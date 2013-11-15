@@ -23,6 +23,8 @@
 		BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAD7182A8A5F00A5505A /* STKMenuView.m */; };
 		BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */; };
 		BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */; };
+		BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */; };
+		BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */; };
 		BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A02182AF40800080601 /* STKHomeViewController.m */; };
 		BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A03182AF40800080601 /* STKHomeViewController.xib */; };
 		BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A07182AF41C00080601 /* STKExploreViewController.m */; };
@@ -35,6 +37,9 @@
 		BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A17182AF43A00080601 /* STKActivityViewController.xib */; };
 		BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A1B182AF44600080601 /* STKGraphViewController.m */; };
 		BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A1C182AF44600080601 /* STKGraphViewController.xib */; };
+		BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */; };
+		BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */; };
+		BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */; };
 		BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEDF8182C1EE100648B9F /* STKCreatePostViewController.m */; };
 		BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEFCEDF9182C1EE100648B9F /* STKCreatePostViewController.xib */; };
 		BEFCEE05182C210600648B9F /* STKConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEDFD182C210600648B9F /* STKConnection.m */; };
@@ -80,6 +85,9 @@
 		BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuButton.m; sourceTree = "<group>"; };
 		BE7A2DF91831877F00CC6EED /* UIViewController+STKControllerItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+STKControllerItems.h"; sourceTree = "<group>"; };
 		BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+STKControllerItems.m"; sourceTree = "<group>"; };
+		BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeCell.xib; sourceTree = "<group>"; };
+		BE8F35E71833D48D00C4ED03 /* STKHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHomeCell.h; sourceTree = "<group>"; };
+		BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHomeCell.m; sourceTree = "<group>"; };
 		BEC01A01182AF40800080601 /* STKHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHomeViewController.h; sourceTree = "<group>"; };
 		BEC01A02182AF40800080601 /* STKHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHomeViewController.m; sourceTree = "<group>"; };
 		BEC01A03182AF40800080601 /* STKHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeViewController.xib; sourceTree = "<group>"; };
@@ -98,6 +106,10 @@
 		BEC01A1A182AF44600080601 /* STKGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGraphViewController.h; sourceTree = "<group>"; };
 		BEC01A1B182AF44600080601 /* STKGraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGraphViewController.m; sourceTree = "<group>"; };
 		BEC01A1C182AF44600080601 /* STKGraphViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKGraphViewController.xib; sourceTree = "<group>"; };
+		BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Temporary.xcassets; sourceTree = "<group>"; };
+		BEE6CBBC1832DCB500BC72F4 /* STKExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKExploreCell.h; sourceTree = "<group>"; };
+		BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKExploreCell.m; sourceTree = "<group>"; };
+		BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKExploreCell.xib; sourceTree = "<group>"; };
 		BEFCEDF7182C1EE100648B9F /* STKCreatePostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreatePostViewController.h; sourceTree = "<group>"; };
 		BEFCEDF8182C1EE100648B9F /* STKCreatePostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCreatePostViewController.m; sourceTree = "<group>"; };
 		BEFCEDF9182C1EE100648B9F /* STKCreatePostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCreatePostViewController.xib; sourceTree = "<group>"; };
@@ -177,6 +189,7 @@
 				BE02EAD4182A81B000A5505A /* Controller */,
 				BE02EAB4182A80A200A5505A /* Images.xcassets */,
 				BE02EAA9182A80A200A5505A /* Supporting Files */,
+				BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */,
 			);
 			path = Prism;
 			sourceTree = "<group>";
@@ -251,6 +264,12 @@
 				BE02EAD7182A8A5F00A5505A /* STKMenuView.m */,
 				BE300BF4182AB16100CA3FC7 /* STKMenuButton.h */,
 				BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */,
+				BEE6CBBC1832DCB500BC72F4 /* STKExploreCell.h */,
+				BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */,
+				BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */,
+				BE8F35E71833D48D00C4ED03 /* STKHomeCell.h */,
+				BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */,
+				BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -351,14 +370,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */,
+				BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */,
 				BEC01A0F182AF42600080601 /* STKTrustViewController.xib in Resources */,
 				BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */,
 				BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */,
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
+				BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
 				BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */,
 				BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */,
+				BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +399,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
@@ -385,6 +408,7 @@
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
+				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,

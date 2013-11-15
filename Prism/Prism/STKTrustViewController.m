@@ -21,8 +21,8 @@
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-        [[self tabBarItem] setImage:[UIImage imageNamed:@"Circle of Trust.png"]];
-        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"Circle of TrustPress.png"]];
+        [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_trust"]];
+        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_trust_selected"]];
 
     }
     return self;

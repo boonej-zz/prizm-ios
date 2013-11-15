@@ -21,8 +21,8 @@
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-        [[self tabBarItem] setImage:[UIImage imageNamed:@"Graph.png"]];
-        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"GraphPress.png"]];
+        [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_graph"]];
+        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_graph_selected"]];
     }
     return self;
 }

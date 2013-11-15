@@ -8,8 +8,12 @@
 
 #import "STKExploreViewController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKExploreCell.h"
 
-@interface STKExploreViewController ()
+@interface STKExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @end
 
@@ -21,9 +25,9 @@
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-        [[self tabBarItem] setImage:[UIImage imageNamed:@"Explore.png"]];
-        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"ExplorePress.png"]];
-
+        [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_explore"]];
+        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
+        [self setAutomaticallyAdjustsScrollViewInsets:YES];
     }
     return self;
 }
@@ -31,13 +35,28 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    UIEdgeInsets currentInset = [[self collectionView] contentInset];
+    currentInset.top += [[self toolbar] bounds].size.height;
+    [[self collectionView] setContentInset:currentInset];
+    [[self collectionView] registerNib:[UINib nibWithNibName:@"STKExploreCell" bundle:nil]
+            forCellWithReuseIdentifier:@"STKExploreCell"];
+    [[self collectionView] setBackgroundColor:[UIColor clearColor]];
+    [[self toolbar] setTranslucent:YES];
 }
 
-- (void)didReceiveMemoryWarning
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    return 20;
+}
+
+// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    STKExploreCell *c = (STKExploreCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKExploreCell"
+                                                                        forIndexPath:indexPath];
+    
+    [[c imageView] setImage:[UIImage imageNamed:@"34"]];
+    return c;
 }
 
 @end

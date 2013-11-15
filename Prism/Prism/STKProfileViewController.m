@@ -21,8 +21,8 @@
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-        [[self tabBarItem] setImage:[UIImage imageNamed:@"User.png"]];
-        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"UserPress.png"]];
+        [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
+        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
 
     }
     return self;

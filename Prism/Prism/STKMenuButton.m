@@ -26,6 +26,37 @@
     [self setNeedsDisplay];
 }
 
+- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    [self setHighlighted:YES];
+    [self setNeedsDisplay];
+    return YES;
+}
+
+- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    if(CGRectContainsPoint([self bounds], [touch locationInView:self])) {
+        [self setHighlighted:YES];
+        [self setNeedsDisplay];
+    } else {
+        [self setHighlighted:NO];
+        [self setNeedsDisplay];
+    }
+
+    return YES;
+}
+
+- (void)cancelTrackingWithEvent:(UIEvent *)event
+{
+    [self setHighlighted:NO];
+}
+
+- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    [self setHighlighted:NO];
+    [self setNeedsDisplay];
+}
+
 - (void)drawRect:(CGRect)rect
 {
     UIBezierPath *bp = [UIBezierPath bezierPathWithRect:[self bounds]];
@@ -35,12 +66,12 @@
     UIImage *img = nil;
     UIColor *clr = nil;
     switch ([self state]) {
+        case UIControlStateHighlighted:
         case UIControlStateSelected:
             img = [[self item] selectedImage];
             clr = [UIColor colorWithWhite:1 alpha:0];
             break;
             
-        case UIControlStateHighlighted:
         case UIControlStateNormal:
         case UIControlStateApplication:
         case UIControlStateDisabled:

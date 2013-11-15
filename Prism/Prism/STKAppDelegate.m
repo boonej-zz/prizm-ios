@@ -22,6 +22,8 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
+    [self configureAppearanceProxies];
+    
     UIViewController *hvc = [[STKHomeViewController alloc] init];
     UIViewController *evc = [[STKExploreViewController alloc] init];
     UIViewController *tvc = [[STKTrustViewController alloc] init];
@@ -39,13 +41,35 @@
         [[UINavigationController alloc] initWithRootViewController:avc],
         [[UINavigationController alloc] initWithRootViewController:gvc]                              
     ]];
-    [nvc setBackgroundImage:[UIImage imageNamed:@"PrismMainMenuBack.png"]];
+    [nvc setBackgroundImage:[UIImage imageNamed:@"img_background"]];
+    
+    for(UINavigationController *vc in [nvc viewControllers]) {
+        [[vc navigationBar] setTranslucent:YES];
+    }
     
     [[self window] setRootViewController:nvc];
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (void)configureAppearanceProxies
+{
+    UIGraphicsBeginImageContext(CGSizeMake(10, 10));
+    [[UIColor colorWithWhite:1 alpha:0.25] set];
+    UIRectFill(CGRectMake(0, 0, 10, 10));
+    
+    [[UINavigationBar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
+             forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    [[UIToolbar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
+                            forToolbarPosition:UIBarPositionAny
+                                    barMetrics:UIBarMetricsDefault];
+    [[UIToolbar appearance] setShadowImage:[[UIImage alloc] init]
+                        forToolbarPosition:UIBarPositionAny];
+    UIGraphicsEndImageContext();
+
 }
 
 @end

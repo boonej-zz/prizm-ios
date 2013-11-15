@@ -28,8 +28,8 @@
 {
     UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     [view addTarget:self action:@selector(createNewPost:) forControlEvents:UIControlEventTouchUpInside];
-    [view setImage:[UIImage imageNamed:@"Add Content.png"] forState:UIControlStateNormal];
-    [view setImage:[UIImage imageNamed:@"Add Contentpress.png"] forState:UIControlStateHighlighted];
+    [view setImage:[UIImage imageNamed:@"bnt_add_content"] forState:UIControlStateNormal];
+    [view setImage:[UIImage imageNamed:@"bnt_add_content_selected"] forState:UIControlStateHighlighted];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     return bbi;

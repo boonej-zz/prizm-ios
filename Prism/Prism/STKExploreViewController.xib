@@ -6,6 +6,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKExploreViewController">
             <connections>
+                <outlet property="collectionView" destination="aZS-38-EnA" id="kin-Pz-Kvb"/>
+                <outlet property="toolbar" destination="wIB-qk-ErU" id="xnX-5e-RVQ"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -14,15 +16,51 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Explore" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iob-Cm-ZPo">
-                    <rect key="frame" x="145" y="146" width="58" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="aZS-38-EnA">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <inset key="scrollIndicatorInsets" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="4" minimumInteritemSpacing="4" id="OWI-9A-ALt">
+                        <size key="itemSize" width="100" height="100"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="4" minY="4" maxX="4" maxY="4"/>
+                    </collectionViewFlowLayout>
+                    <cells/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="3Xv-Bk-klO"/>
+                        <outlet property="delegate" destination="-1" id="XfZ-Rq-7kz"/>
+                    </connections>
+                </collectionView>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wIB-qk-ErU">
+                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="KhL-rO-GnS"/>
+                    </constraints>
+                    <items>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="AcF-Fp-B9U"/>
+                        <barButtonItem title="Latest" id="bZG-h3-Qcr"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="eue-3s-ygZ"/>
+                        <barButtonItem title="Popular" id="Ke5-AU-fpn"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="oOh-7N-BTq"/>
+                        <barButtonItem title="Featured" id="K5g-Cu-5nF"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="jVf-xA-WVM"/>
+                    </items>
+                </toolbar>
             </subviews>
             <color key="backgroundColor" red="0.80759595788043481" green="0.80759595788043481" blue="0.80759595788043481" alpha="0.0" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="wIB-qk-ErU" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="0a7-6A-VOD"/>
+                <constraint firstAttribute="bottom" secondItem="aZS-38-EnA" secondAttribute="bottom" id="CAK-Ym-nQ5"/>
+                <constraint firstItem="wIB-qk-ErU" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="D3a-Ry-Fn3"/>
+                <constraint firstItem="aZS-38-EnA" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GyP-P4-3yU"/>
+                <constraint firstItem="aZS-38-EnA" firstAttribute="top" secondItem="1" secondAttribute="top" id="Zfg-LQ-0Us"/>
+                <constraint firstAttribute="trailing" secondItem="wIB-qk-ErU" secondAttribute="trailing" id="t4h-Sp-EyR"/>
+                <constraint firstAttribute="trailing" secondItem="aZS-38-EnA" secondAttribute="trailing" id="y41-cc-XZS"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
