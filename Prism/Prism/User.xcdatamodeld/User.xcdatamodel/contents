@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A603" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="STKActivityItem" representedClassName="STKActivityItem" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="profileImageURLString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recent" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="referenceImageURLString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="activityItems" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKPost" representedClassName="STKPost" syncable="YES">
+        <attribute name="authorName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="authorUserID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="datePosted" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="hashTagsData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="iconURLString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageURLString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postOrigin" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="posts" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKRequestItem" representedClassName="STKRequestItem" syncable="YES">
+        <attribute name="accepted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="dateConfirmed" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateReceived" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="profileImageURLString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="requestItems" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKUser" representedClassName="STKUser" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="activityItems" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKActivityItem" inverseName="user" inverseEntity="STKActivityItem" syncable="YES"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKPost" inverseName="user" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="requestItems" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKRequestItem" inverseName="user" inverseEntity="STKRequestItem" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="STKActivityItem" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="STKPost" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="STKRequestItem" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="STKUser" positionX="0" positionY="0" width="0" height="0"/>
+    </elements>
+</model>

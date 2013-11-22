@@ -21,8 +21,15 @@
 		BE02EAC8182A80A200A5505A /* PrismTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAC7182A80A200A5505A /* PrismTests.m */; };
 		BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAD2182A81AC00A5505A /* STKMenuController.m */; };
 		BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAD7182A8A5F00A5505A /* STKMenuView.m */; };
+		BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B51C183A90C8009BC02A /* STKTrustView.m */; };
+		BE24B520183A90D1009BC02A /* STKCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B51F183A90D1009BC02A /* STKCountView.m */; };
+		BE24B523183AA653009BC02A /* STKCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B522183AA653009BC02A /* STKCircleView.m */; };
 		BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */; };
+		BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE610859183D1588003A182C /* STKTableViewCell.m */; };
+		BE61085E183D159E003A182C /* STKActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE61085C183D159E003A182C /* STKActivityCell.m */; };
+		BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE61085D183D159E003A182C /* STKActivityCell.xib */; };
 		BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */; };
+		BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */; };
 		BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */; };
 		BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */; };
 		BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A02182AF40800080601 /* STKHomeViewController.m */; };
@@ -40,6 +47,11 @@
 		BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */; };
 		BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */; };
 		BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */; };
+		BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */; };
+		BEFAC19F183D512E005E8933 /* STKRequestItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC19E183D512E005E8933 /* STKRequestItem.m */; };
+		BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A1183D512F005E8933 /* STKUser.m */; };
+		BEFAC1A5183D512F005E8933 /* STKActivityItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A4183D512F005E8933 /* STKActivityItem.m */; };
+		BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A7183D512F005E8933 /* STKPost.m */; };
 		BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEDF8182C1EE100648B9F /* STKCreatePostViewController.m */; };
 		BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEFCEDF9182C1EE100648B9F /* STKCreatePostViewController.xib */; };
 		BEFCEE05182C210600648B9F /* STKConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEDFD182C210600648B9F /* STKConnection.m */; };
@@ -81,10 +93,23 @@
 		BE02EAD2182A81AC00A5505A /* STKMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuController.m; sourceTree = "<group>"; };
 		BE02EAD6182A8A5F00A5505A /* STKMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMenuView.h; sourceTree = "<group>"; };
 		BE02EAD7182A8A5F00A5505A /* STKMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuView.m; sourceTree = "<group>"; };
+		BE24B51B183A90C8009BC02A /* STKTrustView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTrustView.h; sourceTree = "<group>"; };
+		BE24B51C183A90C8009BC02A /* STKTrustView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTrustView.m; sourceTree = "<group>"; };
+		BE24B51E183A90D1009BC02A /* STKCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCountView.h; sourceTree = "<group>"; };
+		BE24B51F183A90D1009BC02A /* STKCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCountView.m; sourceTree = "<group>"; };
+		BE24B521183AA653009BC02A /* STKCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCircleView.h; sourceTree = "<group>"; };
+		BE24B522183AA653009BC02A /* STKCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCircleView.m; sourceTree = "<group>"; };
 		BE300BF4182AB16100CA3FC7 /* STKMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMenuButton.h; sourceTree = "<group>"; };
 		BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuButton.m; sourceTree = "<group>"; };
+		BE610858183D1588003A182C /* STKTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTableViewCell.h; sourceTree = "<group>"; };
+		BE610859183D1588003A182C /* STKTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTableViewCell.m; sourceTree = "<group>"; };
+		BE61085B183D159E003A182C /* STKActivityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKActivityCell.h; sourceTree = "<group>"; };
+		BE61085C183D159E003A182C /* STKActivityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKActivityCell.m; sourceTree = "<group>"; };
+		BE61085D183D159E003A182C /* STKActivityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKActivityCell.xib; sourceTree = "<group>"; };
 		BE7A2DF91831877F00CC6EED /* UIViewController+STKControllerItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+STKControllerItems.h"; sourceTree = "<group>"; };
 		BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+STKControllerItems.m"; sourceTree = "<group>"; };
+		BE7C47FF183EBBAC00C30995 /* STKResolvingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKResolvingImageView.h; sourceTree = "<group>"; };
+		BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKResolvingImageView.m; sourceTree = "<group>"; };
 		BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeCell.xib; sourceTree = "<group>"; };
 		BE8F35E71833D48D00C4ED03 /* STKHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHomeCell.h; sourceTree = "<group>"; };
 		BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHomeCell.m; sourceTree = "<group>"; };
@@ -110,6 +135,15 @@
 		BEE6CBBC1832DCB500BC72F4 /* STKExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKExploreCell.h; sourceTree = "<group>"; };
 		BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKExploreCell.m; sourceTree = "<group>"; };
 		BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKExploreCell.xib; sourceTree = "<group>"; };
+		BEFAC198183D4DCF005E8933 /* User.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = User.xcdatamodel; sourceTree = "<group>"; };
+		BEFAC19D183D512E005E8933 /* STKRequestItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKRequestItem.h; sourceTree = "<group>"; };
+		BEFAC19E183D512E005E8933 /* STKRequestItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKRequestItem.m; sourceTree = "<group>"; };
+		BEFAC1A0183D512F005E8933 /* STKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKUser.h; sourceTree = "<group>"; };
+		BEFAC1A1183D512F005E8933 /* STKUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUser.m; sourceTree = "<group>"; };
+		BEFAC1A3183D512F005E8933 /* STKActivityItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKActivityItem.h; sourceTree = "<group>"; };
+		BEFAC1A4183D512F005E8933 /* STKActivityItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKActivityItem.m; sourceTree = "<group>"; };
+		BEFAC1A6183D512F005E8933 /* STKPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPost.h; sourceTree = "<group>"; };
+		BEFAC1A7183D512F005E8933 /* STKPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKPost.m; sourceTree = "<group>"; };
 		BEFCEDF7182C1EE100648B9F /* STKCreatePostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreatePostViewController.h; sourceTree = "<group>"; };
 		BEFCEDF8182C1EE100648B9F /* STKCreatePostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCreatePostViewController.m; sourceTree = "<group>"; };
 		BEFCEDF9182C1EE100648B9F /* STKCreatePostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCreatePostViewController.xib; sourceTree = "<group>"; };
@@ -154,6 +188,14 @@
 		BE02EA96182A80A200A5505A = {
 			isa = PBXGroup;
 			children = (
+				BEFAC1A6183D512F005E8933 /* STKPost.h */,
+				BEFAC1A7183D512F005E8933 /* STKPost.m */,
+				BEFAC1A3183D512F005E8933 /* STKActivityItem.h */,
+				BEFAC1A4183D512F005E8933 /* STKActivityItem.m */,
+				BEFAC1A0183D512F005E8933 /* STKUser.h */,
+				BEFAC1A1183D512F005E8933 /* STKUser.m */,
+				BEFAC19D183D512E005E8933 /* STKRequestItem.h */,
+				BEFAC19E183D512E005E8933 /* STKRequestItem.m */,
 				BE02EAA8182A80A200A5505A /* Prism */,
 				BE02EAC1182A80A200A5505A /* PrismTests */,
 				BE02EAA1182A80A200A5505A /* Frameworks */,
@@ -184,6 +226,7 @@
 		BE02EAA8182A80A200A5505A /* Prism */ = {
 			isa = PBXGroup;
 			children = (
+				BEE97D93183A5CD900B7BAC1 /* Model */,
 				BEFCEDFC182C204900648B9F /* Store */,
 				BE02EAD5182A8A5500A5505A /* View */,
 				BE02EAD4182A81B000A5505A /* Controller */,
@@ -260,6 +303,8 @@
 		BE02EAD5182A8A5500A5505A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BE610858183D1588003A182C /* STKTableViewCell.h */,
+				BE610859183D1588003A182C /* STKTableViewCell.m */,
 				BE02EAD6182A8A5F00A5505A /* STKMenuView.h */,
 				BE02EAD7182A8A5F00A5505A /* STKMenuView.m */,
 				BE300BF4182AB16100CA3FC7 /* STKMenuButton.h */,
@@ -270,8 +315,26 @@
 				BE8F35E71833D48D00C4ED03 /* STKHomeCell.h */,
 				BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */,
 				BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */,
+				BE24B51B183A90C8009BC02A /* STKTrustView.h */,
+				BE24B51C183A90C8009BC02A /* STKTrustView.m */,
+				BE24B51E183A90D1009BC02A /* STKCountView.h */,
+				BE24B51F183A90D1009BC02A /* STKCountView.m */,
+				BE24B521183AA653009BC02A /* STKCircleView.h */,
+				BE24B522183AA653009BC02A /* STKCircleView.m */,
+				BE61085B183D159E003A182C /* STKActivityCell.h */,
+				BE61085C183D159E003A182C /* STKActivityCell.m */,
+				BE61085D183D159E003A182C /* STKActivityCell.xib */,
+				BE7C47FF183EBBAC00C30995 /* STKResolvingImageView.h */,
+				BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		BEE97D93183A5CD900B7BAC1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		BEFCEDFC182C204900648B9F /* Store */ = {
@@ -289,6 +352,7 @@
 				BEFCEE0A182C211A00648B9F /* STKUserStore.m */,
 				BEFCEE0C182C212800648B9F /* STKImageStore.h */,
 				BEFCEE0D182C212800648B9F /* STKImageStore.m */,
+				BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */,
 			);
 			name = Store;
 			sourceTree = "<group>";
@@ -381,6 +445,7 @@
 				BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */,
 				BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */,
 				BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */,
+				BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,7 +464,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */,
 				BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */,
+				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
@@ -407,16 +474,25 @@
 				BEFCEE05182C210600648B9F /* STKConnection.m in Sources */,
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
+				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
+				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
+				BE24B523183AA653009BC02A /* STKCircleView.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
+				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
+				BEFAC19F183D512E005E8933 /* STKRequestItem.m in Sources */,
 				BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */,
 				BEC01A0E182AF42600080601 /* STKTrustViewController.m in Sources */,
+				BE61085E183D159E003A182C /* STKActivityCell.m in Sources */,
 				BE02EAB3182A80A200A5505A /* STKAppDelegate.m in Sources */,
+				BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */,
 				BEFCEE0B182C211A00648B9F /* STKUserStore.m in Sources */,
 				BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */,
+				BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */,
+				BEFAC1A5183D512F005E8933 /* STKActivityItem.m in Sources */,
 				BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */,
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
 				BEFCEE07182C210600648B9F /* STKSecurePassword.m in Sources */,
@@ -632,6 +708,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
+			);
+			currentVersion = BEFAC198183D4DCF005E8933 /* User.xcdatamodel */;
+			path = User.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = BE02EA97182A80A200A5505A /* Project object */;
 }

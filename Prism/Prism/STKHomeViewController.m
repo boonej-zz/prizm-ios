@@ -9,16 +9,22 @@
 #import "STKHomeViewController.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKHomeCell.h"
+#import "STKPost.h"
+#import "STKUserStore.h"
+#import "STKUser.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *cardView;
-@property (nonatomic, strong) NSArray *cardedCells;
-@property (nonatomic, strong) UIImage *cardToolbarFadeImage;
 @property (nonatomic, strong) UIImage *cardToolbarNormalImage;
 @property (nonatomic) float initialCardViewOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cardViewTopOffset;
+@property (nonatomic, strong) NSArray *items;
+
+@property (nonatomic, strong) NSMutableArray *reusableCards;
+@property (nonatomic, strong) NSMutableDictionary *cardMap;
+@property (nonatomic, strong) UINib *homeCellNib;
 
 @end
 
@@ -32,9 +38,13 @@
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_home_selected"]];
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        _cardMap = [[NSMutableDictionary alloc] init];
+        _reusableCards = [[NSMutableArray alloc] init];
+        
     }
     return self;
 }
+
 
 - (void)viewDidLoad
 {
@@ -42,8 +52,8 @@
     
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     
-    UINib *nib = [UINib nibWithNibName:@"STKHomeCell" bundle:nil];
-    [[self tableView] registerNib:nib
+    _homeCellNib = [UINib nibWithNibName:@"STKHomeCell" bundle:nil];
+    [[self tableView] registerNib:_homeCellNib
            forCellReuseIdentifier:@"STKHomeCell"];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setRowHeight:397];
@@ -53,42 +63,164 @@
     [blankView setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setTableFooterView:blankView];
     
+    [[self tableView] setDelaysContentTouches:NO];
     
-    _cardedCells = @[[[nib instantiateWithOwner:self options:nil] objectAtIndex:0],
-                     [[nib instantiateWithOwner:self options:nil] objectAtIndex:0],
-                     [[nib instantiateWithOwner:self options:nil] objectAtIndex:0]];
-    
-
-    UIGraphicsBeginImageContext(CGSizeMake(2, 2));
-    [[UIColor colorWithRed:0.06 green:0.15 blue:0.40 alpha:0.95] set];
-    UIRectFill(CGRectMake(0, 0, 2, 2));
-    _cardToolbarFadeImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
     _cardToolbarNormalImage = [[UIToolbar appearance] backgroundImageForToolbarPosition:UIBarPositionAny
                                                                              barMetrics:UIBarMetricsDefault];
-    
-    for(STKHomeCell *c in [self cardedCells]) {
+    [[self cardView] setUserInteractionEnabled:NO];
+}
+
+- (STKHomeCell *)cardCellForIndexPath:(NSIndexPath *)ip
+{
+    STKHomeCell *c = [[self cardMap] objectForKey:ip];
+    if(!c) {
+        
+        c = [[self reusableCards] lastObject];
+        if(c) {
+            [[self reusableCards] removeObjectIdenticalTo:c];
+        } else {
+            c = [[self homeCellNib] instantiateWithOwner:self options:nil][0];
+            [[c layer] setShadowColor:[[UIColor blackColor] CGColor]];
+            [[c layer] setShadowOffset:CGSizeMake(0, 0)];
+            [[c layer] setShadowOpacity:0.75];
+            [[c layer] setShadowRadius:5];
+        }
+        
+        [self populateCell:c forIndexPath:ip];
+        
         CGRect f = [c frame];
         f.origin.x = -10;
         [c setFrame:f];
         
-        [[c layer] setShadowColor:[[UIColor blackColor] CGColor]];
-        [[c layer] setShadowOffset:CGSizeMake(0, 0)];
-        [[c layer] setShadowOpacity:0.5];
-        [[c layer] setShadowRadius:5];
-        [[c topToolbar] setBackgroundImage:[self cardToolbarFadeImage]
-                        forToolbarPosition:UIBarPositionAny
-                                barMetrics:UIBarMetricsDefault];
-        [self populateCell:c forIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
         [[self cardView] addSubview:c];
+        [[self cardMap] setObject:c forKey:ip];
     }
-    [[self cardView] setUserInteractionEnabled:NO];
+    return c;
+}
+
+- (void)removeCardAndRecycleForIndexPath:(NSIndexPath *)ip
+{
+    STKHomeCell *mimicCell = [[self cardMap] objectForKey:ip];
+    if(mimicCell) {
+        [mimicCell removeFromSuperview];
+        [[self reusableCards] addObject:mimicCell];
+        [[self cardMap] removeObjectForKey:ip];
+    }
+}
+
+- (void)layoutCards
+{
+    NSArray *visibleRows = [[self tableView] indexPathsForVisibleRows];
+    CGPoint offset = [[self tableView] contentOffset];
+    UIEdgeInsets inset = [[self tableView] contentInset];
+    float containerHeight = [[self tableView] bounds].size.height - inset.top;
+    float totalOffset = offset.y + inset.top;
+    float matchLineY = [[self tableView] rowHeight];
+    
+    // This handles the card area being pushed down in the case of an downwards overscroll
+    if(totalOffset < 0) {
+        [[self cardViewTopOffset] setConstant:(int)([self initialCardViewOffset] - totalOffset)];
+        
+        // Make sure cards are in their normal position here.. but they should never not be?
+    } else {
+        [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
+        
+        for(NSIndexPath *ip in visibleRows) {
+            // Fade out backdrop image view as cell becomes more visible
+            STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
+            float y = [c frame].origin.y - totalOffset;
+            float t = y - ([[self tableView] rowHeight] - 100);
+            if(t < 0)
+                t = 0;
+            t = (t / 100.0);
+            [[c backdropFadeView] setAlpha:t];
+        }
+        
+        
+        
+        NSIndexPath *lastIndexPathOnScreen = [visibleRows lastObject];
+        STKHomeCell *realCell = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:lastIndexPathOnScreen];
+        float lastCellTopRelativeToTable = [realCell frame].origin.y - totalOffset;
+        float cellSpan = 30.0;
+        if(lastCellTopRelativeToTable <= matchLineY) {
+            lastIndexPathOnScreen = [NSIndexPath indexPathForRow:[lastIndexPathOnScreen row] + 1
+                                                       inSection:0];
+            lastCellTopRelativeToTable += [[self tableView] rowHeight];
+        }
+        
+        
+        
+        NSIndexPath *indexPath = lastIndexPathOnScreen;
+        NSMutableArray *indicesToRepresent = [NSMutableArray array];
+        for(int i = 0; i < 3; i++) {
+            if([indexPath row] < [[self items] count]) {
+                [indicesToRepresent addObject:indexPath];
+            }
+            
+            indexPath = [NSIndexPath indexPathForRow:[indexPath row] + 1
+                                           inSection:0];
+        }
+
+        
+        for(NSIndexPath *ip in indicesToRepresent) {
+            STKHomeCell *nextCell = [self cardCellForIndexPath:ip];
+            [[self cardView] bringSubviewToFront:nextCell];
+            // When at bottom (just came onto screen), t = 1, when at top of cardView, t = 0
+ 
+            float t = (lastCellTopRelativeToTable - matchLineY) / (containerHeight - matchLineY);
+            
+            if(t > 1.0) {
+                t = sqrtf(t);
+                [[nextCell layer] setShadowRadius:5.0];
+            } else {
+                [[nextCell layer] setShadowRadius:t * 5.0];
+            }
+   
+            CGRect r = [nextCell frame];
+            r.origin.y = cellSpan * t - 10;
+            [nextCell setFrame:r];
+
+            lastCellTopRelativeToTable += [[self tableView] rowHeight];
+        }
+        
+        
+        for(NSIndexPath *ip in [[self cardMap] allKeys]) {
+            if(![indicesToRepresent containsObject:ip]) {
+                [self removeCardAndRecycleForIndexPath:ip];
+            }
+        }
+        
+    }
+    [[self cardView] layoutIfNeeded];
+
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self layoutCards];
+    
+}
+
+- (void)populateCell:(STKHomeCell *)c forIndexPath:(NSIndexPath *)ip
+{
+    [c setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    STKPost *p = [[self items] objectAtIndex:[ip row]];
+    [[c iconImageView] setUrlString:[p iconURLString]];
+    [[c contentImageView] setUrlString:[p imageURLString]];
+    [[c originatorLabel] setText:[p authorName]];
+    [[c timeLabel] setText:@"Now"];
+    [[c sourceLabel] setText:[p postOrigin]];
+    NSMutableString *str = [[NSMutableString alloc] init];
+    for(NSString *s in [p hashTags])
+        [str appendFormat:@"#%@ ", s];
+    [[c hashTagLabel] setText:str];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [[self items] count];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -100,70 +232,29 @@
 {
     [super viewWillAppear:animated];
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
-}
+    
+    
+    [[STKUserStore store] fetchFeedForCurrentUser:^(NSArray *posts, NSError *error, BOOL moreComing) {
+        if(!error) {
+            if([self items]) {
+                _items = [posts arrayByAddingObjectsFromArray:_items];
+            } else {
+                _items = posts;
+            }
+            [[self tableView] reloadData];
+            [self layoutCards];
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    // This really needs to be optimized
-    CGPoint offset = [scrollView contentOffset];
-    UIEdgeInsets inset = [scrollView contentInset];
-    
-    float totalOffset = offset.y + inset.top;
-    
-    // This handles the card area being pushed down in the case of an downwards overscroll
-    if(totalOffset < 0) {
-        [[self cardViewTopOffset] setConstant:[self initialCardViewOffset] - totalOffset];
-        
-        // Make sure cards are in their normal position here.. but they should never not be?
-    } else {
-        [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
-        
-        // Here, cards can be an accordion position
-        int rowOffset = (int)totalOffset % ((int)[[self tableView] rowHeight]);
-        float t = (float)rowOffset / ([[self tableView] rowHeight] - 1);
-        int index = 0;
-        for(STKHomeCell *c in [self cardedCells]) {
-            CGRect r = [c frame];
+        } else {
             
-            r.origin.y = 20 - 30.0 * t + index * 34;
-            [c setFrame:r];
-            if(index == 0)
-                [[c layer] setShadowRadius:5.0 * (1.0 - t)];
-            else
-                [[c layer] setShadowRadius:5.0];
-            index ++;
         }
-    }
-    [[self cardView] layoutIfNeeded];
-
-    
-    for(STKHomeCell *c in [[self tableView] visibleCells]) {
-        float y = [c frame].origin.y - totalOffset;
-        float t = y - ([[self tableView] rowHeight] - 100);
-        if(t < 0)
-            t = 0;
-        
-        t = (t / 100.0);
-        
-        [[c backdropFadeView] setAlpha:t];
-        
-    }
+    }];
 }
 
-- (void)populateCell:(STKHomeCell *)c forIndexPath:(NSIndexPath *)ip
+- (void)viewDidAppear:(BOOL)animated
 {
-    if(![[c backdropFadeView] image]) {
-        [[c backdropFadeView] setImage:[self cardToolbarFadeImage]];
-    }
-    
-    [c setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [[c iconImageView] setImage:[UIImage imageNamed:@"wisconsin"]];
-    [[c contentImageView] setImage:[UIImage imageNamed:@"19"]];
-    [[c originatorLabel] setText:@"University of Wisconsin"];
-    [[c timeLabel] setText:@"2hrs"];
-    [[c sourceLabel] setText:@"Post via Instagram"];
-    [[c hashTagLabel] setText:@"#domination #bestschoolever"];
+    [super viewDidAppear:animated];
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -174,5 +265,6 @@
     return c;
     
 }
+
 
 @end

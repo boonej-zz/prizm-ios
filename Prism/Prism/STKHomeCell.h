@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "STKTableViewCell.h"
+#import "STKResolvingImageView.h"
 
-@interface STKHomeCell : UITableViewCell
+@interface STKHomeCell : STKTableViewCell
 
 @property (weak, nonatomic) IBOutlet UIToolbar *topToolbar;
 @property (weak, nonatomic) IBOutlet UIToolbar *bottomToolbar;
-@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *contentImageView;
+@property (weak, nonatomic) IBOutlet STKResolvingImageView *iconImageView;
+@property (weak, nonatomic) IBOutlet STKResolvingImageView *contentImageView;
 @property (weak, nonatomic) IBOutlet UILabel *originatorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *sourceLabel;

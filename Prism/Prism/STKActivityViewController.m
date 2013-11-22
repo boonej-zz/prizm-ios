@@ -9,7 +9,10 @@
 #import "STKActivityViewController.h"
 #import "UIViewController+STKControllerItems.h"
 
-@interface STKActivityViewController ()
+@interface STKActivityViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @end
 
@@ -34,10 +37,9 @@
     // Do any additional setup after loading the view from its nib.
 }
 
-- (void)didReceiveMemoryWarning
+- (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    return 10;
 }
 
 @end

@@ -8,8 +8,14 @@
 
 #import "STKTrustViewController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKTrustView.h"
+#import "STKCountView.h"
 
 @interface STKTrustViewController ()
+
+@property (weak, nonatomic) IBOutlet STKTrustView *trustView;
+@property (weak, nonatomic) IBOutlet STKCountView *countView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 @end
 

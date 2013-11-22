@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class STKUser, STKPost, STKActivityItem, STKRequestItem;
+
 @interface STKUserStore : NSObject
+
++ (STKUserStore *)store;
+
+@property (nonatomic, strong) STKUser *currentUser;
+
+- (void)fetchFeedForCurrentUser:(void (^)(NSArray *posts, NSError *error, BOOL moreComing))block;
 
 @end

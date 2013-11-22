@@ -15,13 +15,14 @@
 #import "STKActivityViewController.h"
 #import "STKGraphViewController.h"
 
+#import "STKImageStore.h"
 
 @implementation STKAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
+    
     [self configureAppearanceProxies];
     
     UIViewController *hvc = [[STKHomeViewController alloc] init];
