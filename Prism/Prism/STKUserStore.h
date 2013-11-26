@@ -17,5 +17,7 @@
 @property (nonatomic, strong) STKUser *currentUser;
 
 - (void)fetchFeedForCurrentUser:(void (^)(NSArray *posts, NSError *error, BOOL moreComing))block;
+- (void)fetchActivityForCurrentUser:(void (^)(NSArray *activity, NSError *error, BOOL moreComing))block;
 
+- (void)fetchAccountsForDevice:(void (^)(NSArray *accounts, NSError *err))block;
 @end

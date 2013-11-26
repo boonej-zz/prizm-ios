@@ -30,4 +30,6 @@ typedef enum STKActivityItemEnum : int16_t {
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) STKUser *user;
 
++ (NSString *)stringForActivityItemType:(STKActivityItemType)t;
+
 @end

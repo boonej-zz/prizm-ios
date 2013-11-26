@@ -8,11 +8,15 @@
 
 #import "STKActivityViewController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKActivityCell.h"
+#import "STKUserStore.h"
+#import "STKActivityItem.h"
 
 @interface STKActivityViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (nonatomic, strong) NSArray *items;
 
 @end
 
@@ -34,12 +38,46 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    [[self tableView] setBackgroundColor:[UIColor clearColor]];
+    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 60, 0, 0)];
+    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:1 alpha:0.5]];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[STKUserStore store] fetchActivityForCurrentUser:^(NSArray *activity, NSError *error, BOOL moreComing) {
+        if(!error) {
+            _items = activity;
+            [[self tableView] reloadData];
+        }
+    }];
+    
 }
 
 - (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [[self items] count];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [cell setBackgroundColor:[UIColor clearColor]];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    STKActivityCell *cell = [STKActivityCell cellForTableView:tableView target:self];
+    STKActivityItem *i = [[self items] objectAtIndex:[indexPath row]];
+    
+    [[cell profileImageView] setUrlString:[i profileImageURLString]];
+    [[cell recentIndicatorImageView] setHidden:![i recent]];
+    [[cell nameLabel] setText:[i userName]];
+    [[cell activityTypeLabel] setText:[STKActivityItem stringForActivityItemType:[i type]]];
+    [[cell imageReferenceView] setUrlString:[i referenceImageURLString]];
+    
+    
+    return cell;
 }
 
 @end

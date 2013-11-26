@@ -21,6 +21,7 @@
 @property (nonatomic, getter = isVisible) BOOL visible;
 @property (nonatomic, weak) id <STKMenuViewDelegate> delegate;
 @property (nonatomic) int selectedIndex;
+@property (nonatomic, strong) UIImage *backgroundImage;
 
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated;
 

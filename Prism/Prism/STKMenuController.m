@@ -15,6 +15,7 @@
 #import "STKActivityViewController.h"
 #import "STKGraphViewController.h"
 #import "STKCreatePostViewController.h"
+#import "STKRenderServer.h"
 
 @import QuartzCore;
 
@@ -22,6 +23,7 @@
 
 @property (nonatomic, strong) STKMenuView *menuView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
+@property (nonatomic, strong) NSLayoutConstraint *menuTopConstraint;
 @end
 
 @implementation STKMenuController
@@ -54,17 +56,24 @@
     if(menuVisible) {
         [[self view] bringSubviewToFront:[self menuView]];
 
+        CGRect blurRect = [[self view] bounds];
+        
         UIViewController *selected = [self selectedViewController];
-        CGRect r = [[self menuView] frame];
         if([selected isKindOfClass:[UINavigationController class]]) {
             UINavigationBar *bar = [(UINavigationController *)selected navigationBar];
             CGRect barFrame = [bar frame];
-            r.origin.y = barFrame.size.height + barFrame.origin.y;
-            [[self menuView] setFrame:r];
+            float topOffset = barFrame.origin.y + barFrame.size.height;
+            [[self menuTopConstraint] setConstant:topOffset];
+            blurRect.origin.y += topOffset;
+            blurRect.size.height -= topOffset;
         } else {
-            r.origin.y = 0;
-            [[self menuView] setFrame:r];
+            [[self menuTopConstraint] setConstant:0];
         }
+        
+        [[self menuView] setBackgroundImage:[[STKRenderServer renderServer] instantBlurredImageForView:[self view]
+                                                                                             inSubrect:blurRect]];
+        
+        [[self menuView] layoutIfNeeded];
     }
     [[self menuView] setVisible:menuVisible animated:animated];
 }
@@ -113,6 +122,26 @@
     [[self view] addSubview:[self menuView]];
     
     [[self menuView] setItems:[[self viewControllers] valueForKey:@"tabBarItem"]];
+    
+    
+    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|"
+                                                                        options:0
+                                                                        metrics:nil
+                                                                          views:@{@"v" : _menuView}]];
+    NSLayoutConstraint *c = [NSLayoutConstraint constraintWithItem:_menuView
+                                                         attribute:NSLayoutAttributeTop
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:[self view]
+                                                         attribute:NSLayoutAttributeTop
+                                                        multiplier:1 constant:0];
+    [[self view] addConstraint:c];
+    _menuTopConstraint = c;
+    [[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view]
+                                                            attribute:NSLayoutAttributeBottom
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:_menuView
+                                                            attribute:NSLayoutAttributeBottom
+                                                           multiplier:1 constant:0]];
 }
 
 - (void)viewWillAppear:(BOOL)animated

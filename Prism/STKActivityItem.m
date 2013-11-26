@@ -21,4 +21,20 @@
 @dynamic date;
 @dynamic user;
 
+
++ (NSString *)stringForActivityItemType:(STKActivityItemType)t
+{
+    switch (t) {
+        case STKActivityItemTypeComment:
+            return @"commented on";
+        case STKActivityItemTypeFollow:
+            return @"followed";
+        case STKActivityItemTypeLike:
+            return @"liked your post";
+        case STKActivityItemTypeTrustAccepted:
+            return @"accepted your trust";
+    }
+    return @"";
+}
+
 @end

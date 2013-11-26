@@ -13,9 +13,11 @@
 #import "STKPost.h"
 
 @import CoreData;
+@import Accounts;
 
 @interface STKUserStore ()
 @property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) ACAccountStore *accountStore;
 @end
 
 @implementation STKUserStore
@@ -53,9 +55,36 @@
         [[self context] setPersistentStoreCoordinator:psc];
         [[self context] setUndoManager:nil];
         
+        _accountStore = [[ACAccountStore alloc] init];
+        
         [self buildTemporaryData];
     }
     return self;
+}
+
+- (void)fetchAccountsForDevice:(void (^)(NSArray *accounts, NSError *err))block
+{
+    ACAccountType *type = [[self accountStore] accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
+    [[self accountStore] requestAccessToAccountsWithType:type
+                                                 options:@{
+                                                           ACFacebookAppIdKey : @"744512878911220",
+                                                           ACFacebookPermissionsKey : @[
+                                                                   @"email", @"user_birthday",
+                                                                   @"user_education_history",
+                                                                   @"user_hometown",
+                                                                   @"user_location",
+                                                                   @"user_photos",
+                                                                   @"user_religion_politics"
+                                                            ]
+                                                           }
+                                              completion:^(BOOL granted, NSError *error) {
+                                                  if(granted) {
+                                                      NSArray *accounts = [[self accountStore] accountsWithAccountType:type];
+                                                      block(accounts, nil);
+                                                  } else {
+                                                      block(nil, error);
+                                                  }
+                                              }];
 }
 
 - (void)fetchFeedForCurrentUser:(void (^)(NSArray *posts, NSError *error, BOOL moreComing))block
@@ -65,6 +94,12 @@
     }];
 }
 
+- (void)fetchActivityForCurrentUser:(void (^)(NSArray *activity, NSError *error, BOOL moreComing))block
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        block([[[self currentUser] activityItems] array], nil, NO);
+    }];
+}
 
 - (void)buildTemporaryData
 {

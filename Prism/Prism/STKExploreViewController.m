@@ -9,6 +9,8 @@
 #import "STKExploreViewController.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKExploreCell.h"
+#import "STKPanelViewController.h"
+#import "STKRenderServer.h"
 
 @interface STKExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -30,6 +32,15 @@
         [self setAutomaticallyAdjustsScrollViewInsets:YES];
     }
     return self;
+}
+
+- (IBAction)temporaryShowPanel:(id)sender
+{
+    UIImage *img = [[STKRenderServer renderServer] blurredImageForView:[self view]];
+    STKPanelViewController *vc = [[STKPanelViewController alloc] initWithBackgroundImage:img];
+    
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nvc animated:YES completion:nil];
 }
 
 - (void)viewDidLoad

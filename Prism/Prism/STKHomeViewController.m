@@ -12,6 +12,7 @@
 #import "STKPost.h"
 #import "STKUserStore.h"
 #import "STKUser.h"
+#import "STKRenderServer.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -141,7 +142,7 @@
         NSIndexPath *lastIndexPathOnScreen = [visibleRows lastObject];
         STKHomeCell *realCell = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:lastIndexPathOnScreen];
         float lastCellTopRelativeToTable = [realCell frame].origin.y - totalOffset;
-        float cellSpan = 30.0;
+        float cellSpan = 25.0;
         if(lastCellTopRelativeToTable <= matchLineY) {
             lastIndexPathOnScreen = [NSIndexPath indexPathForRow:[lastIndexPathOnScreen row] + 1
                                                        inSection:0];
@@ -152,7 +153,7 @@
         
         NSIndexPath *indexPath = lastIndexPathOnScreen;
         NSMutableArray *indicesToRepresent = [NSMutableArray array];
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < 4; i++) {
             if([indexPath row] < [[self items] count]) {
                 [indicesToRepresent addObject:indexPath];
             }
@@ -162,25 +163,26 @@
         }
 
         
+        int indexOfIndicies = 0;
+        // When at bottom (just came onto screen), t = 1, when at top of cardView, t = 0
+        float t = (lastCellTopRelativeToTable - matchLineY) / (containerHeight - matchLineY);
+        if(t > 1.0)
+            t = 1.0;
+        
+        
         for(NSIndexPath *ip in indicesToRepresent) {
             STKHomeCell *nextCell = [self cardCellForIndexPath:ip];
             [[self cardView] bringSubviewToFront:nextCell];
-            // When at bottom (just came onto screen), t = 1, when at top of cardView, t = 0
- 
-            float t = (lastCellTopRelativeToTable - matchLineY) / (containerHeight - matchLineY);
-            
-            if(t > 1.0) {
-                t = sqrtf(t);
-                [[nextCell layer] setShadowRadius:5.0];
-            } else {
-                [[nextCell layer] setShadowRadius:t * 5.0];
-            }
-   
-            CGRect r = [nextCell frame];
-            r.origin.y = cellSpan * t - 10;
-            [nextCell setFrame:r];
 
-            lastCellTopRelativeToTable += [[self tableView] rowHeight];
+            [[nextCell layer] setShadowRadius:indexOfIndicies + t];
+
+            CGRect r = [nextCell frame];
+            float moreOffset = indexOfIndicies * cellSpan;
+            r.origin.y = cellSpan * t - 10;
+            r.origin.y += moreOffset;
+            [nextCell setFrame:r];
+            
+            indexOfIndicies ++;
         }
         
         
@@ -243,6 +245,7 @@
             }
             [[self tableView] reloadData];
             [self layoutCards];
+            [[STKRenderServer renderServer] beginTrackingRenderingForScrollView:[self tableView]];
 
         } else {
             
@@ -258,7 +261,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    STKHomeCell *c = (STKHomeCell *)[tableView dequeueReusableCellWithIdentifier:@"STKHomeCell"];
+    STKHomeCell *c = [STKHomeCell cellForTableView:tableView target:self];
 
     [self populateCell:c forIndexPath:indexPath];
     

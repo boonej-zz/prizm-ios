@@ -14,6 +14,7 @@
 #import "STKProfileViewController.h"
 #import "STKActivityViewController.h"
 #import "STKGraphViewController.h"
+#import "STKRegisterViewController.h"
 
 #import "STKImageStore.h"
 
@@ -22,6 +23,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [self configureAppearanceProxies];
     
@@ -48,7 +51,15 @@
         [[vc navigationBar] setTranslucent:YES];
     }
     
+    
     [[self window] setRootViewController:nvc];
+/*
+    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
+    UINavigationController *registerNVC = [[UINavigationController alloc] initWithRootViewController:rvc];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [nvc presentViewController:registerNVC animated:YES completion:nil];
+    }];
+*/
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

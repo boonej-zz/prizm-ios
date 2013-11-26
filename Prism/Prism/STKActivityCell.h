@@ -7,13 +7,14 @@
 //
 
 #import "STKTableViewCell.h"
+#import "STKResolvingImageView.h"
 
 @interface STKActivityCell : STKTableViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (weak, nonatomic) IBOutlet STKResolvingImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *recentIndicatorImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *activityTypeLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *imageReferenceView;
+@property (weak, nonatomic) IBOutlet STKResolvingImageView *imageReferenceView;
 
 @end

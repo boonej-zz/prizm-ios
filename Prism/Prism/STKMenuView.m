@@ -10,21 +10,80 @@
 #import "STKMenuButton.h"
 
 @interface STKMenuView () <UIDynamicAnimatorDelegate>
-
+@property (nonatomic, strong) UIView *buttonContainerView;
 @property (nonatomic, strong) NSArray *buttons;
 @property (nonatomic, strong) UIDynamicAnimator *animator;
+@property (nonatomic, strong) UIImageView *backgroundImageView;
 @end
 
 @implementation STKMenuView
 
 - (id)init
 {
-    self = [super initWithFrame:CGRectMake(0, 0, 320, 100)];
+    self = [super initWithFrame:CGRectMake(0, 0, 320, 140)];
     if (self) {
         [self setBackgroundColor:[UIColor clearColor]];
-//        [self setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setClipsToBounds:YES];
 
+        _backgroundImageView = [[UIImageView alloc] init];
+        [_backgroundImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [_backgroundImageView setContentMode:UIViewContentModeScaleAspectFill];
+
+        [self addSubview:_backgroundImageView];
+
+        
+        
+        
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
+                                                                         attribute:NSLayoutAttributeTop
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:self
+                                                                         attribute:NSLayoutAttributeTop
+                                                                        multiplier:1
+                                                                          constant:0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
+                                                                         attribute:NSLayoutAttributeBottom
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:self
+                                                                         attribute:NSLayoutAttributeBottom
+                                                                        multiplier:1
+                                                                          constant:0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
+                                                                         attribute:NSLayoutAttributeLeft
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:self
+                                                                         attribute:NSLayoutAttributeLeft
+                                                                        multiplier:1
+                                                                          constant:0]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
+                                                                         attribute:NSLayoutAttributeRight
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:self
+                                                                         attribute:NSLayoutAttributeRight
+                                                                        multiplier:1
+                                                                          constant:0]];
+        
+        UIView *v = [[UIView alloc] init];
+        [v setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [v setBackgroundColor:[UIColor colorWithWhite:0.5 alpha:0.5]];
+        [self addSubview:v];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:@{@"v" : v}]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|"
+                                                                              options:0
+                                                                              metrics:nil
+                                                                                views:@{@"v" : v}]];
+        
+        _buttonContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 140)];
+        [self addSubview:_buttonContainerView];
+        
+        
+
+        
+        
         STKMenuButton *b0 = [[STKMenuButton alloc] init];
         STKMenuButton *b1 = [[STKMenuButton alloc] init];
         STKMenuButton *b2 = [[STKMenuButton alloc] init];
@@ -38,22 +97,28 @@
                     action:@selector(buttonTapped:)
           forControlEvents:UIControlEventTouchUpInside];
             [ctl setTranslatesAutoresizingMaskIntoConstraints:NO];
-            [self addSubview:ctl];
+            [_buttonContainerView addSubview:ctl];
         }
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
+        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
                                                                      options:0
                                                                      metrics:nil
                                                                        views:@{@"v0" : b0, @"v1" : b1, @"v2" : b2}]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
+        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
                                                                      options:0
                                                                      metrics:nil
                                                                        views:@{@"v0" : b3, @"v1" : b4, @"v2" : b5}]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==50)]|" options:0 metrics:nil views:@{@"v0" : b0, @"v1" : b3}]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==50)]|" options:0 metrics:nil views:@{@"v0" : b1, @"v1" : b4}]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==50)]|" options:0 metrics:nil views:@{@"v0" : b2, @"v1" : b5}]];
+        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b0, @"v1" : b3}]];
+        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b1, @"v1" : b4}]];
+        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b2, @"v1" : b5}]];
+
     }
     return self;
+}
 
+- (void)setBackgroundImage:(UIImage *)backgroundImage
+{
+    _backgroundImage = backgroundImage;
+    [[self backgroundImageView] setImage:_backgroundImage];
 }
 
 - (void)setSelectedIndex:(int)selectedIndex
