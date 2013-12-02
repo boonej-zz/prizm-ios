@@ -7,9 +7,11 @@
 //
 
 #import "STKCreatePostViewController.h"
+#import "STKHashtagToolbar.h"
 
 @interface STKCreatePostViewController ()
-
+    <STKHashtagToolbarDelegate>
+@property (weak, nonatomic) IBOutlet UITextView *postTextView;
 @end
 
 @implementation STKCreatePostViewController
@@ -23,7 +25,6 @@
         
         [[self navigationItem] setLeftBarButtonItem:bbiCancel];
         [[self navigationItem] setRightBarButtonItem:bbiPost];
-        
     }
     return self;
 }
@@ -42,12 +43,13 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self.postTextView becomeFirstResponder];
+    [STKHashtagToolbar attachToTextView:self.postTextView withDelegate:self];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)textToolbarIsDone:(STKHashtagToolbar *)tb
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [[self view] endEditing:YES];
 }
 
 @end

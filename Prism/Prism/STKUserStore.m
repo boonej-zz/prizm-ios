@@ -198,4 +198,11 @@
     [[self context] save:nil];
 }
 
+- (void)fetchRecommendedHashtags:(NSString *)hashtag completion:(void (^)(NSArray *hashtags, NSError *error))block
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        block(@[hashtag,@"foo",@"bar",@"foobar"],nil);
+    }];
+}
+
 @end

@@ -20,4 +20,6 @@
 - (void)fetchActivityForCurrentUser:(void (^)(NSArray *activity, NSError *error, BOOL moreComing))block;
 
 - (void)fetchAccountsForDevice:(void (^)(NSArray *accounts, NSError *err))block;
+
+- (void)fetchRecommendedHashtags:(NSString *)hashtag completion:(void (^)(NSArray *hashtags, NSError *error))block;
 @end

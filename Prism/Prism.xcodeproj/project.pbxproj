@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */; };
+		88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */; };
 		BE02EAA3182A80A200A5505A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA2182A80A200A5505A /* Foundation.framework */; };
 		BE02EAA5182A80A200A5505A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA4182A80A200A5505A /* CoreGraphics.framework */; };
 		BE02EAA7182A80A200A5505A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA6182A80A200A5505A /* UIKit.framework */; };
@@ -79,6 +81,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		88A74C7C184714A600DF05AC /* STKHashtagToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHashtagToolbar.h; sourceTree = "<group>"; };
+		88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagToolbar.m; sourceTree = "<group>"; };
+		88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+STKHashtagDetector.h"; sourceTree = "<group>"; };
+		88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+STKHashtagDetector.m"; sourceTree = "<group>"; };
 		BE02EA9F182A80A200A5505A /* Prism.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prism.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE02EAA2182A80A200A5505A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE02EAA4182A80A200A5505A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -341,6 +347,8 @@
 				BE61085D183D159E003A182C /* STKActivityCell.xib */,
 				BE7C47FF183EBBAC00C30995 /* STKResolvingImageView.h */,
 				BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */,
+				88A74C7C184714A600DF05AC /* STKHashtagToolbar.h */,
+				88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -367,6 +375,8 @@
 				BEF7A0851843ACB100A3AFFB /* STKRenderServer.m */,
 				BEF7A0871843AE2E00A3AFFB /* STKRenderObject.h */,
 				BEF7A0881843AE2E00A3AFFB /* STKRenderObject.m */,
+				88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */,
+				88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -510,12 +520,14 @@
 				BE02EAAF182A80A200A5505A /* main.m in Sources */,
 				BEFCEE05182C210600648B9F /* STKConnection.m in Sources */,
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
+				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
 				BE24B523183AA653009BC02A /* STKCircleView.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
+				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
 				BEF7A0891843AE2E00A3AFFB /* STKRenderObject.m in Sources */,
