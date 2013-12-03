@@ -7,16 +7,16 @@
 //
 
 #import "STKRenderServer.h"
-#import "STKRenderObject.h"
 
 @import QuartzCore;
 @import CoreImage;
 
 @interface STKRenderServer ()
 
-@property (nonatomic, strong) NSMutableDictionary *renderings;
 @property (nonatomic, strong) CIContext *context;
-
+@property (nonatomic, strong) NSMutableDictionary *nibMap;
+@property (nonatomic, strong) NSMutableDictionary *reusePool;
+@property (nonatomic, strong) NSMutableDictionary *bullshitRemap;
 @end
 
 @implementation STKRenderServer
@@ -36,10 +36,39 @@
 {
     self = [super init];
     if(self) {
-        _renderings = [[NSMutableDictionary alloc] init];
         _context = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer: @(NO)}];
+        _nibMap = [[NSMutableDictionary alloc] init];
+        _reusePool = [[NSMutableDictionary alloc] init];
+        _bullshitRemap = [[NSMutableDictionary alloc] init];
     }
     return self;
+}
+
+- (UIImage *)blurredImageWithImage:(UIImage *)img
+{
+    float blurRadius = 5.0;
+    CIImage *filterImage = [CIImage imageWithCGImage:[img CGImage]];
+    
+    CIFilter *clampFilter = [CIFilter filterWithName:@"CIAffineClamp"];
+    CGAffineTransform t = CGAffineTransformMakeScale(1, 1);
+    [clampFilter setValue:[NSValue valueWithBytes:&t objCType:@encode(CGAffineTransform)]
+                   forKey:@"inputTransform"];
+    [clampFilter setValue:filterImage forKey:@"inputImage"];
+    
+    CIImage *clampedImage = [clampFilter outputImage];
+    
+    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [blurFilter setValue:clampedImage forKey:@"inputImage"];
+    [blurFilter setValue:@(blurRadius) forKey:@"inputRadius"];
+    
+    CGImageRef cgImg = [[self context] createCGImage:[blurFilter outputImage]
+                                            fromRect:[filterImage extent]];
+    
+    UIImage *outImage = [UIImage imageWithCGImage:cgImg];
+    
+    CGImageRelease(cgImg);
+    
+    return outImage;
 }
 
 - (UIImage *)instantBlurredImageForView:(UIView *)view inSubrect:(CGRect)rect
@@ -50,82 +79,98 @@
     
     float renderScale = 0.35;
     CGSize destinationSize = CGSizeMake((int)(rect.size.width * renderScale), (int)(rect.size.height * renderScale));
+
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(destinationSize.width, destinationSize.height), YES, 1.0);
     CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -rect.origin.x * renderScale, -rect.origin.y * renderScale);
     CGContextScaleCTM(UIGraphicsGetCurrentContext(), renderScale, renderScale);
-
     [view drawViewHierarchyInRect:[view bounds]
-               afterScreenUpdates:NO];
+                         afterScreenUpdates:NO];
+    //[[view layer] renderInContext:UIGraphicsGetCurrentContext()];
+
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    
     UIGraphicsEndImageContext();
-
-    float blurRadius = 5.0;
-    CIImage *filterImage = [CIImage imageWithCGImage:[img CGImage]];
     
-    CIFilter *clampFilter = [CIFilter filterWithName:@"CIAffineClamp"];
-    CGAffineTransform t = CGAffineTransformMakeScale(1, 1);
-    [clampFilter setValue:[NSValue valueWithBytes:&t objCType:@encode(CGAffineTransform)] forKey:@"inputTransform"];
-    [clampFilter setValue:filterImage forKey:@"inputImage"];
-
-    CIImage *clampedImage = [clampFilter outputImage];
-    
-    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [blurFilter setValue:clampedImage forKey:@"inputImage"];
-    [blurFilter setValue:@(blurRadius) forKey:@"inputRadius"];
-
-    CGImageRef cgImg = [[self context] createCGImage:[blurFilter outputImage]
-                                            fromRect:[filterImage extent]];
-    
-    UIImage *outImage = [UIImage imageWithCGImage:cgImg];
-    
-    return outImage;
+    return [self blurredImageWithImage:img];
 }
 
-- (void)beginTrackingRenderingForScrollView:(UIScrollView *)view inSubrect:(CGRect)rect
+
+- (UIImage *)backgroundBlurredImageForView:(UIView *)view inSubrect:(CGRect)rect
 {
-    NSLog(@"Size: %@", NSStringFromCGSize([view contentSize]));
-    [view addObserver:self
-           forKeyPath:@"contentOffset"
-              options:NSKeyValueObservingOptionNew
-              context:nil];
-    /*
-//    CGSize sourceSize = [view bounds].size;
-    CGSize destinationSize = rect.size;
-    float renderScale = 0.1;
+    if(CGRectEqualToRect(rect, CGRectZero)) {
+        rect = [view bounds];
+    }
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(destinationSize.width *renderScale, destinationSize.height * renderScale), YES, 1.0);
+    float renderScale = 0.35;
+    CGSize destinationSize = CGSizeMake((int)(rect.size.width * renderScale), (int)(rect.size.height * renderScale));
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(destinationSize.width, destinationSize.height), YES, 1.0);
+
+    [[UIColor whiteColor] set];
+    UIRectFill(CGRectMake(0, 0, destinationSize.width, destinationSize.height));
+    
     CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -rect.origin.x * renderScale, -rect.origin.y * renderScale);
     CGContextScaleCTM(UIGraphicsGetCurrentContext(), renderScale, renderScale);
     [[view layer] renderInContext:UIGraphicsGetCurrentContext()];
+    
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    
     UIGraphicsEndImageContext();
     
-    STKRenderObject *obj = [[STKRenderObject alloc] init];
-    [obj setImage:img];
+    return [self blurredImageWithImage:img];
+}
+
+#pragma mark Table Views
+
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier
+{
+    [[self nibMap] setObject:nib forKey:identifier];
+}
+
+- (id)dequeueCellForReuseIdentifier:(NSString *)identifier
+{
+    NSMutableArray *a = [[self reusePool] objectForKey:identifier];
+    if(!a) {
+        a = [[NSMutableArray alloc] init];
+        [[self reusePool] setObject:a forKey:identifier];
+    }
     
-    // Change to weak map???
-    [[self renderings] setObject:obj forKey:[NSValue valueWithNonretainedObject:view]];*/
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    UIScrollView *sv = (UIScrollView *)object;
-    NSLog(@"%@", NSStringFromCGPoint([sv contentOffset]));
-}
-
-- (void)beginTrackingRenderingForScrollView:(UIScrollView *)view
-{
-    [self beginTrackingRenderingForScrollView:view inSubrect:[view bounds]];
-}
-
-- (void)stopTrackingRenderingForScrollView:(UIScrollView *)view
-{
+    UITableViewCell *c = [a lastObject];
+    if(!c) {
+        c = [(UINib *)[[self nibMap] objectForKey:identifier] instantiateWithOwner:nil
+                                                                           options:0][0];
+        [[self bullshitRemap] setObject:identifier forKey:[NSValue valueWithNonretainedObject:c]];
+    } else {
+        [a removeObjectIdenticalTo:c];
+    }
     
+    return c;
 }
 
-- (UIImage *)blurredImageForView:(UIView *)view
+- (void)reenqueueCell:(UITableViewCell *)cell
 {
-    return [[[self renderings] objectForKey:[NSValue valueWithNonretainedObject:view]] image];
+    NSMutableArray *a = [[self reusePool] objectForKey:[[self bullshitRemap] objectForKey:[NSValue valueWithNonretainedObject:cell]]];
+    [a addObject:cell];
+}
+
+- (void)blurCell:(UITableViewCell *)cell
+      completion:(void (^)(UIImage *result))block
+{
+    if(!block) {
+        @throw [NSException exceptionWithName:@"STKRenderServerException"
+                                       reason:@"Cannot pass nil to blurCell:completion:"
+                                     userInfo:nil];
+    }
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+
+        UIImage *img = [self backgroundBlurredImageForView:cell
+                                                 inSubrect:CGRectZero];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reenqueueCell:cell];
+            block(img);
+        });
+    });
 }
 
 @end

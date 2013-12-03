@@ -13,6 +13,7 @@
 #import "STKUserStore.h"
 #import "STKUser.h"
 #import "STKRenderServer.h"
+#import "STKBackdropView.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -27,6 +28,7 @@
 @property (nonatomic, strong) NSMutableDictionary *cardMap;
 @property (nonatomic, strong) UINib *homeCellNib;
 
+@property (nonatomic, strong) STKBackdropView *backdropView;
 @end
 
 @implementation STKHomeViewController
@@ -39,9 +41,9 @@
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_home_selected"]];
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
-        
     }
     return self;
 }
@@ -53,22 +55,32 @@
     
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     
+    _backdropView = [[STKBackdropView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)
+                                                relativeTo:[self tableView]];
+    [[self view] addSubview:_backdropView];
+    
     _homeCellNib = [UINib nibWithNibName:@"STKHomeCell" bundle:nil];
+    
+    [[STKRenderServer renderServer] registerNib:_homeCellNib
+                         forCellReuseIdentifier:@"STKHomeCell"];
+    
     [[self tableView] registerNib:_homeCellNib
            forCellReuseIdentifier:@"STKHomeCell"];
+    [[self tableView] setDelaysContentTouches:NO];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setRowHeight:397];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    
+
     UIView *blankView = [[UIView alloc] initWithFrame:[[self cardView] bounds]];
     [blankView setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setTableFooterView:blankView];
     
-    [[self tableView] setDelaysContentTouches:NO];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     
     _cardToolbarNormalImage = [[UIToolbar appearance] backgroundImageForToolbarPosition:UIBarPositionAny
                                                                              barMetrics:UIBarMetricsDefault];
     [[self cardView] setUserInteractionEnabled:NO];
+    
 }
 
 - (STKHomeCell *)cardCellForIndexPath:(NSIndexPath *)ip
@@ -137,8 +149,6 @@
             [[c backdropFadeView] setAlpha:t];
         }
         
-        
-        
         NSIndexPath *lastIndexPathOnScreen = [visibleRows lastObject];
         STKHomeCell *realCell = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:lastIndexPathOnScreen];
         float lastCellTopRelativeToTable = [realCell frame].origin.y - totalOffset;
@@ -148,8 +158,6 @@
                                                        inSection:0];
             lastCellTopRelativeToTable += [[self tableView] rowHeight];
         }
-        
-        
         
         NSIndexPath *indexPath = lastIndexPathOnScreen;
         NSMutableArray *indicesToRepresent = [NSMutableArray array];
@@ -194,7 +202,6 @@
         
     }
     [[self cardView] layoutIfNeeded];
-
 }
 
 
@@ -228,13 +235,28 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [cell setBackgroundColor:[UIColor clearColor]];
+
+    if([[self backdropView] shouldBlurImageForIndexPath:indexPath]) {
+        STKHomeCell *blurCell = [[STKRenderServer renderServer] dequeueCellForReuseIdentifier:@"STKHomeCell"];
+        
+        [self populateCell:blurCell
+              forIndexPath:indexPath];
+
+        CGRect rect = [cell frame];
+        [[STKRenderServer renderServer] blurCell:blurCell
+                                      completion:^(UIImage *result) {
+                                          [[self backdropView] addBlurredImage:result
+                                                                       forRect:rect
+                                                                     indexPath:indexPath];
+                                      }];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
     
+    [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
     
     [[STKUserStore store] fetchFeedForCurrentUser:^(NSArray *posts, NSError *error, BOOL moreComing) {
         if(!error) {
@@ -245,8 +267,6 @@
             }
             [[self tableView] reloadData];
             [self layoutCards];
-            [[STKRenderServer renderServer] beginTrackingRenderingForScrollView:[self tableView]];
-
         } else {
             
         }
@@ -266,7 +286,6 @@
     [self populateCell:c forIndexPath:indexPath];
     
     return c;
-    
 }
 
 

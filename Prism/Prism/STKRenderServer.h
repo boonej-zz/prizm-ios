@@ -8,16 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+@class STKRenderProvider;
+
 @interface STKRenderServer : NSObject
 
 + (STKRenderServer *)renderServer;
 
-- (void)beginTrackingRenderingForScrollView:(UIScrollView *)view;
-- (void)beginTrackingRenderingForScrollView:(UIScrollView *)view inSubrect:(CGRect)rect;
-- (void)stopTrackingRenderingForScrollView:(UIScrollView *)view;
-
 - (UIImage *)instantBlurredImageForView:(UIView *)view inSubrect:(CGRect)rect;
 
-- (UIImage *)blurredImageForView:(UIView *)view;
+- (UIImage *)blurredImageWithImage:(UIImage *)img;
+
+// Methods for handling live blurring of table views
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier;
+- (id)dequeueCellForReuseIdentifier:(NSString *)identifier;
+- (void)blurCell:(UITableViewCell *)cell
+      completion:(void (^)(UIImage *result))block;
 
 @end

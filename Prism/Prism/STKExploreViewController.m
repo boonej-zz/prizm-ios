@@ -36,11 +36,11 @@
 
 - (IBAction)temporaryShowPanel:(id)sender
 {
-    UIImage *img = [[STKRenderServer renderServer] blurredImageForView:[self view]];
+/*    UIImage *img = [[STKRenderServer renderServer] blurredImageForView:[self view]];
     STKPanelViewController *vc = [[STKPanelViewController alloc] initWithBackgroundImage:img];
     
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:nvc animated:YES completion:nil];
+    [self presentViewController:nvc animated:YES completion:nil];*/
 }
 
 - (void)viewDidLoad

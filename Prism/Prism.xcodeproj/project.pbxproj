@@ -23,6 +23,7 @@
 		BE02EAC8182A80A200A5505A /* PrismTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAC7182A80A200A5505A /* PrismTests.m */; };
 		BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAD2182A81AC00A5505A /* STKMenuController.m */; };
 		BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAD7182A8A5F00A5505A /* STKMenuView.m */; };
+		BE09FFEF184E27B30059115B /* STKBackdropView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE09FFEE184E27B30059115B /* STKBackdropView.m */; };
 		BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B51C183A90C8009BC02A /* STKTrustView.m */; };
 		BE24B520183A90D1009BC02A /* STKCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B51F183A90D1009BC02A /* STKCountView.m */; };
 		BE24B523183AA653009BC02A /* STKCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B522183AA653009BC02A /* STKCircleView.m */; };
@@ -52,7 +53,6 @@
 		BEF7A08118439E0800A3AFFB /* STKRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A07F18439E0800A3AFFB /* STKRegisterViewController.m */; };
 		BEF7A08218439E0800A3AFFB /* STKRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF7A08018439E0800A3AFFB /* STKRegisterViewController.xib */; };
 		BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A0851843ACB100A3AFFB /* STKRenderServer.m */; };
-		BEF7A0891843AE2E00A3AFFB /* STKRenderObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A0881843AE2E00A3AFFB /* STKRenderObject.m */; };
 		BEF7A08D1843AEAB00A3AFFB /* STKPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A08B1843AEAB00A3AFFB /* STKPanelViewController.m */; };
 		BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF7A08C1843AEAB00A3AFFB /* STKPanelViewController.xib */; };
 		BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */; };
@@ -105,6 +105,8 @@
 		BE02EAD2182A81AC00A5505A /* STKMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuController.m; sourceTree = "<group>"; };
 		BE02EAD6182A8A5F00A5505A /* STKMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMenuView.h; sourceTree = "<group>"; };
 		BE02EAD7182A8A5F00A5505A /* STKMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuView.m; sourceTree = "<group>"; };
+		BE09FFED184E27B30059115B /* STKBackdropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKBackdropView.h; sourceTree = "<group>"; };
+		BE09FFEE184E27B30059115B /* STKBackdropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKBackdropView.m; sourceTree = "<group>"; };
 		BE24B51B183A90C8009BC02A /* STKTrustView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTrustView.h; sourceTree = "<group>"; };
 		BE24B51C183A90C8009BC02A /* STKTrustView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTrustView.m; sourceTree = "<group>"; };
 		BE24B51E183A90D1009BC02A /* STKCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCountView.h; sourceTree = "<group>"; };
@@ -152,8 +154,6 @@
 		BEF7A08018439E0800A3AFFB /* STKRegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKRegisterViewController.xib; sourceTree = "<group>"; };
 		BEF7A0841843ACB100A3AFFB /* STKRenderServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKRenderServer.h; sourceTree = "<group>"; };
 		BEF7A0851843ACB100A3AFFB /* STKRenderServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKRenderServer.m; sourceTree = "<group>"; };
-		BEF7A0871843AE2E00A3AFFB /* STKRenderObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKRenderObject.h; sourceTree = "<group>"; };
-		BEF7A0881843AE2E00A3AFFB /* STKRenderObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKRenderObject.m; sourceTree = "<group>"; };
 		BEF7A08A1843AEAB00A3AFFB /* STKPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPanelViewController.h; sourceTree = "<group>"; };
 		BEF7A08B1843AEAB00A3AFFB /* STKPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKPanelViewController.m; sourceTree = "<group>"; };
 		BEF7A08C1843AEAB00A3AFFB /* STKPanelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKPanelViewController.xib; sourceTree = "<group>"; };
@@ -240,7 +240,7 @@
 		BE02EAA8182A80A200A5505A /* Prism */ = {
 			isa = PBXGroup;
 			children = (
-				BEF7A0831843ACA500A3AFFB /* Utility */,
+				BEF7A0831843ACA500A3AFFB /* Blur */,
 				BEE97D93183A5CD900B7BAC1 /* Model */,
 				BEFCEDFC182C204900648B9F /* Store */,
 				BE02EAD5182A8A5500A5505A /* View */,
@@ -368,17 +368,18 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		BEF7A0831843ACA500A3AFFB /* Utility */ = {
+		BEF7A0831843ACA500A3AFFB /* Blur */ = {
 			isa = PBXGroup;
 			children = (
 				BEF7A0841843ACB100A3AFFB /* STKRenderServer.h */,
 				BEF7A0851843ACB100A3AFFB /* STKRenderServer.m */,
-				BEF7A0871843AE2E00A3AFFB /* STKRenderObject.h */,
-				BEF7A0881843AE2E00A3AFFB /* STKRenderObject.m */,
 				88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */,
 				88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */,
+
+				BE09FFED184E27B30059115B /* STKBackdropView.h */,
+				BE09FFEE184E27B30059115B /* STKBackdropView.m */,
 			);
-			name = Utility;
+			name = Blur;
 			sourceTree = "<group>";
 		};
 		BEFCEDFC182C204900648B9F /* Store */ = {
@@ -530,12 +531,12 @@
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
-				BEF7A0891843AE2E00A3AFFB /* STKRenderObject.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
 				BEFAC19F183D512E005E8933 /* STKRequestItem.m in Sources */,
 				BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */,
 				BEC01A0E182AF42600080601 /* STKTrustViewController.m in Sources */,
+				BE09FFEF184E27B30059115B /* STKBackdropView.m in Sources */,
 				BE61085E183D159E003A182C /* STKActivityCell.m in Sources */,
 				BE02EAB3182A80A200A5505A /* STKAppDelegate.m in Sources */,
 				BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */,
