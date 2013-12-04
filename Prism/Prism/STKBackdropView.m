@@ -7,6 +7,7 @@
 //
 
 #import "STKBackdropView.h"
+#import "STKRenderServer.h"
 
 static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
 
@@ -14,6 +15,7 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic) CGRect rect;
 @property (nonatomic, strong) NSIndexPath *indexPath;
+
 @end
 
 @implementation STKBackdropViewImage
@@ -28,6 +30,16 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
 @property (nonatomic, weak) UIView *blurView;
 @property (nonatomic, strong) NSMutableDictionary *cacheMap;
 
+@property (nonatomic, strong) NSMutableDictionary *nibMap;
+@property (nonatomic, strong) NSMutableDictionary *reusePool;
+@property (nonatomic, strong) NSMutableDictionary *bullshitRemap;
+@property (nonatomic, strong) NSMutableArray *cellContainers;
+
+@property (nonatomic, strong) UIImageView *backgroundImageView;
+
+- (void)blurCell:(UITableViewCell *)cell
+      completion:(void (^)(UIImage *result))block;
+
 @end
 
 @implementation STKBackdropView
@@ -40,7 +52,19 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
         _images = [[NSMutableArray alloc] init];
         _blurView = blurView;
         _cacheMap = [[NSMutableDictionary alloc] init];
+        _nibMap = [[NSMutableDictionary alloc] init];
+        _reusePool = [[NSMutableDictionary alloc] init];
+        _bullshitRemap = [[NSMutableDictionary alloc] init];
+        _cellContainers = [[NSMutableArray alloc] init];
+        
         [self setClipsToBounds:YES];
+
+        _backgroundImageView = [[UIImageView alloc] initWithFrame:[self bounds]];
+        [_backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+        [_backgroundImageView setBackgroundColor:[UIColor clearColor]];
+        [_backgroundImageView setContentMode:UIViewContentModeTop];
+        [self addSubview:_backgroundImageView];
+
         if([blurView isKindOfClass:[UIScrollView class]]) {
             [blurView addObserver:self
                        forKeyPath:@"contentOffset"
@@ -61,30 +85,17 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
 - (void)setBlurBackgroundColor:(UIColor *)blurBackgroundColor
 {
     _blurBackgroundColor = blurBackgroundColor;
-    [self setBlurBackgroundImageFromColor:_blurBackgroundColor];
+    [self setBackgroundColor:blurBackgroundColor];
 }
 
-- (void)setBlurBackgroundImageFromColor:(UIColor *)color
+- (void)setBlurBackgroundImage:(UIImage *)blurBackgroundImage
 {
-    
+    UIImage *img = [[STKRenderServer renderServer] blurredImageWithImage:blurBackgroundImage
+                                                             affineClamp:YES];
+    _blurBackgroundImage = img;
+    [[self backgroundImageView] setImage:img];
 }
 
-- (void)addBlurredImage:(UIImage *)image forRect:(CGRect)rect indexPath:(NSIndexPath *)ip
-{
-    STKBackdropViewImage *i = [[STKBackdropViewImage alloc] init];
-    [i setImage:image];
-    [i setRect:rect];
-    [i setIndexPath:ip];
-    
-    [[self images] addObject:i];
-    [[self cacheMap] setObject:i
-                        forKey:ip];
-}
-
-- (BOOL)shouldBlurImageForIndexPath:(NSIndexPath *)ip
-{
-    return ([[self cacheMap] objectForKey:ip] == nil);
-}
 
 - (void)invalidateCache
 {
@@ -170,4 +181,81 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
                               context:context];
     }
 }
+
+
+#pragma mark UITableView Support
+
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier
+{
+    [[self nibMap] setObject:nib forKey:identifier];
+}
+
+- (id)dequeueCellForReuseIdentifier:(NSString *)identifier
+{
+    NSMutableArray *a = [[self reusePool] objectForKey:identifier];
+    if(!a) {
+        a = [[NSMutableArray alloc] init];
+        [[self reusePool] setObject:a forKey:identifier];
+    }
+    
+    UITableViewCell *c = [a lastObject];
+    if(!c) {
+        c = [(UINib *)[[self nibMap] objectForKey:identifier] instantiateWithOwner:nil
+                                                                           options:0][0];
+        [[self bullshitRemap] setObject:identifier forKey:[NSValue valueWithNonretainedObject:c]];
+    } else {
+        [a removeObjectIdenticalTo:c];
+    }
+    
+    return c;
+}
+
+- (void)reenqueueCell:(UITableViewCell *)cell
+{
+    NSMutableArray *a = [[self reusePool] objectForKey:[[self bullshitRemap] objectForKey:[NSValue valueWithNonretainedObject:cell]]];
+    [a addObject:cell];
+}
+
+- (void)blurCell:(UITableViewCell *)cell
+      completion:(void (^)(UIImage *result))block
+{
+    if(!block) {
+        @throw [NSException exceptionWithName:@"STKRenderServerException"
+                                       reason:@"Cannot pass nil to blurCell:completion:"
+                                     userInfo:nil];
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        UIImage *img = [[STKRenderServer renderServer] backgroundBlurredImageForView:cell
+                                                 inSubrect:CGRectZero];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reenqueueCell:cell];
+            block(img);
+        });
+    });
+}
+
+
+- (void)addBlurredImageFromCell:(UITableViewCell *)cell
+                        forRect:(CGRect)rect
+                      indexPath:(NSIndexPath *)ip
+{
+    [self blurCell:cell
+        completion:^(UIImage *result) {
+            STKBackdropViewImage *i = [[STKBackdropViewImage alloc] init];
+            [i setImage:result];
+            [i setRect:rect];
+            [i setIndexPath:ip];
+            
+            [[self images] addObject:i];
+            [[self cacheMap] setObject:i
+                                forKey:ip];
+        }];
+}
+
+- (BOOL)shouldBlurImageForIndexPath:(NSIndexPath *)ip
+{
+    return ([[self cacheMap] objectForKey:ip] == nil);
+}
+
 @end

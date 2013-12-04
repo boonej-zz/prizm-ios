@@ -53,16 +53,17 @@
 {
     [super viewDidLoad];
     
+    _homeCellNib = [UINib nibWithNibName:@"STKHomeCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     
     _backdropView = [[STKBackdropView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)
                                                 relativeTo:[self tableView]];
     [[self view] addSubview:_backdropView];
+    [_backdropView setBlurBackgroundImage:[UIImage imageNamed:@"img_background"]];
+    [_backdropView registerNib:_homeCellNib
+        forCellReuseIdentifier:@"STKHomeCell"];
     
-    _homeCellNib = [UINib nibWithNibName:@"STKHomeCell" bundle:nil];
     
-    [[STKRenderServer renderServer] registerNib:_homeCellNib
-                         forCellReuseIdentifier:@"STKHomeCell"];
     
     [[self tableView] registerNib:_homeCellNib
            forCellReuseIdentifier:@"STKHomeCell"];
@@ -74,8 +75,6 @@
     UIView *blankView = [[UIView alloc] initWithFrame:[[self cardView] bounds]];
     [blankView setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setTableFooterView:blankView];
-    
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     
     _cardToolbarNormalImage = [[UIToolbar appearance] backgroundImageForToolbarPosition:UIBarPositionAny
                                                                              barMetrics:UIBarMetricsDefault];
@@ -237,18 +236,16 @@
     [cell setBackgroundColor:[UIColor clearColor]];
 
     if([[self backdropView] shouldBlurImageForIndexPath:indexPath]) {
-        STKHomeCell *blurCell = [[STKRenderServer renderServer] dequeueCellForReuseIdentifier:@"STKHomeCell"];
+        STKHomeCell *blurCell = [[self backdropView] dequeueCellForReuseIdentifier:@"STKHomeCell"];
+        [blurCell setBackgroundColor:[UIColor clearColor]];
         
         [self populateCell:blurCell
               forIndexPath:indexPath];
 
         CGRect rect = [cell frame];
-        [[STKRenderServer renderServer] blurCell:blurCell
-                                      completion:^(UIImage *result) {
-                                          [[self backdropView] addBlurredImage:result
-                                                                       forRect:rect
-                                                                     indexPath:indexPath];
-                                      }];
+        [[self backdropView] addBlurredImageFromCell:blurCell
+                                             forRect:rect
+                                           indexPath:indexPath];
     }
 }
 

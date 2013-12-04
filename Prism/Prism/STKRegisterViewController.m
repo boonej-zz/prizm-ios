@@ -44,9 +44,11 @@
             if([accounts count] == 1) {
                 ACAccount *acct = [accounts objectAtIndex:0];
                 ACAccountCredential *creds = [acct credential];
-                
+                NSLog(@"%@", acct);
                 NSLog(@"%@", [creds oauthToken]);
             }
+        } else {
+            NSLog(@"%@", err);
         }
     }];
 }

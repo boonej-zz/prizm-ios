@@ -15,13 +15,7 @@
 + (STKRenderServer *)renderServer;
 
 - (UIImage *)instantBlurredImageForView:(UIView *)view inSubrect:(CGRect)rect;
-
-- (UIImage *)blurredImageWithImage:(UIImage *)img;
-
-// Methods for handling live blurring of table views
-- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier;
-- (id)dequeueCellForReuseIdentifier:(NSString *)identifier;
-- (void)blurCell:(UITableViewCell *)cell
-      completion:(void (^)(UIImage *result))block;
+- (UIImage *)backgroundBlurredImageForView:(UIView *)view inSubrect:(CGRect)rect;
+- (UIImage *)blurredImageWithImage:(UIImage *)img affineClamp:(BOOL)clamp;
 
 @end

@@ -15,10 +15,15 @@
 @property (nonatomic, strong) UIColor *blurBackgroundColor;
 @property (nonatomic, strong) UIImage *blurBackgroundImage;
 
-- (BOOL)shouldBlurImageForIndexPath:(NSIndexPath *)ip;
-- (void)addBlurredImage:(UIImage *)image
-                forRect:(CGRect)rect
-              indexPath:(NSIndexPath *)ip;
 - (void)invalidateCache;
+
+#pragma mark UITableView
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier;
+- (id)dequeueCellForReuseIdentifier:(NSString *)identifier;
+- (BOOL)shouldBlurImageForIndexPath:(NSIndexPath *)ip;
+- (void)addBlurredImageFromCell:(UITableViewCell *)cell
+                        forRect:(CGRect)rect
+                      indexPath:(NSIndexPath *)ip;
+
 
 @end

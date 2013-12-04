@@ -59,7 +59,8 @@
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [nvc presentViewController:registerNVC animated:YES completion:nil];
     }];
-*/
+ */
+
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
