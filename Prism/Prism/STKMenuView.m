@@ -224,7 +224,7 @@
 
 - (void)buttonTapped:(id)sender
 {
-    [[self delegate] menuView:self didSelectItemAtIndex:[[self buttons] indexOfObject:sender]];
+    [[self delegate] menuView:self didSelectItemAtIndex:(int)[[self buttons] indexOfObject:sender]];
 }
 
 

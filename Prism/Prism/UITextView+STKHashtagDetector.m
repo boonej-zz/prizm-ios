@@ -22,17 +22,17 @@
 
 - (NSRange)rangeOfCurrentWordWithSelectedRange:(NSRange)range
 {
-    int previousWhitespaceIndex = [self.text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
+    NSUInteger previousWhitespaceIndex = [self.text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
                                                              options:NSBackwardsSearch
                                                                range:NSMakeRange(0, range.location)].location;
-    int nextWhitespaceIndex = [self.text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
+    NSUInteger nextWhitespaceIndex = [self.text rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
                                                          options:kNilOptions
                                                            range:NSMakeRange(range.location, self.text.length-range.location)].location;
     if (previousWhitespaceIndex == NSNotFound)  {
-        previousWhitespaceIndex = -1;
+        return NSMakeRange(NSNotFound, 0);
     }
     if (nextWhitespaceIndex == NSNotFound)  {
-        nextWhitespaceIndex = self.text.length;
+        return NSMakeRange(NSNotFound, 0);
     }
     return NSMakeRange(previousWhitespaceIndex+1, nextWhitespaceIndex-previousWhitespaceIndex-1);
 }
@@ -59,7 +59,7 @@
     range.location = 0;
     range.length = 0;
     while (range.location != NSNotFound)    {
-        uint location = range.length+range.location;
+        NSUInteger location = range.length+range.location;
         range = [self.text rangeOfString:@"#" options:kNilOptions range:NSMakeRange(location,self.text.length-location)];
         if (range.location != NSNotFound)   {
             NSString *hashtag = [self currentHashtagWithSelectedRange:range];
@@ -86,12 +86,12 @@
     NSLog(@"hashtags %@", hashtags);
     NSRange lastHashtagRange = NSMakeRange(0,0);
     for (NSString *hashtag in hashtags) {
-        uint searchLocation = lastHashtagRange.length+lastHashtagRange.location;
+        NSUInteger searchLocation = lastHashtagRange.length+lastHashtagRange.location;
         NSRange searchRange = NSMakeRange(searchLocation, text.length-searchLocation);
         NSRange hashtagRange = [text rangeOfString:hashtag options:kNilOptions range:searchRange];
         
         [hashtagRanges addObject:[NSValue valueWithRange:hashtagRange]];
-        uint lastHashtagLocation = hashtagRange.location+hashtagRange.length;
+        NSUInteger lastHashtagLocation = hashtagRange.location+hashtagRange.length;
         lastHashtagRange = NSMakeRange(lastHashtagLocation, 0);
     }
     

@@ -8,6 +8,9 @@
 
 #import "STKRegisterViewController.h"
 #import "STKUserStore.h"
+#import "STKLoginViewController.h"
+#import "STKCreateProfileViewController.h"
+
 @import Accounts;
 
 @interface STKRegisterViewController ()
@@ -36,8 +39,12 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (IBAction)connectWithTwitter:(id)sender {
+}
+- (IBAction)connectWithGoogle:(id)sender {
+}
 
-- (IBAction)registerWithFacebook:(id)sender
+- (IBAction)connectWithFacebook:(id)sender
 {
     [[STKUserStore store] fetchAccountsForDevice:^(NSArray *accounts, NSError *err) {
         if(!err) {
@@ -51,6 +58,16 @@
             NSLog(@"%@", err);
         }
     }];
+}
+- (IBAction)loginAccount:(id)sender
+{
+    STKLoginViewController *lvc = [[STKLoginViewController alloc] init];
+    [[self navigationController] pushViewController:lvc animated:YES];
+}
+- (IBAction)registerAccount:(id)sender
+{
+    STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] init];
+    [[self navigationController] pushViewController:pvc animated:YES];
 }
 
 @end

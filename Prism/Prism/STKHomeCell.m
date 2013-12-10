@@ -19,67 +19,33 @@
     return self;
 }
 
-- (void)toggleLike:(id)sender
+- (IBAction)toggleLike:(id)sender
 {
     ROUTE(sender);
 }
 
-- (void)showComments:(id)sender
+- (IBAction)showComments:(id)sender
 {
     ROUTE(sender);
 }
 
-- (void)addToPrism:(id)sender
+- (IBAction)addToPrism:(id)sender
 {
     ROUTE(sender);
 }
 
-- (void)sharePost:(id)sender
+- (IBAction)sharePost:(id)sender
 {
     ROUTE(sender);
 }
 
-- (void)pinPost:(id)sender
+- (IBAction)pinPost:(id)sender
 {
     ROUTE(sender);
 }
 
 - (void)cellDidLoad
 {
-    UIBarButtonItem * (^buttoner)(UIImage *, UIImage *, SEL) = ^(UIImage *n, UIImage *s, SEL action) {
-        UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
-        [b setImage:n forState:UIControlStateNormal];
-        [b setImage:s forState:UIControlStateSelected];
-        [b setImage:s forState:UIControlStateHighlighted];
-        [b setFrame:CGRectMake(0, 0, [n size].width, [n size].height)];
-        [b addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-        
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:b];
-        
-        
-        return bbi;
-    };
-    
-    UIBarButtonItem * (^flexer)() = ^{
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                             target:nil action:nil];
-        return bbi;
-    };
-    
-    [[self bottomToolbar] setItems:@[
-        flexer(),
-        buttoner([UIImage imageNamed:@"action_heart"], [UIImage imageNamed:@"action_heart_like"], @selector(toggleLike:)),
-        flexer(),
-        buttoner([UIImage imageNamed:@"action_comment"], [UIImage imageNamed:@"action_comment_active"], @selector(showComments:)),
-        flexer(),
-        buttoner([UIImage imageNamed:@"action_prism"], [UIImage imageNamed:@"action_prism_active"], @selector(addToPrism:)),
-        flexer(),
-        buttoner([UIImage imageNamed:@"action_share"], [UIImage imageNamed:@"action_share_selected"], @selector(sharePost:)),
-        flexer(),
-        buttoner([UIImage imageNamed:@"action_pin"], [UIImage imageNamed:@"action_pin_selected"], @selector(pinPost:)),
-        flexer()
-    ]];
-    
     static UIImage *fadeImage = nil;
     if(!fadeImage) {
         UIGraphicsBeginImageContext(CGSizeMake(2, 2));
@@ -89,7 +55,7 @@
         UIGraphicsEndImageContext();
     }
     [[self backdropFadeView] setImage:fadeImage];
-    
+
     [[[self iconImageView] layer] setCornerRadius:16];
     [[self iconImageView] setClipsToBounds:YES];
     

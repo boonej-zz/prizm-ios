@@ -138,7 +138,7 @@
                         
     NSArray *hashTags = @[@"hash", @"tag", @"bar", @"foo", @"baz", @"school", @"inspiration"];
     
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     
     for(int i = 0; i < 10; i++) {
         STKPost *p = [NSEntityDescription insertNewObjectForEntityForName:@"STKPost"

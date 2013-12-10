@@ -22,5 +22,13 @@
 @property (weak, nonatomic) IBOutlet UIImageView *indicatorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *hashTagLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *backdropFadeView;
+@property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *commentCountLabel;
+
+- (IBAction)toggleLike:(id)sender;
+- (IBAction)showComments:(id)sender;
+- (IBAction)addToPrism:(id)sender;
+- (IBAction)sharePost:(id)sender;
+- (IBAction)pinPost:(id)sender;
 
 @end

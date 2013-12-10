@@ -81,7 +81,7 @@
                                                          completionHandler:
                                    ^(NSURL *location, NSURLResponse *response, NSError *error) {
                                        if(!error) {
-                                           int statusCode = [(NSHTTPURLResponse *)response statusCode];
+                                           NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
                                            if(statusCode / 100 == 2) {
                                                // This was a success.
                                                [[NSFileManager defaultManager] moveItemAtURL:location

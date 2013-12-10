@@ -15,10 +15,14 @@
 #import "STKActivityViewController.h"
 #import "STKGraphViewController.h"
 #import "STKRegisterViewController.h"
-
+#import "STKVerticalNavigationController.h"
 #import "STKImageStore.h"
 
-@implementation STKAppDelegate
+@interface STKAppDelegate ()
+
+@end
+
+@implementation STKAppDelegate 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -34,7 +38,6 @@
     UIViewController *pvc = [[STKProfileViewController alloc] init];
     UIViewController *avc = [[STKActivityViewController alloc] init];
     UIViewController *gvc = [[STKGraphViewController alloc] init];
-    
 
     STKMenuController *nvc = [[STKMenuController alloc] init];
     [nvc setViewControllers:@[
@@ -49,17 +52,15 @@
     
     for(UINavigationController *vc in [nvc viewControllers]) {
         [[vc navigationBar] setTranslucent:YES];
-    }
-    
+    }    
     
     [[self window] setRootViewController:nvc];
-/*
+
     STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
-    UINavigationController *registerNVC = [[UINavigationController alloc] initWithRootViewController:rvc];
+    STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [nvc presentViewController:registerNVC animated:YES completion:nil];
     }];
- */
 
     
     self.window.backgroundColor = [UIColor whiteColor];
@@ -67,20 +68,22 @@
     return YES;
 }
 
+
+
 - (void)configureAppearanceProxies
 {
     UIGraphicsBeginImageContext(CGSizeMake(10, 10));
-    [[UIColor colorWithWhite:1 alpha:0.25] set];
+    [[UIColor colorWithWhite:1 alpha:0.3] set];
     UIRectFill(CGRectMake(0, 0, 10, 10));
     
     [[UINavigationBar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
              forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    [[UIToolbar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
+/*    [[UIToolbar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
                             forToolbarPosition:UIBarPositionAny
                                     barMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance] setShadowImage:[[UIImage alloc] init]
-                        forToolbarPosition:UIBarPositionAny];
+                        forToolbarPosition:UIBarPositionAny];*/
     UIGraphicsEndImageContext();
 
 }

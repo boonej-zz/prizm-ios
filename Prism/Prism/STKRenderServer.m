@@ -56,8 +56,12 @@
         clampedImage = filterImage;
     }
     
+    CIFilter *whitepoint = [CIFilter filterWithName:@"CIWhitePointAdjust"];
+    [whitepoint setValue:clampedImage forKey:@"inputImage"];
+    [whitepoint setValue:[CIColor colorWithRed:0.5 green:0.5 blue:0.6 alpha:1.0] forKey:@"inputColor"];
+    
     CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [blurFilter setValue:clampedImage forKey:@"inputImage"];
+    [blurFilter setValue:[whitepoint outputImage] forKey:@"inputImage"];
     [blurFilter setValue:@(blurRadius) forKey:@"inputRadius"];
     
     CGImageRef cgImg = [[self context] createCGImage:[blurFilter outputImage]

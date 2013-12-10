@@ -36,6 +36,7 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
 @property (nonatomic, strong) NSMutableArray *cellContainers;
 
 @property (nonatomic, strong) UIImageView *backgroundImageView;
+@property (nonatomic, strong) UIView *overlayView;
 
 - (void)blurCell:(UITableViewCell *)cell
       completion:(void (^)(UIImage *result))block;
@@ -58,12 +59,17 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
         _cellContainers = [[NSMutableArray alloc] init];
         
         [self setClipsToBounds:YES];
-
+        
         _backgroundImageView = [[UIImageView alloc] initWithFrame:[self bounds]];
         [_backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         [_backgroundImageView setBackgroundColor:[UIColor clearColor]];
         [_backgroundImageView setContentMode:UIViewContentModeTop];
         [self addSubview:_backgroundImageView];
+        
+        _overlayView = [[UIView alloc] initWithFrame:[self bounds]];
+        [_overlayView setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+//        [_overlayView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:1 alpha:0.5]];
+        [self addSubview:_overlayView];
 
         if([blurView isKindOfClass:[UIScrollView class]]) {
             [blurView addObserver:self
@@ -149,7 +155,7 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
             if(!iv) {
                 iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [image rect].size.width, [image rect].size.height)];
                 [iv setImage:[image image]];
-                [self addSubview:iv];
+                [self insertSubview:iv belowSubview:[self overlayView]];
                 [[self imageViews] setObject:iv forKey:[image indexPath]];
             }
             

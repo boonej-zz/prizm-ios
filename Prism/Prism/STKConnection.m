@@ -82,7 +82,7 @@ static NSMutableArray *sharedConnectionList = nil;
 {
     NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
     
-    [self setStatusCode:[r statusCode]];
+    [self setStatusCode:(int)[r statusCode]];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data

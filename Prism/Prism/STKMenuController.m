@@ -108,7 +108,7 @@
         [[self view] addSubview:v];
         [v setFrame:[[self view] bounds]];
         
-        [[self menuView] setSelectedIndex:[[self viewControllers] indexOfObject:_selectedViewController]];
+        [[self menuView] setSelectedIndex:(int)[[self viewControllers] indexOfObject:_selectedViewController]];
     }
 }
 
