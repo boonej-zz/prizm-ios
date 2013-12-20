@@ -37,10 +37,12 @@
 		BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE61085D183D159E003A182C /* STKActivityCell.xib */; };
 		BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6AEF821857681E00F92DF4 /* STKGenderCell.m */; };
 		BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6AEF831857681E00F92DF4 /* STKGenderCell.xib */; };
+		BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6EB880186395F300E8009D /* STKErrorStore.m */; };
 		BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */; };
 		BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */; };
 		BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */; };
 		BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */; };
+		BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE96C61B185A0D0C005D44BC /* STKWebViewController.m */; };
 		BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */; };
 		BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */; };
 		BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A618522D6C00F0B211 /* STKTextFieldCell.m */; };
@@ -57,6 +59,19 @@
 		BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A17182AF43A00080601 /* STKActivityViewController.xib */; };
 		BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A1B182AF44600080601 /* STKGraphViewController.m */; };
 		BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A1C182AF44600080601 /* STKGraphViewController.xib */; };
+		BED0B264185F689100564300 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B261185F689100564300 /* GoogleOpenSource.framework */; };
+		BED0B266185F689100564300 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B263185F689100564300 /* GooglePlus.framework */; };
+		BED0B268185F68C700564300 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B267185F68C700564300 /* AssetsLibrary.framework */; };
+		BED0B26A185F68CF00564300 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B269185F68CF00564300 /* CoreLocation.framework */; };
+		BED0B26C185F68D300564300 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B26B185F68D300564300 /* CoreMotion.framework */; };
+		BED0B26E185F68D900564300 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B26D185F68D900564300 /* CoreText.framework */; };
+		BED0B270185F68E000564300 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B26F185F68E000564300 /* MediaPlayer.framework */; };
+		BED0B272185F68E500564300 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B271185F68E500564300 /* Security.framework */; };
+		BED0B274185F68EB00564300 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B273185F68EB00564300 /* SystemConfiguration.framework */; };
+		BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE0FA3F185B5914009FCA3B /* STKProcessingView.m */; };
+		BEE0FA43185B621A009FCA3B /* STKProfileInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */; };
+		BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE0FA45185B6722009FCA3B /* STKDateCell.m */; };
+		BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE0FA46185B6722009FCA3B /* STKDateCell.xib */; };
 		BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */; };
 		BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */; };
 		BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */; };
@@ -65,6 +80,9 @@
 		BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A0851843ACB100A3AFFB /* STKRenderServer.m */; };
 		BEF7A08D1843AEAB00A3AFFB /* STKPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A08B1843AEAB00A3AFFB /* STKPanelViewController.m */; };
 		BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF7A08C1843AEAB00A3AFFB /* STKPanelViewController.xib */; };
+		BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF96AD2186221340016E737 /* NSData+Base64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		BEF96AD9186221340016E737 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF96AD4186221340016E737 /* OAuth+Additions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		BEF96ADA186221340016E737 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF96AD6186221340016E737 /* OAuthCore.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */; };
 		BEFAC19F183D512E005E8933 /* STKRequestItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC19E183D512E005E8933 /* STKRequestItem.m */; };
 		BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A1183D512F005E8933 /* STKUser.m */; };
@@ -139,6 +157,8 @@
 		BE6AEF811857681E00F92DF4 /* STKGenderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGenderCell.h; sourceTree = "<group>"; };
 		BE6AEF821857681E00F92DF4 /* STKGenderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGenderCell.m; sourceTree = "<group>"; };
 		BE6AEF831857681E00F92DF4 /* STKGenderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKGenderCell.xib; sourceTree = "<group>"; };
+		BE6EB87F186395F300E8009D /* STKErrorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKErrorStore.h; sourceTree = "<group>"; };
+		BE6EB880186395F300E8009D /* STKErrorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKErrorStore.m; sourceTree = "<group>"; };
 		BE7A2DF91831877F00CC6EED /* UIViewController+STKControllerItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+STKControllerItems.h"; sourceTree = "<group>"; };
 		BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+STKControllerItems.m"; sourceTree = "<group>"; };
 		BE7C47FF183EBBAC00C30995 /* STKResolvingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKResolvingImageView.h; sourceTree = "<group>"; };
@@ -146,6 +166,8 @@
 		BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeCell.xib; sourceTree = "<group>"; };
 		BE8F35E71833D48D00C4ED03 /* STKHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHomeCell.h; sourceTree = "<group>"; };
 		BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHomeCell.m; sourceTree = "<group>"; };
+		BE96C61A185A0D0C005D44BC /* STKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKWebViewController.h; sourceTree = "<group>"; };
+		BE96C61B185A0D0C005D44BC /* STKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKWebViewController.m; sourceTree = "<group>"; };
 		BEAC71A01852285700F0B211 /* STKCreateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreateProfileViewController.h; sourceTree = "<group>"; };
 		BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCreateProfileViewController.m; sourceTree = "<group>"; };
 		BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCreateProfileViewController.xib; sourceTree = "<group>"; };
@@ -170,6 +192,22 @@
 		BEC01A1A182AF44600080601 /* STKGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGraphViewController.h; sourceTree = "<group>"; };
 		BEC01A1B182AF44600080601 /* STKGraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGraphViewController.m; sourceTree = "<group>"; };
 		BEC01A1C182AF44600080601 /* STKGraphViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKGraphViewController.xib; sourceTree = "<group>"; };
+		BED0B261185F689100564300 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
+		BED0B263185F689100564300 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
+		BED0B267185F68C700564300 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		BED0B269185F68CF00564300 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		BED0B26B185F68D300564300 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		BED0B26D185F68D900564300 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		BED0B26F185F68E000564300 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		BED0B271185F68E500564300 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BED0B273185F68EB00564300 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		BEE0FA3E185B5914009FCA3B /* STKProcessingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProcessingView.h; sourceTree = "<group>"; };
+		BEE0FA3F185B5914009FCA3B /* STKProcessingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProcessingView.m; sourceTree = "<group>"; };
+		BEE0FA41185B621A009FCA3B /* STKProfileInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProfileInformation.h; sourceTree = "<group>"; };
+		BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProfileInformation.m; sourceTree = "<group>"; };
+		BEE0FA44185B6722009FCA3B /* STKDateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKDateCell.h; sourceTree = "<group>"; };
+		BEE0FA45185B6722009FCA3B /* STKDateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKDateCell.m; sourceTree = "<group>"; };
+		BEE0FA46185B6722009FCA3B /* STKDateCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKDateCell.xib; sourceTree = "<group>"; };
 		BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Temporary.xcassets; sourceTree = "<group>"; };
 		BEE6CBBC1832DCB500BC72F4 /* STKExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKExploreCell.h; sourceTree = "<group>"; };
 		BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKExploreCell.m; sourceTree = "<group>"; };
@@ -182,6 +220,12 @@
 		BEF7A08A1843AEAB00A3AFFB /* STKPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPanelViewController.h; sourceTree = "<group>"; };
 		BEF7A08B1843AEAB00A3AFFB /* STKPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKPanelViewController.m; sourceTree = "<group>"; };
 		BEF7A08C1843AEAB00A3AFFB /* STKPanelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKPanelViewController.xib; sourceTree = "<group>"; };
+		BEF96AD1186221340016E737 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		BEF96AD2186221340016E737 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		BEF96AD3186221340016E737 /* OAuth+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OAuth+Additions.h"; sourceTree = "<group>"; };
+		BEF96AD4186221340016E737 /* OAuth+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OAuth+Additions.m"; sourceTree = "<group>"; };
+		BEF96AD5186221340016E737 /* OAuthCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthCore.h; sourceTree = "<group>"; };
+		BEF96AD6186221340016E737 /* OAuthCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthCore.m; sourceTree = "<group>"; };
 		BEFAC198183D4DCF005E8933 /* User.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = User.xcdatamodel; sourceTree = "<group>"; };
 		BEFAC19D183D512E005E8933 /* STKRequestItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKRequestItem.h; path = ../STKRequestItem.h; sourceTree = "<group>"; };
 		BEFAC19E183D512E005E8933 /* STKRequestItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKRequestItem.m; path = ../STKRequestItem.m; sourceTree = "<group>"; };
@@ -213,8 +257,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BED0B274185F68EB00564300 /* SystemConfiguration.framework in Frameworks */,
+				BED0B272185F68E500564300 /* Security.framework in Frameworks */,
+				BED0B270185F68E000564300 /* MediaPlayer.framework in Frameworks */,
+				BED0B26E185F68D900564300 /* CoreText.framework in Frameworks */,
+				BED0B26C185F68D300564300 /* CoreMotion.framework in Frameworks */,
+				BED0B26A185F68CF00564300 /* CoreLocation.framework in Frameworks */,
+				BED0B268185F68C700564300 /* AssetsLibrary.framework in Frameworks */,
+				BED0B266185F689100564300 /* GooglePlus.framework in Frameworks */,
 				BE02EAA5182A80A200A5505A /* CoreGraphics.framework in Frameworks */,
 				BE02EAA7182A80A200A5505A /* UIKit.framework in Frameworks */,
+				BED0B264185F689100564300 /* GoogleOpenSource.framework in Frameworks */,
 				BE02EAA3182A80A200A5505A /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,6 +307,13 @@
 		BE02EAA1182A80A200A5505A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BED0B273185F68EB00564300 /* SystemConfiguration.framework */,
+				BED0B271185F68E500564300 /* Security.framework */,
+				BED0B26F185F68E000564300 /* MediaPlayer.framework */,
+				BED0B26D185F68D900564300 /* CoreText.framework */,
+				BED0B26B185F68D300564300 /* CoreMotion.framework */,
+				BED0B269185F68CF00564300 /* CoreLocation.framework */,
+				BED0B267185F68C700564300 /* AssetsLibrary.framework */,
 				BE02EAA2182A80A200A5505A /* Foundation.framework */,
 				BE02EAA4182A80A200A5505A /* CoreGraphics.framework */,
 				BE02EAA6182A80A200A5505A /* UIKit.framework */,
@@ -265,7 +325,9 @@
 		BE02EAA8182A80A200A5505A /* Prism */ = {
 			isa = PBXGroup;
 			children = (
-				BEF7A0831843ACA500A3AFFB /* Blur */,
+				BEF96ACF186221340016E737 /* OAuthCore */,
+				BED0B1DA185F61FC00564300 /* Google Plus */,
+				BEF7A0831843ACA500A3AFFB /* Utility */,
 				BEE97D93183A5CD900B7BAC1 /* Model */,
 				BEFCEDFC182C204900648B9F /* Store */,
 				BE02EAD5182A8A5500A5505A /* View */,
@@ -351,6 +413,8 @@
 				BEAC71A01852285700F0B211 /* STKCreateProfileViewController.h */,
 				BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */,
 				BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */,
+				BE96C61A185A0D0C005D44BC /* STKWebViewController.h */,
+				BE96C61B185A0D0C005D44BC /* STKWebViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -389,8 +453,20 @@
 				BE6AEF811857681E00F92DF4 /* STKGenderCell.h */,
 				BE6AEF821857681E00F92DF4 /* STKGenderCell.m */,
 				BE6AEF831857681E00F92DF4 /* STKGenderCell.xib */,
+				BEE0FA44185B6722009FCA3B /* STKDateCell.h */,
+				BEE0FA45185B6722009FCA3B /* STKDateCell.m */,
+				BEE0FA46185B6722009FCA3B /* STKDateCell.xib */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		BED0B1DA185F61FC00564300 /* Google Plus */ = {
+			isa = PBXGroup;
+			children = (
+				BED0B261185F689100564300 /* GoogleOpenSource.framework */,
+				BED0B263185F689100564300 /* GooglePlus.framework */,
+			);
+			name = "Google Plus";
 			sourceTree = "<group>";
 		};
 		BEE97D93183A5CD900B7BAC1 /* Model */ = {
@@ -404,13 +480,17 @@
 				BEFAC1A1183D512F005E8933 /* STKUser.m */,
 				BEFAC19D183D512E005E8933 /* STKRequestItem.h */,
 				BEFAC19E183D512E005E8933 /* STKRequestItem.m */,
+				BEE0FA41185B621A009FCA3B /* STKProfileInformation.h */,
+				BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
 		};
-		BEF7A0831843ACA500A3AFFB /* Blur */ = {
+		BEF7A0831843ACA500A3AFFB /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				BEE0FA3E185B5914009FCA3B /* STKProcessingView.h */,
+				BEE0FA3F185B5914009FCA3B /* STKProcessingView.m */,
 				BEF7A0841843ACB100A3AFFB /* STKRenderServer.h */,
 				BEF7A0851843ACB100A3AFFB /* STKRenderServer.m */,
 				88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */,
@@ -418,8 +498,22 @@
 				BE09FFED184E27B30059115B /* STKBackdropView.h */,
 				BE09FFEE184E27B30059115B /* STKBackdropView.m */,
 			);
-			name = Blur;
+			name = Utility;
 			sourceTree = "<group>";
+		};
+		BEF96ACF186221340016E737 /* OAuthCore */ = {
+			isa = PBXGroup;
+			children = (
+				BEF96AD1186221340016E737 /* NSData+Base64.h */,
+				BEF96AD2186221340016E737 /* NSData+Base64.m */,
+				BEF96AD3186221340016E737 /* OAuth+Additions.h */,
+				BEF96AD4186221340016E737 /* OAuth+Additions.m */,
+				BEF96AD5186221340016E737 /* OAuthCore.h */,
+				BEF96AD6186221340016E737 /* OAuthCore.m */,
+			);
+			name = OAuthCore;
+			path = OAuth/OAuthCore;
+			sourceTree = SOURCE_ROOT;
 		};
 		BEFCEDFC182C204900648B9F /* Store */ = {
 			isa = PBXGroup;
@@ -437,6 +531,8 @@
 				BEFCEE0C182C212800648B9F /* STKImageStore.h */,
 				BEFCEE0D182C212800648B9F /* STKImageStore.m */,
 				BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */,
+				BE6EB87F186395F300E8009D /* STKErrorStore.h */,
+				BE6EB880186395F300E8009D /* STKErrorStore.m */,
 			);
 			name = Store;
 			sourceTree = "<group>";
@@ -533,6 +629,7 @@
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
+				BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */,
 				BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */,
 				BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */,
 				BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */,
@@ -560,18 +657,23 @@
 				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
+				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,
 				BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */,
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
 				BE02EAAF182A80A200A5505A /* main.m in Sources */,
 				BEFCEE05182C210600648B9F /* STKConnection.m in Sources */,
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
+				BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
+				BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */,
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
+				BEE0FA43185B621A009FCA3B /* STKProfileInformation.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
+				BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */,
 				BE24B523183AA653009BC02A /* STKCircleView.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
@@ -586,6 +688,8 @@
 				BE09FFEF184E27B30059115B /* STKBackdropView.m in Sources */,
 				BE61085E183D159E003A182C /* STKActivityCell.m in Sources */,
 				BE02EAB3182A80A200A5505A /* STKAppDelegate.m in Sources */,
+				BEF96AD9186221340016E737 /* OAuth+Additions.m in Sources */,
+				BEF96ADA186221340016E737 /* OAuthCore.m in Sources */,
 				BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */,
 				BEFCEE0B182C211A00648B9F /* STKUserStore.m in Sources */,
 				BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */,
@@ -597,6 +701,7 @@
 				BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */,
 				BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */,
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
+				BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */,
 				BEFCEE07182C210600648B9F /* STKSecurePassword.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -716,9 +821,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/joeconway/Projects/Prism/Prism/Prism,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "11BCD8F4-528B-4943-BF4F-80C37C6869F8";
 				WRAPPER_EXTENSION = app;
@@ -730,9 +840,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/joeconway/Projects/Prism/Prism/Prism,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "11BCD8F4-528B-4943-BF4F-80C37C6869F8";
 				WRAPPER_EXTENSION = app;

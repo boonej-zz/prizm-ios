@@ -1,4 +1,4 @@
-//
+ //
 //  STKCreateProfileViewController.m
 //  Prism
 //
@@ -9,28 +9,46 @@
 #import "STKCreateProfileViewController.h"
 #import "STKTextFieldCell.h"
 #import "STKGenderCell.h"
+#import "STKWebViewController.h"
+#import "STKProfileInformation.h"
+#import "STKDateCell.h"
+#import "STKUserStore.h"
+#import "STKResolvingImageView.h"
+#import "STKImageStore.h"
+#import "STKProcessingView.h"
 
+@import Social;
 @import CoreLocation;
 
 @interface STKCreateProfileViewController ()
-    <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate>
+    <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) CLGeocoder *geocoder;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSArray *items;
-@property (nonatomic, strong) NSMutableDictionary *profileDictionary;
 
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (nonatomic, strong) UIDatePicker *datePicker;
+@property (nonatomic, strong) UIImagePickerController *imagePickerController;
 
-@property (weak, nonatomic) IBOutlet UIImageView *coverPhotoImageView;
+@property (weak, nonatomic) IBOutlet STKResolvingImageView *coverPhotoImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *profilePictureImageView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIView *footerView;
 
 @property (nonatomic, strong) NSIndexPath *editingIndexPath;
+
+@property (weak, nonatomic) IBOutlet UIButton *profilePhotoButton;
+@property (weak, nonatomic) IBOutlet UIButton *coverPhotoButton;
+
+@property (nonatomic, weak) UIButton *photoTriggerButton;
+
 - (IBAction)previousTapped:(id)sender;
 - (IBAction)nextTapped:(id)sender;
 - (IBAction)doneTapped:(id)sender;
+- (IBAction)changeCoverPhoto:(id)sender;
+- (IBAction)changeProfilePhoto:(id)sender;
+- (IBAction)showTOS:(id)sender;
+- (IBAction)finishProfile:(id)sender;
 
 @end
 
@@ -40,52 +58,78 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        _profileDictionary = [[NSMutableDictionary alloc] init];
-        [_profileDictionary setObject:@"female" forKey:@"gender"];
-        
-        _datePicker = [[UIDatePicker alloc] init];
-        [_datePicker setDatePickerMode:UIDatePickerModeDate];
-        [_datePicker addTarget:self
-                        action:@selector(dateChanged:)
-              forControlEvents:UIControlEventValueChanged];
-        [_datePicker setDate:[NSDate dateWithTimeIntervalSinceNow:-60*60*24*365.25*17]];
+        _profileInformation = [[STKProfileInformation alloc] init];
+        [_profileInformation setGender:@"female"];
         
         _items = @[
-            @{@"title" : @"Email", @"key" : @"username", @"keyboardType" : @(UIKeyboardTypeEmailAddress)},
+            @{@"title" : @"Email", @"key" : @"email", @"keyboardType" : @(UIKeyboardTypeEmailAddress)},
             @{@"title" : @"Password", @"key" : @"password", @"secure" : @(YES)},
-            @{@"title" : @"First Name", @"key" : @"firstName"},
-            @{@"title" : @"Last Name", @"key" : @"lastName"},
+            @{@"title" : @"First Name", @"key" : @"firstName", @"autocap" : @(UITextAutocapitalizationTypeWords)},
+            @{@"title" : @"Last Name", @"key" : @"lastName", @"autocap" : @(UITextAutocapitalizationTypeWords)},
             @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
-            @{@"title" : @"Date of Birth", @"key" : @"birthday", @"inputView" : _datePicker},
+            @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
             @{@"title" : @"Zip Code", @"key" : @"zipCode"}
         ];
+        
         _locationManager = [[CLLocationManager alloc] init];
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
         [_locationManager setDelegate:self];
-        
     }
     return self;
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [[self tableView] setTableFooterView:[self footerView]];
+    [[self tableView] setRowHeight:40];
+    [[self tableView] setSeparatorColor:[UIColor colorWithRed:0 green:0 blue:1 alpha:1]];
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+    [[self tableView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
+    [[self tableView] setDelaysContentTouches:NO];
 }
 
-- (void)dateChanged:(id)sender
+- (void)viewDidAppear:(BOOL)animated
 {
-    static NSDateFormatter *df = nil;
-    if(!df) {
-        df = [[NSDateFormatter alloc] init];
-        [df setDateStyle:NSDateFormatterMediumStyle];
-    }
-    NSString *dateString = [df stringFromDate:[sender date]];
-    [[self profileDictionary] setObject:dateString
-                                 forKey:@"birthday"];
-    
-    STKTextFieldCell *c = (STKTextFieldCell *)[self visibleCellForKey:@"birthday"];
-    [[c textField] setText:dateString];
+    [super viewDidAppear:animated];
+    [[self tableView] flashScrollIndicators];
+}
+
+- (void)dateChanged:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [[self profileInformation] setBirthday:[sender date]];
+}
+
+- (BOOL)verifyFields:(BOOL)displayFailures
+{
+    __block BOOL result = YES;
+    [[self items] enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx, BOOL *stop) {
+        if(![[self profileInformation] valueForKey:[d objectForKey:@"key"]]) {
+            if(displayFailures) {
+                NSIndexPath *ip = [NSIndexPath indexPathForRow:idx inSection:0];
+                [[self tableView] scrollToRowAtIndexPath:ip
+                                        atScrollPosition:UITableViewScrollPositionNone
+                                                animated:NO];
+                
+                UITableViewCell *c = [[self tableView] cellForRowAtIndexPath:ip];
+                
+                CAKeyframeAnimation *kf = [CAKeyframeAnimation animationWithKeyPath:@"backgroundColor"];
+                
+                [kf setValues:@[(__bridge id)[[UIColor clearColor] CGColor],
+                                (__bridge id)[[UIColor colorWithRed:1 green:0 blue:0 alpha:0.4] CGColor],
+                                (__bridge id)[[UIColor clearColor] CGColor],
+                                (__bridge id)[[UIColor colorWithRed:1 green:0 blue:0 alpha:0.4] CGColor],
+                                (__bridge id)[[UIColor clearColor] CGColor]]];
+                [kf setDuration:0.45];
+                [[[c contentView] layer] addAnimation:kf forKey:@"pulse"];
+            }
+            result = NO;
+            *stop = YES;
+        }
+    }];
+    return result;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -99,6 +143,32 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [[self locationManager] startUpdatingLocation];
+    
+    if([[self profileInformation] externalService]) {
+        NSArray *i = [[self items] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"key != %@", @"password"]];
+        _items = i;
+    }
+    
+    if(![[self profileInformation] gender]) {
+        [[self profileInformation] setGender:@"female"];
+    }
+    
+    if([[self profileInformation] profilePhoto]) {
+        [self setProfileImage:[[self profileInformation] profilePhoto]];
+    }
+    if([[self profileInformation] coverPhoto]) {
+        [self setCoverImage:[[self profileInformation] coverPhoto]];
+    }
+    if([[self profileInformation] coverPhotoURLString]) {
+        [[self coverPhotoImageView] setUrlString:[[self profileInformation] coverPhotoURLString]];
+    }
+    if([[self profileInformation] profilePhotoURLString]) {
+        [[STKImageStore store] fetchImageForURLString:[[self profileInformation] profilePhotoURLString]
+                                           completion:^(UIImage *img) {
+                                               [self setProfileImage:img];
+                                           }];
+    }
+    
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
@@ -139,19 +209,30 @@
 {
     NSDictionary *item = [[self items] objectAtIndex:[ip row]];
     NSString *text = [sender text];
-    [[self profileDictionary] setObject:text forKey:[item objectForKey:@"key"]];
+    [[self profileInformation] setValue:text forKey:[item objectForKey:@"key"]];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
                      atIndexPath:(NSIndexPath *)ip
 {
+    if([[[[self items] objectAtIndex:[ip row]] objectForKey:@"cellType"] isEqualToString:@"date"]) {
+        STKDateCell *c = (STKDateCell *)[[self tableView] cellForRowAtIndexPath:ip];
+        [[self profileInformation] setBirthday:[c date]];
+    }
     [self setEditingIndexPath:ip];
 }
 
 - (void)textFieldShouldReturn:(UITextField *)textField
                   atIndexPath:(NSIndexPath *)ip
 {
-    
+    NSArray *allKeys = [[self items] valueForKey:@"key"];
+    for(NSString *k in allKeys) {
+        if([[self profileInformation] valueForKey:k]) {
+            NSLog(@"OK");
+        } else {
+            NSLog(@"not ok %@", k);
+        }
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -164,9 +245,8 @@
                         completionHandler:^(NSArray *placemarks, NSError *error) {
                             if(!error) {
                                 CLPlacemark *cp = [placemarks lastObject];
-                                if([cp postalCode] && ![[self profileDictionary] objectForKey:@"zipCode"]) {
-                                    [[self profileDictionary] setObject:[cp postalCode]
-                                                                 forKey:@"zipCode"];
+                                if([cp postalCode] && ![[self profileInformation] zipCode]) {
+                                    [[self profileInformation] setZipCode:[cp postalCode]];
                                     
                                     UITableViewCell *c = [self visibleCellForKey:@"zipCode"];
                                     [[self tableView] reloadRowsAtIndexPaths:@[[[self tableView] indexPathForCell:c]]
@@ -179,24 +259,142 @@
     }
 }
 
+- (void)promptForPhoto
+{
+    UIActionSheet *sheet = nil;
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        sheet = [[UIActionSheet alloc] initWithTitle:@"Select Option"
+                                            delegate:self
+                                   cancelButtonTitle:@"Cancel"
+                              destructiveButtonTitle:nil
+                                   otherButtonTitles:@"Take New Photo", @"Choose Existing Photo", nil];
+    } else {
+        sheet = [[UIActionSheet alloc] initWithTitle:@"Select Option"
+                                            delegate:self
+                                   cancelButtonTitle:@"Cancel"
+                              destructiveButtonTitle:nil
+                                   otherButtonTitles:@"Choose Existing Photo", nil];
+    }
+    
+    [sheet showInView:[self view]];
+    
+    if(![self imagePickerController]) {
+        [self setImagePickerController:[[UIImagePickerController alloc] init]];
+        [[self imagePickerController] setAllowsEditing:YES];
+        [[self imagePickerController] setDelegate:self];
+    }
+}
+
 - (IBAction)changeCoverPhoto:(id)sender
 {
-
+    [self setPhotoTriggerButton:sender];
+    [self promptForPhoto];
 }
 
-- (IBAction)changeProfilePicture:(id)sender
+- (IBAction)changeProfilePhoto:(id)sender
 {
-    
+    [self setPhotoTriggerButton:sender];
+    [self promptForPhoto];
 }
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if([actionSheet numberOfButtons] == 2) {
+        if(buttonIndex == 0) {
+            [[self imagePickerController] setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        } else {
+            return;
+        }
+    } else if([actionSheet numberOfButtons] == 3) {
+        if(buttonIndex == 0) {
+            [[self imagePickerController] setSourceType:UIImagePickerControllerSourceTypeCamera];
+        } else if(buttonIndex == 1) {
+            [[self imagePickerController] setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        } else {
+            return;
+        }
+    }
+    
+    [self presentViewController:[self imagePickerController] animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *img = [info objectForKey:UIImagePickerControllerEditedImage];
+    
+    if([self photoTriggerButton] == [self profilePhotoButton])
+        [self setProfileImage:img];
+    else if([self photoTriggerButton] == [self coverPhotoButton])
+        [self setCoverImage:img];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)setProfileImage:(UIImage *)img
+{
+    CGRect b = [[self profilePhotoButton] bounds];
+    UIGraphicsBeginImageContextWithOptions(b.size, NO, 0.0);
+    
+    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(b, 6, 6)];
+    [[UIColor colorWithRed:0 green:0 blue:1 alpha:1] set];
+    [bp setLineWidth:6 * [[UIScreen mainScreen] scale]];
+    [bp stroke];
+    [bp addClip];
+    
+    [img drawInRect:b];
+    
+    [[self profilePhotoButton] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext() forState:UIControlStateNormal];
+    [[self profilePhotoButton] setTitle:@"" forState:UIControlStateNormal];
+    
+    UIGraphicsEndImageContext();
+}
+
+- (void)setCoverImage:(UIImage *)img
+{
+    [[self coverPhotoImageView] setImage:img];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+- (IBAction)showTOS:(id)sender
+{
+    STKWebViewController *vc = [[STKWebViewController alloc] init];
+    [vc setUrl:[NSURL URLWithString:@"http://higheraltitude.co"]];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+
+    [self presentViewController:nvc animated:YES completion:nil];
+}
+
+- (IBAction)finishProfile:(id)sender
+{
+    [[self view] endEditing:YES];
+    if([self verifyFields:YES]) {
+        [STKProcessingView present];
+        [[STKUserStore store] registerAccount:[self profileInformation]
+                                   completion:^(id user, NSError *err) {
+                                       [STKProcessingView dismiss];
+                                       if(!err) {
+                                           [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                       } else {
+                                           [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                       }
+                                   }];
+    }
+
+}
+
 
 - (void)maleButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    [[self profileDictionary] setObject:@"male" forKey:@"gender"];
+    [[self profileInformation] setGender:@"male"];
 }
 
 - (void)femaleButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    [[self profileDictionary] setObject:@"female" forKey:@"gender"];
+    [[self profileInformation] setGender:@"female"];
 }
 
 
@@ -218,7 +416,8 @@
     if(cellType) {
         if([cellType isEqualToString:@"gender"]) {
             STKGenderCell *c = [STKGenderCell cellForTableView:tableView target:self];
-            if([[[self profileDictionary] objectForKey:@"gender"] isEqualToString:@"female"]) {
+            [c setBackdropColor:[UIColor clearColor]];
+            if([[[self profileInformation] gender] isEqualToString:@"female"]) {
                 [[c femaleButton] setSelected:YES];
                 [[c maleButton] setSelected:NO];
             } else {
@@ -226,14 +425,21 @@
                 [[c maleButton] setSelected:YES];
             }
             return c;
+        } else if([cellType isEqualToString:@"date"]) {
+            STKDateCell *c = [STKDateCell cellForTableView:tableView target:self];
+            [c setDefaultDate:[NSDate dateWithTimeIntervalSinceNow:-60*60*24*365.25*16]];
+            [[c label] setText:[item objectForKey:@"title"]];
+            [c setDate:[[self profileInformation] birthday]];
+            [[c textField] setInputAccessoryView:[self toolbar]];
+            return c;
         }
     }
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
-    
+    [c setBackdropColor:[UIColor clearColor]];
     
     [[c label] setText:[item objectForKey:@"title"]];
-    NSString *value = [[self profileDictionary] objectForKey:[item objectForKey:@"key"]];
+    NSString *value = [[self profileInformation] valueForKey:[item objectForKey:@"key"]];
     if(value) {
         [[c textField] setText:value];
     } else {
@@ -251,6 +457,12 @@
         [[c textField] setInputView:[item objectForKey:@"inputView"]];
     } else {
         [[c textField] setInputView:nil];
+    }
+    
+    if([item objectForKey:@"autocap"]) {
+        [[c textField] setAutocapitalizationType:[[item objectForKey:@"autocap"] intValue]];
+    } else {
+        [[c textField] setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     }
     
     [[c textField] setSecureTextEntry:[[item objectForKey:@"secure"] boolValue]];
@@ -275,7 +487,7 @@
                                         animated:NO];
         c = [[self tableView] cellForRowAtIndexPath:[self editingIndexPath]];
     }
-    if([c isKindOfClass:[STKTextFieldCell class]]) {
+    if([c respondsToSelector:@selector(textField)]) {
         [[(STKTextFieldCell *)c textField] becomeFirstResponder];
     } else {
         [self previousTapped:nil];
@@ -296,7 +508,7 @@
                                         animated:NO];
         c = [[self tableView] cellForRowAtIndexPath:[self editingIndexPath]];
     }
-    if([c isKindOfClass:[STKTextFieldCell class]]) {
+    if([c respondsToSelector:@selector(textField)]) {
         [[(STKTextFieldCell *)c textField] becomeFirstResponder];
     } else {
         [self nextTapped:nil];
@@ -307,4 +519,5 @@
 {
     [[self view] endEditing:YES];
 }
+
 @end

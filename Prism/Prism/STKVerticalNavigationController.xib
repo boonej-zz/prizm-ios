@@ -19,13 +19,19 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y8b-uO-Van">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y8b-uO-Van">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.51551094890510951" green="0.5021384580291971" blue="0.5534329379562043" alpha="0.33000000000000002" colorSpace="calibratedRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="y8b-uO-Van" secondAttribute="bottom" id="0aa-g9-5RQ"/>
+                <constraint firstItem="y8b-uO-Van" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="AYl-mk-yKg"/>
+                <constraint firstAttribute="trailing" secondItem="y8b-uO-Van" secondAttribute="trailing" id="Leo-t4-eie"/>
+                <constraint firstItem="y8b-uO-Van" firstAttribute="top" secondItem="1" secondAttribute="top" id="Yk1-J4-ksH"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>

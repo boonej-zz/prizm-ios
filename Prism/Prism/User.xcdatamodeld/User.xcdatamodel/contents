@@ -10,6 +10,14 @@
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="activityItems" inverseEntity="STKUser" syncable="YES"/>
     </entity>
+    <entity name="STKExternalSystem" syncable="YES">
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="STKGender" syncable="YES">
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="STKPost" representedClassName="STKPost" syncable="YES">
         <attribute name="authorName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="authorUserID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -31,18 +39,25 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="requestItems" inverseEntity="STKUser" syncable="YES"/>
     </entity>
     <entity name="STKUser" representedClassName="STKUser" syncable="YES">
+        <attribute name="birthday" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalServiceType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="activityItems" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKActivityItem" inverseName="user" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKPost" inverseName="user" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="requestItems" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKRequestItem" inverseName="user" inverseEntity="STKRequestItem" syncable="YES"/>
     </entity>
     <elements>
         <element name="STKActivityItem" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="STKGender" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKPost" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKRequestItem" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKUser" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="STKExternalSystem" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

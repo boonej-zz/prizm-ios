@@ -12,5 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *maleButton;
 @property (weak, nonatomic) IBOutlet UIButton *femaleButton;
+@property (nonatomic, strong) UIColor *backdropColor;
 
 @end

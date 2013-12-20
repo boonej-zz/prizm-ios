@@ -8,18 +8,29 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "STKJSONObject.h"
+#import "STKProfileInformation.h"
 
 @class STKActivityItem, STKPost, STKRequestItem;
 
-@interface STKUser : NSManagedObject
+@interface STKUser : NSManagedObject <STKJSONObject>
 
-@property (nonatomic) int32_t userID;
-@property (nonatomic, retain) NSString * userName;
-@property (nonatomic, retain) NSString * email;
-@property (nonatomic, retain) NSString * gender;
+@property (nonatomic) NSString *userID;
+
+@property (nonatomic, retain) NSDate *birthday;
+@property (nonatomic, retain) NSString *firstName;
+@property (nonatomic, retain) NSString *lastName;
+@property (nonatomic, retain) NSString *zipCode;
+@property (nonatomic, retain) NSString *userName;
+@property (nonatomic, retain) NSString *email;
+@property (nonatomic, retain) NSString *gender;
+
+@property (nonatomic, strong) NSString *externalServiceType;
+
 @property (nonatomic, retain) NSOrderedSet *requestItems;
 @property (nonatomic, retain) NSOrderedSet *activityItems;
 @property (nonatomic, retain) NSOrderedSet *posts;
+
 @end
 
 @interface STKUser (CoreDataGeneratedAccessors)

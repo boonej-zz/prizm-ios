@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@import Accounts;
+@class STKProfileInformation;
+
 @interface STKCreateProfileViewController : UIViewController
+
+@property (nonatomic, strong) STKProfileInformation *profileInformation;
 
 @end

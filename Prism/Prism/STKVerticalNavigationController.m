@@ -66,7 +66,6 @@
     [[self containerView] addSubview:[[self internalNavigationController] view]];
     [[[self internalNavigationController] view] setFrame:[[self view] bounds]];
     [[[self internalNavigationController] view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-
     [[self view] addSubview:_barContainer];
 
     _backButton = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 80)];
@@ -77,20 +76,7 @@
     _backButtonImageView = [[UIImageView alloc] initWithFrame:[_backButton bounds]];
     [_backButton addSubview:_backButtonImageView];
     [_backButtonImageView setContentMode:UIViewContentModeCenter];
-    
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(20, 11), NO, 0.0);
-    UIBezierPath *bp = [UIBezierPath bezierPath];
-    [bp moveToPoint:CGPointMake(0, 10)];
-    [bp addLineToPoint:CGPointMake(10, 1)];
-    [bp addLineToPoint:CGPointMake(20, 10)];
-    [[UIColor colorWithWhite:1 alpha:0.5] set];
-    [bp setLineWidth:2];
-    [bp setLineJoinStyle:kCGLineJoinBevel];
-    [bp stroke];
-    
-    [_backButtonImageView setImage:UIGraphicsGetImageFromCurrentImageContext()];
-    
-    UIGraphicsEndImageContext();
+    [_backButtonImageView setImage:[UIImage imageNamed:@"backarrow"]];
 }
 
 - (void)pop:(id)sender

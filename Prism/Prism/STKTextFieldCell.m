@@ -8,7 +8,19 @@
 
 #import "STKTextFieldCell.h"
 
+@interface STKTextFieldCell ()
+@property (weak, nonatomic) IBOutlet UIView *backdropView;
+
+@end
+
+
 @implementation STKTextFieldCell
+
+- (void)setBackdropColor:(UIColor *)backdropColor
+{
+    _backdropColor = backdropColor;
+    [[self backdropView] setBackgroundColor:_backdropColor];
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

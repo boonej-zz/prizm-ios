@@ -118,10 +118,10 @@
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     
     UIGraphicsEndImageContext();
-    
+    /*
     [UIImagePNGRepresentation(img) writeToFile:@"/Users/joeconway/Desktop/image.png"
                                     atomically:YES];
-    
+    */
     return [self blurredImageWithImage:img affineClamp:YES];
 }
 

@@ -6,8 +6,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKCreateProfileViewController">
             <connections>
+                <outlet property="coverPhotoButton" destination="uCp-R9-fYJ" id="Bat-HZ-Vz4"/>
                 <outlet property="coverPhotoImageView" destination="XYa-Fr-Bxy" id="Nkl-0Z-uag"/>
-                <outlet property="profilePictureImageView" destination="qU9-5X-5EX" id="nGF-SD-YhB"/>
+                <outlet property="footerView" destination="ZG1-O3-gkY" id="cET-26-Y1G"/>
+                <outlet property="profilePhotoButton" destination="bmB-56-liW" id="rDe-OC-SFU"/>
                 <outlet property="tableView" destination="7Yn-5Y-IYC" id="Twu-fQ-hgf"/>
                 <outlet property="toolbar" destination="aE9-wJ-xea" id="X6p-6d-geE"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -18,50 +20,16 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1hO-yR-Xrj" customClass="UIControl">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XYa-Fr-Bxy" customClass="STKResolvingImageView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="149"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XYa-Fr-Bxy">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="149"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        </imageView>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.98198792879453212" green="0.96728371077188058" blue="1" alpha="0.38" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstItem="XYa-Fr-Bxy" firstAttribute="leading" secondItem="1hO-yR-Xrj" secondAttribute="leading" id="2hp-yn-Fc1"/>
-                        <constraint firstAttribute="trailing" secondItem="XYa-Fr-Bxy" secondAttribute="trailing" id="Fu6-Sv-l9S"/>
-                        <constraint firstItem="XYa-Fr-Bxy" firstAttribute="top" secondItem="1hO-yR-Xrj" secondAttribute="top" id="Guu-5g-mxH"/>
-                        <constraint firstAttribute="bottom" secondItem="XYa-Fr-Bxy" secondAttribute="bottom" id="Rgx-4F-sA7"/>
-                        <constraint firstAttribute="height" constant="149" id="hlh-b3-GMw"/>
+                        <constraint firstAttribute="height" constant="149" id="bWf-EC-2u9"/>
                     </constraints>
-                    <connections>
-                        <action selector="changeCoverPhoto:" destination="-1" eventType="touchUpInside" id="lyB-Ln-JUY"/>
-                    </connections>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aZu-PT-qdx" customClass="UIControl">
-                    <rect key="frame" x="120" y="35" width="80" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qU9-5X-5EX">
-                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        </imageView>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstItem="qU9-5X-5EX" firstAttribute="top" secondItem="aZu-PT-qdx" secondAttribute="top" id="7ZH-KW-xO0"/>
-                        <constraint firstAttribute="trailing" secondItem="qU9-5X-5EX" secondAttribute="trailing" id="NpF-6i-dSr"/>
-                        <constraint firstAttribute="height" constant="80" id="i6S-MW-2sS"/>
-                        <constraint firstAttribute="bottom" secondItem="qU9-5X-5EX" secondAttribute="bottom" id="iE1-RM-jJG"/>
-                        <constraint firstItem="qU9-5X-5EX" firstAttribute="leading" secondItem="aZu-PT-qdx" secondAttribute="leading" id="iPd-m7-E9K"/>
-                    </constraints>
-                    <connections>
-                        <action selector="changeProfilePicture:" destination="-1" eventType="touchUpInside" id="AlT-7c-K0f"/>
-                    </connections>
-                </view>
+                </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7Yn-5Y-IYC">
-                    <rect key="frame" x="0.0" y="147" width="320" height="421"/>
+                    <rect key="frame" x="0.0" y="149" width="320" height="419"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     <connections>
@@ -69,19 +37,47 @@
                         <outlet property="delegate" destination="-1" id="j0e-Kx-fNO"/>
                     </connections>
                 </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCp-R9-fYJ">
+                    <rect key="frame" x="10" y="122" width="71" height="19"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="71" id="1Nf-t1-0Uz"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="Upload" image="upload_image">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="changeCoverPhoto:" destination="-1" eventType="touchUpInside" id="CvJ-iC-YtK"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bmB-56-liW">
+                    <rect key="frame" x="120" y="52" width="80" height="80"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <inset key="titleEdgeInsets" minX="0.0" minY="24" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="Upload" backgroundImage="upload_camera">
+                        <color key="titleColor" red="0.29183269932740852" green="0.46036189843335162" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="changeProfilePhoto:" destination="-1" eventType="touchUpInside" id="jq4-K1-OC1"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="1hO-yR-Xrj" firstAttribute="top" secondItem="1" secondAttribute="top" id="0ff-JS-Vsg"/>
-                <constraint firstItem="1hO-yR-Xrj" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="68x-fx-yDf"/>
-                <constraint firstItem="aZu-PT-qdx" firstAttribute="top" secondItem="1" secondAttribute="top" constant="35" id="73u-H0-1Pf"/>
-                <constraint firstItem="aZu-PT-qdx" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="120" id="982-1Q-Y4h"/>
+                <constraint firstItem="XYa-Fr-Bxy" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="55E-Rb-Tcf"/>
+                <constraint firstAttribute="trailing" secondItem="XYa-Fr-Bxy" secondAttribute="trailing" id="59i-vu-z8b"/>
+                <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="XYa-Fr-Bxy" secondAttribute="bottom" id="5xU-xZ-pok"/>
+                <constraint firstItem="uCp-R9-fYJ" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10" id="A1D-jE-cgQ"/>
                 <constraint firstAttribute="bottom" secondItem="7Yn-5Y-IYC" secondAttribute="bottom" id="Cz0-39-lTh"/>
                 <constraint firstAttribute="trailing" secondItem="7Yn-5Y-IYC" secondAttribute="trailing" id="GKX-bc-gnh"/>
-                <constraint firstAttribute="trailing" secondItem="aZu-PT-qdx" secondAttribute="trailing" constant="120" id="Nyv-UL-kOB"/>
-                <constraint firstAttribute="trailing" secondItem="1hO-yR-Xrj" secondAttribute="trailing" id="Ph9-36-T8t"/>
+                <constraint firstItem="uCp-R9-fYJ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="122" id="IZD-vY-xxx"/>
                 <constraint firstItem="7Yn-5Y-IYC" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Qrd-eY-Lsn"/>
-                <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="aZu-PT-qdx" secondAttribute="bottom" constant="32" id="rVI-1j-sGw"/>
+                <constraint firstItem="XYa-Fr-Bxy" firstAttribute="top" secondItem="1" secondAttribute="top" id="XRT-fY-QVV"/>
+                <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="uCp-R9-fYJ" secondAttribute="bottom" constant="8" id="p6b-Tt-ezB"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -108,5 +104,52 @@
                 </barButtonItem>
             </items>
         </toolbar>
+        <view contentMode="scaleToFill" id="ZG1-O3-gkY">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="98"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BPe-LZ-5Me">
+                    <rect key="frame" x="0.0" y="58" width="320" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.46701013749414405" green="0.62567713678999992" blue="0.935546875" alpha="0.0" colorSpace="calibratedRGB"/>
+                    <state key="normal" title="Done" backgroundImage="btn_lg">
+                        <color key="titleColor" red="0.935546875" green="0.92220889193327404" blue="0.93260502066387929" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="finishProfile:" destination="-1" eventType="touchUpInside" id="9kb-r0-m3e"/>
+                    </connections>
+                </button>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="By clicking Done, you are indicating that you have read and agree to the" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="211" translatesAutoresizingMaskIntoConstraints="NO" id="Omw-2u-fTv">
+                    <rect key="frame" x="55" y="0.0" width="211" height="39"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <color key="textColor" white="0.76200387773722644" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I4v-xD-8nb">
+                    <rect key="frame" x="78" y="26" width="165" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal">
+                        <attributedString key="attributedTitle">
+                            <fragment content="Prism Terms of Service">
+                                <attributes>
+                                    <font key="NSFont" size="11" name="HelveticaNeue-Bold"/>
+                                </attributes>
+                            </fragment>
+                        </attributedString>
+                    </state>
+                    <connections>
+                        <action selector="showTOS:" destination="-1" eventType="touchUpInside" id="8GB-cp-zdd"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+        </view>
     </objects>
+    <resources>
+        <image name="btn_lg" width="303" height="44"/>
+        <image name="upload_camera" width="77" height="77"/>
+        <image name="upload_image" width="15" height="15"/>
+    </resources>
 </document>

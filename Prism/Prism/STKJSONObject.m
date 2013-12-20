@@ -24,7 +24,7 @@
 
 - (void)bindFromDictionary:(NSDictionary *)d
                  sourceKey:(NSString *)sourceKey
-          destinationBlock:(void (^)(id destinationObject, id inVal))block
+          destinationBlock:(void (^)(id inVal))block
 {
     id value = [d objectForKey:sourceKey];
     if(!value)
@@ -32,7 +32,7 @@
     if([value isKindOfClass:[NSNull class]])
         return;
 
-    block(self, value);
+    block(value);
 }
 
 - (void)bindFromDictionary:(NSDictionary *)dataDictionary

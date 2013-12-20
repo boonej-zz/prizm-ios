@@ -21,7 +21,7 @@
 
 - (void)bindFromDictionary:(NSDictionary *)d
                  sourceKey:(NSString *)sourceKey
-          destinationBlock:(void (^)(id destinationObject, id inVal))block;
+          destinationBlock:(void (^)(id inVal))block;
 
 - (void)bindFromDictionary:(NSDictionary *)dataDictionary
                     keyMap:(NSDictionary *)keyMap;

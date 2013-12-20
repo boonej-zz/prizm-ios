@@ -16,7 +16,8 @@
 #import "STKGraphViewController.h"
 #import "STKRegisterViewController.h"
 #import "STKVerticalNavigationController.h"
-#import "STKImageStore.h"
+
+#import <GooglePlus/GooglePlus.h>
 
 @interface STKAppDelegate ()
 
@@ -56,18 +57,25 @@
     
     [[self window] setRootViewController:nvc];
 
-    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
-    STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [nvc presentViewController:registerNVC animated:YES completion:nil];
-    }];
-
-    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    
+    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
+    STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
+
+    [nvc presentViewController:registerNVC animated:NO completion:nil];
+
+
     return YES;
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    if([[url scheme] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]])
+        [[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation];
+    return YES;
+}
 
 
 - (void)configureAppearanceProxies
