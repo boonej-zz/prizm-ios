@@ -24,6 +24,8 @@
 		BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAD2182A81AC00A5505A /* STKMenuController.m */; };
 		BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE02EAD7182A8A5F00A5505A /* STKMenuView.m */; };
 		BE09FFEF184E27B30059115B /* STKBackdropView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE09FFEE184E27B30059115B /* STKBackdropView.m */; };
+		BE13648E18689F39003D9D5C /* STKAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE13648C18689F39003D9D5C /* STKAccountChooserViewController.m */; };
+		BE13648F18689F39003D9D5C /* STKAccountChooserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE13648D18689F39003D9D5C /* STKAccountChooserViewController.xib */; };
 		BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1E09CD1850DF0A00975652 /* STKLoginViewController.m */; };
 		BE1E09D01850DF0A00975652 /* STKLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE1E09CE1850DF0A00975652 /* STKLoginViewController.xib */; };
 		BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1E09D31850E58900975652 /* STKVerticalNavigationController.m */; };
@@ -135,6 +137,9 @@
 		BE02EAD7182A8A5F00A5505A /* STKMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuView.m; sourceTree = "<group>"; };
 		BE09FFED184E27B30059115B /* STKBackdropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKBackdropView.h; sourceTree = "<group>"; };
 		BE09FFEE184E27B30059115B /* STKBackdropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKBackdropView.m; sourceTree = "<group>"; };
+		BE13648B18689F39003D9D5C /* STKAccountChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKAccountChooserViewController.h; sourceTree = "<group>"; };
+		BE13648C18689F39003D9D5C /* STKAccountChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKAccountChooserViewController.m; sourceTree = "<group>"; };
+		BE13648D18689F39003D9D5C /* STKAccountChooserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKAccountChooserViewController.xib; sourceTree = "<group>"; };
 		BE1E09CC1850DF0A00975652 /* STKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLoginViewController.h; sourceTree = "<group>"; };
 		BE1E09CD1850DF0A00975652 /* STKLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLoginViewController.m; sourceTree = "<group>"; };
 		BE1E09CE1850DF0A00975652 /* STKLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLoginViewController.xib; sourceTree = "<group>"; };
@@ -415,6 +420,9 @@
 				BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */,
 				BE96C61A185A0D0C005D44BC /* STKWebViewController.h */,
 				BE96C61B185A0D0C005D44BC /* STKWebViewController.m */,
+				BE13648B18689F39003D9D5C /* STKAccountChooserViewController.h */,
+				BE13648C18689F39003D9D5C /* STKAccountChooserViewController.m */,
+				BE13648D18689F39003D9D5C /* STKAccountChooserViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -630,6 +638,7 @@
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
 				BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */,
+				BE13648F18689F39003D9D5C /* STKAccountChooserViewController.xib in Resources */,
 				BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */,
 				BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */,
 				BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */,
@@ -691,6 +700,7 @@
 				BEF96AD9186221340016E737 /* OAuth+Additions.m in Sources */,
 				BEF96ADA186221340016E737 /* OAuthCore.m in Sources */,
 				BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */,
+				BE13648E18689F39003D9D5C /* STKAccountChooserViewController.m in Sources */,
 				BEFCEE0B182C211A00648B9F /* STKUserStore.m in Sources */,
 				BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */,
 				BEF7A08D1843AEAB00A3AFFB /* STKPanelViewController.m in Sources */,

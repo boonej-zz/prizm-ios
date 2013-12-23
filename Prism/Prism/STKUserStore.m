@@ -47,6 +47,9 @@ NSString * const STKUserEndpointGenderList = @"/common/ajax/get_genders.php";
 NSString * const STKUserEndpointSocialList = @"/common/ajax/get_external_systems.php";
 
 NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStoreTransparentLoginFailedNotification";
+NSString * const STKUserStoreTransparentLoginFailedReasonKey = @"STKUserStoreTransparentLoginFailedReasonKey";
+NSString * const STKUserStoreTransparentLoginFailedConnectionValue = @"STKUserStoreTransparentLoginFailedConnectionValue";
+NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUserStoreTransparentLoginFailedAuthenticationValue";
 
 @import CoreData;
 @import Accounts;
@@ -57,7 +60,7 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, strong) NSURLSession *userSession;
-@property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(STKUser *user, STKProfileInformation *googleData, NSError *err);
+@property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
 
 @end
 
@@ -169,7 +172,10 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
     if([currentUser userID]) {
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser userID]
                                                   forKey:STKUserStoreCurrentUserKey];
+    } else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
     }
+    
 }
 
 - (STKUser *)currentUser
@@ -190,44 +196,6 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
     return _currentUser;
 }
 
-- (void)attemptTransparentLoginWithUser:(STKUser *)u
-{
-    void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
-        if(!valErr) {
-            if([info password]) {
-                STKSecurityStorePassword([u email], [info password]);
-            } else {
-                // Assuming we do have a token here
-                STKSecurityStorePassword([u email], [info token]);
-                STKSecurityStorePassword([NSString stringWithFormat:@"%@secret", [u email]], [info secret]);
-                [u setExternalServiceType:[info externalService]];
-            }
-            [self setCurrentUser:u];
-            [[self context] save:nil];
-            block(u, nil);
-        } else {
-            block(nil, valErr);
-        }
-    };
-    
-    NSString *email = [u email];
-
-    NSString *serviceType = [u externalServiceType];
-    if([serviceType isEqualToString:STKProfileInformationExternalServiceFacebook]) {
-        NSString *token = STKSecurityGetPassword(email);
-        [self validateWithFacebook:token completion:validationBlock];
-    } else if([serviceType isEqualToString:STKProfileInformationExternalServiceGoogle]) {
-        NSString *token = STKSecurityGetPassword(email);
-    } else if([serviceType isEqualToString:STKProfileInformationExternalServiceTwitter]) {
-        NSString *token = STKSecurityGetPassword(email);
-        NSString *secret = STKSecurityGetPassword([NSString stringWithFormat:@"%@secret", [u email]]);
-    } else {
-        // Email
-        NSString *password = STKSecurityGetPassword(email);
-    }
-
-    
-}
 
 - (void)fetchFeedForCurrentUser:(void (^)(NSArray *posts, NSError *error, BOOL moreComing))block
 {
@@ -361,68 +329,64 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
                            }];
 }
 
-- (void)fetchTwitterAccount:(void (^)(STKUser *existingUser, STKProfileInformation *twitterData, NSError *err))block
+#pragma mark Twitter
+
+- (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block
 {
     ACAccountType *type = [[self accountStore] accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
     [[self accountStore] requestAccessToAccountsWithType:type
                                                  options:nil
                                               completion:^(BOOL granted, NSError *error) {
                                                   if(granted) {
-                                                      NSArray *accounts = [[self accountStore] accountsWithAccountType:type];
-                                                      if([accounts count] > 0) {
-                                                          ACAccount *acct = [accounts objectAtIndex:0];
-                                                          [self fetchTwitterAccessToken:acct completion:^(NSString *token, NSString *secret, NSError *tokenError) {
-                                                              if(!tokenError) {
-                                                                  STKConnection *c = [self connectionForEndpoint:STKUserEndpointValidateTwitter];
-                                                                  [c addQueryValue:token forKey:@"ext_token"];
-                                                                  [c addQueryValue:secret forKey:@"ext_token_secret"];
-                                                                  [c setContext:[self context]];
-                                                                  [c setEntityName:@"STKUser"];
-                                                                  [c setExistingMatchMap:@{@"userID" : @"entity"}];
-                                                                  
-                                                                  [self validateWithTwitterToken:token secret:secret completion:^(STKUser *user, NSError *valErr) {
-                                                                      if(!valErr) {
-                                                                          [self setCurrentUser:user];
-                                                                          [[self context] save:nil];
-                                                                          block(user, nil, nil);
-                                                                      } else {
-                                                                          if([valErr isConnectionError]) {
-                                                                              block(nil, nil, valErr);
-                                                                          } else {
-                                                                              // Return Twitter Information for Registration
-                                                                              [self fetchTwitterDataForAccount:acct completion:^(STKProfileInformation *profInfo, NSError *dataErr) {
-                                                                                  if([dataErr isConnectionError]) {
-                                                                                      block(nil, nil, dataErr);
-                                                                                  } else {
-                                                                                      [profInfo setToken:token];
-                                                                                      [profInfo setSecret:secret];
-                                                                                      block(nil, profInfo, dataErr);
-                                                                                  }
-                                                                              }];
-                                                                          }
-                                                                      }
-                                                                  }];
-                                                              } else {
-                                                                  // OAuth failed
-                                                                  [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                                      block(nil, nil, tokenError);
-                                                                  }];
-                                                              }
-                                                          }];
-                                                      } else {
-                                                          // No Twitter Accounts
-                                                          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                              block(nil, nil, [self errorForCode:STKUserStoreErrorCodeNoAccount data:nil]);
-                                                          }];
-                                                      }
-                                                  } else {
-                                                      // Failed requestAccessToAccountsWithTypes
                                                       [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                          block(nil, nil, error);
+                                                          NSArray *accounts = [[self accountStore] accountsWithAccountType:type];
+                                                          if([accounts count] > 0)
+                                                              block([[self accountStore] accountsWithAccountType:type], nil);
+                                                          else
+                                                              block(nil, [self errorForCode:STKUserStoreErrorCodeNoAccount data:nil]);
+                                                      }];
+                                                  } else {
+                                                      [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                                          block(nil, error);
                                                       }];
                                                   }
                                               }];
-    
+}
+
+- (void)connectWithTwitterAccount:(ACAccount *)acct completion:(void (^)(STKUser *existingUser, STKProfileInformation *registrationData, NSError *err))block
+{
+    [self fetchTwitterAccessToken:acct completion:^(NSString *token, NSString *secret, NSError *tokenError) {
+        if(!tokenError) {
+            [self validateWithTwitterToken:token secret:secret completion:^(STKUser *user, NSError *valErr) {
+                if(!valErr) {
+                    [self setCurrentUser:user];
+                    [user setExternalServiceType:STKProfileInformationExternalServiceTwitter];
+                    [user setAccountStoreID:[acct identifier]];
+                    
+                    [[self context] save:nil];
+                    block(user, nil, nil);
+                } else {
+                    if([valErr isConnectionError]) {
+                        block(nil, nil, valErr);
+                    } else {
+                        // Return Twitter Information for Registration
+                        [self fetchTwitterDataForAccount:acct completion:^(STKProfileInformation *profInfo, NSError *dataErr) {
+                            if([dataErr isConnectionError]) {
+                                block(nil, nil, dataErr);
+                            } else {
+                                [profInfo setToken:token];
+                                [profInfo setSecret:secret];
+                                block(nil, profInfo, dataErr);
+                            }
+                        }];
+                    }
+                }
+            }];
+        } else {
+            // OAuth failed
+            block(nil, nil, tokenError);
+        }
+    }];
 }
 
 - (void)validateWithTwitterToken:(NSString *)token secret:(NSString *)secret completion:(void (^)(STKUser *u, NSError *err))block
@@ -508,6 +472,7 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
             
             STKProfileInformation *pi = [[STKProfileInformation alloc] init];
             [pi setValuesFromTwitter:a];
+            [pi setAccountStoreID:[acct identifier]];
             
             SLRequest *profReq = [SLRequest requestForServiceType:SLServiceTypeTwitter
                                                     requestMethod:SLRequestMethodGET
@@ -538,7 +503,44 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
     }];
 }
 
-- (void)fetchFacebookAccount:(void (^)(STKUser *existingUser, STKProfileInformation *facebookData, NSError *err))block
+#pragma mark Facebook
+
+- (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKProfileInformation *facebookData, NSError *err))block
+{
+    [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
+        if(!err) {
+            [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *user, NSError *valError) {
+                if(!valError) {
+                    [self setCurrentUser:user];
+                    [user setExternalServiceType:STKProfileInformationExternalServiceFacebook];
+                    [user setAccountStoreID:[acct identifier]];
+                    
+                    [[self context] save:nil];
+                    
+                    block(user, nil, nil);
+                } else {
+                    if([valError isConnectionError]) {
+                        block(nil, nil, valError);
+                    } else {
+                        // Fallback to registration
+                        [self fetchFacebookDataForAccount:acct completion:^(STKProfileInformation *profInfo, NSError *dataErr) {
+                            if([dataErr isConnectionError]) {
+                                block(nil, nil, dataErr);
+                            } else {
+                                [profInfo setToken:[[acct credential] oauthToken]];
+                                block(nil, profInfo, dataErr);
+                            }
+                        }];
+                    }
+                }
+            }];
+        } else {
+            block(nil, nil, err);
+        }
+    }];
+}
+
+- (void)fetchFacebookAccountWithCompletion:(void (^)(ACAccount *acct, NSError *err))block
 {
     ACAccountType *type = [[self accountStore] accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
     [[self accountStore] requestAccessToAccountsWithType:type options:@{
@@ -557,44 +559,21 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
                                                   if(granted) {
                                                       NSArray *accounts = [[self accountStore] accountsWithAccountType:type];
                                                       if([accounts count] == 1) {
-                                                          ACAccount *acct = [accounts objectAtIndex:0];
-                                                          
-                                                          
-                                                          [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *user, NSError *valError) {
-                                                              if(!valError) {
-                                                                  [self setCurrentUser:user];
-                                                                  [[self context] save:nil];
-                                                                  block(user, nil, nil);
-                                                              } else {
-                                                                  if([valError isConnectionError]) {
-                                                                      block(nil, nil, valError);
-                                                                  } else {
-                                                                      // Fallback to registration
-                                                                      [self fetchFacebookDataForAccount:acct completion:^(STKProfileInformation *profInfo, NSError *dataErr) {
-                                                                          if([dataErr isConnectionError]) {
-                                                                              block(nil, nil, dataErr);
-                                                                          } else {
-                                                                              [profInfo setToken:[[acct credential] oauthToken]];
-                                                                              block(nil, profInfo, dataErr);
-                                                                          }
-                                                                      }];
-                                                                  }
-                                                              }
+                                                          ACAccount *acct = [accounts firstObject];
+                                                          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                                              block(acct, nil);
                                                           }];
                                                       } else {
-                                                          // No accounts for FB
                                                           [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                              block(nil, nil, [self errorForCode:STKUserStoreErrorCodeNoAccount data:nil]);
+                                                              block(nil, [self errorForCode:STKUserStoreErrorCodeNoAccount data:nil]);
                                                           }];
                                                       }
                                                   } else {
-                                                      // Fialed getting accounts
                                                       [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                          block(nil, nil, error);
+                                                          block(nil, error);
                                                       }];
                                                   }
                                               }];
-    
 }
 
 - (void)validateWithFacebook:(NSString *)oauthToken completion:(void (^)(STKUser *u, NSError *err))block
@@ -620,6 +599,7 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
             STKProfileInformation *pi = [[STKProfileInformation alloc] init];
             [pi setValuesFromFacebook:userDict];
             [pi setToken:[[acct credential] oauthToken]];
+            [pi setAccountStoreID:[acct identifier]];
             
             SLRequest *profilePicReq = [SLRequest requestForServiceType:SLServiceTypeFacebook
                                                           requestMethod:SLRequestMethodGET
@@ -652,8 +632,42 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
     }];
 }
 
-- (void)fetchGoogleAccount:(void (^)(STKUser *u, STKProfileInformation *googleData, NSError *err))block
+#pragma mark Google
+
+- (void)connectWithGoogle:(void (^)(STKUser *, STKProfileInformation *, NSError *))block
 {
+    [self fetchGoogleAccount:^(GTMOAuth2Authentication *auth, NSError *err) {
+        if(!err) {
+            [self validateWithGoogle:[auth accessToken] completion:^(STKUser *u, NSError *err) {
+                if(!err) {
+                    [self setCurrentUser:u];
+                    [u setExternalServiceType:STKProfileInformationExternalServiceGoogle];
+                    [[self context] save:nil];
+                    
+                    block(u, nil, nil);
+                } else {
+                    if([err isConnectionError]) {
+                        block(nil, nil, err);
+                    } else {
+                        [self fetchGoogleDataForAuth:auth completion:^(STKProfileInformation *pi, NSError *err) {
+                            if(!err)
+                                block(nil, pi, nil);
+                            else
+                                block(nil, nil, err);
+                        }];
+                    }
+                }
+            }];
+        } else {
+            block(nil, nil, err);
+        }
+    }];
+}
+
+- (void)fetchGoogleAccount:(void (^)(GTMOAuth2Authentication *auth, NSError *err))block
+{
+    [self setGooglePlusAuthenticationBlock:block];
+    
     [[GPPSignIn sharedInstance] setScopes:@[kGTLAuthScopePlusLogin, kGTLAuthScopePlusMe]];
     [[GPPSignIn sharedInstance] setShouldFetchGooglePlusUser:YES];
     [[GPPSignIn sharedInstance] setShouldFetchGoogleUserEmail:YES];
@@ -661,11 +675,10 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
     [[GPPSignIn sharedInstance] setClientID:STKUserStoreExternalCredentialGoogleClientID];
     [[GPPSignIn sharedInstance] setDelegate:self];
     
-    [self setGooglePlusAuthenticationBlock:block];
-    
     GPPSignInButton *b = [[GPPSignInButton alloc] init];
     [b sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
+
 
 - (void)validateWithGoogle:(NSString *)token completion:(void (^)(STKUser *, NSError *))block
 {
@@ -677,61 +690,67 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
     [c getWithSession:[self userSession] completionBlock:block];
 }
 
+- (void)fetchGoogleDataForAuth:(GTMOAuth2Authentication *)auth completion:(void (^)(STKProfileInformation *pi, NSError *err))block
+{
+    STKProfileInformation *pi = [[STKProfileInformation alloc] init];
+    [pi setEmail:[auth userEmail]];
+    [pi setToken:[auth accessToken]];
+    
+    GTLServicePlus *service = [[GTLServicePlus alloc] init];
+    [service setAuthorizer:auth];
+    GTLQueryPlus *query = [GTLQueryPlus queryForPeopleGetWithUserId:@"me"];
+    
+    [service executeQuery:query
+        completionHandler:^(GTLServiceTicket *ticket, GTLPlusPerson *object, NSError *queryError) {
+            if(!queryError) {
+                [pi setValuesFromGooglePlus:object];
+                block(pi, nil);
+            } else {
+                block(nil, queryError);
+            }
+        }];
+}
+
+
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth
                    error:(NSError *)error
 {
-    if(!error) {
-        STKProfileInformation *pi = [[STKProfileInformation alloc] init];
-        [pi setEmail:[auth userEmail]];
-        [pi setToken:[auth accessToken]];
-        
-        [self validateWithGoogle:[auth accessToken] completion:^(STKUser *user, NSError *valErr) {
-            if(!valErr) {
-                [self setCurrentUser:user];
-                [[self context] save:nil];
-                if([self googlePlusAuthenticationBlock]) {
-                    [self googlePlusAuthenticationBlock](user, nil, nil);
-                    [self setGooglePlusAuthenticationBlock:nil];
-                }
-            } else {
-                if([valErr isConnectionError]) {
-                    // Login failed because we don't have a connect
-                    if([self googlePlusAuthenticationBlock]) {
-                        [self googlePlusAuthenticationBlock](nil, nil, valErr);
-                        [self setGooglePlusAuthenticationBlock:nil];
-                    }
-                } else {
-                    // Error was that login was invalid, try register
-                    GTLServicePlus *service = [[GTLServicePlus alloc] init];
-                    [service setAuthorizer:auth];
-                    GTLQueryPlus *query = [GTLQueryPlus queryForPeopleGetWithUserId:@"me"];
-                    
-                    [service executeQuery:query
-                        completionHandler:^(GTLServiceTicket *ticket, GTLPlusPerson *object, NSError *queryError) {
-                            if(!queryError) {
-                                [pi setValuesFromGooglePlus:object];
-                                if([self googlePlusAuthenticationBlock]) {
-                                    [self googlePlusAuthenticationBlock](nil, pi, nil);
-                                }
-                            } else {
-                                // Asking for Info failed
-                                if([self googlePlusAuthenticationBlock]) {
-                                    [self googlePlusAuthenticationBlock](nil, nil, queryError);
-                                }
-                            }
-                            [self setGooglePlusAuthenticationBlock:nil];
-                        }];
-                }
-            }
-        }];
-    } else {
-        // Failed to hit Google
-        if([self googlePlusAuthenticationBlock]) {
-            [self googlePlusAuthenticationBlock](nil, nil, error);
-            [self setGooglePlusAuthenticationBlock:nil];
-        }
-    }
+    [self googlePlusAuthenticationBlock](auth, error);
+    [self setGooglePlusAuthenticationBlock:nil];
 }
+
+#pragma mark Standard
+
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
+{
+    [self validateWithEmail:email password:password completion:^(STKUser *user, NSError *err) {
+        if(!err) {
+            STKSecurityStorePassword([user email], password);
+            
+            [self setCurrentUser:user];
+            [[self context] save:nil];
+            block(user, nil);
+        } else {
+            block(nil, err);
+        }
+    }];
+}
+
+- (void)validateWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
+{
+    STKConnection *c = [self connectionForEndpoint:STKUserEndpointValidateEmail];
+    [c addQueryValue:email forKey:@"login"];
+    [c addQueryValue:password forKey:@"password"];
+    
+    [c setContext:[self context]];
+    [c setEntityName:@"STKUser"];
+    [c setExistingMatchMap:@{@"userID" : @"entity"}];
+    
+    [c getWithSession:[self userSession]
+      completionBlock:block];
+}
+
+#pragma mark Uniform
 
 - (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block
 {
@@ -740,7 +759,6 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
     STKProfileInformation *transformedInfo = [info copy];
     
     [transformedInfo setGender:[self transformLookupValue:[info gender] forType:STKLookupTypeGender]];
-    
     
     NSArray *missingKeys = nil;
     BOOL verified = [c addQueryObject:transformedInfo
@@ -786,12 +804,11 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
                     if([info password]) {
                         STKSecurityStorePassword([u email], [info password]);
                     } else {
-                        // Assuming we do have a token here
-                        STKSecurityStorePassword([u email], [info token]);
-                        STKSecurityStorePassword([NSString stringWithFormat:@"%@secret", [u email]], [info secret]);
                         [u setExternalServiceType:[info externalService]];
+                        [u setAccountStoreID:[info accountStoreID]];
                     }
                     [self setCurrentUser:u];
+                
                     [[self context] save:nil];
                     block(u, nil);
                 } else {
@@ -817,33 +834,119 @@ NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStore
     }];
 }
 
-- (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
+- (void)attemptTransparentLoginWithUser:(STKUser *)u
 {
-    [self validateWithEmail:email password:password completion:^(STKUser *user, NSError *err) {
-        if(!err) {
-            STKSecurityStorePassword([user email], password);
-
-            [self setCurrentUser:user];
+    if(!u)
+        return;
+    
+    void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
+        if(!valErr) {
             [[self context] save:nil];
-            block(user, nil);
         } else {
-            block(nil, err);
+            [self setCurrentUser:nil];
+    
+            if([valErr isConnectionError]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreTransparentLoginFailedNotification
+                                                                    object:nil
+                                                                  userInfo:@{STKUserStoreTransparentLoginFailedReasonKey : STKUserStoreTransparentLoginFailedConnectionValue,
+                                                                             @"error" : valErr}];
+            } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreTransparentLoginFailedNotification
+                                                                    object:nil
+                                                                  userInfo:@{STKUserStoreTransparentLoginFailedReasonKey : STKUserStoreTransparentLoginFailedAuthenticationValue,
+                                                                             @"error" : valErr}];
+            }
         }
-    }];
+    };
+    
+    
+    NSString *serviceType = [u externalServiceType];
+    if([serviceType isEqualToString:STKProfileInformationExternalServiceFacebook]) {
+        [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
+            if([[acct identifier] isEqualToString:[u accountStoreID]]) {
+                [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *u, NSError *err) {
+                    validationBlock(u, err);
+                }];
+            } else {
+                validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
+            }
+        }];
+    } else if([serviceType isEqualToString:STKProfileInformationExternalServiceGoogle]) {
+        [self fetchGoogleAccount:^(GTMOAuth2Authentication *auth, NSError *err) {
+            if(!err) {
+                [self validateWithGoogle:[auth accessToken] completion:^(STKUser *u, NSError *err) {
+                    if(!err) {
+                        validationBlock(u, err);
+                    } else {
+                        validationBlock(nil, err);
+                    }
+                }];
+            } else {
+                validationBlock(nil, err);
+            }
+        }];
+    } else if([serviceType isEqualToString:STKProfileInformationExternalServiceTwitter]) {
+        [self fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
+            if(!err) {
+                ACAccount *activeAccount = nil;
+                for(ACAccount *acct in accounts) {
+                    if([[acct identifier] isEqualToString:[u accountStoreID]]) {
+                        activeAccount = acct;
+                        break;
+                    }
+                }
+                
+                if(activeAccount) {
+                    [self fetchTwitterAccessToken:activeAccount completion:^(NSString *token, NSString *tokenSecret, NSError *err) {
+                        if(!err) {
+                            [self validateWithTwitterToken:token secret:tokenSecret completion:^(STKUser *u, NSError *err) {
+                                if(!err) {
+                                    validationBlock(u, nil);
+                                } else {
+                                    // Spcific account could not be authoriized
+                                    validationBlock(nil, err);
+                                }
+                            }];
+                        } else {
+                            // Could not authenticate via Twitter
+                            validationBlock(nil, err);
+                        }
+                    }];
+                } else {
+                    // Could not find matching account
+                    validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
+                }
+            } else {
+                // Could not access accounts
+                validationBlock(nil, err);
+            }
+        }];
+    } else {
+        // Via Email
+        NSString *email = [u email];
+        NSString *password = STKSecurityGetPassword(email);
+        if(password) {
+            [self validateWithEmail:email password:password completion:^(STKUser *user, NSError *err) {
+                if(!err) {
+                    validationBlock(user, nil);
+                } else {
+                    validationBlock(nil, err);
+                }
+            }];
+        } else {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeNoPassword data:nil]);
+            }];
+        }
+    }
+    
+    
 }
 
-- (void)validateWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
+- (void)logout
 {
-    STKConnection *c = [self connectionForEndpoint:STKUserEndpointValidateEmail];
-    [c addQueryValue:email forKey:@"login"];
-    [c addQueryValue:password forKey:@"password"];
-
-    [c setContext:[self context]];
-    [c setEntityName:@"STKUser"];
-    [c setExistingMatchMap:@{@"userID" : @"entity"}];
-    
-    [c getWithSession:[self userSession]
-      completionBlock:block];
+    [self setCurrentUser:nil];
+    // Cancel all connections!
 }
 
 

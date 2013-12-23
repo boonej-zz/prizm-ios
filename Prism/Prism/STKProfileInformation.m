@@ -35,6 +35,7 @@ NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
     [pi setPassword:[self password]];
     [pi setToken:[self token]];
     [pi setSecret:[self secret]];
+    [pi setAccountStoreID:[self accountStoreID]];
     
     return pi;
 }

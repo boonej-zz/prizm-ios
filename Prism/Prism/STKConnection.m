@@ -21,6 +21,8 @@ static NSMutableArray *sharedConnectionList = nil;
 @property (nonatomic, strong) NSURL *baseURL;
 @property (nonatomic, strong) NSString *endpoint;
 
+@property (nonatomic) NSDate *beginTime;
+
 @end
 
 @implementation STKConnection
@@ -47,6 +49,8 @@ static NSMutableArray *sharedConnectionList = nil;
 
 - (void)beginWithSession:(NSURLSession *)session
 {
+    _beginTime = [NSDate date];
+    
     NSURLComponents *components = [[NSURLComponents alloc] initWithURL:[self baseURL]
                                                resolvingAgainstBaseURL:NO];
     [components setPath:[self endpoint]];
@@ -182,7 +186,8 @@ static NSMutableArray *sharedConnectionList = nil;
 - (void)handleError:(NSError *)error
 {
 #ifdef DEBUG
-    NSLog(@"Request FAILED -> \nRequest: %@ - %@\nResponse: %d\n", [self request], [[self request] HTTPMethod], [self statusCode]);
+    NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
+    NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n", i, [self request], [[self request] HTTPMethod], [self statusCode]);
 #endif
 
     // Pass the error from the connection to the completionBlock
@@ -205,7 +210,8 @@ static NSMutableArray *sharedConnectionList = nil;
 - (void)handleSuccess:(NSData *)data
 {
 #ifdef DEBUG
-    NSLog(@"Request Finished -> \nRequest: %@ - %@\nResponse: %d\n%@", [self request], [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
+    NSLog(@"Request Finished (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n%@", i, [self request], [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 #endif
 
 

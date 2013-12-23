@@ -44,8 +44,10 @@
         
         [errorMap setObject:@{
             @(STKUserStoreErrorCodeMissingArguments) : @"The required data was not supplied.",
-            @(STKUserStoreErrorCodeNoAccount) : @"No account exists for this service. Please fill out your credentials in the Settings application.",
-            @(STKUserStoreErrorCodeOAuth) : @"There was a problem authenticating your account."
+            @(STKUserStoreErrorCodeNoAccount) : @"No account exists for this social network. Please fill out your credentials in the Settings application.",
+            @(STKUserStoreErrorCodeOAuth) : @"There was a problem authenticating your account.",
+            @(STKUserStoreErrorCodeWrongAccount) : @"The account you tried to login with does not match the Facebook account you have set up in Settings.",
+            @(STKUserStoreErrorCodeNoPassword) : @"The password for this account is unknown. Try logging in again."
         } forKey:STKUserStoreErrorDomain];
         [errorMap setObject:@{
             @(ACErrorUnknown) : @"Unknown issue relating your your account.",
@@ -90,15 +92,23 @@
 + (NSString *)errorStringForError:(NSError *)err
 {
     NSDictionary *domainErrors = [[self errorMap] objectForKey:[err domain]];
+    NSDictionary *userInfo = [err userInfo];
     
     NSString *text = [domainErrors objectForKey:@([err code])];
     if(!text) {
         text = [domainErrors objectForKey:@"Any"];
-        if(!text)
-            text = @"There was an unexpected error.";
+        if(!text) {
+            text = [[err userInfo] objectForKey:NSLocalizedDescriptionKey];
+            if(!text) {
+                text = @"There was an unexpected error.";
+            } else {
+                userInfo = nil;
+            }
+        }
+        
     }
     
-    if([[err userInfo] count] > 0)
+    if([userInfo count] > 0)
         return [NSString stringWithFormat:@"%@ (%@)", text, [err userInfo]];
     
     return text;

@@ -26,6 +26,7 @@
 @property (nonatomic, retain) NSString *gender;
 
 @property (nonatomic, strong) NSString *externalServiceType;
+@property (nonatomic, strong) NSString *accountStoreID;
 
 @property (nonatomic, retain) NSOrderedSet *requestItems;
 @property (nonatomic, retain) NSOrderedSet *activityItems;

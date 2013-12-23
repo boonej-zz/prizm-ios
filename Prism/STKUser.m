@@ -23,6 +23,7 @@
 @dynamic posts;
 
 @dynamic zipCode, birthday, firstName, lastName, externalServiceType;
+@dynamic accountStoreID;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {

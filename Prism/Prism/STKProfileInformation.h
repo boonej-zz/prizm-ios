@@ -30,6 +30,7 @@ extern NSString * const STKProfileInformationExternalServiceGoogle;
 
 @property (nonatomic, strong) NSString *externalID;
 @property (nonatomic, strong) NSString *externalService;
+@property (nonatomic, strong) NSString *accountStoreID;
 
 @property (nonatomic, strong) NSString *token;
 @property (nonatomic, strong) NSString *secret;

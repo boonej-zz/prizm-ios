@@ -18,4 +18,6 @@
 
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
 
+- (void)logout;
+
 @end

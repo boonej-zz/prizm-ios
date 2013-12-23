@@ -8,6 +8,7 @@
 
 #import "STKProfileViewController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKUserStore.h"
 
 @interface STKProfileViewController ()
 
@@ -26,6 +27,12 @@
 
     }
     return self;
+}
+
+- (IBAction)temporaryLogout:(id)sender
+{
+    [[self menuController] logout];
+    
 }
 
 - (void)viewDidLoad

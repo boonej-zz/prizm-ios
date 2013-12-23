@@ -12,6 +12,7 @@
 #import "STKCreateProfileViewController.h"
 #import "STKProcessingView.h"
 #import "STKErrorStore.h"
+#import "STKAccountChooserViewController.h"
 
 @import Accounts;
 @import Social;
@@ -40,19 +41,31 @@
 - (IBAction)connectWithTwitter:(id)sender
 {
     [STKProcessingView present];
-    
-    [[STKUserStore store] fetchTwitterAccount:^(STKUser *u, STKProfileInformation *twitterData, NSError *err) {
-        [STKProcessingView dismiss];
-        
+    [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
         if(!err) {
-            if(u) {
-                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+            if([accounts count] > 1) {
+                [STKProcessingView dismiss];
+                STKAccountChooserViewController *accChooser = [[STKAccountChooserViewController alloc] initWithAccounts:accounts];
+                [[self navigationController] pushViewController:accChooser animated:YES];
             } else {
-                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] init];
-                [pvc setProfileInformation:twitterData];
-                [[self navigationController] pushViewController:pvc animated:YES];
+                ACAccount *acct = [accounts objectAtIndex:0];
+                [[STKUserStore store] connectWithTwitterAccount:acct completion:^(STKUser *existingUser, STKProfileInformation *registrationData, NSError *err) {
+                    [STKProcessingView dismiss];
+                    if(!err) {
+                        if(registrationData) {
+                            STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] init];
+                            [pvc setProfileInformation:registrationData];
+                            [[self navigationController] pushViewController:pvc animated:YES];
+                        } else if(existingUser) {
+                            [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                        }
+                    } else {
+                        [[STKErrorStore alertViewForError:err delegate:nil] show];
+                    }
+                }];
             }
         } else {
+            [STKProcessingView dismiss];
             [[STKErrorStore alertViewForError:err delegate:nil] show];
         }
     }];
@@ -60,7 +73,7 @@
 - (IBAction)connectWithGoogle:(id)sender
 {
     [STKProcessingView present];
-    [[STKUserStore store] fetchGoogleAccount:^(STKUser *u, STKProfileInformation *googleData, NSError *err) {
+    [[STKUserStore store] connectWithGoogle:^(STKUser *u, STKProfileInformation *googleData, NSError *err) {
         [STKProcessingView dismiss];
         
         if(!err) {
@@ -80,9 +93,8 @@
 - (IBAction)connectWithFacebook:(id)sender
 {
     [STKProcessingView present];
-    [[STKUserStore store] fetchFacebookAccount:^(STKUser *u, STKProfileInformation *facebookData, NSError *err) {
+    [[STKUserStore store] connectWithFacebook:^(STKUser *u, STKProfileInformation *facebookData, NSError *err) {
         [STKProcessingView dismiss];
-    
         if(!err) {
             if(u) {
                 [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];

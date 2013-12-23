@@ -16,6 +16,7 @@
 #import "STKGraphViewController.h"
 #import "STKRegisterViewController.h"
 #import "STKVerticalNavigationController.h"
+#import "STKUserStore.h"
 
 #import <GooglePlus/GooglePlus.h>
 
@@ -61,12 +62,12 @@
     [self.window makeKeyAndVisible];
     
     
-    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
-    STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
-
-    [nvc presentViewController:registerNVC animated:NO completion:nil];
-
-
+    if(![[STKUserStore store] currentUser]) {
+        STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
+        STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
+        
+        [nvc presentViewController:registerNVC animated:NO completion:nil];
+    }
     return YES;
 }
 

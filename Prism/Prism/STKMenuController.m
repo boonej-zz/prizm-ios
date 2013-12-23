@@ -16,6 +16,10 @@
 #import "STKGraphViewController.h"
 #import "STKCreatePostViewController.h"
 #import "STKRenderServer.h"
+#import "STKUserStore.h"
+#import "STKErrorStore.h"
+#import "STKRegisterViewController.h"
+#import "STKVerticalNavigationController.h"
 
 @import QuartzCore;
 
@@ -33,9 +37,35 @@
 {
     self = [super initWithNibName:nil bundle:nil];
     if(self) {
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(transparentLoginDidFail:)
+                                                     name:STKUserStoreTransparentLoginFailedNotification
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)logout
+{
+    [[STKUserStore store] logout];
+    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
+    STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
+    [self presentViewController:nvc
+                       animated:YES
+                     completion:nil];
+
+}
+
+- (void)transparentLoginDidFail:(NSNotification *)note
+{
+    UIAlertView *av = [STKErrorStore alertViewForError:[[note userInfo] objectForKey:@"error"] delegate:nil];
+    
+    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
+    STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
+    [self presentViewController:nvc animated:YES
+                     completion:^{
+                         [av show];
+                     }];
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
