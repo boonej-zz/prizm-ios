@@ -79,6 +79,8 @@
 }
 
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -102,17 +104,79 @@
     [[self profileInformation] setBirthday:[sender date]];
 }
 
+- (BOOL)verifyValue:(id)val forKey:(NSString *)key errorMessage:(NSString **)msg
+{
+    if(!msg)
+        @throw [NSException exceptionWithName:@"STKCreateProfileViewController" reason:@"Have to pass errorMessage param to verifyValue:forKey:errorMessage:" userInfo:nil];
+    
+    
+    __block NSString *title = nil;
+    [[self items] enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx, BOOL *stop) {
+        if([[d objectForKey:@"key"] isEqualToString:key]) {
+            title = [d objectForKey:@"title"];
+            *stop = YES;
+        }
+    }];
+
+    if(!val) {
+        *msg = [NSString stringWithFormat:@"%@ is required.", title];
+        return NO;
+    }
+    
+    if([key isEqualToString:@"email"]) {
+        NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"[^@]*@[^\\.]*\\..{2,}" options:0 error:nil];
+        NSTextCheckingResult *tr = [exp firstMatchInString:val options:0 range:NSMakeRange(0, [val length])];
+        if(!tr) {
+            *msg = [NSString stringWithFormat:@"Email address must be valid."];
+            return NO;
+        }
+    }
+
+    
+    if([key isEqualToString:@"firstName"] || [key isEqualToString:@"lastName"] || [key isEqualToString:@"zipCode"]) {
+        if([val length] < 1) {
+            *msg = [NSString stringWithFormat:@"%@ is required.", title];
+            return NO;
+        }
+    }
+    if([key isEqualToString:@"password"]) {
+        if([val length] < 6) {
+            *msg = [NSString stringWithFormat:@"Please choose a password that is at least 6 characters long."];
+            return NO;
+        }
+    }
+    if([key isEqualToString:@"birthday"]) {
+        NSDate *ageMin = [NSDate dateWithTimeIntervalSinceNow:-60 * 60 * 24 * 365.25 * 13];
+        if([val timeIntervalSinceDate:ageMin] > 0) {
+            *msg = @"You must be 13 years of age to create an account.";
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
 - (BOOL)verifyFields:(BOOL)displayFailures
 {
     __block BOOL result = YES;
     [[self items] enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx, BOOL *stop) {
-        if(![[self profileInformation] valueForKey:[d objectForKey:@"key"]]) {
+        NSString *outMsg = nil;
+        NSString *val = [[self profileInformation] valueForKey:[d objectForKey:@"key"]];
+        if(![self verifyValue:val forKey:[d objectForKey:@"key"] errorMessage:&outMsg]) {
+            result = NO;
+            *stop = YES;
             if(displayFailures) {
+                
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Something is Missing" message:outMsg
+                                                            delegate:nil
+                                                   cancelButtonTitle:@"OK"
+                                                   otherButtonTitles:nil];
+                [av show];
+                
                 NSIndexPath *ip = [NSIndexPath indexPathForRow:idx inSection:0];
                 [[self tableView] scrollToRowAtIndexPath:ip
                                         atScrollPosition:UITableViewScrollPositionNone
                                                 animated:NO];
-                
                 UITableViewCell *c = [[self tableView] cellForRowAtIndexPath:ip];
                 
                 CAKeyframeAnimation *kf = [CAKeyframeAnimation animationWithKeyPath:@"backgroundColor"];
@@ -125,8 +189,6 @@
                 [kf setDuration:0.45];
                 [[[c contentView] layer] addAnimation:kf forKey:@"pulse"];
             }
-            result = NO;
-            *stop = YES;
         }
     }];
     return result;
