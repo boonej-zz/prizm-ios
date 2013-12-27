@@ -77,7 +77,6 @@
 }
 
 - (void)formatHashtags
-
 {
     NSString *text = self.text;
     

@@ -17,4 +17,6 @@
 // The return value of this method signifies nothing about the image being available/returned/valid.
 - (BOOL)fetchImageForURLString:(NSString *)url completion:(void (^)(UIImage *img))block;
 
+- (void)uploadImage:(UIImage *)image completion:(void (^)(NSString *URLString, NSError *err))block;
+
 @end

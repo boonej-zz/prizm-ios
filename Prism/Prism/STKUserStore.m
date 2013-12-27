@@ -19,14 +19,13 @@
 #import "OAuthCore.h"
 #import "NSError+STKConnection.h"
 #import "STKSecurePassword.h"
+#import "STKBaseStore.h"
 
 // To erase DB data:
 // curl prism.neadwerx.com/common/ajax/delete_all_entities_and_data.php
 
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 
-NSString * const STKLookupTypeGender = @"STKGender";
-NSString * const STKLookupTypeSocial = @"STKExternalSystem";
 
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 
@@ -36,15 +35,12 @@ NSString * const STKUserStoreExternalCredentialTwitterTokenSecret = @"tYnRjsX7to
 NSString * const STKUserStoreExternalCredentialTwitterConsumerKey = @"B8y2wlENU9eQCV2FO2s3rg";
 NSString * const STKUserStoreExternalCredentialTwitterConsumerSecret = @"XKWgxHrWgE8sfnFv7IcrgcvLM6XFZdBGmQexnzwFo";
 
-NSString * const STKUserBaseURLString = @"http://prism.neadwerx.com";
+
 NSString * const STKUserEndpointRegister = @"/common/ajax/create_entity.php";
 NSString * const STKUserEndpointValidateFacebook = @"/common/ajax/validate_facebook.php";
 NSString * const STKUserEndpointValidateTwitter = @"/common/ajax/validate_twitter.php";
 NSString * const STKUserEndpointValidateGoogle = @"/common/ajax/validate_google.php";
 NSString * const STKUserEndpointValidateEmail = @"/common/ajax/validate_login.php";
-
-NSString * const STKUserEndpointGenderList = @"/common/ajax/get_genders.php";
-NSString * const STKUserEndpointSocialList = @"/common/ajax/get_external_systems.php";
 
 NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStoreTransparentLoginFailedNotification";
 NSString * const STKUserStoreTransparentLoginFailedReasonKey = @"STKUserStoreTransparentLoginFailedReasonKey";
@@ -55,11 +51,9 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 @import Accounts;
 @import Social;
 
-@interface STKUserStore () <NSURLSessionDelegate, GPPSignInDelegate>
+@interface STKUserStore () <GPPSignInDelegate>
 
-@property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) ACAccountStore *accountStore;
-@property (nonatomic, strong) NSURLSession *userSession;
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
 
 @end
@@ -77,9 +71,14 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     return store;
 }
 
-+ (NSURL *)baseURL
+- (NSManagedObjectContext *)context
 {
-    return [NSURL URLWithString:STKUserBaseURLString];
+    return [[STKBaseStore store] context];
+}
+
+- (NSURLSession *)session
+{
+    return [[STKBaseStore store] session];
 }
 
 - (NSError *)errorForCode:(STKUserStoreErrorCode)code data:(id)data
@@ -91,80 +90,16 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     return [NSError errorWithDomain:STKUserStoreErrorDomain code:code userInfo:nil];
 }
 
-- (STKConnection *)connectionForEndpoint:(NSString *)endpoint
-{
-    STKConnection *c = [[STKConnection alloc] initWithBaseURL:[[self class] baseURL]
-                                                     endpoint:endpoint];
-    
-    return c;
-}
-
-
 - (id)init
 {
     self = [super init];
     if (self) {
-        NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"User"
-                                                                                                                withExtension:@"momd"]];
-        NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
-        
-        NSString *dbPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"user.db"];
-        NSError *error = nil;
-        if(![psc addPersistentStoreWithType:NSSQLiteStoreType
-                              configuration:nil
-                                        URL:[NSURL fileURLWithPath:dbPath]
-                                    options:nil
-                                      error:&error]) {
-            [NSException raise:@"Open failed" format:@"Reason %@", [error localizedDescription]];
-        }
-        
-        _context = [[NSManagedObjectContext alloc] init];
-        [[self context] setPersistentStoreCoordinator:psc];
-        [[self context] setUndoManager:nil];
-        
         _accountStore = [[ACAccountStore alloc] init];
-        
-        _userSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration ephemeralSessionConfiguration]
-                                                     delegate:self
-                                                delegateQueue:[NSOperationQueue mainQueue]];
-     
-        
-        [self fetchLookupValues];
-        
-        
-      //  [self buildTemporaryData];
     }
     return self;
 }
 
-- (void)fetchLookupValues
-{
-    [self fetchLookupValuesForEntity:@"STKGender" endpoint:STKUserEndpointGenderList keyPath:@"genders.gender"];
-    [self fetchLookupValuesForEntity:@"STKExternalSystem" endpoint:STKUserEndpointSocialList keyPath:@"external_systems.external_system"];
-}
 
-- (void)fetchLookupValuesForEntity:(NSString *)entity endpoint:(NSString *)endpoint keyPath:(NSString *)keyPath
-{
-    NSArray *keys = [keyPath componentsSeparatedByString:@"."];
-    NSString *keyGrouping = [keys objectAtIndex:0];
-    NSString *keyName = [keys objectAtIndex:1];
-    
-    NSFetchRequest *r = [NSFetchRequest fetchRequestWithEntityName:entity];
-    if([[[self context] executeFetchRequest:r error:nil] count] == 0) {
-        STKConnection *c = [self connectionForEndpoint:endpoint];
-        [c getWithSession:[self userSession]
-          completionBlock:^(NSDictionary *lookupValues, NSError *err) {
-              NSArray *allValues = [lookupValues objectForKey:keyGrouping];
-              for(NSDictionary *value in allValues) {
-                  NSManagedObject *o = [NSEntityDescription insertNewObjectForEntityForName:entity
-                                                                     inManagedObjectContext:[self context]];
-                  [o setValue:[value objectForKey:@"label"] forKey:@"label"];
-                  [o setValue:[value objectForKey:keyName] forKey:@"identifier"];
-              }
-              [[self context] save:nil];
-          }];
-    }
-}
 
 - (void)setCurrentUser:(STKUser *)currentUser
 {
@@ -194,125 +129,6 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     }
     
     return _currentUser;
-}
-
-
-- (void)fetchFeedForCurrentUser:(void (^)(NSArray *posts, NSError *error, BOOL moreComing))block
-{
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        block([[[self currentUser] posts] array], nil, NO);
-    }];
-}
-
-- (void)fetchActivityForCurrentUser:(void (^)(NSArray *activity, NSError *error, BOOL moreComing))block
-{
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        block([[[self currentUser] activityItems] array], nil, NO);
-    }];
-}
-
-- (void)buildTemporaryData
-{
-    NSFetchRequest *r = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
-    NSArray *a = [[self context] executeFetchRequest:r error:nil];
-    if([a count] > 0) {
-        [self setCurrentUser:[a objectAtIndex:0]];
-        return;
-    }
-    
-    STKUser *u = [NSEntityDescription insertNewObjectForEntityForName:@"STKUser"
-                                               inManagedObjectContext:[self context]];
-    [u setUserID:0];
-    [u setUserName:@"Cedric Rogers"];
-    [u setEmail:@"cedric@higheraltitude.co"];
-    [u setGender:@"Male"];
-    
-    [self setCurrentUser:u];
-    
-    // reuqestItes, activityItems, posts
-    
-    NSArray *authors = @[@"University of Wisconsin", @"Cedric Rogers", @"Joe Conway", @"Rovane Durso",
-                         @"Facebook", @"North Carolina State", @"Emory"];
-    NSArray *iconURLStrings = @[@"https://www.etsy.com/storque/media/bunker/2008/10/DU_Wisconsin_logo-tn.jpg",
-                               @"https://pbs.twimg.com/profile_images/2420162558/image_bigger.jpg",
-                               @"http://stablekernel.com/images/joe.png",
-                               @"https://pbs.twimg.com/profile_images/3500227034/2ad776b09c64e9ff677c91dd55a18472_bigger.jpeg",
-                               @"http://marketingland.com/wp-content/ml-loads/2013/05/facebook-logo-new-300x300.png",
-                               @"http://www.logotypes101.com/logos/953/28D5E04946B566AA97E4770658F48F55/NC_State_University1.png",
-                               @"http://www.comacc.org/training/PublishingImages/Emory_Logo.jpg"];
-                               
-    NSArray *origins = @[@"Instagram", @"Facebook", @"Prism", @"Twitter"];
-    NSArray *dates = @[[NSDate date], [NSDate dateWithTimeIntervalSinceNow:-100000], [NSDate dateWithTimeIntervalSinceNow:-2000]];
-    NSArray *images = @[@"http://socialmediamamma.com/wp-content/uploads/2012/11/now-is-the-time-inspirational-quote-inspiring-quotes-www.socialmediamamma.com_.jpg",
-                        @"http://socialmediamamma.com/wp-content/uploads/2012/11/dont-be-afraid-to-live-inspiring-quotes-Inspirational-quotes-Gaynor-Parke-www.socialmediamamma.com_.jpg"];
-                        
-    NSArray *hashTags = @[@"hash", @"tag", @"bar", @"foo", @"baz", @"school", @"inspiration"];
-    
-    srand((unsigned int)time(NULL));
-    
-    for(int i = 0; i < 10; i++) {
-        STKPost *p = [NSEntityDescription insertNewObjectForEntityForName:@"STKPost"
-                                                   inManagedObjectContext:[self context]];
-        int idx = rand() % [authors count];
-        [p setAuthorName:authors[idx]];
-        [p setIconURLString:iconURLStrings[idx]];
-
-        idx = rand() % [origins count];
-        [p setPostOrigin:origins[idx]];
-        
-        [p setAuthorUserID:0];
-        
-        idx = rand() % [dates count];
-        [p setDatePosted:dates[idx]];
-        
-        int count = rand() % 4;
-        NSMutableArray *tags = [NSMutableArray array];
-        for(int j = 0; j < count; j++) {
-            idx = rand() % [hashTags count];
-            [tags addObject:hashTags[idx]];
-        }
-        [p setHashTagsData:[NSJSONSerialization dataWithJSONObject:tags options:0 error:nil]];
-
-        idx = rand() % [images count];
-        [p setImageURLString:images[idx]];
-        [p setUser:u];
-    }
-    
-    for(int i = 0; i < 5; i++) {
-        STKActivityItem *item = [NSEntityDescription insertNewObjectForEntityForName:@"STKActivityItem"
-                                                              inManagedObjectContext:[self context]];
-        [item setUser:u];
-        [item setUserID:0];
-        [item setUserName:@"Cedric Rogers"];
-        [item setProfileImageURLString:@"https://pbs.twimg.com/profile_images/2420162558/image_bigger.jpg"];
-        [item setRecent:(BOOL)(rand() % 2)];
-        [item setType:(STKActivityItemType)(rand() % 5)];
-        [item setReferenceImageURLString:images[rand() % [images count]]];
-        [item setDate:dates[rand() % [dates count]]];
-    }
-    for(int i = 0; i < 5; i++) {
-        STKRequestItem *item = [NSEntityDescription insertNewObjectForEntityForName:@"STKRequestItem"
-                                                              inManagedObjectContext:[self context]];
-        [item setUser:u];
-        [item setUserID:0];
-        [item setUserName:@"Cedric Rogers"];
-        [item setProfileImageURLString:@"https://pbs.twimg.com/profile_images/2420162558/image_bigger.jpg"];
-        [item setType:STKRequestItemTypeTrust];
-        [item setDateReceived:dates[rand() % [dates count]]];
-        if(rand() % 2 == 0) {
-            [item setAccepted:(BOOL)(rand() % 2)];
-            [item setDateConfirmed:dates[rand() % [dates count]]];
-        }
-        
-    }
-    [[self context] save:nil];
-}
-
-- (void)fetchRecommendedHashtags:(NSString *)hashtag completion:(void (^)(NSArray *hashtags, NSError *error))block
-{
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        block(@[hashtag,@"foo",@"bar",@"foobar"],nil);
-    }];
 }
 
 #pragma mark Authentication Nonsense
@@ -391,13 +207,13 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 
 - (void)validateWithTwitterToken:(NSString *)token secret:(NSString *)secret completion:(void (^)(STKUser *u, NSError *err))block
 {
-    STKConnection *c = [self connectionForEndpoint:STKUserEndpointValidateTwitter];
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateTwitter];
     [c addQueryValue:token forKey:@"ext_token"];
     [c addQueryValue:secret forKey:@"ext_token_secret"];
     [c setContext:[self context]];
     [c setEntityName:@"STKUser"];
     [c setExistingMatchMap:@{@"userID" : @"entity"}];
-    [c getWithSession:[self userSession]
+    [c getWithSession:[self session]
       completionBlock:block];
 }
 
@@ -578,12 +394,12 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 
 - (void)validateWithFacebook:(NSString *)oauthToken completion:(void (^)(STKUser *u, NSError *err))block
 {
-    STKConnection *c = [self connectionForEndpoint:STKUserEndpointValidateFacebook];
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateFacebook];
     [c addQueryValue:oauthToken forKey:@"ext_token"];
     [c setContext:[self context]];
     [c setEntityName:@"STKUser"];
     [c setExistingMatchMap:@{@"userID" : @"entity"}];
-    [c getWithSession:[self userSession] completionBlock:block];
+    [c getWithSession:[self session] completionBlock:block];
 }
 
 - (void)fetchFacebookDataForAccount:(ACAccount *)acct completion:(void (^)(STKProfileInformation *acct, NSError *err))block
@@ -682,12 +498,12 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 
 - (void)validateWithGoogle:(NSString *)token completion:(void (^)(STKUser *, NSError *))block
 {
-    STKConnection *c = [self connectionForEndpoint:STKUserEndpointValidateGoogle];
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateGoogle];
     [c addQueryValue:token forKey:@"ext_token"];
     [c setContext:[self context]];
     [c setEntityName:@"STKUser"];
     [c setExistingMatchMap:@{@"userID" : @"entity"}];
-    [c getWithSession:[self userSession] completionBlock:block];
+    [c getWithSession:[self session] completionBlock:block];
 }
 
 - (void)fetchGoogleDataForAuth:(GTMOAuth2Authentication *)auth completion:(void (^)(STKProfileInformation *pi, NSError *err))block
@@ -738,7 +554,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 
 - (void)validateWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
 {
-    STKConnection *c = [self connectionForEndpoint:STKUserEndpointValidateEmail];
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateEmail];
     [c addQueryValue:email forKey:@"login"];
     [c addQueryValue:password forKey:@"password"];
     
@@ -746,7 +562,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     [c setEntityName:@"STKUser"];
     [c setExistingMatchMap:@{@"userID" : @"entity"}];
     
-    [c getWithSession:[self userSession]
+    [c getWithSession:[self session]
       completionBlock:block];
 }
 
@@ -754,11 +570,11 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 
 - (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block
 {
-    STKConnection *c = [self connectionForEndpoint:STKUserEndpointRegister];
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRegister];
     
     STKProfileInformation *transformedInfo = [info copy];
     
-    [transformedInfo setGender:[self transformLookupValue:[info gender] forType:STKLookupTypeGender]];
+    [transformedInfo setGender:[[STKBaseStore store] transformLookupValue:[info gender] forType:STKLookupTypeGender]];
     
     NSArray *missingKeys = nil;
     BOOL verified = [c addQueryObject:transformedInfo
@@ -784,7 +600,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     }
     
     if([transformedInfo externalService] && [transformedInfo externalID]) {
-        [transformedInfo setExternalService:[self transformLookupValue:[info externalService] forType:STKLookupTypeSocial]];
+        [transformedInfo setExternalService:[[STKBaseStore store] transformLookupValue:[info externalService] forType:STKLookupTypeSocial]];
         [c addQueryObject:transformedInfo missingKeys:nil withKeyMap:@{@"externalID" : @"external_id",
                                                                        @"externalService" : @"external_system"}];
     } else if([info password]) {
@@ -797,7 +613,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
         return;
     }
     
-    [c getWithSession:[self userSession] completionBlock:^(NSDictionary *obj, NSError *err) {
+    [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
         if(!err) {
             void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
                 if(!valErr) {
@@ -949,14 +765,5 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     // Cancel all connections!
 }
 
-
-- (NSString *)transformLookupValue:(NSString *)lookupValue forType:(NSString *)type
-{
-    NSFetchRequest *fetch = [NSFetchRequest fetchRequestWithEntityName:type];
-    [fetch setPredicate:[NSPredicate predicateWithFormat:@"label like[cd] %@", lookupValue]];
-    NSManagedObject *result = [[[self context] executeFetchRequest:fetch error:nil] firstObject];
-    
-    return [result valueForKey:@"identifier"];
-}
 
 @end

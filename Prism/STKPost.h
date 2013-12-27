@@ -9,6 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+typedef enum : int16_t {
+    STKPostTypeAspiration,
+    STKPostTypeInspiration,
+    STKPostTypeExperience,
+    STKPostTypeAchievement,
+    STKPostTypePassion,
+    STKPostTypeAccolade
+} STKPostType;
+
 @class STKUser;
 
 @interface STKPost : NSManagedObject
@@ -20,6 +29,8 @@
 @property (nonatomic, retain) NSString * iconURLString;
 @property (nonatomic, retain) NSData * hashTagsData;
 @property (nonatomic, retain) NSString * imageURLString;
+@property (nonatomic) int16_t type;
+
 @property (nonatomic, retain) STKUser *user;
 
 @property (nonatomic, readonly) NSArray *hashTags;

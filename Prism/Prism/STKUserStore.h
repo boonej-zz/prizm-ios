@@ -20,9 +20,6 @@ typedef enum {
     STKUserStoreErrorCodeNoPassword
 } STKUserStoreErrorCode;
 
-extern NSString * const STKLookupTypeGender;
-extern NSString * const STKLookupTypeSocial;
-
 extern NSString * const STKUserStoreTransparentLoginFailedNotification;
     extern NSString * const STKUserStoreTransparentLoginFailedReasonKey;
         extern NSString * const STKUserStoreTransparentLoginFailedConnectionValue;
@@ -34,12 +31,11 @@ extern NSString * const STKUserStoreTransparentLoginFailedNotification;
 
 @property (nonatomic, strong) STKUser *currentUser;
 
-- (NSString *)transformLookupValue:(NSString *)lookupValue forType:(NSString *)type;
-
+/*
 - (void)fetchFeedForCurrentUser:(void (^)(NSArray *posts, NSError *error, BOOL moreComing))block;
 - (void)fetchActivityForCurrentUser:(void (^)(NSArray *activity, NSError *error, BOOL moreComing))block;
 - (void)fetchRecommendedHashtags:(NSString *)hashtag completion:(void (^)(NSArray *hashtags, NSError *error))block;
-
+*/
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
 
 - (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block;

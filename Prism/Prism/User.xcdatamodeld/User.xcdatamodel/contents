@@ -26,6 +26,7 @@
         <attribute name="iconURLString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageURLString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postOrigin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="posts" inverseEntity="STKUser" syncable="YES"/>
     </entity>
     <entity name="STKRequestItem" representedClassName="STKRequestItem" syncable="YES">

@@ -20,6 +20,7 @@
 @dynamic hashTagsData;
 @dynamic imageURLString;
 @dynamic user;
+@dynamic type;
 @synthesize hashTags = _hashTags;
 
 - (NSArray *)hashTags

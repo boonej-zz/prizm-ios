@@ -14,7 +14,8 @@
 
 @optional
 
-- (void)textToolbarIsDone:(STKHashtagToolbar *)tb;
+- (void)hashtagToolbarClickedDone:(STKHashtagToolbar *)tb;
+- (void)hashtagToolbar:(STKHashtagToolbar *)tb didPickHashtag:(NSString *)hashtag;
 
 @end
 
@@ -24,6 +25,5 @@
 @property (nonatomic, weak) id <STKHashtagToolbarDelegate> delegate;
 @property (nonatomic, strong) NSArray *hashtags;
 
-+ (void)attachToTextView:(UITextView *)tv withDelegate:(id <STKHashtagToolbarDelegate>)del;
 
 @end

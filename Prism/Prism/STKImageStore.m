@@ -7,9 +7,18 @@
 //
 
 #import "STKImageStore.h"
+#import <CommonCrypto/CommonCrypto.h>
+#import "AmazonS3Client.h"
+
+
+NSString * const STKImageStoreS3Key = @"27F1TqpcdXOzi6DLmt9U4LCdlI71EhtwhClX0XMl";
+NSString * const STKImageStoreS3KeyID = @"AKIAI7E5TSPROBCA4YWA";
+NSString * const STKImageStoreBucketName = @"higheraltitude.prism";
+NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 
 @interface STKImageStore () <NSURLSessionDelegate>
 
+@property (nonatomic, strong) AmazonS3Client *amazonClient;
 @property (nonatomic, strong) NSURLSession *fetchSession;
 @property (nonatomic, readonly) NSString *cachePath;
 @property (nonatomic, strong) NSMutableDictionary *failedFetchMap;
@@ -42,6 +51,9 @@
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         
         _fetchSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    
+        _amazonClient = [[AmazonS3Client alloc] initWithAccessKey:STKImageStoreS3KeyID
+                                                    withSecretKey:STKImageStoreS3Key];
     }
     return self;
 }
@@ -110,10 +122,49 @@
 
 - (NSString *)safeStringForURLString:(NSString *)url
 {
+    // Remove protocol
+    url = [url stringByReplacingOccurrencesOfString:@"https://" withString:@""];
+    url = [url stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+
     return [url stringByReplacingOccurrencesOfString:@"[^0-9A-Za-z_-]"
                                           withString:@""
                                              options:NSRegularExpressionSearch
                                                range:NSMakeRange(0, [url length])];
+}
+
+- (void)uploadImage:(UIImage *)image completion:(void (^)(NSString *URLString, NSError *err))block
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+        const void *cStr = [imageData bytes];
+        unsigned char result[CC_MD5_DIGEST_LENGTH];
+        
+        CC_MD5(cStr, (uint32_t)[imageData length], result);
+        
+        NSString *md5 = [[[NSData alloc] initWithBytes:result length:CC_MD5_DIGEST_LENGTH] base64EncodedStringWithOptions:0];
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"yyyyMMddhhmmss"];
+        
+        NSString *fileName = [NSString stringWithFormat:@"%@_%@.jpg", [df stringFromDate:[NSDate date]], md5];
+        
+        S3PutObjectRequest *req = [[S3PutObjectRequest alloc] initWithKey:fileName inBucket:STKImageStoreBucketName];
+        
+        [req setContentType:@"image/jpeg"];
+        [req setData:imageData];
+        [req setCannedACL:[S3CannedACL publicRead]];
+        S3PutObjectResponse *response = [[self amazonClient] putObject:req];
+        if(![response error] && ![response exception]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString *fullPath = [[STKImageStoreBucketHostURLString stringByAppendingPathComponent:STKImageStoreBucketName] stringByAppendingPathComponent:fileName];
+                NSString *cachePath = [self cachePathForURLString:fullPath];
+                [imageData writeToFile:cachePath atomically:YES];
+                
+                block(fullPath, nil);
+            });
+        } else {
+            block(nil, [response error]);
+        }
+    });
 }
 
 @end

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="eu0-Jo-5oQ" customClass="STKTextImageCell">
+            <rect key="frame" x="0.0" y="0.0" width="106" height="64"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="106" height="64"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xhg-yL-rnM">
+                        <rect key="frame" x="0.0" y="43" width="106" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="dIL-ae-Hpm"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZAH-8E-Mau">
+                        <rect key="frame" x="37" y="10" width="32" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.58187181122448983" green="0.58187181122448983" blue="0.58187181122448983" alpha="0.0" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="32" id="Az2-ce-cCg"/>
+                            <constraint firstAttribute="width" constant="32" id="J5W-1e-XVW"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="Xhg-yL-rnM" firstAttribute="leading" secondItem="eu0-Jo-5oQ" secondAttribute="leading" id="Kcc-36-HuI"/>
+                <constraint firstItem="ZAH-8E-Mau" firstAttribute="top" secondItem="eu0-Jo-5oQ" secondAttribute="top" constant="10" id="LzY-5k-ltx"/>
+                <constraint firstAttribute="trailing" secondItem="Xhg-yL-rnM" secondAttribute="trailing" id="YXP-Wh-yDL"/>
+                <constraint firstAttribute="bottom" secondItem="Xhg-yL-rnM" secondAttribute="bottom" id="gjN-ER-jhY"/>
+                <constraint firstAttribute="centerX" secondItem="ZAH-8E-Mau" secondAttribute="centerX" id="iWL-m1-GdO"/>
+            </constraints>
+            <size key="customSize" width="142" height="119"/>
+            <connections>
+                <outlet property="imageView" destination="ZAH-8E-Mau" id="nCR-77-4TG"/>
+                <outlet property="label" destination="Xhg-yL-rnM" id="lI4-dJ-EG9"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+</document>

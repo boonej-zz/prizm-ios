@@ -254,7 +254,7 @@
     [super viewWillAppear:animated];
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
-    
+    /*
     [[STKUserStore store] fetchFeedForCurrentUser:^(NSArray *posts, NSError *error, BOOL moreComing) {
         if(!error) {
             if([self items]) {
@@ -267,7 +267,7 @@
         } else {
             
         }
-    }];
+    }];*/
 }
 
 - (void)viewDidAppear:(BOOL)animated

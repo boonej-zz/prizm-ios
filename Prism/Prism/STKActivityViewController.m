@@ -46,13 +46,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[STKUserStore store] fetchActivityForCurrentUser:^(NSArray *activity, NSError *error, BOOL moreComing) {
+/*    [[STKUserStore store] fetchActivityForCurrentUser:^(NSArray *activity, NSError *error, BOOL moreComing) {
         if(!error) {
             _items = activity;
             [[self tableView] reloadData];
         }
     }];
-    
+  */  
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
