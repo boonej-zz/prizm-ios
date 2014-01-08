@@ -14,6 +14,7 @@
 #import "STKUser.h"
 #import "STKRenderServer.h"
 #import "STKBackdropView.h"
+#import "STKContentStore.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -64,12 +65,11 @@
         forCellReuseIdentifier:@"STKHomeCell"];
     
     
-    
     [[self tableView] registerNib:_homeCellNib
            forCellReuseIdentifier:@"STKHomeCell"];
     [[self tableView] setDelaysContentTouches:NO];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
-    [[self tableView] setRowHeight:397];
+    [[self tableView] setRowHeight:401];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     UIView *blankView = [[UIView alloc] initWithFrame:[[self cardView] bounds]];
@@ -215,11 +215,14 @@
     [c setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     STKPost *p = [[self items] objectAtIndex:[ip row]];
-    [[c iconImageView] setUrlString:[p iconURLString]];
     [[c contentImageView] setUrlString:[p imageURLString]];
-    [[c originatorLabel] setText:[p authorName]];
-    [[c timeLabel] setText:@"Now"];
-    [[c sourceLabel] setText:[p postOrigin]];
+
+    [[[c headerView] avatarView] setUrlString:[p iconURLString]];
+    [[[c headerView] posterLabel] setText:[p authorName]];
+    [[[c headerView] timeLabel] setText:@"Now:"];
+    [[[c headerView] sourceLabel] setText:[p postOrigin]];
+    [[[c headerView] postTypeView] setImage:[p typeImage]];
+
     NSMutableString *str = [[NSMutableString alloc] init];
     for(NSString *s in [p hashTags])
         [str appendFormat:@"#%@ ", s];
@@ -254,8 +257,9 @@
     [super viewWillAppear:animated];
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
-    /*
-    [[STKUserStore store] fetchFeedForCurrentUser:^(NSArray *posts, NSError *error, BOOL moreComing) {
+    
+    
+    [[STKContentStore store] fetchPostsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *posts, NSError *error) {
         if(!error) {
             if([self items]) {
                 _items = [posts arrayByAddingObjectsFromArray:_items];
@@ -267,7 +271,7 @@
         } else {
             
         }
-    }];*/
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -68,6 +68,7 @@
         
         [nvc presentViewController:registerNVC animated:NO completion:nil];
     }
+    
     return YES;
 }
 

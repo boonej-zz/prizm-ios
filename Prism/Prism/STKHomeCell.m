@@ -55,11 +55,8 @@
         UIGraphicsEndImageContext();
     }
     [[self backdropFadeView] setImage:fadeImage];
-
-    [[[self iconImageView] layer] setCornerRadius:16];
-    [[self iconImageView] setClipsToBounds:YES];
     
-    
+    [[self headerView] setBackgroundColor:[UIColor colorWithWhite:0.5 alpha:0.33]];
 }
 /*
 // Only override drawRect: if you perform custom drawing.

@@ -27,9 +27,12 @@
 - (UIBarButtonItem *)postBarButtonItem
 {
     UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    [[view imageView] setContentMode:UIViewContentModeCenter];
+    [[view imageView] setClipsToBounds:NO];
+    [view setClipsToBounds:NO];
     [view addTarget:self action:@selector(createNewPost:) forControlEvents:UIControlEventTouchUpInside];
-    [view setImage:[UIImage imageNamed:@"bnt_add_content"] forState:UIControlStateNormal];
-    [view setImage:[UIImage imageNamed:@"bnt_add_content_selected"] forState:UIControlStateHighlighted];
+    [view setImage:[UIImage imageNamed:@"btn_addcontent"] forState:UIControlStateNormal];
+    [view setImage:[UIImage imageNamed:@"btn_addcontent_active"] forState:UIControlStateHighlighted];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     return bbi;
@@ -38,9 +41,12 @@
 - (UIBarButtonItem *)menuBarButtonItem
 {
     UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    [[view imageView] setContentMode:UIViewContentModeCenter];
+    [[view imageView] setClipsToBounds:NO];
+    [view setClipsToBounds:NO];
     [view addTarget:self action:@selector(toggleMenu:) forControlEvents:UIControlEventTouchUpInside];
-    [view setImage:[UIImage imageNamed:@"Menu.png"] forState:UIControlStateNormal];
-    [view setImage:[UIImage imageNamed:@"MenuPress.png"] forState:UIControlStateHighlighted];
+    [view setImage:[UIImage imageNamed:@"btn_menu"] forState:UIControlStateNormal];
+    [view setImage:[UIImage imageNamed:@"btn_menu_active"] forState:UIControlStateHighlighted];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     return bbi;
 }

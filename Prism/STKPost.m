@@ -37,4 +37,26 @@
     return _hashTags;
 }
 
+- (UIImage *)typeImage
+{
+    return [[self class] imageForType:[self type]];
+}
+
++ (UIImage *)imageForType:(STKPostType)t
+{
+    NSDictionary *m = @{@(STKPostTypeAchievement) : @"category_achievements",
+                        @(STKPostTypeAspiration) : @"category_aspirations",
+                        @(STKPostTypeExperience) : @"category_experiences",
+                        @(STKPostTypeInspiration) : @"category_inspirations",
+                        @(STKPostTypePassion) : @"category_passion"};
+    
+    NSString *imageName = m[@(t)];
+    
+    if(imageName) {
+        return [UIImage imageNamed:imageName];
+    }
+    
+    return nil;
+}
+
 @end

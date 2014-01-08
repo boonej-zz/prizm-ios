@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface STKCountView : UIView
-@property (nonatomic) int followerCount;
-@property (nonatomic) int followingCount;
-@property (nonatomic) int postCount;
-@property (nonatomic, strong) NSDate *joinDate;
+
+@property (nonatomic, copy) NSArray *circleTitles; // Must be 3
+@property (nonatomic, copy) NSArray *circleValues; // Must be 3
+
 @end

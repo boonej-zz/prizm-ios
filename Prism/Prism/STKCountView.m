@@ -8,6 +8,72 @@
 
 #import "STKCountView.h"
 
+@interface STKCountCircleView : UIView
+
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *countLabel;
+
+@end
+
+@implementation STKCountCircleView
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if(self) {
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _countLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        [_titleLabel setTextColor:[UIColor whiteColor]];
+        [_countLabel setTextColor:[UIColor whiteColor]];
+        [_titleLabel setMinimumScaleFactor:0.5];
+        [_countLabel setMinimumScaleFactor:0.5];
+        [_titleLabel setFont:[UIFont systemFontOfSize:12]];
+        [_countLabel setFont:[UIFont systemFontOfSize:20]];
+        [_titleLabel setAdjustsFontSizeToFitWidth:YES];
+        [_countLabel setAdjustsFontSizeToFitWidth:YES];
+        [_titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [_countLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [_titleLabel setTextAlignment:NSTextAlignmentCenter];
+        [_countLabel setTextAlignment:NSTextAlignmentCenter];
+        
+        [self addSubview:_titleLabel];
+        [self addSubview:_countLabel];
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-8-[v]-8-|" options:0 metrics:nil views:@{@"v" : _titleLabel}]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_titleLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
+                                                            toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:-1]];
+        [_titleLabel addConstraint:[NSLayoutConstraint constraintWithItem:_titleLabel attribute:NSLayoutAttributeHeight
+                                                                relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
+                                                               multiplier:1 constant:24]];
+
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-8-[v]-8-|" options:0 metrics:nil views:@{@"v" : _countLabel}]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:_countLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
+                                                            toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:1]];
+        [_countLabel addConstraint:[NSLayoutConstraint constraintWithItem:_countLabel attribute:NSLayoutAttributeHeight
+                                                                relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
+                                                               multiplier:1 constant:24]];
+        [self setBackgroundColor:[UIColor clearColor]];
+    }
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    [[UIColor colorWithWhite:1.0 alpha:0.1] setFill];
+    [[UIColor colorWithWhite:1.0 alpha:0.5] setStroke];
+    
+    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 5, 5)];
+    [bp setLineWidth:2];
+    [bp fill];
+    [bp stroke];
+}
+
+@end
+
+@interface STKCountView ()
+@property (nonatomic, strong) NSArray *circleViews;
+@end
+
 @implementation STKCountView
 
 - (id)initWithFrame:(CGRect)frame
@@ -24,7 +90,6 @@
     self = [super initWithCoder:aDecoder];
     if(self) {
         [self commonInit];
-        [self setJoinDate:[NSDate date]];
     }
     return self;
 }
@@ -32,109 +97,54 @@
 - (void)commonInit
 {
     [self setBackgroundColor:[UIColor clearColor]];
-}
-
-- (void)setFollowerCount:(int)followerCount
-{
-    _followerCount = followerCount;
-    [self setNeedsDisplay];
-}
-
-- (void)setFollowingCount:(int)followingCount
-{
-    _followingCount = followingCount;
-    [self setNeedsDisplay];
-}
-
-- (void)setPostCount:(int)postCount
-{
-    _postCount = postCount;
-    [self setNeedsDisplay];
-}
-
-- (void)setJoinDate:(NSDate *)joinDate
-{
-    _joinDate = joinDate;
-    [self setNeedsDisplay];
-}
-
-- (void)drawRect:(CGRect)rect
-{
-    CGRect b = [self bounds];
     
-    float circleHeight = b.size.height / 1.8;
-    float remainingAfterCircle = b.size.height - circleHeight;
-    float topPadding = remainingAfterCircle / 3.0;
-    float horizontalRemaining = b.size.width - circleHeight * 3.0;
-    float horizontalMajor = horizontalRemaining * 2.0 / 3.0;
-    float horizontalMinor = horizontalRemaining * 1.0 / 3.0;
-    
-    [[UIColor colorWithWhite:1.0 alpha:0.1] setFill];
-    [[UIColor colorWithWhite:0.2 alpha:0.2] setStroke];
-    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, circleHeight, circleHeight)];
-    CGContextSaveGState(UIGraphicsGetCurrentContext());
-    CGContextSetShadowWithColor(UIGraphicsGetCurrentContext(), CGSizeZero, 5, [[UIColor darkGrayColor] CGColor]);
-    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, topPadding);
-    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), horizontalMinor / 2.0, 0);
-    [bp fill];
-    [bp stroke];
-    
-    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), circleHeight + horizontalMajor / 2.0, 0);
-    [bp fill];
-    [bp stroke];
-
-    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), circleHeight + horizontalMajor / 2.0, 0);
-    [bp fill];
-    [bp stroke];
-
-    CGContextRestoreGState(UIGraphicsGetCurrentContext());
-    
-    float cx = horizontalMinor / 2.0 + circleHeight / 2.0;
-    float cy = topPadding + circleHeight / 2.0;
-    UIFont *smallFont = [UIFont systemFontOfSize:16];
-    UIFont *largeFont = [UIFont systemFontOfSize:18];
-    NSDictionary *smallAttrs = @{NSFontAttributeName : smallFont, NSForegroundColorAttributeName : [UIColor colorWithWhite:1 alpha:0.5]};
-    NSDictionary *largeAttrs = @{NSFontAttributeName : largeFont, NSForegroundColorAttributeName : [UIColor colorWithWhite:1 alpha:0.5]};
-    
-    NSString *s = @"Followers";
-    CGSize sz = [s sizeWithAttributes:smallAttrs];
-    [s drawInRect:CGRectMake(cx - sz.width / 2.0, cy - sz.height, sz.width, sz.height) withAttributes:smallAttrs];
-    s = [NSString stringWithFormat:@"%d", [self followerCount]];
-    sz = [s sizeWithAttributes:largeAttrs];
-    [s drawInRect:CGRectMake(cx - sz.width / 2.0, cy, sz.width, sz.height) withAttributes:largeAttrs];
-    
-    s = @"Following";
-    sz = [s sizeWithAttributes:smallAttrs];
-    [s drawInRect:CGRectMake(cx - sz.width / 2.0 + circleHeight + horizontalMajor / 2.0, cy - sz.height, sz.width, sz.height) withAttributes:smallAttrs];
-    s = [NSString stringWithFormat:@"%d", [self followingCount]];
-    sz = [s sizeWithAttributes:largeAttrs];
-    [s drawInRect:CGRectMake(cx - sz.width / 2.0 + circleHeight + horizontalMajor / 2.0, cy, sz.width, sz.height) withAttributes:largeAttrs];
-
-    s = @"Posts";
-    sz = [s sizeWithAttributes:smallAttrs];
-    [s drawInRect:CGRectMake(cx - sz.width / 2.0 + 2.0 * (circleHeight + horizontalMajor / 2.0), cy - sz.height, sz.width, sz.height) withAttributes:smallAttrs];
-    s = [NSString stringWithFormat:@"%d", [self postCount]];
-    sz = [s sizeWithAttributes:largeAttrs];
-    [s drawInRect:CGRectMake(cx - sz.width / 2.0 + 2.0 * (circleHeight + horizontalMajor / 2.0), cy, sz.width, sz.height) withAttributes:largeAttrs];
-
-    float pillWidth = 150;
-    [[UIColor colorWithWhite:1.0 alpha:0.1] setFill];
-    bp = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(b.size.width / 2.0 - pillWidth / 2.0, b.size.height - 30, 150, 24)
-                                             byRoundingCorners:UIRectCornerAllCorners
-                                                   cornerRadii:CGSizeMake(4, 4)];
-    [bp fill];
-    
-    static NSDateFormatter *df = nil;
-    if(!df) {
-        df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"MMM yyyy"];
+    NSMutableArray *a = [NSMutableArray array];
+    for(int i = 0; i < 3; i++) {
+        STKCountCircleView *c = [[STKCountCircleView alloc] init];
+        [c setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self addSubview:c];
+        [a addObject:c];
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : c}]];
     }
-    smallFont = [UIFont systemFontOfSize:12];
-    smallAttrs = @{NSFontAttributeName : smallFont, NSForegroundColorAttributeName : [UIColor colorWithWhite:1 alpha:0.5]};
-    s = [NSString stringWithFormat:@"Member since %@", [df stringFromDate:[self joinDate]]];
-    sz = [s sizeWithAttributes:smallAttrs];
-    [s drawInRect:CGRectMake(b.size.width / 2.0 - sz.width / 2.0, b.size.height - 24, sz.width, sz.height) withAttributes:smallAttrs];
+    _circleViews = [a copy];
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-4-[v0]-8-[v1(==v0)]-8-[v2(==v0)]-4-|"
+                                                                 options:0
+                                                                 metrics:nil
+                                                                   views:@{@"v0" : a[0], @"v1" : a[1], @"v2" : a[2]}]];
 }
+
+- (void)setCircleTitles:(NSArray *)circleTitles
+{
+    if([circleTitles count] != 3) {
+        @throw [NSException exceptionWithName:@"STKCountViewException" reason:@"Therem ust be 3 circles" userInfo:nil];
+    }
+    _circleTitles = [circleTitles copy];
+    
+    for(int i = 0; i < 3; i++) {
+        [[[[self circleViews] objectAtIndex:i] titleLabel] setText:[[self circleTitles] objectAtIndex:i]];
+    }
+    
+    [self setNeedsDisplay];
+}
+
+- (void)setCircleValues:(NSArray *)circleValues
+{
+    if([circleValues count] != 3) {
+        @throw [NSException exceptionWithName:@"STKCountViewException" reason:@"Therem ust be 3 circles" userInfo:nil];
+    }
+
+    _circleValues = [circleValues copy];
+    
+    for(int i = 0; i < 3; i++) {
+        [[[[self circleViews] objectAtIndex:i] countLabel] setText:[[self circleValues] objectAtIndex:i]];
+    }
+
+    
+    [self setNeedsDisplay];
+}
+
 
 
 @end

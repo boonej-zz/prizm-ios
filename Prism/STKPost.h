@@ -29,10 +29,14 @@ typedef enum : int16_t {
 @property (nonatomic, retain) NSString * iconURLString;
 @property (nonatomic, retain) NSData * hashTagsData;
 @property (nonatomic, retain) NSString * imageURLString;
-@property (nonatomic) int16_t type;
+@property (nonatomic) STKPostType type;
 
 @property (nonatomic, retain) STKUser *user;
 
 @property (nonatomic, readonly) NSArray *hashTags;
+
+- (UIImage *)typeImage;
+
++ (UIImage *)imageForType:(STKPostType)t;
 
 @end

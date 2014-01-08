@@ -16,6 +16,8 @@
 - (void)fetchRecommendedHashtags:(NSString *)baseString
                       completion:(void (^)(NSArray *suggestions))block;
 
+- (void)fetchPostsForUser:(STKUser *)u completion:(void (^)(NSArray *posts, NSError *err))block;
+
 - (void)addPostWithCaption:(NSString *)caption
             imageURLString:(NSString *)imageURLString
                       type:(STKPostType)type

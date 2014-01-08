@@ -37,7 +37,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    [[self countView] setCircleTitles:@[@"Likes", @"Comments", @"Posts"]];
+    [[self countView] setCircleValues:@[@"0", @"0", @"0"]];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

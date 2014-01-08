@@ -18,7 +18,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7YY-nm-ywx">
-                    <rect key="frame" x="0.0" y="366" width="320" height="44"/>
+                    <rect key="frame" x="0.0" y="379" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="cal-Ql-Dqo"/>
@@ -26,16 +26,16 @@
                     <items/>
                 </toolbar>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RwR-nx-6cr" customClass="STKCountView">
-                    <rect key="frame" x="0.0" y="410" width="320" height="158"/>
+                    <rect key="frame" x="0.0" y="441" width="320" height="99"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="320" id="Nud-Kh-ZOF"/>
-                        <constraint firstAttribute="height" constant="158" id="Wmd-K0-bZj"/>
+                        <constraint firstAttribute="height" constant="99" id="XPD-Ag-4id"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNh-yH-M0i" customClass="STKTrustView">
-                    <rect key="frame" x="0.0" y="64" width="320" height="302"/>
+                    <rect key="frame" x="0.0" y="64" width="320" height="315"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
@@ -47,10 +47,10 @@
                 <constraint firstAttribute="trailing" secondItem="7YY-nm-ywx" secondAttribute="trailing" id="Bzy-D0-1Om"/>
                 <constraint firstItem="RwR-nx-6cr" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GZf-0y-PHO"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="WHr-oL-3Es"/>
-                <constraint firstItem="RwR-nx-6cr" firstAttribute="top" secondItem="7YY-nm-ywx" secondAttribute="bottom" id="icW-LY-AZs"/>
+                <constraint firstItem="RwR-nx-6cr" firstAttribute="top" secondItem="7YY-nm-ywx" secondAttribute="bottom" constant="18" id="icW-LY-AZs"/>
                 <constraint firstItem="7YY-nm-ywx" firstAttribute="top" secondItem="XNh-yH-M0i" secondAttribute="bottom" id="lbf-l9-dCM"/>
                 <constraint firstAttribute="trailing" secondItem="XNh-yH-M0i" secondAttribute="trailing" id="oW0-Iw-oiD"/>
-                <constraint firstAttribute="bottom" secondItem="RwR-nx-6cr" secondAttribute="bottom" id="uks-4R-6DK"/>
+                <constraint firstAttribute="bottom" secondItem="RwR-nx-6cr" secondAttribute="bottom" constant="28" id="uks-4R-6DK"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="zMh-qt-WxP"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
