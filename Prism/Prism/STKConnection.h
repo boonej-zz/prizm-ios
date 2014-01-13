@@ -10,6 +10,8 @@
 
 @import CoreData;
 
+extern NSString * const STKConnectionUnauthorizedNotification;
+
 typedef enum {
     STKConnectionMethodGET,
     STKConnectionMethodPOST,
@@ -22,7 +24,8 @@ extern NSString * const STKConnectionErrorDomain;
 typedef enum {
     STKConnectionErrorCodeBadRequest,
     STKConnectionErrorCodeParseFailed,
-    STKConnectionErrorCodeRequestFailed
+    STKConnectionErrorCodeRequestFailed,
+    STKConnectionErrorCodeInvalidModelGraph
     
 } STKConnectionErrorCode;
 
@@ -45,6 +48,16 @@ typedef enum {
 @property (nonatomic, strong) NSDictionary *existingMatchMap;
 @property (nonatomic, copy) void (^insertionBlock)(NSManagedObject *rootObject);
 @property (nonatomic, strong) NSManagedObjectContext *context;
+
+
+// Pass either an array or dictionary containing any number of arrays, dictionaries and strings.
+// The structure of the modelGraph is used is to match the structure of the incoming *internal* JSON.
+
+// For example, pass @{@"jsonFieldName" : @[@"ClassName]}, will search internal data for key jsonFieldName,
+// assume it is an array, and each object in that array will be parsed into ClassName.
+// If used in cojunction with context, ClassName will be treated as Core data entities
+// Only supports homogenous arrays.
+@property (nonatomic, strong) id modelGraph;
 
 - (void)beginWithSession:(NSURLSession *)session;
 - (void)beginWithSession:(NSURLSession *)session method:(STKConnectionMethod)method completionBlock:(void (^)(id obj, NSError *err))block;

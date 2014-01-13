@@ -41,6 +41,11 @@
                                                  selector:@selector(transparentLoginDidFail:)
                                                      name:STKUserStoreTransparentLoginFailedNotification
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(userBecameUnauthorized:)
+                                                     name:STKUserStoreUserBecameUnauthorizedNotification
+                                                   object:nil];
+
     }
     return self;
 }
@@ -55,6 +60,22 @@
                      completion:nil];
 
 }
+
+- (void)userBecameUnauthorized:(NSNotification *)note
+{
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Session Ended"
+                                                 message:@"You no longer have access to the user you have logged in as. Try logging in again."
+                                                delegate:nil
+                                       cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
+    STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
+    [self presentViewController:nvc animated:YES
+                     completion:^{
+                         [av show];
+                     }];
+
+}
+
 
 - (void)transparentLoginDidFail:(NSNotification *)note
 {

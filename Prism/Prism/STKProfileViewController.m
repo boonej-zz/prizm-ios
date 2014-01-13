@@ -11,6 +11,8 @@
 #import "STKUserStore.h"
 #import "STKProfileCell.h"
 #import "STKCountView.h"
+#import "STKUser.h"
+#import "STKInitialProfileStatisticsCell.h"
 
 @interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -43,29 +45,31 @@
 {
     [super viewDidLoad];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
-    [[self tableView] registerNib:[UINib nibWithNibName:@"STKProfileCell" bundle:nil]
-           forCellReuseIdentifier:@"STKProfileCell"];
 }
 
 - (float)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
-        return 441;
+        return 246;
+    } else if([indexPath section] == 1) {
+        return 213;
     }
     return 44;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([indexPath section] == 0) {
+    if([indexPath section] == 0 || [indexPath section] == 1) {
         [cell setBackgroundColor:[UIColor clearColor]];
     }
 }
 
-- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
-        return 441;
+        return 246;
+    } else if([indexPath section] == 1) {
+        return 213;
     }
     return 44;
 
@@ -73,15 +77,33 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    STKProfileCell *c = [STKProfileCell cellForTableView:tableView target:self];
-    
-    [[c countView] setCircleTitles:@[@"Followers", @"Following", @"Posts"]];
-    [[c countView] setCircleValues:@[@"0", @"0", @"0"]];
-    
-    return c;
+    if([indexPath section] == 0) {
+        STKProfileCell *c = [STKProfileCell cellForTableView:tableView target:self];
+        
+        STKUser *u = [[STKUserStore store] currentUser];
+        [[c nameLabel] setText:[NSString stringWithFormat:@"%@ %@", [u firstName], [u lastName]]];
+        if([u city])
+            [[c locationLabel] setText:[u city]];
+        else
+            [[c locationLabel] setText:@""];
+        
+        return c;
+    } else if ([indexPath section] == 1) {
+        STKInitialProfileStatisticsCell *c = [STKInitialProfileStatisticsCell cellForTableView:tableView target:self];
+        [[c circleView] setCircleTitles:@[@"Followers", @"Following", @"Posts"]];
+        [[c circleView] setCircleValues:@[@"0", @"0", @"0"]];
+
+        return c;
+    }
+    return nil;
 }
 
-- (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 1;
 }

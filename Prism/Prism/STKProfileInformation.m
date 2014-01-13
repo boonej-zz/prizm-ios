@@ -9,6 +9,7 @@
 #import "STKProfileInformation.h"
 #import <GoogleOpenSource/GoogleOpenSource.h>
 #import <GooglePlus/GooglePlus.h>
+@import CoreLocation;
 
 NSString * const STKProfileInformationExternalServiceTwitter = @"Twitter";
 NSString * const STKProfileInformationExternalServiceFacebook = @"Facebook";
@@ -36,6 +37,8 @@ NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
     [pi setToken:[self token]];
     [pi setSecret:[self secret]];
     [pi setAccountStoreID:[self accountStoreID]];
+    [pi setCity:[self city]];
+    [pi setState:[self state]];
     
     return pi;
 }
@@ -72,6 +75,14 @@ NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
         [self setBirthday:[df dateFromString:v]];
     }
 }
+
+- (void)setLocation:(CLPlacemark *)cp
+{
+    [self setZipCode:[cp postalCode]];
+    [self setCity:[cp locality]];
+    [self setState:[cp administrativeArea]];
+}
+
 
 - (void)setValuesFromTwitter:(NSArray *)vals
 {

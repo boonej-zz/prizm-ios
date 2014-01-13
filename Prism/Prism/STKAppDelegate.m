@@ -17,6 +17,7 @@
 #import "STKRegisterViewController.h"
 #import "STKVerticalNavigationController.h"
 #import "STKUserStore.h"
+#import "STKBaseStore.h"
 
 #import <GooglePlus/GooglePlus.h>
 
@@ -29,6 +30,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    
+    [STKBaseStore store];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     

@@ -23,6 +23,12 @@
 @dynamic type;
 @synthesize hashTags = _hashTags;
 
+- (NSError *)readFromJSONObject:(id)jsonObject
+{
+    
+    return nil;
+}
+
 - (NSArray *)hashTags
 {
     if(!_hashTags) {

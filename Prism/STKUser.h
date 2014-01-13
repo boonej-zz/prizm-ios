@@ -24,6 +24,10 @@
 @property (nonatomic, retain) NSString *userName;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *gender;
+@property (nonatomic, strong) NSString *city;
+@property (nonatomic, strong) NSString *state;
+@property (nonatomic, strong) NSString *profileID;
+
 
 @property (nonatomic, strong) NSString *externalServiceType;
 @property (nonatomic, strong) NSString *accountStoreID;

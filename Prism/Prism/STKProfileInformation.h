@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class GTLPlusPerson;
+@class GTLPlusPerson, CLPlacemark;
 
 extern NSString * const STKProfileInformationExternalServiceTwitter;
 extern NSString * const STKProfileInformationExternalServiceFacebook;
@@ -22,6 +22,9 @@ extern NSString * const STKProfileInformationExternalServiceGoogle;
 @property (nonatomic, strong) NSString *gender;
 @property (nonatomic, strong) NSDate *birthday;
 @property (nonatomic, strong) NSString *zipCode;
+@property (nonatomic, strong) NSString *city;
+@property (nonatomic, strong) NSString *state;
+
 
 @property (nonatomic, strong) UIImage *profilePhoto;
 @property (nonatomic, strong) NSString *profilePhotoURLString;
@@ -40,5 +43,7 @@ extern NSString * const STKProfileInformationExternalServiceGoogle;
 - (void)setValuesFromFacebook:(NSDictionary *)vals;
 - (void)setValuesFromTwitter:(NSArray *)vals;
 - (void)setValuesFromGooglePlus:(GTLPlusPerson *)vals;
+
+- (void)setLocation:(CLPlacemark *)cp;
 
 @end

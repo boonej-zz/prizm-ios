@@ -25,11 +25,16 @@ extern NSString * const STKUserStoreTransparentLoginFailedNotification;
         extern NSString * const STKUserStoreTransparentLoginFailedConnectionValue;
         extern NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue;
 
+extern NSString * const STKUserStoreUserBecameUnauthorizedNotification;
+
 @interface STKUserStore : NSObject
 
 + (STKUserStore *)store;
 
 @property (nonatomic, strong) STKUser *currentUser;
+@property (nonatomic) BOOL currentUserIsAuthorized;
+
+- (void)executeAuthorizedRequest:(void (^)(void))request;
 
 /*
 - (void)fetchFeedForCurrentUser:(void (^)(NSArray *posts, NSError *error, BOOL moreComing))block;

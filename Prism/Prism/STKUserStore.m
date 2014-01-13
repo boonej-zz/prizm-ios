@@ -24,8 +24,9 @@
 // To erase DB data:
 // curl prism.neadwerx.com/common/ajax/delete_all_entities_and_data.php
 
-NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
+NSString * const STKUserStoreUserBecameUnauthorizedNotification = @"STKUserStoreUserBecameUnauthorizedNotification";
 
+NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 
@@ -55,6 +56,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 
 @property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
+@property (nonatomic, strong) NSMutableArray *authorizedRequestQueue;
 
 @end
 
@@ -94,9 +96,45 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 {
     self = [super init];
     if (self) {
+        _authorizedRequestQueue = [[NSMutableArray alloc] init];
         _accountStore = [[ACAccountStore alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(connectionDidFailAuthorization:)
+                                                     name:STKConnectionUnauthorizedNotification
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)logout
+{
+    [self setCurrentUserIsAuthorized:NO];
+    [self setCurrentUser:nil];
+    [STKConnection cancelAllConnections];
+}
+
+- (void)executeAuthorizedRequest:(void (^)(void))request
+{
+    if([self currentUserIsAuthorized]) {
+        request();
+    } else {
+        // ensure user is the same as user at this time somehow?
+        // or ensure cookie is the same?
+    }
+}
+
+- (void)connectionDidFailAuthorization:(NSNotification *)note
+{
+    [self setCurrentUserIsAuthorized:NO];
+    [self setCurrentUser:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreUserBecameUnauthorizedNotification
+                                                        object:self];
+}
+
+- (void)authenticateUser:(STKUser *)u
+{
+    [self setCurrentUser:u];
+    [self setCurrentUserIsAuthorized:YES];
 }
 
 
@@ -175,7 +213,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
         if(!tokenError) {
             [self validateWithTwitterToken:token secret:secret completion:^(STKUser *user, NSError *valErr) {
                 if(!valErr) {
-                    [self setCurrentUser:user];
+                    [self authenticateUser:user];
                     [user setExternalServiceType:STKProfileInformationExternalServiceTwitter];
                     [user setAccountStoreID:[acct identifier]];
                     
@@ -327,7 +365,8 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
         if(!err) {
             [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *user, NSError *valError) {
                 if(!valError) {
-                    [self setCurrentUser:user];
+                    [self authenticateUser:user];
+
                     [user setExternalServiceType:STKProfileInformationExternalServiceFacebook];
                     [user setAccountStoreID:[acct identifier]];
                     
@@ -456,7 +495,8 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
         if(!err) {
             [self validateWithGoogle:[auth accessToken] completion:^(STKUser *u, NSError *err) {
                 if(!err) {
-                    [self setCurrentUser:u];
+                    [self authenticateUser:u];
+
                     [u setExternalServiceType:STKProfileInformationExternalServiceGoogle];
                     [[self context] save:nil];
                     
@@ -543,7 +583,8 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
         if(!err) {
             STKSecurityStorePassword([user email], password);
             
-            [self setCurrentUser:user];
+            [self authenticateUser:user];
+
             [[self context] save:nil];
             block(user, nil);
         } else {
@@ -584,6 +625,8 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
                                         @"email" : @"email_address",
                                         @"gender" : @"gender",
                                         @"zipCode" : @"zip_postal",
+                                        @"city" : @"city",
+                                        @"state" : @"region",
                                         @"birthday" : ^(id value) {
                                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
                                             [df setDateFormat:@"MM-dd-yyyy"];
@@ -623,7 +666,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
                         [u setExternalServiceType:[info externalService]];
                         [u setAccountStoreID:[info accountStoreID]];
                     }
-                    [self setCurrentUser:u];
+                    [self authenticateUser:u];
                 
                     [[self context] save:nil];
                     block(u, nil);
@@ -657,6 +700,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     
     void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
         if(!valErr) {
+            [self authenticateUser:u];
             [[self context] save:nil];
         } else {
             [self setCurrentUser:nil];
@@ -759,11 +803,6 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     
 }
 
-- (void)logout
-{
-    [self setCurrentUser:nil];
-    // Cancel all connections!
-}
 
 
 @end

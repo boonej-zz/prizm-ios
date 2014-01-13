@@ -16,7 +16,7 @@
 #import "STKResolvingImageView.h"
 #import "STKImageStore.h"
 #import "STKProcessingView.h"
-
+@import AddressBook;
 @import Social;
 @import CoreLocation;
 
@@ -265,8 +265,6 @@
     return nil;
 }
 
-
-
 - (void)textFieldDidChange:(UITextField *)sender atIndexPath:(NSIndexPath *)ip
 {
     NSDictionary *item = [[self items] objectAtIndex:[ip row]];
@@ -308,7 +306,7 @@
                             if(!error) {
                                 CLPlacemark *cp = [placemarks lastObject];
                                 if([cp postalCode] && ![[self profileInformation] zipCode]) {
-                                    [[self profileInformation] setZipCode:[cp postalCode]];
+                                    [[self profileInformation] setLocation:cp];
                                     
                                     UITableViewCell *c = [self visibleCellForKey:@"zipCode"];
                                     [[self tableView] reloadRowsAtIndexPaths:@[[[self tableView] indexPathForCell:c]]
@@ -435,15 +433,42 @@
     [[self view] endEditing:YES];
     if([self verifyFields:YES]) {
         [STKProcessingView present];
-        [[STKUserStore store] registerAccount:[self profileInformation]
-                                   completion:^(id user, NSError *err) {
-                                       [STKProcessingView dismiss];
-                                       if(!err) {
-                                           [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-                                       } else {
-                                           [[STKErrorStore alertViewForError:err delegate:nil] show];
-                                       }
-                                   }];
+        
+        void (^registerBlock)(void) = ^{
+            [[STKUserStore store] registerAccount:[self profileInformation]
+                                       completion:^(id user, NSError *err) {
+                                           [STKProcessingView dismiss];
+                                           if(!err) {
+                                               [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                           } else {
+                                               [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                           }
+                                       }];
+        };
+        
+        if(![[self profileInformation] city]) {
+            CLGeocoder *gc = [[CLGeocoder alloc] init];
+            [gc geocodeAddressDictionary:@{(__bridge NSString *)kABPersonAddressZIPKey : [[self profileInformation] zipCode]}
+                       completionHandler:^(NSArray *placemarks, NSError *error) {
+                           if(!error) {
+                               CLPlacemark *cp = [placemarks lastObject];
+                               [[self profileInformation] setCity:[cp locality]];
+                               [[self profileInformation] setState:[cp administrativeArea]];
+                               registerBlock();
+                           } else {
+                               [STKProcessingView dismiss];
+                               UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Zip Code Error"
+                                                                            message:@"There was a problem determining your location from the provided zip code. Ensure you have an internet connection and a valid zip code and try again."
+                                                                           delegate:nil
+                                                                  cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                               [av show];
+                           }
+                       }];
+        } else {
+            registerBlock();
+        }
+
+
     }
 
 }

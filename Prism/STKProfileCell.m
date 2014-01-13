@@ -12,7 +12,11 @@
 
 - (void)cellDidLoad
 {
-    
+    [[self nameLabel] setFont:STKFont(20)];
+    [[self locationLabel] setFont:STKFont(8)];
+    [[self nameLabel] setTextColor:STKTextColor];
+    [[self locationLabel] setTextColor:STKTextTransparentColor];
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 
 - (void)layoutContent

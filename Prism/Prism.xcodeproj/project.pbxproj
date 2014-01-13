@@ -86,6 +86,9 @@
 		BEE0FA43185B621A009FCA3B /* STKProfileInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */; };
 		BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE0FA45185B6722009FCA3B /* STKDateCell.m */; };
 		BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE0FA46185B6722009FCA3B /* STKDateCell.xib */; };
+		BEE5F03D187DC03300CB5325 /* STKInitialProfileStatisticsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE5F03B187DC03300CB5325 /* STKInitialProfileStatisticsCell.m */; };
+		BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE5F03C187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib */; };
+		BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE5F040187DD01C00CB5325 /* NSCharacterSet+STKURL.m */; };
 		BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */; };
 		BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */; };
 		BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */; };
@@ -1940,6 +1943,11 @@
 		BEE0FA44185B6722009FCA3B /* STKDateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKDateCell.h; path = Prism/STKDateCell.h; sourceTree = "<group>"; };
 		BEE0FA45185B6722009FCA3B /* STKDateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKDateCell.m; path = Prism/STKDateCell.m; sourceTree = "<group>"; };
 		BEE0FA46185B6722009FCA3B /* STKDateCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKDateCell.xib; path = Prism/STKDateCell.xib; sourceTree = "<group>"; };
+		BEE5F03A187DC03300CB5325 /* STKInitialProfileStatisticsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInitialProfileStatisticsCell.h; sourceTree = "<group>"; };
+		BEE5F03B187DC03300CB5325 /* STKInitialProfileStatisticsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInitialProfileStatisticsCell.m; sourceTree = "<group>"; };
+		BEE5F03C187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInitialProfileStatisticsCell.xib; sourceTree = "<group>"; };
+		BEE5F03F187DD01C00CB5325 /* NSCharacterSet+STKURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCharacterSet+STKURL.h"; sourceTree = "<group>"; };
+		BEE5F040187DD01C00CB5325 /* NSCharacterSet+STKURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCharacterSet+STKURL.m"; sourceTree = "<group>"; };
 		BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Temporary.xcassets; sourceTree = "<group>"; };
 		BEE6CBBC1832DCB500BC72F4 /* STKExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKExploreCell.h; path = Prism/STKExploreCell.h; sourceTree = "<group>"; };
 		BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKExploreCell.m; path = Prism/STKExploreCell.m; sourceTree = "<group>"; };
@@ -2216,6 +2224,9 @@
 				BE477C1A186E2ED4003672A0 /* STKProfileCell.h */,
 				BE477C1B186E2ED4003672A0 /* STKProfileCell.m */,
 				BE477C1C186E2ED4003672A0 /* STKProfileCell.xib */,
+				BEE5F03A187DC03300CB5325 /* STKInitialProfileStatisticsCell.h */,
+				BEE5F03B187DC03300CB5325 /* STKInitialProfileStatisticsCell.m */,
+				BEE5F03C187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4059,6 +4070,8 @@
 				88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */,
 				BE09FFED184E27B30059115B /* STKBackdropView.h */,
 				BE09FFEE184E27B30059115B /* STKBackdropView.m */,
+				BEE5F03F187DD01C00CB5325 /* NSCharacterSet+STKURL.h */,
+				BEE5F040187DD01C00CB5325 /* NSCharacterSet+STKURL.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -4191,6 +4204,7 @@
 				BEC01A0F182AF42600080601 /* STKTrustViewController.xib in Resources */,
 				BE1E09D01850DF0A00975652 /* STKLoginViewController.xib in Resources */,
 				BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */,
+				BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */,
 				BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */,
 				BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */,
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
@@ -4248,6 +4262,7 @@
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
 				BEE0FA43185B621A009FCA3B /* STKProfileInformation.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
+				BEE5F03D187DC03300CB5325 /* STKInitialProfileStatisticsCell.m in Sources */,
 				BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */,
 				BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */,
 				BE24B523183AA653009BC02A /* STKCircleView.m in Sources */,
@@ -4258,6 +4273,7 @@
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
+				BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
 				BEFAC19F183D512E005E8933 /* STKRequestItem.m in Sources */,
 				BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */,

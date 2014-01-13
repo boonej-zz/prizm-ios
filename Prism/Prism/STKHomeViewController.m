@@ -258,8 +258,7 @@
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
     
-    
-    [[STKContentStore store] fetchPostsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *posts, NSError *error) {
+    [[STKContentStore store] fetchPostsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *posts, NSError *error, BOOL moreComing) {
         if(!error) {
             if([self items]) {
                 _items = [posts arrayByAddingObjectsFromArray:_items];

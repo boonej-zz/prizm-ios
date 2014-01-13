@@ -9,7 +9,7 @@
 #import "STKConnection.h"
 #import "NSError+STKConnection.h"
 
-
+NSString * const STKConnectionUnauthorizedNotification = @"STKConnectionUnauthorizedNotification";
 NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
 static NSMutableArray *sharedConnectionList = nil;
@@ -59,12 +59,14 @@ static NSMutableArray *sharedConnectionList = nil;
     NSArray *allKeys = [[self internalArguments] allKeys];
     for(NSString *key in allKeys) {
         NSString *value = [[self internalArguments] objectForKey:key];
-        
-        [queryString appendFormat:@"%@=%@", key, [value stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+        NSString *v = [value stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLArgumentAllowedCharacterSet]];
+
+        [queryString appendFormat:@"%@=%@", key, v];
         if(key != [allKeys lastObject])
             [queryString appendString:@"&"];
     }
-    [components setPercentEncodedQuery:queryString];
+    if([queryString length] > 0)
+        [components setPercentEncodedQuery:queryString];
     
     NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[components URL]];
     [req setHTTPMethod:@{@(STKConnectionMethodGET) : @"GET",
@@ -79,7 +81,7 @@ static NSMutableArray *sharedConnectionList = nil;
         [req addValue:[self authorizationString] forHTTPHeaderField:@"Authorization"];
     
     _request = [req copy];
-    
+
     NSURLSessionDataTask *dt = [session dataTaskWithRequest:[self request]
                                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                               if(error) {
@@ -114,11 +116,6 @@ static NSMutableArray *sharedConnectionList = nil;
     [self setCompletionBlock:block];
     [self setMethod:STKConnectionMethodGET];
     [self beginWithSession:session];
-}
-
-- (void)addAuthorizationDictionary:(NSDictionary *)dict
-{
-    
 }
 
 - (void)addQueryValue:(NSString *)value forKey:(NSString *)key
@@ -190,20 +187,15 @@ static NSMutableArray *sharedConnectionList = nil;
     NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n", i, [self request], [[self request] HTTPMethod], [self statusCode]);
 #endif
 
-    // Pass the error from the connection to the completionBlock
+    [self reportFailureWithError:error];
+}
+
+
+- (void)reportFailureWithError:(NSError *)err
+{
     if ([self completionBlock]) {
-     /*   NSMutableDictionary *d = [[error userInfo] mutableCopy];
-        NSString *desc = [d objectForKey:NSLocalizedDescriptionKey];
-        if(desc) {
-            [d setObject:@[desc] forKey:@"ErrorList"];
-        } else {
-            [d setObject:@[@"There was a problem with the connection. Make sure you have internet access and try again."]
-                           forKey:@"ErrorList"];
-        }*/
-        
-        [self completionBlock](nil, error);
+        [self completionBlock](nil, err);
     }
-    // Destroy this connection
     [sharedConnectionList removeObject:self];
 }
 
@@ -215,94 +207,57 @@ static NSMutableArray *sharedConnectionList = nil;
 #endif
 
 
-// FIRST CHECK: RESPONSE CODE
-    NSError *statusCodeError = nil;
     if ([self statusCode] >= 400) {
-        statusCodeError = [NSError errorWithDomain:STKConnectionServiceErrorDomain
-                                              code:STKConnectionErrorCodeBadRequest
-                                          userInfo:nil];
-        if ([self completionBlock]) {
-            [self completionBlock](nil, statusCodeError);
-        }
-        [sharedConnectionList removeObject:self];
+        [self reportFailureWithError:[NSError errorWithDomain:STKConnectionServiceErrorDomain
+                                                         code:STKConnectionErrorCodeBadRequest
+                                                     userInfo:nil]];
         return;
     }
 
-    id rootObject = nil;
-    NSError *jsonParsingError;
     NSDictionary *jsonObject = nil;
-
-// SECOND CHECK: VALID JSON
     if([data length] > 0) {
-        jsonObject = [NSJSONSerialization JSONObjectWithData:data
-                                                     options:0
-                                                       error:&jsonParsingError];
-        if (jsonParsingError) {
-            if ([self completionBlock]) {
-                [self completionBlock](nil, [NSError errorWithDomain:STKConnectionServiceErrorDomain
-                                                            code:STKConnectionErrorCodeParseFailed
-                                                        userInfo:nil]);
-            }
-            [sharedConnectionList removeObject:self];
+        NSError *error = nil;
+        jsonObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+        if (error) {
+            [self reportFailureWithError:[NSError errorWithDomain:STKConnectionServiceErrorDomain
+                                                             code:STKConnectionErrorCodeParseFailed
+                                                         userInfo:[error userInfo]]];
             return;
         }
     }
     
     NSDictionary *responseValue = [jsonObject objectForKey:@"response"];
-    
-// THIRD CHECK: For Success from Server
     BOOL success = [[responseValue objectForKey:@"success"] boolValue];
     if(!success) {
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:[responseValue objectForKey:@"message"]
-                                                             forKey:NSLocalizedDescriptionKey];
-        NSError *error;
-        error = [NSError errorWithDomain:STKConnectionServiceErrorDomain
-                                    code:STKConnectionErrorCodeRequestFailed
-                                userInfo:userInfo];
-        if ([self completionBlock]) {
-            [self completionBlock](nil, error);
+        NSString *msg = [responseValue objectForKey:@"message"];
+        
+        // Intercept 'Not Authorized' at lowest level
+        if([msg isEqualToString:@"Not Authorized"]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:STKConnectionUnauthorizedNotification
+                                                                object:self];
         }
-        [sharedConnectionList removeObject:self];
+        
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:msg
+                                                             forKey:NSLocalizedDescriptionKey];
+        [self reportFailureWithError:[NSError errorWithDomain:STKConnectionServiceErrorDomain
+                                                         code:STKConnectionErrorCodeRequestFailed
+                                                     userInfo:userInfo]];
         return;
     }
     
-    NSDictionary *internalData = [responseValue objectForKey:@"data"];
-    // If success, construct json object. If failure construct error
-    if([self jsonRootObject]) {
-        [[self jsonRootObject] readFromJSONObject:internalData];
-        rootObject = [self jsonRootObject];
-    } else if ([self entityName]) {
-        if(![self context]) {
-            @throw [NSException exceptionWithName:@"STKConnection No Context" reason:@"Trying to instantiate entity without context" userInfo:nil];
-        }
-        
-        id obj = nil;
-        if([self existingMatchMap]) {
-            NSMutableArray *predicates = [NSMutableArray array];
-            for(NSString *key in [self existingMatchMap]) {
-                NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %@", key, [internalData valueForKeyPath:[[self existingMatchMap] objectForKey:key]]];
-                [predicates addObject:p];
-            }
-            NSPredicate *p = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
-            NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:[self entityName]];
-            [req setPredicate:p];
-            
-            NSArray *results = [[self context] executeFetchRequest:req error:nil];
-            if([results count] == 1) {
-                obj = [results firstObject];
-            } else {
-                obj = [NSEntityDescription insertNewObjectForEntityForName:[self entityName]
-                                                    inManagedObjectContext:[self context]];
-            }
-        } else {
-            obj = [NSEntityDescription insertNewObjectForEntityForName:[self entityName]
-                                                inManagedObjectContext:[self context]];
-        }
-        
-        [obj readFromJSONObject:internalData];
-        rootObject = obj;
+    
+    NSError *err = nil;
+    id rootObject = nil;
+    id internalData = [responseValue objectForKey:@"data"];
+    if(![self modelGraph]) {
+        rootObject = [self populateModelObjectWithData:internalData error:&err];
     } else {
-        rootObject = internalData;
+        rootObject = [self populateModelGraphWithData:internalData error:&err];
+    }
+    
+    if(err) {
+        [self reportFailureWithError:err];
+        return;
     }
     
     // Then, pass the root object to the completion block - remember,
@@ -314,12 +269,132 @@ static NSMutableArray *sharedConnectionList = nil;
     [sharedConnectionList removeObject:self];
 }
 
+- (id)populateModelGraphWithData:(id)incomingData error:(NSError **)err
+{
+    return [self populateModelGraphWithData:incomingData
+                                       node:[self modelGraph]
+                                      error:err];
+}
+
+- (id)populateModelGraphWithData:(id)incomingData node:(id)node error:(NSError **)err
+{
+    // This is a messy way of handling the fact that you can't do a strict
+    // class comparison for all of these class clusters.
+    if([node isKindOfClass:[NSString class]]) {
+        
+        if(![incomingData isKindOfClass:[NSDictionary class]]) {
+            *err = [NSError errorWithDomain:STKConnectionErrorDomain
+                                       code:STKConnectionErrorCodeInvalidModelGraph
+                                   userInfo:@{@"expected" : @"NSDictionary-Model", @"received" : NSStringFromClass([incomingData class])}];
+            return nil;
+        }
+
+        id obj = nil;
+        if([self context])
+            obj = [self instanceOfEntityForName:node data:incomingData];
+        else
+            obj = [[NSClassFromString(node) alloc] init];
+        
+        *err = [obj readFromJSONObject:incomingData];
+        
+        return obj;
+    } else if ([node isKindOfClass:[NSArray class]]) {
+        
+        if(![incomingData isKindOfClass:[NSArray class]]) {
+            *err = [NSError errorWithDomain:STKConnectionErrorDomain
+                                       code:STKConnectionErrorCodeInvalidModelGraph
+                                   userInfo:@{@"expected" : @"NSArray", @"received" : NSStringFromClass([incomingData class])}];
+            return nil;
+        }
+
+        NSMutableArray *collection = [NSMutableArray array];
+        NSString *internalNode = [node firstObject];
+        for(id innerObj in incomingData) {
+            id parsedObject = [self populateModelGraphWithData:innerObj node:internalNode error:err];
+            if(err)
+                return nil;
+
+            [collection addObject:parsedObject];
+        }
+        return collection;
+    } else if([node isKindOfClass:[NSDictionary class]]) {
+        
+        if(![incomingData isKindOfClass:[NSDictionary class]]) {
+            *err = [NSError errorWithDomain:STKConnectionErrorDomain
+                                       code:STKConnectionErrorCodeInvalidModelGraph
+                                   userInfo:@{@"expected" : @"NSDictionary", @"received" : NSStringFromClass([incomingData class])}];
+            return nil;
+        }
+        
+        NSMutableDictionary *collection = [NSMutableDictionary dictionary];
+        for(NSString *key in node) {
+            id innerNode = [node objectForKey:key];
+            id incomingInnerObject = [incomingData objectForKey:key];
+            
+            id parsedObject = [self populateModelGraphWithData:incomingInnerObject node:innerNode error:err];
+            if(err)
+                return nil;
+            
+            [collection setObject:parsedObject forKey:key];
+        }
+        return collection;
+    }
+    return nil;
+}
+
+- (id)populateModelObjectWithData:(id)incomingData error:(NSError **)err
+{
+    if([self jsonRootObject]) {
+        *err = [[self jsonRootObject] readFromJSONObject:incomingData];
+
+        return [self jsonRootObject];
+    } else if ([self entityName]) {
+        
+        id obj = [self instanceOfEntityForName:[self entityName] data:incomingData];
+        
+        *err = [obj readFromJSONObject:incomingData];
+        
+        return obj;
+    }
+    return incomingData;
+}
+
+- (NSManagedObject <STKJSONObject> *)instanceOfEntityForName:(NSString *)name data:(id)incomingData
+{
+    if(![self context]) {
+        @throw [NSException exceptionWithName:@"STKConnection No Context" reason:@"Trying to instantiate entity without context" userInfo:nil];
+    }
+    
+    id obj = nil;
+    if([self existingMatchMap]) {
+        NSMutableArray *predicates = [NSMutableArray array];
+        for(NSString *key in [self existingMatchMap]) {
+            NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %@", key, [incomingData valueForKeyPath:[[self existingMatchMap] objectForKey:key]]];
+            [predicates addObject:p];
+        }
+        NSPredicate *p = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+        NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:name];
+        [req setPredicate:p];
+        
+        NSArray *results = [[self context] executeFetchRequest:req error:nil];
+        obj = [results firstObject];
+    }
+    
+    if(!obj) {
+        obj = [NSEntityDescription insertNewObjectForEntityForName:name
+                                            inManagedObjectContext:[self context]];
+    }
+    return obj;
+}
+
+
 + (void)cancelAllConnections {
 	
-	for (STKConnection *connection in [sharedConnectionList copy]) {
+	for (STKConnection *connection in sharedConnectionList) {
 		[connection.internalConnection cancel];
-		[sharedConnectionList removeObjectAtIndex:0];
 	}
+    [sharedConnectionList removeAllObjects];
 }
+
 
 @end

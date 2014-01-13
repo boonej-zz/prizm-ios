@@ -13,6 +13,13 @@
 #import "STKUser.h"
 #import "STKActivityItem.h"
 #import "STKRequestItem.h"
+#import "STKConnection.h"
+
+NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
+
+NSString * const STKContentEndpointCreatePost = @"/common/ajax/create_post.php";
+NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
+
 
 @interface STKContentStore ()
 - (void)buildTemporaryData;
@@ -40,10 +47,21 @@
     return [[STKBaseStore store] session];
 }
 
-- (void)fetchPostsForUser:(STKUser *)u completion:(void (^)(NSArray *posts, NSError *err))block
+- (NSError *)errorForCode:(STKContentStoreErrorCode)code data:(id)data
 {
+    if(code == STKContentStoreErrorCodeMissingArguments) {
+        return [NSError errorWithDomain:STKUserStoreErrorDomain code:code userInfo:@{@"missing arguments" : data}];
+    }
+    
+    return [NSError errorWithDomain:STKUserStoreErrorDomain code:code userInfo:nil];
+}
+
+
+- (void)fetchPostsForUser:(STKUser *)u completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block
+{
+    /*
     if(![self hasBuiltTemporaryData]) {
-       // [self buildTemporaryData];
+        [self buildTemporaryData];
         [self setHasBuiltTemporaryData:YES];
     }
     
@@ -51,6 +69,21 @@
     NSArray *posts = [[self context] executeFetchRequest:req error:nil];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         block(posts, nil);
+    }];*/
+    
+    // Get cached ones, say you'll return more.
+    
+    [[STKUserStore store] executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
+        [c addQueryObject:u
+              missingKeys:nil
+               withKeyMap:@{@"profileID" : @"profile"}];
+        [c setContext:[self context]];
+        [c setModelGraph:@{@"post" : @[@"STKPost"]}];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            
+            block(obj, err, NO);
+        }];
     }];
 }
 
@@ -73,8 +106,20 @@
                       type:(STKPostType)type
                 completion:(void (^)(STKPost *post, NSError *err))block
 {
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        block(nil, nil);
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointCreatePost];
+    [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+              forKey:@"entity"];
+    // Look up type here!
+    [c addQueryValue:@"1" forKey:@"post_type"];
+    [c addQueryValue:@"1" forKey:@"visibility_type"];
+    [c addQueryValue:[[[STKUserStore store] currentUser] profileID] forKey:@"profile"];
+    [c addQueryValue:imageURLString forKey:@"file_path"];
+    [c addQueryValue:@"post" forKey:@"title"];
+    if(caption)
+        [c addQueryValue:caption forKey:@"body"];
+    
+    [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+        NSLog(@"%@ %@", obj, err);
     }];
 }
 

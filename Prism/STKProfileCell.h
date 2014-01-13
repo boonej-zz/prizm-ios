@@ -9,11 +9,8 @@
 #import "STKTableViewCell.h"
 #import "STKResolvingImageView.h"
 
-@class STKCountView;
-
 @interface STKProfileCell : STKTableViewCell
 
-@property (weak, nonatomic) IBOutlet STKCountView *countView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *coverPhotoImageView;

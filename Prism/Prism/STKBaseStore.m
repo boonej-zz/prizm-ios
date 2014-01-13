@@ -65,7 +65,7 @@ NSString * const STKUserEndpointSocialList = @"/common/ajax/get_external_systems
         [[self context] setUndoManager:nil];
         
         
-        _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration ephemeralSessionConfiguration]
+        _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
                                                      delegate:self
                                                 delegateQueue:[NSOperationQueue mainQueue]];
         

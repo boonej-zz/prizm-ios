@@ -21,6 +21,8 @@
 @dynamic requestItems;
 @dynamic activityItems;
 @dynamic posts;
+@dynamic city, state;
+@dynamic profileID;
 
 @dynamic zipCode, birthday, firstName, lastName, externalServiceType;
 @dynamic accountStoreID;
@@ -37,12 +39,16 @@
         @"first_name" : @"firstName",
         @"last_name" : @"lastName",
         @"zip_postal" : @"zipCode",
+        @"city" : @"city",
+        @"region" : @"state",
+        @"profile" : @"profileID",
         @"date_of_birth" : ^(id inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
             [df setDateFormat:@"YYYY-MM-dd"];
             [self setBirthday:[df dateFromString:inValue]];
         }
     }];
+    
     return nil;
 }
 
