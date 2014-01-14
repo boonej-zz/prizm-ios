@@ -27,6 +27,10 @@ extern NSString * const STKUserStoreTransparentLoginFailedNotification;
 
 extern NSString * const STKUserStoreUserBecameUnauthorizedNotification;
 
+
+extern NSString * const STKUserCoverPhotoURLStringKey;
+extern NSString * const STKUserProfilePhotoURLStringKey;
+
 @interface STKUserStore : NSObject
 
 + (STKUserStore *)store;
@@ -52,6 +56,9 @@ extern NSString * const STKUserStoreUserBecameUnauthorizedNotification;
 
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
+
+- (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block;
+- (void)updateCurrentProfileWithInformation:(NSDictionary *)info completion:(void (^)(STKUser *u, NSError *err))block;
 
 - (void)logout;
 

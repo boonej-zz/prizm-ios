@@ -43,10 +43,16 @@ NSString * const STKUserEndpointValidateTwitter = @"/common/ajax/validate_twitte
 NSString * const STKUserEndpointValidateGoogle = @"/common/ajax/validate_google.php";
 NSString * const STKUserEndpointValidateEmail = @"/common/ajax/validate_login.php";
 
+NSString * const STKUserEndpointUpdateProfile = @"/common/ajax/update_profile.php";
+NSString * const STKUserEndpointGetProfile = @"/common/ajax/get_profiles.php";
+
 NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStoreTransparentLoginFailedNotification";
 NSString * const STKUserStoreTransparentLoginFailedReasonKey = @"STKUserStoreTransparentLoginFailedReasonKey";
 NSString * const STKUserStoreTransparentLoginFailedConnectionValue = @"STKUserStoreTransparentLoginFailedConnectionValue";
 NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUserStoreTransparentLoginFailedAuthenticationValue";
+
+NSString * const STKUserCoverPhotoURLStringKey = @"cover_image_file_path";
+NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
 
 @import CoreData;
 @import Accounts;
@@ -57,6 +63,8 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 @property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
 @property (nonatomic, strong) NSMutableArray *authorizedRequestQueue;
+
+
 
 @end
 
@@ -118,8 +126,15 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     if([self currentUserIsAuthorized]) {
         request();
     } else {
-        // ensure user is the same as user at this time somehow?
-        // or ensure cookie is the same?
+        if([self currentUser]) {
+            // Then we are in the process of authenticating, let's just queue this
+            [[self authorizedRequestQueue] addObject:request];
+        } else {
+            // We can just dismiss this, although this may cause issues with the request not being fulfilled
+            // and therefore any 'completion' necessary isn't called. But we can't pass an error,
+            // because then the error handler of that block would fire.
+            // So, then, we must be careful of all authenticated calls.
+        }
     }
 }
 
@@ -135,9 +150,12 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 {
     [self setCurrentUser:u];
     [self setCurrentUserIsAuthorized:YES];
+    
+    for(void (^req)(void) in [self authorizedRequestQueue]) {
+        req();
+    }
+    [[self authorizedRequestQueue] removeAllObjects];
 }
-
-
 
 - (void)setCurrentUser:(STKUser *)currentUser
 {
@@ -146,6 +164,8 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser userID]
                                                   forKey:STKUserStoreCurrentUserKey];
     } else {
+        // Get rid of any pending requests, because this user no longer is any good
+        [[self authorizedRequestQueue] removeAllObjects];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
     }
     
@@ -168,6 +188,52 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     
     return _currentUser;
 }
+
+- (void)updateCurrentProfileWithInformation:(NSDictionary *)info completion:(void (^)(STKUser *u, NSError *err))block
+{
+    [self executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUpdateProfile];
+        [c setParameters:info];
+        [c addQueryValue:[[self currentUser] profileID] forKey:@"profile"];
+        [c setContext:[self context]];
+        [c setJsonRootObject:[self currentUser]];
+        [c getWithSession:[self session] completionBlock:^(STKUser *u, NSError *err) {
+            if(!err) {
+                [[self context] save:nil];
+                block(u, nil);
+            } else {
+                block(nil, err);
+            }
+        }];
+    }];
+}
+
+- (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block
+{
+    [self executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
+        [c addQueryValue:[[STKBaseStore store] transformLookupValue:STKUserTypePersonal
+                                                            forType:STKLookupTypeProfileType]
+                  forKey:@"profile_type"];
+        [c addQueryObject:[self currentUser]
+              missingKeys:nil
+               withKeyMap:@{@"profileID" : @"profile", @"userID" : @"entity"}];
+        
+        [c setModelGraph:@{@"profile" : @[[self currentUser]]}];
+        
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
+            STKUser *u = nil;
+            if(!err) {
+                u = [[profiles objectForKey:@"profiles"] firstObject];
+                [[self context] save:nil];
+            } else {
+                
+            }
+            block(u, err);
+        }];
+    }];
+}
+
 
 #pragma mark Authentication Nonsense
 
@@ -718,7 +784,6 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
             }
         }
     };
-    
     
     NSString *serviceType = [u externalServiceType];
     if([serviceType isEqualToString:STKProfileInformationExternalServiceFacebook]) {

@@ -19,4 +19,7 @@
 
 - (void)uploadImage:(UIImage *)image completion:(void (^)(NSString *URLString, NSError *err))block;
 
+// Returns the resized local image
+- (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz completion:(void (^)(NSString *URLString, NSError *err))block;
+
 @end

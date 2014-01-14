@@ -13,6 +13,7 @@
 
 extern NSString * const STKLookupTypeGender;
 extern NSString * const STKLookupTypeSocial;
+extern NSString * const STKLookupTypeProfileType;
 
 @interface STKBaseStore : NSObject
 

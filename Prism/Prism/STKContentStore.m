@@ -80,9 +80,10 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
                withKeyMap:@{@"profileID" : @"profile"}];
         [c setContext:[self context]];
         [c setModelGraph:@{@"post" : @[@"STKPost"]}];
-        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            NSArray *posts = [obj objectForKey:@"post"];
             
-            block(obj, err, NO);
+            block(posts, err, NO);
         }];
     }];
 }

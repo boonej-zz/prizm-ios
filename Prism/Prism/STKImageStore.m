@@ -132,6 +132,18 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
                                                range:NSMakeRange(0, [url length])];
 }
 
+- (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz completion:(void (^)(NSString *URLString, NSError *err))block
+{
+    UIGraphicsBeginImageContextWithOptions(sz, YES, 0.0);
+    [image drawInRect:CGRectMake(0, 0, sz.width, sz.height)];
+    UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [self uploadImage:resizedImage completion:block];
+
+    return resizedImage;
+}
+
 - (void)uploadImage:(UIImage *)image completion:(void (^)(NSString *URLString, NSError *err))block
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{

@@ -13,6 +13,16 @@
 
 @class STKActivityItem, STKPost, STKRequestItem;
 
+
+extern NSString * const STKUserTypePersonal;
+extern NSString * const STKUserTypeLuminary;
+extern NSString * const STKUserTypeMilitary;
+extern NSString * const STKUserTypeEducation;
+extern NSString * const STKUserTypeFoundation;
+extern NSString * const STKUserTypeCompany;
+extern NSString * const STKUserTypeCommunity;
+
+
 @interface STKUser : NSManagedObject <STKJSONObject>
 
 @property (nonatomic) NSString *userID;
@@ -28,6 +38,8 @@
 @property (nonatomic, strong) NSString *state;
 @property (nonatomic, strong) NSString *profileID;
 
+@property (nonatomic, strong) NSString *coverPhotoPath;
+@property (nonatomic, strong) NSString *profilePhotoPath;
 
 @property (nonatomic, strong) NSString *externalServiceType;
 @property (nonatomic, strong) NSString *accountStoreID;

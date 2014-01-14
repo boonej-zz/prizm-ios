@@ -29,6 +29,10 @@
         <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="posts" inverseEntity="STKUser" syncable="YES"/>
     </entity>
+    <entity name="STKProfileType" syncable="YES">
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="STKRequestItem" representedClassName="STKRequestItem" syncable="YES">
         <attribute name="accepted" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="dateConfirmed" optional="YES" attributeType="Date" syncable="YES"/>
@@ -43,12 +47,14 @@
         <attribute name="accountStoreID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="birthday" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coverPhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="externalServiceType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profileID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
@@ -64,5 +70,6 @@
         <element name="STKPost" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKRequestItem" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKUser" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="STKProfileType" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

@@ -11,6 +11,14 @@
 #import "STKPost.h"
 #import "STKRequestItem.h"
 
+NSString * const STKUserTypePersonal = @"Personal";
+NSString * const STKUserTypeLuminary = @"Luminaries";
+NSString * const STKUserTypeMilitary = @"Military";
+NSString * const STKUserTypeEducation = @"Education";
+NSString * const STKUserTypeFoundation = @"Foundations";
+NSString * const STKUserTypeCompa = @"Companies";
+NSString * const STKUserTypeCommunity = @"Community";
+
 
 @implementation STKUser
 
@@ -23,7 +31,7 @@
 @dynamic posts;
 @dynamic city, state;
 @dynamic profileID;
-
+@dynamic profilePhotoPath, coverPhotoPath;
 @dynamic zipCode, birthday, firstName, lastName, externalServiceType;
 @dynamic accountStoreID;
 
@@ -42,6 +50,8 @@
         @"city" : @"city",
         @"region" : @"state",
         @"profile" : @"profileID",
+        @"cover_image_file_path" : @"coverPhotoPath",
+        @"profile_image_file_path" : @"profilePhotoPath",
         @"date_of_birth" : ^(id inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
             [df setDateFormat:@"YYYY-MM-dd"];

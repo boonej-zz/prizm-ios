@@ -41,6 +41,15 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[STKUserStore store] fetchProfileForCurrentUser:^(STKUser *u, NSError *err) {
+        [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
+                        withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -86,6 +95,8 @@
             [[c locationLabel] setText:[u city]];
         else
             [[c locationLabel] setText:@""];
+        
+        [[c coverPhotoImageView] setUrlString:[u coverPhotoPath]];
         
         return c;
     } else if ([indexPath section] == 1) {

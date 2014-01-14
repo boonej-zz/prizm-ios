@@ -16,6 +16,8 @@
 #import "STKResolvingImageView.h"
 #import "STKImageStore.h"
 #import "STKProcessingView.h"
+#import "STKImageChooser.h"
+
 @import AddressBook;
 @import Social;
 @import CoreLocation;
@@ -39,8 +41,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *profilePhotoButton;
 @property (weak, nonatomic) IBOutlet UIButton *coverPhotoButton;
-
-@property (nonatomic, weak) UIButton *photoTriggerButton;
 
 - (IBAction)previousTapped:(id)sender;
 - (IBAction)nextTapped:(id)sender;
@@ -222,10 +222,17 @@
         [self setCoverImage:[[self profileInformation] coverPhoto]];
     }
     if([[self profileInformation] coverPhotoURLString]) {
-        [[self coverPhotoImageView] setUrlString:[[self profileInformation] coverPhotoURLString]];
+        NSString *imageURLString = [[self profileInformation] coverPhotoURLString];
+        [[self profileInformation] setCoverPhotoURLString:nil];
+        [[STKImageStore store] fetchImageForURLString:imageURLString
+                                           completion:^(UIImage *img) {
+                                               [self setCoverImage:img];
+                                           }];
     }
     if([[self profileInformation] profilePhotoURLString]) {
-        [[STKImageStore store] fetchImageForURLString:[[self profileInformation] profilePhotoURLString]
+        NSString *imageURLString = [[self profileInformation] profilePhotoURLString];
+        [[self profileInformation] setProfilePhotoURLString:nil];
+        [[STKImageStore store] fetchImageForURLString:imageURLString
                                            completion:^(UIImage *img) {
                                                [self setProfileImage:img];
                                            }];
@@ -347,14 +354,18 @@
 
 - (IBAction)changeCoverPhoto:(id)sender
 {
-    [self setPhotoTriggerButton:sender];
-    [self promptForPhoto];
+    [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self completion:^(UIImage *img) {
+        if(img)
+            [self setCoverImage:img];
+    }];
 }
 
 - (IBAction)changeProfilePhoto:(id)sender
 {
-    [self setPhotoTriggerButton:sender];
-    [self promptForPhoto];
+    [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self completion:^(UIImage *img) {
+        if(img)
+            [self setProfileImage:img];
+    }];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -378,39 +389,60 @@
     [self presentViewController:[self imagePickerController] animated:YES completion:nil];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *img = [info objectForKey:UIImagePickerControllerEditedImage];
-    
-    if([self photoTriggerButton] == [self profilePhotoButton])
-        [self setProfileImage:img];
-    else if([self photoTriggerButton] == [self coverPhotoButton])
-        [self setCoverImage:img];
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)setProfileImage:(UIImage *)img
 {
-    CGRect b = [[self profilePhotoButton] bounds];
-    UIGraphicsBeginImageContextWithOptions(b.size, NO, 0.0);
+    CGRect r = CGRectMake(0, 0, 100, 100);
+    __weak STKCreateProfileViewController *ws = self;
+    UIImage *resizedImage = [[STKImageStore store] uploadImage:img size:r.size completion:^(NSString *URLString, NSError *err) {
+        if(!err) {
+            if(ws) {
+                [[ws profileInformation] setCoverPhotoURLString:URLString];
+            } else {
+                [[STKUserStore store] updateCurrentProfileWithInformation:@{STKUserProfilePhotoURLStringKey : URLString} completion:^(STKUser *u, NSError *err) {
+                    
+                }];
+            }
+        } else {
+            // We should really notify here...
+        }
+    }];
     
-    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(b, 6, 6)];
+    UIGraphicsBeginImageContextWithOptions(r.size, NO, 0.0);
+    
+    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(r, 6, 6)];
     [[UIColor colorWithRed:0 green:0 blue:1 alpha:1] set];
     [bp setLineWidth:6 * [[UIScreen mainScreen] scale]];
     [bp stroke];
     [bp addClip];
     
-    [img drawInRect:b];
+    [resizedImage drawInRect:r];
     
     [[self profilePhotoButton] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext() forState:UIControlStateNormal];
     [[self profilePhotoButton] setTitle:@"" forState:UIControlStateNormal];
-    
     UIGraphicsEndImageContext();
 }
 
 - (void)setCoverImage:(UIImage *)img
 {
-    [[self coverPhotoImageView] setImage:img];
+    __weak STKCreateProfileViewController *ws = self;
+    UIImage *resizedImage = [[STKImageStore store] uploadImage:img size:CGSizeMake(320, 200) completion:^(NSString *URLString, NSError *err) {
+        if(!err) {
+            // If we are still registering, just record the URL to pass after registration.
+            // Otherwise, we can assume that the reigstration either succeeded (and we're updating that profile)
+            // or that registration failed, in which case, this goes nowhere.
+            if(ws) {
+                [[ws profileInformation] setCoverPhotoURLString:URLString];
+            } else {
+                [[STKUserStore store] updateCurrentProfileWithInformation:@{STKUserCoverPhotoURLStringKey : URLString} completion:^(STKUser *u, NSError *err) {
+                    
+                }];
+            }
+        } else {
+            // We should really notify here...
+        }
+    }];
+
+    [[self coverPhotoImageView] setImage:resizedImage];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -440,6 +472,19 @@
                                            [STKProcessingView dismiss];
                                            if(!err) {
                                                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                               
+                                               NSMutableDictionary *vals = [NSMutableDictionary dictionary];
+                                               if([[self profileInformation] coverPhotoURLString]) {
+                                                   [vals setObject:[[self profileInformation] coverPhotoURLString] forKey:STKUserCoverPhotoURLStringKey];
+                                               }
+                                               if([[self profileInformation] profilePhotoURLString]) {
+                                                   [vals setObject:[[self profileInformation] profilePhotoURLString] forKey:STKUserProfilePhotoURLStringKey];
+                                               }
+                                               if([vals count] > 0) {
+                                                   [[STKUserStore store] updateCurrentProfileWithInformation:vals completion:^(STKUser *u, NSError *err) {
+                                                                                                                   
+                                                   }];
+                                               }
                                            } else {
                                                [[STKErrorStore alertViewForError:err delegate:nil] show];
                                            }

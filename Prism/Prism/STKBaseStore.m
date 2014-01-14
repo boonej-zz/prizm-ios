@@ -13,14 +13,14 @@
 NSString * const STKUserBaseURLString = @"http://prism.neadwerx.com";
 NSString * const STKLookupTypeGender = @"STKGender";
 NSString * const STKLookupTypeSocial = @"STKExternalSystem";
+NSString * const STKLookupTypeProfileType = @"STKProfileType";
 
-NSString * const STKUserEndpointGenderList = @"/common/ajax/get_genders.php";
-NSString * const STKUserEndpointSocialList = @"/common/ajax/get_external_systems.php";
 
+NSString * const STKBaseEndpointGenderList = @"/common/ajax/get_genders.php";
+NSString * const STKBaseEndpointSocialList = @"/common/ajax/get_external_systems.php";
+NSString * const STKBaseEndpointProfileTypeList = @"/common/ajax/get_profile_types.php";
 
 @interface STKBaseStore () <NSURLSessionDelegate>
-
-
 
 @end
 
@@ -83,8 +83,9 @@ NSString * const STKUserEndpointSocialList = @"/common/ajax/get_external_systems
 
 - (void)fetchLookupValues
 {
-    [self fetchLookupValuesForEntity:@"STKGender" endpoint:STKUserEndpointGenderList keyPath:@"genders.gender"];
-    [self fetchLookupValuesForEntity:@"STKExternalSystem" endpoint:STKUserEndpointSocialList keyPath:@"external_systems.external_system"];
+    [self fetchLookupValuesForEntity:STKLookupTypeGender endpoint:STKBaseEndpointGenderList keyPath:@"genders.gender"];
+    [self fetchLookupValuesForEntity:STKLookupTypeSocial endpoint:STKBaseEndpointSocialList keyPath:@"external_systems.external_system"];
+    [self fetchLookupValuesForEntity:STKLookupTypeProfileType endpoint:STKBaseEndpointProfileTypeList keyPath:@"profile_types.profile_type"];
 }
 
 - (void)fetchLookupValuesForEntity:(NSString *)entity endpoint:(NSString *)endpoint keyPath:(NSString *)keyPath

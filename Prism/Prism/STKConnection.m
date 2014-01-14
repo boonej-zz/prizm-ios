@@ -203,7 +203,7 @@ static NSMutableArray *sharedConnectionList = nil;
 {
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
-    NSLog(@"Request Finished (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n%@", i, [self request], [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSLog(@"Request Finished (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\nData:%@", i, [self request], [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 #endif
 
 
@@ -280,25 +280,7 @@ static NSMutableArray *sharedConnectionList = nil;
 {
     // This is a messy way of handling the fact that you can't do a strict
     // class comparison for all of these class clusters.
-    if([node isKindOfClass:[NSString class]]) {
-        
-        if(![incomingData isKindOfClass:[NSDictionary class]]) {
-            *err = [NSError errorWithDomain:STKConnectionErrorDomain
-                                       code:STKConnectionErrorCodeInvalidModelGraph
-                                   userInfo:@{@"expected" : @"NSDictionary-Model", @"received" : NSStringFromClass([incomingData class])}];
-            return nil;
-        }
-
-        id obj = nil;
-        if([self context])
-            obj = [self instanceOfEntityForName:node data:incomingData];
-        else
-            obj = [[NSClassFromString(node) alloc] init];
-        
-        *err = [obj readFromJSONObject:incomingData];
-        
-        return obj;
-    } else if ([node isKindOfClass:[NSArray class]]) {
+    if ([node isKindOfClass:[NSArray class]]) {
         
         if(![incomingData isKindOfClass:[NSArray class]]) {
             *err = [NSError errorWithDomain:STKConnectionErrorDomain
@@ -310,9 +292,12 @@ static NSMutableArray *sharedConnectionList = nil;
         NSMutableArray *collection = [NSMutableArray array];
         NSString *internalNode = [node firstObject];
         for(id innerObj in incomingData) {
-            id parsedObject = [self populateModelGraphWithData:innerObj node:internalNode error:err];
-            if(err)
+            NSError *internalError = nil;
+            id parsedObject = [self populateModelGraphWithData:innerObj node:internalNode error:&internalError];
+            if(internalError) {
+                *err = internalError;
                 return nil;
+            }
 
             [collection addObject:parsedObject];
         }
@@ -331,13 +316,40 @@ static NSMutableArray *sharedConnectionList = nil;
             id innerNode = [node objectForKey:key];
             id incomingInnerObject = [incomingData objectForKey:key];
             
-            id parsedObject = [self populateModelGraphWithData:incomingInnerObject node:innerNode error:err];
-            if(err)
+            NSError *internalError = nil;
+            id parsedObject = [self populateModelGraphWithData:incomingInnerObject node:innerNode error:&internalError];
+            if(internalError) {
+                *err = internalError;
                 return nil;
+            }
             
             [collection setObject:parsedObject forKey:key];
         }
         return collection;
+    } else {
+        
+        if(![incomingData isKindOfClass:[NSDictionary class]]) {
+            *err = [NSError errorWithDomain:STKConnectionErrorDomain
+                                       code:STKConnectionErrorCodeInvalidModelGraph
+                                   userInfo:@{@"expected" : @"NSDictionary-Model or Model", @"received" : NSStringFromClass([incomingData class])}];
+            return nil;
+        }
+        
+        id obj = nil;
+        if([obj isKindOfClass:[NSString class]]) {
+            if([self context])
+                obj = [self instanceOfEntityForName:node data:incomingData];
+            else
+                obj = [[NSClassFromString(node) alloc] init];
+        } else {
+            obj = node;
+        }
+        
+        NSError *resultErr = [obj readFromJSONObject:incomingData];
+        if(resultErr) {
+            *err = resultErr;
+        }
+        return obj;
     }
     return nil;
 }
