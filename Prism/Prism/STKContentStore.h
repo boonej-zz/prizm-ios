@@ -24,9 +24,9 @@ typedef enum {
 - (void)fetchPostsForUser:(STKUser *)u
                completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
 
-- (void)addPostWithCaption:(NSString *)caption
-            imageURLString:(NSString *)imageURLString
-                      type:(STKPostType)type
-                completion:(void (^)(STKPost *post, NSError *err))block;
+- (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
+
+
+- (void)fetchProfilePostsForCurrentUser:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
 
 @end

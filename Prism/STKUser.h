@@ -10,18 +10,18 @@
 #import <CoreData/CoreData.h>
 #import "STKJSONObject.h"
 #import "STKProfileInformation.h"
+#import "STKProfile.h"
 
 @class STKActivityItem, STKPost, STKRequestItem;
 
 
-extern NSString * const STKUserTypePersonal;
-extern NSString * const STKUserTypeLuminary;
-extern NSString * const STKUserTypeMilitary;
-extern NSString * const STKUserTypeEducation;
-extern NSString * const STKUserTypeFoundation;
-extern NSString * const STKUserTypeCompany;
-extern NSString * const STKUserTypeCommunity;
 
+extern NSString * const STKUserGenderMale;
+extern NSString * const STKUserGenderFemale;
+
+extern NSString * const STKUserExternalSystemFacebook;
+extern NSString * const STKUserExternalSystemTwitter;
+extern NSString * const STKUserExternalSystemGoogle;
 
 @interface STKUser : NSManagedObject <STKJSONObject>
 
@@ -36,10 +36,6 @@ extern NSString * const STKUserTypeCommunity;
 @property (nonatomic, retain) NSString *gender;
 @property (nonatomic, strong) NSString *city;
 @property (nonatomic, strong) NSString *state;
-@property (nonatomic, strong) NSString *profileID;
-
-@property (nonatomic, strong) NSString *coverPhotoPath;
-@property (nonatomic, strong) NSString *profilePhotoPath;
 
 @property (nonatomic, strong) NSString *externalServiceType;
 @property (nonatomic, strong) NSString *accountStoreID;
@@ -47,6 +43,9 @@ extern NSString * const STKUserTypeCommunity;
 @property (nonatomic, retain) NSOrderedSet *requestItems;
 @property (nonatomic, retain) NSOrderedSet *activityItems;
 @property (nonatomic, retain) NSOrderedSet *posts;
+@property (nonatomic, strong) NSSet *profiles;
+
+- (STKProfile *)personalProfile;
 
 @end
 

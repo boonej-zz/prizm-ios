@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A603" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Citizenship" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Country" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="threeLetterCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twoLetterCode" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Race" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Region" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="country" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twoLetterCode" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Religion" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Citizenship" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Country" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Race" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Region" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Religion" positionX="0" positionY="0" width="0" height="0"/>
+    </elements>
+</model>

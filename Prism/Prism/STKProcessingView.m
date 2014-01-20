@@ -23,9 +23,6 @@ static STKProcessingView *STKProcessingViewCurrentView = nil;
 + (void)present
 {
     if(STKProcessingViewCurrentView != nil) {
-        @throw [NSException exceptionWithName:@"STKProcessingViewException"
-                                       reason:@"Tried to present STKProcessingView when one is already presented"
-                                     userInfo:nil];
         return;
     }
     STKProcessingView *p = [[STKProcessingView alloc] init];

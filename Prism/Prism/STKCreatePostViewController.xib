@@ -24,7 +24,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Caption your post..." translatesAutoresizingMaskIntoConstraints="NO" id="1Dz-r9-03S">
-                    <rect key="frame" x="108" y="74" width="192" height="128"/>
+                    <rect key="frame" x="108" y="100" width="192" height="102"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -135,7 +135,7 @@
                 <constraint firstAttribute="trailing" secondItem="BVv-6Z-JvL" secondAttribute="trailing" id="l31-wO-0Gt"/>
                 <constraint firstItem="0Dx-6c-DLI" firstAttribute="top" secondItem="BVv-6Z-JvL" secondAttribute="bottom" id="pC4-XR-Aad"/>
                 <constraint firstItem="0Dx-6c-DLI" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="pbz-fp-2E1"/>
-                <constraint firstItem="1Dz-r9-03S" firstAttribute="top" secondItem="1" secondAttribute="top" constant="74" id="rNl-PG-szm"/>
+                <constraint firstItem="1Dz-r9-03S" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100" id="rNl-PG-szm"/>
                 <constraint firstItem="y5v-O0-9uB" firstAttribute="top" secondItem="0Dx-6c-DLI" secondAttribute="bottom" id="uYS-oH-NN0"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

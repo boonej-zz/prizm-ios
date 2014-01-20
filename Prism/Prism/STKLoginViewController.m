@@ -8,6 +8,7 @@
 
 #import "STKLoginViewController.h"
 #import "STKUserStore.h"
+#import "STKProcessingView.h"
 
 @interface STKLoginViewController () <UITextFieldDelegate>
 
@@ -47,9 +48,11 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if([[[self emailField] text] length] > 0 && [[[self passwordField] text] length] > 0) {
+        [STKProcessingView present];
         [[STKUserStore store] loginWithEmail:[[self emailField] text]
                                     password:[[self passwordField] text]
                                   completion:^(STKUser *u, NSError *err) {
+                                      [STKProcessingView dismiss];
                                       if(!err) {
                                           [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
                                       } else {

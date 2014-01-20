@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKPostViewController">
             <connections>
+                <outlet property="tableView" destination="UWv-rb-JIt" id="2RV-uC-lZ7"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -14,166 +15,19 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ts2-hP-jHO">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.50490419708029199" alpha="0.33000000000000002" colorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eBY-Nk-cFu" customClass="STKPostHeaderView">
-                    <rect key="frame" x="0.0" y="20" width="320" height="48"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="UWv-rb-JIt">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="1" alpha="0.48999999999999999" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BfW-eR-wKe">
-                    <rect key="frame" x="0.0" y="68" width="320" height="320"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="plP-Z5-Gos">
-                    <rect key="frame" x="0.0" y="388" width="320" height="48"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBa-ti-shL">
-                            <rect key="frame" x="0.0" y="2" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="44" id="QHU-QM-AU5"/>
-                                <constraint firstAttribute="height" constant="44" id="gbS-Cp-01f"/>
-                            </constraints>
-                            <inset key="titleEdgeInsets" minX="1" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <inset key="imageEdgeInsets" minX="-8" minY="-8" maxX="-8" maxY="-8"/>
-                            <state key="normal" image="action_heart">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="selected" image="action_heart_like"/>
-                            <state key="highlighted" image="action_heart_like"/>
-                        </button>
-                        <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ADN-Pf-3hV">
-                            <rect key="frame" x="59" y="2" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="44" id="Xeb-Ts-6gD"/>
-                                <constraint firstAttribute="height" constant="44" id="i9X-Ku-YdE"/>
-                            </constraints>
-                            <inset key="imageEdgeInsets" minX="-8" minY="-8" maxX="-8" maxY="-8"/>
-                            <state key="normal" image="action_comment">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted" image="action_comment_active"/>
-                        </button>
-                        <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="89K-Jh-DPu">
-                            <rect key="frame" x="138" y="2" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="44" id="W8L-8t-jC2"/>
-                                <constraint firstAttribute="height" constant="44" id="vIg-SW-nvn"/>
-                            </constraints>
-                            <inset key="imageEdgeInsets" minX="-8" minY="-8" maxX="-8" maxY="-8"/>
-                            <state key="normal" image="action_prism">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted" image="action_prism_active"/>
-                        </button>
-                        <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gqh-7r-c5o">
-                            <rect key="frame" x="220" y="2" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="44" id="SmV-eu-zV0"/>
-                                <constraint firstAttribute="width" constant="44" id="ZAu-r6-fq5"/>
-                            </constraints>
-                            <inset key="imageEdgeInsets" minX="-8" minY="-8" maxX="-8" maxY="-8"/>
-                            <state key="normal" image="action_share">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted" image="action_share_selected"/>
-                        </button>
-                        <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p1o-x4-hez">
-                            <rect key="frame" x="276" y="2" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="44" id="3ju-p4-Gyf"/>
-                                <constraint firstAttribute="width" constant="44" id="XN0-fq-Qed"/>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="ebL-dI-wOV"/>
-                            </constraints>
-                            <inset key="imageEdgeInsets" minX="-8" minY="-8" maxX="-8" maxY="-8"/>
-                            <state key="normal" image="action_pin">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted" image="action_pin_active"/>
-                        </button>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="txZ-W8-Xwc">
-                            <rect key="frame" x="39" y="16" width="20" height="16"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="20" id="jLA-6t-X4D"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b5d-1N-31b">
-                            <rect key="frame" x="98" y="16" width="20" height="16"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="20" id="dn8-zb-lTg"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" red="0.49991446169999998" green="0.49583713499999998" blue="0.57441833939999998" alpha="0.33000000000000002" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="centerY" secondItem="ADN-Pf-3hV" secondAttribute="centerY" id="3gs-pG-66e"/>
-                        <constraint firstAttribute="centerX" secondItem="89K-Jh-DPu" secondAttribute="centerX" id="R3K-JI-vhm"/>
-                        <constraint firstItem="ADN-Pf-3hV" firstAttribute="leading" secondItem="txZ-W8-Xwc" secondAttribute="trailing" id="RJk-Fk-lsT"/>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="S3s-5P-M40"/>
-                        <constraint firstAttribute="trailing" secondItem="p1o-x4-hez" secondAttribute="trailing" id="TGK-Gm-cEb"/>
-                        <constraint firstAttribute="centerY" secondItem="txZ-W8-Xwc" secondAttribute="centerY" id="U8i-oD-rwH"/>
-                        <constraint firstAttribute="centerY" secondItem="CBa-ti-shL" secondAttribute="centerY" id="VSQ-eF-OgA"/>
-                        <constraint firstAttribute="centerY" secondItem="b5d-1N-31b" secondAttribute="centerY" id="bCj-VX-MeV"/>
-                        <constraint firstItem="CBa-ti-shL" firstAttribute="leading" secondItem="plP-Z5-Gos" secondAttribute="leading" id="oXi-Fs-opi"/>
-                        <constraint firstItem="p1o-x4-hez" firstAttribute="leading" secondItem="gqh-7r-c5o" secondAttribute="trailing" constant="12" id="phW-pU-zZV"/>
-                        <constraint firstAttribute="centerY" secondItem="89K-Jh-DPu" secondAttribute="centerY" id="qed-wT-MdG"/>
-                        <constraint firstAttribute="centerY" secondItem="p1o-x4-hez" secondAttribute="centerY" id="qp0-Rc-0gb"/>
-                        <constraint firstItem="b5d-1N-31b" firstAttribute="leading" secondItem="ADN-Pf-3hV" secondAttribute="trailing" constant="-5" id="rEw-Ru-dfH"/>
-                        <constraint firstAttribute="height" constant="48" id="rSd-vv-uOr"/>
-                        <constraint firstAttribute="centerY" secondItem="gqh-7r-c5o" secondAttribute="centerY" id="tC6-0z-f0V"/>
-                        <constraint firstItem="txZ-W8-Xwc" firstAttribute="leading" secondItem="CBa-ti-shL" secondAttribute="trailing" constant="-5" id="xgU-NQ-5tH"/>
-                    </constraints>
-                </view>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="FzA-PY-kej"/>
+                        <outlet property="delegate" destination="-1" id="ux7-rk-QwG"/>
+                    </connections>
+                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="leading" secondItem="BfW-eR-wKe" secondAttribute="leading" id="0AP-CY-7i6"/>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="leading" secondItem="eBY-Nk-cFu" secondAttribute="leading" id="1kF-Yw-KG9"/>
-                <constraint firstItem="eBY-Nk-cFu" firstAttribute="bottom" secondItem="ts2-hP-jHO" secondAttribute="bottom" id="5ll-lg-7qP"/>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="trailing" secondItem="ts2-hP-jHO" secondAttribute="trailing" id="82Q-ja-dty"/>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="B2X-65-d0r"/>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="leading" secondItem="ts2-hP-jHO" secondAttribute="leading" id="DhA-F8-Raf"/>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="trailing" secondItem="BfW-eR-wKe" secondAttribute="trailing" id="ESK-gh-mMM"/>
-                <constraint firstAttribute="bottom" secondItem="eBY-Nk-cFu" secondAttribute="bottom" constant="500" id="XF3-0h-eub"/>
-                <constraint firstItem="ts2-hP-jHO" firstAttribute="top" secondItem="1" secondAttribute="top" id="bu3-cm-BSV"/>
-                <constraint firstAttribute="trailing" secondItem="plP-Z5-Gos" secondAttribute="trailing" id="cW4-aD-0rf"/>
-                <constraint firstItem="BfW-eR-wKe" firstAttribute="top" secondItem="eBY-Nk-cFu" secondAttribute="bottom" id="fjH-qD-JL3"/>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="top" secondItem="BfW-eR-wKe" secondAttribute="bottom" id="gkd-L6-YsY"/>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="top" secondItem="1" secondAttribute="top" constant="388" id="uHZ-Zy-Hyx"/>
-                <constraint firstItem="plP-Z5-Gos" firstAttribute="trailing" secondItem="eBY-Nk-cFu" secondAttribute="trailing" id="yDa-gb-AqM"/>
-                <constraint firstItem="eBY-Nk-cFu" firstAttribute="top" secondItem="1" secondAttribute="top" constant="20" symbolic="YES" id="zBa-Fe-lzp"/>
-            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
-    <resources>
-        <image name="action_comment" width="56" height="56"/>
-        <image name="action_comment_active" width="56" height="56"/>
-        <image name="action_heart" width="56" height="56"/>
-        <image name="action_heart_like" width="56" height="56"/>
-        <image name="action_pin" width="56" height="56"/>
-        <image name="action_pin_active" width="56" height="56"/>
-        <image name="action_prism" width="56" height="56"/>
-        <image name="action_prism_active" width="56" height="56"/>
-        <image name="action_share" width="56" height="56"/>
-        <image name="action_share_selected" width="56" height="56"/>
-    </resources>
 </document>

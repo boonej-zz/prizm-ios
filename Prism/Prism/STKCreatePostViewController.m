@@ -15,15 +15,15 @@
 #import "STKContentStore.h"
 #import "UITextView+STKHashtagDetector.h"
 #import "STKImageStore.h"
+#import "STKProcessingView.h"
+#import "STKBaseStore.h"
+
+@import CoreLocation;
 
 NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
-NSString * const STKCreatePostTypeKey = @"type";
-NSString * const STKCreatePostURLKey = @"url";
-NSString * const STKCreatePostTextKey = @"text";
-
 @interface STKCreatePostViewController ()
-    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKHashtagToolbarDelegate, UIAlertViewDelegate>
+    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKHashtagToolbarDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextView *postTextView;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
@@ -32,6 +32,8 @@ NSString * const STKCreatePostTextKey = @"text";
 @property (weak, nonatomic) IBOutlet UIButton *imageButton;
 @property (nonatomic, strong) STKHashtagToolbar *hashtagToolbar;
 @property (nonatomic) NSRange hashtagRange;
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @property (nonatomic, strong) NSArray *categoryItems;
 @property (nonatomic, strong) NSArray *optionItems;
@@ -56,25 +58,24 @@ NSString * const STKCreatePostTextKey = @"text";
         [[self navigationItem] setLeftBarButtonItem:bbiCancel];
         [[self navigationItem] setRightBarButtonItem:bbiPost];
         
-        
         _categoryItems = @[
-                           @{@"title" : @"Aspirations", STKCreatePostTypeKey : @(STKPostTypeAspiration), @"image" : [UIImage imageNamed:@"category_aspirations"]},
-                           @{@"title" : @"Passions", STKCreatePostTypeKey : @(STKPostTypePassion), @"image" : [UIImage imageNamed:@"category_passion"]},
-                           @{@"title" : @"Experiences", STKCreatePostTypeKey : @(STKPostTypeExperience), @"image" : [UIImage imageNamed:@"category_experiences"]},
-                           @{@"title" : @"Achievements", STKCreatePostTypeKey : @(STKPostTypeAchievement), @"image" : [UIImage imageNamed:@"category_achievements"]},
-                           @{@"title" : @"Inspirations", STKCreatePostTypeKey : @(STKPostTypeInspiration), @"image" : [UIImage imageNamed:@"category_inspirations"]},
-                           @{@"title" : @"Personal", STKCreatePostTypeKey : @(-1)}
+            @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"btn_cloud_aspirations"]},
+            @{@"title" : @"Passions", STKPostTypeKey : STKPostTypePassion, @"image" : [UIImage imageNamed:@"btn_heart"]},
+            @{@"title" : @"Experiences", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"btn_experiences"]},
+            @{@"title" : @"Achievements", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"btn_achievements"]},
+            @{@"title" : @"Inspirations", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"btn_inspirations"]},
+            @{@"title" : @"Personal", STKPostTypeKey : @"0", @"image" : [UIImage imageNamed:@"btn_personal"]}
         ];
         
         _optionItems = @[
-                         @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"category_aspirations"]},
-                         @{@"key" : @"location", @"image" : [UIImage imageNamed:@"category_aspirations"]},
-                         @{@"key" : @"user", @"image" : [UIImage imageNamed:@"category_aspirations"]},
-                         @{@"key" : @"web", @"image" : [UIImage imageNamed:@"category_aspirations"]},
-                         @{@"key" : @"facebook", @"image" : [UIImage imageNamed:@"category_aspirations"]},
-                         @{@"key" : @"twitter", @"image" : [UIImage imageNamed:@"category_aspirations"]},
-                         @{@"key" : @"tumblr", @"image" : [UIImage imageNamed:@"category_aspirations"]},
-                         @{@"key" : @"noidea", @"image" : [UIImage imageNamed:@"category_aspirations"]}
+            @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"category_aspirations"]},
+            @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"action" : @"findLocation"},
+            @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"]},
+            @{@"key" : @"web", @"image" : [UIImage imageNamed:@"btn_globe"]},
+            @{@"key" : @"facebook", @"image" : [UIImage imageNamed:@"btn_facebook"]},
+            @{@"key" : @"twitter", @"image" : [UIImage imageNamed:@"btn_tweeter"]},
+            @{@"key" : @"tumblr", @"image" : [UIImage imageNamed:@"btn_tumblr"]},
+            @{@"key" : @"personal", @"image" : [UIImage imageNamed:@"btn_foursquare"]}
         ];
     }
     return self;
@@ -87,7 +88,7 @@ NSString * const STKCreatePostTextKey = @"text";
     [[STKImageStore store] uploadImage:_postImage completion:^(NSString *URLString, NSError *err) {
         if(postImage == [self postImage]) {
             if(!err) {
-                [[self postInfo] setObject:URLString forKey:STKCreatePostURLKey];
+                [[self postInfo] setObject:URLString forKey:STKPostURLKey];
             } else {
                 [[self imageView] setImage:nil];
                 [[self imageButton] setImage:[UIImage imageNamed:@"upload_camera"]
@@ -101,6 +102,27 @@ NSString * const STKCreatePostTextKey = @"text";
             }
         }
     }];
+}
+
+- (void)findLocation
+{
+    if(![self locationManager]) {
+        _locationManager = [[CLLocationManager alloc] init];
+        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        [_locationManager setDelegate:self];
+    }
+    [[self locationManager] startUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation *l = [locations lastObject];
+    if([[l timestamp] timeIntervalSinceNow] > -60 * 3) {
+        [[self locationManager] stopUpdatingLocation];
+        
+        [[self postInfo] setObject:@([l coordinate].latitude) forKey:STKPostLocationLatitudeKey];
+        [[self postInfo] setObject:@([l coordinate].longitude) forKey:STKPostLocationLongitudeKey];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -255,7 +277,7 @@ NSString * const STKCreatePostTextKey = @"text";
         
         [[cell label] setTextColor:[UIColor whiteColor]];
         
-        if([[[self postInfo] objectForKey:STKCreatePostTypeKey] isEqual:[item objectForKey:STKCreatePostTypeKey]]) {
+        if([[[self postInfo] objectForKey:STKPostTypeKey] isEqual:[item objectForKey:STKPostTypeKey]]) {
             [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
         } else {
             [cell setBackgroundColor:[UIColor clearColor]];
@@ -281,11 +303,17 @@ NSString * const STKCreatePostTextKey = @"text";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if(collectionView == [self categoryCollectionView]) {
-        [[self postInfo] setObject:[[[self categoryItems] objectAtIndex:[indexPath row]] objectForKey:STKCreatePostTypeKey]
-                            forKey:STKCreatePostTypeKey];
+        [[self postInfo] setObject:[[[self categoryItems] objectAtIndex:[indexPath row]] objectForKey:STKPostTypeKey]
+                            forKey:STKPostTypeKey];
         [collectionView reloadData];
+    } else if(collectionView == [self optionCollectionView]) {
+        NSString *action = [[self optionItems] objectAtIndex:[indexPath row]];
+        if(action) {
+            [self performSelector:NSSelectorFromString(action)];
+        }
     }
 }
+
 
 - (void)cancel:(id)sender
 {
@@ -296,9 +324,9 @@ NSString * const STKCreatePostTextKey = @"text";
 {
     NSString *msg = nil;
     // Verify that we have everything
-    if(![[self postInfo] objectForKey:STKCreatePostTypeKey]) {
+    if(![[self postInfo] objectForKey:STKPostTypeKey]) {
         msg = @"Choose the category this post belongs to from the bottom of the screen before posting.";
-    } else if(![[self postInfo] objectForKey:STKCreatePostURLKey]) {
+    } else if(![[self postInfo] objectForKey:STKPostURLKey]) {
         msg = @"Choose an image for this post before posting.";
     }
     
@@ -310,19 +338,19 @@ NSString * const STKCreatePostTextKey = @"text";
     
     if([[[self postTextView] text] length] > 0 && ![[[self postTextView] text] isEqualToString:STKCreatePostPlaceholderText]) {
         [[self postInfo] setObject:[[self postTextView] text]
-                            forKey:STKCreatePostTextKey];
+                            forKey:STKPostTextKey];
     }
     
-    [[STKContentStore store] addPostWithCaption:[[self postInfo] objectForKey:STKCreatePostTextKey]
-                                 imageURLString:[[self postInfo] objectForKey:STKCreatePostURLKey]
-                                           type:[[[self postInfo] objectForKey:STKCreatePostTypeKey] intValue]
-                                     completion:^(STKPost *post, NSError *err) {
-                                         if(!err) {
-                                             [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-                                         } else {
-                                             
-                                         }
-                                     }];
+    [STKProcessingView present];
+    
+    [[STKContentStore store] addPostWithInfo:[self postInfo] completion:^(STKPost *post, NSError *err) {
+        [STKProcessingView dismiss];
+        if(!err) {
+            [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            
+        }
+    }];
     
 }
 

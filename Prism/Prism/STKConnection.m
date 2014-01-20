@@ -336,7 +336,7 @@ static NSMutableArray *sharedConnectionList = nil;
         }
         
         id obj = nil;
-        if([obj isKindOfClass:[NSString class]]) {
+        if([node isKindOfClass:[NSString class]]) {
             if([self context])
                 obj = [self instanceOfEntityForName:node data:incomingData];
             else

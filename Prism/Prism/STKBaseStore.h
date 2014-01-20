@@ -11,9 +11,13 @@
 
 @class STKUser, STKConnection;
 
-extern NSString * const STKLookupTypeGender;
-extern NSString * const STKLookupTypeSocial;
-extern NSString * const STKLookupTypeProfileType;
+typedef enum {
+    STKLookupTypeCitizenship,
+    STKLookupTypeCountry,
+    STKLookupTypeRace,
+    STKLookupTypeRegion,
+    STKLookupTypeReligion
+} STKLookupType;
 
 @interface STKBaseStore : NSObject
 
@@ -22,7 +26,9 @@ extern NSString * const STKLookupTypeProfileType;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSURLSession *session;
 
-- (NSString *)transformLookupValue:(NSString *)lookupValue forType:(NSString *)type;
+- (NSString *)labelForCode:(NSString *)code type:(STKLookupType)type;
+- (NSNumber *)codeForLookupValue:(NSString *)lookupValue type:(STKLookupType)type;
+
 - (STKConnection *)connectionForEndpoint:(NSString *)endpoint;
 
 - (NSArray *)executeFetchRequest:(NSFetchRequest *)req;

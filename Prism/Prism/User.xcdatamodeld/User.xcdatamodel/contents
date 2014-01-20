@@ -10,36 +10,42 @@
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="activityItems" inverseEntity="STKUser" syncable="YES"/>
     </entity>
-    <entity name="STKExternalSystem" syncable="YES">
-        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
-    <entity name="STKGender" syncable="YES">
-        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
     <entity name="STKPost" representedClassName="STKPost" syncable="YES">
-        <attribute name="authorName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="authorUserID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="commentCount" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coordinateData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="creatorID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="creatorName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="creatorProfilePhotoURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="datePosted" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="externalSystemID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hashTagsData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="iconURLString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageURLString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="postOrigin" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="likeCount" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profileID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="referenceTimestamp" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="posts" inverseEntity="STKUser" syncable="YES"/>
     </entity>
-    <entity name="STKProfileType" syncable="YES">
-        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
+    <entity name="STKProfile" representedClassName="STKProfile" syncable="YES">
+        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coverPhotoPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profileID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profileType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="profiles" inverseEntity="STKUser" syncable="YES"/>
     </entity>
     <entity name="STKRequestItem" representedClassName="STKRequestItem" syncable="YES">
         <attribute name="accepted" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="dateConfirmed" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="dateReceived" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="profileImageURLString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="userID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="requestItems" inverseEntity="STKUser" syncable="YES"/>
     </entity>
@@ -47,29 +53,25 @@
         <attribute name="accountStoreID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="birthday" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="coverPhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="externalServiceType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="profileID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="activityItems" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKActivityItem" inverseName="user" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKPost" inverseName="user" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="profiles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKProfile" inverseName="user" inverseEntity="STKProfile" syncable="YES"/>
         <relationship name="requestItems" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="STKRequestItem" inverseName="user" inverseEntity="STKRequestItem" syncable="YES"/>
     </entity>
     <elements>
         <element name="STKActivityItem" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="STKExternalSystem" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="STKGender" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKPost" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKRequestItem" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKUser" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="STKProfileType" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="STKProfile" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

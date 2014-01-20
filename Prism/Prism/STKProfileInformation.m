@@ -9,11 +9,9 @@
 #import "STKProfileInformation.h"
 #import <GoogleOpenSource/GoogleOpenSource.h>
 #import <GooglePlus/GooglePlus.h>
-@import CoreLocation;
+#import "STKUser.h"
 
-NSString * const STKProfileInformationExternalServiceTwitter = @"Twitter";
-NSString * const STKProfileInformationExternalServiceFacebook = @"Facebook";
-NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
+@import CoreLocation;
 
 @implementation STKProfileInformation
 
@@ -56,7 +54,7 @@ NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
     v = [d objectForKey:@"id"];
     if(v) {
         [self setExternalID:v];
-        [self setExternalService:STKProfileInformationExternalServiceFacebook];
+        [self setExternalService:STKUserExternalSystemFacebook];
     }
     
     v = [d objectForKey:@"email"];
@@ -64,9 +62,14 @@ NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
         [self setEmail:v];
     
     v = [d objectForKey:@"gender"];
-    if(v)
-        [self setGender:v];
-    
+    if(v) {
+        if([v isEqualToString:@"male"]) {
+            [self setGender:STKUserGenderMale];
+        }
+        if([v isEqualToString:@"female"]) {
+            [self setGender:STKUserGenderFemale];
+        }
+    }
     v = [d objectForKey:@"birthday"];
     if(v) {
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -74,13 +77,6 @@ NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
         
         [self setBirthday:[df dateFromString:v]];
     }
-}
-
-- (void)setLocation:(CLPlacemark *)cp
-{
-    [self setZipCode:[cp postalCode]];
-    [self setCity:[cp locality]];
-    [self setState:[cp administrativeArea]];
 }
 
 
@@ -91,7 +87,7 @@ NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
     NSString *v = [d objectForKey:@"id_str"];
     if(v) {
         [self setExternalID:v];
-        [self setExternalService:STKProfileInformationExternalServiceTwitter];
+        [self setExternalService:STKUserExternalSystemTwitter];
     }
     
     v = [d objectForKey:@"name"];
@@ -113,12 +109,17 @@ NSString * const STKProfileInformationExternalServiceGoogle = @"Google";
         [df setDateFormat:@"YYYY-MM-dd"];
         [self setBirthday:[df dateFromString:[vals birthday]]];
     }
-    if([[vals gender] isEqualToString:@"male"] || [[vals gender] isEqualToString:@"female"])
-        [self setGender:[vals gender]];
+    if([[vals gender] isEqualToString:@"male"]) {
+        [self setGender:STKUserGenderMale];
+    }
+    if([[vals gender] isEqualToString:@"female"]) {
+        [self setGender:STKUserGenderFemale];
+    }
+
     [self setFirstName:[[vals name] givenName]];
     [self setLastName:[[vals name] familyName]];
     [self setExternalID:[vals identifier]];
-    [self setExternalService:STKProfileInformationExternalServiceGoogle];
+    [self setExternalService:STKUserExternalSystemGoogle];
 
     [self setProfilePhotoURLString:[[vals image] url]];
     [self setCoverPhotoURLString:[[[vals cover] coverPhoto] url]];

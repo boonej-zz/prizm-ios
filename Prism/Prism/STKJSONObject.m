@@ -13,7 +13,7 @@
                  sourceKey:(NSString *)sourceKey
             destinationKey:(NSString *)destKey
 {
-    id value = [d objectForKey:sourceKey];
+    id value = [d valueForKeyPath:sourceKey];
     if(!value)
         return;
     if([value isKindOfClass:[NSNull class]])
@@ -26,7 +26,7 @@
                  sourceKey:(NSString *)sourceKey
           destinationBlock:(void (^)(id inVal))block
 {
-    id value = [d objectForKey:sourceKey];
+    id value = [d valueForKeyPath:sourceKey];
     if(!value)
         return;
     if([value isKindOfClass:[NSNull class]])

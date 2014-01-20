@@ -11,13 +11,13 @@
 #import "STKPost.h"
 #import "STKRequestItem.h"
 
-NSString * const STKUserTypePersonal = @"Personal";
-NSString * const STKUserTypeLuminary = @"Luminaries";
-NSString * const STKUserTypeMilitary = @"Military";
-NSString * const STKUserTypeEducation = @"Education";
-NSString * const STKUserTypeFoundation = @"Foundations";
-NSString * const STKUserTypeCompa = @"Companies";
-NSString * const STKUserTypeCommunity = @"Community";
+
+NSString * const STKUserGenderMale = @"1";
+NSString * const STKUserGenderFemale = @"2";
+
+NSString * const STKUserExternalSystemFacebook = @"1";
+NSString * const STKUserExternalSystemTwitter = @"2";
+NSString * const STKUserExternalSystemGoogle = @"3";
 
 
 @implementation STKUser
@@ -30,10 +30,18 @@ NSString * const STKUserTypeCommunity = @"Community";
 @dynamic activityItems;
 @dynamic posts;
 @dynamic city, state;
-@dynamic profileID;
-@dynamic profilePhotoPath, coverPhotoPath;
 @dynamic zipCode, birthday, firstName, lastName, externalServiceType;
 @dynamic accountStoreID;
+@dynamic profiles;
+
+- (void)awakeFromInsert
+{
+    STKProfile *profile = [NSEntityDescription insertNewObjectForEntityForName:@"STKProfile"
+                                                        inManagedObjectContext:[self managedObjectContext]];
+    [profile setProfileType:STKProfileTypePersonal];
+    [profile setUser:self];
+
+}
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -49,9 +57,6 @@ NSString * const STKUserTypeCommunity = @"Community";
         @"zip_postal" : @"zipCode",
         @"city" : @"city",
         @"region" : @"state",
-        @"profile" : @"profileID",
-        @"cover_image_file_path" : @"coverPhotoPath",
-        @"profile_image_file_path" : @"profilePhotoPath",
         @"date_of_birth" : ^(id inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
             [df setDateFormat:@"YYYY-MM-dd"];
@@ -59,6 +64,20 @@ NSString * const STKUserTypeCommunity = @"Community";
         }
     }];
     
+    STKProfile *profile = [self personalProfile];
+    [profile readFromJSONObject:[jsonObject objectForKey:@"profile"]];
+    [profile setUser:self];
+    
+    return nil;
+}
+
+- (STKProfile *)personalProfile
+{
+    for(STKProfile *p in [self profiles]) {
+        if([[p profileType] isEqualToString:STKProfileTypePersonal]) {
+            return p;
+        }
+    }
     return nil;
 }
 

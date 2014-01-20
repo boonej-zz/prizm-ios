@@ -10,10 +10,6 @@
 
 @class GTLPlusPerson, CLPlacemark;
 
-extern NSString * const STKProfileInformationExternalServiceTwitter;
-extern NSString * const STKProfileInformationExternalServiceFacebook;
-extern NSString * const STKProfileInformationExternalServiceGoogle;
-
 @interface STKProfileInformation : NSObject <NSCopying>
 
 @property (nonatomic, strong) NSString *firstName;
@@ -43,7 +39,5 @@ extern NSString * const STKProfileInformationExternalServiceGoogle;
 - (void)setValuesFromFacebook:(NSDictionary *)vals;
 - (void)setValuesFromTwitter:(NSArray *)vals;
 - (void)setValuesFromGooglePlus:(GTLPlusPerson *)vals;
-
-- (void)setLocation:(CLPlacemark *)cp;
 
 @end

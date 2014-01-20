@@ -14,6 +14,7 @@
 #import "STKActivityItem.h"
 #import "STKRequestItem.h"
 #import "STKConnection.h"
+#import "STKProfile.h"
 
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 
@@ -73,17 +74,72 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
     
     // Get cached ones, say you'll return more.
     
+    // Set predicate to search for where poster or receiver is this user
+//    NSFetchRequest *cacheRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
+//    [cacheRequest setFetchLimit:30];
+    
     [[STKUserStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
-        [c addQueryObject:u
+        [c addQueryObject:[u personalProfile]
               missingKeys:nil
                withKeyMap:@{@"profileID" : @"profile"}];
+        [c addQueryValue:@"20" forKey:@"limit"];
+        
+        
         [c setContext:[self context]];
         [c setModelGraph:@{@"post" : @[@"STKPost"]}];
+        [c setExistingMatchMap:@{@"postID" : @"post"}];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
-            NSArray *posts = [obj objectForKey:@"post"];
-            
-            block(posts, err, NO);
+            if(!err) {
+                NSArray *posts = [obj objectForKey:@"post"];
+                
+                block(posts, err, NO);
+            } else {
+                block(nil, err, NO);
+            }
+        }];
+    }];
+}
+
+- (void)fetchProfilePostsForCurrentUser:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block
+{
+    // Set predicate to search for where poster or receiver is this user
+    NSFetchRequest *cacheRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
+    [cacheRequest setFetchBatchSize:30];
+    [cacheRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted"
+                                                                     ascending:NO]]];
+    
+    NSArray *results = [[self context] executeFetchRequest:cacheRequest error:nil];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        block(results, nil, YES);
+    }];
+
+    [[STKUserStore store] executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
+        [c addQueryObject:[[[STKUserStore store] currentUser] personalProfile]
+              missingKeys:nil
+               withKeyMap:@{@"profileID" : @"profile"}];
+        [c addQueryValue:@"20" forKey:@"limit"];
+        
+        
+        [c setContext:[self context]];
+        [c setModelGraph:@{@"post" : @[@"STKPost"]}];
+        [c setExistingMatchMap:@{@"postID" : @"post"}];
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            if(!err) {
+                [[self context] save:nil];
+
+                NSFetchRequest *newCacheRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
+                [newCacheRequest setFetchBatchSize:30];
+                [newCacheRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted"
+                                                                                    ascending:NO]]];
+                
+                NSArray *results = [[self context] executeFetchRequest:newCacheRequest error:nil];
+                block(results, nil, NO);
+                
+            } else {
+                block(nil, err, NO);
+            }
         }];
     }];
 }
@@ -102,30 +158,35 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
     }];
 }
 
-- (void)addPostWithCaption:(NSString *)caption
-            imageURLString:(NSString *)imageURLString
-                      type:(STKPostType)type
-                completion:(void (^)(STKPost *post, NSError *err))block
+- (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block
 {
+    NSLog(@"Posting: %@", info);
     STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointCreatePost];
     [c addQueryValue:[[[STKUserStore store] currentUser] userID]
               forKey:@"entity"];
-    // Look up type here!
-    [c addQueryValue:@"1" forKey:@"post_type"];
+    [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
+
     [c addQueryValue:@"1" forKey:@"visibility_type"];
-    [c addQueryValue:[[[STKUserStore store] currentUser] profileID] forKey:@"profile"];
-    [c addQueryValue:imageURLString forKey:@"file_path"];
-    [c addQueryValue:@"post" forKey:@"title"];
-    if(caption)
-        [c addQueryValue:caption forKey:@"body"];
+    [c addQueryValue:@"x" forKey:@"title"];
+    
+    for(NSString *key in info) {
+        [c addQueryValue:[info objectForKey:key] forKey:key];
+    }
     
     [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-        NSLog(@"%@ %@", obj, err);
+
+        if(!err) {
+                // Should catch, but you know, can't yet
+        } else {
+        
+        }
+        
+        block(obj, err);
     }];
 }
 
 - (void)buildTemporaryData
-{
+{/*
     NSFetchRequest *r = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
     NSArray *a = [[self context] executeFetchRequest:r error:nil];
     if([a count] > 0) {
@@ -221,7 +282,7 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
         }
         
     }
-    [[self context] save:nil];
+    [[self context] save:nil];*/
 }
 
 @end

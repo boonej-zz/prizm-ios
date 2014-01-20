@@ -40,12 +40,12 @@
     _timeLabel = [[UILabel alloc] init];
     _sourceLabel = [[UILabel alloc] init];
     _postTypeView = [[UIImageView alloc] init];
-    _timeImageView = [[UIImageView alloc] init];
+    _timeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_clock"]];
     
-    [_posterLabel setFont:STKFont(20)];
+    [_posterLabel setFont:STKFont(16)];
     [_posterLabel setTextColor:STKTextColor];
 
-    [_timeLabel setFont:STKFont(8)];
+    [_timeLabel setFont:STKFont(10)];
     [_timeLabel setTextColor:STKTextTransparentColor];
     
     [_sourceLabel setFont:STKFont(10)];
@@ -54,7 +54,8 @@
     
     [[_avatarView layer] setCornerRadius:16];
     [_avatarView setClipsToBounds:YES];
-
+    
+    [_postTypeView setContentMode:UIViewContentModeCenter];
     
     [self addSubview:_avatarView];
     [self addSubview:_posterLabel];
@@ -80,17 +81,17 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
                                                         toItem:_timeImageView attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[tiv(==8)]-2-[time(==100)]-8-[source]-9-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[tiv(==10.5)]-2-[time(==100)]-8-[source]-9-|"
                                                                  options:NSLayoutFormatAlignAllCenterY metrics:nil views:@{@"tiv" : _timeImageView, @"time" : _timeLabel, @"source" : _sourceLabel}]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
                                                          toItem:_timeImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
 
-    [_posterLabel addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
-                                                            multiplier:1 constant:20]];
+//    [_posterLabel addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
+//                                                            multiplier:1 constant:16]];
 
     [_timeImageView addConstraint:[NSLayoutConstraint constraintWithItem:_timeImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
-                                                               toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:8]];
+                                                               toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:10.5]];
 
 }
 

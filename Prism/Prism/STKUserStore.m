@@ -51,8 +51,6 @@ NSString * const STKUserStoreTransparentLoginFailedReasonKey = @"STKUserStoreTra
 NSString * const STKUserStoreTransparentLoginFailedConnectionValue = @"STKUserStoreTransparentLoginFailedConnectionValue";
 NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUserStoreTransparentLoginFailedAuthenticationValue";
 
-NSString * const STKUserCoverPhotoURLStringKey = @"cover_image_file_path";
-NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
 
 @import CoreData;
 @import Accounts;
@@ -194,9 +192,9 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
     [self executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUpdateProfile];
         [c setParameters:info];
-        [c addQueryValue:[[self currentUser] profileID] forKey:@"profile"];
+        [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"profile"];
         [c setContext:[self context]];
-        [c setJsonRootObject:[self currentUser]];
+        [c setJsonRootObject:[[self currentUser] personalProfile]];
         [c getWithSession:[self session] completionBlock:^(STKUser *u, NSError *err) {
             if(!err) {
                 [[self context] save:nil];
@@ -212,14 +210,13 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
 {
     [self executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
-        [c addQueryValue:[[STKBaseStore store] transformLookupValue:STKUserTypePersonal
-                                                            forType:STKLookupTypeProfileType]
+        [c addQueryValue:STKProfileTypePersonal
                   forKey:@"profile_type"];
-        [c addQueryObject:[self currentUser]
-              missingKeys:nil
-               withKeyMap:@{@"profileID" : @"profile", @"userID" : @"entity"}];
-        
-        [c setModelGraph:@{@"profile" : @[[self currentUser]]}];
+        [c addQueryValue:[[self currentUser] userID] forKey:@"entity"];
+//        [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"profile"];
+        [c addQueryValue:@"0" forKey:@"offset"];
+        [c addQueryValue:@"1" forKey:@"limit"];
+        [c setModelGraph:@{@"profile" : @[[[self currentUser] personalProfile]]}];
         
         [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
             STKUser *u = nil;
@@ -280,7 +277,7 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
             [self validateWithTwitterToken:token secret:secret completion:^(STKUser *user, NSError *valErr) {
                 if(!valErr) {
                     [self authenticateUser:user];
-                    [user setExternalServiceType:STKProfileInformationExternalServiceTwitter];
+                    [user setExternalServiceType:STKUserExternalSystemTwitter];
                     [user setAccountStoreID:[acct identifier]];
                     
                     [[self context] save:nil];
@@ -433,7 +430,7 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
                 if(!valError) {
                     [self authenticateUser:user];
 
-                    [user setExternalServiceType:STKProfileInformationExternalServiceFacebook];
+                    [user setExternalServiceType:STKUserExternalSystemFacebook];
                     [user setAccountStoreID:[acct identifier]];
                     
                     [[self context] save:nil];
@@ -563,7 +560,7 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
                 if(!err) {
                     [self authenticateUser:u];
 
-                    [u setExternalServiceType:STKProfileInformationExternalServiceGoogle];
+                    [u setExternalServiceType:STKUserEndpointValidateGoogle];
                     [[self context] save:nil];
                     
                     block(u, nil, nil);
@@ -679,12 +676,8 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
 {
     STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRegister];
     
-    STKProfileInformation *transformedInfo = [info copy];
-    
-    [transformedInfo setGender:[[STKBaseStore store] transformLookupValue:[info gender] forType:STKLookupTypeGender]];
-    
     NSArray *missingKeys = nil;
-    BOOL verified = [c addQueryObject:transformedInfo
+    BOOL verified = [c addQueryObject:info
                           missingKeys:&missingKeys
                            withKeyMap:@{@"firstName" : @"first_name",
                                         @"lastName" : @"last_name",
@@ -708,12 +701,11 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
         return;
     }
     
-    if([transformedInfo externalService] && [transformedInfo externalID]) {
-        [transformedInfo setExternalService:[[STKBaseStore store] transformLookupValue:[info externalService] forType:STKLookupTypeSocial]];
-        [c addQueryObject:transformedInfo missingKeys:nil withKeyMap:@{@"externalID" : @"external_id",
-                                                                       @"externalService" : @"external_system"}];
+    if([info externalService] && [info externalID]) {
+        [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalID" : @"external_id",
+                                                            @"externalService" : @"external_system"}];
     } else if([info password]) {
-        [c addQueryObject:transformedInfo missingKeys:nil withKeyMap:@{@"password" : @"password"}];
+        [c addQueryObject:info missingKeys:nil withKeyMap:@{@"password" : @"password"}];
     } else {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments
@@ -742,11 +734,11 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
             };
             
             // Now let us authenticate
-            if([[info externalService] isEqualToString:STKProfileInformationExternalServiceGoogle]) {
+            if([[info externalService] isEqualToString:STKUserExternalSystemGoogle]) {
                 [self validateWithGoogle:[info token] completion:validationBlock];
-            } else if([[info externalService] isEqualToString:STKProfileInformationExternalServiceFacebook]) {
+            } else if([[info externalService] isEqualToString:STKUserExternalSystemFacebook]) {
                 [self validateWithFacebook:[info token] completion:validationBlock];
-            } else if([[info externalService] isEqualToString:STKProfileInformationExternalServiceTwitter]) {
+            } else if([[info externalService] isEqualToString:STKUserEndpointValidateTwitter]) {
                 [self validateWithTwitterToken:[info token] secret:[info secret] completion:validationBlock];
             } else {
                 [self validateWithEmail:[info email]
@@ -786,7 +778,7 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
     };
     
     NSString *serviceType = [u externalServiceType];
-    if([serviceType isEqualToString:STKProfileInformationExternalServiceFacebook]) {
+    if([serviceType isEqualToString:STKUserExternalSystemFacebook]) {
         [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
             if([[acct identifier] isEqualToString:[u accountStoreID]]) {
                 [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *u, NSError *err) {
@@ -796,7 +788,7 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
                 validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
             }
         }];
-    } else if([serviceType isEqualToString:STKProfileInformationExternalServiceGoogle]) {
+    } else if([serviceType isEqualToString:STKUserExternalSystemGoogle]) {
         [self fetchGoogleAccount:^(GTMOAuth2Authentication *auth, NSError *err) {
             if(!err) {
                 [self validateWithGoogle:[auth accessToken] completion:^(STKUser *u, NSError *err) {
@@ -810,7 +802,7 @@ NSString * const STKUserProfilePhotoURLStringKey = @"profile_image_file_path";
                 validationBlock(nil, err);
             }
         }];
-    } else if([serviceType isEqualToString:STKProfileInformationExternalServiceTwitter]) {
+    } else if([serviceType isEqualToString:STKUserExternalSystemTwitter]) {
         [self fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
             if(!err) {
                 ACAccount *activeAccount = nil;

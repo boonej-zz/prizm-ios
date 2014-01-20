@@ -93,11 +93,11 @@
     [[UINavigationBar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
              forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    [[UIToolbar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
+   /* [[UIToolbar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
                             forToolbarPosition:UIBarPositionAny
                                     barMetrics:UIBarMetricsDefault];
     [[UIToolbar appearance] setShadowImage:[[UIImage alloc] init]
-                        forToolbarPosition:UIBarPositionAny];
+                        forToolbarPosition:UIBarPositionAny];*/
     UIGraphicsEndImageContext();
 
 }

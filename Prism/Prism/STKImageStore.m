@@ -67,9 +67,9 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     return _cachePath;
 }
 
-- (BOOL)fetchImageForURLString:(NSString *)url completion:(void (^)(UIImage *img))block
+- (BOOL)fetchImageForURLString:(NSString *)urlString completion:(void (^)(UIImage *img))block
 {
-    NSString *cachePath = [self cachePathForURLString:url];
+    NSString *cachePath = [self cachePathForURLString:urlString];
     NSData *fileData = [[NSData alloc] initWithContentsOfFile:cachePath];
     if(fileData) {
         block([UIImage imageWithData:fileData]);
@@ -89,7 +89,13 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         [[self failedFetchMap] removeObjectForKey:cachePath];
     }
     
-    NSURLSessionDownloadTask *t = [[self fetchSession] downloadTaskWithURL:[NSURL URLWithString:url]
+    NSURL *url = [NSURL URLWithString:urlString];
+    if(!url) {
+        block(nil);
+        return YES;
+    }
+    
+    NSURLSessionDownloadTask *t = [[self fetchSession] downloadTaskWithURL:url
                                                          completionHandler:
                                    ^(NSURL *location, NSURLResponse *response, NSError *error) {
                                        if(!error) {
@@ -158,6 +164,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         [df setDateFormat:@"yyyyMMddhhmmss"];
         
         NSString *fileName = [NSString stringWithFormat:@"%@_%@.jpg", [df stringFromDate:[NSDate date]], md5];
+        fileName = [fileName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
         
         S3PutObjectRequest *req = [[S3PutObjectRequest alloc] initWithKey:fileName inBucket:STKImageStoreBucketName];
         
@@ -174,7 +181,9 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
                 block(fullPath, nil);
             });
         } else {
-            block(nil, [response error]);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(nil, [response error]);
+            });
         }
     });
 }

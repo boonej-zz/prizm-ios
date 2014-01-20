@@ -217,12 +217,16 @@
     STKPost *p = [[self items] objectAtIndex:[ip row]];
     [[c contentImageView] setUrlString:[p imageURLString]];
 
-    [[[c headerView] avatarView] setUrlString:[p iconURLString]];
-    [[[c headerView] posterLabel] setText:[p authorName]];
-    [[[c headerView] timeLabel] setText:@"Now:"];
-    [[[c headerView] sourceLabel] setText:[p postOrigin]];
+    [[[c headerView] avatarView] setUrlString:[p creatorProfilePhotoURL]];
+    [[[c headerView] posterLabel] setText:[p creatorName]];
+    [[[c headerView] timeLabel] setText:@"Now"];
+//    if([p externalSystemID])
+        //[[[c headerView] sourceLabel] setText:[p postOrigin]];
     [[[c headerView] postTypeView] setImage:[p typeImage]];
 
+    [[c commentCountLabel] setText:[p commentCount]];
+    [[c likeCountLabel] setText:[p likeCount]];
+    
     NSMutableString *str = [[NSMutableString alloc] init];
     for(NSString *s in [p hashTags])
         [str appendFormat:@"#%@ ", s];
