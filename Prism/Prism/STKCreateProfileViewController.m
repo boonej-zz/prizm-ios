@@ -412,7 +412,7 @@ const long STKCreateProgressGeocoding = 4;
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingProfile];
         
         CGRect r = CGRectMake(0, 0, 100, 100);
-        UIImage *resizedImage = [[STKImageStore store] uploadImage:img size:r.size completion:^(NSString *URLString, NSError *err) {
+        UIImage *resizedImage = [[STKImageStore store] uploadImage:img size:r.size intoDirectory:@"profile" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self profileInformation] setProfilePhotoURLString:URLString];
             } else {
@@ -454,7 +454,7 @@ const long STKCreateProgressGeocoding = 4;
     UIImage *resizedImage = img;
     if(img) {
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingCover];
-        resizedImage = [[STKImageStore store] uploadImage:img size:CGSizeMake(320, 200) completion:^(NSString *URLString, NSError *err) {
+        resizedImage = [[STKImageStore store] uploadImage:img size:CGSizeMake(320, 200) intoDirectory:@"covers" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self profileInformation] setCoverPhotoURLString:URLString];
             } else {

@@ -9,10 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "STKPost.h"
 
+
+@class STKUser;
+
 extern NSString * const STKContentStoreErrorDomain;
 typedef enum {
     STKContentStoreErrorCodeMissingArguments, // @[arg0, ...]
 } STKContentStoreErrorCode;
+
+typedef enum {
+    STKContentStoreFetchDirectionNewer,
+    STKContentStoreFetchDirectionOlder,
+    STKContentStoreFetchDirectionNone
+} STKContentStoreFetchDirection;
 
 @interface STKContentStore : NSObject
 
@@ -27,6 +36,12 @@ typedef enum {
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
 
 
-- (void)fetchProfilePostsForCurrentUser:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
+- (void)fetchProfilePostsForCurrentUserInDirection:(STKContentStoreFetchDirection)fetchDirection
+                                     referencePost:(STKPost *)referencePost
+                                        completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
+
+- (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
+                       referencePost:(STKPost *)referencePost
+                          completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
 
 @end

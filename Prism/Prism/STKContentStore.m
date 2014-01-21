@@ -101,42 +101,63 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
     }];
 }
 
-- (void)fetchProfilePostsForCurrentUser:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block
+- (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
+                       referencePost:(STKPost *)referencePost
+                          completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block
 {
-    // Set predicate to search for where poster or receiver is this user
-    NSFetchRequest *cacheRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
-    [cacheRequest setFetchBatchSize:30];
-    [cacheRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted"
-                                                                     ascending:NO]]];
-    
-    NSArray *results = [[self context] executeFetchRequest:cacheRequest error:nil];
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        block(results, nil, YES);
-    }];
-
     [[STKUserStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
-        [c addQueryObject:[[[STKUserStore store] currentUser] personalProfile]
-              missingKeys:nil
-               withKeyMap:@{@"profileID" : @"profile"}];
-        [c addQueryValue:@"20" forKey:@"limit"];
+        [c addQueryValue:@"30" forKey:@"limit"];
+        [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
+        
+        if(referencePost) {
+            if(fetchDirection == STKContentStoreFetchDirectionNewer) {
+                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_min"];
+            } else if(fetchDirection == STKContentStoreFetchDirectionOlder) {
+                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_max"];
+            }
+        } else {
+            // Without a reference post, we don't have any posts so we just need to grab off the top of the stack
+            
+        }
         
         
-        [c setContext:[self context]];
         [c setModelGraph:@{@"post" : @[@"STKPost"]}];
-        [c setExistingMatchMap:@{@"postID" : @"post"}];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
             if(!err) {
-                [[self context] save:nil];
+                block([obj objectForKey:@"post"], nil, NO);
+            } else {
+                block(nil, err, NO);
+            }
+        }];
+    }];
+}
 
-                NSFetchRequest *newCacheRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
-                [newCacheRequest setFetchBatchSize:30];
-                [newCacheRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted"
-                                                                                    ascending:NO]]];
-                
-                NSArray *results = [[self context] executeFetchRequest:newCacheRequest error:nil];
-                block(results, nil, NO);
-                
+- (void)fetchProfilePostsForCurrentUserInDirection:(STKContentStoreFetchDirection)fetchDirection
+                                     referencePost:(STKPost *)referencePost
+                                        completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block
+{
+    [[STKUserStore store] executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
+        [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
+        [c addQueryValue:@"20" forKey:@"limit"];
+
+        if(referencePost) {
+            if(fetchDirection == STKContentStoreFetchDirectionNewer) {
+                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_min"];
+            } else if(fetchDirection == STKContentStoreFetchDirectionOlder) {
+                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_max"];
+            }
+        } else {
+            // Without a reference post, we don't have any posts so we just need to grab off the top of the stack
+            
+        }
+        
+        
+        [c setModelGraph:@{@"post" : @[@"STKPost"]}];
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            if(!err) {
+                block([obj objectForKey:@"post"], nil, NO);
             } else {
                 block(nil, err, NO);
             }
@@ -165,8 +186,8 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
     [c addQueryValue:[[[STKUserStore store] currentUser] userID]
               forKey:@"entity"];
     [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
-
-    [c addQueryValue:@"1" forKey:@"visibility_type"];
+    [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"posting_profile"];
+    [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
     [c addQueryValue:@"x" forKey:@"title"];
     
     for(NSString *key in info) {

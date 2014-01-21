@@ -138,19 +138,19 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
                                                range:NSMakeRange(0, [url length])];
 }
 
-- (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz completion:(void (^)(NSString *URLString, NSError *err))block
+- (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block
 {
-    UIGraphicsBeginImageContextWithOptions(sz, YES, 0.0);
+    UIGraphicsBeginImageContextWithOptions(sz, YES, 1.0);
     [image drawInRect:CGRectMake(0, 0, sz.width, sz.height)];
     UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    [self uploadImage:resizedImage completion:block];
+    [self uploadImage:resizedImage intoDirectory:directory completion:block];
 
     return resizedImage;
 }
 
-- (void)uploadImage:(UIImage *)image completion:(void (^)(NSString *URLString, NSError *err))block
+- (void)uploadImage:(UIImage *)image intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
@@ -159,11 +159,11 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         
         CC_MD5(cStr, (uint32_t)[imageData length], result);
         
-        NSString *md5 = [[[NSData alloc] initWithBytes:result length:CC_MD5_DIGEST_LENGTH] base64EncodedStringWithOptions:0];
+        NSUUID *uuid = [[NSUUID alloc] init];
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyyMMddhhmmss"];
         
-        NSString *fileName = [NSString stringWithFormat:@"%@_%@.jpg", [df stringFromDate:[NSDate date]], md5];
+        NSString *fileName = [NSString stringWithFormat:@"%@/%@_%@.jpg", directory, [df stringFromDate:[NSDate date]], [uuid UUIDString]];
         fileName = [fileName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
         
         S3PutObjectRequest *req = [[S3PutObjectRequest alloc] initWithKey:fileName inBucket:STKImageStoreBucketName];

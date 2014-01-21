@@ -20,7 +20,7 @@
 
 @interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) NSArray *posts;
+@property (nonatomic, strong) NSMutableArray *posts;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -35,6 +35,7 @@
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
+        _posts = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -52,17 +53,19 @@
         [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
                         withRowAnimation:UITableViewRowAnimationNone];
     }];
-    [[STKContentStore store] fetchProfilePostsForCurrentUser:^(NSArray *posts, NSError *err, BOOL moreComing) {
-        if(!err) {
-            _posts = posts;
-        }
-        if(moreComing) {
-            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
-                           withRowAnimation:UITableViewRowAnimationNone];
-        } else {
-            
-        }
-    }];
+    [[STKContentStore store] fetchProfilePostsForCurrentUserInDirection:STKContentStoreFetchDirectionNewer
+                                                          referencePost:[[self posts] firstObject]
+                                                             completion:^(NSArray *posts, NSError *err, BOOL moreComing) {
+                                                                 if(!err) {
+                                                                     [[self posts] addObjectsFromArray:posts];
+                                                                     [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                                     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
+                                                                                     withRowAnimation:UITableViewRowAnimationNone];
+
+                                                                 } else {
+                                                                     // Do nothing?
+                                                                 }
+                                                             }];
 }
 
 - (void)viewDidLoad
@@ -133,12 +136,17 @@
     
     [[c coverPhotoImageView] setUrlString:[p coverPhotoPath]];
     [[c avatarView] setUrlString:[p profilePhotoPath]];
+    
 }
 
 - (void)populateInitialProfileStatisticsCell:(STKInitialProfileStatisticsCell *)c
 {
     [[c circleView] setCircleTitles:@[@"Followers", @"Following", @"Posts"]];
-    [[c circleView] setCircleValues:@[@"0", @"0", @"0"]];
+
+    NSString *followerCount = [[[[STKUserStore store] currentUser] personalProfile] followedCount];
+    NSString *followingCount = [[[[STKUserStore store] currentUser] personalProfile] followingCount];
+    // NSString *postCount;
+    [[c circleView] setCircleValues:@[followerCount, followingCount, @"0"]];
 }
 
 - (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row

@@ -20,10 +20,11 @@ NSString * const STKProfileTypeCommunity = @"7";
 
 NSString * const STKProfileCoverPhotoURLStringKey = @"cover_image_file_path";
 NSString * const STKProfileProfilePhotoURLStringKey = @"profile_image_file_path";
-
+NSString * const STKProfileProfileIDKey = @"profile";
 
 @implementation STKProfile
 
+@dynamic accoladeCount, trustCount, followedCount, followingCount;
 @dynamic profileID;
 @dynamic profilePhotoPath;
 @dynamic coverPhotoPath;
@@ -37,14 +38,21 @@ NSString * const STKProfileProfilePhotoURLStringKey = @"profile_image_file_path"
 {
     [self bindFromDictionary:jsonObject keyMap:
     @{
-      @"profile" : @"profileID",
+      STKProfileProfileIDKey : @"profileID",
       @"name" : @"name",
       STKProfileProfilePhotoURLStringKey : @"profilePhotoPath",
       STKProfileCoverPhotoURLStringKey: @"coverPhotoPath",
       @"profile_type" : @"profileType",
       @"city" : @"city",
-      @"region" : @"state"
+      @"region" : @"state",
+      @"dv_profiles_followed_by_count" : @"followedCount",
+      @"dv_profiles_following_count" : @"followingCount",
+      @"dv_trust_count" : @"trustCount",
+      @"dv_accolade_count" : @"accoladeCount"
     }];
+    [self setProfilePhotoPath:[[self profilePhotoPath] stringByReplacingOccurrencesOfString:@"\\" withString:@""]];
+    [self setCoverPhotoPath:[[self coverPhotoPath] stringByReplacingOccurrencesOfString:@"\\" withString:@""]];
+
     return nil;
 }
 

@@ -8,6 +8,7 @@
 
 #import "STKPost.h"
 #import "STKUser.h"
+#import "STKUserStore.h"
 
 NSString * const STKPostLocationLatitudeKey = @"location_lat";
 NSString * const STKPostLocationLongitudeKey = @"location_long";
@@ -30,12 +31,6 @@ NSString * const STKPostTypeAccolade = @"6";
 
 @implementation STKPost
 
-@dynamic commentCount, coordinate, creatorID, creatorName, creatorProfilePhotoURL, datePosted;
-@dynamic externalSystemID, hashTagsData, imageURLString, likeCount, locationName, postID, text;
-@dynamic type, user, profileID;
-@dynamic referenceTimestamp;
-
-@synthesize hashTags = _hashTags;
 
 - (void)setCoordinate:(CLLocationCoordinate2D)coordinate
 {
@@ -62,30 +57,31 @@ NSString * const STKPostTypeAccolade = @"6";
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
-    
     [self bindFromDictionary:jsonObject keyMap:@{
                                                  @"post" : @"postID",
                                                  STKPostTextKey : @"text",
+                                                 STKPostTypeKey : @"type",
                                                  STKPostLocationNameKey : @"locationName",
-                                                 @"created" : ^(id inValue) {
-                                                     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                                                     [df setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
-                                                     [self setDatePosted:[df dateFromString:inValue]];
-                                                 },
                                                  @"created" : @"referenceTimestamp",
                                                  STKPostURLKey : @"imageURLString",
                                                  @"external_system" : @"externalSystemID",
                                                  @"like_count" : @"likeCount",
-                                                 @"comment_count" : @"commentCount",
-                                                 @"profile" : @"profileID"
+                                                 @"comment_count" : @"commentCount"
     }];
     
-    NSDictionary *creator = [jsonObject objectForKey:@"creator"];
-    [self setCreatorID:[creator objectForKey:@"entity"]];
-    NSString *firstName = [creator objectForKey:@"first_name"];
-    NSString *lastName = [creator objectForKey:@"last_name"];
-    [self setCreatorName:[NSString stringWithFormat:@"%@ %@", firstName, lastName]];
+    static NSDateFormatter *df = nil;
+    if(!df) {
+        df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"YYYY-MM-dd HH:mm:ss.SSSSSS"];
+    }
     
+    [self setDatePosted:[df dateFromString:[self referenceTimestamp]]];
+    
+    [self setImageURLString:[[self imageURLString] stringByReplacingOccurrencesOfString:@"\\" withString:@""]];
+    
+    [self setRecepientProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"profile"]]];
+    [self setCreatorProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"posting_profile"]]];
+     
     NSString *lat = [jsonObject objectForKey:STKPostLocationLatitudeKey];
     NSString *lon = [jsonObject objectForKey:STKPostLocationLongitudeKey];
     if(lat && lon && ![lat isKindOfClass:[NSNull class]] && ![lon isKindOfClass:[NSNull class]]) {
@@ -98,19 +94,6 @@ NSString * const STKPostTypeAccolade = @"6";
     return nil;
 }
 
-- (NSArray *)hashTags
-{
-    if(!_hashTags) {
-        if([[self hashTagsData] length] > 0) {
-            _hashTags = [NSJSONSerialization JSONObjectWithData:[self hashTagsData]
-                                                        options:0
-                                                          error:nil];
-        } else {
-            _hashTags = @[];
-        }
-    }
-    return _hashTags;
-}
 
 - (UIImage *)typeImage
 {

@@ -155,6 +155,21 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     [[self authorizedRequestQueue] removeAllObjects];
 }
 
+- (STKProfile *)profileForProfileDictionary:(NSDictionary *)profileDict
+{
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKProfile"];
+    [req setPredicate:[NSPredicate predicateWithFormat:@"profileID == %@", [profileDict objectForKey:STKProfileProfileIDKey]]];
+    
+    STKProfile *prof = [[[self context] executeFetchRequest:req error:nil] lastObject];
+    if(!prof) {
+        prof = [NSEntityDescription insertNewObjectForEntityForName:@"STKProfile"
+                                             inManagedObjectContext:[self context]];
+    }
+    [prof readFromJSONObject:profileDict];
+    
+    return prof;
+}
+
 - (void)setCurrentUser:(STKUser *)currentUser
 {
     _currentUser = currentUser;

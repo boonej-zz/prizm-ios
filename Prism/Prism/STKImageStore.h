@@ -17,9 +17,9 @@
 // The return value of this method signifies nothing about the image being available/returned/valid.
 - (BOOL)fetchImageForURLString:(NSString *)url completion:(void (^)(UIImage *img))block;
 
-- (void)uploadImage:(UIImage *)image completion:(void (^)(NSString *URLString, NSError *err))block;
+- (void)uploadImage:(UIImage *)image intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block;
 
 // Returns the resized local image
-- (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz completion:(void (^)(NSString *URLString, NSError *err))block;
+- (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block;
 
 @end

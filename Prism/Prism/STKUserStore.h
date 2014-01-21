@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class STKUser, STKPost, STKActivityItem, STKRequestItem, STKProfileInformation;
-@class ACAccount;
+@class ACAccount, STKProfile;
 
 extern NSString * const STKUserStoreErrorDomain;
 typedef enum {
@@ -40,11 +40,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 - (void)executeAuthorizedRequest:(void (^)(void))request;
 
-/*
-- (void)fetchFeedForCurrentUser:(void (^)(NSArray *posts, NSError *error, BOOL moreComing))block;
-- (void)fetchActivityForCurrentUser:(void (^)(NSArray *activity, NSError *error, BOOL moreComing))block;
-- (void)fetchRecommendedHashtags:(NSString *)hashtag completion:(void (^)(NSArray *hashtags, NSError *error))block;
-*/
+- (STKProfile *)profileForProfileDictionary:(NSDictionary *)profileDict;
+
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
 
 - (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block;

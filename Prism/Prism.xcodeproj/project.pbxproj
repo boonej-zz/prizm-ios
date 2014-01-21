@@ -4071,6 +4071,8 @@
 				BEFAC19E183D512E005E8933 /* STKRequestItem.m */,
 				BEE0FA41185B621A009FCA3B /* STKProfileInformation.h */,
 				BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */,
+				BEF216FA188DDA1500B35C51 /* STKProfile.h */,
+				BEF216FB188DDA1500B35C51 /* STKProfile.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -4123,8 +4125,6 @@
 				BEFCEE0C182C212800648B9F /* STKImageStore.h */,
 				BEFCEE0D182C212800648B9F /* STKImageStore.m */,
 				BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */,
-				BEF216FA188DDA1500B35C51 /* STKProfile.h */,
-				BEF216FB188DDA1500B35C51 /* STKProfile.m */,
 				BE6EB87F186395F300E8009D /* STKErrorStore.h */,
 				BE6EB880186395F300E8009D /* STKErrorStore.m */,
 				BE1FC3BB186CC966003464E1 /* STKBaseStore.h */,

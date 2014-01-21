@@ -23,7 +23,7 @@ extern NSString * const STKProfileTypeCommunity;
 
 extern NSString * const STKProfileCoverPhotoURLStringKey;
 extern NSString * const STKProfileProfilePhotoURLStringKey;
-
+extern NSString * const STKProfileProfileIDKey;
 
 @interface STKProfile : NSManagedObject <STKJSONObject>
 
@@ -34,5 +34,11 @@ extern NSString * const STKProfileProfilePhotoURLStringKey;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * city;
 @property (nonatomic, retain) NSString * state;
+@property (nonatomic, strong) NSString *accoladeCount;
+@property (nonatomic, strong) NSString *followingCount;
+@property (nonatomic, strong) NSString *followedCount;
+@property (nonatomic, strong) NSString *trustCount;
 @property (nonatomic, retain) STKUser *user;
+
+
 @end

@@ -11,8 +11,7 @@
 #import "STKJSONObject.h"
 @import CoreLocation;
 
-@class STKUser;
-
+@class STKProfile;
 
 extern NSString * const STKPostTypeAspiration;
 extern NSString * const STKPostTypeInspiration;
@@ -32,7 +31,7 @@ extern NSString * const STKPostURLKey;
 extern NSString * const STKPostTextKey;
 extern NSString * const STKPostTypeKey;
 
-@interface STKPost : NSManagedObject <STKJSONObject>
+@interface STKPost : NSObject <STKJSONObject>
 
 @property (nonatomic, strong) NSString *postID;
 @property (nonatomic, strong) NSString *profileID;
@@ -41,27 +40,20 @@ extern NSString * const STKPostTypeKey;
 @property (nonatomic, strong) NSString *locationName;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 
-@property (nonatomic, strong) NSString *creatorID;
-@property (nonatomic, strong) NSString *creatorName;
-@property (nonatomic, strong) NSString *creatorProfilePhotoURL;
+@property (nonatomic, strong) STKProfile *creatorProfile;
+@property (nonatomic, strong) STKProfile *recepientProfile;
 
-@property (nonatomic, retain) NSDate *datePosted;
+@property (nonatomic, strong) NSDate *datePosted;
 @property (nonatomic, strong) NSString *referenceTimestamp;
 
 @property (nonatomic, retain) NSString *imageURLString;
 
 @property (nonatomic, retain) NSString *externalSystemID;
 
-// This is missing!
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSString *commentCount;
 @property (nonatomic) NSString *likeCount;
 
-@property (nonatomic, retain) STKUser *user;
-
-// In use?
-@property (nonatomic, readonly) NSArray *hashTags;
-@property (nonatomic, retain) NSData * hashTagsData;
 
 - (UIImage *)typeImage;
 

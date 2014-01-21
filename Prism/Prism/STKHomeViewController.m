@@ -217,8 +217,8 @@
     STKPost *p = [[self items] objectAtIndex:[ip row]];
     [[c contentImageView] setUrlString:[p imageURLString]];
 
-    [[[c headerView] avatarView] setUrlString:[p creatorProfilePhotoURL]];
-    [[[c headerView] posterLabel] setText:[p creatorName]];
+//    [[[c headerView] avatarView] setUrlString:[p creatorProfilePhotoURL]];
+//    [[[c headerView] posterLabel] setText:[p creatorName]];
     [[[c headerView] timeLabel] setText:@"Now"];
 //    if([p externalSystemID])
         //[[[c headerView] sourceLabel] setText:[p postOrigin]];
@@ -226,11 +226,6 @@
 
     [[c commentCountLabel] setText:[p commentCount]];
     [[c likeCountLabel] setText:[p likeCount]];
-    
-    NSMutableString *str = [[NSMutableString alloc] init];
-    for(NSString *s in [p hashTags])
-        [str appendFormat:@"#%@ ", s];
-    [[c hashTagLabel] setText:str];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -261,7 +256,7 @@
     [super viewWillAppear:animated];
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
-    
+    /*
     [[STKContentStore store] fetchPostsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *posts, NSError *error, BOOL moreComing) {
         if(!error) {
             if([self items]) {
@@ -274,7 +269,7 @@
         } else {
             
         }
-    }];
+    }];*/
 }
 
 - (void)viewDidAppear:(BOOL)animated

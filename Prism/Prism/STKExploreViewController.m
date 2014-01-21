@@ -11,12 +11,15 @@
 #import "STKExploreCell.h"
 #import "STKPanelViewController.h"
 #import "STKRenderServer.h"
+#import "STKTriImageCell.h"
+#import "STKPost.h"
+#import "STKResolvingImageView.h"
+#import "STKContentStore.h"
 
-@interface STKExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface STKExploreViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
-
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *posts;
 @end
 
 @implementation STKExploreViewController
@@ -26,12 +29,24 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
-        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        
+        UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_search"]
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(search:)];
+        [[self navigationItem] setRightBarButtonItem:searchButton];
+        
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_explore"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
         [self setAutomaticallyAdjustsScrollViewInsets:YES];
+        _posts = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (void)search:(id)sender
+{
+    
 }
 
 - (IBAction)temporaryShowPanel:(id)sender
@@ -46,27 +61,70 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIEdgeInsets currentInset = [[self collectionView] contentInset];
-    currentInset.top += [[self toolbar] bounds].size.height;
-    [[self collectionView] setContentInset:currentInset];
-    [[self collectionView] registerNib:[UINib nibWithNibName:@"STKExploreCell" bundle:nil]
-            forCellWithReuseIdentifier:@"STKExploreCell"];
-    [[self collectionView] setBackgroundColor:[UIColor clearColor]];
-    [[self toolbar] setTranslucent:YES];
+    [[self tableView] setRowHeight:106];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (void)viewWillAppear:(BOOL)animated
 {
-    return 20;
+    [super viewWillAppear:animated];
+    [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer referencePost:[[self posts] firstObject]
+                                               completion:^(NSArray *posts, NSError *err, BOOL moreComing) {
+                                                   if(!err) {
+                                                       [[self posts] addObjectsFromArray:posts];
+                                                       [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                       [[self tableView] reloadData];
+                                                       
+                                                   } else {
+                                                       // Do nothing?
+                                                   }
+                                               }];
 }
 
-// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    STKExploreCell *c = (STKExploreCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKExploreCell"
-                                                                        forIndexPath:indexPath];
+    [cell setBackgroundColor:[UIColor clearColor]];
+}
+
+
+- (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if([[self posts] count] % 3 > 0)
+        return [[self posts] count] / 3 + 1;
+    return [[self posts] count] / 3;
+}
+
+- (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row
+{
+    int arrayIndex = row * 3;
     
-    [[c imageView] setImage:[UIImage imageNamed:@"34"]];
+    if(arrayIndex + 0 < [[self posts] count]) {
+        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 0];
+        [[c leftImageView] setUrlString:[p imageURLString]];
+    } else {
+        [[c leftImageView] setUrlString:nil];
+    }
+    if(arrayIndex + 1 < [[self posts] count]) {
+        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 1];
+        [[c centerImageView] setUrlString:[p imageURLString]];
+    } else {
+        [[c centerImageView] setUrlString:nil];
+    }
+    
+    if(arrayIndex + 2 < [[self posts] count]) {
+        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 2];
+        [[c rightImageView] setUrlString:[p imageURLString]];
+    } else {
+        [[c rightImageView] setUrlString:nil];
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
+    [self populateTriImageCell:c forRow:[indexPath row]];
+    
     return c;
 }
 

@@ -14,11 +14,11 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="C6g-Lp-J3b" customClass="STKResolvingImageView">
-                        <rect key="frame" x="0.0" y="0.0" width="106" height="106"/>
+                        <rect key="frame" x="2" y="1" width="104" height="104"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="AXx-Jx-aDt">
-                        <rect key="frame" x="0.0" y="0.0" width="106" height="106"/>
+                        <rect key="frame" x="0.0" y="0.0" width="105" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <state key="normal">
@@ -29,11 +29,11 @@
                         </connections>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="aMb-88-5jA" customClass="STKResolvingImageView">
-                        <rect key="frame" x="106" y="0.0" width="106" height="106"/>
+                        <rect key="frame" x="108" y="1" width="104" height="104"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HdE-Kl-l7b">
-                        <rect key="frame" x="106" y="0.0" width="106" height="106"/>
+                        <rect key="frame" x="106" y="0.0" width="105" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <state key="normal">
@@ -44,11 +44,11 @@
                         </connections>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="f7c-d7-fUs" customClass="STKResolvingImageView">
-                        <rect key="frame" x="212" y="0.0" width="107" height="106"/>
+                        <rect key="frame" x="214" y="1" width="104" height="104"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Tay-nr-vU1">
-                        <rect key="frame" x="212" y="0.0" width="107" height="106"/>
+                        <rect key="frame" x="213" y="0.0" width="105" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <state key="normal">
