@@ -7,7 +7,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKCreatePostViewController">
             <connections>
                 <outlet property="categoryCollectionView" destination="y5v-O0-9uB" id="Xn4-wJ-dmL"/>
-                <outlet property="imageButton" destination="ZKf-qE-JMx" id="Uaj-7Q-Q0d"/>
                 <outlet property="imageView" destination="QXR-Ft-Vam" id="T4M-GD-tJw"/>
                 <outlet property="optionCollectionView" destination="BVv-6Z-JvL" id="FEo-Y6-wvF"/>
                 <outlet property="postTextView" destination="1Dz-r9-03S" id="eag-cP-jY7"/>
@@ -100,20 +99,6 @@
                         <outlet property="delegate" destination="-1" id="R2A-G2-GtJ"/>
                     </connections>
                 </collectionView>
-                <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZKf-qE-JMx">
-                    <rect key="frame" x="20" y="98" width="80" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="80" id="QUR-1a-Dyh"/>
-                        <constraint firstAttribute="width" constant="80" id="otU-5I-gNE"/>
-                    </constraints>
-                    <state key="normal" image="upload_camera">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="changeImage:" destination="-1" eventType="touchUpInside" id="3ym-4g-EOn"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -126,10 +111,8 @@
                 <constraint firstItem="LOr-M2-ePT" firstAttribute="top" secondItem="1Dz-r9-03S" secondAttribute="bottom" constant="10" id="QEZ-RP-jSb"/>
                 <constraint firstItem="1Dz-r9-03S" firstAttribute="leading" secondItem="QXR-Ft-Vam" secondAttribute="trailing" constant="8" id="X2j-k6-tqv"/>
                 <constraint firstItem="QXR-Ft-Vam" firstAttribute="top" secondItem="1" secondAttribute="top" constant="98" id="XJo-Ix-lag"/>
-                <constraint firstItem="ZKf-qE-JMx" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" id="a2N-UP-GT9"/>
                 <constraint firstAttribute="trailing" secondItem="0Dx-6c-DLI" secondAttribute="trailing" id="b4c-Fg-trR"/>
                 <constraint firstAttribute="trailing" secondItem="LOr-M2-ePT" secondAttribute="trailing" id="d33-UG-z9j"/>
-                <constraint firstItem="ZKf-qE-JMx" firstAttribute="top" secondItem="1" secondAttribute="top" constant="98" id="dm9-Em-Bx5"/>
                 <constraint firstItem="BVv-6Z-JvL" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="hH0-zX-nYy"/>
                 <constraint firstItem="QXR-Ft-Vam" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" id="iQE-IF-8NE"/>
                 <constraint firstAttribute="trailing" secondItem="BVv-6Z-JvL" secondAttribute="trailing" id="l31-wO-0Gt"/>
@@ -145,6 +128,5 @@
     </objects>
     <resources>
         <image name="img_background" width="309" height="558"/>
-        <image name="upload_camera" width="77" height="77"/>
     </resources>
 </document>

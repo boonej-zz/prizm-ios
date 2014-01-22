@@ -16,7 +16,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3BT-z3-bYi">
                         <rect key="frame" x="0.0" y="0.0" width="319" height="42"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7GV-Hd-UTx">
                         <rect key="frame" x="134" y="0.0" width="165" height="42"/>
@@ -30,10 +30,10 @@
                         </connections>
                     </textField>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Myy-wG-Zm1">
-                        <rect key="frame" x="20" y="11" width="106" height="21"/>
+                        <rect key="frame" x="22" y="11" width="106" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                        <color key="textColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -43,10 +43,10 @@
                     <constraint firstAttribute="trailing" secondItem="3BT-z3-bYi" secondAttribute="trailing" id="Lcc-uh-rBO"/>
                     <constraint firstItem="3BT-z3-bYi" firstAttribute="top" secondItem="Xls-ns-FP9" secondAttribute="top" id="URB-0r-Dj9"/>
                     <constraint firstItem="7GV-Hd-UTx" firstAttribute="leading" secondItem="Myy-wG-Zm1" secondAttribute="trailing" constant="8" id="ZAX-4M-NSY"/>
-                    <constraint firstAttribute="trailing" secondItem="7GV-Hd-UTx" secondAttribute="trailing" constant="20" id="aEQ-Na-UG7"/>
+                    <constraint firstAttribute="trailing" secondItem="7GV-Hd-UTx" secondAttribute="trailing" constant="21.5" id="aEQ-Na-UG7"/>
                     <constraint firstAttribute="bottom" secondItem="7GV-Hd-UTx" secondAttribute="bottom" constant="1" id="aMt-RJ-SKY"/>
                     <constraint firstAttribute="bottom" secondItem="Myy-wG-Zm1" secondAttribute="bottom" constant="11" id="mrH-hd-b4d"/>
-                    <constraint firstItem="Myy-wG-Zm1" firstAttribute="leading" secondItem="Xls-ns-FP9" secondAttribute="leading" constant="20" id="ntf-u1-4ON"/>
+                    <constraint firstItem="Myy-wG-Zm1" firstAttribute="leading" secondItem="Xls-ns-FP9" secondAttribute="leading" constant="21.5" id="ntf-u1-4ON"/>
                     <constraint firstItem="Myy-wG-Zm1" firstAttribute="top" secondItem="Xls-ns-FP9" secondAttribute="top" constant="11" id="rBx-6V-LLv"/>
                     <constraint firstItem="7GV-Hd-UTx" firstAttribute="top" secondItem="Xls-ns-FP9" secondAttribute="top" id="z0s-2l-q7y"/>
                 </constraints>

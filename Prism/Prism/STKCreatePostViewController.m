@@ -71,8 +71,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         ];
         
         _optionItems = @[
-            @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"category_aspirations"]},
-            @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"action" : @"findLocation"},
+                         @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"btn_camera"], @"action" : @"changeImage:"},
+            @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"action" : @"findLocation:"},
             @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"]},
             @{@"key" : @"web", @"image" : [UIImage imageNamed:@"btn_globe"]},
             @{@"key" : @"facebook", @"image" : [UIImage imageNamed:@"btn_facebook"]},
@@ -107,7 +107,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }];
 }
 
-- (void)findLocation
+- (void)findLocation:(id)sender
 {
     if(![self locationManager]) {
         _locationManager = [[CLLocationManager alloc] init];
@@ -256,12 +256,12 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 }
 
-- (int)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
 }
 
-- (int)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if(collectionView == [self categoryCollectionView])
         return [[self categoryItems] count];
@@ -310,9 +310,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                             forKey:STKPostTypeKey];
         [collectionView reloadData];
     } else if(collectionView == [self optionCollectionView]) {
-        NSString *action = [[self optionItems] objectAtIndex:[indexPath row]];
+        NSString *action = [[[self optionItems] objectAtIndex:[indexPath row]] objectForKey:@"action"];
         if(action) {
-            [self performSelector:NSSelectorFromString(action)];
+            [self performSelector:NSSelectorFromString(action) withObject:nil];
         }
     }
 }

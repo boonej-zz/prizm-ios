@@ -14,6 +14,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ay2-kb-Tax">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Prismlogo" translatesAutoresizingMaskIntoConstraints="NO" id="NtM-kg-InZ">
                     <rect key="frame" x="83" y="91" width="154" height="154"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -138,11 +143,15 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="Ay2-kb-Tax" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="1qh-zr-BQ8"/>
                 <constraint firstItem="HV6-tB-Qog" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="3lq-X4-IPf"/>
+                <constraint firstItem="Ay2-kb-Tax" firstAttribute="top" secondItem="1" secondAttribute="top" id="GE1-bD-QCI"/>
                 <constraint firstAttribute="centerX" secondItem="NtM-kg-InZ" secondAttribute="centerX" id="Umc-ZC-hMA"/>
+                <constraint firstAttribute="bottom" secondItem="Ay2-kb-Tax" secondAttribute="bottom" id="ax2-LK-7Te"/>
                 <constraint firstItem="NtM-kg-InZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="91" id="c6b-mB-aNi"/>
                 <constraint firstAttribute="trailing" secondItem="HV6-tB-Qog" secondAttribute="trailing" id="gc0-uO-6Wb"/>
                 <constraint firstAttribute="bottom" secondItem="HV6-tB-Qog" secondAttribute="bottom" constant="20" id="ire-WP-vIA"/>
+                <constraint firstAttribute="trailing" secondItem="Ay2-kb-Tax" secondAttribute="trailing" id="vOg-1o-sXW"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

@@ -50,6 +50,7 @@ const long STKCreateProgressGeocoding = 4;
 @property (weak, nonatomic) IBOutlet UIButton *profilePhotoButton;
 @property (weak, nonatomic) IBOutlet UIButton *coverPhotoButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *tosButton;
 
 
 - (IBAction)previousTapped:(id)sender;
@@ -105,12 +106,16 @@ const long STKCreateProgressGeocoding = 4;
 {
     [super viewDidLoad];
     [[self tableView] setTableFooterView:[self footerView]];
-    [[self tableView] setRowHeight:40];
-    [[self tableView] setSeparatorColor:[UIColor colorWithRed:0 green:0 blue:1 alpha:1]];
-    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [[self tableView] setRowHeight:44];
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
     [[self tableView] setDelaysContentTouches:NO];
+    
+    NSMutableAttributedString *title = [[[self tosButton] attributedTitleForState:UIControlStateNormal] mutableCopy];
+    [title addAttribute:NSUnderlineStyleAttributeName value:@(NSUnderlineStyleSingle) range:NSMakeRange(0, [title length])];
+    [[self tosButton] setAttributedTitle:title forState:UIControlStateNormal];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -580,7 +585,6 @@ const long STKCreateProgressGeocoding = 4;
     if(cellType) {
         if([cellType isEqualToString:@"gender"]) {
             STKGenderCell *c = [STKGenderCell cellForTableView:tableView target:self];
-            [c setBackdropColor:[UIColor clearColor]];
             if([[[self profileInformation] gender] isEqualToString:STKUserGenderFemale]) {
                 [[c femaleButton] setSelected:YES];
                 [[c maleButton] setSelected:NO];
@@ -600,7 +604,6 @@ const long STKCreateProgressGeocoding = 4;
     }
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
-    [c setBackdropColor:[UIColor clearColor]];
     
     [[c label] setText:[item objectForKey:@"title"]];
     NSString *value = [[self profileInformation] valueForKey:[item objectForKey:@"key"]];
