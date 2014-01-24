@@ -17,16 +17,20 @@
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *contentImageView;
 @property (weak, nonatomic) IBOutlet UILabel *hashTagLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *backdropFadeView;
 @property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *commentCountLabel;
 @property (weak, nonatomic) IBOutlet STKPostHeaderView *headerView;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftInset;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightInset;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topInset;
 
 - (IBAction)toggleLike:(id)sender;
 - (IBAction)showComments:(id)sender;
 - (IBAction)addToPrism:(id)sender;
 - (IBAction)sharePost:(id)sender;
 - (IBAction)pinPost:(id)sender;
+- (IBAction)imageTapped:(id)sender;
 
 - (void)populateWithPost:(STKPost *)post;
 

@@ -16,11 +16,19 @@
 #import "STKResolvingImageView.h"
 #import "STKContentStore.h"
 #import "STKPostViewController.h"
+#import "STKUserStore.h"
+#import "STKProfile.h"
+#import "STKSearchProfileCell.h"
+#import "STKProfileViewController.h"
 
 @interface STKExploreViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *posts;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
+
+@property (nonatomic, strong) NSArray *profilesFound;
+
 @end
 
 @implementation STKExploreViewController
@@ -34,19 +42,24 @@
         UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_search"]
                                                                          style:UIBarButtonItemStylePlain
                                                                         target:self
-                                                                        action:@selector(search:)];
+                                                                        action:@selector(toggleSearch:)];
         [[self navigationItem] setRightBarButtonItem:searchButton];
         
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_explore"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
-        [self setAutomaticallyAdjustsScrollViewInsets:YES];
         _posts = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
-- (void)search:(id)sender
+- (void)toggleSearch:(id)sender
 {
+    float top = [[self tableView] contentInset].top;
+    if(-[[self tableView] contentOffset].y == top) {
+        [[self tableView] setContentOffset:CGPointMake(0, [[self searchBar] bounds].size.height - top) animated:YES];
+    } else {
+        [[self tableView] setContentOffset:CGPointMake(0, -top) animated:YES];
+    }
     
 }
 
@@ -87,11 +100,15 @@
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [[self tableView] setTableHeaderView:[self searchBar]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    float top = [[self tableView] contentInset].top;
+    [[self tableView] setContentOffset:CGPointMake(0, [[self searchBar] bounds].size.height - top) animated:YES];
+
     [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
                                             referencePost:[[self posts] firstObject]
                                                completion:^(NSArray *posts, NSError *err, BOOL moreComing) {
@@ -106,17 +123,29 @@
                                                }];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setBackgroundColor:[UIColor clearColor]];
+    if(tableView == [self tableView]) {
+        [cell setBackgroundColor:[UIColor clearColor]];
+        return;
+    }
 }
 
 
 - (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if([[self posts] count] % 3 > 0)
-        return [[self posts] count] / 3 + 1;
-    return [[self posts] count] / 3;
+    if(tableView == [self tableView]) {
+        if([[self posts] count] % 3 > 0)
+            return [[self posts] count] / 3 + 1;
+        return [[self posts] count] / 3;
+    }
+    
+    return [[self profilesFound] count];
 }
 
 - (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row
@@ -146,10 +175,42 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-    [self populateTriImageCell:c forRow:[indexPath row]];
+    if(tableView == [self tableView]) {
+        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
+        [self populateTriImageCell:c forRow:[indexPath row]];
+        
+        return c;
+    }
+    
+    STKSearchProfileCell *c = [STKSearchProfileCell cellForTableView:tableView target:self];
+    STKProfile *p = [[self profilesFound] objectAtIndex:[indexPath row]];
+    [[c nameLabel] setText:[p name]];
+    [[c avatarView] setUrlString:[p profilePhotoPath]];
     
     return c;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView == [[self searchDisplayController] searchResultsTableView]) {
+        STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+        [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
+        [[self navigationController] pushViewController:pvc animated:YES];
+    }
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    if([searchString length] == 0)
+        return YES;
+    
+    [[STKUserStore store] fetchProfilesWithNameMatching:searchString completion:^(NSArray *profiles, NSError *err) {
+        if(!err) {
+            _profilesFound = profiles;
+            [[controller searchResultsTableView] reloadData];
+        }
+    }];
+    return NO;
 }
 
 @end

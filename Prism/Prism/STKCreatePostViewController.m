@@ -60,6 +60,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         
         [[self navigationItem] setLeftBarButtonItem:bbiCancel];
         [[self navigationItem] setRightBarButtonItem:bbiPost];
+        [[self navigationItem] setTitle:@"Prism"];
         
         _categoryItems = @[
             @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"btn_cloud_aspirations"]},
@@ -82,6 +83,15 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         ];
     }
     return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
+                                                                          NSFontAttributeName : STKFont(18)}];
+    [[[self navigationController] navigationBar] setTintColor:[UIColor lightGrayColor]];
+
 }
 
 - (void)setPostImage:(UIImage *)postImage
@@ -202,58 +212,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[self optionCollectionView] registerNib:[UINib nibWithNibName:@"STKImageCollectionViewCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKImageCollectionViewCell"];
     [[self optionCollectionView] setBackgroundColor:[UIColor clearColor]];
-    
-    [self configureGridBackgroundImages];
-}
-
-- (void)configureGridBackgroundImages
-{
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(320, 128), NO, 0.0);
-    [[UIColor colorWithWhite:0 alpha:0.5] set];
-    UIBezierPath *bp = [UIBezierPath bezierPath];
-    
-    // Horizontal lines
-    [bp moveToPoint:CGPointMake(0, 0)];
-    [bp addLineToPoint:CGPointMake(320.0, 0)];
-    [bp moveToPoint:CGPointMake(0.0, 64.0)];
-    [bp addLineToPoint:CGPointMake(320, 64)];
-    [bp moveToPoint:CGPointMake(0, 128)];
-    [bp addLineToPoint:CGPointMake(320, 128)];
-    
-    // Vertical
-    [bp moveToPoint:CGPointMake(320 / 3, 0)];
-    [bp addLineToPoint:CGPointMake(320 / 3, 128)];
-    [bp moveToPoint:CGPointMake(2 * 320 / 3, 0)];
-    [bp addLineToPoint:CGPointMake(2 * 320 / 3, 128)];
-    
-    [bp stroke];
-    [[self categoryCollectionView] setBackgroundView:[[UIImageView alloc] initWithImage:UIGraphicsGetImageFromCurrentImageContext()]];
-    UIGraphicsEndImageContext();
-    
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(320, 82), NO, 0.0);
-    [[UIColor colorWithWhite:0 alpha:0.5] set];
-    bp = [UIBezierPath bezierPath];
-    
-    // Horizontal lines
-    [bp moveToPoint:CGPointMake(0, 0)];
-    [bp addLineToPoint:CGPointMake(320.0, 0)];
-    [bp moveToPoint:CGPointMake(0.0, 41.0)];
-    [bp addLineToPoint:CGPointMake(320, 41)];
-    [bp moveToPoint:CGPointMake(0.0, 82.0)];
-    [bp addLineToPoint:CGPointMake(320, 82)];
-    
-    // Vertical
-    [bp moveToPoint:CGPointMake(320 / 4, 0)];
-    [bp addLineToPoint:CGPointMake(320 / 4, 82)];
-    [bp moveToPoint:CGPointMake(2 * 320 / 4, 0)];
-    [bp addLineToPoint:CGPointMake(2 * 320 / 4, 82)];
-    [bp moveToPoint:CGPointMake(3 * 320 / 4, 0)];
-    [bp addLineToPoint:CGPointMake(3 * 320 / 4, 82)];
-    
-    [bp stroke];
-    [[self optionCollectionView] setBackgroundView:[[UIImageView alloc] initWithImage:UIGraphicsGetImageFromCurrentImageContext()]];
-    UIGraphicsEndImageContext();
-
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -277,8 +235,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                                                forIndexPath:indexPath];
         [[cell label] setText:[item objectForKey:@"title"]];
         [[cell imageView] setImage:[item objectForKey:@"image"]];
-        
-        [[cell label] setTextColor:[UIColor whiteColor]];
         
         if([[[self postInfo] objectForKey:STKPostTypeKey] isEqual:[item objectForKey:STKPostTypeKey]]) {
             [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];

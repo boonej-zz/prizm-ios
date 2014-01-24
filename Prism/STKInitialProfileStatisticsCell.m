@@ -12,7 +12,7 @@
 
 - (void)cellDidLoad
 {
-        [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 
 - (void)layoutContent
@@ -20,6 +20,18 @@
     
 }
 
-- (IBAction)editProfile:(id)sender {
+- (IBAction)editProfile:(id)sender
+{
+    ROUTE(sender);
 }
+- (IBAction)requestTrust:(id)sender
+{
+    ROUTE(sender);
+}
+
+- (IBAction)follow:(id)sender
+{
+    ROUTE(sender);
+}
+
 @end

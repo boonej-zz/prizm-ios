@@ -13,7 +13,12 @@
 @interface STKInitialProfileStatisticsCell : STKTableViewCell
 
 @property (weak, nonatomic) IBOutlet STKCountView *circleView;
+@property (weak, nonatomic) IBOutlet UIButton *followButton;
+@property (weak, nonatomic) IBOutlet UIButton *trustButton;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
 
 - (IBAction)editProfile:(id)sender;
+- (IBAction)requestTrust:(id)sender;
+- (IBAction)follow:(id)sender;
 
 @end

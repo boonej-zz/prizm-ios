@@ -145,7 +145,7 @@
             if(t < 0)
                 t = 0;
             t = (t / 100.0);
-            [[c backdropFadeView] setAlpha:t];
+            [[[c headerView] backdropFadeView] setAlpha:t];
         }
         
         NSIndexPath *lastIndexPathOnScreen = [visibleRows lastObject];

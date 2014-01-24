@@ -17,27 +17,46 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pE3-Ln-jzB">
-                                <rect key="frame" x="189" y="10" width="75" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pE3-Ln-jzB">
+                                <rect key="frame" x="197" y="13" width="103" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Edit Profile">
+                                <inset key="titleEdgeInsets" minX="-40" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="78" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Edit Profile" image="username">
                                     <color key="titleColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="editProfile:" destination="2" eventType="touchUpInside" id="cei-P3-jAu"/>
+                                    <action selector="editProfile:" destination="2" eventType="touchUpInside" id="FXb-As-iER"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZSb-ex-6VT">
-                                <rect key="frame" x="272" y="13" width="28" height="24"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="DAf-8b-z0w">
+                                <rect key="frame" x="181" y="2" width="139" height="46"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" image="username">
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <inset key="titleEdgeInsets" minX="-97" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="79" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Request Trust" image="menu_trust">
+                                    <color key="titleColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="editProfile:" destination="2" eventType="touchUpInside" id="ST9-CH-skY"/>
+                                    <action selector="requestTrust:" destination="2" eventType="touchUpInside" id="lLM-ik-Vwo"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="YqS-S7-smM">
+                                <rect key="frame" x="9" y="13" width="78" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <inset key="titleEdgeInsets" minX="-48" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="51" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Follow" image="username">
+                                    <color key="titleColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="follow:" destination="2" eventType="touchUpInside" id="fow-XR-dVa"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -87,10 +106,14 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="circleView" destination="LiL-4C-O6p" id="rTg-O1-mxw"/>
+                <outlet property="editButton" destination="pE3-Ln-jzB" id="zq5-hm-7aC"/>
+                <outlet property="followButton" destination="YqS-S7-smM" id="Kum-xI-0vk"/>
+                <outlet property="trustButton" destination="DAf-8b-z0w" id="hhf-ap-PNG"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
+        <image name="menu_trust" width="56" height="56"/>
         <image name="username" width="23" height="24"/>
     </resources>
 </document>

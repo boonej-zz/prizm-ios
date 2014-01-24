@@ -13,8 +13,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="80" height="41"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="REZ-Ig-9w5">
+                        <rect key="frame" x="1" y="0.5" width="78" height="38"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Gau-sZ-TH2">
-                        <rect key="frame" x="25" y="6" width="30" height="30"/>
+                        <rect key="frame" x="25" y="5" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="6aw-Rz-vpm"/>
@@ -27,6 +32,10 @@
             <constraints>
                 <constraint firstAttribute="centerX" secondItem="Gau-sZ-TH2" secondAttribute="centerX" id="0O9-gf-jvL"/>
                 <constraint firstAttribute="centerY" secondItem="Gau-sZ-TH2" secondAttribute="centerY" id="5nq-0b-MeY"/>
+                <constraint firstAttribute="bottom" secondItem="REZ-Ig-9w5" secondAttribute="bottom" constant="0.5" id="U5o-AN-MSF"/>
+                <constraint firstItem="REZ-Ig-9w5" firstAttribute="leading" secondItem="67j-3e-Zeq" secondAttribute="leading" constant="0.5" id="Vpw-ZU-PwV"/>
+                <constraint firstItem="REZ-Ig-9w5" firstAttribute="top" secondItem="67j-3e-Zeq" secondAttribute="top" constant="0.5" id="chD-Kc-QJG"/>
+                <constraint firstAttribute="trailing" secondItem="REZ-Ig-9w5" secondAttribute="trailing" constant="0.5" id="v8m-vB-4hS"/>
             </constraints>
             <connections>
                 <outlet property="imageView" destination="Gau-sZ-TH2" id="bjY-oY-dPp"/>

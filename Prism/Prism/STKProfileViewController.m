@@ -24,6 +24,8 @@
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+- (BOOL)isShowingCurrentUserProfile;
+
 @end
 
 @implementation STKProfileViewController
@@ -32,7 +34,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
+
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
@@ -47,26 +49,44 @@
     
 }
 
+- (BOOL)isShowingCurrentUserProfile
+{
+    return [[[self profile] profileID] isEqualToString:[[[[STKUserStore store] currentUser] personalProfile] profileID]];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[STKUserStore store] fetchProfileForCurrentUser:^(STKUser *u, NSError *err) {
-        [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
-                        withRowAnimation:UITableViewRowAnimationNone];
-    }];
-    [[STKContentStore store] fetchProfilePostsForCurrentUserInDirection:STKContentStoreFetchDirectionNewer
-                                                          referencePost:[[self posts] firstObject]
-                                                             completion:^(NSArray *posts, NSError *err, BOOL moreComing) {
-                                                                 if(!err) {
-                                                                     [[self posts] addObjectsFromArray:posts];
-                                                                     [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-                                                                     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
-                                                                                     withRowAnimation:UITableViewRowAnimationNone];
-
-                                                                 } else {
-                                                                     // Do nothing?
-                                                                 }
-                                                             }];
+    
+    if([[[self navigationController] viewControllers] indexOfObject:self] == 0) {
+        [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
+    }
+    
+    if([self profile]) {
+        
+    } else {
+        [self setProfile:[[[STKUserStore store] currentUser] personalProfile]];
+        [[STKUserStore store] fetchProfileForCurrentUser:^(STKUser *u, NSError *err) {
+            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
+                            withRowAnimation:UITableViewRowAnimationNone];
+        }];
+    }
+    [[STKContentStore store] fetchProfilePostsForProfile:[self profile]
+                                             inDirection:STKContentStoreFetchDirectionNewer
+                                           referencePost:[[self posts] firstObject]
+                                              completion:^(NSArray *posts, NSError *err, BOOL moreComing) {
+                                                  if(!err) {
+                                                      [[self posts] addObjectsFromArray:posts];
+                                                      [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                      [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
+                                                                      withRowAnimation:UITableViewRowAnimationNone];
+                                                      
+                                                  } else {
+                                                      // Do nothing?
+                                                  }
+                                              }];
+    
+    
 }
 
 - (void)viewDidLoad
@@ -107,6 +127,21 @@
     [self showPostAtIndex:itemIndex];
 }
 
+- (void)editProfile:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
+}
+
+- (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
+}
+
+- (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
+}
+
 - (float)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
@@ -141,7 +176,7 @@
 
 - (void)populateProfileCell:(STKProfileCell *)c
 {
-    STKProfile *p = [[[STKUserStore store] currentUser] personalProfile];
+    STKProfile *p = [self profile];
     [[c nameLabel] setText:[p name]];
     if([p city] && [p state]) {
         NSString *city = [p city];
@@ -158,11 +193,22 @@
 
 - (void)populateInitialProfileStatisticsCell:(STKInitialProfileStatisticsCell *)c
 {
+    if([self isShowingCurrentUserProfile]) {
+        [[c followButton] setHidden:YES];
+        [[c trustButton] setHidden:YES];
+        [[c editButton] setHidden:NO];
+    } else {
+        [[c followButton] setHidden:NO];
+        [[c trustButton] setHidden:NO];
+        [[c editButton] setHidden:YES];
+    }
+    
+    
     [[c circleView] setCircleTitles:@[@"Followers", @"Following", @"Posts"]];
 
-    NSString *followerCount = [[[[STKUserStore store] currentUser] personalProfile] followedCount];
-    NSString *followingCount = [[[[STKUserStore store] currentUser] personalProfile] followingCount];
-    NSString *postCount = [[[[STKUserStore store] currentUser] personalProfile] postCount];
+    NSString *followerCount = [[self profile] followedCount];
+    NSString *followingCount = [[self profile] followingCount];
+    NSString *postCount = [[self profile] postCount];
     if(!followerCount)
         followerCount = @"0";
     if(!followingCount)

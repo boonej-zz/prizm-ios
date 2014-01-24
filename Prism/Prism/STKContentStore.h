@@ -36,9 +36,10 @@ typedef enum {
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
 
 
-- (void)fetchProfilePostsForCurrentUserInDirection:(STKContentStoreFetchDirection)fetchDirection
-                                     referencePost:(STKPost *)referencePost
-                                        completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
+- (void)fetchProfilePostsForProfile:(STKProfile *)prof
+                        inDirection:(STKContentStoreFetchDirection)fetchDirection
+                      referencePost:(STKPost *)referencePost
+                         completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
 
 - (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
                        referencePost:(STKPost *)referencePost

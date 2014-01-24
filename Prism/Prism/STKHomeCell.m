@@ -64,6 +64,11 @@
     ROUTE(sender);
 }
 
+- (IBAction)imageTapped:(id)sender
+{
+    ROUTE(sender);
+}
+
 - (void)cellDidLoad
 {
     static UIImage *fadeImage = nil;
@@ -74,7 +79,7 @@
         fadeImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
     }
-    [[self backdropFadeView] setImage:fadeImage];
+    [[[self headerView] backdropFadeView] setImage:fadeImage];
     
     [[self headerView] setBackgroundColor:[UIColor colorWithWhite:0.5 alpha:0.33]];
 }

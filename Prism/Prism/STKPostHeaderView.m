@@ -35,6 +35,7 @@
 - (void)commonInit
 {
     [self setBackgroundColor:[UIColor clearColor]];
+    _backdropFadeView = [[UIImageView alloc] init];
     _avatarView = [[STKResolvingImageView alloc] init];
     _posterLabel = [[UILabel alloc] init];
     _timeLabel = [[UILabel alloc] init];
@@ -57,6 +58,7 @@
     
     [_postTypeView setContentMode:UIViewContentModeCenter];
     
+    [self addSubview:_backdropFadeView];
     [self addSubview:_avatarView];
     [self addSubview:_posterLabel];
     [self addSubview:_timeLabel];
@@ -68,6 +70,16 @@
         [v setTranslatesAutoresizingMaskIntoConstraints:NO];
     }
     
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|"
+                                                                 options:0
+                                                                 metrics:nil
+                                                                   views:@{@"v" : _backdropFadeView}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|"
+                                                                 options:0
+                                                                 metrics:nil
+                                                                   views:@{@"v" : _backdropFadeView}]];
+    
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-9-[ava(==30)]-8-[poster]-8-[type(==20)]-9-|"
                                                                  options:NSLayoutFormatAlignAllTop metrics:nil
                                                                    views:@{@"ava" : _avatarView, @"poster" : _posterLabel, @"type" : _postTypeView}]];
@@ -76,8 +88,8 @@
     [_postTypeView addConstraint:[NSLayoutConstraint constraintWithItem:_postTypeView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
                                                                toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:20]];
 
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual
-                                                        toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
+                                                        toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-10]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
                                                         toItem:_timeImageView attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
     

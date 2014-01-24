@@ -246,6 +246,28 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     }];
 }
 
+- (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block
+{
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
+    [c addQueryValue:STKProfileTypePersonal
+              forKey:@"profile_type"];
+    [c addQueryValue:@"0" forKey:@"offset"];
+    [c addQueryValue:@"20" forKey:@"limit"];
+    [c addQueryValue:name forKey:@"name"];
+    [c setContext:[self context]];
+    [c setExistingMatchMap:@{@"profileID" : @"profile"}];
+    [c setModelGraph:@{@"profile" : @[@"STKProfile"]}];
+    [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
+        if(!err) {
+            [[self context] save:nil];
+            block([profiles objectForKey:@"profile"], nil);
+        } else {
+            block(nil, err);
+        }
+    }];
+
+}
+
 
 #pragma mark Authentication Nonsense
 

@@ -17,5 +17,5 @@
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UILabel *sourceLabel;
 @property (nonatomic, strong) UIImageView *postTypeView;
-
+@property (nonatomic, strong) UIImageView *backdropFadeView;
 @end

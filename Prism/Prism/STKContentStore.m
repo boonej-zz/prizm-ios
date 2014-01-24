@@ -133,13 +133,14 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
     }];
 }
 
-- (void)fetchProfilePostsForCurrentUserInDirection:(STKContentStoreFetchDirection)fetchDirection
-                                     referencePost:(STKPost *)referencePost
-                                        completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block
+- (void)fetchProfilePostsForProfile:(STKProfile *)prof
+                        inDirection:(STKContentStoreFetchDirection)fetchDirection
+                      referencePost:(STKPost *)referencePost
+                         completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block
 {
     [[STKUserStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
-        [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
+        [c addQueryValue:[prof profileID] forKey:@"profile"];
         [c addQueryValue:@"20" forKey:@"limit"];
 
         if(referencePost) {

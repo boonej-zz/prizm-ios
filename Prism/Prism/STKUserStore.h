@@ -57,6 +57,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 - (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block;
 - (void)updateCurrentProfileWithInformation:(NSDictionary *)info completion:(void (^)(STKUser *u, NSError *err))block;
 
+- (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;
+
 - (void)logout;
 
 
