@@ -88,7 +88,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 {
     _postImage = postImage;
     
-    [[STKImageStore store] uploadImage:_postImage size:CGSizeMake(600, 600) intoDirectory:[[[[STKUserStore store] currentUser] personalProfile] profileID] completion:^(NSString *URLString, NSError *err) {
+    [[STKImageStore store] uploadImage:_postImage intoDirectory:[[[[STKUserStore store] currentUser] personalProfile] profileID] completion:^(NSString *URLString, NSError *err) {
         if(postImage == [self postImage]) {
             if(!err) {
                 [[self postInfo] setObject:URLString forKey:STKPostURLKey];

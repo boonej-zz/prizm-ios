@@ -17,6 +17,7 @@
 #import "STKTriImageCell.h"
 #import "STKProfile.h"
 #import "STKBaseStore.h"
+#import "STKPostViewController.h"
 
 @interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -75,19 +76,35 @@
     [[self tableView] setDelaysContentTouches:NO];
 }
 
+- (void)showPostAtIndex:(int)idx
+{
+    if(idx < [[self posts] count]) {
+        STKPostViewController *vc = [[STKPostViewController alloc] init];
+        [vc setPost:[[self posts] objectAtIndex:idx]];
+        [self presentViewController:vc animated:YES completion:nil];
+    }
+}
+
 - (void)leftImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    int row = [ip row];
+    int itemIndex = row * 3;
+    [self showPostAtIndex:itemIndex];
 }
 
 - (void)centerImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    int row = [ip row];
+    int itemIndex = row * 3 + 1;
+    [self showPostAtIndex:itemIndex];
+
 }
 
 - (void)rightImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    int row = [ip row];
+    int itemIndex = row * 3 + 2;
+    [self showPostAtIndex:itemIndex];
 }
 
 - (float)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -145,8 +162,15 @@
 
     NSString *followerCount = [[[[STKUserStore store] currentUser] personalProfile] followedCount];
     NSString *followingCount = [[[[STKUserStore store] currentUser] personalProfile] followingCount];
-    // NSString *postCount;
-    [[c circleView] setCircleValues:@[followerCount, followingCount, @"0"]];
+    NSString *postCount = [[[[STKUserStore store] currentUser] personalProfile] postCount];
+    if(!followerCount)
+        followerCount = @"0";
+    if(!followingCount)
+        followingCount = @"0";
+    if(!postCount)
+        postCount = @"0";
+    
+    [[c circleView] setCircleValues:@[followerCount, followingCount, postCount]];
 }
 
 - (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row

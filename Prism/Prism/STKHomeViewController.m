@@ -98,7 +98,7 @@
             [[c layer] setShadowRadius:5];
         }
         
-        [self populateCell:c forIndexPath:ip];
+        [c populateWithPost:[[self items] objectAtIndex:[ip row]]];
         
         CGRect f = [c frame];
         f.origin.x = -10;
@@ -210,23 +210,6 @@
     
 }
 
-- (void)populateCell:(STKHomeCell *)c forIndexPath:(NSIndexPath *)ip
-{
-    [c setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
-    STKPost *p = [[self items] objectAtIndex:[ip row]];
-    [[c contentImageView] setUrlString:[p imageURLString]];
-
-//    [[[c headerView] avatarView] setUrlString:[p creatorProfilePhotoURL]];
-//    [[[c headerView] posterLabel] setText:[p creatorName]];
-    [[[c headerView] timeLabel] setText:@"Now"];
-//    if([p externalSystemID])
-        //[[[c headerView] sourceLabel] setText:[p postOrigin]];
-    [[[c headerView] postTypeView] setImage:[p typeImage]];
-
-    [[c commentCountLabel] setText:[p commentCount]];
-    [[c likeCountLabel] setText:[p likeCount]];
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -240,9 +223,7 @@
     if([[self backdropView] shouldBlurImageForIndexPath:indexPath]) {
         STKHomeCell *blurCell = [[self backdropView] dequeueCellForReuseIdentifier:@"STKHomeCell"];
         [blurCell setBackgroundColor:[UIColor clearColor]];
-        
-        [self populateCell:blurCell
-              forIndexPath:indexPath];
+        [blurCell populateWithPost:[[self items] objectAtIndex:[indexPath row]]];
 
         CGRect rect = [cell frame];
         [[self backdropView] addBlurredImageFromCell:blurCell
@@ -282,7 +263,7 @@
 {
     STKHomeCell *c = [STKHomeCell cellForTableView:tableView target:self];
 
-    [self populateCell:c forIndexPath:indexPath];
+    [c populateWithPost:[[self items] objectAtIndex:[indexPath row]]];
     
     return c;
 }

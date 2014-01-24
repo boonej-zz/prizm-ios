@@ -38,6 +38,8 @@ extern NSString * const STKProfileProfileIDKey;
 @property (nonatomic, strong) NSString *followingCount;
 @property (nonatomic, strong) NSString *followedCount;
 @property (nonatomic, strong) NSString *trustCount;
+@property (nonatomic, strong) NSString *postCount;
+
 @property (nonatomic, retain) STKUser *user;
 
 

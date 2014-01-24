@@ -17,6 +17,7 @@
         <attribute name="followedCount" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="followingCount" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postCount" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profileID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="profileType" optional="YES" attributeType="String" syncable="YES"/>

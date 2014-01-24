@@ -7,10 +7,11 @@
 //
 
 #import "STKImageChooser.h"
+#import "STKCaptureViewController.h"
 
-@interface STKImageChooser () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface STKImageChooser () <UIActionSheetDelegate, STKCaptureViewControllerDelegate>
 @property (nonatomic, strong) UIActionSheet *actionSheet;
-@property (nonatomic, strong) UIImagePickerController *imagePickerController;
+@property (nonatomic, strong) STKCaptureViewController *captureViewController;
 @property (nonatomic, strong) void (^imageBlock)(UIImage *);
 @property (nonatomic, weak) UIViewController *sourceViewController;
 @end
@@ -33,56 +34,15 @@
     [self setImageBlock:block];
     [self setSourceViewController:vc];
     
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        if(![self actionSheet]) {
-            _actionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose Image Source"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Camera", @"Photo Library", nil];
-        }
-        [[self actionSheet] showInView:[vc view]];
-    } else {
-        _imagePickerController = [[UIImagePickerController alloc] init];
-        [_imagePickerController setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-        [_imagePickerController setDelegate:self];
-        [[self sourceViewController] presentViewController:_imagePickerController animated:YES completion:nil];
-    }
+    _captureViewController = [[STKCaptureViewController alloc] init];
+    [_captureViewController setDelegate:self];
+    [[self sourceViewController] presentViewController:_captureViewController animated:YES completion:nil];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (void)captureViewController:(STKCaptureViewController *)captureViewController didPickImage:(UIImage *)image
 {
-    UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
-
-    [[picker presentingViewController] dismissViewControllerAnimated:YES completion:^{
-        [self imageBlock](img);
+    [[captureViewController presentingViewController] dismissViewControllerAnimated:YES completion:^{
+        [self imageBlock](image);
     }];
 }
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [[picker presentingViewController] dismissViewControllerAnimated:YES completion:^{
-        [self imageBlock](nil);
-    }];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if(buttonIndex == 0) {
-        _imagePickerController = [[UIImagePickerController alloc] init];
-        [_imagePickerController setSourceType:UIImagePickerControllerSourceTypeCamera];
-        [_imagePickerController setDelegate:self];
-        [[self sourceViewController] presentViewController:_imagePickerController
-                                                  animated:YES
-                                                completion:nil];
-    } else if(buttonIndex == 1) {
-        _imagePickerController = [[UIImagePickerController alloc] init];
-        [_imagePickerController setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-        [_imagePickerController setDelegate:self];
-        [[self sourceViewController] presentViewController:_imagePickerController
-                                                  animated:YES
-                                                completion:nil];
-    }
-}
-
 @end

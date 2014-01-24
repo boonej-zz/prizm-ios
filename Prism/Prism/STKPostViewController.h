@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface STKPostViewController : UIViewController
+@class STKPost;
 
+@interface STKPostViewController : UIViewController
+@property (nonatomic, strong) STKPost *post;
 @end

@@ -24,7 +24,7 @@ NSString * const STKProfileProfileIDKey = @"profile";
 
 @implementation STKProfile
 
-@dynamic accoladeCount, trustCount, followedCount, followingCount;
+@dynamic accoladeCount, trustCount, followedCount, followingCount, postCount;
 @dynamic profileID;
 @dynamic profilePhotoPath;
 @dynamic coverPhotoPath;
@@ -48,7 +48,8 @@ NSString * const STKProfileProfileIDKey = @"profile";
       @"dv_profiles_followed_by_count" : @"followedCount",
       @"dv_profiles_following_count" : @"followingCount",
       @"dv_trust_count" : @"trustCount",
-      @"dv_accolade_count" : @"accoladeCount"
+      @"dv_accolade_count" : @"accoladeCount",
+      @"dv_created_post_count" : @"postCount"
     }];
     [self setProfilePhotoPath:[[self profilePhotoPath] stringByReplacingOccurrencesOfString:@"\\" withString:@""]];
     [self setCoverPhotoPath:[[self coverPhotoPath] stringByReplacingOccurrencesOfString:@"\\" withString:@""]];

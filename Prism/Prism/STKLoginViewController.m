@@ -36,7 +36,7 @@
     [super viewDidLoad];
 
     NSDictionary *attrs = @{NSForegroundColorAttributeName : [UIColor colorWithWhite:1 alpha:.8],
-                            NSUnderlineStyleAttributeName: @(1),
+                            NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle),
                             NSFontAttributeName : STKFont(14)};
     NSAttributedString *str = [[NSAttributedString alloc] initWithString:@"Forgot Password?"
                                                               attributes:attrs];

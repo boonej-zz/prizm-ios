@@ -7,6 +7,9 @@
 //
 
 #import "STKHomeCell.h"
+#import "STKPost.h"
+#import "STKProfile.h"
+#import "STKRelativeDateConverter.h"
 
 @implementation STKHomeCell
 
@@ -17,6 +20,23 @@
         // Initialization code
     }
     return self;
+}
+
+- (void)populateWithPost:(STKPost *)p
+{
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    [[self contentImageView] setUrlString:[p imageURLString]];
+    
+    [[[self headerView] avatarView] setUrlString:[[p creatorProfile] profilePhotoPath]];
+    [[[self headerView] posterLabel] setText:[[p creatorProfile] name]];
+    [[[self headerView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
+    //    if([p externalSystemID])
+    //[[[c headerView] sourceLabel] setText:[p postOrigin]];
+    [[[self headerView] postTypeView] setImage:[p typeImage]];
+    
+    [[self commentCountLabel] setText:[p commentCount]];
+    [[self likeCountLabel] setText:[p likeCount]];
 }
 
 - (IBAction)toggleLike:(id)sender

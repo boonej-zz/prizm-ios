@@ -15,6 +15,7 @@
 #import "STKPost.h"
 #import "STKResolvingImageView.h"
 #import "STKContentStore.h"
+#import "STKPostViewController.h"
 
 @interface STKExploreViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -49,13 +50,35 @@
     
 }
 
-- (IBAction)temporaryShowPanel:(id)sender
+- (void)showPostAtIndex:(int)idx
 {
-/*    UIImage *img = [[STKRenderServer renderServer] blurredImageForView:[self view]];
-    STKPanelViewController *vc = [[STKPanelViewController alloc] initWithBackgroundImage:img];
+    if(idx < [[self posts] count]) {
+        STKPostViewController *vc = [[STKPostViewController alloc] init];
+        [vc setPost:[[self posts] objectAtIndex:idx]];
+        [self presentViewController:vc animated:YES completion:nil];
+    }
+}
+
+- (void)leftImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    int row = [ip row];
+    int itemIndex = row * 3;
+    [self showPostAtIndex:itemIndex];
+}
+
+- (void)centerImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    int row = [ip row];
+    int itemIndex = row * 3 + 1;
+    [self showPostAtIndex:itemIndex];
     
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:nvc animated:YES completion:nil];*/
+}
+
+- (void)rightImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    int row = [ip row];
+    int itemIndex = row * 3 + 2;
+    [self showPostAtIndex:itemIndex];
 }
 
 - (void)viewDidLoad
@@ -69,7 +92,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer referencePost:[[self posts] firstObject]
+    [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
+                                            referencePost:[[self posts] firstObject]
                                                completion:^(NSArray *posts, NSError *err, BOOL moreComing) {
                                                    if(!err) {
                                                        [[self posts] addObjectsFromArray:posts];

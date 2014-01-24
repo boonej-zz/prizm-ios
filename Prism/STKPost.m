@@ -18,8 +18,7 @@ NSString * const STKPostTextKey = @"body";
 NSString * const STKPostTypeKey = @"post_type";
 
 NSString * const STKPostVisibilityPublic = @"1";
-NSString * const STKPostVisibilityTrust = @"2";
-NSString * const STKPostVisibilityPrivate = @"3";
+NSString * const STKPostVisibilityPrivate = @"2";
 
 NSString * const STKPostTypeAspiration = @"1";
 NSString * const STKPostTypeInspiration = @"2";
@@ -62,7 +61,7 @@ NSString * const STKPostTypeAccolade = @"6";
                                                  STKPostTextKey : @"text",
                                                  STKPostTypeKey : @"type",
                                                  STKPostLocationNameKey : @"locationName",
-                                                 @"created" : @"referenceTimestamp",
+                                                 @"created_epoch_timestamp" : @"referenceTimestamp",
                                                  STKPostURLKey : @"imageURLString",
                                                  @"external_system" : @"externalSystemID",
                                                  @"like_count" : @"likeCount",
@@ -75,7 +74,7 @@ NSString * const STKPostTypeAccolade = @"6";
         [df setDateFormat:@"YYYY-MM-dd HH:mm:ss.SSSSSS"];
     }
     
-    [self setDatePosted:[df dateFromString:[self referenceTimestamp]]];
+    [self setDatePosted:[df dateFromString:[jsonObject objectForKey:@"created"]]];
     
     [self setImageURLString:[[self imageURLString] stringByReplacingOccurrencesOfString:@"\\" withString:@""]];
     

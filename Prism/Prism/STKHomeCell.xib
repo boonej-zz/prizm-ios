@@ -178,22 +178,22 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="MuO-Ko-R2y" firstAttribute="leading" secondItem="B1Y-Qd-F7e" secondAttribute="leading" constant="5" id="0b5-Sb-6ES"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="leading" secondItem="B1Y-Qd-F7e" secondAttribute="leading" constant="5" id="2yq-OD-Jrh"/>
                     <constraint firstItem="8Wu-Aq-8GE" firstAttribute="top" secondItem="B1Y-Qd-F7e" secondAttribute="top" constant="5" id="9Pu-8r-ayH"/>
                     <constraint firstItem="6QP-zd-FRS" firstAttribute="bottom" secondItem="7BC-Pt-GTX" secondAttribute="bottom" constant="1" id="Aer-Mg-vQM"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="top" secondItem="MuO-Ko-R2y" secondAttribute="bottom" id="CRL-e1-bDo"/>
                     <constraint firstItem="6QP-zd-FRS" firstAttribute="top" secondItem="Ldn-1H-Ldn" secondAttribute="top" constant="1" id="GaI-2o-7pD"/>
+                    <constraint firstItem="7BC-Pt-GTX" firstAttribute="leading" secondItem="JP4-cN-kHA" secondAttribute="leading" id="LWT-du-1sK"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="top" secondItem="8Wu-Aq-8GE" secondAttribute="bottom" id="Nzl-sG-P3Y"/>
+                    <constraint firstItem="7BC-Pt-GTX" firstAttribute="trailing" secondItem="JP4-cN-kHA" secondAttribute="trailing" id="PYf-AW-0E3"/>
                     <constraint firstItem="MuO-Ko-R2y" firstAttribute="top" secondItem="B1Y-Qd-F7e" secondAttribute="top" constant="5" id="Qv6-tj-NKb"/>
                     <constraint firstAttribute="bottom" secondItem="JP4-cN-kHA" secondAttribute="bottom" constant="-1" id="TDq-Mm-hBF"/>
                     <constraint firstAttribute="trailing" secondItem="7BC-Pt-GTX" secondAttribute="trailing" constant="5" id="Tos-9Z-oua"/>
                     <constraint firstItem="8Wu-Aq-8GE" firstAttribute="leading" secondItem="B1Y-Qd-F7e" secondAttribute="leading" constant="5" id="U59-1M-LaL"/>
-                    <constraint firstAttribute="trailing" secondItem="JP4-cN-kHA" secondAttribute="trailing" constant="5" id="WAb-Sn-hNV"/>
                     <constraint firstAttribute="trailing" secondItem="8Wu-Aq-8GE" secondAttribute="trailing" constant="5" id="Wil-8x-xZQ"/>
                     <constraint firstItem="6QP-zd-FRS" firstAttribute="top" secondItem="B1Y-Qd-F7e" secondAttribute="top" constant="326" id="c22-Xl-Bq5"/>
-                    <constraint firstAttribute="trailing" secondItem="MuO-Ko-R2y" secondAttribute="trailing" constant="5" id="gmP-aA-dx0"/>
-                    <constraint firstItem="JP4-cN-kHA" firstAttribute="leading" secondItem="B1Y-Qd-F7e" secondAttribute="leading" constant="5" id="hIV-3w-pKT"/>
+                    <constraint firstItem="7BC-Pt-GTX" firstAttribute="trailing" secondItem="MuO-Ko-R2y" secondAttribute="trailing" id="mRA-aE-Xkw"/>
+                    <constraint firstItem="7BC-Pt-GTX" firstAttribute="leading" secondItem="MuO-Ko-R2y" secondAttribute="leading" id="yT0-7Z-Ofo"/>
                 </constraints>
             </tableViewCellContentView>
             <constraints>

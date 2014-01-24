@@ -11,6 +11,8 @@
 #import "STKResolvingImageView.h"
 #import "STKPostHeaderView.h"
 
+@class STKPost;
+
 @interface STKHomeCell : STKTableViewCell
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *contentImageView;
@@ -25,5 +27,7 @@
 - (IBAction)addToPrism:(id)sender;
 - (IBAction)sharePost:(id)sender;
 - (IBAction)pinPost:(id)sender;
+
+- (void)populateWithPost:(STKPost *)post;
 
 @end
