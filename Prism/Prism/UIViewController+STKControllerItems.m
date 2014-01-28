@@ -24,6 +24,21 @@
     return nil;
 }
 
+- (UIBarButtonItem *)searchBarButtonItem
+{
+    UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    [[view imageView] setContentMode:UIViewContentModeCenter];
+    [[view imageView] setClipsToBounds:NO];
+    [view setClipsToBounds:NO];
+    [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
+    [view setImage:[UIImage imageNamed:@"btn_search"] forState:UIControlStateNormal];
+    [view setImage:[UIImage imageNamed:@"btn_search_selected"] forState:UIControlStateHighlighted];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+    
+    return bbi;
+
+}
+
 - (UIBarButtonItem *)postBarButtonItem
 {
     UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
@@ -65,6 +80,11 @@
 {
     STKMenuController *tbc = (STKMenuController *)[self menuController];
     [tbc setMenuVisible:![tbc isMenuVisible] animated:YES];
+}
+
+- (void)initiateSearch:(id)sender
+{
+    
 }
 
 @end

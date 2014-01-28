@@ -18,8 +18,9 @@
 #import "STKProfile.h"
 #import "STKBaseStore.h"
 #import "STKPostViewController.h"
+#import "STKRequestItem.h"
 
-@interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -89,6 +90,21 @@
     
 }
 
+- (void)countView:(STKCountView *)countView didSelectCircleAtIndex:(int)index
+{
+    switch (index) {
+        case 0: {
+            
+        } break;
+        case 1: {
+            
+        } break;
+        case 2: {
+            [self scrollToPosts];
+        } break;
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -96,12 +112,31 @@
     [[self tableView] setDelaysContentTouches:NO];
 }
 
+- (void)scrollToPosts
+{
+    [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (void)avatarTappedForPostAtIndex:(int)idx
+{
+    STKPost *p = [[self posts] objectAtIndex:idx];
+    if([[[p creatorProfile] profileID] isEqualToString:[[self profile] profileID]]) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        // Needs testing
+        STKProfileViewController *nextProfile = [[STKProfileViewController alloc] init];
+        [nextProfile setProfile:[p creatorProfile]];
+        [[self navigationController] pushViewController:nextProfile animated:NO];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 - (void)showPostAtIndex:(int)idx
 {
     if(idx < [[self posts] count]) {
         STKPostViewController *vc = [[STKPostViewController alloc] init];
         [vc setPost:[[self posts] objectAtIndex:idx]];
-        [self presentViewController:vc animated:YES completion:nil];
+        [[self navigationController] pushViewController:vc animated:YES];
     }
 }
 
@@ -134,12 +169,16 @@
 
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    [[STKUserStore store] createRequestOfType:STKRequestTypeTrust profile:[self profile] completion:^(id obj, NSError *err) {
+        
+    }];
 }
 
 - (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    [[STKUserStore store] startFollowingProfile:[self profile] completion:^(id obj, NSError *err) {
+        
+    }];
 }
 
 - (float)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -217,6 +256,8 @@
         postCount = @"0";
     
     [[c circleView] setCircleValues:@[followerCount, followingCount, postCount]];
+    
+    [[c circleView] setDelegate:self];
 }
 
 - (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row

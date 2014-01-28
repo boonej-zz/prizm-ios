@@ -35,6 +35,8 @@
 - (void)commonInit
 {
     [self setBackgroundColor:[UIColor clearColor]];
+    
+    _avatarButton = [[UIControl alloc] init];
     _backdropFadeView = [[UIImageView alloc] init];
     _avatarView = [[STKResolvingImageView alloc] init];
     _posterLabel = [[UILabel alloc] init];
@@ -58,8 +60,11 @@
     
     [_postTypeView setContentMode:UIViewContentModeCenter];
     
+    [_avatarButton setBackgroundColor:[UIColor clearColor]];
+    
     [self addSubview:_backdropFadeView];
     [self addSubview:_avatarView];
+    [self addSubview:_avatarButton];
     [self addSubview:_posterLabel];
     [self addSubview:_timeLabel];
     [self addSubview:_sourceLabel];
@@ -69,6 +74,18 @@
     for(UIView *v in [self subviews]) {
         [v setTranslatesAutoresizingMaskIntoConstraints:NO];
     }
+    
+
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeWidth
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:_avatarView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeHeight
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:_avatarView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual
+                                                        toItem:_avatarView attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
+                                                        toItem:_avatarView attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|"
                                                                  options:0

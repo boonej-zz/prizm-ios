@@ -69,7 +69,7 @@
         case UIControlStateHighlighted:
         case UIControlStateSelected:
             img = [[self item] selectedImage];
-            clr = [UIColor colorWithWhite:0.0 alpha:0.5];
+            clr = [UIColor colorWithWhite:1.0 alpha:0.0];
             break;
             
         case UIControlStateNormal:
@@ -77,7 +77,7 @@
         case UIControlStateDisabled:
         case UIControlStateReserved:
             img = [[self item] image];
-            clr = [UIColor colorWithWhite:0.0 alpha:0.2];
+            clr = [UIColor colorWithWhite:1.0 alpha:0.3];
             break;
             
         default:

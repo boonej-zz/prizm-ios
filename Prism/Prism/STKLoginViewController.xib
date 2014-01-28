@@ -25,7 +25,7 @@
                             <rect key="frame" x="98" y="7" width="202" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                             <textInputTraits key="textInputTraits" returnKeyType="go"/>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="Xpp-3Q-yUC"/>
@@ -34,7 +34,7 @@
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ITc-NJ-y9D">
                             <rect key="frame" x="45" y="13" width="36" height="17"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -47,7 +47,7 @@
                             </constraints>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="ITc-NJ-y9D" firstAttribute="top" secondItem="e9L-d9-cGZ" secondAttribute="top" constant="13" id="75v-WN-FGI"/>
                         <constraint firstItem="Wld-4M-gYh" firstAttribute="top" secondItem="e9L-d9-cGZ" secondAttribute="top" constant="7" id="7SE-6Q-0zz"/>
@@ -69,7 +69,7 @@
                             <rect key="frame" x="115" y="7" width="185" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                             <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="zLT-az-Jeq"/>
@@ -78,7 +78,7 @@
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dAr-QZ-stD">
                             <rect key="frame" x="43" y="13" width="64" height="17"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -91,7 +91,7 @@
                             </constraints>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="QvI-Bu-wC1" firstAttribute="leading" secondItem="dAr-QZ-stD" secondAttribute="trailing" constant="8" id="CUE-es-Aic"/>
                         <constraint firstAttribute="bottom" secondItem="dx1-Ys-ucd" secondAttribute="bottom" constant="4" id="LKl-qz-0ZL"/>
@@ -116,11 +116,11 @@
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ym-jc-HPn">
-                    <rect key="frame" x="97" y="303" width="126" height="30"/>
+                    <rect key="frame" x="84" y="303" width="152" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="1J5-DW-O4c"/>
-                        <constraint firstAttribute="width" constant="126" id="NUN-9z-Orn"/>
+                        <constraint firstAttribute="width" constant="152" id="NUN-9z-Orn"/>
                     </constraints>
                     <color key="tintColor" red="1" green="0.99449431970239555" blue="0.98446441255352646" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal">
@@ -138,7 +138,7 @@
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="NMI-rG-Isc" firstAttribute="top" secondItem="e9L-d9-cGZ" secondAttribute="bottom" constant="0.5" id="EFK-kh-H7B"/>
                 <constraint firstAttribute="trailing" secondItem="e9L-d9-cGZ" secondAttribute="trailing" id="GE9-7C-iSL"/>

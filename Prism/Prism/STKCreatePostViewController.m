@@ -20,13 +20,13 @@
 #import "STKUserStore.h"
 #import "STKUser.h"
 #import "STKProfile.h"
-
-@import CoreLocation;
+#import "STKLocationListViewController.h"
+#import "STKFoursquareLocation.h"
 
 NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 @interface STKCreatePostViewController ()
-    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKHashtagToolbarDelegate, UIAlertViewDelegate, CLLocationManagerDelegate>
+    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKHashtagToolbarDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextView *postTextView;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
@@ -36,7 +36,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 @property (nonatomic, strong) STKHashtagToolbar *hashtagToolbar;
 @property (nonatomic) NSRange hashtagRange;
 
-@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @property (nonatomic, strong) NSArray *categoryItems;
 @property (nonatomic, strong) NSArray *optionItems;
@@ -88,8 +87,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
-                                                                          NSFontAttributeName : STKFont(18)}];
+
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithWhite:0.7 alpha:1],
+                                                                          NSFontAttributeName : STKFont(22)}];
     [[[self navigationController] navigationBar] setTintColor:[UIColor lightGrayColor]];
 
 }
@@ -119,23 +119,17 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (void)findLocation:(id)sender
 {
-    if(![self locationManager]) {
-        _locationManager = [[CLLocationManager alloc] init];
-        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        [_locationManager setDelegate:self];
-    }
-    [[self locationManager] startUpdatingLocation];
+    STKLocationListViewController *lvc = [[STKLocationListViewController alloc] init];
+    [lvc setDelegate:self];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:lvc];
+    [self presentViewController:nvc animated:YES completion:nil];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+- (void)locationListViewController:(STKLocationListViewController *)lvc choseLocation:(STKFoursquareLocation *)loc
 {
-    CLLocation *l = [locations lastObject];
-    if([[l timestamp] timeIntervalSinceNow] > -60 * 3) {
-        [[self locationManager] stopUpdatingLocation];
-        
-        [[self postInfo] setObject:@([l coordinate].latitude) forKey:STKPostLocationLatitudeKey];
-        [[self postInfo] setObject:@([l coordinate].longitude) forKey:STKPostLocationLongitudeKey];
-    }
+    [[self postInfo] setObject:[@([loc location].latitude) stringValue] forKey:STKPostLocationLatitudeKey];
+    [[self postInfo] setObject:[@([loc location].longitude) stringValue] forKey:STKPostLocationLongitudeKey];
+    [[self postInfo] setObject:[loc name] forKey:STKPostLocationNameKey];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

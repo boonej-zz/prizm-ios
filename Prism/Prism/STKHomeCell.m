@@ -59,7 +59,7 @@
     ROUTE(sender);
 }
 
-- (IBAction)pinPost:(id)sender
+- (IBAction)showLocation:(id)sender
 {
     ROUTE(sender);
 }

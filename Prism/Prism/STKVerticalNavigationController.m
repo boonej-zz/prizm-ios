@@ -60,7 +60,7 @@
 {
     [super viewDidLoad];
     CGRect r = [[self view] bounds];
-    _barContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, r.size.width, 60)];
+    _barContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, r.size.width, 86)];
     [_barContainer setBackgroundColor:[UIColor clearColor]];
     
     [[self containerView] addSubview:[[self internalNavigationController] view]];
@@ -68,7 +68,7 @@
     [[[self internalNavigationController] view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [[self view] addSubview:_barContainer];
 
-    _backButton = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 80)];
+    _backButton = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 86)];
     [_backButton addTarget:self action:@selector(pop:) forControlEvents:UIControlEventTouchUpInside];
     [[self barContainer] addSubview:_backButton];
     [_backButton setHidden:YES];
@@ -77,6 +77,8 @@
     [_backButton addSubview:_backButtonImageView];
     [_backButtonImageView setContentMode:UIViewContentModeCenter];
     [_backButtonImageView setImage:[UIImage imageNamed:@"backarrow"]];
+    
+ //   [_backButton setBackgroundColor:[UIColor redColor]];
 }
 
 - (void)pop:(id)sender

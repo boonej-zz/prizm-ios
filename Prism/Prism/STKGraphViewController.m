@@ -8,6 +8,7 @@
 
 #import "STKGraphViewController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKUserStore.h"
 
 @interface STKGraphViewController ()
 
@@ -25,6 +26,10 @@
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_graph_selected"]];
     }
     return self;
+}
+- (IBAction)tempLogout:(id)sender
+{
+    [[self menuController] logout];
 }
 
 - (void)viewDidLoad

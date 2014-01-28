@@ -45,6 +45,11 @@
 		BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */; };
 		BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE477C1B186E2ED4003672A0 /* STKProfileCell.m */; };
 		BE477C1E186E2ED4003672A0 /* STKProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE477C1C186E2ED4003672A0 /* STKProfileCell.xib */; };
+		BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */; };
+		BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64251896F83A00467E2D /* STKFoursquareLocation.m */; };
+		BE4C64291896FA3800467E2D /* STKLocationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64281896FA3800467E2D /* STKLocationListViewController.m */; };
+		BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C642B18970BE500467E2D /* STKLocationViewController.m */; };
+		BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE4C642C18970BE500467E2D /* STKLocationViewController.xib */; };
 		BE5324CB189075F4004AAC5C /* STKRelativeDateConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5324CA189075F4004AAC5C /* STKRelativeDateConverter.m */; };
 		BE5767F5187B4DFF004AEE1F /* STKPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5767F3187B4DFF004AEE1F /* STKPostViewController.m */; };
 		BE5767F6187B4DFF004AEE1F /* STKPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE5767F4187B4DFF004AEE1F /* STKPostViewController.xib */; };
@@ -1896,6 +1901,15 @@
 		BE477C1A186E2ED4003672A0 /* STKProfileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProfileCell.h; sourceTree = "<group>"; };
 		BE477C1B186E2ED4003672A0 /* STKProfileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProfileCell.m; sourceTree = "<group>"; };
 		BE477C1C186E2ED4003672A0 /* STKProfileCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKProfileCell.xib; sourceTree = "<group>"; };
+		BE4C64211896F65D00467E2D /* STKFoursquareConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFoursquareConnection.h; sourceTree = "<group>"; };
+		BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKFoursquareConnection.m; sourceTree = "<group>"; };
+		BE4C64241896F83A00467E2D /* STKFoursquareLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFoursquareLocation.h; sourceTree = "<group>"; };
+		BE4C64251896F83A00467E2D /* STKFoursquareLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKFoursquareLocation.m; sourceTree = "<group>"; };
+		BE4C64271896FA3800467E2D /* STKLocationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLocationListViewController.h; sourceTree = "<group>"; };
+		BE4C64281896FA3800467E2D /* STKLocationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLocationListViewController.m; sourceTree = "<group>"; };
+		BE4C642A18970BE500467E2D /* STKLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLocationViewController.h; sourceTree = "<group>"; };
+		BE4C642B18970BE500467E2D /* STKLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLocationViewController.m; sourceTree = "<group>"; };
+		BE4C642C18970BE500467E2D /* STKLocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLocationViewController.xib; sourceTree = "<group>"; };
 		BE5324C9189075F4004AAC5C /* STKRelativeDateConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKRelativeDateConverter.h; sourceTree = "<group>"; };
 		BE5324CA189075F4004AAC5C /* STKRelativeDateConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKRelativeDateConverter.m; sourceTree = "<group>"; };
 		BE5767F2187B4DFF004AEE1F /* STKPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPostViewController.h; sourceTree = "<group>"; };
@@ -2200,6 +2214,11 @@
 				BE5767F2187B4DFF004AEE1F /* STKPostViewController.h */,
 				BE5767F3187B4DFF004AEE1F /* STKPostViewController.m */,
 				BE5767F4187B4DFF004AEE1F /* STKPostViewController.xib */,
+				BE4C64271896FA3800467E2D /* STKLocationListViewController.h */,
+				BE4C64281896FA3800467E2D /* STKLocationListViewController.m */,
+				BE4C642A18970BE500467E2D /* STKLocationViewController.h */,
+				BE4C642B18970BE500467E2D /* STKLocationViewController.m */,
+				BE4C642C18970BE500467E2D /* STKLocationViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4101,6 +4120,8 @@
 				BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */,
 				BEF216FA188DDA1500B35C51 /* STKProfile.h */,
 				BEF216FB188DDA1500B35C51 /* STKProfile.m */,
+				BE4C64241896F83A00467E2D /* STKFoursquareLocation.h */,
+				BE4C64251896F83A00467E2D /* STKFoursquareLocation.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -4170,6 +4191,8 @@
 				BE1FC3BC186CC966003464E1 /* STKBaseStore.m */,
 				BE8935FF186CD05E00FE8263 /* STKContentStore.h */,
 				BE893600186CD05E00FE8263 /* STKContentStore.m */,
+				BE4C64211896F65D00467E2D /* STKFoursquareConnection.h */,
+				BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */,
 			);
 			name = Store;
 			sourceTree = "<group>";
@@ -4259,6 +4282,7 @@
 				BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */,
 				BE1FC3B7186C8C22003464E1 /* STKImageCollectionViewCell.xib in Resources */,
 				BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */,
+				BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */,
 				BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */,
 				BE95438C1892CD1400DCC3B1 /* STKCommentCell.xib in Resources */,
 				BE2A2E141885BA320077194A /* STKTriImageCell.xib in Resources */,
@@ -4303,6 +4327,7 @@
 				BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */,
 				BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */,
 				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
+				BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
@@ -4315,6 +4340,7 @@
 				BEFCEE05182C210600648B9F /* STKConnection.m in Sources */,
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
 				BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */,
+				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
 				BE5767F5187B4DFF004AEE1F /* STKPostViewController.m in Sources */,
@@ -4337,6 +4363,7 @@
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,
+				BE4C64291896FA3800467E2D /* STKLocationListViewController.m in Sources */,
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
 				BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */,
@@ -4366,6 +4393,7 @@
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
 				BE1FC3BD186CC966003464E1 /* STKBaseStore.m in Sources */,
 				BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */,
+				BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */,
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
 				BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */,
 				BEFCEE07182C210600648B9F /* STKSecurePassword.m in Sources */,

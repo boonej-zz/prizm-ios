@@ -45,6 +45,8 @@ NSString * const STKUserEndpointValidateEmail = @"/common/ajax/validate_login.ph
 
 NSString * const STKUserEndpointUpdateProfile = @"/common/ajax/update_profile.php";
 NSString * const STKUserEndpointGetProfile = @"/common/ajax/get_profiles.php";
+NSString * const STKUserEndpointAddFollower = @"/common/ajax/create_profile_follower.php";
+NSString * const STKUserEndpointRequest = @"/common/ajax/create_request.php";
 
 NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStoreTransparentLoginFailedNotification";
 NSString * const STKUserStoreTransparentLoginFailedReasonKey = @"STKUserStoreTransparentLoginFailedReasonKey";
@@ -248,24 +250,52 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 
 - (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block
 {
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
-    [c addQueryValue:STKProfileTypePersonal
-              forKey:@"profile_type"];
-    [c addQueryValue:@"0" forKey:@"offset"];
-    [c addQueryValue:@"20" forKey:@"limit"];
-    [c addQueryValue:name forKey:@"name"];
-    [c setContext:[self context]];
-    [c setExistingMatchMap:@{@"profileID" : @"profile"}];
-    [c setModelGraph:@{@"profile" : @[@"STKProfile"]}];
-    [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
-        if(!err) {
-            [[self context] save:nil];
-            block([profiles objectForKey:@"profile"], nil);
-        } else {
-            block(nil, err);
-        }
+    [self executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
+        [c addQueryValue:STKProfileTypePersonal
+                  forKey:@"profile_type"];
+        [c addQueryValue:@"0" forKey:@"offset"];
+        [c addQueryValue:@"20" forKey:@"limit"];
+        [c addQueryValue:name forKey:@"name"];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"profileID" : @"profile"}];
+        [c setModelGraph:@{@"profile" : @[@"STKProfile"]}];
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
+            if(!err) {
+                [[self context] save:nil];
+                block([profiles objectForKey:@"profile"], nil);
+            } else {
+                block(nil, err);
+            }
+        }];
     }];
+}
 
+- (void)startFollowingProfile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
+{
+    [self executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointAddFollower];
+        [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"follower"];
+        [c addQueryValue:[profile profileID] forKey:@"profile"];
+        [c addQueryValue:@"unknown" forKey:@"title"];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
+{
+    [self executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRequest];
+        [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"requesting_profile"];
+        [c addQueryValue:[profile profileID] forKey:@"profile"];
+        [c addQueryValue:requestType forKey:@"request_type"];
+        [c addQueryValue:STKRequestStatusPending forKey:@"request_status"];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
 }
 
 

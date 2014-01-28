@@ -9,6 +9,8 @@
 #import "STKPostViewController.h"
 #import "STKHomeCell.h"
 #import "STKPost.h"
+#import "STKProfileViewController.h"
+#import "STKLocationViewController.h"
 
 @interface STKPostViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
@@ -26,15 +28,23 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [self setAutomaticallyAdjustsScrollViewInsets:NO];
     }
     return self;
+}
+
+- (IBAction)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
+    [lvc setCoordinate:[[self post] coordinate]];
+    [[self navigationController] pushViewController:lvc animated:YES];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setTableFooterView:[self commentFooterView]];
 }
@@ -44,6 +54,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[self navigationController] setNavigationBarHidden:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
@@ -57,6 +68,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [[self navigationController] setNavigationBarHidden:NO];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -74,7 +87,14 @@
 
 - (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+
+- (void)avatarTapped:(id)sender
+{
+    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+    [vc setProfile:[[self post] creatorProfile]];
+    [[self navigationController] pushViewController:vc animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -112,6 +132,9 @@
         [[c topInset] setConstant:0];
         [[c leftInset] setConstant:0];
         [[c rightInset] setConstant:0];
+        if(![[[[c headerView] avatarButton] allTargets] containsObject:self])
+            [[[c headerView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
+        
         [c populateWithPost:[self post]];
         
         return c;

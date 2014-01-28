@@ -24,7 +24,7 @@
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="dIL-ae-Hpm"/>
                         </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -41,15 +41,15 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
-                <constraint firstItem="dlb-Gr-r0I" firstAttribute="leading" secondItem="eu0-Jo-5oQ" secondAttribute="leading" constant="0.5" id="4FN-Y7-BWx"/>
+                <constraint firstItem="dlb-Gr-r0I" firstAttribute="leading" secondItem="eu0-Jo-5oQ" secondAttribute="leading" id="4FN-Y7-BWx"/>
                 <constraint firstItem="Xhg-yL-rnM" firstAttribute="leading" secondItem="eu0-Jo-5oQ" secondAttribute="leading" id="Kcc-36-HuI"/>
                 <constraint firstItem="ZAH-8E-Mau" firstAttribute="top" secondItem="eu0-Jo-5oQ" secondAttribute="top" constant="12" id="LzY-5k-ltx"/>
                 <constraint firstAttribute="trailing" secondItem="Xhg-yL-rnM" secondAttribute="trailing" id="YXP-Wh-yDL"/>
-                <constraint firstAttribute="trailing" secondItem="dlb-Gr-r0I" secondAttribute="trailing" constant="0.5" id="gSa-1a-OaY"/>
+                <constraint firstAttribute="trailing" secondItem="dlb-Gr-r0I" secondAttribute="trailing" id="gSa-1a-OaY"/>
                 <constraint firstAttribute="bottom" secondItem="Xhg-yL-rnM" secondAttribute="bottom" constant="4" id="gjN-ER-jhY"/>
                 <constraint firstAttribute="centerX" secondItem="ZAH-8E-Mau" secondAttribute="centerX" id="iWL-m1-GdO"/>
-                <constraint firstAttribute="bottom" secondItem="dlb-Gr-r0I" secondAttribute="bottom" constant="0.5" id="waA-6w-QRu"/>
-                <constraint firstItem="dlb-Gr-r0I" firstAttribute="top" secondItem="eu0-Jo-5oQ" secondAttribute="top" constant="0.5" id="y7f-Ze-UWH"/>
+                <constraint firstAttribute="bottom" secondItem="dlb-Gr-r0I" secondAttribute="bottom" constant="1" id="waA-6w-QRu"/>
+                <constraint firstItem="dlb-Gr-r0I" firstAttribute="top" secondItem="eu0-Jo-5oQ" secondAttribute="top" id="y7f-Ze-UWH"/>
             </constraints>
             <size key="customSize" width="142" height="119"/>
             <connections>

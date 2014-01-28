@@ -123,7 +123,7 @@
                                 </state>
                                 <state key="highlighted" image="action_pin_active"/>
                                 <connections>
-                                    <action selector="pinPost:" destination="J9J-bF-ztf" eventType="touchUpInside" id="e4X-x9-yU5"/>
+                                    <action selector="showLocation:" destination="J9J-bF-ztf" eventType="touchUpInside" id="xHb-yf-cck"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bDc-bv-DBk">

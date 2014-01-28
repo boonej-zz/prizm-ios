@@ -58,7 +58,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self) {
-
+        [self cellDidLoad];
     }
     return self;
 }

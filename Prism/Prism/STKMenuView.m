@@ -66,7 +66,7 @@
 
         UIView *v = [[UIView alloc] init];
         [v setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [v setBackgroundColor:[UIColor colorWithWhite:0.5 alpha:0.5]];
+        [v setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.0]];
         [self addSubview:v];
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|"
                                                                               options:0

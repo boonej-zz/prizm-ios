@@ -31,29 +31,6 @@ NSString * const STKPostTypeAccolade = @"6";
 @implementation STKPost
 
 
-- (void)setCoordinate:(CLLocationCoordinate2D)coordinate
-{
-    NSDictionary *d = @{@"lat" : @(coordinate.latitude), @"lon" : @(coordinate.longitude)};
-    NSData *data = [NSJSONSerialization dataWithJSONObject:d options:0 error:nil];
-    [self willChangeValueForKey:@"coordinateData"];
-    [self setValue:data forKey:@"coordinateData"];
-    [self didChangeValueForKey:@"coordinateData"];
-}
-
-- (CLLocationCoordinate2D)coordinate
-{
-    NSData *data = [self valueForKey:@"coordinateData"];
-    if(!data)
-        return CLLocationCoordinate2DMake(0, 0);
-    
-    NSDictionary *d = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-    
-    CLLocationCoordinate2D coord;
-    coord.latitude = [[d objectForKey:@"lat"] doubleValue];
-    coord.longitude = [[d objectForKey:@"lon"] doubleValue];
-    return coord;
-}
-
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
     [self bindFromDictionary:jsonObject keyMap:@{

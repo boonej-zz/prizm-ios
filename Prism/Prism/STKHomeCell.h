@@ -29,7 +29,7 @@
 - (IBAction)showComments:(id)sender;
 - (IBAction)addToPrism:(id)sender;
 - (IBAction)sharePost:(id)sender;
-- (IBAction)pinPost:(id)sender;
+- (IBAction)showLocation:(id)sender;
 - (IBAction)imageTapped:(id)sender;
 
 - (void)populateWithPost:(STKPost *)post;

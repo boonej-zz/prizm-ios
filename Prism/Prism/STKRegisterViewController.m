@@ -19,6 +19,8 @@
 
 @interface STKRegisterViewController ()
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *gapConstraint;
+
 @end
 
 @implementation STKRegisterViewController
@@ -35,7 +37,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    float screenHeightDelta = 568.0 - [[UIScreen mainScreen] bounds].size.height;
+    if(fabs(screenHeightDelta) > 0)
+        [[self gapConstraint] setConstant:10];
+    
 }
 
 - (IBAction)connectWithTwitter:(id)sender

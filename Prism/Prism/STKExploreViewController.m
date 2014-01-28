@@ -39,11 +39,7 @@
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         
-        UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_search"]
-                                                                         style:UIBarButtonItemStylePlain
-                                                                        target:self
-                                                                        action:@selector(toggleSearch:)];
-        [[self navigationItem] setRightBarButtonItem:searchButton];
+        [[self navigationItem] setRightBarButtonItem:[self searchBarButtonItem]];
         
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_explore"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
@@ -52,7 +48,7 @@
     return self;
 }
 
-- (void)toggleSearch:(id)sender
+- (void)initiateSearch:(id)sender
 {
     float top = [[self tableView] contentInset].top;
     if(-[[self tableView] contentOffset].y == top) {
@@ -63,12 +59,19 @@
     
 }
 
+- (void)avatarTappedForPost:(STKPost *)p
+{
+    STKProfile *prof = [p creatorProfile];
+}
+
 - (void)showPostAtIndex:(int)idx
 {
     if(idx < [[self posts] count]) {
+        STKPost *p = [[self posts] objectAtIndex:idx];
         STKPostViewController *vc = [[STKPostViewController alloc] init];
-        [vc setPost:[[self posts] objectAtIndex:idx]];
-        [self presentViewController:vc animated:YES completion:nil];
+        [vc setPost:p];
+
+        [[self navigationController] pushViewController:vc animated:YES];
     }
 }
 

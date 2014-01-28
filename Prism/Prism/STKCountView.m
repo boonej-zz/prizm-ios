@@ -8,7 +8,7 @@
 
 #import "STKCountView.h"
 
-@interface STKCountCircleView : UIView
+@interface STKCountCircleView : UIControl
 
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *countLabel;
@@ -101,6 +101,7 @@
     NSMutableArray *a = [NSMutableArray array];
     for(int i = 0; i < 3; i++) {
         STKCountCircleView *c = [[STKCountCircleView alloc] init];
+        [c addTarget:self action:@selector(circleTapped:) forControlEvents:UIControlEventTouchUpInside];
         [c setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self addSubview:c];
         [a addObject:c];
@@ -113,6 +114,12 @@
                                                                  options:0
                                                                  metrics:nil
                                                                    views:@{@"v0" : a[0], @"v1" : a[1], @"v2" : a[2]}]];
+}
+
+- (void)circleTapped:(id)sender
+{
+    int idx = [[self circleViews] indexOfObject:sender];
+    [[self delegate] countView:self didSelectCircleAtIndex:idx];
 }
 
 - (void)setCircleTitles:(NSArray *)circleTitles

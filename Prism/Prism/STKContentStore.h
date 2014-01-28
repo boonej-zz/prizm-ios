@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "STKPost.h"
-
+@import CoreLocation;
 
 @class STKUser;
 
@@ -44,5 +44,8 @@ typedef enum {
 - (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
                        referencePost:(STKPost *)referencePost
                           completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
+
+- (void)fetchLocationNamesForCoordinate:(CLLocationCoordinate2D)coord
+                             completion:(void (^)(NSArray *locations, NSError *err))block;
 
 @end

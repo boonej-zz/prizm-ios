@@ -12,10 +12,9 @@
 NSString * const STKConnectionUnauthorizedNotification = @"STKConnectionUnauthorizedNotification";
 NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
-static NSMutableArray *sharedConnectionList = nil;
+
 
 @interface STKConnection ()
-@property (nonatomic) int statusCode;
 @property (nonatomic, weak) NSURLSessionDataTask *internalConnection;
 @property (nonatomic, strong) NSMutableDictionary *internalArguments;
 @property (nonatomic, strong) NSURL *baseURL;
@@ -27,6 +26,16 @@ static NSMutableArray *sharedConnectionList = nil;
 
 @implementation STKConnection
 @dynamic parameters;
+
++ (NSMutableArray *)activeConnections
+{
+    static NSMutableArray *sharedConnectionList = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedConnectionList = [[NSMutableArray alloc] init];
+    });
+    return sharedConnectionList;
+}
 
 - (id)initWithBaseURL:(NSURL *)url endpoint:(NSString *)endpoint
 {
@@ -95,11 +104,8 @@ static NSMutableArray *sharedConnectionList = nil;
     [self setInternalConnection:dt];
 
     // If this is the first connection started, create the array
-    if (!sharedConnectionList)
-        sharedConnectionList = [[NSMutableArray alloc] init];
-    
     // Add the connection to the array so it doesn't get destroyed
-    [sharedConnectionList addObject:self];
+    [[STKConnection activeConnections] addObject:self];
     
     [dt resume];
 }
@@ -196,7 +202,7 @@ static NSMutableArray *sharedConnectionList = nil;
     if ([self completionBlock]) {
         [self completionBlock](nil, err);
     }
-    [sharedConnectionList removeObject:self];
+    [[STKConnection activeConnections] removeObject:self];
 }
 
 - (void)handleSuccess:(NSData *)data
@@ -266,7 +272,7 @@ static NSMutableArray *sharedConnectionList = nil;
         [self completionBlock](rootObject, nil);
     
     // Now, destroy this connection
-    [sharedConnectionList removeObject:self];
+    [[STKConnection activeConnections] removeObject:self];
 }
 
 - (id)populateModelGraphWithData:(id)incomingData error:(NSError **)err
@@ -402,10 +408,10 @@ static NSMutableArray *sharedConnectionList = nil;
 
 + (void)cancelAllConnections {
 	
-	for (STKConnection *connection in sharedConnectionList) {
+	for (STKConnection *connection in [STKConnection activeConnections]) {
 		[connection.internalConnection cancel];
 	}
-    [sharedConnectionList removeAllObjects];
+    [[STKConnection activeConnections] removeAllObjects];
 }
 
 

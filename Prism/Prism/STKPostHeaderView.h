@@ -18,4 +18,6 @@
 @property (nonatomic, strong) UILabel *sourceLabel;
 @property (nonatomic, strong) UIImageView *postTypeView;
 @property (nonatomic, strong) UIImageView *backdropFadeView;
+@property (nonatomic, strong) UIControl *avatarButton;
+
 @end

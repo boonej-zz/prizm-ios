@@ -15,8 +15,13 @@
 #import "STKRequestItem.h"
 #import "STKConnection.h"
 #import "STKProfile.h"
+#import "STKFoursquareConnection.h"
+#import "STKFoursquareLocation.h"
 
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
+
+NSString * const STKContentFoursquareClientID = @"NPXBWJD343KPWSECQJM1NKJEZ4SYQ4RGRYWEBTLCU21PNUXO";
+NSString * const STKContentFoursquareClientSecret = @"B2KSDXAPXQTWWMZLB2ODCCR3JOJVRQKCS1MNODYKD4TF2VCS";
 
 NSString * const STKContentEndpointCreatePost = @"/common/ajax/create_post.php";
 NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
@@ -57,6 +62,26 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
     return [NSError errorWithDomain:STKUserStoreErrorDomain code:code userInfo:nil];
 }
 
+- (void)fetchLocationNamesForCoordinate:(CLLocationCoordinate2D)coord
+                             completion:(void (^)(NSArray *locations, NSError *err))block
+{
+    STKFoursquareConnection *c = [[STKFoursquareConnection alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.foursquare.com"]
+                                                                         endpoint:@"/v2/venues/search"];
+    [c addQueryValue:[NSString stringWithFormat:@"%.2f,%.2f", coord.latitude, coord.longitude] forKey:@"ll"];
+    [c addQueryValue:STKContentFoursquareClientID forKey:@"client_id"];
+    [c addQueryValue:STKContentFoursquareClientSecret forKey:@"client_secret"];
+    [c addQueryValue:@"20130101" forKey:@"v"];
+    
+    [c setModelGraph:@{@"venues" : @[@"STKFoursquareLocation"]}];
+    [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+        if(!err) {
+            NSArray *venues = [obj objectForKey:@"venues"];
+            block(venues, nil);
+        } else {
+            block(nil, err);
+        }
+    }];
+}
 
 - (void)fetchPostsForUser:(STKUser *)u completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block
 {

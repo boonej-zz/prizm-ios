@@ -11,6 +11,7 @@
 @import CoreData;
 
 extern NSString * const STKConnectionUnauthorizedNotification;
+extern NSString * const STKConnectionErrorDomain;
 
 typedef enum {
     STKConnectionMethodGET,
@@ -48,6 +49,8 @@ typedef enum {
 @property (nonatomic, strong) NSDictionary *existingMatchMap;
 @property (nonatomic, copy) void (^insertionBlock)(NSManagedObject *rootObject);
 @property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic) int statusCode;
+
 
 
 // Pass either an array or dictionary containing any number of arrays, dictionaries and strings.
@@ -75,5 +78,9 @@ typedef enum {
 
 - (void)addQueryValue:(NSString *)value forKey:(NSString *)key;
 
++ (NSMutableArray *)activeConnections;
+- (void)reportFailureWithError:(NSError *)err;
+- (id)populateModelGraphWithData:(id)incomingData error:(NSError **)err;
+- (id)populateModelObjectWithData:(id)incomingData error:(NSError **)err;
 
 @end
