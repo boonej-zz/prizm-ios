@@ -20,12 +20,11 @@ typedef enum {
     STKUserStoreErrorCodeNoPassword
 } STKUserStoreErrorCode;
 
-extern NSString * const STKUserStoreTransparentLoginFailedNotification;
-    extern NSString * const STKUserStoreTransparentLoginFailedReasonKey;
-        extern NSString * const STKUserStoreTransparentLoginFailedConnectionValue;
-        extern NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue;
-
-extern NSString * const STKUserStoreUserBecameUnauthorizedNotification;
+extern NSString * const STKUserStoreCurrentUserSessionEndedNotification;
+    extern NSString * const STKUserStoreCurrentUserSessionEndedReasonKey;
+        extern NSString * const STKUserStoreCurrentUserSessionEndedConnectionValue;
+        extern NSString * const STKUserStoreCurrentUserSessionEndedAuthenticationValue;
+        extern NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue;
 
 
 extern NSString * const STKUserCoverPhotoURLStringKey;
@@ -61,6 +60,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 - (void)startFollowingProfile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block;
 - (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block;
+
+- (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block;
 
 - (void)logout;
 

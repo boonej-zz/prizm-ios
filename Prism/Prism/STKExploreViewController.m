@@ -61,7 +61,7 @@
 
 - (void)avatarTappedForPost:(STKPost *)p
 {
-    STKProfile *prof = [p creatorProfile];
+
 }
 
 - (void)showPostAtIndex:(int)idx
@@ -114,7 +114,7 @@
 
     [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
                                             referencePost:[[self posts] firstObject]
-                                               completion:^(NSArray *posts, NSError *err, BOOL moreComing) {
+                                               completion:^(NSArray *posts, NSError *err) {
                                                    if(!err) {
                                                        [[self posts] addObjectsFromArray:posts];
                                                        [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];

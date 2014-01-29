@@ -44,11 +44,6 @@
     return self;
 }
 
-- (IBAction)temporaryLogout:(id)sender
-{
-    [[self menuController] logout];
-    
-}
 
 - (BOOL)isShowingCurrentUserProfile
 {
@@ -63,19 +58,18 @@
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
     }
     
-    if([self profile]) {
-        
-    } else {
+    if(![self profile]) {
         [self setProfile:[[[STKUserStore store] currentUser] personalProfile]];
-        [[STKUserStore store] fetchProfileForCurrentUser:^(STKUser *u, NSError *err) {
-            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
-                            withRowAnimation:UITableViewRowAnimationNone];
-        }];
     }
+    [[STKUserStore store] fetchProfileForCurrentUser:^(STKUser *u, NSError *err) {
+        [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
+                        withRowAnimation:UITableViewRowAnimationNone];
+    }];
+
     [[STKContentStore store] fetchProfilePostsForProfile:[self profile]
                                              inDirection:STKContentStoreFetchDirectionNewer
                                            referencePost:[[self posts] firstObject]
-                                              completion:^(NSArray *posts, NSError *err, BOOL moreComing) {
+                                              completion:^(NSArray *posts, NSError *err) {
                                                   if(!err) {
                                                       [[self posts] addObjectsFromArray:posts];
                                                       [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];

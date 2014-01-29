@@ -111,6 +111,8 @@
 		BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */; };
 		BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */; };
 		BEF216FC188DDA1500B35C51 /* STKProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF216FB188DDA1500B35C51 /* STKProfile.m */; };
+		BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF2D7891899818900D3C8D6 /* STKRequestCell.m */; };
+		BEF2D78C1899818900D3C8D6 /* STKRequestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF2D78A1899818900D3C8D6 /* STKRequestCell.xib */; };
 		BEF7A08118439E0800A3AFFB /* STKRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A07F18439E0800A3AFFB /* STKRegisterViewController.m */; };
 		BEF7A08218439E0800A3AFFB /* STKRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF7A08018439E0800A3AFFB /* STKRegisterViewController.xib */; };
 		BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A0851843ACB100A3AFFB /* STKRenderServer.m */; };
@@ -2002,6 +2004,9 @@
 		BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKExploreCell.xib; path = Prism/STKExploreCell.xib; sourceTree = "<group>"; };
 		BEF216FA188DDA1500B35C51 /* STKProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProfile.h; sourceTree = "<group>"; };
 		BEF216FB188DDA1500B35C51 /* STKProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProfile.m; sourceTree = "<group>"; };
+		BEF2D7881899818900D3C8D6 /* STKRequestCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKRequestCell.h; sourceTree = "<group>"; };
+		BEF2D7891899818900D3C8D6 /* STKRequestCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKRequestCell.m; sourceTree = "<group>"; };
+		BEF2D78A1899818900D3C8D6 /* STKRequestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKRequestCell.xib; sourceTree = "<group>"; };
 		BEF7A07E18439E0800A3AFFB /* STKRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKRegisterViewController.h; sourceTree = "<group>"; };
 		BEF7A07F18439E0800A3AFFB /* STKRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKRegisterViewController.m; sourceTree = "<group>"; };
 		BEF7A08018439E0800A3AFFB /* STKRegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKRegisterViewController.xib; sourceTree = "<group>"; };
@@ -2290,6 +2295,9 @@
 				BE95438D1892FE5C00DCC3B1 /* STKSearchProfileCell.h */,
 				BE95438E1892FE5C00DCC3B1 /* STKSearchProfileCell.m */,
 				BE95438F1892FE5C00DCC3B1 /* STKSearchProfileCell.xib */,
+				BEF2D7881899818900D3C8D6 /* STKRequestCell.h */,
+				BEF2D7891899818900D3C8D6 /* STKRequestCell.m */,
+				BEF2D78A1899818900D3C8D6 /* STKRequestCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4275,6 +4283,7 @@
 			files = (
 				BE1E09D61850E58900975652 /* STKVerticalNavigationController.xib in Resources */,
 				BE5767F6187B4DFF004AEE1F /* STKPostViewController.xib in Resources */,
+				BEF2D78C1899818900D3C8D6 /* STKRequestCell.xib in Resources */,
 				BE9543911892FE5C00DCC3B1 /* STKSearchProfileCell.xib in Resources */,
 				BE1FC3B2186C81A4003464E1 /* STKTextImageCell.xib in Resources */,
 				BE477C1E186E2ED4003672A0 /* STKProfileCell.xib in Resources */,
@@ -4334,6 +4343,7 @@
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,
 				BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */,
+				BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */,
 				BE1FC3B5186C8C0A003464E1 /* STKImageCollectionViewCell.m in Sources */,
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
 				BE02EAAF182A80A200A5505A /* main.m in Sources */,

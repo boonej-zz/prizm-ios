@@ -29,7 +29,7 @@
 }
 - (IBAction)tempLogout:(id)sender
 {
-    [[self menuController] logout];
+    [[STKUserStore store] logout];
 }
 
 - (void)viewDidLoad

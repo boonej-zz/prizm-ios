@@ -23,13 +23,16 @@
 @property (nonatomic, strong) UIImage *cardToolbarNormalImage;
 @property (nonatomic) float initialCardViewOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cardViewTopOffset;
-@property (nonatomic, strong) NSArray *items;
+
 
 @property (nonatomic, strong) NSMutableArray *reusableCards;
 @property (nonatomic, strong) NSMutableDictionary *cardMap;
 @property (nonatomic, strong) UINib *homeCellNib;
 
 @property (nonatomic, strong) STKBackdropView *backdropView;
+
+@property (nonatomic, strong) NSMutableArray *items;
+
 @end
 
 @implementation STKHomeViewController
@@ -45,6 +48,8 @@
         
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
+        _items = [[NSMutableArray alloc] init];
+        
     }
     return self;
 }
@@ -237,20 +242,17 @@
     [super viewWillAppear:animated];
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
-    /*
-    [[STKContentStore store] fetchPostsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *posts, NSError *error, BOOL moreComing) {
-        if(!error) {
-            if([self items]) {
-                _items = [posts arrayByAddingObjectsFromArray:_items];
-            } else {
-                _items = posts;
-            }
-            [[self tableView] reloadData];
-            [self layoutCards];
-        } else {
-            
-        }
-    }];*/
+    [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
+                                  inDirection:STKContentStoreFetchDirectionNewer
+                                referencePost:[[self items] firstObject] completion:^(NSArray *posts, NSError *err) {
+                                    if(!err) {
+                                        [[self items] addObjectsFromArray:posts];
+                                        [[self tableView] reloadData];
+                                        [self layoutCards];
+                                    } else {
+                                        
+                                    }
+                                }];
 }
 
 - (void)viewDidAppear:(BOOL)animated

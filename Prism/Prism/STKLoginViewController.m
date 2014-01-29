@@ -48,6 +48,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if([[[self emailField] text] length] > 0 && [[[self passwordField] text] length] > 0) {
+        [[self view] endEditing:YES];
         [STKProcessingView present];
         [[STKUserStore store] loginWithEmail:[[self emailField] text]
                                     password:[[self passwordField] text]

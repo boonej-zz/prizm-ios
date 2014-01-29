@@ -20,6 +20,7 @@
 #import "STKErrorStore.h"
 #import "STKRegisterViewController.h"
 #import "STKVerticalNavigationController.h"
+#import "UIViewController+STKControllerItems.h"
 
 @import QuartzCore;
 
@@ -38,55 +39,58 @@
     self = [super initWithNibName:nil bundle:nil];
     if(self) {
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(transparentLoginDidFail:)
-                                                     name:STKUserStoreTransparentLoginFailedNotification
-                                                   object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(userBecameUnauthorized:)
-                                                     name:STKUserStoreUserBecameUnauthorizedNotification
+                                                     name:STKUserStoreCurrentUserSessionEndedNotification
                                                    object:nil];
-
     }
     return self;
 }
 
-- (void)logout
-{
-    [[STKUserStore store] logout];
-    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
-    STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
-    [self presentViewController:nvc
-                       animated:YES
-                     completion:nil];
-
-}
 
 - (void)userBecameUnauthorized:(NSNotification *)note
 {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Session Ended"
-                                                 message:@"You no longer have access to the user you have logged in as. Try logging in again."
-                                                delegate:nil
-                                       cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    NSString *reasonValue = [[note userInfo] objectForKey:STKUserStoreCurrentUserSessionEndedReasonKey];
+    NSString *msg = nil;
+    if([reasonValue isEqualToString:STKUserStoreCurrentUserSessionEndedConnectionValue]) {
+        msg = @"There was an issue with your connection and you could not be authenticated with the server. Please make sure you have an internet connection and log in again.";
+    } else if ([reasonValue isEqualToString:STKUserStoreCurrentUserSessionEndedAuthenticationValue]) {
+        msg = @"Your session has ended. Please try to login again.";
+    }
+    
+    // Only if we need a message do we show the alert view
+    UIAlertView *av = nil;
+    if(msg) {
+        av = [[UIAlertView alloc] initWithTitle:@"Session Ended"
+                                        message:msg
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+    }
     STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
     STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
     [self presentViewController:nvc animated:YES
                      completion:^{
+                         [self recreateAllViewControllers];
                          [av show];
                      }];
-
+    
 }
 
-
-- (void)transparentLoginDidFail:(NSNotification *)note
+- (void)recreateAllViewControllers
 {
-    UIAlertView *av = [STKErrorStore alertViewForError:[[note userInfo] objectForKey:@"error"] delegate:nil];
+    NSMutableArray *vcTypes = [NSMutableArray array];
+    for(UINavigationController *nvc in [self viewControllers]) {
+        UIViewController *root = [[nvc viewControllers] firstObject];
+        [vcTypes addObject:[root class]];
+    }
     
-    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
-    STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
-    [self presentViewController:nvc animated:YES
-                     completion:^{
-                         [av show];
-                     }];
+    NSMutableArray *newVCs = [NSMutableArray array];
+    for(Class cls in vcTypes) {
+        UIViewController *vc = [[cls alloc] init];
+        UINavigationController *newNav = [[UINavigationController alloc] initWithRootViewController:vc];
+        [newVCs addObject:newNav];
+    }
+    [self setViewControllers:[newVCs copy]];
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
@@ -229,6 +233,10 @@
     for(UIViewController *vc in viewControllers) {
         if([vc isKindOfClass:[UINavigationController class]]) {
             [(UINavigationController *)vc setDelegate:self];
+        } else {
+            @throw [NSException exceptionWithName:@"STKMenuControllerException"
+                                           reason:@"All view controllers must be embedded in a UINavigationController"
+                                         userInfo:nil];
         }
         
         [self addChildViewController:vc];

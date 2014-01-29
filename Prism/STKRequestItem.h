@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "STKJSONObject.h"
 
-@class STKUser;
+@class STKProfile;
 
 extern NSString * const STKRequestTypeTrust;
 extern NSString * const STKRequestTypeAccolade;
@@ -19,15 +20,12 @@ extern NSString * const STKRequestStatusAccepted;
 extern NSString * const STKRequestStatusRejected;
 extern NSString * const STKRequestStatusBlocked;
 
-@interface STKRequestItem : NSManagedObject
+@interface STKRequestItem : NSObject <STKJSONObject>
 
-@property (nonatomic) int32_t userID;
-@property (nonatomic, retain) NSString * userName;
-@property (nonatomic, retain) NSString * profileImageURLString;
-@property (nonatomic) NSString *type;
-@property (nonatomic, retain) NSDate * dateReceived;
-@property (nonatomic, retain) NSDate * dateConfirmed;
-@property (nonatomic) BOOL accepted;
-@property (nonatomic, retain) STKUser *user;
+@property (nonatomic, strong) STKProfile *requestingProfile;
+@property (nonatomic, strong) NSDate *dateCreated;
+@property (nonatomic, strong) NSString *requestID;
+@property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) NSString *status;
 
 @end

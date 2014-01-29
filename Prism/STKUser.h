@@ -14,8 +14,6 @@
 
 @class STKActivityItem, STKPost, STKRequestItem;
 
-
-
 extern NSString * const STKUserGenderMale;
 extern NSString * const STKUserGenderFemale;
 

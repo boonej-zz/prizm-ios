@@ -7,7 +7,8 @@
 //
 
 #import "STKRequestItem.h"
-#import "STKUser.h"
+#import "STKUserStore.h"
+#import "STKProfile.h"
 
 NSString * const STKRequestTypeTrust = @"1";
 NSString * const STKRequestTypeAccolade = @"2";
@@ -20,13 +21,35 @@ NSString * const STKRequestStatusBlocked = @"4";
 
 @implementation STKRequestItem
 
-@dynamic userID;
-@dynamic userName;
-@dynamic profileImageURLString;
-@dynamic type;
-@dynamic dateReceived;
-@dynamic dateConfirmed;
-@dynamic accepted;
-@dynamic user;
+
+/*
+ 
+ @property (nonatomic, strong) STKProfile *requestingProfile;
+ @property (nonatomic, strong) NSDate *dateCreated;
+ @property (nonatomic, strong) NSString *requestID;
+ @property (nonatomic, strong) NSString *type;
+ @property (nonatomic, strong) NSString *status;
+ 
+*/
+- (NSError *)readFromJSONObject:(id)jsonObject
+{
+    static NSDateFormatter *df = nil;
+    if(!df) {
+        df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"YYYY-MM-dd HH:mm:ss.SSSSSS"];
+    }
+    [self bindFromDictionary:jsonObject
+                      keyMap:@{
+                               @"request" : @"requestID",
+                               @"request_type" : @"type",
+                               @"request_status" : @"status",
+                               @"recorded" : ^(id inValue) {
+                                    [self setDateCreated:[df dateFromString:inValue]];
+    }}];
+    
+
+    [self setRequestingProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"requesting_profile"]]];
+    return nil;
+}
 
 @end

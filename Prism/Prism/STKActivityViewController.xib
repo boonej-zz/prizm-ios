@@ -6,8 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKActivityViewController">
             <connections>
-                <outlet property="tableView" destination="uQ0-yN-AK0" id="FTh-du-l3h"/>
-                <outlet property="toolbar" destination="AAR-J6-Ohg" id="Mu4-7n-ecp"/>
+                <outlet property="tableView" destination="7H2-7Q-gtH" id="Ufk-b7-bHN"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -16,36 +15,40 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AAR-J6-Ohg">
-                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dpd-dE-8bZ">
+                    <rect key="frame" x="20" y="72" width="280" height="29"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="44" id="KLY-7Q-dlS"/>
+                        <constraint firstAttribute="height" constant="28" id="PSy-JS-wZa"/>
                     </constraints>
-                    <items>
-                        <barButtonItem title="Notifications" id="fJ3-8a-Fas"/>
-                        <barButtonItem title="Requests" id="B3d-8Y-Pvq"/>
-                    </items>
-                </toolbar>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="uQ0-yN-AK0">
+                    <segments>
+                        <segment title="Activity"/>
+                        <segment title="Requests"/>
+                    </segments>
+                    <connections>
+                        <action selector="typeChanged:" destination="-1" eventType="valueChanged" id="DTT-fC-sRf"/>
+                    </connections>
+                </segmentedControl>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7H2-7Q-gtH">
                     <rect key="frame" x="0.0" y="108" width="320" height="460"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
-                        <outlet property="dataSource" destination="-1" id="IqZ-NL-spj"/>
-                        <outlet property="delegate" destination="-1" id="sgA-KJ-MlQ"/>
+                        <outlet property="dataSource" destination="-1" id="fmY-dO-K07"/>
+                        <outlet property="delegate" destination="-1" id="y83-rd-PsF"/>
                     </connections>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="0.79587720788043481" green="0.79587720788043481" blue="0.79587720788043481" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="uQ0-yN-AK0" firstAttribute="top" secondItem="AAR-J6-Ohg" secondAttribute="bottom" id="7li-Ln-wXu"/>
-                <constraint firstItem="uQ0-yN-AK0" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="A2Y-3T-pOM"/>
-                <constraint firstAttribute="trailing" secondItem="AAR-J6-Ohg" secondAttribute="trailing" id="FVB-xk-Je7"/>
-                <constraint firstAttribute="bottom" secondItem="uQ0-yN-AK0" secondAttribute="bottom" id="O6v-D4-f3i"/>
-                <constraint firstAttribute="trailing" secondItem="uQ0-yN-AK0" secondAttribute="trailing" id="ifD-jr-soo"/>
-                <constraint firstItem="AAR-J6-Ohg" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="t2p-qd-RfY"/>
-                <constraint firstItem="AAR-J6-Ohg" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="xXd-ke-jal"/>
+                <constraint firstAttribute="bottom" secondItem="7H2-7Q-gtH" secondAttribute="bottom" id="8wB-2T-Met"/>
+                <constraint firstAttribute="trailing" secondItem="7H2-7Q-gtH" secondAttribute="trailing" id="LMJ-vJ-qg9"/>
+                <constraint firstItem="7H2-7Q-gtH" firstAttribute="top" secondItem="dpd-dE-8bZ" secondAttribute="bottom" constant="8" id="Ng3-4d-vzc"/>
+                <constraint firstItem="dpd-dE-8bZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="72" id="Nn9-q6-e1y"/>
+                <constraint firstAttribute="trailing" secondItem="dpd-dE-8bZ" secondAttribute="trailing" constant="20" id="PbI-U9-ltb"/>
+                <constraint firstItem="7H2-7Q-gtH" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="gQI-qU-Ppg"/>
+                <constraint firstItem="dpd-dE-8bZ" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" id="h2y-DJ-eMZ"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>

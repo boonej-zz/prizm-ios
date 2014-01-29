@@ -26,7 +26,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                            <textInputTraits key="textInputTraits" returnKeyType="go"/>
+                            <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="go"/>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="Xpp-3Q-yUC"/>
                             </connections>

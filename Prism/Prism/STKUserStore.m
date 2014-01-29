@@ -24,7 +24,6 @@
 // To erase DB data:
 // curl prism.neadwerx.com/common/ajax/delete_all_entities_and_data.php
 
-NSString * const STKUserStoreUserBecameUnauthorizedNotification = @"STKUserStoreUserBecameUnauthorizedNotification";
 
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 
@@ -47,12 +46,13 @@ NSString * const STKUserEndpointUpdateProfile = @"/common/ajax/update_profile.ph
 NSString * const STKUserEndpointGetProfile = @"/common/ajax/get_profiles.php";
 NSString * const STKUserEndpointAddFollower = @"/common/ajax/create_profile_follower.php";
 NSString * const STKUserEndpointRequest = @"/common/ajax/create_request.php";
+NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
-NSString * const STKUserStoreTransparentLoginFailedNotification = @"STKUserStoreTransparentLoginFailedNotification";
-NSString * const STKUserStoreTransparentLoginFailedReasonKey = @"STKUserStoreTransparentLoginFailedReasonKey";
-NSString * const STKUserStoreTransparentLoginFailedConnectionValue = @"STKUserStoreTransparentLoginFailedConnectionValue";
-NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUserStoreTransparentLoginFailedAuthenticationValue";
-
+NSString * const STKUserStoreCurrentUserSessionEndedNotification = @"STKUserStoreCurrentUserSessionEndedNotification";
+NSString * const STKUserStoreCurrentUserSessionEndedReasonKey = @"STKUserStoreCurrentUserSessionEndedReasonKey";
+NSString * const STKUserStoreCurrentUserSessionEndedConnectionValue = @"STKUserStoreCurrentUserSessionEndedConnectionValue";
+NSString * const STKUserStoreCurrentUserSessionEndedAuthenticationValue = @"STKUserStoreCurrentUserSessionEndedAuthenticationValue";
+NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStoreCurrentUserSessionEndedLogoutValue";
 
 @import CoreData;
 @import Accounts;
@@ -63,8 +63,6 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 @property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
 @property (nonatomic, strong) NSMutableArray *authorizedRequestQueue;
-
-
 
 @end
 
@@ -119,6 +117,10 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     [self setCurrentUserIsAuthorized:NO];
     [self setCurrentUser:nil];
     [STKConnection cancelAllConnections];
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserSessionEndedNotification
+                                                        object:nil
+                                                      userInfo:@{STKUserStoreCurrentUserSessionEndedReasonKey : STKUserStoreCurrentUserSessionEndedLogoutValue}];
+
 }
 
 - (void)executeAuthorizedRequest:(void (^)(void))request
@@ -142,8 +144,11 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 {
     [self setCurrentUserIsAuthorized:NO];
     [self setCurrentUser:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreUserBecameUnauthorizedNotification
-                                                        object:self];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserSessionEndedNotification
+                                                        object:nil
+                                                      userInfo:@{STKUserStoreCurrentUserSessionEndedReasonKey : STKUserStoreCurrentUserSessionEndedAuthenticationValue}];
+
 }
 
 - (void)authenticateUser:(STKUser *)u
@@ -175,7 +180,8 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
 - (void)setCurrentUser:(STKUser *)currentUser
 {
     _currentUser = currentUser;
-    if([currentUser userID]) {
+    
+    if(currentUser) {
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser userID]
                                                   forKey:STKUserStoreCurrentUserKey];
     } else {
@@ -183,7 +189,6 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
         [[self authorizedRequestQueue] removeAllObjects];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
     }
-    
 }
 
 - (STKUser *)currentUser
@@ -298,6 +303,25 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
     }];
 }
 
+- (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block
+{
+    [self executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetRequests];
+        [c addQueryValue:[[[self currentUser] personalProfile] profileID]
+                  forKey:@"profile"];
+        
+        [c setModelGraph:@{@"request" : @[@"STKRequestItem"]}];
+        
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            if(!err) {
+                NSArray *requests = [obj objectForKey:@"request"];
+                block(requests, nil);
+            } else {
+                block(nil, err);
+            }
+        }];
+    }];
+}
 
 #pragma mark Authentication Nonsense
 
@@ -805,7 +829,7 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
                 [self validateWithGoogle:[info token] completion:validationBlock];
             } else if([[info externalService] isEqualToString:STKUserExternalSystemFacebook]) {
                 [self validateWithFacebook:[info token] completion:validationBlock];
-            } else if([[info externalService] isEqualToString:STKUserEndpointValidateTwitter]) {
+            } else if([[info externalService] isEqualToString:STKUserExternalSystemTwitter]) {
                 [self validateWithTwitterToken:[info token] secret:[info secret] completion:validationBlock];
             } else {
                 [self validateWithEmail:[info email]
@@ -831,14 +855,14 @@ NSString * const STKUserStoreTransparentLoginFailedAuthenticationValue = @"STKUs
             [self setCurrentUser:nil];
     
             if([valErr isConnectionError]) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreTransparentLoginFailedNotification
+                [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserSessionEndedNotification
                                                                     object:nil
-                                                                  userInfo:@{STKUserStoreTransparentLoginFailedReasonKey : STKUserStoreTransparentLoginFailedConnectionValue,
+                                                                  userInfo:@{STKUserStoreCurrentUserSessionEndedReasonKey : STKUserStoreCurrentUserSessionEndedConnectionValue,
                                                                              @"error" : valErr}];
             } else {
-                [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreTransparentLoginFailedNotification
+                [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserSessionEndedNotification
                                                                     object:nil
-                                                                  userInfo:@{STKUserStoreTransparentLoginFailedReasonKey : STKUserStoreTransparentLoginFailedAuthenticationValue,
+                                                                  userInfo:@{STKUserStoreCurrentUserSessionEndedReasonKey : STKUserStoreCurrentUserSessionEndedAuthenticationValue,
                                                                              @"error" : valErr}];
             }
         }

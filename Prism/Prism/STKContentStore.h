@@ -30,20 +30,22 @@ typedef enum {
 - (void)fetchRecommendedHashtags:(NSString *)baseString
                       completion:(void (^)(NSArray *suggestions))block;
 
-- (void)fetchPostsForUser:(STKUser *)u
-               completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
 
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
 
+- (void)fetchFeedForUser:(STKUser *)u
+             inDirection:(STKContentStoreFetchDirection)fetchDirection
+           referencePost:(STKPost *)referencePost
+              completion:(void (^)(NSArray *posts, NSError *err))block;
 
 - (void)fetchProfilePostsForProfile:(STKProfile *)prof
                         inDirection:(STKContentStoreFetchDirection)fetchDirection
                       referencePost:(STKPost *)referencePost
-                         completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
+                         completion:(void (^)(NSArray *posts, NSError *err))block;
 
 - (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
                        referencePost:(STKPost *)referencePost
-                          completion:(void (^)(NSArray *posts, NSError *err, BOOL moreComing))block;
+                          completion:(void (^)(NSArray *posts, NSError *err))block;
 
 - (void)fetchLocationNamesForCoordinate:(CLLocationCoordinate2D)coord
                              completion:(void (^)(NSArray *locations, NSError *err))block;

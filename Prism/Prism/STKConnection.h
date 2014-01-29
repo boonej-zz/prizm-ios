@@ -46,6 +46,8 @@ typedef enum {
 @property (nonatomic, strong) id <STKJSONObject> jsonRootObject;
 
 @property (nonatomic, copy) NSString *entityName;
+
+// { ourName : theirName}
 @property (nonatomic, strong) NSDictionary *existingMatchMap;
 @property (nonatomic, copy) void (^insertionBlock)(NSManagedObject *rootObject);
 @property (nonatomic, strong) NSManagedObjectContext *context;

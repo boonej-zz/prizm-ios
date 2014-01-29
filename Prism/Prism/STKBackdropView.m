@@ -72,10 +72,10 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
         [self addSubview:_overlayView];
 
         if([blurView isKindOfClass:[UIScrollView class]]) {
-            [blurView addObserver:self
+            /*[blurView addObserver:self
                        forKeyPath:@"contentOffset"
                           options:NSKeyValueObservingOptionNew
-                          context:STKBackdropViewKVOContext];
+                          context:STKBackdropViewKVOContext];*/
         }
     }
     return self;
@@ -263,5 +263,6 @@ static void * STKBackdropViewKVOContext = &STKBackdropViewKVOContext;
 {
     return ([[self cacheMap] objectForKey:ip] == nil);
 }
+
 
 @end
