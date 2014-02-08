@@ -84,13 +84,19 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     return self;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithWhite:0.7 alpha:1],
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                           NSFontAttributeName : STKFont(22)}];
-    [[[self navigationController] navigationBar] setTintColor:[UIColor lightGrayColor]];
+    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.5]];
 
 }
 
@@ -301,7 +307,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         if(!err) {
             [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
         } else {
-            
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
         }
     }];
     

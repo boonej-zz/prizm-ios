@@ -17,10 +17,12 @@ NSString * const STKProfileTypeFoundation = @"5";
 NSString * const STKProfileTypeCompa = @"6";
 NSString * const STKProfileTypeCommunity = @"7";
 
-
 NSString * const STKProfileCoverPhotoURLStringKey = @"cover_image_file_path";
 NSString * const STKProfileProfilePhotoURLStringKey = @"profile_image_file_path";
 NSString * const STKProfileProfileIDKey = @"profile";
+
+CGSize STKProfileCoverPhotoSize = {.width = 320, .height = 188};
+CGSize STKProfileProfilePhotoSize = {.width = 128, .height = 128};
 
 @implementation STKProfile
 
@@ -33,11 +35,13 @@ NSString * const STKProfileProfileIDKey = @"profile";
 @dynamic city;
 @dynamic state;
 @dynamic user;
+@dynamic entityID;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
     [self bindFromDictionary:jsonObject keyMap:
     @{
+      @"entity" : @"entityID",
       STKProfileProfileIDKey : @"profileID",
       @"name" : @"name",
       STKProfileProfilePhotoURLStringKey : @"profilePhotoPath",

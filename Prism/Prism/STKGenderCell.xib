@@ -13,7 +13,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oun-JR-z7c">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oun-JR-z7c">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
@@ -36,8 +36,8 @@
                             <action selector="femaleButtonTapped:" destination="2" eventType="touchUpInside" id="fHQ-Tu-AnA"/>
                         </connections>
                     </button>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Gender" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfr-Op-AgN">
-                        <rect key="frame" x="22" y="13" width="57" height="17"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gender" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfr-Op-AgN">
+                        <rect key="frame" x="22" y="12" width="57" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="57" id="Dry-mA-mN3"/>
@@ -47,7 +47,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JHR-cX-5Jh">
-                        <rect key="frame" x="145" y="6" width="50" height="32"/>
+                        <rect key="frame" x="170" y="6" width="50" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="50" id="a88-OV-DSV"/>
@@ -71,8 +71,8 @@
                     <constraint firstItem="lfr-Op-AgN" firstAttribute="leading" secondItem="scj-wl-GXH" secondAttribute="leading" constant="21.5" id="5yk-ha-UtA"/>
                     <constraint firstAttribute="centerY" secondItem="cJY-cD-GJS" secondAttribute="centerY" id="KIr-yK-6fV"/>
                     <constraint firstAttribute="bottom" secondItem="oun-JR-z7c" secondAttribute="bottom" constant="0.5" id="PUU-tp-XQt"/>
-                    <constraint firstAttribute="trailing" secondItem="oun-JR-z7c" secondAttribute="trailing" constant="1" id="UlR-JZ-Bf1"/>
-                    <constraint firstItem="JHR-cX-5Jh" firstAttribute="leading" secondItem="lfr-Op-AgN" secondAttribute="trailing" constant="66" id="Zev-bN-z7l"/>
+                    <constraint firstAttribute="trailing" secondItem="oun-JR-z7c" secondAttribute="trailing" id="UlR-JZ-Bf1"/>
+                    <constraint firstItem="JHR-cX-5Jh" firstAttribute="leading" secondItem="lfr-Op-AgN" secondAttribute="trailing" constant="91" id="Zev-bN-z7l"/>
                     <constraint firstAttribute="centerY" secondItem="JHR-cX-5Jh" secondAttribute="centerY" id="eRK-sb-HQe"/>
                     <constraint firstItem="oun-JR-z7c" firstAttribute="top" secondItem="scj-wl-GXH" secondAttribute="top" id="hWJ-jM-IGu"/>
                     <constraint firstAttribute="trailing" secondItem="cJY-cD-GJS" secondAttribute="trailing" constant="20" id="w8l-tQ-oQR"/>

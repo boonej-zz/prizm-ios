@@ -52,6 +52,7 @@ const long STKCreateProgressGeocoding = 4;
 
 @property (weak, nonatomic) IBOutlet UIButton *tosButton;
 
+@property (weak, nonatomic) IBOutlet UIView *coverOverlayView;
 
 - (IBAction)previousTapped:(id)sender;
 - (IBAction)nextTapped:(id)sender;
@@ -89,7 +90,7 @@ const long STKCreateProgressGeocoding = 4;
                    
                    @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                    
-                   @{@"title" : @"Zip Code", @"key" : @"zipCode"}
+                   @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
         ];
         
         _locationManager = [[CLLocationManager alloc] init];
@@ -99,7 +100,28 @@ const long STKCreateProgressGeocoding = 4;
     return self;
 }
 
-
+- (void)configureInterface
+{
+    if([[self profileInformation] coverPhotoURLString] || [[self profileInformation] coverPhoto] || [self progressMask] & STKCreateProgressUploadingCover) {
+        [[self coverOverlayView] setHidden:NO];
+        [[self coverPhotoButton] setTitle:@"Edit" forState:UIControlStateNormal];
+        [[self coverPhotoButton] setTitleColor:STKTextColor forState:UIControlStateNormal];
+    } else {
+        [[self coverOverlayView] setHidden:YES];
+        [[self coverPhotoButton] setTitleColor:STKLightBlueColor forState:UIControlStateNormal];
+        [[self coverPhotoButton] setTitle:@"Upload" forState:UIControlStateNormal];
+    }
+    
+    if([[self profileInformation] profilePhotoURLString] || [[self profileInformation] profilePhoto] || [self progressMask] & STKCreateProgressUploadingProfile) {
+        [[self profilePhotoButton] setTitle:@"Edit" forState:UIControlStateNormal];
+        [[self profilePhotoButton] setTitleColor:STKTextColor forState:UIControlStateNormal];
+        [[self profilePhotoButton] setBackgroundImage:[[self profileInformation] profilePhoto] forState:UIControlStateNormal];
+    } else {
+        [[self profilePhotoButton] setBackgroundImage:[UIImage imageNamed:@"upload_camera"] forState:UIControlStateNormal];
+        [[self profilePhotoButton] setTitle:@"Upload" forState:UIControlStateNormal];
+        [[self profilePhotoButton] setTitleColor:STKLightBlueColor forState:UIControlStateNormal];
+    }
+}
 
 
 - (void)viewDidLoad
@@ -114,7 +136,13 @@ const long STKCreateProgressGeocoding = 4;
     
     NSMutableAttributedString *title = [[[self tosButton] attributedTitleForState:UIControlStateNormal] mutableCopy];
     [title addAttribute:NSUnderlineStyleAttributeName value:@(NSUnderlineStyleSingle) range:NSMakeRange(0, [title length])];
+    [title addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:33.0 / 255.0
+                                                                             green:144.0 / 255.0
+                                                                              blue:255.0 / 255.0
+                                                                             alpha:1] range:NSMakeRange(0, [title length])];
     [[self tosButton] setAttributedTitle:title forState:UIControlStateNormal];
+    
+    [[self coverOverlayView] setHidden:YES];
     
 }
 
@@ -297,7 +325,7 @@ const long STKCreateProgressGeocoding = 4;
                                                [self setProfileImage:img];
                                            }];
     }
-    
+    [self configureInterface];
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
@@ -399,6 +427,7 @@ const long STKCreateProgressGeocoding = 4;
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self completion:^(UIImage *img) {
         if(img)
             [self setCoverImage:img];
+        [self configureInterface];
     }];
 }
 
@@ -407,6 +436,7 @@ const long STKCreateProgressGeocoding = 4;
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self completion:^(UIImage *img) {
         if(img)
             [self setProfileImage:img];
+        [self configureInterface];
     }];
 }
 
@@ -416,42 +446,48 @@ const long STKCreateProgressGeocoding = 4;
     if(img) {
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingProfile];
         
-        CGRect r = CGRectMake(0, 0, 100, 100);
+        CGRect r = CGRectZero;
+        r.size = STKProfileProfilePhotoSize;
         UIImage *resizedImage = [[STKImageStore store] uploadImage:img size:r.size intoDirectory:@"profile" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self profileInformation] setProfilePhotoURLString:URLString];
             } else {
                 [[self profileInformation] setProfilePhotoURLString:nil];
-                [self setProfileImage:nil];
+                [[self profileInformation] setProfilePhoto:nil];
+                
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Profile Image Upload Failed"
                                                              message:@"The profile image failed to upload. Ensure you have an internet connection and try again."
                                                             delegate:nil
                                                    cancelButtonTitle:@"OK"
                                                    otherButtonTitles:nil];
                 [av show];
-
+                
             }
+
             [self setProgressMask:[self progressMask] & ~STKCreateProgressUploadingProfile];
+            [self configureInterface];
         }];
         
         UIGraphicsBeginImageContextWithOptions(r.size, NO, 0.0);
         
         UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(r, 6, 6)];
-        [[UIColor colorWithRed:0 green:0 blue:1 alpha:1] set];
+        
+
+        [STKTextTransparentColor set];
         [bp setLineWidth:6 * [[UIScreen mainScreen] scale]];
         [bp stroke];
         [bp addClip];
         
         [resizedImage drawInRect:r];
         
-        [[self profilePhotoButton] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext() forState:UIControlStateNormal];
-        [[self profilePhotoButton] setTitle:@"" forState:UIControlStateNormal];
-        UIGraphicsEndImageContext();
-    } else {
-        [[self profilePhotoButton] setBackgroundImage:[UIImage imageNamed:@"upload_camera"] forState:UIControlStateNormal];
-        [[self profilePhotoButton] setTitle:@"Upload" forState:UIControlStateNormal];
+        [[UIColor colorWithWhite:0 alpha:0.5] set];
+        [bp fill];
 
+        [[self profileInformation] setProfilePhoto:UIGraphicsGetImageFromCurrentImageContext()];
+
+        UIGraphicsEndImageContext();
     }
+    [self configureInterface];
 }
 
 - (void)setCoverImage:(UIImage *)img
@@ -459,7 +495,7 @@ const long STKCreateProgressGeocoding = 4;
     UIImage *resizedImage = img;
     if(img) {
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingCover];
-        resizedImage = [[STKImageStore store] uploadImage:img size:CGSizeMake(320, 200) intoDirectory:@"covers" completion:^(NSString *URLString, NSError *err) {
+        resizedImage = [[STKImageStore store] uploadImage:img size:STKProfileCoverPhotoSize intoDirectory:@"covers" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self profileInformation] setCoverPhotoURLString:URLString];
             } else {
@@ -477,6 +513,7 @@ const long STKCreateProgressGeocoding = 4;
     }
 
     [[self coverPhotoImageView] setImage:resizedImage];
+    [self configureInterface];
 }
 
 

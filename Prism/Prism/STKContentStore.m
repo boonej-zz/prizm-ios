@@ -199,28 +199,30 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
 
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block
 {
-    NSLog(@"Posting: %@", info);
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointCreatePost];
-    [c addQueryValue:[[[STKUserStore store] currentUser] userID]
-              forKey:@"entity"];
-    [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
-    [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"posting_profile"];
-    [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
-    [c addQueryValue:@"x" forKey:@"title"];
-    
-    for(NSString *key in info) {
-        [c addQueryValue:[info objectForKey:key] forKey:key];
-    }
-    
-    [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-
-        if(!err) {
-                // Should catch, but you know, can't yet
-        } else {
+    [[STKUserStore store] executeAuthorizedRequest:^{
+        NSLog(@"Posting: %@", info);
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointCreatePost];
+        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+                  forKey:@"entity"];
+        [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
+        [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"posting_profile"];
+        [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
+        [c addQueryValue:@"x" forKey:@"title"];
         
+        for(NSString *key in info) {
+            [c addQueryValue:[info objectForKey:key] forKey:key];
         }
         
-        block(obj, err);
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+
+            if(!err) {
+                    // Should catch, but you know, can't yet
+            } else {
+            
+            }
+            
+            block(obj, err);
+        }];
     }];
 }
 

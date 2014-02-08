@@ -12,9 +12,9 @@
 #import "STKPost.h"
 #import "STKUserStore.h"
 #import "STKUser.h"
-#import "STKRenderServer.h"
 #import "STKBackdropView.h"
 #import "STKContentStore.h"
+#import "UIERealTimeBlurView.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -62,18 +62,12 @@
     _homeCellNib = [UINib nibWithNibName:@"STKHomeCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     
-    _backdropView = [[STKBackdropView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)
-                                                relativeTo:[self tableView]];
-    [[self view] addSubview:_backdropView];
-    [_backdropView setBlurBackgroundImage:[UIImage imageNamed:@"img_background"]];
-    [_backdropView registerNib:_homeCellNib
-        forCellReuseIdentifier:@"STKHomeCell"];
     
     
     [[self tableView] registerNib:_homeCellNib
            forCellReuseIdentifier:@"STKHomeCell"];
     [[self tableView] setDelaysContentTouches:NO];
-    [[self tableView] setBackgroundColor:[UIColor clearColor]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setRowHeight:401];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
@@ -224,7 +218,7 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [cell setBackgroundColor:[UIColor clearColor]];
-
+/*
     if([[self backdropView] shouldBlurImageForIndexPath:indexPath]) {
         STKHomeCell *blurCell = [[self backdropView] dequeueCellForReuseIdentifier:@"STKHomeCell"];
         [blurCell setBackgroundColor:[UIColor clearColor]];
@@ -234,7 +228,7 @@
         [[self backdropView] addBlurredImageFromCell:blurCell
                                              forRect:rect
                                            indexPath:indexPath];
-    }
+    }*/
 }
 
 - (void)viewWillAppear:(BOOL)animated

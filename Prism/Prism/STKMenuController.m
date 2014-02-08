@@ -47,6 +47,11 @@
 }
 
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)userBecameUnauthorized:(NSNotification *)note
 {
     NSString *reasonValue = [[note userInfo] objectForKey:STKUserStoreCurrentUserSessionEndedReasonKey];
@@ -125,8 +130,10 @@
             [[self menuTopConstraint] setConstant:0];
         }
         
-        [[self menuView] setBackgroundImage:[[STKRenderServer renderServer] instantBlurredImageForView:[self view]
-                                                                                             inSubrect:blurRect]];
+        UIImage *bgImage = [[STKRenderServer renderServer] instantBlurredImageForView:[self view]
+                                                                            inSubrect:blurRect];
+
+        [[self menuView] setBackgroundImage:bgImage];
         
         [[self menuView] layoutIfNeeded];
     }
@@ -161,9 +168,11 @@
     if([self isViewLoaded]) {
         UIView *v = [[self selectedViewController] view];
         [[self view] addSubview:v];
+
         [v setFrame:[[self view] bounds]];
         
         [[self menuView] setSelectedIndex:(int)[[self viewControllers] indexOfObject:_selectedViewController]];
+        
     }
 }
 
@@ -285,6 +294,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     
     if([[self viewControllers] count] > 0)
         [self setSelectedViewController:[[self viewControllers] objectAtIndex:0]];

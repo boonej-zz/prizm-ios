@@ -19,6 +19,7 @@
 
     #define STKTextColor [UIColor colorWithRed:192.0/255.0 green:193.0/255.0 blue:213.0/255.0 alpha:1]
     #define STKTextTransparentColor [UIColor colorWithRed:192.0/255.0 green:193.0/255.0 blue:213.0/255.0 alpha:0.4]
+    #define STKLightBlueColor [UIColor colorWithRed:26.0 / 255.0 green:114.0 / 255.0 blue:178.0 / 255.0 alpha:1]
     #define STKFont(x) [UIFont fontWithName:@"HelveticaNeue-Light" size:x]
 
 #endif

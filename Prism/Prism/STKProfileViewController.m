@@ -19,6 +19,8 @@
 #import "STKBaseStore.h"
 #import "STKPostViewController.h"
 #import "STKRequestItem.h"
+#import "STKEditProfileViewController.h"
+#import "UIERealTimeBlurView.h"
 
 @interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate>
 
@@ -36,7 +38,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
 
-        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
         _posts = [[NSMutableArray alloc] init];
@@ -61,7 +63,7 @@
     if(![self profile]) {
         [self setProfile:[[[STKUserStore store] currentUser] personalProfile]];
     }
-    [[STKUserStore store] fetchProfileForCurrentUser:^(STKUser *u, NSError *err) {
+    [[STKUserStore store] fetchProfile:[self profile] completion:^(STKProfile *p, NSError *err) {
         [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
                         withRowAnimation:UITableViewRowAnimationNone];
     }];
@@ -104,6 +106,9 @@
     [super viewDidLoad];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setDelaysContentTouches:NO];
+    
+//    UIERealTimeBlurView *bv = [[UIERealTimeBlurView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
+//    [[self view] addSubview:bv];
 }
 
 - (void)scrollToPosts
@@ -158,7 +163,8 @@
 
 - (void)editProfile:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    STKEditProfileViewController *ep = [[STKEditProfileViewController alloc] init];
+    [[self navigationController] pushViewController:ep animated:YES];
 }
 
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip

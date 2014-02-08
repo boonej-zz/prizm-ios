@@ -51,24 +51,27 @@
     CGSize sz = [self bounds].size;
     float w = sz.width;
     float h = sz.height;
-    CGRect cut = CGRectInset([self cutRect], 1, 1);
     
-    UIBezierPath *bp = [UIBezierPath bezierPath];
-    [bp moveToPoint:CGPointMake(0, 0)];
-    [bp addLineToPoint:CGPointMake(w, 0)];
-    [bp addLineToPoint:CGPointMake(w, h)];
-    [bp addLineToPoint:CGPointMake(0, h)];
-    [bp addLineToPoint:CGPointMake(0, cut.origin.y)];
-    [bp addLineToPoint:CGPointMake(cut.origin.x, cut.origin.y)];
-    [bp addLineToPoint:CGPointMake(cut.origin.x, cut.origin.y + cut.size.height)];
-    [bp addLineToPoint:CGPointMake(cut.origin.x + cut.size.width, cut.origin.y + cut.size.height)];
-    [bp addLineToPoint:CGPointMake(cut.origin.x + cut.size.width, cut.origin.y)];
-    [bp addLineToPoint:CGPointMake(0, cut.origin.y)];
-    [bp closePath];
+    if(!CGRectIsEmpty([self cutRect])) {
+        CGRect cut = CGRectInset([self cutRect], 1, 1);
+        
+        UIBezierPath *bp = [UIBezierPath bezierPath];
+        [bp moveToPoint:CGPointMake(0, 0)];
+        [bp addLineToPoint:CGPointMake(w, 0)];
+        [bp addLineToPoint:CGPointMake(w, h)];
+        [bp addLineToPoint:CGPointMake(0, h)];
+        [bp addLineToPoint:CGPointMake(0, cut.origin.y)];
+        [bp addLineToPoint:CGPointMake(cut.origin.x, cut.origin.y)];
+        [bp addLineToPoint:CGPointMake(cut.origin.x, cut.origin.y + cut.size.height)];
+        [bp addLineToPoint:CGPointMake(cut.origin.x + cut.size.width, cut.origin.y + cut.size.height)];
+        [bp addLineToPoint:CGPointMake(cut.origin.x + cut.size.width, cut.origin.y)];
+        [bp addLineToPoint:CGPointMake(0, cut.origin.y)];
+        [bp closePath];
 
-    [bp addClip];
+        [bp addClip];
+        [[self backgroundImage] drawInRect:[self bounds]];
+    }
     
-    [[self backgroundImage] drawInRect:[self bounds]];
     
 }
 

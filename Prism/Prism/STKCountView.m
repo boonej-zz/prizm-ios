@@ -23,12 +23,12 @@
     if(self) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _countLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_titleLabel setTextColor:[UIColor whiteColor]];
-        [_countLabel setTextColor:[UIColor whiteColor]];
+        [_titleLabel setTextColor:STKTextColor];
+        [_countLabel setTextColor:STKTextColor];
         [_titleLabel setMinimumScaleFactor:0.5];
         [_countLabel setMinimumScaleFactor:0.5];
-        [_titleLabel setFont:[UIFont systemFontOfSize:12]];
-        [_countLabel setFont:[UIFont systemFontOfSize:20]];
+        [_titleLabel setFont:STKFont(16)];
+        [_countLabel setFont:STKFont(16)];
         [_titleLabel setAdjustsFontSizeToFitWidth:YES];
         [_countLabel setAdjustsFontSizeToFitWidth:YES];
         [_titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -44,15 +44,16 @@
                                                             toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:-1]];
         [_titleLabel addConstraint:[NSLayoutConstraint constraintWithItem:_titleLabel attribute:NSLayoutAttributeHeight
                                                                 relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
-                                                               multiplier:1 constant:24]];
+                                                               multiplier:1 constant:20]];
 
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-8-[v]-8-|" options:0 metrics:nil views:@{@"v" : _countLabel}]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_countLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
-                                                            toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:1]];
+                                                            toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:-1]];
         [_countLabel addConstraint:[NSLayoutConstraint constraintWithItem:_countLabel attribute:NSLayoutAttributeHeight
                                                                 relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
-                                                               multiplier:1 constant:24]];
+                                                               multiplier:1 constant:20]];
         [self setBackgroundColor:[UIColor clearColor]];
+        [self setContentMode:UIViewContentModeRedraw];
     }
     return self;
 }
@@ -61,8 +62,8 @@
 {
     [[UIColor colorWithWhite:1.0 alpha:0.1] setFill];
     [[UIColor colorWithWhite:1.0 alpha:0.5] setStroke];
-    
-    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 5, 5)];
+
+    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 8, 8)];
     [bp setLineWidth:2];
     [bp fill];
     [bp stroke];
@@ -105,7 +106,6 @@
         [c setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self addSubview:c];
         [a addObject:c];
-        
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : c}]];
     }
     _circleViews = [a copy];
@@ -132,8 +132,6 @@
     for(int i = 0; i < 3; i++) {
         [[[[self circleViews] objectAtIndex:i] titleLabel] setText:[[self circleTitles] objectAtIndex:i]];
     }
-    
-    [self setNeedsDisplay];
 }
 
 - (void)setCircleValues:(NSArray *)circleValues
@@ -147,9 +145,6 @@
     for(int i = 0; i < 3; i++) {
         [[[[self circleViews] objectAtIndex:i] countLabel] setText:[[self circleValues] objectAtIndex:i]];
     }
-
-    
-    [self setNeedsDisplay];
 }
 
 

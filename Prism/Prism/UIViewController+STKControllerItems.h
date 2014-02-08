@@ -14,6 +14,7 @@
 @property (nonatomic, readonly) UIBarButtonItem *searchBarButtonItem;
 @property (nonatomic, readonly) UIBarButtonItem *menuBarButtonItem;
 @property (nonatomic, readonly) UIBarButtonItem *postBarButtonItem;
-@property (nonatomic, readonly) STKMenuController *menuController;
+@property (nonatomic, readonly) UIBarButtonItem *settingsBarButtonItem;
 
+@property (nonatomic, readonly) STKMenuController *menuController;
 @end

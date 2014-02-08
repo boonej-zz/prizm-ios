@@ -228,6 +228,36 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
     }];
 }
 
+- (void)fetchProfile:(STKProfile *)p completion:(void (^)(STKProfile *u, NSError *err))block
+{
+    [self executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
+        [c addQueryValue:STKProfileTypePersonal
+                  forKey:@"profile_type"];
+
+// Warning: Fix
+        if([p entityID])
+            [c addQueryValue:[p entityID] forKey:@"entity"];
+        else
+            [c addQueryValue:[[p user] userID] forKey:@"entity"];
+        
+        [c addQueryValue:@"0" forKey:@"offset"];
+        [c addQueryValue:@"1" forKey:@"limit"];
+        [c setModelGraph:@{@"profile" : @[p]}];
+        
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
+            STKProfile *u = nil;
+            if(!err) {
+                u = [[profiles objectForKey:@"profiles"] firstObject];
+                [[self context] save:nil];
+            } else {
+                
+            }
+            block(u, err);
+        }];
+    }];
+}
+
 - (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block
 {
     [self executeAuthorizedRequest:^{
@@ -262,8 +292,11 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
         [c addQueryValue:@"0" forKey:@"offset"];
         [c addQueryValue:@"20" forKey:@"limit"];
         [c addQueryValue:name forKey:@"name"];
+                
         [c setContext:[self context]];
+        
         [c setExistingMatchMap:@{@"profileID" : @"profile"}];
+        
         [c setModelGraph:@{@"profile" : @[@"STKProfile"]}];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
             if(!err) {
@@ -282,7 +315,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointAddFollower];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"follower"];
         [c addQueryValue:[profile profileID] forKey:@"profile"];
-        [c addQueryValue:@"unknown" forKey:@"title"];
+//        [c addQueryValue:@"unknown" forKey:@"title"];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             block(obj, err);
         }];

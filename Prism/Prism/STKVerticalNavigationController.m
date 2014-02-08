@@ -56,6 +56,12 @@
     [[self navigationController] pushViewController:vc animated:YES];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

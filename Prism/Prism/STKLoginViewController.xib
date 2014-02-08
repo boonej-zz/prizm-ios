@@ -107,7 +107,7 @@
                         <constraint firstItem="QvI-Bu-wC1" firstAttribute="leading" secondItem="dAr-QZ-stD" secondAttribute="trailing" constant="8" id="oAt-SB-fO8"/>
                     </constraints>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Prismlogo" translatesAutoresizingMaskIntoConstraints="NO" id="WPY-oI-C0n">
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Prismlogo" translatesAutoresizingMaskIntoConstraints="NO" id="WPY-oI-C0n">
                     <rect key="frame" x="102" y="61" width="116" height="116"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
@@ -156,7 +156,7 @@
         </view>
     </objects>
     <resources>
-        <image name="Prismlogo" width="160" height="160"/>
+        <image name="Prismlogo" width="82" height="80"/>
         <image name="lockpassword" width="18" height="25"/>
         <image name="username" width="23" height="24"/>
     </resources>

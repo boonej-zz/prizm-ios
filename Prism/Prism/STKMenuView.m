@@ -127,7 +127,7 @@
     
     for(int i = 0; i < [[self buttons] count]; i++) {
         STKMenuButton *mb = [[self buttons] objectAtIndex:i];
-        [mb setSelected:i == _selectedIndex];
+        //[mb setSelected:i == _selectedIndex];
     }
     
 }
@@ -151,6 +151,9 @@
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated
 {
     [self setHidden:!visible];
+    if(!visible) {
+        [self setBackgroundImage:nil];
+    }
 }
 
 - (BOOL)isVisible

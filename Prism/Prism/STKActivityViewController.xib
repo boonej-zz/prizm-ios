@@ -15,6 +15,15 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="98K-yS-Cp7">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pIz-2f-31L" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="104"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dpd-dE-8bZ">
                     <rect key="frame" x="20" y="72" width="280" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -42,17 +51,24 @@
             </subviews>
             <color key="backgroundColor" red="0.79587720788043481" green="0.79587720788043481" blue="0.79587720788043481" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="98K-yS-Cp7" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="7dR-6c-wqV"/>
                 <constraint firstAttribute="bottom" secondItem="7H2-7Q-gtH" secondAttribute="bottom" id="8wB-2T-Met"/>
                 <constraint firstAttribute="trailing" secondItem="7H2-7Q-gtH" secondAttribute="trailing" id="LMJ-vJ-qg9"/>
                 <constraint firstItem="7H2-7Q-gtH" firstAttribute="top" secondItem="dpd-dE-8bZ" secondAttribute="bottom" constant="8" id="Ng3-4d-vzc"/>
                 <constraint firstItem="dpd-dE-8bZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="72" id="Nn9-q6-e1y"/>
                 <constraint firstAttribute="trailing" secondItem="dpd-dE-8bZ" secondAttribute="trailing" constant="20" id="PbI-U9-ltb"/>
+                <constraint firstAttribute="bottom" secondItem="98K-yS-Cp7" secondAttribute="bottom" id="a0p-YT-mJT"/>
+                <constraint firstItem="98K-yS-Cp7" firstAttribute="top" secondItem="1" secondAttribute="top" id="dtb-6x-24n"/>
                 <constraint firstItem="7H2-7Q-gtH" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="gQI-qU-Ppg"/>
                 <constraint firstItem="dpd-dE-8bZ" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" id="h2y-DJ-eMZ"/>
+                <constraint firstAttribute="trailing" secondItem="98K-yS-Cp7" secondAttribute="trailing" id="ubF-qb-i3X"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
+    <resources>
+        <image name="img_background" width="309" height="558"/>
+    </resources>
 </document>

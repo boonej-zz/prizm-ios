@@ -7,6 +7,7 @@
 //
 
 #import "STKRenderServer.h"
+#import "UIImage+BoxBlur.h"
 
 @import QuartzCore;
 @import CoreImage;
@@ -40,7 +41,7 @@
 
 - (UIImage *)blurredImageWithImage:(UIImage *)img affineClamp:(BOOL)clamp
 {
-    float blurRadius = 2.0;
+    float blurRadius = 10.0;
     CIImage *filterImage = [CIImage imageWithCGImage:[img CGImage]];
     CIImage *clampedImage = nil;
     
@@ -56,12 +57,8 @@
         clampedImage = filterImage;
     }
     
-    CIFilter *whitepoint = [CIFilter filterWithName:@"CIWhitePointAdjust"];
-    [whitepoint setValue:clampedImage forKey:@"inputImage"];
-    [whitepoint setValue:[CIColor colorWithRed:0.5 green:0.5 blue:0.6 alpha:1.0] forKey:@"inputColor"];
-    
     CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [blurFilter setValue:[whitepoint outputImage] forKey:@"inputImage"];
+    [blurFilter setValue:clampedImage forKey:@"inputImage"];
     [blurFilter setValue:@(blurRadius) forKey:@"inputRadius"];
     
     CGImageRef cgImg = [[self context] createCGImage:[blurFilter outputImage]
@@ -86,9 +83,9 @@
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(destinationSize.width, destinationSize.height), YES, 1.0);
     CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -rect.origin.x * renderScale, -rect.origin.y * renderScale);
     CGContextScaleCTM(UIGraphicsGetCurrentContext(), renderScale, renderScale);
+
     [view drawViewHierarchyInRect:[view bounds]
-                         afterScreenUpdates:NO];
-    //[[view layer] renderInContext:UIGraphicsGetCurrentContext()];
+               afterScreenUpdates:NO];
 
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     

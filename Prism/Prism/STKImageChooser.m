@@ -9,7 +9,7 @@
 #import "STKImageChooser.h"
 #import "STKCaptureViewController.h"
 
-@interface STKImageChooser () <UIActionSheetDelegate, STKCaptureViewControllerDelegate>
+@interface STKImageChooser () <UIActionSheetDelegate, STKCaptureViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (nonatomic, strong) UIActionSheet *actionSheet;
 @property (nonatomic, strong) STKCaptureViewController *captureViewController;
 @property (nonatomic, strong) void (^imageBlock)(UIImage *);
@@ -34,9 +34,28 @@
     [self setImageBlock:block];
     [self setSourceViewController:vc];
     
+
     _captureViewController = [[STKCaptureViewController alloc] init];
     [_captureViewController setDelegate:self];
-    [[self sourceViewController] presentViewController:_captureViewController animated:YES completion:nil];
+    [[self sourceViewController] presentViewController:_captureViewController animated:YES completion:^{
+        if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            [[self captureViewController] showLibrary:nil];
+        }
+    }];
+    
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    
+    [[picker presentingViewController] dismissViewControllerAnimated:YES completion:^{
+//        [self imageBlock]
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [[picker presentingViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)captureViewController:(STKCaptureViewController *)captureViewController didPickImage:(UIImage *)image

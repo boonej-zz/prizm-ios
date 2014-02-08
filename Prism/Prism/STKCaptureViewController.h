@@ -21,4 +21,6 @@
 
 @property (nonatomic, weak) id <STKCaptureViewControllerDelegate> delegate;
 
+- (IBAction)showLibrary:(id)sender;
+
 @end

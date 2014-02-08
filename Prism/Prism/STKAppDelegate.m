@@ -52,7 +52,7 @@
         [[UINavigationController alloc] initWithRootViewController:tvc],
         [[UINavigationController alloc] initWithRootViewController:pvc],
         [[UINavigationController alloc] initWithRootViewController:avc],
-        [[UINavigationController alloc] initWithRootViewController:gvc]                              
+        [[UINavigationController alloc] initWithRootViewController:gvc]
     ]];
     [nvc setBackgroundImage:[UIImage imageNamed:@"img_background"]];
     
@@ -86,6 +86,8 @@
 
 - (void)configureAppearanceProxies
 {
+
+    
     UIGraphicsBeginImageContext(CGSizeMake(10, 10));
     [[UIColor colorWithWhite:1 alpha:0.3] set];
     UIRectFill(CGRectMake(0, 0, 10, 10));

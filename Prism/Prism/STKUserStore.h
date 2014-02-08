@@ -54,6 +54,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
 
 - (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block;
+- (void)fetchProfile:(STKProfile *)p completion:(void (^)(STKProfile *u, NSError *err))block;
 - (void)updateCurrentProfileWithInformation:(NSDictionary *)info completion:(void (^)(STKUser *u, NSError *err))block;
 
 - (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;

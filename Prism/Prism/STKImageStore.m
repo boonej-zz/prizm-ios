@@ -22,7 +22,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 @property (nonatomic, strong) NSURLSession *fetchSession;
 @property (nonatomic, readonly) NSString *cachePath;
 @property (nonatomic, strong) NSMutableDictionary *failedFetchMap;
-
+@property (nonatomic, strong) NSMapTable *memoryCache;
 
 - (NSString *)safeStringForURLString:(NSString *)url;
 
@@ -47,6 +47,8 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 {
     self = [super init];
     if(self) {
+        _memoryCache = [NSMapTable strongToWeakObjectsMapTable];
+        
         _failedFetchMap = [[NSMutableDictionary alloc] init];
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         
@@ -70,9 +72,18 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 - (BOOL)fetchImageForURLString:(NSString *)urlString completion:(void (^)(UIImage *img))block
 {
     NSString *cachePath = [self cachePathForURLString:urlString];
+    
+    UIImage *img = [[self memoryCache] objectForKey:cachePath];
+    if(img) {
+        block(img);
+        return YES;
+    }
+    
     NSData *fileData = [[NSData alloc] initWithContentsOfFile:cachePath];
     if(fileData) {
-        block([UIImage imageWithData:fileData]);
+        img = [UIImage imageWithData:fileData];
+        [[self memoryCache] setObject:img forKey:cachePath];
+        block(img);
         return YES;
     }
 
@@ -106,7 +117,10 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
                                                                                        toURL:[NSURL fileURLWithPath:cachePath]
                                                                                        error:nil];
                                                NSData *data = [NSData dataWithContentsOfFile:cachePath];
-                                               block([UIImage imageWithData:data]);
+                                               
+                                               UIImage *image = [UIImage imageWithData:data];
+                                               [[self memoryCache] setObject:image forKey:cachePath];
+                                               block(image);
                                                return;
                                            } else {
                                                // We could reach the server and all, but the image wasn't there, so let's

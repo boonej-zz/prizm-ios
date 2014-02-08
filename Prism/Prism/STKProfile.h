@@ -25,6 +25,9 @@ extern NSString * const STKProfileCoverPhotoURLStringKey;
 extern NSString * const STKProfileProfilePhotoURLStringKey;
 extern NSString * const STKProfileProfileIDKey;
 
+extern CGSize STKProfileCoverPhotoSize;
+extern CGSize STKProfileProfilePhotoSize;
+
 @interface STKProfile : NSManagedObject <STKJSONObject>
 
 @property (nonatomic, retain) NSString * profileID;
@@ -39,6 +42,8 @@ extern NSString * const STKProfileProfileIDKey;
 @property (nonatomic, strong) NSString *followedCount;
 @property (nonatomic, strong) NSString *trustCount;
 @property (nonatomic, strong) NSString *postCount;
+
+@property (nonatomic, strong) NSString *entityID;
 
 @property (nonatomic, retain) STKUser *user;
 

@@ -20,6 +20,7 @@
 @interface STKRegisterViewController ()
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *gapConstraint;
+@property (weak, nonatomic) IBOutlet UILabel *connectLabel;
 
 @end
 

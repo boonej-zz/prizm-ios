@@ -24,6 +24,19 @@
     return nil;
 }
 
+- (UIBarButtonItem *)settingsBarButtonItem
+{
+    UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    [[view imageView] setContentMode:UIViewContentModeCenter];
+    [[view imageView] setClipsToBounds:NO];
+    [view setClipsToBounds:NO];
+    [view addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
+    [view setImage:[UIImage imageNamed:@"btn_settings"] forState:UIControlStateNormal];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+    
+    return bbi;
+}
+
 - (UIBarButtonItem *)searchBarButtonItem
 {
     UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
@@ -36,7 +49,6 @@
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     return bbi;
-
 }
 
 - (UIBarButtonItem *)postBarButtonItem
@@ -83,6 +95,11 @@
 }
 
 - (void)initiateSearch:(id)sender
+{
+    
+}
+
+- (void)showSettings:(id)sender
 {
     
 }

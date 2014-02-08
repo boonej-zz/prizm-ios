@@ -34,6 +34,11 @@
                         <constraint firstAttribute="height" constant="97" id="IoE-m0-0LT"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nSw-v7-q76" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.75959578804347827" green="0.75959578804347827" blue="0.75959578804347827" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
