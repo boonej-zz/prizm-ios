@@ -34,7 +34,7 @@ NSUInteger UIEDeviceSystemMajorVersion();
 
 //tweak this value to have a smoother or a more perfomant rendering
 //Default is 30FPS
-const CGFloat UIERealTimeBlurViewFPS = 30;
+const CGFloat UIERealTimeBlurViewFPS = 20;
 const CGFloat UIERealTimeBlurViewDefaultBlurRadius = 1;
 const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.1;
 
@@ -96,7 +96,7 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.1;
     
     //default tint color
     self.tintColor = [UIColor clearColor];
-    //}
+   // }
 
 }
 
@@ -132,7 +132,11 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.1;
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextTranslateCTM(context, -visibleRect.origin.x, -visibleRect.origin.y);
     CALayer *layer = superview.layer;
+   
     [layer renderInContext:context];
+
+//    [superview drawViewHierarchyInRect:[self frame]
+//                    afterScreenUpdates:NO];
     
     //show all the blurred views from the superview before taking a screenshot
     [self uie_toggleBlurViewsInView:superview hidden:NO alpha:alpha];

@@ -20,9 +20,11 @@
 #import "STKProfile.h"
 #import "STKSearchProfileCell.h"
 #import "STKProfileViewController.h"
+#import "UIERealTimeBlurView.h"
 
 @interface STKExploreViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
@@ -106,9 +108,18 @@
     [[self tableView] setTableHeaderView:[self searchBar]];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[[self blurView] displayLink] setPaused:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+ 
+    [[[self blurView] displayLink] setPaused:NO];
+
     float top = [[self tableView] contentInset].top;
     [[self tableView] setContentOffset:CGPointMake(0, [[self searchBar] bounds].size.height - top) animated:YES];
 

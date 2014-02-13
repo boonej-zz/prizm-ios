@@ -55,11 +55,9 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         _activeQueue = [[NSMutableArray alloc] init];
         _throttleQueue = [[NSMutableArray alloc] init];
         _memoryCache = [NSMapTable strongToWeakObjectsMapTable];
-        
         _failedFetchMap = [[NSMutableDictionary alloc] init];
-        NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         
-        _fetchSession = [NSURLSession sessionWithConfiguration:config
+        _fetchSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration ephemeralSessionConfiguration]
                                                       delegate:self
                                                  delegateQueue:[NSOperationQueue mainQueue]];
     
@@ -153,8 +151,6 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
                                                                  [[self callbackMap] removeObjectForKey:url];
                                                                  
                                                                  [self dequeue];
-                                                                 
-                                                                 NSLog(@"Stack depth: %d", [[NSThread callStackSymbols] count]);
                                                              }];
         
         dtRef = t;
@@ -179,8 +175,6 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
             [[self throttleQueue] removeObjectIdenticalTo:t];
             
             [t resume];
-            
-            NSLog(@"Throttled: %d Active: %d", [[self throttleQueue] count], [[self activeQueue] count]);
         }
     }
 }

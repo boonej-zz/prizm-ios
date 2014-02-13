@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKExploreViewController">
             <connections>
+                <outlet property="blurView" destination="dEz-1m-5JB" id="T0P-Qw-zwf"/>
                 <outlet property="searchBar" destination="eLY-ER-n8o" id="gDz-ar-2qF"/>
                 <outlet property="searchDisplayController" destination="6Rq-r7-ZSl" id="9ON-EI-r3k"/>
                 <outlet property="tableView" destination="ule-sa-Sui" id="tUf-FH-UQl"/>
