@@ -94,6 +94,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 {
     [super viewWillAppear:animated];
 
+    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
     [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                           NSFontAttributeName : STKFont(22)}];
     [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.5]];
@@ -334,6 +335,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (IBAction)changeImage:(id)sender
 {
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
+                                                                        forType:STKImageChooserTypeImage
                                                                      completion:^(UIImage *img) {
                                                                          [self setPostImage:img];
                                                                          [[self imageView] setImage:img];

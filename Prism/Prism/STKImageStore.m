@@ -24,6 +24,10 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 @property (nonatomic, strong) NSMutableDictionary *failedFetchMap;
 @property (nonatomic, strong) NSMapTable *memoryCache;
 
+@property (nonatomic, strong) NSMutableArray *throttleQueue;
+@property (nonatomic, strong) NSMutableArray *activeQueue;
+@property (nonatomic, strong) NSMutableDictionary *callbackMap;
+
 - (NSString *)safeStringForURLString:(NSString *)url;
 
 - (NSString *)cachePathForURLString:(NSString *)url;
@@ -47,12 +51,17 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 {
     self = [super init];
     if(self) {
+        _callbackMap = [[NSMutableDictionary alloc] init];
+        _activeQueue = [[NSMutableArray alloc] init];
+        _throttleQueue = [[NSMutableArray alloc] init];
         _memoryCache = [NSMapTable strongToWeakObjectsMapTable];
         
         _failedFetchMap = [[NSMutableDictionary alloc] init];
         NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         
-        _fetchSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+        _fetchSession = [NSURLSession sessionWithConfiguration:config
+                                                      delegate:self
+                                                 delegateQueue:[NSOperationQueue mainQueue]];
     
         _amazonClient = [[AmazonS3Client alloc] initWithAccessKey:STKImageStoreS3KeyID
                                                     withSecretKey:STKImageStoreS3Key];
@@ -79,6 +88,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         return YES;
     }
     
+    
     NSData *fileData = [[NSData alloc] initWithContentsOfFile:cachePath];
     if(fileData) {
         img = [UIImage imageWithData:fileData];
@@ -86,6 +96,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         block(img);
         return YES;
     }
+    
 
     // If this image really didn't exist <2 minutes ago, then don't bother re-fetching it.
     // However, if we last tried over 2 minutes ago, go ahead and try again.
@@ -106,33 +117,72 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         return YES;
     }
     
-    NSURLSessionDownloadTask *t = [[self fetchSession] downloadTaskWithURL:url
-                                                         completionHandler:
-                                   ^(NSURL *location, NSURLResponse *response, NSError *error) {
-                                       if(!error) {
-                                           NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
-                                           if(statusCode / 100 == 2) {
-                                               // This was a success.
-                                               [[NSFileManager defaultManager] moveItemAtURL:location
-                                                                                       toURL:[NSURL fileURLWithPath:cachePath]
-                                                                                       error:nil];
-                                               NSData *data = [NSData dataWithContentsOfFile:cachePath];
-                                               
-                                               UIImage *image = [UIImage imageWithData:data];
-                                               [[self memoryCache] setObject:image forKey:cachePath];
-                                               block(image);
-                                               return;
-                                           } else {
-                                               // We could reach the server and all, but the image wasn't there, so let's
-                                               // not try fetching it for awhile.
-                                               [[self failedFetchMap] setObject:[NSDate date]
-                                                                         forKey:cachePath];
-                                           }
-                                       }                                       
-                                       block(nil);
-                                   }];
-    [t resume];
+    NSMutableArray *callbacks = [[self callbackMap] objectForKey:url];
+    
+    if(callbacks) {
+        NSMutableArray * a = [[self callbackMap] objectForKey:url];
+        [a addObject:block];
+
+    } else {
+        callbacks = [[NSMutableArray alloc] init];
+        [callbacks addObject:block];
+        [[self callbackMap] setObject:callbacks forKey:url];
+        
+        __block NSURLSessionDownloadTask *dtRef = nil;
+        NSURLSessionDownloadTask *t = [[self fetchSession] downloadTaskWithURL:url
+                                                             completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                                                                 
+                                                                 UIImage *image = nil;
+                                                                 if(!error) {
+                                                                     [[NSFileManager defaultManager] moveItemAtURL:location
+                                                                                                             toURL:[NSURL fileURLWithPath:cachePath]
+                                                                                                             error:nil];
+                                                                     NSData *data = [NSData dataWithContentsOfFile:cachePath];
+                                                                     
+                                                                     image = [UIImage imageWithData:data];
+                                                                     [[self memoryCache] setObject:image forKey:cachePath];
+                                                                 } else {
+                                                                     [[self failedFetchMap] setObject:[NSDate date] forKey:cachePath];
+                                                                 }
+                                                                 
+                                                                 [[self activeQueue] removeObjectIdenticalTo:dtRef];
+                                                                 
+                                                                 for(void (^callbackBlock)(UIImage *img) in [[self callbackMap] objectForKey:url]) {
+                                                                     callbackBlock(image);
+                                                                 }
+                                                                 [[self callbackMap] removeObjectForKey:url];
+                                                                 
+                                                                 [self dequeue];
+                                                                 
+                                                                 NSLog(@"Stack depth: %d", [[NSThread callStackSymbols] count]);
+                                                             }];
+        
+        dtRef = t;
+        
+        [[self throttleQueue] addObject:t];
+        
+        [self dequeue];
+    }
+    
+    
+    
+    
     return NO;
+}
+
+- (void)dequeue
+{
+    if([[self activeQueue] count] < 3) {
+        NSURLSessionDownloadTask *t = [[self throttleQueue] firstObject];
+        if(t) {
+            [[self activeQueue] addObject:t];
+            [[self throttleQueue] removeObjectIdenticalTo:t];
+            
+            [t resume];
+            
+            NSLog(@"Throttled: %d Active: %d", [[self throttleQueue] count], [[self activeQueue] count]);
+        }
+    }
 }
 
 - (NSString *)cachePathForURLString:(NSString *)url

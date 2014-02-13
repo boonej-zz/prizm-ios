@@ -29,6 +29,7 @@ extern const CGFloat UIERealTimeBlurViewFPS;
 
 #endif
 
+@property (nonatomic, strong) CADisplayLink *displayLink;
 /*** Manually performs the refresh of the blurred background */
 - (void)refresh;
 

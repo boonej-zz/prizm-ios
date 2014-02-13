@@ -10,7 +10,7 @@
 
 @interface STKCaptureOverlayView : UIView
 
-@property (nonatomic) CGRect cutRect;
+@property (nonatomic) UIBezierPath *cutPath;
 @property (nonatomic) UIImage *backgroundImage;
 
 @end

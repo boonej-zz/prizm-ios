@@ -8,13 +8,11 @@
 
 #import "STKCaptureView.h"
 
+@interface STKCaptureView ()
+@end
+
 @implementation STKCaptureView
 @dynamic session;
-
-+ (Class)layerClass
-{
-    return [AVCaptureVideoPreviewLayer class];
-}
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -36,18 +34,28 @@
 
 - (void)commonInit
 {
-//    [self setClipsToBounds:YES];
-    [(AVCaptureVideoPreviewLayer *)[self layer] setVideoGravity:AVLayerVideoGravityResizeAspect];
+    [self setClipsToBounds:YES];
+    _videoLayer = [AVCaptureVideoPreviewLayer layer];
+    [[self layer] addSublayer:_videoLayer];
+    [_videoLayer setBounds:CGRectMake(0, 0, 320, 568)];
+    [_videoLayer setVideoGravity:AVLayerVideoGravityResizeAspect];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [_videoLayer setPosition:[self center]];
+
 }
 
 - (AVCaptureSession *)session
 {
-	return [(AVCaptureVideoPreviewLayer *)[self layer] session];
+	return [(AVCaptureVideoPreviewLayer *)[self videoLayer] session];
 }
 
 - (void)setSession:(AVCaptureSession *)session
 {
-	[(AVCaptureVideoPreviewLayer *)[self layer] setSession:session];
+	[(AVCaptureVideoPreviewLayer *)[self videoLayer] setSession:session];
 }
 
 

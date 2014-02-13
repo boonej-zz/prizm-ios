@@ -106,10 +106,12 @@ const long STKCreateProgressGeocoding = 4;
         [[self coverOverlayView] setHidden:NO];
         [[self coverPhotoButton] setTitle:@"Edit" forState:UIControlStateNormal];
         [[self coverPhotoButton] setTitleColor:STKTextColor forState:UIControlStateNormal];
+        [[self coverPhotoButton] setImage:[UIImage imageNamed:@"btn_pic_uploadedit"] forState:UIControlStateNormal];
     } else {
         [[self coverOverlayView] setHidden:YES];
         [[self coverPhotoButton] setTitleColor:STKLightBlueColor forState:UIControlStateNormal];
         [[self coverPhotoButton] setTitle:@"Upload" forState:UIControlStateNormal];
+        [[self coverPhotoButton] setImage:[UIImage imageNamed:@"upload_image"] forState:UIControlStateNormal];
     }
     
     if([[self profileInformation] profilePhotoURLString] || [[self profileInformation] profilePhoto] || [self progressMask] & STKCreateProgressUploadingProfile) {
@@ -424,7 +426,9 @@ const long STKCreateProgressGeocoding = 4;
 
 - (IBAction)changeCoverPhoto:(id)sender
 {
-    [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self completion:^(UIImage *img) {
+    [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
+                                                                        forType:STKImageChooserTypeCover
+                                                                     completion:^(UIImage *img) {
         if(img)
             [self setCoverImage:img];
         [self configureInterface];
@@ -433,7 +437,9 @@ const long STKCreateProgressGeocoding = 4;
 
 - (IBAction)changeProfilePhoto:(id)sender
 {
-    [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self completion:^(UIImage *img) {
+    [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
+                                                                        forType:STKImageChooserTypeProfile
+                                                                     completion:^(UIImage *img) {
         if(img)
             [self setProfileImage:img];
         [self configureInterface];
@@ -448,6 +454,8 @@ const long STKCreateProgressGeocoding = 4;
         
         CGRect r = CGRectZero;
         r.size = STKProfileProfilePhotoSize;
+        r.size.width *= 2.0;
+        r.size.height *= 2.0;
         UIImage *resizedImage = [[STKImageStore store] uploadImage:img size:r.size intoDirectory:@"profile" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self profileInformation] setProfilePhotoURLString:URLString];
@@ -495,6 +503,9 @@ const long STKCreateProgressGeocoding = 4;
     UIImage *resizedImage = img;
     if(img) {
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingCover];
+        CGSize sz = STKProfileCoverPhotoSize;
+        sz.width *= 2.0;
+        sz.height *= 2.0;
         resizedImage = [[STKImageStore store] uploadImage:img size:STKProfileCoverPhotoSize intoDirectory:@"covers" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self profileInformation] setCoverPhotoURLString:URLString];

@@ -18,6 +18,7 @@
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *cardView;
 @property (nonatomic, strong) UIImage *cardToolbarNormalImage;
@@ -235,6 +236,9 @@
 {
     [super viewWillAppear:animated];
     
+    [[[self blurView] displayLink] setPaused:NO];
+
+    
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
     [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
                                   inDirection:STKContentStoreFetchDirectionNewer
@@ -247,6 +251,13 @@
                                         
                                     }
                                 }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[[self blurView] displayLink] setPaused:YES];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated

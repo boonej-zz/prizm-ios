@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSArray *buttons;
 @property (nonatomic, strong) UIDynamicAnimator *animator;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
+@property (nonatomic, strong) NSLayoutConstraint *blurHeightConstraint;
 @end
 
 @implementation STKMenuView
@@ -22,67 +23,60 @@
 {
     self = [super initWithFrame:CGRectMake(0, 0, 320, 140)];
     if (self) {
-        [self setBackgroundColor:[UIColor clearColor]];
+        [self setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setClipsToBounds:YES];
 
+        
+        
         _backgroundImageView = [[UIImageView alloc] init];
         [_backgroundImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [_backgroundImageView setContentMode:UIViewContentModeScaleAspectFill];
+        [_backgroundImageView setClipsToBounds:YES];
 
-        [self addSubview:_backgroundImageView];
+        
 
-        
-        
-        
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
-                                                                         attribute:NSLayoutAttributeTop
-                                                                         relatedBy:NSLayoutRelationEqual
-                                                                            toItem:self
-                                                                         attribute:NSLayoutAttributeTop
-                                                                        multiplier:1
-                                                                          constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
-                                                                         attribute:NSLayoutAttributeBottom
-                                                                         relatedBy:NSLayoutRelationEqual
-                                                                            toItem:self
-                                                                         attribute:NSLayoutAttributeBottom
-                                                                        multiplier:1
-                                                                          constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
-                                                                         attribute:NSLayoutAttributeLeft
-                                                                         relatedBy:NSLayoutRelationEqual
-                                                                            toItem:self
-                                                                         attribute:NSLayoutAttributeLeft
-                                                                        multiplier:1
-                                                                          constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
-                                                                         attribute:NSLayoutAttributeRight
-                                                                         relatedBy:NSLayoutRelationEqual
-                                                                            toItem:self
-                                                                         attribute:NSLayoutAttributeRight
-                                                                        multiplier:1
-                                                                          constant:0]];
-
-        UIView *v = [[UIView alloc] init];
-        [v setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [v setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.0]];
-        [self addSubview:v];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|"
-                                                                              options:0
-                                                                              metrics:nil
-                                                                                views:@{@"v" : v}]];
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|"
-                                                                              options:0
-                                                                              metrics:nil
-                                                                                views:@{@"v" : v}]];
-        
         _buttonContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 140)];
+        [_buttonContainerView setClipsToBounds:YES];
         [self addSubview:_buttonContainerView];
         
         
-
+        [_buttonContainerView addSubview:_backgroundImageView];
+        [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
+                                                         attribute:NSLayoutAttributeTop
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:_buttonContainerView
+                                                         attribute:NSLayoutAttributeTop
+                                                        multiplier:1
+                                                          constant:0]];
+        [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
+                                                         attribute:NSLayoutAttributeLeft
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:_buttonContainerView
+                                                         attribute:NSLayoutAttributeLeft
+                                                        multiplier:1
+                                                          constant:0]];
+        [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundImageView
+                                                         attribute:NSLayoutAttributeRight
+                                                         relatedBy:NSLayoutRelationEqual
+                                                            toItem:_buttonContainerView
+                                                         attribute:NSLayoutAttributeRight
+                                                        multiplier:1
+                                                          constant:0]];
+        _blurHeightConstraint = [NSLayoutConstraint constraintWithItem:_backgroundImageView
+                                                             attribute:NSLayoutAttributeHeight
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:nil
+                                                             attribute:NSLayoutAttributeNotAnAttribute
+                                                            multiplier:1
+                                                              constant:140];
+        [_backgroundImageView addConstraint:_blurHeightConstraint];
         
+        UIView *v = [[UIView alloc] initWithFrame:[_buttonContainerView bounds]];
+        [v setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+        [v setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
+        [_buttonContainerView addSubview:v];
+
         
         STKMenuButton *b0 = [[STKMenuButton alloc] init];
         STKMenuButton *b1 = [[STKMenuButton alloc] init];
@@ -119,6 +113,19 @@
 {
     _backgroundImage = backgroundImage;
     [[self backgroundImageView] setImage:_backgroundImage];
+    
+    if(_backgroundImage) {
+        CGSize imgSize = [_backgroundImage size];
+        CGSize viewSize = [self bounds].size;
+        
+        float ratio = viewSize.width / imgSize.width;
+        
+        float height = imgSize.height * ratio;
+        [[self blurHeightConstraint] setConstant:height];
+    } else {
+        [[self blurHeightConstraint] setConstant:0];
+    }
+    [[self backgroundImageView] setNeedsLayout];
 }
 
 - (void)setSelectedIndex:(int)selectedIndex

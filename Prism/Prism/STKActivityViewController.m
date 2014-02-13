@@ -16,6 +16,7 @@
 #import "STKRequestItem.h"
 #import "STKProfile.h"
 #import "STKRelativeDateConverter.h"
+#import "UIERealTimeBlurView.h"
 
 typedef enum {
     STKActivityViewControllerTypeActivity,
@@ -23,6 +24,7 @@ typedef enum {
 } STKActivityViewControllerType;
 
 @interface STKActivityViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
@@ -62,7 +64,15 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[[self blurView] displayLink] setPaused:NO];
     [self refresh];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[[self blurView] displayLink] setPaused:YES];
+
 }
 
 - (void)setCurrentType:(STKActivityViewControllerType)currentType

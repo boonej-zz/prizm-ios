@@ -23,6 +23,7 @@
 #import "UIERealTimeBlurView.h"
 
 @interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate>
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -52,9 +53,18 @@
     return [[[self profile] profileID] isEqualToString:[[[[STKUserStore store] currentUser] personalProfile] profileID]];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[[self blurView] displayLink] setPaused:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [[[self blurView] displayLink] setPaused:NO];
+
     
     if([[[self navigationController] viewControllers] indexOfObject:self] == 0) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
@@ -106,14 +116,12 @@
     [super viewDidLoad];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setDelaysContentTouches:NO];
-    
-//    UIERealTimeBlurView *bv = [[UIERealTimeBlurView alloc] initWithFrame:CGRectMake(0, 0, 320, 64)];
-//    [[self view] addSubview:bv];
 }
 
 - (void)scrollToPosts
 {
-    [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    if([[self posts] count] > 0)
+        [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
 - (void)avatarTappedForPostAtIndex:(int)idx
@@ -141,14 +149,14 @@
 
 - (void)leftImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    int row = [ip row];
+    NSInteger row = [ip row];
     int itemIndex = row * 3;
     [self showPostAtIndex:itemIndex];
 }
 
 - (void)centerImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    int row = [ip row];
+    NSInteger row = [ip row];
     int itemIndex = row * 3 + 1;
     [self showPostAtIndex:itemIndex];
 
@@ -156,7 +164,7 @@
 
 - (void)rightImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    int row = [ip row];
+    NSInteger row = [ip row];
     int itemIndex = row * 3 + 2;
     [self showPostAtIndex:itemIndex];
 }

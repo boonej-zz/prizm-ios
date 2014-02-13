@@ -9,10 +9,12 @@
 #import "STKCaptureViewController.h"
 #import "STKCaptureView.h"
 #import "STKCaptureOverlayView.h"
+#import "STKProfile.h"
 
 @import AVFoundation;
 
-@interface STKCaptureViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface STKCaptureViewController () <UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
 @property (weak, nonatomic) IBOutlet UILabel *flashLabel;
 @property (weak, nonatomic) IBOutlet UIButton *flipCameraButton;
@@ -23,11 +25,14 @@
 @property (nonatomic, strong) AVCaptureStillImageOutput *imageCaptureOutput;
 @property (nonatomic, strong) UIImage *capturedImage;
 @property (nonatomic, weak) IBOutlet STKCaptureOverlayView *overlayView;
+@property (weak, nonatomic) IBOutlet UIButton *okayButton;
 
 @property (weak, nonatomic) IBOutlet UIView *bottomBar;
 @property (weak, nonatomic) IBOutlet UIView *topBar;
+@property (weak, nonatomic) IBOutlet UIScrollView *editScrollView;
 
 @property (nonatomic, strong) UIImagePickerController *imagePickerController;
+@property (weak, nonatomic) IBOutlet UIButton *captureButton;
 
 @end
 
@@ -45,12 +50,13 @@
 
 - (UIImagePickerController *)imagePickerController
 {
-    
     if(!_imagePickerController) {
         _imagePickerController = [[UIImagePickerController alloc] init];
         [_imagePickerController setDelegate:self];
-        [_imagePickerController setAllowsEditing:YES];
         [_imagePickerController setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        [[_imagePickerController navigationBar] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+        [[_imagePickerController navigationBar] setTranslucent:YES];
+        
     }
     return _imagePickerController;
 }
@@ -58,6 +64,41 @@
 - (IBAction)dismiss:(id)sender
 {
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)okayEdit:(id)sender
+{
+    float zoom = [[self editScrollView] zoomScale];
+    CGSize sz = [[self editScrollView] contentSize];
+    CGPoint p = [[self editScrollView] contentOffset];
+    CGSize imgSize = [[self capturedImage] size];
+    sz.width /= zoom;
+    sz.height /= zoom;
+    
+    float diffX = (imgSize.width - sz.width) * zoom;
+    float diffY = (imgSize.height - sz.height) * zoom;
+    
+    
+    
+    CGSize destSize = CGSizeMake(640, 640);
+    if([self type] == STKImageChooserTypeCover) {
+        destSize.height = STKProfileCoverPhotoSize.height * 2.0;
+        diffY += (640.0 - STKProfileCoverPhotoSize.height * 2.0) / 2.0;
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(destSize, YES, 1.0);
+    
+    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -p.x * 2.0 - diffX, -p.y * 2.0 - diffY);
+
+    CGContextScaleCTM(UIGraphicsGetCurrentContext(), zoom * 2.0, zoom * 2.0);
+    [[self capturedImage] drawInRect:CGRectMake(0, 0, imgSize.width, imgSize.height)];
+    
+    //[UIImageJPEGRepresentation(UIGraphicsGetImageFromCurrentImageContext(), 1) writeToFile:@"/Users/joeconway/Desktop/image.jpg" atomically:YES];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    [[self delegate] captureViewController:self didPickImage:img];
 }
 
 - (IBAction)toggleFlashMode:(id)sender
@@ -78,23 +119,37 @@
 }
 - (void)configureInterface
 {
-    [[self flipCameraButton] setHidden:([[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count] <= 1)];
-    
-    if([[[self deviceInput] device] isFlashAvailable]) {
-        [[self flashLabel] setHidden:NO];
-        [[self flashButton] setHidden:NO];
-
-        AVCaptureFlashMode mode = [[[self deviceInput] device] flashMode];
-        if(mode == AVCaptureFlashModeAuto) {
-            [[self flashLabel] setText:@"Auto"];
-        } else if(mode == AVCaptureFlashModeOn) {
-            [[self flashLabel] setText:@"On"];
-        } else if (mode == AVCaptureFlashModeOff) {
-            [[self flashLabel] setText:@"Off"];
-        }
-    } else {
-        [[self flashLabel] setHidden:YES];
+    if([self capturedImage]) {
+        [[self editScrollView] setBackgroundColor:[UIColor blackColor]];
+        [[self flipCameraButton] setHidden:YES];
         [[self flashButton] setHidden:YES];
+        [[self flashLabel] setHidden:YES];
+        [[self captureButton] setHidden:YES];
+        [[self okayButton] setHidden:NO];
+    } else {
+        [[self flipCameraButton] setHidden:([[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count] <= 1)];
+        
+        if([[[self deviceInput] device] isFlashAvailable]) {
+            [[self flashLabel] setHidden:NO];
+            [[self flashButton] setHidden:NO];
+
+            AVCaptureFlashMode mode = [[[self deviceInput] device] flashMode];
+            if(mode == AVCaptureFlashModeAuto) {
+                [[self flashLabel] setText:@"Auto"];
+            } else if(mode == AVCaptureFlashModeOn) {
+                [[self flashLabel] setText:@"On"];
+            } else if (mode == AVCaptureFlashModeOff) {
+                [[self flashLabel] setText:@"Off"];
+            }
+        } else {
+            [[self flashLabel] setHidden:YES];
+            [[self flashButton] setHidden:YES];
+        }
+        [[self editScrollView] setBackgroundColor:[UIColor clearColor]];
+        
+        [[self captureButton] setTitle:nil forState:UIControlStateNormal];
+        [[self captureButton] setImage:[UIImage imageNamed:@"btn_camera"] forState:UIControlStateNormal];
+        [[self okayButton] setHidden:YES];
     }
 }
 - (IBAction)showLibrary:(id)sender
@@ -109,6 +164,10 @@
     return YES;
 }
 
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView
+{
+}
+
 - (IBAction)snapPhoto:(id)sender
 {
     CGRect cropRect = [self rectForCameraArea];
@@ -119,11 +178,17 @@
                                                                    UIImage *image = [[UIImage alloc] initWithData:imageData];
                                                                    CGSize sz = [image size];
 
-                                                                   float destSize = 640.0;
-                                                                   UIGraphicsBeginImageContextWithOptions(CGSizeMake(destSize, destSize), YES, 1.0);
+                                                                   CGSize destSize = CGSizeMake(640, 640);
+                                                                   float diffY = 0;
+                                                                   if([self type] == STKImageChooserTypeCover) {
+                                                                       destSize.height = STKProfileCoverPhotoSize.height * 2.0;
+                                                                       diffY += (640.0 - STKProfileCoverPhotoSize.height * 2.0) / 2.0;
+                                                                   }
+
+                                                                   UIGraphicsBeginImageContextWithOptions(destSize, YES, 1.0);
                                                                    
-                                                                   float s = destSize / sz.width;
-                                                                   NSLog(@"%f", s);
+                                                                   float s = destSize.width / sz.width;
+                                                                   CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -diffY);
                                                                    CGContextScaleCTM(UIGraphicsGetCurrentContext(), s, s);
                                                                    [image drawInRect:CGRectMake(0, -cropRect.origin.y * 2.0 / s, sz.width, sz.height)];
                                                                    UIImage *croppedImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -214,20 +279,29 @@
     bottom = [[self view] convertRect:bottom fromView:[[self bottomBar] superview]];
     
     CGRect r = CGRectMake(0, top.origin.y + top.size.height, 320, bottom.origin.y);
-    r = [[self view] convertRect:r toView:[self captureView]];
-    NSLog(@"%@", NSStringFromCGRect(r));
+    r = [[[self view] layer] convertRect:r toLayer:[[self captureView] videoLayer]];
+ 
     return r;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if([[[self session] inputs] count] > 0)
+    if([[[self session] inputs] count] > 0 && ![self capturedImage])
         [[self session] startRunning];
 
     [self configureInterface];
 
-//    [[self overlayView] setCutRect:[self rectForCameraArea]];
+    if([self type] == STKImageChooserTypeProfile) {
+        UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([[self overlayView] bounds], 4, 4)];
+        [[self overlayView] setCutPath:bp];
+    } else if([self type] == STKImageChooserTypeCover) {
+        float h = STKProfileCoverPhotoSize.height;
+        UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(2, (320.0 - h) / 2.0, 316.0, h)];
+        [[self overlayView] setCutPath:bp];
+    } else {
+        [[self overlayView] setCutPath:nil];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -241,5 +315,65 @@
     [[self session] stopRunning];
 }
 
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self setCapturedImage:img];
+    
+    [_capturedImageView removeFromSuperview];
+    
+    UIImageView *newImageView = [[UIImageView alloc] initWithImage:[self capturedImage]];
+
+    [self dismissViewControllerAnimated:YES completion:^{
+        CGSize sz = [[self capturedImage] size];
+        
+        float smallSide = sz.width;
+        if(sz.height < smallSide)
+            smallSide = sz.height;
+
+        float scale = [[self editScrollView] bounds].size.width / smallSide;
+        
+        CGSize imageViewSize = sz;
+        if(imageViewSize.width > imageViewSize.height)
+            imageViewSize.height = imageViewSize.width;
+        else
+            imageViewSize.width = imageViewSize.height;
+        
+        [newImageView setTranslatesAutoresizingMaskIntoConstraints:YES];
+        [[self editScrollView] addSubview:newImageView];
+        [newImageView setContentMode:UIViewContentModeCenter];
+        [newImageView setFrame:CGRectMake(0, 0, imageViewSize.width, imageViewSize.height)];
+        _capturedImageView = newImageView;
+
+        [[self editScrollView] setContentSize:imageViewSize];
+        [[self editScrollView] setZoomScale:scale];
+        [[self editScrollView] setMinimumZoomScale:scale];
+        
+        float centerDiffX = (imageViewSize.width * scale - [[self editScrollView] frame].size.width) / 2.0;
+        float centerDiffY = (imageViewSize.height * scale  - [[self editScrollView] frame].size.height) / 2.0;
+
+        [[self editScrollView] setContentOffset:CGPointMake(centerDiffX, centerDiffY)];
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [[picker presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return [self capturedImageView];
+}
 
 @end

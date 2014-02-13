@@ -544,6 +544,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
     }];
 }
 
+
 #pragma mark Facebook
 
 - (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKProfileInformation *facebookData, NSError *err))block

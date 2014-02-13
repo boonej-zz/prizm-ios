@@ -89,7 +89,7 @@
 
     
     UIGraphicsBeginImageContext(CGSizeMake(10, 10));
-    [[UIColor colorWithWhite:1 alpha:0.3] set];
+    [[UIColor colorWithWhite:1 alpha:0.2] set];
     UIRectFill(CGRectMake(0, 0, 10, 10));
     
     [[UINavigationBar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()

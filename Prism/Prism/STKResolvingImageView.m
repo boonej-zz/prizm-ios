@@ -15,6 +15,8 @@
 {
     _urlString = urlString;
     
+    [self setImage:nil];
+    
     if(_urlString) {
         __weak STKResolvingImageView *iv = self;
         [[STKImageStore store] fetchImageForURLString:_urlString
@@ -24,8 +26,6 @@
                                                    [iv setNeedsDisplay];
                                                }
                                            }];
-    } else {
-        [self setImage:nil];
     }
     
 }

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "STKImageChooser.h"
 
 @class STKCaptureViewController;
 
@@ -20,6 +21,7 @@
 @interface STKCaptureViewController : UIViewController
 
 @property (nonatomic, weak) id <STKCaptureViewControllerDelegate> delegate;
+@property (nonatomic) STKImageChooserType type;
 
 - (IBAction)showLibrary:(id)sender;
 

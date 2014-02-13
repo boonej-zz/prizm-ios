@@ -8,11 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    STKImageChooserTypeImage,
+    STKImageChooserTypeProfile,
+    STKImageChooserTypeCover
+} STKImageChooserType;
+
 @interface STKImageChooser : NSObject
 
 + (STKImageChooser *)sharedImageChooser;
 
 - (void)initiateImageChooserForViewController:(UIViewController *)vc
+                                      forType:(STKImageChooserType)type
                                    completion:(void (^)(UIImage *))block;
 
 

@@ -200,6 +200,7 @@
                                                         multiplier:1 constant:0];
     [[self view] addConstraint:c];
     _menuTopConstraint = c;
+    
     [[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view]
                                                             attribute:NSLayoutAttributeBottom
                                                             relatedBy:NSLayoutRelationEqual

@@ -94,6 +94,8 @@
 		BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A17182AF43A00080601 /* STKActivityViewController.xib */; };
 		BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A1B182AF44600080601 /* STKGraphViewController.m */; };
 		BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A1C182AF44600080601 /* STKGraphViewController.xib */; };
+		BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC726EB18AC111D009350E8 /* STKLabelCell.m */; };
+		BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC726EC18AC111D009350E8 /* STKLabelCell.xib */; };
 		BED0B264185F689100564300 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B261185F689100564300 /* GoogleOpenSource.framework */; };
 		BED0B266185F689100564300 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B263185F689100564300 /* GooglePlus.framework */; };
 		BED0B268185F68C700564300 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B267185F68C700564300 /* AssetsLibrary.framework */; };
@@ -1988,6 +1990,9 @@
 		BEC01A1A182AF44600080601 /* STKGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGraphViewController.h; sourceTree = "<group>"; };
 		BEC01A1B182AF44600080601 /* STKGraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGraphViewController.m; sourceTree = "<group>"; };
 		BEC01A1C182AF44600080601 /* STKGraphViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKGraphViewController.xib; sourceTree = "<group>"; };
+		BEC726EA18AC111D009350E8 /* STKLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKLabelCell.h; path = Prism/STKLabelCell.h; sourceTree = "<group>"; };
+		BEC726EB18AC111D009350E8 /* STKLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKLabelCell.m; path = Prism/STKLabelCell.m; sourceTree = "<group>"; };
+		BEC726EC18AC111D009350E8 /* STKLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKLabelCell.xib; path = Prism/STKLabelCell.xib; sourceTree = "<group>"; };
 		BED0B261185F689100564300 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
 		BED0B263185F689100564300 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
 		BED0B267185F68C700564300 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -2324,6 +2329,9 @@
 				BEAB9763189AD503002A14F5 /* STKProfileInformationCell.h */,
 				BEAB9764189AD503002A14F5 /* STKProfileInformationCell.m */,
 				BEAB9765189AD503002A14F5 /* STKProfileInformationCell.xib */,
+				BEC726EA18AC111D009350E8 /* STKLabelCell.h */,
+				BEC726EB18AC111D009350E8 /* STKLabelCell.m */,
+				BEC726EC18AC111D009350E8 /* STKLabelCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4324,6 +4332,7 @@
 				BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */,
 				BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */,
 				BE95438C1892CD1400DCC3B1 /* STKCommentCell.xib in Resources */,
+				BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */,
 				BE2A2E141885BA320077194A /* STKTriImageCell.xib in Resources */,
 				BEF7A08218439E0800A3AFFB /* STKRegisterViewController.xib in Resources */,
 				BEC01A0F182AF42600080601 /* STKTrustViewController.xib in Resources */,
@@ -4368,6 +4377,7 @@
 				BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */,
 				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
 				BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */,
+				BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,

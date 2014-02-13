@@ -13,5 +13,6 @@
 @interface STKCaptureView : UIControl
 
 @property (nonatomic, strong) AVCaptureSession *session;
+@property (nonatomic, strong, readonly) AVCaptureVideoPreviewLayer *videoLayer;
 
 @end

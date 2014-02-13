@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKActivityViewController">
             <connections>
+                <outlet property="blurView" destination="pIz-2f-31L" id="DBC-cL-wW9"/>
                 <outlet property="tableView" destination="7H2-7Q-gtH" id="Ufk-b7-bHN"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>

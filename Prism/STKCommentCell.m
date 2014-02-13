@@ -21,3 +21,21 @@
 }
 
 @end
+
+
+/*
+
+ {
+    "meta" : {"status" : true|false},
+    "data" : [
+        {
+            "first_name" : .., "last_name" : ..., "whatever"
+        },
+        {
+ 
+        }
+    ]
+ }
+ 
+
+*/

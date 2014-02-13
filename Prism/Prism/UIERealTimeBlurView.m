@@ -44,7 +44,7 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.1;
     CALayer *_tintLayer;
     UIColor *_tint;
     
-    CADisplayLink *_displayLink;
+    
     
     /*** Wheter the view has been rendered once or not */
     BOOL _rendered;

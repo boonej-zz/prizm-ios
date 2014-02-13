@@ -77,7 +77,7 @@
         case UIControlStateDisabled:
         case UIControlStateReserved:
             img = [[self item] image];
-            clr = [UIColor colorWithWhite:1.0 alpha:0.3];
+            clr = [UIColor colorWithWhite:1.0 alpha:0.2];
             break;
             
         default:

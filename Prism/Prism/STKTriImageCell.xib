@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
@@ -13,11 +13,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="105"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="C6g-Lp-J3b" customClass="STKResolvingImageView">
-                        <rect key="frame" x="0.0" y="1" width="104" height="104"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="C6g-Lp-J3b" customClass="STKResolvingImageView">
+                        <rect key="frame" x="1" y="0.0" width="106" height="104"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="106" id="aIe-Dd-NfT"/>
+                        </constraints>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="AXx-Jx-aDt">
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AXx-Jx-aDt">
                         <rect key="frame" x="-2" y="0.0" width="105" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -28,12 +31,12 @@
                             <action selector="leftImageButtonTapped:" destination="2" eventType="touchUpInside" id="N0e-hs-I1Q"/>
                         </connections>
                     </button>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="aMb-88-5jA" customClass="STKResolvingImageView">
-                        <rect key="frame" x="108" y="1" width="104" height="104"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aMb-88-5jA" customClass="STKResolvingImageView">
+                        <rect key="frame" x="108" y="0.0" width="104" height="104"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HdE-Kl-l7b">
-                        <rect key="frame" x="106" y="0.0" width="105" height="105"/>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HdE-Kl-l7b">
+                        <rect key="frame" x="107" y="0.0" width="105" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <state key="normal">
@@ -43,11 +46,14 @@
                             <action selector="centerImageButtonTapped:" destination="2" eventType="touchUpInside" id="RW7-9A-URV"/>
                         </connections>
                     </button>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="f7c-d7-fUs" customClass="STKResolvingImageView">
-                        <rect key="frame" x="216" y="1" width="104" height="104"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="f7c-d7-fUs" customClass="STKResolvingImageView">
+                        <rect key="frame" x="213" y="0.0" width="106" height="104"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="106" id="Hhj-6o-w2v"/>
+                        </constraints>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Tay-nr-vU1">
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tay-nr-vU1">
                         <rect key="frame" x="215" y="0.0" width="105" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -59,6 +65,18 @@
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="f7c-d7-fUs" firstAttribute="top" secondItem="H2B-kA-2zT" secondAttribute="top" id="1np-Hc-cWI"/>
+                    <constraint firstItem="C6g-Lp-J3b" firstAttribute="leading" secondItem="H2B-kA-2zT" secondAttribute="leading" constant="0.5" id="EzX-1b-yvb"/>
+                    <constraint firstAttribute="bottom" secondItem="aMb-88-5jA" secondAttribute="bottom" constant="0.5" id="Jr2-aC-MmN"/>
+                    <constraint firstItem="f7c-d7-fUs" firstAttribute="leading" secondItem="aMb-88-5jA" secondAttribute="trailing" constant="0.5" id="LrK-4c-yGw"/>
+                    <constraint firstItem="aMb-88-5jA" firstAttribute="leading" secondItem="C6g-Lp-J3b" secondAttribute="trailing" constant="0.5" id="QLD-bM-XCj"/>
+                    <constraint firstAttribute="bottom" secondItem="C6g-Lp-J3b" secondAttribute="bottom" constant="0.5" id="kbx-Jf-udN"/>
+                    <constraint firstItem="C6g-Lp-J3b" firstAttribute="top" secondItem="H2B-kA-2zT" secondAttribute="top" id="lSl-ta-ZlE"/>
+                    <constraint firstAttribute="trailing" secondItem="f7c-d7-fUs" secondAttribute="trailing" constant="0.5" id="nfk-kF-i5K"/>
+                    <constraint firstItem="aMb-88-5jA" firstAttribute="top" secondItem="H2B-kA-2zT" secondAttribute="top" id="pKb-eX-0ie"/>
+                    <constraint firstAttribute="bottom" secondItem="f7c-d7-fUs" secondAttribute="bottom" constant="0.5" id="scO-rA-9cC"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="centerImageView" destination="aMb-88-5jA" id="M0w-zd-aF1"/>

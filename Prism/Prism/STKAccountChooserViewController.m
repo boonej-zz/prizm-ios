@@ -11,6 +11,7 @@
 #import "STKProcessingView.h"
 #import "STKCreateProfileViewController.h"
 #import "STKErrorStore.h"
+#import "STKLabelCell.h"
 
 @import Accounts;
 
@@ -40,7 +41,8 @@
 {
     [super viewDidLoad];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
-    [[self tableView] registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
+    [[self tableView] registerNib:[UINib nibWithNibName:@"STKLabelCell" bundle:nil]
+           forCellReuseIdentifier:@"STKLabelCell"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -69,7 +71,7 @@
     }];
 }
 
-- (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [[self accounts] count];
 }
@@ -77,12 +79,12 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
+    [cell setBackgroundColor:[UIColor clearColor]];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+    STKLabelCell *c = (STKLabelCell *)[tableView dequeueReusableCellWithIdentifier:@"STKLabelCell"];
     
     ACAccount *acct = [[self accounts] objectAtIndex:[indexPath row]];
     [[c textLabel] setText:[NSString stringWithFormat:@"@%@", [acct username]]];

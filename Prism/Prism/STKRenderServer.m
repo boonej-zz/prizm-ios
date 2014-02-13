@@ -41,7 +41,7 @@
 
 - (UIImage *)blurredImageWithImage:(UIImage *)img affineClamp:(BOOL)clamp
 {
-    float blurRadius = 10.0;
+    float blurRadius = 5;
     CIImage *filterImage = [CIImage imageWithCGImage:[img CGImage]];
     CIImage *clampedImage = nil;
     

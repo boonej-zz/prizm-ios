@@ -34,9 +34,9 @@
     [self setBackgroundColor:[UIColor clearColor]];
 }
 
-- (void)setCutRect:(CGRect)cutRect
+- (void)setCutPath:(UIBezierPath *)cutPath
 {
-    _cutRect = cutRect;
+    _cutPath = cutPath;
     [self setNeedsDisplay];
 }
 
@@ -47,30 +47,22 @@
 }
 
 - (void)drawRect:(CGRect)rect
-{
-    CGSize sz = [self bounds].size;
-    float w = sz.width;
-    float h = sz.height;
-    
-    if(!CGRectIsEmpty([self cutRect])) {
-        CGRect cut = CGRectInset([self cutRect], 1, 1);
+{    
+    if([self cutPath]) {
+        [[UIColor colorWithWhite:0 alpha:0.9] set];
+        UIRectFill([self bounds]);
+        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeDestinationOut);
+        [[self cutPath] fill];
         
-        UIBezierPath *bp = [UIBezierPath bezierPath];
-        [bp moveToPoint:CGPointMake(0, 0)];
-        [bp addLineToPoint:CGPointMake(w, 0)];
-        [bp addLineToPoint:CGPointMake(w, h)];
-        [bp addLineToPoint:CGPointMake(0, h)];
-        [bp addLineToPoint:CGPointMake(0, cut.origin.y)];
-        [bp addLineToPoint:CGPointMake(cut.origin.x, cut.origin.y)];
-        [bp addLineToPoint:CGPointMake(cut.origin.x, cut.origin.y + cut.size.height)];
-        [bp addLineToPoint:CGPointMake(cut.origin.x + cut.size.width, cut.origin.y + cut.size.height)];
-        [bp addLineToPoint:CGPointMake(cut.origin.x + cut.size.width, cut.origin.y)];
-        [bp addLineToPoint:CGPointMake(0, cut.origin.y)];
-        [bp closePath];
+        CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeNormal);
+        CGContextSetShadowWithColor(UIGraphicsGetCurrentContext(), CGSizeZero, 6, [[UIColor whiteColor] CGColor]);
+        [[UIColor colorWithWhite:1 alpha:0.5] set];
+        [[self cutPath] setLineWidth:2];
+        [[self cutPath] stroke];
 
-        [bp addClip];
-        [[self backgroundImage] drawInRect:[self bounds]];
-    }
+        [[self cutPath] setLineWidth:1];
+        [[self cutPath] stroke];
+}
     
     
 }

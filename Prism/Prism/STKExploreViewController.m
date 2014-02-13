@@ -140,7 +140,7 @@
 }
 
 
-- (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(tableView == [self tableView]) {
         if([[self posts] count] % 3 > 0)
