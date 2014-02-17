@@ -62,13 +62,13 @@
     }
     return self;
 }
-
+/*
 - (void)layoutSubviews
 {
-    [super layoutSubviews];
+//    [super layoutSubviews];
     [self layoutContent];
 }
-
+*/
 - (void)cellDidLoad
 {
     // For override, does nothing initially

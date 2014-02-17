@@ -12,6 +12,7 @@
 
 - (void)cellDidLoad
 {
+//    [[self contentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 

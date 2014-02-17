@@ -87,8 +87,8 @@
     STKLabelCell *c = (STKLabelCell *)[tableView dequeueReusableCellWithIdentifier:@"STKLabelCell"];
     
     ACAccount *acct = [[self accounts] objectAtIndex:[indexPath row]];
-    [[c textLabel] setText:[NSString stringWithFormat:@"@%@", [acct username]]];
-    [[c textLabel] setTextColor:[UIColor whiteColor]];
+    [[c label] setText:[NSString stringWithFormat:@"@%@", [acct username]]];
+    [[c label] setTextColor:[UIColor whiteColor]];
     
     return c;
 }

@@ -9,6 +9,8 @@
 #import "STKImageChooser.h"
 #import "STKCaptureViewController.h"
 
+//lipo -create './build-arm/libStaticLibDemo.a' './build-arm64/libStaticLibDemo.a' './build-i386/libStaticLibDemo.a' './build-x86_64/libStaticLibDemo.a' -output 'libStaticLibDemo.a'
+
 @interface STKImageChooser () <STKCaptureViewControllerDelegate>
 @property (nonatomic, strong) STKCaptureViewController *captureViewController;
 @property (nonatomic, strong) void (^imageBlock)(UIImage *);

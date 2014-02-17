@@ -36,7 +36,7 @@ NSUInteger UIEDeviceSystemMajorVersion();
 //Default is 30FPS
 const CGFloat UIERealTimeBlurViewFPS = 20;
 const CGFloat UIERealTimeBlurViewDefaultBlurRadius = 1;
-const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.1;
+const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
 
 @implementation UIERealTimeBlurView {
     
@@ -93,9 +93,9 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.1;
     _tintLayer = [[CALayer alloc] init];
     _tintLayer.frame = self.bounds;
     _tintLayer.opacity = UIERealTimeBlurViewTintColorAlpha;
-    
+    [[self layer] addSublayer:_tintLayer];
     //default tint color
-    self.tintColor = [UIColor clearColor];
+    self.tintColor = [UIColor blackColor];
    // }
 
 }
