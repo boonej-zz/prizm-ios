@@ -35,12 +35,11 @@ NSString * const STKUserStoreExternalCredentialTwitterTokenSecret = @"tYnRjsX7to
 NSString * const STKUserStoreExternalCredentialTwitterConsumerKey = @"B8y2wlENU9eQCV2FO2s3rg";
 NSString * const STKUserStoreExternalCredentialTwitterConsumerSecret = @"XKWgxHrWgE8sfnFv7IcrgcvLM6XFZdBGmQexnzwFo";
 
-
-NSString * const STKUserEndpointRegister = @"/common/ajax/create_entity.php";
+NSString * const STKUserEndpointRegister = @"/user";
 NSString * const STKUserEndpointValidateFacebook = @"/common/ajax/validate_facebook.php";
 NSString * const STKUserEndpointValidateTwitter = @"/common/ajax/validate_twitter.php";
 NSString * const STKUserEndpointValidateGoogle = @"/common/ajax/validate_google.php";
-NSString * const STKUserEndpointValidateEmail = @"/common/ajax/validate_login.php";
+NSString * const STKUserEndpointValidateEmail = @"/oauth2/login";
 
 NSString * const STKUserEndpointUpdateProfile = @"/common/ajax/update_profile.php";
 NSString * const STKUserEndpointGetProfile = @"/common/ajax/get_profiles.php";
@@ -62,7 +61,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 @property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
-@property (nonatomic, strong) NSMutableArray *authorizedRequestQueue;
+
 
 @end
 
@@ -102,7 +101,6 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 {
     self = [super init];
     if (self) {
-        _authorizedRequestQueue = [[NSMutableArray alloc] init];
         _accountStore = [[ACAccountStore alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(connectionDidFailAuthorization:)
@@ -123,22 +121,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 }
 
-- (void)executeAuthorizedRequest:(void (^)(void))request
-{
-    if([self currentUserIsAuthorized]) {
-        request();
-    } else {
-        if([self currentUser]) {
-            // Then we are in the process of authenticating, let's just queue this
-            [[self authorizedRequestQueue] addObject:request];
-        } else {
-            // We can just dismiss this, although this may cause issues with the request not being fulfilled
-            // and therefore any 'completion' necessary isn't called. But we can't pass an error,
-            // because then the error handler of that block would fire.
-            // So, then, we must be careful of all authenticated calls.
-        }
-    }
-}
+
 
 - (void)connectionDidFailAuthorization:(NSNotification *)note
 {
@@ -156,10 +139,10 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
     [self setCurrentUser:u];
     [self setCurrentUserIsAuthorized:YES];
     
-    for(void (^req)(void) in [self authorizedRequestQueue]) {
+ /*   for(void (^req)(void) in [self authorizedRequestQueue]) {
         req();
     }
-    [[self authorizedRequestQueue] removeAllObjects];
+    [[self authorizedRequestQueue] removeAllObjects];*/
 }
 
 - (STKProfile *)profileForProfileDictionary:(NSDictionary *)profileDict
@@ -186,7 +169,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
                                                   forKey:STKUserStoreCurrentUserKey];
     } else {
         // Get rid of any pending requests, because this user no longer is any good
-        [[self authorizedRequestQueue] removeAllObjects];
+      //  [[self authorizedRequestQueue] removeAllObjects];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
     }
 }
@@ -211,7 +194,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)updateCurrentProfileWithInformation:(NSDictionary *)info completion:(void (^)(STKUser *u, NSError *err))block
 {
-    [self executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUpdateProfile];
         [c setParameters:info];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"profile"];
@@ -230,7 +213,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)fetchProfile:(STKProfile *)p completion:(void (^)(STKProfile *u, NSError *err))block
 {
-    [self executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
         [c addQueryValue:STKProfileTypePersonal
                   forKey:@"profile_type"];
@@ -260,7 +243,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block
 {
-    [self executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
         [c addQueryValue:STKProfileTypePersonal
                   forKey:@"profile_type"];
@@ -285,7 +268,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block
 {
-    [self executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
         [c addQueryValue:STKProfileTypePersonal
                   forKey:@"profile_type"];
@@ -311,7 +294,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)startFollowingProfile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
 {
-    [self executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointAddFollower];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"follower"];
         [c addQueryValue:[profile profileID] forKey:@"profile"];
@@ -324,7 +307,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
 {
-    [self executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRequest];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"requesting_profile"];
         [c addQueryValue:[profile profileID] forKey:@"profile"];
@@ -338,7 +321,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block
 {
-    [self executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetRequests];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID]
                   forKey:@"profile"];
@@ -783,96 +766,100 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)validateWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
 {
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateEmail];
-    [c addQueryValue:email forKey:@"login"];
-    [c addQueryValue:password forKey:@"password"];
-    
-    [c setContext:[self context]];
-    [c setEntityName:@"STKUser"];
-    [c setExistingMatchMap:@{@"userID" : @"entity"}];
-    
-    [c getWithSession:[self session]
-      completionBlock:block];
+    [[STKBaseStore store] executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateEmail];
+        [c addQueryValue:email forKey:@"email"];
+        [c addQueryValue:password forKey:@"password"];
+        
+        [c setContext:[self context]];
+        [c setModelGraph:@[@"STKUser"]];
+        [c setExistingMatchMap:@{@"userID" : @"_id"}];
+        
+        [c postWithSession:[self session]
+           completionBlock:block];
+    }];
 }
 
 #pragma mark Uniform
 
 - (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block
 {
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRegister];
-    
-    NSArray *missingKeys = nil;
-    BOOL verified = [c addQueryObject:info
-                          missingKeys:&missingKeys
-                           withKeyMap:@{@"firstName" : @"first_name",
-                                        @"lastName" : @"last_name",
-                                        @"email" : @"email_address",
-                                        @"gender" : @"gender",
-                                        @"zipCode" : @"zip_postal",
-                                        @"city" : @"city",
-                                        @"state" : @"region",
-                                        @"birthday" : ^(id value) {
-                                            NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                                            [df setDateFormat:@"MM-dd-yyyy"];
-                                            return @{@"date_of_birth" : [df stringFromDate:value]};
-                                        }
-    }];
-    
-    if(!verified) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments
-                                     data:missingKeys]);
-        }];
-        return;
-    }
-    
-    if([info externalService] && [info externalID]) {
-        [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalID" : @"external_id",
-                                                            @"externalService" : @"external_system"}];
-    } else if([info password]) {
-        [c addQueryObject:info missingKeys:nil withKeyMap:@{@"password" : @"password"}];
-    } else {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments
-                                     data:@[@"password", @"externalService", @"externalID"]]);
-        }];
-        return;
-    }
-    
-    [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
-        if(!err) {
-            void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
-                if(!valErr) {
-                    if([info password]) {
-                        STKSecurityStorePassword([u email], [info password]);
-                    } else {
-                        [u setExternalServiceType:[info externalService]];
-                        [u setAccountStoreID:[info accountStoreID]];
-                    }
-                    [self authenticateUser:u];
-                
-                    [[self context] save:nil];
-                    block(u, nil);
-                } else {
-                    block(nil, valErr);
-                }
-            };
-            
-            // Now let us authenticate
-            if([[info externalService] isEqualToString:STKUserExternalSystemGoogle]) {
-                [self validateWithGoogle:[info token] completion:validationBlock];
-            } else if([[info externalService] isEqualToString:STKUserExternalSystemFacebook]) {
-                [self validateWithFacebook:[info token] completion:validationBlock];
-            } else if([[info externalService] isEqualToString:STKUserExternalSystemTwitter]) {
-                [self validateWithTwitterToken:[info token] secret:[info secret] completion:validationBlock];
-            } else {
-                [self validateWithEmail:[info email]
-                               password:[info password]
-                             completion:validationBlock];
-            }
-        } else {
-            block(nil, err);
+    [[STKBaseStore store] executeAuthorizedRequest:^{
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRegister];
+        
+        NSArray *missingKeys = nil;
+        BOOL verified = [c addQueryObject:info
+                              missingKeys:&missingKeys
+                               withKeyMap:@{@"firstName" : @"first_name",
+                                            @"lastName" : @"last_name",
+                                            @"email" : @"email",
+                                            @"gender" : @"gender",
+                                            @"zipCode" : @"zip_postal",
+                                            @"city" : @"city",
+                                            @"state" : @"state",
+                                            @"birthday" : ^(id value) {
+                                                    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                                                    [df setDateFormat:@"MM-dd-yyyy"];
+                                                    return @{@"birthday" : [df stringFromDate:value]};
+                                                }
+                                            }];
+        
+        if(!verified) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments
+                                         data:missingKeys]);
+            }];
+            return;
         }
+        
+        if([info externalService] && [info externalID]) {
+            [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalID" : @"external_id",
+                                                                @"externalService" : @"external_system"}];
+        } else if([info password]) {
+            [c addQueryObject:info missingKeys:nil withKeyMap:@{@"password" : @"password"}];
+        } else {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments
+                                         data:@[@"password", @"externalService", @"externalID"]]);
+            }];
+            return;
+        }
+        
+        [c postWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            if(!err) {
+                void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
+                    if(!valErr) {
+                        if([info password]) {
+                            STKSecurityStorePassword([u email], [info password]);
+                        } else {
+                            [u setExternalServiceType:[info externalService]];
+                            [u setAccountStoreID:[info accountStoreID]];
+                        }
+                        [self authenticateUser:u];
+                        
+                        [[self context] save:nil];
+                        block(u, nil);
+                    } else {
+                        block(nil, valErr);
+                    }
+                };
+                
+                // Now let us authenticate
+                if([[info externalService] isEqualToString:STKUserExternalSystemGoogle]) {
+                    [self validateWithGoogle:[info token] completion:validationBlock];
+                } else if([[info externalService] isEqualToString:STKUserExternalSystemFacebook]) {
+                    [self validateWithFacebook:[info token] completion:validationBlock];
+                } else if([[info externalService] isEqualToString:STKUserExternalSystemTwitter]) {
+                    [self validateWithTwitterToken:[info token] secret:[info secret] completion:validationBlock];
+                } else {
+                    [self validateWithEmail:[info email]
+                                   password:[info password]
+                                 completion:validationBlock];
+                }
+            } else {
+                block(nil, err);
+            }
+        }];
     }];
 }
 

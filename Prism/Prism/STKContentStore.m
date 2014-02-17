@@ -88,7 +88,7 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
            referencePost:(STKPost *)referencePost
               completion:(void (^)(NSArray *posts, NSError *err))block;
 {
-    [[STKUserStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
         [c addQueryObject:[u personalProfile]
               missingKeys:nil
@@ -122,7 +122,7 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
                        referencePost:(STKPost *)referencePost
                           completion:(void (^)(NSArray *posts, NSError *err))block
 {
-    [[STKUserStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
         [c addQueryValue:@"30" forKey:@"limit"];
         [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
@@ -155,7 +155,7 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
                       referencePost:(STKPost *)referencePost
                          completion:(void (^)(NSArray *posts, NSError *err))block
 {
-    [[STKUserStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
         [c addQueryValue:[prof profileID] forKey:@"profile"];
         [c addQueryValue:@"20" forKey:@"limit"];
@@ -199,7 +199,7 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
 
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block
 {
-    [[STKUserStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^{
         NSLog(@"Posting: %@", info);
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointCreatePost];
         [c addQueryValue:[[[STKUserStore store] currentUser] userID]

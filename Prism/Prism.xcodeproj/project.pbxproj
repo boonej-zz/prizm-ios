@@ -45,6 +45,7 @@
 		BE2A2E141885BA320077194A /* STKTriImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE2A2E121885BA320077194A /* STKTriImageCell.xib */; };
 		BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */; };
 		BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */; };
+		BE3FFDF918AE9744005B531E /* STKAuthorizationToken.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3FFDF818AE9744005B531E /* STKAuthorizationToken.m */; };
 		BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE477C1B186E2ED4003672A0 /* STKProfileCell.m */; };
 		BE477C1E186E2ED4003672A0 /* STKProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE477C1C186E2ED4003672A0 /* STKProfileCell.xib */; };
 		BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */; };
@@ -217,6 +218,8 @@
 		BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuButton.m; sourceTree = "<group>"; };
 		BE3014C01891F24F0069F31E /* STKCaptureOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCaptureOverlayView.h; sourceTree = "<group>"; };
 		BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCaptureOverlayView.m; sourceTree = "<group>"; };
+		BE3FFDF718AE9744005B531E /* STKAuthorizationToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKAuthorizationToken.h; sourceTree = "<group>"; };
+		BE3FFDF818AE9744005B531E /* STKAuthorizationToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKAuthorizationToken.m; sourceTree = "<group>"; };
 		BE477570186DC666003672A0 /* AmazonAbstractJsonWebServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AmazonAbstractJsonWebServiceClient.h; path = Amazon/AmazonAbstractJsonWebServiceClient.h; sourceTree = SOURCE_ROOT; };
 		BE477571186DC666003672A0 /* AmazonAbstractWebServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AmazonAbstractWebServiceClient.h; path = Amazon/AmazonAbstractWebServiceClient.h; sourceTree = SOURCE_ROOT; };
 		BE477572186DC666003672A0 /* AmazonAuthUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AmazonAuthUtils.h; path = Amazon/AmazonAuthUtils.h; sourceTree = SOURCE_ROOT; };
@@ -4235,6 +4238,8 @@
 				BE893600186CD05E00FE8263 /* STKContentStore.m */,
 				BE4C64211896F65D00467E2D /* STKFoursquareConnection.h */,
 				BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */,
+				BE3FFDF718AE9744005B531E /* STKAuthorizationToken.h */,
+				BE3FFDF818AE9744005B531E /* STKAuthorizationToken.m */,
 			);
 			name = Store;
 			sourceTree = "<group>";
@@ -4389,6 +4394,7 @@
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
 				BEAB976B189AD81C002A14F5 /* STKEditProfileViewController.m in Sources */,
 				BE02EAAF182A80A200A5505A /* main.m in Sources */,
+				BE3FFDF918AE9744005B531E /* STKAuthorizationToken.m in Sources */,
 				BEFCEE05182C210600648B9F /* STKConnection.m in Sources */,
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
 				BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */,

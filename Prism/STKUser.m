@@ -47,17 +47,16 @@ NSString * const STKUserExternalSystemGoogle = @"3";
 {
     [self bindFromDictionary:jsonObject keyMap:
     @{
-        @"entity" : @"userID",
-        @"email_address" : @"email",
+        @"_id" : @"userID",
+        @"email" : @"email",
         @"gender" : @"gender",
-        @"email_address" : @"userName",
         @"username" : @"userName",
         @"first_name" : @"firstName",
         @"last_name" : @"lastName",
         @"zip_postal" : @"zipCode",
         @"city" : @"city",
-        @"region" : @"state",
-        @"date_of_birth" : ^(id inValue) {
+        @"state" : @"state",
+        @"birthday" : ^(id inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
             [df setDateFormat:@"YYYY-MM-dd"];
             [self setBirthday:[df dateFromString:inValue]];

@@ -44,7 +44,7 @@ typedef enum {
 @property (nonatomic, strong) NSData *HTTPBody;
 
 @property (nonatomic, strong) id <STKJSONObject> jsonRootObject;
-
+@property (nonatomic) BOOL shouldReturnArray;
 @property (nonatomic, copy) NSString *entityName;
 
 // { ourName : theirName}

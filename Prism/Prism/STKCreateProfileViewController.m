@@ -260,7 +260,7 @@ const long STKCreateProgressGeocoding = 4;
     }];
     
     if(result) {
-        if(![[self profileInformation] coverPhotoURLString]) {
+     /*   if(![[self profileInformation] coverPhotoURLString]) {
             if(!([self progressMask] & STKCreateProgressUploadingCover)) {
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Choose a Cover Photo" message:@"Upload a cover photo before continuing." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
@@ -273,7 +273,7 @@ const long STKCreateProgressGeocoding = 4;
                 [av show];
                 return NO;
             }
-        }
+        }*/
     }
     
     return result;

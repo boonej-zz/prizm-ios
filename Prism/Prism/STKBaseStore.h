@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @import CoreData;
 
-@class STKUser, STKConnection;
+@class STKUser, STKConnection, STKAuthorizationToken;
 
 typedef enum {
     STKLookupTypeCitizenship,
@@ -25,6 +25,7 @@ typedef enum {
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSURLSession *session;
+@property (nonatomic, strong) STKAuthorizationToken *authorizationToken;
 
 - (NSString *)labelForCode:(NSString *)code type:(STKLookupType)type;
 - (NSNumber *)codeForLookupValue:(NSString *)lookupValue type:(STKLookupType)type;
@@ -32,5 +33,9 @@ typedef enum {
 - (STKConnection *)connectionForEndpoint:(NSString *)endpoint;
 
 - (NSArray *)executeFetchRequest:(NSFetchRequest *)req;
+
+- (void)fetchAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block;
+
+- (void)executeAuthorizedRequest:(void (^)(void))request;
 
 @end

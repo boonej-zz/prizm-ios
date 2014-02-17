@@ -37,7 +37,6 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) STKUser *currentUser;
 @property (nonatomic) BOOL currentUserIsAuthorized;
 
-- (void)executeAuthorizedRequest:(void (^)(void))request;
 
 - (STKProfile *)profileForProfileDictionary:(NSDictionary *)profileDict;
 
