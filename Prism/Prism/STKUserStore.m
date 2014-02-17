@@ -47,11 +47,6 @@ NSString * const STKUserEndpointAddFollower = @"/common/ajax/create_profile_foll
 NSString * const STKUserEndpointRequest = @"/common/ajax/create_request.php";
 NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
-NSString * const STKUserStoreCurrentUserSessionEndedNotification = @"STKUserStoreCurrentUserSessionEndedNotification";
-NSString * const STKUserStoreCurrentUserSessionEndedReasonKey = @"STKUserStoreCurrentUserSessionEndedReasonKey";
-NSString * const STKUserStoreCurrentUserSessionEndedConnectionValue = @"STKUserStoreCurrentUserSessionEndedConnectionValue";
-NSString * const STKUserStoreCurrentUserSessionEndedAuthenticationValue = @"STKUserStoreCurrentUserSessionEndedAuthenticationValue";
-NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStoreCurrentUserSessionEndedLogoutValue";
 
 @import CoreData;
 @import Accounts;
@@ -115,9 +110,9 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
     [self setCurrentUserIsAuthorized:NO];
     [self setCurrentUser:nil];
     [STKConnection cancelAllConnections];
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserSessionEndedNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
                                                         object:nil
-                                                      userInfo:@{STKUserStoreCurrentUserSessionEndedReasonKey : STKUserStoreCurrentUserSessionEndedLogoutValue}];
+                                                      userInfo:@{STKSessionEndedReasonKey : STKSessionEndedLogoutValue}];
 
 }
 
@@ -128,9 +123,9 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
     [self setCurrentUserIsAuthorized:NO];
     [self setCurrentUser:nil];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserSessionEndedNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
                                                         object:nil
-                                                      userInfo:@{STKUserStoreCurrentUserSessionEndedReasonKey : STKUserStoreCurrentUserSessionEndedAuthenticationValue}];
+                                                      userInfo:@{STKSessionEndedReasonKey : STKSessionEndedAuthenticationValue}];
 
 }
 
@@ -138,11 +133,6 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 {
     [self setCurrentUser:u];
     [self setCurrentUserIsAuthorized:YES];
-    
- /*   for(void (^req)(void) in [self authorizedRequestQueue]) {
-        req();
-    }
-    [[self authorizedRequestQueue] removeAllObjects];*/
 }
 
 - (STKProfile *)profileForProfileDictionary:(NSDictionary *)profileDict
@@ -194,7 +184,12 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)updateCurrentProfileWithInformation:(NSDictionary *)info completion:(void (^)(STKUser *u, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUpdateProfile];
         [c setParameters:info];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"profile"];
@@ -213,7 +208,12 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)fetchProfile:(STKProfile *)p completion:(void (^)(STKProfile *u, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
         [c addQueryValue:STKProfileTypePersonal
                   forKey:@"profile_type"];
@@ -243,7 +243,12 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
         [c addQueryValue:STKProfileTypePersonal
                   forKey:@"profile_type"];
@@ -268,7 +273,12 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
         [c addQueryValue:STKProfileTypePersonal
                   forKey:@"profile_type"];
@@ -294,7 +304,12 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)startFollowingProfile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointAddFollower];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"follower"];
         [c addQueryValue:[profile profileID] forKey:@"profile"];
@@ -307,7 +322,12 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRequest];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"requesting_profile"];
         [c addQueryValue:[profile profileID] forKey:@"profile"];
@@ -321,7 +341,11 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetRequests];
         [c addQueryValue:[[[self currentUser] personalProfile] profileID]
                   forKey:@"profile"];
@@ -766,7 +790,11 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)validateWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateEmail];
         [c addQueryValue:email forKey:@"email"];
         [c addQueryValue:password forKey:@"password"];
@@ -784,7 +812,11 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
 
 - (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRegister];
         
         NSArray *missingKeys = nil;
@@ -797,6 +829,7 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
                                             @"zipCode" : @"zip_postal",
                                             @"city" : @"city",
                                             @"state" : @"state",
+                                        //    @"profilePhotoURLString" : @"picture_path",
                                             @"birthday" : ^(id value) {
                                                     NSDateFormatter *df = [[NSDateFormatter alloc] init];
                                                     [df setDateFormat:@"MM-dd-yyyy"];
@@ -876,14 +909,14 @@ NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue = @"STKUserStore
             [self setCurrentUser:nil];
     
             if([valErr isConnectionError]) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserSessionEndedNotification
+                [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
                                                                     object:nil
-                                                                  userInfo:@{STKUserStoreCurrentUserSessionEndedReasonKey : STKUserStoreCurrentUserSessionEndedConnectionValue,
+                                                                  userInfo:@{STKSessionEndedReasonKey : STKSessionEndedConnectionValue,
                                                                              @"error" : valErr}];
             } else {
-                [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserSessionEndedNotification
+                [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
                                                                     object:nil
-                                                                  userInfo:@{STKUserStoreCurrentUserSessionEndedReasonKey : STKUserStoreCurrentUserSessionEndedAuthenticationValue,
+                                                                  userInfo:@{STKSessionEndedReasonKey : STKSessionEndedAuthenticationValue,
                                                                              @"error" : valErr}];
             }
         }

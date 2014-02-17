@@ -21,6 +21,14 @@ NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.comp
 NSString * const STKBaseStoreEndpointAuthorization = @"/oauth2/authorize";
 NSString * const STKBaseStoreEndpointToken = @"/oauth2/token";
 
+NSString * const STKSessionEndedNotification = @"STKUserStoreCurrentUserSessionEndedNotification";
+NSString * const STKSessionEndedReasonKey = @"STKUserStoreCurrentUserSessionEndedReasonKey";
+NSString * const STKSessionEndedConnectionValue = @"STKUserStoreCurrentUserSessionEndedConnectionValue";
+NSString * const STKSessionEndedAuthenticationValue = @"STKUserStoreCurrentUserSessionEndedAuthenticationValue";
+NSString * const STKSessionEndedLogoutValue = @"STKUserStoreCurrentUserSessionEndedLogoutValue";
+
+NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
+
 @interface STKBaseStore () <NSURLSessionDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *lookupContext;
@@ -107,15 +115,31 @@ NSString * const STKBaseStoreEndpointToken = @"/oauth2/token";
     return self;
 }
 
-- (void)executeAuthorizedRequest:(void (^)(void))request
+- (void)executeAuthorizedRequest:(void (^)(BOOL granted))request
 {
     if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > 0) {
-        request();
+        request(YES);
     } else {
-        // search authorizedREquestQueue
-       // [self  ]
+        NSLog(@"Auth token has expired, queuing and requesting");
+        [[self authorizedRequestQueue] addObject:request];
+        if([[self authorizationToken] refreshToken]) {
+            [self refreshAccessToken:^(STKAuthorizationToken *token, NSError *err) {
+                for(void (^req)(BOOL) in [self authorizedRequestQueue]) {
+                    req(err == nil);
+                }
+                [[self authorizedRequestQueue] removeAllObjects];
+            }];
+        } else {
+            [self fetchAccessToken:^(STKAuthorizationToken *token, NSError *err) {
+                for(void (^req)(BOOL) in [self authorizedRequestQueue]) {
+                    req(err == nil);
+                }
+                [[self authorizedRequestQueue] removeAllObjects];
+            }];
+        }
     }
 }
+
 
 
 - (void)URLSession:(NSURLSession *)session
@@ -173,6 +197,21 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }];
 }
 
+- (void)refreshAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block
+{
+    STKConnection *c = [self connectionForEndpoint:STKBaseStoreEndpointToken];
+    [c addQueryValue:[[self authorizationToken] refreshToken] forKey:@"code"];
+    [c addQueryValue:@"refresh_token" forKey:@"grant_type"];
+    [c addQueryValue:STKPrismRedirectURI forKey:@"redirect_uri"];
+    [c setAuthorizationString:[self authenticationString]];
+    
+    [c setModelGraph:@[@"STKAuthorizationToken"]];
+    
+    [c postWithSession:[self session] completionBlock:^(STKAuthorizationToken *obj, NSError *err) {
+        [self setAuthorizationToken:obj];
+        block(obj, err);
+    }];
+}
 
 - (NSString *)labelForCode:(NSString *)code type:(STKLookupType)type
 {

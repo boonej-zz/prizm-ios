@@ -18,7 +18,7 @@ NSString * const STKProfileTypeCompa = @"6";
 NSString * const STKProfileTypeCommunity = @"7";
 
 NSString * const STKProfileCoverPhotoURLStringKey = @"cover_image_file_path";
-NSString * const STKProfileProfilePhotoURLStringKey = @"profile_image_file_path";
+NSString * const STKProfileProfilePhotoURLStringKey = @"picture_path";
 NSString * const STKProfileProfileIDKey = @"profile";
 
 CGSize STKProfileCoverPhotoSize = {.width = 320, .height = 188};

@@ -258,9 +258,9 @@ const long STKCreateProgressGeocoding = 4;
             }
         }
     }];
-    
+   /*
     if(result) {
-     /*   if(![[self profileInformation] coverPhotoURLString]) {
+        if(![[self profileInformation] coverPhotoURLString]) {
             if(!([self progressMask] & STKCreateProgressUploadingCover)) {
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Choose a Cover Photo" message:@"Upload a cover photo before continuing." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
@@ -273,8 +273,8 @@ const long STKCreateProgressGeocoding = 4;
                 [av show];
                 return NO;
             }
-        }*/
-    }
+        }
+    }*/
     
     return result;
 }
@@ -555,7 +555,7 @@ const long STKCreateProgressGeocoding = 4;
                                            [STKProcessingView dismiss];
                                            if(!err) {
                                                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-                                               
+                                               /*
                                                NSMutableDictionary *vals = [NSMutableDictionary dictionary];
                                                if([[self profileInformation] coverPhotoURLString]) {
                                                    [vals setObject:[[self profileInformation] coverPhotoURLString] forKey:STKProfileCoverPhotoURLStringKey];
@@ -567,7 +567,7 @@ const long STKCreateProgressGeocoding = 4;
                                                    [[STKUserStore store] updateCurrentProfileWithInformation:vals completion:^(STKUser *u, NSError *err) {
                                                                                                                    
                                                    }];
-                                               }
+                                               }*/
                                            } else {
                                                [[STKErrorStore alertViewForError:err delegate:nil] show];
                                            }

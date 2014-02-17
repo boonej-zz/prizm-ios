@@ -21,6 +21,7 @@
 #import "STKRegisterViewController.h"
 #import "STKVerticalNavigationController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKBaseStore.h"
 
 @import QuartzCore;
 
@@ -40,7 +41,7 @@
     if(self) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(userBecameUnauthorized:)
-                                                     name:STKUserStoreCurrentUserSessionEndedNotification
+                                                     name:STKSessionEndedNotification
                                                    object:nil];
     }
     return self;
@@ -54,11 +55,11 @@
 
 - (void)userBecameUnauthorized:(NSNotification *)note
 {
-    NSString *reasonValue = [[note userInfo] objectForKey:STKUserStoreCurrentUserSessionEndedReasonKey];
+    NSString *reasonValue = [[note userInfo] objectForKey:STKSessionEndedReasonKey];
     NSString *msg = nil;
-    if([reasonValue isEqualToString:STKUserStoreCurrentUserSessionEndedConnectionValue]) {
+    if([reasonValue isEqualToString:STKSessionEndedConnectionValue]) {
         msg = @"There was an issue with your connection and you could not be authenticated with the server. Please make sure you have an internet connection and log in again.";
-    } else if ([reasonValue isEqualToString:STKUserStoreCurrentUserSessionEndedAuthenticationValue]) {
+    } else if ([reasonValue isEqualToString:STKSessionEndedAuthenticationValue]) {
         msg = @"Your session has ended. Please try to login again.";
     }
     

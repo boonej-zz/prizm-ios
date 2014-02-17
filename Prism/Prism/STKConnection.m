@@ -13,7 +13,6 @@ NSString * const STKConnectionUnauthorizedNotification = @"STKConnectionUnauthor
 NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
 
-
 @interface STKConnection ()
 @property (nonatomic, weak) NSURLSessionDataTask *internalConnection;
 @property (nonatomic, strong) NSMutableDictionary *internalArguments;

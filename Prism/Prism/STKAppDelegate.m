@@ -35,11 +35,6 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    
-    [[STKBaseStore store] fetchAccessToken:^(STKAuthorizationToken *token, NSError *err) {
-        
-    }];
-    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [self configureAppearanceProxies];

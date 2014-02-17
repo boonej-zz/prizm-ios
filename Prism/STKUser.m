@@ -12,12 +12,12 @@
 #import "STKRequestItem.h"
 
 
-NSString * const STKUserGenderMale = @"1";
-NSString * const STKUserGenderFemale = @"2";
+NSString * const STKUserGenderMale = @"male";
+NSString * const STKUserGenderFemale = @"female";
 
-NSString * const STKUserExternalSystemFacebook = @"1";
-NSString * const STKUserExternalSystemTwitter = @"2";
-NSString * const STKUserExternalSystemGoogle = @"3";
+NSString * const STKUserExternalSystemFacebook = @"facebook";
+NSString * const STKUserExternalSystemTwitter = @"twitter";
+NSString * const STKUserExternalSystemGoogle = @"google";
 
 
 @implementation STKUser

@@ -11,6 +11,14 @@
 
 @class STKUser, STKConnection, STKAuthorizationToken;
 
+extern NSString * const STKSessionEndedNotification;
+extern NSString * const STKSessionEndedReasonKey;
+extern NSString * const STKSessionEndedConnectionValue;
+extern NSString * const STKSessionEndedAuthenticationValue;
+extern NSString * const STKSessionEndedLogoutValue;
+
+extern NSString * const STKAuthenticationErrorDomain;
+
 typedef enum {
     STKLookupTypeCitizenship,
     STKLookupTypeCountry,
@@ -36,6 +44,6 @@ typedef enum {
 
 - (void)fetchAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block;
 
-- (void)executeAuthorizedRequest:(void (^)(void))request;
+- (void)executeAuthorizedRequest:(void (^)(BOOL granted))request;
 
 @end

@@ -20,11 +20,6 @@ typedef enum {
     STKUserStoreErrorCodeNoPassword
 } STKUserStoreErrorCode;
 
-extern NSString * const STKUserStoreCurrentUserSessionEndedNotification;
-    extern NSString * const STKUserStoreCurrentUserSessionEndedReasonKey;
-        extern NSString * const STKUserStoreCurrentUserSessionEndedConnectionValue;
-        extern NSString * const STKUserStoreCurrentUserSessionEndedAuthenticationValue;
-        extern NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue;
 
 
 extern NSString * const STKUserCoverPhotoURLStringKey;
