@@ -119,6 +119,9 @@
         CGRect blurRect = [[self view] bounds];
         
         UIViewController *selected = [self selectedViewController];
+        [selected menuWillAppear:animated];
+        
+        
         if([selected isKindOfClass:[UINavigationController class]]) {
             UINavigationBar *bar = [(UINavigationController *)selected navigationBar];
             CGRect barFrame = [bar frame];
@@ -136,6 +139,8 @@
         [[self menuView] setBackgroundImage:bgImage];
         
         [[self menuView] layoutIfNeeded];
+    } else {
+        [[self selectedViewController] menuWillDisappear:animated];
     }
     [[self menuView] setVisible:menuVisible animated:animated];
 }
@@ -153,10 +158,16 @@
 
 - (void)menuView:(STKMenuView *)menuView didSelectItemAtIndex:(int)idx
 {
+    // Ensure that this line of code is always sent before the changing of the selected view controller
     [self setMenuVisible:NO animated:YES];
+    
     UIViewController *vc = [[self viewControllers] objectAtIndex:idx];
     if(vc != [self selectedViewController])
         [self setSelectedViewController:vc];
+    else {
+        [(UINavigationController *)[self selectedViewController] popToRootViewControllerAnimated:NO];
+
+    }
 }
 
 - (void)setSelectedViewController:(UIViewController *)selectedViewController
@@ -164,6 +175,7 @@
     [[[self selectedViewController] view] removeFromSuperview];
     
     _selectedViewController = selectedViewController;
+    [(UINavigationController *)_selectedViewController popToRootViewControllerAnimated:NO];
     
     if([self isViewLoaded]) {
         UIView *v = [[self selectedViewController] view];

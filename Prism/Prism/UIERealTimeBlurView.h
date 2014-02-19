@@ -33,5 +33,6 @@ extern const CGFloat UIERealTimeBlurViewFPS;
 /*** Manually performs the refresh of the blurred background */
 - (void)refresh;
 
+@property (nonatomic) float overlayOpacity;
 
 @end

@@ -10,10 +10,13 @@
 @class STKResolvingImageView;
 
 @interface STKTriImageCell : STKTableViewCell
-
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *leftImageView;
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *rightImageView;
+
+@property (weak, nonatomic) IBOutlet UIButton *leftButton;
+@property (weak, nonatomic) IBOutlet UIButton *centerButton;
+@property (weak, nonatomic) IBOutlet UIButton *rightButton;
 
 - (IBAction)leftImageButtonTapped:(id)sender;
 - (IBAction)centerImageButtonTapped:(id)sender;

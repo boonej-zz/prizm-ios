@@ -16,14 +16,14 @@
     _urlString = urlString;
     
     [self setImage:nil];
-    
+    NSLog(@"%@", NSStringFromCGRect([self frame]));
     if(_urlString) {
         __weak STKResolvingImageView *iv = self;
         [[STKImageStore store] fetchImageForURLString:_urlString
                                            completion:^(UIImage *img) {
                                                if([urlString isEqualToString:[iv urlString]]) {
                                                    [iv setImage:img];
-                                                   [iv setNeedsDisplay];
+                                                   //[iv setNeedsDisplay];
                                                }
                                            }];
     }

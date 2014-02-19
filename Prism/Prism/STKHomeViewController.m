@@ -253,6 +253,16 @@
                                 }];
 }
 
+- (void)menuWillAppear:(BOOL)animated
+{
+    [[self blurView] setOverlayOpacity:0.5];
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [[self blurView] setOverlayOpacity:0.0];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];

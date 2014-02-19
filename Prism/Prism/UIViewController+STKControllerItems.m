@@ -24,6 +24,20 @@
     return nil;
 }
 
+- (void)menuWillAppear:(BOOL)animated
+{
+    for(UIViewController *vc in [self childViewControllers]) {
+        [vc menuWillAppear:animated];
+    }
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    for(UIViewController *vc in [self childViewControllers]) {
+        [vc menuWillDisappear:animated];
+    }
+}
+
 - (UIBarButtonItem *)settingsBarButtonItem
 {
     UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];

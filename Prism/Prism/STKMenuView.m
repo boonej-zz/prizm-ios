@@ -15,6 +15,8 @@
 @property (nonatomic, strong) UIDynamicAnimator *animator;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSLayoutConstraint *blurHeightConstraint;
+
+@property (nonatomic, strong) CALayer *underlayLayer;
 @end
 
 @implementation STKMenuView
@@ -27,14 +29,10 @@
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setClipsToBounds:YES];
 
-        
-        
         _backgroundImageView = [[UIImageView alloc] init];
         [_backgroundImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [_backgroundImageView setContentMode:UIViewContentModeScaleAspectFill];
         [_backgroundImageView setClipsToBounds:YES];
-
-        
 
         _buttonContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 140)];
         [_buttonContainerView setClipsToBounds:YES];
@@ -72,11 +70,12 @@
                                                               constant:140];
         [_backgroundImageView addConstraint:_blurHeightConstraint];
         
-        UIView *v = [[UIView alloc] initWithFrame:[_buttonContainerView bounds]];
-        [v setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-        [v setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.5]];
-        [_buttonContainerView addSubview:v];
-
+        
+        _underlayLayer = [CALayer layer];
+        [_underlayLayer setBackgroundColor:[[UIColor blackColor] CGColor]];
+        [_underlayLayer setFrame:[_buttonContainerView bounds]];
+        [[_buttonContainerView layer] addSublayer:_underlayLayer];
+        
         
         STKMenuButton *b0 = [[STKMenuButton alloc] init];
         STKMenuButton *b1 = [[STKMenuButton alloc] init];
@@ -107,6 +106,12 @@
 
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [[self underlayLayer] setFrame:[[self buttonContainerView] bounds]];
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
@@ -158,8 +163,12 @@
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated
 {
     [self setHidden:!visible];
+    
     if(!visible) {
         [self setBackgroundImage:nil];
+        [[self underlayLayer] setOpacity:0.0];
+    } else {
+        [[self underlayLayer] setOpacity:0.5];
     }
 }
 

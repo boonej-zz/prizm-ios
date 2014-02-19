@@ -61,6 +61,17 @@
     
 }
 
+- (void)menuWillAppear:(BOOL)animated
+{
+    [[self blurView] setOverlayOpacity:0.5];
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [[self blurView] setOverlayOpacity:0.0];
+}
+
+
 - (void)avatarTappedForPost:(STKPost *)p
 {
 
@@ -191,7 +202,7 @@
 {
     if(tableView == [self tableView]) {
         STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-        [self populateTriImageCell:c forRow:[indexPath row]];
+        [self populateTriImageCell:c forRow:(int)[indexPath row]];
         
         return c;
     }

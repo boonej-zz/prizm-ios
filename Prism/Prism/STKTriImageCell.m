@@ -12,7 +12,16 @@
 
 - (void)cellDidLoad
 {
-//    [[self contentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [[self contentView] setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|"
+                                                                 options:0
+                                                                 metrics:nil
+                                                                   views:@{@"v" : [self contentView]}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|"
+                                                                 options:0
+                                                                 metrics:nil
+                                                                   views:@{@"v" : [self contentView]}]];
+    
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 

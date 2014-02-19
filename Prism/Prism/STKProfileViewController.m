@@ -38,8 +38,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-
-        [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
+        [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
         _posts = [[NSMutableArray alloc] init];
@@ -47,6 +46,10 @@
     return self;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
 
 - (BOOL)isShowingCurrentUserProfile
 {
@@ -64,15 +67,18 @@
     [super viewWillAppear:animated];
     
     [[[self blurView] displayLink] setPaused:NO];
-
     
-    if([[[self navigationController] viewControllers] indexOfObject:self] == 0) {
-        [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
-    }
     
     if(![self profile]) {
         [self setProfile:[[[STKUserStore store] currentUser] personalProfile]];
     }
+    
+    if([self isShowingCurrentUserProfile]) {
+        [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
+    } else {
+        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+    }
+    
     [[STKUserStore store] fetchProfile:[self profile] completion:^(STKProfile *p, NSError *err) {
         [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
                         withRowAnimation:UITableViewRowAnimationNone];
@@ -147,17 +153,28 @@
     }
 }
 
+- (void)menuWillAppear:(BOOL)animated
+{
+    [[self blurView] setOverlayOpacity:0.5];
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [[self blurView] setOverlayOpacity:0.0];
+}
+
+
 - (void)leftImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     NSInteger row = [ip row];
-    int itemIndex = row * 3;
+    int itemIndex = (int)row * 3;
     [self showPostAtIndex:itemIndex];
 }
 
 - (void)centerImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     NSInteger row = [ip row];
-    int itemIndex = row * 3 + 1;
+    int itemIndex = (int)row * 3 + 1;
     [self showPostAtIndex:itemIndex];
 
 }
@@ -165,7 +182,7 @@
 - (void)rightImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     NSInteger row = [ip row];
-    int itemIndex = row * 3 + 2;
+    int itemIndex = (int)row * 3 + 2;
     [self showPostAtIndex:itemIndex];
 }
 
@@ -189,7 +206,7 @@
     }];
 }
 
-- (float)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
         return 246;

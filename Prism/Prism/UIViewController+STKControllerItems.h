@@ -17,4 +17,8 @@
 @property (nonatomic, readonly) UIBarButtonItem *settingsBarButtonItem;
 
 @property (nonatomic, readonly) STKMenuController *menuController;
+
+- (void)menuWillAppear:(BOOL)animated;
+- (void)menuWillDisappear:(BOOL)animated;
+
 @end

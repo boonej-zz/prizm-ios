@@ -73,6 +73,16 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
 }
 
 
+- (void)setOverlayOpacity:(float)overlayOpacity
+{
+    [_tintLayer setOpacity:overlayOpacity];
+}
+
+- (float)overlayOpacity
+{
+    return [_tintLayer opacity];
+}
+
 - (void)commonInit
 {
     // Initialization code
@@ -92,7 +102,7 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
     self.userInteractionEnabled = NO;
     _tintLayer = [[CALayer alloc] init];
     _tintLayer.frame = self.bounds;
-    _tintLayer.opacity = UIERealTimeBlurViewTintColorAlpha;
+    _tintLayer.opacity = 0.0;
     [[self layer] addSublayer:_tintLayer];
     //default tint color
     self.tintColor = [UIColor blackColor];
