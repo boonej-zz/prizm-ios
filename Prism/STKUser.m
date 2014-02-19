@@ -19,11 +19,24 @@ NSString * const STKUserExternalSystemFacebook = @"facebook";
 NSString * const STKUserExternalSystemTwitter = @"twitter";
 NSString * const STKUserExternalSystemGoogle = @"google";
 
+NSString * const STKUserTypePersonal = @"personal";
+NSString * const STKUserTypeLuminary = @"luminary";
+NSString * const STKUserTypeMilitary = @"military";
+NSString * const STKUserTypeEducation = @"education";
+NSString * const STKUserTypeFoundation = @"foundation";
+NSString * const STKUserTypeCompany = @"company";
+NSString * const STKUserTypeCommunity = @"community";
+
+NSString * const STKUserCoverPhotoURLStringKey = @"cover_photo_url";
+NSString * const STKUserProfilePhotoURLStringKey = @"profile_photo_url";
+
+CGSize STKUserCoverPhotoSize = {.width = 320, .height = 188};
+CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
+
 
 @implementation STKUser
 
 @dynamic userID;
-@dynamic userName;
 @dynamic email;
 @dynamic gender;
 @dynamic requestItems;
@@ -32,16 +45,13 @@ NSString * const STKUserExternalSystemGoogle = @"google";
 @dynamic city, state;
 @dynamic zipCode, birthday, firstName, lastName, externalServiceType;
 @dynamic accountStoreID;
-@dynamic profiles;
+@dynamic profilePhotoPath, coverPhotoPath;
 
-- (void)awakeFromInsert
+- (NSString *)name
 {
-    STKProfile *profile = [NSEntityDescription insertNewObjectForEntityForName:@"STKProfile"
-                                                        inManagedObjectContext:[self managedObjectContext]];
-    [profile setProfileType:STKProfileTypePersonal];
-    [profile setUser:self];
-
+    return [NSString stringWithFormat:@"%@ %@", [self firstName], [self lastName]];
 }
+
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -50,34 +60,22 @@ NSString * const STKUserExternalSystemGoogle = @"google";
         @"_id" : @"userID",
         @"email" : @"email",
         @"gender" : @"gender",
-        @"username" : @"userName",
         @"first_name" : @"firstName",
         @"last_name" : @"lastName",
         @"zip_postal" : @"zipCode",
         @"city" : @"city",
         @"state" : @"state",
+        STKUserProfilePhotoURLStringKey : @"profilePhotoPath",
+        STKUserCoverPhotoURLStringKey : @"coverPhotoPath",
         @"birthday" : ^(id inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
-            [df setDateFormat:@"YYYY-MM-dd"];
+            [df setDateFormat:@"MM-dd-yyyy"];
             [self setBirthday:[df dateFromString:inValue]];
         }
     }];
     
-    STKProfile *profile = [self personalProfile];
-    [profile readFromJSONObject:[jsonObject objectForKey:@"profile"]];
-    [profile setUser:self];
-    
     return nil;
 }
 
-- (STKProfile *)personalProfile
-{
-    for(STKProfile *p in [self profiles]) {
-        if([[p profileType] isEqualToString:STKProfileTypePersonal]) {
-            return p;
-        }
-    }
-    return nil;
-}
 
 @end

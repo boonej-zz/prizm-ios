@@ -55,6 +55,10 @@
 
 - (void)userBecameUnauthorized:(NSNotification *)note
 {
+    if([[self presentedViewController] isKindOfClass:[STKVerticalNavigationController class]]) {
+        return;
+    }
+    
     NSString *reasonValue = [[note userInfo] objectForKey:STKSessionEndedReasonKey];
     NSString *msg = nil;
     if([reasonValue isEqualToString:STKSessionEndedConnectionValue]) {
@@ -72,6 +76,8 @@
                               cancelButtonTitle:@"OK"
                               otherButtonTitles:nil];
     }
+    
+    
     STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
     STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
     [self presentViewController:nvc animated:YES

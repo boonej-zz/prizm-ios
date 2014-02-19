@@ -47,8 +47,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
 
-- (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block;
-- (void)fetchProfile:(STKProfile *)p completion:(void (^)(STKProfile *u, NSError *err))block;
+- (void)fetchUserDetails:(STKUser *)u completion:(void (^)(STKUser *u, NSError *err))block;
 - (void)updateCurrentProfileWithInformation:(NSDictionary *)info completion:(void (^)(STKUser *u, NSError *err))block;
 
 - (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;

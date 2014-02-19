@@ -39,10 +39,10 @@ NSString * const STKUserEndpointRegister = @"/user";
 NSString * const STKUserEndpointValidateFacebook = @"/common/ajax/validate_facebook.php";
 NSString * const STKUserEndpointValidateTwitter = @"/common/ajax/validate_twitter.php";
 NSString * const STKUserEndpointValidateGoogle = @"/common/ajax/validate_google.php";
-NSString * const STKUserEndpointValidateEmail = @"/oauth2/login";
+NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 NSString * const STKUserEndpointUpdateProfile = @"/common/ajax/update_profile.php";
-NSString * const STKUserEndpointGetProfile = @"/common/ajax/get_profiles.php";
+NSString * const STKUserEndpointGetUserDetails = @"/user";
 NSString * const STKUserEndpointAddFollower = @"/common/ajax/create_profile_follower.php";
 NSString * const STKUserEndpointRequest = @"/common/ajax/create_request.php";
 NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
@@ -135,20 +135,6 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     [self setCurrentUserIsAuthorized:YES];
 }
 
-- (STKProfile *)profileForProfileDictionary:(NSDictionary *)profileDict
-{
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKProfile"];
-    [req setPredicate:[NSPredicate predicateWithFormat:@"profileID == %@", [profileDict objectForKey:STKProfileProfileIDKey]]];
-    
-    STKProfile *prof = [[[self context] executeFetchRequest:req error:nil] lastObject];
-    if(!prof) {
-        prof = [NSEntityDescription insertNewObjectForEntityForName:@"STKProfile"
-                                             inManagedObjectContext:[self context]];
-    }
-    [prof readFromJSONObject:profileDict];
-    
-    return prof;
-}
 
 - (void)setCurrentUser:(STKUser *)currentUser
 {
@@ -192,9 +178,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUpdateProfile];
         [c setParameters:info];
-        [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"profile"];
+    //    [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"profile"];
         [c setContext:[self context]];
-        [c setJsonRootObject:[[self currentUser] personalProfile]];
+      //  [c setJsonRootObject:[[self currentUser] personalProfile]];
         [c getWithSession:[self session] completionBlock:^(STKUser *u, NSError *err) {
             if(!err) {
                 [[self context] save:nil];
@@ -206,7 +192,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     }];
 }
 
-- (void)fetchProfile:(STKProfile *)p completion:(void (^)(STKProfile *u, NSError *err))block
+- (void)fetchUserDetails:(STKUser *)u completion:(void (^)(STKUser *u, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
@@ -214,59 +200,14 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
-        [c addQueryValue:STKProfileTypePersonal
-                  forKey:@"profile_type"];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetUserDetails];
+        [c setIdentifiers:@[[u userID]]];
+        [c setModelGraph:@[@"STKUser"]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"userID" : @"_id"}];
+        [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
 
-// Warning: Fix
-        if([p entityID])
-            [c addQueryValue:[p entityID] forKey:@"entity"];
-        else
-            [c addQueryValue:[[p user] userID] forKey:@"entity"];
-        
-        [c addQueryValue:@"0" forKey:@"offset"];
-        [c addQueryValue:@"1" forKey:@"limit"];
-        [c setModelGraph:@{@"profile" : @[p]}];
-        
-        [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
-            STKProfile *u = nil;
-            if(!err) {
-                u = [[profiles objectForKey:@"profiles"] firstObject];
-                [[self context] save:nil];
-            } else {
-                
-            }
-            block(u, err);
-        }];
-    }];
-}
-
-- (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block
-{
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
-            return;
-        }
-        
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
-        [c addQueryValue:STKProfileTypePersonal
-                  forKey:@"profile_type"];
-        [c addQueryValue:[[self currentUser] userID] forKey:@"entity"];
-//        [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"profile"];
-        [c addQueryValue:@"0" forKey:@"offset"];
-        [c addQueryValue:@"1" forKey:@"limit"];
-        [c setModelGraph:@{@"profile" : @[[[self currentUser] personalProfile]]}];
-        
-        [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
-            STKUser *u = nil;
-            if(!err) {
-                u = [[profiles objectForKey:@"profiles"] firstObject];
-                [[self context] save:nil];
-            } else {
-                
-            }
-            block(u, err);
+            block(user, err);
         }];
     }];
 }
@@ -279,9 +220,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetProfile];
-        [c addQueryValue:STKProfileTypePersonal
-                  forKey:@"profile_type"];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUpdateProfile];
         [c addQueryValue:@"0" forKey:@"offset"];
         [c addQueryValue:@"20" forKey:@"limit"];
         [c addQueryValue:name forKey:@"name"];
@@ -311,7 +250,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointAddFollower];
-        [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"follower"];
+        [c addQueryValue:[[self currentUser] userID] forKey:@"follower"];
         [c addQueryValue:[profile profileID] forKey:@"profile"];
 //        [c addQueryValue:@"unknown" forKey:@"title"];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -329,7 +268,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRequest];
-        [c addQueryValue:[[[self currentUser] personalProfile] profileID] forKey:@"requesting_profile"];
+        [c addQueryValue:[[self currentUser] userID] forKey:@"requesting_profile"];
         [c addQueryValue:[profile profileID] forKey:@"profile"];
         [c addQueryValue:requestType forKey:@"request_type"];
         [c addQueryValue:STKRequestStatusPending forKey:@"request_status"];
@@ -347,7 +286,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetRequests];
-        [c addQueryValue:[[[self currentUser] personalProfile] profileID]
+        [c addQueryValue:[[self currentUser] userID]
                   forKey:@"profile"];
         
         [c setModelGraph:@{@"request" : @[@"STKRequestItem"]}];
@@ -558,7 +497,8 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 {
     [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
         if(!err) {
-            [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *user, NSError *valError) {
+            [self validateWithFacebook:[[acct credential] oauthToken]
+                            completion:^(STKUser *user, NSError *valError) {
                 if(!valError) {
                     [self authenticateUser:user];
 
@@ -569,7 +509,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                     
                     block(user, nil, nil);
                 } else {
-                    if([valError isConnectionError]) {
+                    if(![[[valError userInfo] objectForKey:@"error"] isEqualToString:STKErrorUserDoesNotExist]) {
                         block(nil, nil, valError);
                     } else {
                         // Fallback to registration
@@ -628,12 +568,13 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)validateWithFacebook:(NSString *)oauthToken completion:(void (^)(STKUser *u, NSError *err))block
 {
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateFacebook];
-    [c addQueryValue:oauthToken forKey:@"ext_token"];
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+    [c addQueryValue:oauthToken forKey:@"provider_token"];
+    [c addQueryValue:STKUserExternalSystemFacebook forKey:@"provider"];
     [c setContext:[self context]];
     [c setEntityName:@"STKUser"];
-    [c setExistingMatchMap:@{@"userID" : @"entity"}];
-    [c getWithSession:[self session] completionBlock:block];
+    [c setExistingMatchMap:@{@"userID" : @"_id"}];
+    [c postWithSession:[self session] completionBlock:block];
 }
 
 - (void)fetchFacebookDataForAccount:(ACAccount *)acct completion:(void (^)(STKProfileInformation *acct, NSError *err))block
@@ -795,7 +736,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateEmail];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
         [c addQueryValue:email forKey:@"email"];
         [c addQueryValue:password forKey:@"password"];
         
@@ -829,7 +770,8 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                                             @"zipCode" : @"zip_postal",
                                             @"city" : @"city",
                                             @"state" : @"state",
-                                        //    @"profilePhotoURLString" : @"picture_path",
+                                            @"coverPhotoURLString" : STKUserCoverPhotoURLStringKey,
+                                            @"profilePhotoURLString" : STKUserProfilePhotoURLStringKey,
                                             @"birthday" : ^(id value) {
                                                     NSDateFormatter *df = [[NSDateFormatter alloc] init];
                                                     [df setDateFormat:@"MM-dd-yyyy"];
@@ -846,8 +788,8 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         }
         
         if([info externalService] && [info externalID]) {
-            [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalID" : @"external_id",
-                                                                @"externalService" : @"external_system"}];
+            [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalID" : @"provider_id",
+                                                                @"externalService" : @"provider"}];
         } else if([info password]) {
             [c addQueryObject:info missingKeys:nil withKeyMap:@{@"password" : @"password"}];
         } else {
@@ -858,7 +800,10 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             return;
         }
         
-        [c postWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+        [c setContext:[self context]];
+        [c setModelGraph:@[@"STKUser"]];
+        
+        [c postWithSession:[self session] completionBlock:^(STKUser *registeredUser, NSError *err) {
             if(!err) {
                 void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
                     if(!valErr) {
@@ -881,13 +826,11 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                 if([[info externalService] isEqualToString:STKUserExternalSystemGoogle]) {
                     [self validateWithGoogle:[info token] completion:validationBlock];
                 } else if([[info externalService] isEqualToString:STKUserExternalSystemFacebook]) {
-                    [self validateWithFacebook:[info token] completion:validationBlock];
+                    validationBlock(registeredUser, nil);
                 } else if([[info externalService] isEqualToString:STKUserExternalSystemTwitter]) {
                     [self validateWithTwitterToken:[info token] secret:[info secret] completion:validationBlock];
                 } else {
-                    [self validateWithEmail:[info email]
-                                   password:[info password]
-                                 completion:validationBlock];
+                    validationBlock(registeredUser, nil);
                 }
             } else {
                 block(nil, err);

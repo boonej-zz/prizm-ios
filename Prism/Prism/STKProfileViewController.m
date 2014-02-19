@@ -15,7 +15,6 @@
 #import "STKInitialProfileStatisticsCell.h"
 #import "STKContentStore.h"
 #import "STKTriImageCell.h"
-#import "STKProfile.h"
 #import "STKBaseStore.h"
 #import "STKPostViewController.h"
 #import "STKRequestItem.h"
@@ -50,7 +49,7 @@
 
 - (BOOL)isShowingCurrentUserProfile
 {
-    return [[[self profile] profileID] isEqualToString:[[[[STKUserStore store] currentUser] personalProfile] profileID]];
+    return [[[self profile] userID] isEqualToString:[[[STKUserStore store] currentUser] userID]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -71,13 +70,13 @@
     }
     
     if(![self profile]) {
-        [self setProfile:[[[STKUserStore store] currentUser] personalProfile]];
+        [self setProfile:[[STKUserStore store] currentUser]];
     }
-    [[STKUserStore store] fetchProfile:[self profile] completion:^(STKProfile *p, NSError *err) {
+    [[STKUserStore store] fetchUserDetails:[self profile] completion:^(STKUser *p, NSError *err) {
         [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
                         withRowAnimation:UITableViewRowAnimationNone];
     }];
-
+/*
     [[STKContentStore store] fetchProfilePostsForProfile:[self profile]
                                              inDirection:STKContentStoreFetchDirectionNewer
                                            referencePost:[[self posts] firstObject]
@@ -91,7 +90,7 @@
                                                   } else {
                                                       // Do nothing?
                                                   }
-                                              }];
+                                              }];*/
     
     
 }
@@ -127,7 +126,7 @@
 - (void)avatarTappedForPostAtIndex:(int)idx
 {
     STKPost *p = [[self posts] objectAtIndex:idx];
-    if([[[p creatorProfile] profileID] isEqualToString:[[self profile] profileID]]) {
+  /*  if([[[p creatorProfile] profileID] isEqualToString:[[self profile] profileID]]) {
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         // Needs testing
@@ -135,7 +134,7 @@
         [nextProfile setProfile:[p creatorProfile]];
         [[self navigationController] pushViewController:nextProfile animated:NO];
         [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    }*/
 }
 
 - (void)showPostAtIndex:(int)idx
@@ -223,7 +222,7 @@
 
 - (void)populateProfileCell:(STKProfileCell *)c
 {
-    STKProfile *p = [self profile];
+    STKUser *p = [self profile];
     [[c nameLabel] setText:[p name]];
     if([p city] && [p state]) {
         NSString *city = [p city];
@@ -252,7 +251,7 @@
     
     
     [[c circleView] setCircleTitles:@[@"Followers", @"Following", @"Posts"]];
-
+/*
     NSString *followerCount = [[self profile] followedCount];
     NSString *followingCount = [[self profile] followingCount];
     NSString *postCount = [[self profile] postCount];
@@ -264,7 +263,7 @@
         postCount = @"0";
     
     [[c circleView] setCircleValues:@[followerCount, followingCount, postCount]];
-    
+    */
     [[c circleView] setDelegate:self];
 }
 

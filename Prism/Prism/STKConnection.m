@@ -61,7 +61,13 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     
     NSURLComponents *components = [[NSURLComponents alloc] initWithURL:[self baseURL]
                                                resolvingAgainstBaseURL:NO];
-    [components setPath:[self endpoint]];
+    if([self identifiers]) {
+        NSArray *fullArray = [@[[self endpoint]] arrayByAddingObjectsFromArray:[self identifiers]];
+        NSString *pathIdentifier = [fullArray componentsJoinedByString:@"/"];
+        [components setPath:pathIdentifier];
+    } else {
+        [components setPath:[self endpoint]];
+    }
     
     NSMutableString *queryString = [[NSMutableString alloc] init];
     NSArray *allKeys = [[self internalArguments] allKeys];
@@ -227,9 +233,26 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
                                                                 object:self];
         }
 
+        NSMutableDictionary *errDict = [NSMutableDictionary dictionary];
+        if([data length] > 0) {
+            NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data
+                                                                       options:0
+                                                                         error:nil];
+            NSDictionary *errObj = [jsonObject objectForKey:@"error"];
+            if([errObj objectForKey:@"error"]) {
+                [errDict setObject:[errObj objectForKey:@"error"]
+                            forKey:@"error"];
+            }
+            if([errObj objectForKey:@"error_description"]) {
+                [errDict setObject:[errObj objectForKey:@"error_description"]
+                            forKey:@"error_description"];
+            }
+        }
+        
+        
         [self reportFailureWithError:[NSError errorWithDomain:STKConnectionServiceErrorDomain
-                                                         code:STKConnectionErrorCodeBadRequest
-                                                     userInfo:nil]];
+                                                         code:STKConnectionErrorCodeRequestFailed
+                                                     userInfo:errDict]];
         return;
     }
 

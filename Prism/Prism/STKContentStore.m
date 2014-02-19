@@ -95,9 +95,9 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
-        [c addQueryObject:[u personalProfile]
+       /* [c addQueryObject:[u personalProfile]
               missingKeys:nil
-               withKeyMap:@{@"profileID" : @"followed_by"}];
+               withKeyMap:@{@"profileID" : @"followed_by"}];*/
         [c addQueryValue:@"30" forKey:@"limit"];
         if(referencePost) {
             if(fetchDirection == STKContentStoreFetchDirectionNewer) {
@@ -221,8 +221,8 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointCreatePost];
         [c addQueryValue:[[[STKUserStore store] currentUser] userID]
                   forKey:@"entity"];
-        [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
-        [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"posting_profile"];
+       // [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
+       // [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"posting_profile"];
         [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
         [c addQueryValue:@"x" forKey:@"title"];
         

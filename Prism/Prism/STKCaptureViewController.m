@@ -9,7 +9,7 @@
 #import "STKCaptureViewController.h"
 #import "STKCaptureView.h"
 #import "STKCaptureOverlayView.h"
-#import "STKProfile.h"
+#import "STKUser.h"
 
 @import AVFoundation;
 
@@ -82,8 +82,8 @@
     
     CGSize destSize = CGSizeMake(640, 640);
     if([self type] == STKImageChooserTypeCover) {
-        destSize.height = STKProfileCoverPhotoSize.height * 2.0;
-        diffY += (640.0 - STKProfileCoverPhotoSize.height * 2.0) / 2.0;
+        destSize.height = STKUserCoverPhotoSize.height * 2.0;
+        diffY += (640.0 - STKUserCoverPhotoSize.height * 2.0) / 2.0;
     }
     
     UIGraphicsBeginImageContextWithOptions(destSize, YES, 1.0);
@@ -181,8 +181,8 @@
                                                                    CGSize destSize = CGSizeMake(640, 640);
                                                                    float diffY = 0;
                                                                    if([self type] == STKImageChooserTypeCover) {
-                                                                       destSize.height = STKProfileCoverPhotoSize.height * 2.0;
-                                                                       diffY += (640.0 - STKProfileCoverPhotoSize.height * 2.0) / 2.0;
+                                                                       destSize.height = STKUserCoverPhotoSize.height * 2.0;
+                                                                       diffY += (640.0 - STKUserCoverPhotoSize.height * 2.0) / 2.0;
                                                                    }
 
                                                                    UIGraphicsBeginImageContextWithOptions(destSize, YES, 1.0);
@@ -296,7 +296,7 @@
         UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([[self overlayView] bounds], 4, 4)];
         [[self overlayView] setCutPath:bp];
     } else if([self type] == STKImageChooserTypeCover) {
-        float h = STKProfileCoverPhotoSize.height;
+        float h = STKUserCoverPhotoSize.height;
         UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(2, (320.0 - h) / 2.0, 316.0, h)];
         [[self overlayView] setCutPath:bp];
     } else {

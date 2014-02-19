@@ -38,6 +38,8 @@ typedef enum {
 
 @property (nonatomic, readonly) NSURLRequest *request;
 @property (nonatomic) STKConnectionMethod method;
+@property (nonatomic, strong) NSArray *identifiers;
+
 @property (nonatomic, strong) NSDictionary *parameters;
 @property (nonatomic, strong) NSString *authorizationString;
 @property (nonatomic, copy) void (^completionBlock)(id obj, NSError *err);
