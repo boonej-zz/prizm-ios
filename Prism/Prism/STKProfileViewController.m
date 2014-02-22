@@ -232,9 +232,8 @@
     [[c nameLabel] setText:[p name]];
     if([p city] && [p state]) {
         NSString *city = [p city];
-        NSString *stateCode = [p state];
-        NSString *state = [[STKBaseStore store] labelForCode:stateCode type:STKLookupTypeRegion];
-        [[c locationLabel] setText:[NSString stringWithFormat:@"%@, %@", city, state]];
+        NSString *state = [p state];
+        [[c locationLabel] setText:state];
     } else
         [[c locationLabel] setText:@""];
     

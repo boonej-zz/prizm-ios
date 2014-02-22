@@ -187,6 +187,8 @@ NSString * const STKContentEndpointPost = @"/post";
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
+                obj = [obj sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted"
+                                                                                       ascending:NO]]];
                 block(obj, nil);
             } else {
                 block(nil, err);

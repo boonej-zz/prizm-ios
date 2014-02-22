@@ -35,8 +35,6 @@ typedef enum {
 @property (nonatomic, strong) NSURLSession *session;
 @property (nonatomic, strong) STKAuthorizationToken *authorizationToken;
 
-- (NSString *)labelForCode:(NSString *)code type:(STKLookupType)type;
-- (NSNumber *)codeForLookupValue:(NSString *)lookupValue type:(STKLookupType)type;
 
 - (STKConnection *)connectionForEndpoint:(NSString *)endpoint;
 

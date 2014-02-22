@@ -258,7 +258,7 @@ const long STKCreateProgressGeocoding = 4;
             }
         }
     }];
-   /*
+
     if(result) {
         if(![[self profileInformation] coverPhotoURLString]) {
             if(!([self progressMask] & STKCreateProgressUploadingCover)) {
@@ -274,7 +274,7 @@ const long STKCreateProgressGeocoding = 4;
                 return NO;
             }
         }
-    }*/
+    }
     
     return result;
 }
@@ -408,8 +408,7 @@ const long STKCreateProgressGeocoding = 4;
                                     [[self profileInformation] setZipCode:[cp postalCode]];
                                     [[self profileInformation] setCity:[cp locality]];
                                     
-                                    NSNumber *val = [[STKBaseStore store] codeForLookupValue:[cp administrativeArea] type:STKLookupTypeRegion];
-                                    [[self profileInformation] setState:[NSString stringWithFormat:@"%@", val]];
+                                    [[self profileInformation] setState:[cp administrativeArea]];
 
                                     
                                     UITableViewCell *c = [self visibleCellForKey:@"zipCode"];
@@ -570,8 +569,7 @@ const long STKCreateProgressGeocoding = 4;
                                [[self profileInformation] setCity:[cp locality]];
 
                                NSString *state = [cp administrativeArea];
-                               NSNumber *val = [[STKBaseStore store] codeForLookupValue:state type:STKLookupTypeRegion];
-                               [[self profileInformation] setState:[NSString stringWithFormat:@"%@", val]];
+                               [[self profileInformation] setState:state];
                                
                                registerBlock();
                            } else {

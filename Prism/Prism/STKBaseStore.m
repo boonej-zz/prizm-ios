@@ -213,46 +213,6 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }];
 }
 
-- (NSString *)labelForCode:(NSString *)code type:(STKLookupType)type
-{
-    NSString *entityName = @{@(STKLookupTypeCitizenship) : @"Citizenship",
-                             @(STKLookupTypeCountry) : @"Country",
-                             @(STKLookupTypeRace) : @"Race",
-                             @(STKLookupTypeRegion) : @"Region",
-                             @(STKLookupTypeReligion) : @"Religion"}[@(type)];
-    
-
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    [req setPredicate:[NSPredicate predicateWithFormat:@"code == %d", [code intValue]]];
-    
-    NSArray *results = [[self lookupContext] executeFetchRequest:req error:nil];
-    return [[results lastObject] valueForKey:@"label"];
-}
-
-- (NSNumber *)codeForLookupValue:(NSString *)lookupValue type:(STKLookupType)type
-{
-    NSString *entityName = @{@(STKLookupTypeCitizenship) : @"Citizenship",
-                             @(STKLookupTypeCountry) : @"Country",
-                             @(STKLookupTypeRace) : @"Race",
-                             @(STKLookupTypeRegion) : @"Region",
-                             @(STKLookupTypeReligion) : @"Religion"}[@(type)];
-
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    if(type == STKLookupTypeRegion) {
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"twoLetterCode == %@ or label == %@", lookupValue, lookupValue];
-        [req setPredicate:pred];
-    } else if(type == STKLookupTypeCountry) {
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"twoLetterCode == %@ or label == %@ or threeLetterCode == %@", lookupValue, lookupValue, lookupValue];
-        [req setPredicate:pred];
-    } else {
-        [req setPredicate:[NSPredicate predicateWithFormat:@"label == %@", lookupValue]];
-    }
-    
-    NSArray *results = [[self lookupContext] executeFetchRequest:req error:nil];
-    
-    return [[results lastObject] valueForKey:@"code"];
-}
-
 - (NSArray *)executeFetchRequest:(NSFetchRequest *)req
 {
     return [[self context] executeFetchRequest:req error:nil];
