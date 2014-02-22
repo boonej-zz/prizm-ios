@@ -28,7 +28,10 @@
     }
     
     int days = i / (60 * 60 * 24);
-    return [NSString stringWithFormat:@"%dd", days];
+    if(days < 7)
+        return [NSString stringWithFormat:@"%dd", days];
+    
+    return [NSString stringWithFormat:@"%dwks", days / 7];
 }
 
 @end

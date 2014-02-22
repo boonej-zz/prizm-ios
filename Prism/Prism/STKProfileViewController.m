@@ -63,7 +63,6 @@
     [super viewWillAppear:animated];
     
     [[[self blurView] displayLink] setPaused:NO];
-
     
     if([[[self navigationController] viewControllers] indexOfObject:self] == 0) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
@@ -72,25 +71,32 @@
     if(![self profile]) {
         [self setProfile:[[STKUserStore store] currentUser]];
     }
+    
+    if([self isShowingCurrentUserProfile]) {
+        [[self navigationItem] setTitle:@"Profile"];
+    } else {
+        [[self navigationItem] setTitle:@"Prism"];
+    }
+    
     [[STKUserStore store] fetchUserDetails:[self profile] completion:^(STKUser *p, NSError *err) {
         [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
                         withRowAnimation:UITableViewRowAnimationNone];
     }];
-/*
-    [[STKContentStore store] fetchProfilePostsForProfile:[self profile]
-                                             inDirection:STKContentStoreFetchDirectionNewer
-                                           referencePost:[[self posts] firstObject]
-                                              completion:^(NSArray *posts, NSError *err) {
-                                                  if(!err) {
-                                                      [[self posts] addObjectsFromArray:posts];
-                                                      [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-                                                      [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
-                                                                      withRowAnimation:UITableViewRowAnimationNone];
-                                                      
-                                                  } else {
-                                                      // Do nothing?
-                                                  }
-                                              }];*/
+
+    [[STKContentStore store] fetchProfilePostsForUser:[self profile]
+                                          inDirection:STKContentStoreFetchDirectionNewer
+                                        referencePost:[[self posts] firstObject]
+                                           completion:^(NSArray *posts, NSError *err) {
+                                               if(!err) {
+                                                   [[self posts] addObjectsFromArray:posts];
+                                                   [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                   [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
+                                                                   withRowAnimation:UITableViewRowAnimationNone];
+                                                   
+                                               } else {
+                                                   // Do nothing?
+                                               }
+                                           }];
     
     
 }

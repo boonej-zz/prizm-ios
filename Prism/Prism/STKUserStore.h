@@ -32,9 +32,6 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) STKUser *currentUser;
 @property (nonatomic) BOOL currentUserIsAuthorized;
 
-
-- (STKProfile *)profileForProfileDictionary:(NSDictionary *)profileDict;
-
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
 
 - (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block;

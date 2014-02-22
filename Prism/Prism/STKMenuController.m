@@ -250,6 +250,10 @@
     for(UIViewController *vc in viewControllers) {
         if([vc isKindOfClass:[UINavigationController class]]) {
             [(UINavigationController *)vc setDelegate:self];
+            [[(UINavigationController *)vc navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
+            [[(UINavigationController *)vc navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+                                                                                  NSFontAttributeName : STKFont(22)}];
+            [[(UINavigationController *)vc navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
         } else {
             @throw [NSException exceptionWithName:@"STKMenuControllerException"
                                            reason:@"All view controllers must be embedded in a UINavigationController"

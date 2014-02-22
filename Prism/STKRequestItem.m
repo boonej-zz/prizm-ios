@@ -48,7 +48,7 @@ NSString * const STKRequestStatusBlocked = @"4";
     }}];
     
 
-    [self setRequestingProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"requesting_profile"]]];
+//    [self setRequestingProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"requesting_profile"]]];
     return nil;
 }
 

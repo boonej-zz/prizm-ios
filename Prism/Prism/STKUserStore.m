@@ -32,17 +32,20 @@ NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.current
 NSString * const STKUserStoreExternalCredentialGoogleClientID = @"945478453792.apps.googleusercontent.com";
 NSString * const STKUserStoreExternalCredentialFacebookAppID = @"744512878911220";
 NSString * const STKUserStoreExternalCredentialTwitterTokenSecret = @"tYnRjsX7toPoFAmRQnFOen8W3BsyJ2irnfmNYAIZwFAxd";
-NSString * const STKUserStoreExternalCredentialTwitterConsumerKey = @"B8y2wlENU9eQCV2FO2s3rg";
-NSString * const STKUserStoreExternalCredentialTwitterConsumerSecret = @"XKWgxHrWgE8sfnFv7IcrgcvLM6XFZdBGmQexnzwFo";
+NSString * const STKUserStoreExternalCredentialTwitterConsumerKey = @"Ru65wMMNzljgbdZxie6okg";
+//@"B8y2wlENU9eQCV2FO2s3rg";
+NSString * const STKUserStoreExternalCredentialTwitterConsumerSecret = @"sJHdOEwTXQDO2y7nEjeHRdt8gX0TUhirOSNk32o";
+//@"XKWgxHrWgE8sfnFv7IcrgcvLM6XFZdBGmQexnzwFo";
 
-NSString * const STKUserEndpointRegister = @"/user";
+NSString * const STKUserEndpointUser = @"/users";
+NSString * const STKUserEndpointLogin = @"/oauth2/login";
+
 NSString * const STKUserEndpointValidateFacebook = @"/common/ajax/validate_facebook.php";
 NSString * const STKUserEndpointValidateTwitter = @"/common/ajax/validate_twitter.php";
 NSString * const STKUserEndpointValidateGoogle = @"/common/ajax/validate_google.php";
-NSString * const STKUserEndpointLogin = @"/oauth2/login";
+
 
 NSString * const STKUserEndpointUpdateProfile = @"/common/ajax/update_profile.php";
-NSString * const STKUserEndpointGetUserDetails = @"/user";
 NSString * const STKUserEndpointAddFollower = @"/common/ajax/create_profile_follower.php";
 NSString * const STKUserEndpointRequest = @"/common/ajax/create_request.php";
 NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
@@ -200,7 +203,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetUserDetails];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[u userID]]];
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
@@ -378,13 +381,14 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)validateWithTwitterToken:(NSString *)token secret:(NSString *)secret completion:(void (^)(STKUser *u, NSError *err))block
 {
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateTwitter];
-    [c addQueryValue:token forKey:@"ext_token"];
-    [c addQueryValue:secret forKey:@"ext_token_secret"];
+    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+    [c addQueryValue:token forKey:@"provider_token"];
+    [c addQueryValue:secret forKey:@"provider_token_secret"];
+    [c addQueryValue:STKUserExternalSystemTwitter forKey:@"provider"];
     [c setContext:[self context]];
-    [c setEntityName:@"STKUser"];
-    [c setExistingMatchMap:@{@"userID" : @"entity"}];
-    [c getWithSession:[self session]
+    [c setModelGraph:@[@"STKUser"]];
+    [c setExistingMatchMap:@{@"userID" : @"_id"}];
+    [c postWithSession:[self session]
       completionBlock:block];
 }
 
@@ -568,13 +572,19 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)validateWithFacebook:(NSString *)oauthToken completion:(void (^)(STKUser *u, NSError *err))block
 {
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
-    [c addQueryValue:oauthToken forKey:@"provider_token"];
-    [c addQueryValue:STKUserExternalSystemFacebook forKey:@"provider"];
-    [c setContext:[self context]];
-    [c setEntityName:@"STKUser"];
-    [c setExistingMatchMap:@{@"userID" : @"_id"}];
-    [c postWithSession:[self session] completionBlock:block];
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+        [c addQueryValue:oauthToken forKey:@"provider_token"];
+        [c addQueryValue:STKUserExternalSystemFacebook forKey:@"provider"];
+        [c setContext:[self context]];
+        [c setModelGraph:@[@"STKUser"]];
+        [c setExistingMatchMap:@{@"userID" : @"_id"}];
+        [c postWithSession:[self session] completionBlock:block];
+    }];
 }
 
 - (void)fetchFacebookDataForAccount:(ACAccount *)acct completion:(void (^)(STKProfileInformation *acct, NSError *err))block
@@ -758,7 +768,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRegister];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         
         NSArray *missingKeys = nil;
         BOOL verified = [c addQueryObject:info
@@ -789,7 +799,11 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         
         if([info externalService] && [info externalID]) {
             [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalID" : @"provider_id",
-                                                                @"externalService" : @"provider"}];
+                                                                @"externalService" : @"provider",
+                                                                @"token" : @"provider_token"}];
+            if([[info externalService] isEqualToString:STKUserExternalSystemTwitter]) {
+                [c addQueryValue:[info secret] forKey:@"provider_token_secret"];
+            }
         } else if([info password]) {
             [c addQueryObject:info missingKeys:nil withKeyMap:@{@"password" : @"password"}];
         } else {
@@ -828,7 +842,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                 } else if([[info externalService] isEqualToString:STKUserExternalSystemFacebook]) {
                     validationBlock(registeredUser, nil);
                 } else if([[info externalService] isEqualToString:STKUserExternalSystemTwitter]) {
-                    [self validateWithTwitterToken:[info token] secret:[info secret] completion:validationBlock];
+                    validationBlock(registeredUser, nil);
                 } else {
                     validationBlock(registeredUser, nil);
                 }

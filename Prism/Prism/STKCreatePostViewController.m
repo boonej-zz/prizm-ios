@@ -97,7 +97,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
     [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                           NSFontAttributeName : STKFont(22)}];
-    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.5]];
+    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
 
 }
 

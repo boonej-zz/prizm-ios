@@ -40,7 +40,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
-        
+        [[self navigationItem] setTitle:@"Explore"];
         [[self navigationItem] setRightBarButtonItem:[self searchBarButtonItem]];
         
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_explore"]];

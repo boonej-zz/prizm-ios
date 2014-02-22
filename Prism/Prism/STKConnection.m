@@ -44,6 +44,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         _internalArguments = [[NSMutableDictionary alloc] init];
         _baseURL = url;
         _endpoint = endpoint;
+        if(!_endpoint)
+            _endpoint = @"";
     }
     return self;
 }
@@ -204,7 +206,11 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 {
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
-    NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n", i, [self request], [[self request] HTTPMethod], [self statusCode]);
+    NSString *requestString = [[self request] description];
+    if([[[self request] HTTPMethod] isEqualToString:@"POST"]) {
+        requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
+    }
+    NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n", i, requestString, [[self request] HTTPMethod], [self statusCode]);
 #endif
 
     [self reportFailureWithError:error];
@@ -223,7 +229,12 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 {
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
-    NSLog(@"Request Finished (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\nData:%@", i, [self request], [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSString *requestString = [[self request] description];
+    if([[[self request] HTTPMethod] isEqualToString:@"POST"]) {
+        requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
+    }
+
+    NSLog(@"Request Finished (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\nData:%@", i, requestString, [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 #endif
 
 

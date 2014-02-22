@@ -14,18 +14,18 @@ NSString * const STKPostLocationLatitudeKey = @"location_lat";
 NSString * const STKPostLocationLongitudeKey = @"location_long";
 NSString * const STKPostLocationNameKey = @"location_name";
 NSString * const STKPostURLKey = @"file_path";
-NSString * const STKPostTextKey = @"body";
-NSString * const STKPostTypeKey = @"post_type";
+NSString * const STKPostTextKey = @"text";
+NSString * const STKPostTypeKey = @"type";
 
-NSString * const STKPostVisibilityPublic = @"1";
-NSString * const STKPostVisibilityPrivate = @"2";
+NSString * const STKPostVisibilityPublic = @"public";
+NSString * const STKPostVisibilityPrivate = @"private";
 
-NSString * const STKPostTypeAspiration = @"1";
-NSString * const STKPostTypeInspiration = @"2";
-NSString * const STKPostTypeExperience = @"3";
-NSString * const STKPostTypeAchievement = @"4";
-NSString * const STKPostTypePassion = @"5";
-NSString * const STKPostTypeAccolade = @"6";
+NSString * const STKPostTypeAspiration = @"aspiration";
+NSString * const STKPostTypeInspiration = @"inspiration";
+NSString * const STKPostTypeExperience = @"experience";
+NSString * const STKPostTypeAchievement = @"achievement";
+NSString * const STKPostTypePassion = @"passion";
+NSString * const STKPostTypeAccolade = @"accolade";
 
 
 @implementation STKPost
@@ -34,11 +34,11 @@ NSString * const STKPostTypeAccolade = @"6";
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
     [self bindFromDictionary:jsonObject keyMap:@{
-                                                 @"post" : @"postID",
+                                                 @"_id" : @"postID",
                                                  STKPostTextKey : @"text",
                                                  STKPostTypeKey : @"type",
                                                  STKPostLocationNameKey : @"locationName",
-                                                 @"created_epoch_timestamp" : @"referenceTimestamp",
+                                                 @"create_date" : @"referenceTimestamp",
                                                  STKPostURLKey : @"imageURLString",
                                                  @"external_system" : @"externalSystemID",
                                                  @"like_count" : @"likeCount",
@@ -48,15 +48,15 @@ NSString * const STKPostTypeAccolade = @"6";
     static NSDateFormatter *df = nil;
     if(!df) {
         df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"YYYY-MM-dd HH:mm:ss.SSSSSS"];
+        [df setDateFormat:@"yyyy-MM-ddTHH:mm:ss.SSSZ"];
     }
     
-    [self setDatePosted:[df dateFromString:[jsonObject objectForKey:@"created"]]];
+    [self setDatePosted:[df dateFromString:[jsonObject objectForKey:@"create_date"]]];
     
     [self setImageURLString:[[self imageURLString] stringByReplacingOccurrencesOfString:@"\\" withString:@""]];
     
-    [self setRecepientProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"profile"]]];
-    [self setCreatorProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"posting_profile"]]];
+//    [self setRecepientProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"profile"]]];
+//    [self setCreatorProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"posting_profile"]]];
      
     NSString *lat = [jsonObject objectForKey:STKPostLocationLatitudeKey];
     NSString *lon = [jsonObject objectForKey:STKPostLocationLongitudeKey];
