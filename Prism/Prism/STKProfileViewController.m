@@ -75,8 +75,10 @@
     
     if([self isShowingCurrentUserProfile]) {
         [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
+        [[self navigationItem] setTitle:@"Profile"];
     } else {
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        [[self navigationItem] setTitle:@"Prism"];
     }
     
     [[STKUserStore store] fetchProfile:[self profile] completion:^(STKProfile *p, NSError *err) {

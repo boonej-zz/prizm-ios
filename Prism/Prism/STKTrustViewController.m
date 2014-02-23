@@ -26,6 +26,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
+        [[self navigationItem] setTitle:@"Trust"];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_trust"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_trust_selected"]];

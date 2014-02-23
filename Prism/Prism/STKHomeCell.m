@@ -81,7 +81,7 @@
     }
     [[[self headerView] backdropFadeView] setImage:fadeImage];
     
-    [[self headerView] setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.2]];
+    [[self headerView] setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.33]];
 }
 /*
 // Only override drawRect: if you perform custom drawing.

@@ -47,6 +47,8 @@
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         
+        [[self navigationItem] setTitle:@"Prism"];
+        
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
         _items = [[NSMutableArray alloc] init];

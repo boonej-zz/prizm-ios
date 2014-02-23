@@ -44,6 +44,7 @@ typedef enum {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
+        [[self navigationItem] setTitle:@"Activity"];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_notification"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_notification_selected"]];
