@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@class STKProfile;
+@class STKUser;
 
 @interface STKProfileViewController : UIViewController
-@property (nonatomic, strong) STKProfile *profile;
+@property (nonatomic, strong) STKUser *profile;
 @end

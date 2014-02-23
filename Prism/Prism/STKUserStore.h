@@ -20,11 +20,6 @@ typedef enum {
     STKUserStoreErrorCodeNoPassword
 } STKUserStoreErrorCode;
 
-extern NSString * const STKUserStoreCurrentUserSessionEndedNotification;
-    extern NSString * const STKUserStoreCurrentUserSessionEndedReasonKey;
-        extern NSString * const STKUserStoreCurrentUserSessionEndedConnectionValue;
-        extern NSString * const STKUserStoreCurrentUserSessionEndedAuthenticationValue;
-        extern NSString * const STKUserStoreCurrentUserSessionEndedLogoutValue;
 
 
 extern NSString * const STKUserCoverPhotoURLStringKey;
@@ -36,10 +31,6 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 @property (nonatomic, strong) STKUser *currentUser;
 @property (nonatomic) BOOL currentUserIsAuthorized;
-
-- (void)executeAuthorizedRequest:(void (^)(void))request;
-
-- (STKProfile *)profileForProfileDictionary:(NSDictionary *)profileDict;
 
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
 
@@ -53,8 +44,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
 
-- (void)fetchProfileForCurrentUser:(void (^)(STKUser *u, NSError *err))block;
-- (void)fetchProfile:(STKProfile *)p completion:(void (^)(STKProfile *u, NSError *err))block;
+- (void)fetchUserDetails:(STKUser *)u completion:(void (^)(STKUser *u, NSError *err))block;
 - (void)updateCurrentProfileWithInformation:(NSDictionary *)info completion:(void (^)(STKUser *u, NSError *err))block;
 
 - (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;

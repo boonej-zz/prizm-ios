@@ -13,7 +13,6 @@ NSString * const STKConnectionUnauthorizedNotification = @"STKConnectionUnauthor
 NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
 
-
 @interface STKConnection ()
 @property (nonatomic, weak) NSURLSessionDataTask *internalConnection;
 @property (nonatomic, strong) NSMutableDictionary *internalArguments;
@@ -45,6 +44,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         _internalArguments = [[NSMutableDictionary alloc] init];
         _baseURL = url;
         _endpoint = endpoint;
+        if(!_endpoint)
+            _endpoint = @"";
     }
     return self;
 }
@@ -62,7 +63,13 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     
     NSURLComponents *components = [[NSURLComponents alloc] initWithURL:[self baseURL]
                                                resolvingAgainstBaseURL:NO];
-    [components setPath:[self endpoint]];
+    if([self identifiers]) {
+        NSArray *fullArray = [@[[self endpoint]] arrayByAddingObjectsFromArray:[self identifiers]];
+        NSString *pathIdentifier = [fullArray componentsJoinedByString:@"/"];
+        [components setPath:pathIdentifier];
+    } else {
+        [components setPath:[self endpoint]];
+    }
     
     NSMutableString *queryString = [[NSMutableString alloc] init];
     NSArray *allKeys = [[self internalArguments] allKeys];
@@ -74,17 +81,26 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         if(key != [allKeys lastObject])
             [queryString appendString:@"&"];
     }
-    if([queryString length] > 0)
-        [components setPercentEncodedQuery:queryString];
     
-    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[components URL]];
+    NSMutableURLRequest *req = [[NSMutableURLRequest alloc] init];
+    if([queryString length] > 0) {
+        if([self method] == STKConnectionMethodPOST) {
+            [req setHTTPBody:[queryString dataUsingEncoding:NSUTF8StringEncoding]];
+        } else {
+            [components setPercentEncodedQuery:queryString];
+        }
+    }
+    
+    [req setURL:[components URL]];
+    
     [req setHTTPMethod:@{@(STKConnectionMethodGET) : @"GET",
                          @(STKConnectionMethodPOST) : @"POST",
                          @(STKConnectionMethodDELETE) : @"DELETE",
                          @(STKConnectionMethodPUT) : @"PUT"}[@([self method])]];
 
     
-    [req setHTTPBody:[self HTTPBody]];
+    if(![req HTTPBody])
+        [req setHTTPBody:[self HTTPBody]];
     
     if([self authorizationString])
         [req addValue:[self authorizationString] forHTTPHeaderField:@"Authorization"];
@@ -190,7 +206,11 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 {
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
-    NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n", i, [self request], [[self request] HTTPMethod], [self statusCode]);
+    NSString *requestString = [[self request] description];
+    if([[[self request] HTTPMethod] isEqualToString:@"POST"]) {
+        requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
+    }
+    NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n", i, requestString, [[self request] HTTPMethod], [self statusCode]);
 #endif
 
     [self reportFailureWithError:error];
@@ -209,14 +229,41 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 {
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
-    NSLog(@"Request Finished (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\nData:%@", i, [self request], [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSString *requestString = [[self request] description];
+    if([[[self request] HTTPMethod] isEqualToString:@"POST"]) {
+        requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
+    }
+
+    NSLog(@"Request Finished (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\nData:%@", i, requestString, [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 #endif
 
 
     if ([self statusCode] >= 400) {
+        if([self statusCode] == 401) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:STKConnectionUnauthorizedNotification
+                                                                object:self];
+        }
+
+        NSMutableDictionary *errDict = [NSMutableDictionary dictionary];
+        if([data length] > 0) {
+            NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:data
+                                                                       options:0
+                                                                         error:nil];
+            NSDictionary *errObj = [jsonObject objectForKey:@"error"];
+            if([errObj objectForKey:@"error"]) {
+                [errDict setObject:[errObj objectForKey:@"error"]
+                            forKey:@"error"];
+            }
+            if([errObj objectForKey:@"error_description"]) {
+                [errDict setObject:[errObj objectForKey:@"error_description"]
+                            forKey:@"error_description"];
+            }
+        }
+        
+        
         [self reportFailureWithError:[NSError errorWithDomain:STKConnectionServiceErrorDomain
-                                                         code:STKConnectionErrorCodeBadRequest
-                                                     userInfo:nil]];
+                                                         code:STKConnectionErrorCodeRequestFailed
+                                                     userInfo:errDict]];
         return;
     }
 
@@ -232,38 +279,36 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         }
     }
     
-    NSDictionary *responseValue = [jsonObject objectForKey:@"response"];
-    BOOL success = [[responseValue objectForKey:@"success"] boolValue];
-    if(!success) {
-        NSString *msg = [responseValue objectForKey:@"message"];
-        
-        // Intercept 'Not Authorized' at lowest level
-        if([msg isEqualToString:@"Not Authorized"]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:STKConnectionUnauthorizedNotification
-                                                                object:self];
+    
+    id rootObject = nil;
+
+    NSDictionary *responseValue = [jsonObject objectForKey:@"metadata"];
+    if(responseValue) {
+        BOOL success = [[responseValue objectForKey:@"success"] boolValue];
+        if(!success) {
+            [self reportFailureWithError:[NSError errorWithDomain:STKConnectionServiceErrorDomain
+                                                             code:STKConnectionErrorCodeRequestFailed
+                                                         userInfo:nil]];
+            return;
         }
         
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:msg
-                                                             forKey:NSLocalizedDescriptionKey];
-        [self reportFailureWithError:[NSError errorWithDomain:STKConnectionServiceErrorDomain
-                                                         code:STKConnectionErrorCodeRequestFailed
-                                                     userInfo:userInfo]];
-        return;
-    }
-    
-    
-    NSError *err = nil;
-    id rootObject = nil;
-    id internalData = [responseValue objectForKey:@"data"];
-    if(![self modelGraph]) {
-        rootObject = [self populateModelObjectWithData:internalData error:&err];
-    } else {
-        rootObject = [self populateModelGraphWithData:internalData error:&err];
-    }
-    
-    if(err) {
-        [self reportFailureWithError:err];
-        return;
+        NSError *err = nil;
+        id internalData = [jsonObject objectForKey:@"data"];
+        
+        if(![self modelGraph]) {
+            rootObject = [self populateModelObjectWithData:internalData error:&err];
+        } else {
+            rootObject = [self populateModelGraphWithData:internalData error:&err];
+        }
+        
+        if(![self shouldReturnArray]) {
+            rootObject = [rootObject lastObject];
+        }
+        
+        if(err) {
+            [self reportFailureWithError:err];
+            return;
+        }
     }
     
     // Then, pass the root object to the completion block - remember,

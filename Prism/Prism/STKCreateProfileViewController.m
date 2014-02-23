@@ -258,7 +258,7 @@ const long STKCreateProgressGeocoding = 4;
             }
         }
     }];
-    
+
     if(result) {
         if(![[self profileInformation] coverPhotoURLString]) {
             if(!([self progressMask] & STKCreateProgressUploadingCover)) {
@@ -408,8 +408,7 @@ const long STKCreateProgressGeocoding = 4;
                                     [[self profileInformation] setZipCode:[cp postalCode]];
                                     [[self profileInformation] setCity:[cp locality]];
                                     
-                                    NSNumber *val = [[STKBaseStore store] codeForLookupValue:[cp administrativeArea] type:STKLookupTypeRegion];
-                                    [[self profileInformation] setState:[NSString stringWithFormat:@"%@", val]];
+                                    [[self profileInformation] setState:[cp administrativeArea]];
 
                                     
                                     UITableViewCell *c = [self visibleCellForKey:@"zipCode"];
@@ -453,7 +452,7 @@ const long STKCreateProgressGeocoding = 4;
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingProfile];
         
         CGRect r = CGRectZero;
-        r.size = STKProfileProfilePhotoSize;
+        r.size = STKUserProfilePhotoSize;
         r.size.width *= 2.0;
         r.size.height *= 2.0;
         UIImage *resizedImage = [[STKImageStore store] uploadImage:img size:r.size intoDirectory:@"profile" completion:^(NSString *URLString, NSError *err) {
@@ -503,10 +502,10 @@ const long STKCreateProgressGeocoding = 4;
     UIImage *resizedImage = img;
     if(img) {
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingCover];
-        CGSize sz = STKProfileCoverPhotoSize;
+        CGSize sz = STKUserCoverPhotoSize;
         sz.width *= 2.0;
         sz.height *= 2.0;
-        resizedImage = [[STKImageStore store] uploadImage:img size:STKProfileCoverPhotoSize intoDirectory:@"covers" completion:^(NSString *URLString, NSError *err) {
+        resizedImage = [[STKImageStore store] uploadImage:img size:STKUserCoverPhotoSize intoDirectory:@"covers" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self profileInformation] setCoverPhotoURLString:URLString];
             } else {
@@ -555,19 +554,6 @@ const long STKCreateProgressGeocoding = 4;
                                            [STKProcessingView dismiss];
                                            if(!err) {
                                                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-                                               
-                                               NSMutableDictionary *vals = [NSMutableDictionary dictionary];
-                                               if([[self profileInformation] coverPhotoURLString]) {
-                                                   [vals setObject:[[self profileInformation] coverPhotoURLString] forKey:STKProfileCoverPhotoURLStringKey];
-                                               }
-                                               if([[self profileInformation] profilePhotoURLString]) {
-                                                   [vals setObject:[[self profileInformation] profilePhotoURLString] forKey:STKProfileProfilePhotoURLStringKey];
-                                               }
-                                               if([vals count] > 0) {
-                                                   [[STKUserStore store] updateCurrentProfileWithInformation:vals completion:^(STKUser *u, NSError *err) {
-                                                                                                                   
-                                                   }];
-                                               }
                                            } else {
                                                [[STKErrorStore alertViewForError:err delegate:nil] show];
                                            }
@@ -583,8 +569,7 @@ const long STKCreateProgressGeocoding = 4;
                                [[self profileInformation] setCity:[cp locality]];
 
                                NSString *state = [cp administrativeArea];
-                               NSNumber *val = [[STKBaseStore store] codeForLookupValue:state type:STKLookupTypeRegion];
-                               [[self profileInformation] setState:[NSString stringWithFormat:@"%@", val]];
+                               [[self profileInformation] setState:state];
                                
                                registerBlock();
                            } else {

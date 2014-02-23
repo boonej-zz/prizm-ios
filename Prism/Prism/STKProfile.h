@@ -12,21 +12,7 @@
 
 @class STKUser;
 
-extern NSString * const STKProfileTypePersonal;
-extern NSString * const STKProfileTypeLuminary;
-extern NSString * const STKProfileTypeMilitary;
-extern NSString * const STKProfileTypeEducation;
-extern NSString * const STKProfileTypeFoundation;
-extern NSString * const STKProfileTypeCompany;
-extern NSString * const STKProfileTypeCommunity;
 
-
-extern NSString * const STKProfileCoverPhotoURLStringKey;
-extern NSString * const STKProfileProfilePhotoURLStringKey;
-extern NSString * const STKProfileProfileIDKey;
-
-extern CGSize STKProfileCoverPhotoSize;
-extern CGSize STKProfileProfilePhotoSize;
 
 @interface STKProfile : NSManagedObject <STKJSONObject>
 

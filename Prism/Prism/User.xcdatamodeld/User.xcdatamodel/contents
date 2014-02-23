@@ -1,38 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A603" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="STKProfile" representedClassName="STKProfile" syncable="YES">
-        <attribute name="accoladeCount" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="coverPhotoPath" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="entityID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="followedCount" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="followingCount" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="postCount" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="profileID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="profileType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="trustCount" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="profiles" inverseEntity="STKUser" syncable="YES"/>
-    </entity>
     <entity name="STKUser" representedClassName="STKUser" syncable="YES">
         <attribute name="accountStoreID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="birthday" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coverPhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="externalServiceType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="profiles" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKProfile" inverseName="user" inverseEntity="STKProfile" syncable="YES"/>
     </entity>
     <elements>
-        <element name="STKProfile" positionX="0" positionY="0" width="0" height="0"/>
         <element name="STKUser" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

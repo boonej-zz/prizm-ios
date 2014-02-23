@@ -8,13 +8,31 @@
 
 #import "STKBaseStore.h"
 #import "STKConnection.h"
+#import "STKAuthorizationToken.h"
 
+@import Security;
 
-NSString * const STKUserBaseURLString = @"http://prism.neadwerx.com";
+NSString * const STKUserBaseURLString = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com";
+
+NSString * const STKPrismClientSecret = @"f27198fb-689d-4965-acb0-0e9c5f61ddec";
+NSString * const STKPrismClientID = @"67e1fe4f-db1b-4d5c-bdc7-56270b0822e2";
+NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com/callback";
+
+NSString * const STKBaseStoreEndpointAuthorization = @"/oauth2/authorize";
+NSString * const STKBaseStoreEndpointToken = @"/oauth2/token";
+
+NSString * const STKSessionEndedNotification = @"STKUserStoreCurrentUserSessionEndedNotification";
+NSString * const STKSessionEndedReasonKey = @"STKUserStoreCurrentUserSessionEndedReasonKey";
+NSString * const STKSessionEndedConnectionValue = @"STKUserStoreCurrentUserSessionEndedConnectionValue";
+NSString * const STKSessionEndedAuthenticationValue = @"STKUserStoreCurrentUserSessionEndedAuthenticationValue";
+NSString * const STKSessionEndedLogoutValue = @"STKUserStoreCurrentUserSessionEndedLogoutValue";
+
+NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
 
 @interface STKBaseStore () <NSURLSessionDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *lookupContext;
+@property (nonatomic, strong) NSMutableArray *authorizedRequestQueue;
 
 @end
 
@@ -40,6 +58,7 @@ NSString * const STKUserBaseURLString = @"http://prism.neadwerx.com";
 {
     self = [super init];
     if(self) {
+        _authorizedRequestQueue = [[NSMutableArray alloc] init];
         NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"User"
                                                                                                                 withExtension:@"momd"]];
         NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
@@ -86,8 +105,8 @@ NSString * const STKUserBaseURLString = @"http://prism.neadwerx.com";
 
         
         _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
-                                                     delegate:self
-                                                delegateQueue:[NSOperationQueue mainQueue]];
+                                                 delegate:self
+                                            delegateQueue:[NSOperationQueue mainQueue]];
         
         
 //
@@ -96,45 +115,102 @@ NSString * const STKUserBaseURLString = @"http://prism.neadwerx.com";
     return self;
 }
 
-
-- (NSString *)labelForCode:(NSString *)code type:(STKLookupType)type
+- (void)executeAuthorizedRequest:(void (^)(BOOL granted))request
 {
-    NSString *entityName = @{@(STKLookupTypeCitizenship) : @"Citizenship",
-                             @(STKLookupTypeCountry) : @"Country",
-                             @(STKLookupTypeRace) : @"Race",
-                             @(STKLookupTypeRegion) : @"Region",
-                             @(STKLookupTypeReligion) : @"Religion"}[@(type)];
-    
-
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    [req setPredicate:[NSPredicate predicateWithFormat:@"code == %d", [code intValue]]];
-    
-    NSArray *results = [[self lookupContext] executeFetchRequest:req error:nil];
-    return [[results lastObject] valueForKey:@"label"];
+    if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > 0) {
+        request(YES);
+    } else {
+        NSLog(@"Auth token has expired, queuing and requesting");
+        [[self authorizedRequestQueue] addObject:request];
+        if([[self authorizationToken] refreshToken]) {
+            [self refreshAccessToken:^(STKAuthorizationToken *token, NSError *err) {
+                for(void (^req)(BOOL) in [self authorizedRequestQueue]) {
+                    req(err == nil);
+                }
+                [[self authorizedRequestQueue] removeAllObjects];
+            }];
+        } else {
+            [self fetchAccessToken:^(STKAuthorizationToken *token, NSError *err) {
+                for(void (^req)(BOOL) in [self authorizedRequestQueue]) {
+                    req(err == nil);
+                }
+                [[self authorizedRequestQueue] removeAllObjects];
+            }];
+        }
+    }
 }
 
-- (NSNumber *)codeForLookupValue:(NSString *)lookupValue type:(STKLookupType)type
-{
-    NSString *entityName = @{@(STKLookupTypeCitizenship) : @"Citizenship",
-                             @(STKLookupTypeCountry) : @"Country",
-                             @(STKLookupTypeRace) : @"Race",
-                             @(STKLookupTypeRegion) : @"Region",
-                             @(STKLookupTypeReligion) : @"Religion"}[@(type)];
 
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:entityName];
-    if(type == STKLookupTypeRegion) {
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"twoLetterCode == %@ or label == %@", lookupValue, lookupValue];
-        [req setPredicate:pred];
-    } else if(type == STKLookupTypeCountry) {
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"twoLetterCode == %@ or label == %@ or threeLetterCode == %@", lookupValue, lookupValue, lookupValue];
-        [req setPredicate:pred];
-    } else {
-        [req setPredicate:[NSPredicate predicateWithFormat:@"label == %@", lookupValue]];
-    }
+
+- (void)URLSession:(NSURLSession *)session
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
+{
+    if([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]){
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    } 
+}
+
+- (NSString *)authenticationString
+{
+    NSString *authHeaderValue = [NSString stringWithFormat:@"%@:%@", STKPrismClientID, STKPrismClientSecret];
+    NSString *base64EncodedValue = [[authHeaderValue dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
+    return [NSString stringWithFormat:@"Basic %@", base64EncodedValue];
+}
+
+- (void)fetchAuthorizationCodeCompletion:(void (^)(NSString *code, NSError *err))block
+{
+    STKConnection *c = [self connectionForEndpoint:STKBaseStoreEndpointAuthorization];
     
-    NSArray *results = [[self lookupContext] executeFetchRequest:req error:nil];
+    [c addQueryValue:@"code" forKey:@"response_type"];
+    [c addQueryValue:STKPrismClientID forKey:@"client_id"];
+    [c addQueryValue:STKPrismRedirectURI forKey:@"redirect_uri"];
     
-    return [[results lastObject] valueForKey:@"code"];
+    [c setAuthorizationString:[self authenticationString]];
+
+    [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+        NSString *authCode = [obj objectForKey:@"authorization_code"];
+        block(authCode, err);
+    }];
+}
+
+- (void)fetchAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block
+{
+    [self fetchAuthorizationCodeCompletion:^(NSString *code, NSError *err) {
+        if(!err) {
+            STKConnection *c = [self connectionForEndpoint:STKBaseStoreEndpointToken];
+            [c addQueryValue:code forKey:@"code"];
+            [c addQueryValue:@"authorization_code" forKey:@"grant_type"];
+            [c addQueryValue:STKPrismRedirectURI forKey:@"redirect_uri"];
+            [c setAuthorizationString:[self authenticationString]];
+            
+            [c setModelGraph:@[@"STKAuthorizationToken"]];
+            
+            [c postWithSession:[self session] completionBlock:^(STKAuthorizationToken *obj, NSError *err) {
+                [self setAuthorizationToken:obj];
+                block(obj, err);
+            }];
+        } else {
+            block(nil, err);
+        }
+    }];
+}
+
+- (void)refreshAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block
+{
+    STKConnection *c = [self connectionForEndpoint:STKBaseStoreEndpointToken];
+    [c addQueryValue:[[self authorizationToken] refreshToken] forKey:@"code"];
+    [c addQueryValue:@"refresh_token" forKey:@"grant_type"];
+    [c addQueryValue:STKPrismRedirectURI forKey:@"redirect_uri"];
+    [c setAuthorizationString:[self authenticationString]];
+    
+    [c setModelGraph:@[@"STKAuthorizationToken"]];
+    
+    [c postWithSession:[self session] completionBlock:^(STKAuthorizationToken *obj, NSError *err) {
+        [self setAuthorizationToken:obj];
+        block(obj, err);
+    }];
 }
 
 - (NSArray *)executeFetchRequest:(NSFetchRequest *)req
@@ -146,6 +222,10 @@ NSString * const STKUserBaseURLString = @"http://prism.neadwerx.com";
 {
     STKConnection *c = [[STKConnection alloc] initWithBaseURL:[[self class] baseURL]
                                                      endpoint:endpoint];
+    
+    if([self authorizationToken]) {
+        [c setAuthorizationString:[NSString stringWithFormat:@"Bearer %@", [[self authorizationToken] accessToken]]];
+    }
     
     return c;
 }

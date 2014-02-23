@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const STKErrorUserDoesNotExist;
+extern NSString * const STKErrorBadPassword;
+
 @interface STKErrorStore : NSObject
 
 + (UIAlertView *)alertViewForError:(NSError *)err

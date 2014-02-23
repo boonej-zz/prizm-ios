@@ -23,8 +23,7 @@ NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 NSString * const STKContentFoursquareClientID = @"NPXBWJD343KPWSECQJM1NKJEZ4SYQ4RGRYWEBTLCU21PNUXO";
 NSString * const STKContentFoursquareClientSecret = @"B2KSDXAPXQTWWMZLB2ODCCR3JOJVRQKCS1MNODYKD4TF2VCS";
 
-NSString * const STKContentEndpointCreatePost = @"/common/ajax/create_post.php";
-NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
+NSString * const STKContentEndpointPost = @"/post";
 
 
 @interface STKContentStore ()
@@ -88,11 +87,16 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
            referencePost:(STKPost *)referencePost
               completion:(void (^)(NSArray *posts, NSError *err))block;
 {
-    [[STKUserStore store] executeAuthorizedRequest:^{
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
-        [c addQueryObject:[u personalProfile]
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
+       /* [c addQueryObject:[u personalProfile]
               missingKeys:nil
-               withKeyMap:@{@"profileID" : @"followed_by"}];
+               withKeyMap:@{@"profileID" : @"followed_by"}];*/
         [c addQueryValue:@"30" forKey:@"limit"];
         if(referencePost) {
             if(fetchDirection == STKContentStoreFetchDirectionNewer) {
@@ -122,8 +126,12 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
                        referencePost:(STKPost *)referencePost
                           completion:(void (^)(NSArray *posts, NSError *err))block
 {
-    [[STKUserStore store] executeAuthorizedRequest:^{
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
         [c addQueryValue:@"30" forKey:@"limit"];
         [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
         
@@ -150,32 +158,38 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
     }];
 }
 
-- (void)fetchProfilePostsForProfile:(STKProfile *)prof
-                        inDirection:(STKContentStoreFetchDirection)fetchDirection
-                      referencePost:(STKPost *)referencePost
-                         completion:(void (^)(NSArray *posts, NSError *err))block
+- (void)fetchProfilePostsForUser:(STKUser *)user
+                     inDirection:(STKContentStoreFetchDirection)fetchDirection
+                   referencePost:(STKPost *)referencePost
+                      completion:(void (^)(NSArray *posts, NSError *err))block
 {
-    [[STKUserStore store] executeAuthorizedRequest:^{
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointGetPosts];
-        [c addQueryValue:[prof profileID] forKey:@"profile"];
-        [c addQueryValue:@"20" forKey:@"limit"];
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
+        [c setIdentifiers:@[[user userID], @"posts"]];
+        [c addQueryValue:@"30" forKey:@"limit"];
 
         if(referencePost) {
-            if(fetchDirection == STKContentStoreFetchDirectionNewer) {
-                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_min"];
-            } else if(fetchDirection == STKContentStoreFetchDirectionOlder) {
-                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_max"];
+            [c addQueryValue:[referencePost referenceTimestamp] forKey:@"feature_identifier"];
+            if(fetchDirection == STKContentStoreFetchDirectionOlder) {
+                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"older"];
             }
         } else {
             // Without a reference post, we don't have any posts so we just need to grab off the top of the stack
-            
+            [c addQueryValue:@"2000-01-01T00:00:00.000Z" forKey:@"feature_identifier"];
         }
         
         
-        [c setModelGraph:@{@"post" : @[@"STKPost"]}];
-        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+        [c setModelGraph:@[@"STKPost"]];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
-                block([obj objectForKey:@"post"], nil);
+                obj = [obj sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted"
+                                                                                       ascending:NO]]];
+                block(obj, nil);
             } else {
                 block(nil, err);
             }
@@ -199,21 +213,23 @@ NSString * const STKContentEndpointGetPosts = @"/common/ajax/get_posts.php";
 
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block
 {
-    [[STKUserStore store] executeAuthorizedRequest:^{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
         NSLog(@"Posting: %@", info);
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointCreatePost];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
-                  forKey:@"entity"];
-        [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"profile"];
-        [c addQueryValue:[[[[STKUserStore store] currentUser] personalProfile] profileID] forKey:@"posting_profile"];
-        [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
-        [c addQueryValue:@"x" forKey:@"title"];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
+        [c setIdentifiers:@[[[[STKUserStore store] currentUser] userID], @"posts"]];
+        [c addQueryValue:@"public" forKey:@"scope"];
+        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
+//        [c addQueryValue:@"x" forKey:@"title"];
         
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
         }
         
-        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
 
             if(!err) {
                     // Should catch, but you know, can't yet

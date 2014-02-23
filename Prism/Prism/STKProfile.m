@@ -9,20 +9,8 @@
 #import "STKProfile.h"
 #import "STKUser.h"
 
-NSString * const STKProfileTypePersonal = @"1";
-NSString * const STKProfileTypeLuminary = @"2";
-NSString * const STKProfileTypeMilitary = @"3";
-NSString * const STKProfileTypeEducation = @"4";
-NSString * const STKProfileTypeFoundation = @"5";
-NSString * const STKProfileTypeCompa = @"6";
-NSString * const STKProfileTypeCommunity = @"7";
 
-NSString * const STKProfileCoverPhotoURLStringKey = @"cover_image_file_path";
-NSString * const STKProfileProfilePhotoURLStringKey = @"profile_image_file_path";
-NSString * const STKProfileProfileIDKey = @"profile";
 
-CGSize STKProfileCoverPhotoSize = {.width = 320, .height = 188};
-CGSize STKProfileProfilePhotoSize = {.width = 128, .height = 128};
 
 @implementation STKProfile
 
@@ -42,10 +30,10 @@ CGSize STKProfileProfilePhotoSize = {.width = 128, .height = 128};
     [self bindFromDictionary:jsonObject keyMap:
     @{
       @"entity" : @"entityID",
-      STKProfileProfileIDKey : @"profileID",
+    //  STKProfileProfileIDKey : @"profileID",
       @"name" : @"name",
-      STKProfileProfilePhotoURLStringKey : @"profilePhotoPath",
-      STKProfileCoverPhotoURLStringKey: @"coverPhotoPath",
+    //  STKProfileProfilePhotoURLStringKey : @"profilePhotoPath",
+     // STKProfileCoverPhotoURLStringKey: @"coverPhotoPath",
       @"profile_type" : @"profileType",
       @"city" : @"city",
       @"region" : @"state",

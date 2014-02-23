@@ -38,13 +38,15 @@ typedef enum {
 
 @property (nonatomic, readonly) NSURLRequest *request;
 @property (nonatomic) STKConnectionMethod method;
+@property (nonatomic, strong) NSArray *identifiers;
+
 @property (nonatomic, strong) NSDictionary *parameters;
 @property (nonatomic, strong) NSString *authorizationString;
 @property (nonatomic, copy) void (^completionBlock)(id obj, NSError *err);
 @property (nonatomic, strong) NSData *HTTPBody;
 
 @property (nonatomic, strong) id <STKJSONObject> jsonRootObject;
-
+@property (nonatomic) BOOL shouldReturnArray;
 @property (nonatomic, copy) NSString *entityName;
 
 // { ourName : theirName}

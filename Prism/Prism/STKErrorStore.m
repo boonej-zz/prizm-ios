@@ -9,9 +9,12 @@
 #import "STKErrorStore.h"
 #import "STKUserStore.h"
 #import "STKConnection.h"
+#import "NSError+STKConnection.h"
 
 @import Accounts;
 
+NSString * const STKErrorUserDoesNotExist = @"user_does_not_exist";
+NSString * const STKErrorBadPassword = @"invalid_user_credentials";
 
 @implementation STKErrorStore
 
@@ -70,8 +73,10 @@
         [errorMap setObject:@{
             @(STKConnectionErrorCodeBadRequest) : @"There was a problem with the server.",
             @(STKConnectionErrorCodeParseFailed) : @"The response from the server didn't make sense.",
-            @(STKConnectionErrorCodeRequestFailed) : @"The requested information was not accessed successfully."
-        } forKey:STKConnectionErrorDomain];
+            @(STKConnectionErrorCodeRequestFailed) : @"The requested information was not accessed successfully.",
+            STKErrorUserDoesNotExist : @"The specified user does not exist.",
+            STKErrorBadPassword : @"The password does not match."
+        } forKey:STKConnectionServiceErrorDomain];
         [errorMap setObject:@{
             @"Any" : @"There was a problem communicating with the server. Ensure you have internet access and try again."
         } forKey:NSURLErrorDomain];
@@ -94,22 +99,26 @@
     NSDictionary *domainErrors = [[self errorMap] objectForKey:[err domain]];
     NSDictionary *userInfo = [err userInfo];
     
-    NSString *text = [domainErrors objectForKey:@([err code])];
-    if(!text) {
-        text = [domainErrors objectForKey:@"Any"];
+    NSString *text = nil;
+    if([userInfo objectForKey:@"error"]) {
+        return [domainErrors objectForKey:[userInfo objectForKey:@"error"]];
+    } else {
+        text = [domainErrors objectForKey:@([err code])];
         if(!text) {
-            text = [[err userInfo] objectForKey:NSLocalizedDescriptionKey];
+            text = [domainErrors objectForKey:@"Any"];
             if(!text) {
-                text = @"There was an unexpected error.";
-            } else {
-                userInfo = nil;
+                text = [[err userInfo] objectForKey:NSLocalizedDescriptionKey];
+                if(!text) {
+                    text = @"There was an unexpected error.";
+                } else {
+                    userInfo = nil;
+                }
             }
         }
-        
     }
     
     if([userInfo count] > 0)
-        return [NSString stringWithFormat:@"%@ (%@)", text, [err userInfo]];
+        return [NSString stringWithFormat:@"%@ (%@)", text, [[err userInfo] objectForKey:NSLocalizedDescriptionKey]];
     
     return text;
 }

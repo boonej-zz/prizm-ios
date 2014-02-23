@@ -19,7 +19,11 @@
 #import "STKUserStore.h"
 #import "STKBaseStore.h"
 
+
 #import <GooglePlus/GooglePlus.h>
+
+
+#import "STKAuthorizationToken.h"
 
 @interface STKAppDelegate ()
 
@@ -30,9 +34,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    
-    [STKBaseStore store];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
