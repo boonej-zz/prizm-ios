@@ -90,6 +90,8 @@
                                                if(!err) {
                                                    [[self posts] addObjectsFromArray:posts];
                                                    [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                   
+                                                   
                                                    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
                                                                    withRowAnimation:UITableViewRowAnimationNone];
                                                    

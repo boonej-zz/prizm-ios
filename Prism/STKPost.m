@@ -48,7 +48,7 @@ NSString * const STKPostTypeAccolade = @"accolade";
     static NSDateFormatter *df = nil;
     if(!df) {
         df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyy-MM-ddTHH:mm:ss.SSSZ"];
+        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
     }
     
     [self setDatePosted:[df dateFromString:[jsonObject objectForKey:@"create_date"]]];
