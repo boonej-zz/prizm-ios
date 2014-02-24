@@ -75,7 +75,12 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     NSArray *allKeys = [[self internalArguments] allKeys];
     for(NSString *key in allKeys) {
         NSString *value = [[self internalArguments] objectForKey:key];
-        NSString *v = [value stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLArgumentAllowedCharacterSet]];
+        NSString *v = nil;
+        if([value rangeOfString:@"{"].location == NSNotFound) {
+            v = [value stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLArgumentAllowedCharacterSet]];
+        } else {
+            v = value;
+        }
 
         [queryString appendFormat:@"%@=%@", key, v];
         if(key != [allKeys lastObject])
@@ -140,21 +145,43 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     [self beginWithSession:session];
 }
 
-- (void)addQueryValue:(NSString *)value forKey:(NSString *)key
+- (void)addQueryValue:(id)value forKey:(NSString *)key
 {
     if(!value || !key)
         return;
+    if([value isKindOfClass:[NSString class]]) {
+        [_internalArguments setObject:value forKey:key];
+    } else if([value isKindOfClass:[NSDictionary class]]) {
+        [self addQueryDictionary:value forKey:key];
+    }
+}
+
+- (void)addQueryDictionary:(NSDictionary *)dict forKey:(NSString *)key
+{
+    if(!key || !dict) {
+        return;
+    }
     
-    [_internalArguments setObject:value forKey:key];
+    NSMutableString *str = [[NSMutableString alloc] init];
+    for(NSString *key in dict) {
+        NSString *val = [dict objectForKey:key];
+        [str appendFormat:@"%@:\"%@\",", key, [val stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLArgumentAllowedCharacterSet]]];
+    }
+    if([str length] > 0) {
+        [str deleteCharactersInRange:NSMakeRange([str length] - 1, 1)];
+    }
+    
+    NSString *formatted = [NSString stringWithFormat:@"{%@}", str];
+    NSLog(@"%@", formatted);
+    [self addQueryValue:formatted forKey:key];
 }
 
 - (void)setParameters:(NSDictionary *)parameters
 {
     [_internalArguments removeAllObjects];
     for(NSString *key in parameters) {
-        NSString *val = [parameters objectForKey:key];
-        [_internalArguments setObject:val
-                               forKey:key];
+        id val = [parameters objectForKey:key];
+        [self addQueryValue:val forKey:key];
     }
 }
 - (BOOL)addQueryObject:(id)object
@@ -165,17 +192,19 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     NSMutableArray *missingKeys = [[NSMutableArray alloc] init];
     for(NSString *key in keyMap) {
         id objectKeyOrBlock = [keyMap objectForKey:key];
-        if([objectKeyOrBlock isKindOfClass:[NSString class]]) {
-            
-            NSString *stringValue = [object valueForKeyPath:key];
-            if(!stringValue) {
+        
+        if([objectKeyOrBlock isKindOfClass:[NSString class]]
+        || [objectKeyOrBlock isKindOfClass:[NSDictionary class]]) {
+            id value = [object valueForKeyPath:key];
+            if(!value) {
                 success = NO;
                 [missingKeys addObject:key];
             } else {
-                [[self internalArguments] setObject:stringValue
-                                             forKey:objectKeyOrBlock];
+                [self addQueryValue:value
+                             forKey:objectKeyOrBlock];
             }
         } else {
+            // The assumption is that this is a block
             NSString *initialValue = [object valueForKey:key];
             if(!initialValue) {
                 success = NO;
@@ -184,8 +213,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
                 NSDictionary * (^block)(id value) = objectKeyOrBlock;
                 NSDictionary *result = block([object valueForKeyPath:key]);
                 for(NSString *internalKey in result) {
-                    [[self internalArguments] setObject:[result objectForKey:internalKey]
-                                                 forKey:internalKey];
+                    [self addQueryValue:[result objectForKey:internalKey]
+                                 forKey:internalKey];
                 }
             }
         }

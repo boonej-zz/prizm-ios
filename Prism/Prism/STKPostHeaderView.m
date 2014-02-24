@@ -32,6 +32,7 @@
     return self;
 }
 
+
 - (void)commonInit
 {
     [self setBackgroundColor:[UIColor clearColor]];

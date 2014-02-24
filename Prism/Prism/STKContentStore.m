@@ -223,7 +223,6 @@ NSString * const STKContentEndpointPost = @"/post";
         [c setIdentifiers:@[[[[STKUserStore store] currentUser] userID], @"posts"]];
         [c addQueryValue:@"public" forKey:@"scope"];
         [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
-//        [c addQueryValue:@"x" forKey:@"title"];
         
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];

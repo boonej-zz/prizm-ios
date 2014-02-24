@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet STKTrustView *trustView;
 @property (weak, nonatomic) IBOutlet STKCountView *countView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIView *underlayView;
 
 @end
 
@@ -46,6 +47,29 @@
 {
     [super viewDidAppear:animated];
 }
+
+- (void)menuWillAppear:(BOOL)animated
+{
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [[self underlayView] setAlpha:0.5];
+        }];
+    } else {
+        [[self underlayView] setAlpha:0.5];
+    }
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [[self underlayView] setAlpha:0.0];
+        }];
+    } else {
+        [[self underlayView] setAlpha:0.0];
+    }
+}
+
 
 - (void)didReceiveMemoryWarning
 {

@@ -80,7 +80,7 @@ typedef enum {
            missingKeys:(NSArray **)missingKeysOut
             withKeyMap:(NSDictionary *)keyMap;
 
-- (void)addQueryValue:(NSString *)value forKey:(NSString *)key;
+- (void)addQueryValue:(id)value forKey:(NSString *)key;
 
 + (NSMutableArray *)activeConnections;
 - (void)reportFailureWithError:(NSError *)err;

@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKGraphViewController">
             <connections>
+                <outlet property="underlayView" destination="kcm-xO-L1a" id="nWf-x7-yNy"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -30,8 +31,21 @@
                         <action selector="tempLogout:" destination="-1" eventType="touchUpInside" id="73O-Kw-O5J"/>
                     </connections>
                 </button>
+                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kcm-xO-L1a">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.0037872779187817507" green="0.0037872779187817507" blue="0.0037872779187817507" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="wWF-iZ-Ziy"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.76078464673913038" green="0.76078464673913038" blue="0.76078464673913038" alpha="0.0" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="kcm-xO-L1a" firstAttribute="top" secondItem="1" secondAttribute="top" id="JHW-DE-VLH"/>
+                <constraint firstAttribute="trailing" secondItem="kcm-xO-L1a" secondAttribute="trailing" id="S2K-hY-aQS"/>
+                <constraint firstItem="kcm-xO-L1a" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="l4e-t1-nBx"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

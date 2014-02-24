@@ -16,4 +16,6 @@
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *coverPhotoImageView;
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *avatarView;
 
+- (IBAction)toggleInformation:(id)sender;
+
 @end

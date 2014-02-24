@@ -74,8 +74,8 @@ NSString * const STKErrorBadPassword = @"invalid_user_credentials";
             @(STKConnectionErrorCodeBadRequest) : @"There was a problem with the server.",
             @(STKConnectionErrorCodeParseFailed) : @"The response from the server didn't make sense.",
             @(STKConnectionErrorCodeRequestFailed) : @"The requested information was not accessed successfully.",
-            STKErrorUserDoesNotExist : @"The specified user does not exist.",
-            STKErrorBadPassword : @"The password does not match."
+            STKErrorUserDoesNotExist : @"Invalid user or password.",
+            STKErrorBadPassword : @"Invalid user or password."
         } forKey:STKConnectionServiceErrorDomain];
         [errorMap setObject:@{
             @"Any" : @"There was a problem communicating with the server. Ensure you have internet access and try again."

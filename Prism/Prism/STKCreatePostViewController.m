@@ -134,9 +134,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (void)locationListViewController:(STKLocationListViewController *)lvc choseLocation:(STKFoursquareLocation *)loc
 {
-    [[self postInfo] setObject:[@([loc location].latitude) stringValue] forKey:STKPostLocationLatitudeKey];
-    [[self postInfo] setObject:[@([loc location].longitude) stringValue] forKey:STKPostLocationLongitudeKey];
-    [[self postInfo] setObject:[loc name] forKey:STKPostLocationNameKey];
+    [[self postInfo] setObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:[loc location].latitude]] forKey:STKPostLocationLatitudeKey];
+    [[self postInfo] setObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:[loc location].longitude]] forKey:STKPostLocationLongitudeKey];
+    if([loc name]) {
+        [[self postInfo] setObject:[loc name] forKey:STKPostLocationNameKey];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

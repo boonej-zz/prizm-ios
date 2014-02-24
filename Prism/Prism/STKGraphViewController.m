@@ -11,6 +11,7 @@
 #import "STKUserStore.h"
 
 @interface STKGraphViewController ()
+@property (weak, nonatomic) IBOutlet UIView *underlayView;
 
 @end
 
@@ -28,10 +29,34 @@
     }
     return self;
 }
+
 - (IBAction)tempLogout:(id)sender
 {
     [[STKUserStore store] logout];
 }
+
+- (void)menuWillAppear:(BOOL)animated
+{
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [[self underlayView] setAlpha:0.5];
+        }];
+    } else {
+        [[self underlayView] setAlpha:0.5];
+    }
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [[self underlayView] setAlpha:0.0];
+        }];
+    } else {
+        [[self underlayView] setAlpha:0.0];
+    }
+}
+
 
 - (void)viewDidLoad
 {

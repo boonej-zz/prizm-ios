@@ -143,6 +143,17 @@ typedef enum {
     return nil;
 }
 
+- (void)menuWillAppear:(BOOL)animated
+{
+    [[self blurView] setOverlayOpacity:0.5];
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [[self blurView] setOverlayOpacity:0.0];
+}
+
+
 - (IBAction)typeChanged:(id)sender
 {
     [self setCurrentType:[sender selectedSegmentIndex]];

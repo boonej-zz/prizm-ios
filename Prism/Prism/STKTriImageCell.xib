@@ -16,56 +16,59 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" id="EOK-AD-1qZ" customClass="STKResolvingImageView">
                         <rect key="frame" x="1" y="0.0" width="106" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" id="alE-a0-fcS" customClass="STKResolvingImageView">
-                        <rect key="frame" x="108" y="0.0" width="103" height="105"/>
+                        <rect key="frame" x="108" y="0.0" width="105" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" id="Box-9T-2R0" customClass="STKResolvingImageView">
-                        <rect key="frame" x="212" y="0.0" width="106" height="105"/>
+                        <rect key="frame" x="214" y="0.0" width="105" height="105"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XQ9-zp-3bk">
-                        <rect key="frame" x="1.5" y="0.0" width="106" height="104"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ayH-q8-oaM">
+                        <rect key="frame" x="1" y="0.0" width="106" height="106"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.54697414340101524" green="0.54697414340101524" blue="0.54697414340101524" alpha="0.0" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <state key="normal">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <connections>
-                            <action selector="leftImageButtonTapped:" destination="xyQ-lm-cED" eventType="touchUpInside" id="MDh-Nq-zGs"/>
+                            <action selector="leftImageButtonTapped:" destination="xyQ-lm-cED" eventType="touchUpInside" id="zbp-4I-Urn"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="C6i-Wq-yRN">
-                        <rect key="frame" x="109" y="0.0" width="106" height="105"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5CA-TK-LDj">
+                        <rect key="frame" x="107.5" y="0.0" width="106" height="106"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.54697414340101524" green="0.54697414340101524" blue="0.54697414340101524" alpha="0.0" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <state key="normal">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <connections>
-                            <action selector="centerImageButtonTapped:" destination="xyQ-lm-cED" eventType="touchUpInside" id="lVQ-gp-c9F"/>
+                            <action selector="centerImageButtonTapped:" destination="xyQ-lm-cED" eventType="touchUpInside" id="OwO-dR-D2L"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="oMD-8c-MRp">
-                        <rect key="frame" x="216.5" y="0.0" width="106" height="104"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5ND-E1-lJU">
+                        <rect key="frame" x="211.5" y="0.0" width="106" height="106"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.54697414340101524" green="0.54697414340101524" blue="0.54697414340101524" alpha="0.0" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <state key="normal">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <connections>
-                            <action selector="rightImageButtonTapped:" destination="xyQ-lm-cED" eventType="touchUpInside" id="NFO-jM-Gia"/>
+                            <action selector="rightImageButtonTapped:" destination="xyQ-lm-cED" eventType="touchUpInside" id="UZu-kW-nRS"/>
                         </connections>
                     </button>
                 </subviews>
             </tableViewCellContentView>
             <connections>
-                <outlet property="centerButton" destination="C6i-Wq-yRN" id="V2H-IS-jHB"/>
                 <outlet property="centerImageView" destination="alE-a0-fcS" id="rka-R8-WZj"/>
-                <outlet property="leftButton" destination="XQ9-zp-3bk" id="cEd-Hp-qre"/>
                 <outlet property="leftImageView" destination="EOK-AD-1qZ" id="uxg-jb-dvq"/>
-                <outlet property="rightButton" destination="oMD-8c-MRp" id="g9N-hF-Mlv"/>
                 <outlet property="rightImageView" destination="Box-9T-2R0" id="HXv-81-opi"/>
             </connections>
         </tableViewCell>

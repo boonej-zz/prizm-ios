@@ -10,12 +10,13 @@
 #import "STKUser.h"
 #import "STKUserStore.h"
 
-NSString * const STKPostLocationLatitudeKey = @"location_lat";
-NSString * const STKPostLocationLongitudeKey = @"location_long";
+NSString * const STKPostLocationLatitudeKey = @"location_latitude";
+NSString * const STKPostLocationLongitudeKey = @"location_longitude";
 NSString * const STKPostLocationNameKey = @"location_name";
+
 NSString * const STKPostURLKey = @"file_path";
 NSString * const STKPostTextKey = @"text";
-NSString * const STKPostTypeKey = @"type";
+NSString * const STKPostTypeKey = @"category";
 
 NSString * const STKPostVisibilityPublic = @"public";
 NSString * const STKPostVisibilityPrivate = @"private";

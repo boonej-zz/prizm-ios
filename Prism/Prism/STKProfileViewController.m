@@ -26,6 +26,8 @@
 
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, getter = isShowingInformation) BOOL showingInformation;
+@property (strong, nonatomic) IBOutlet UIView *imageSectionHeader;
 
 - (BOOL)isShowingCurrentUserProfile;
 
@@ -165,11 +167,13 @@
 - (void)menuWillAppear:(BOOL)animated
 {
     [[self blurView] setOverlayOpacity:0.5];
+    [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
     [[self blurView] setOverlayOpacity:0.0];
+    [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
 }
 
 
@@ -201,6 +205,13 @@
     [[self navigationController] pushViewController:ep animated:YES];
 }
 
+- (void)toggleInformation:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [self setShowingInformation:![self isShowingInformation]];
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
+                    withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [[STKUserStore store] createRequestOfType:STKRequestTypeTrust profile:[self profile] completion:^(id obj, NSError *err) {
@@ -220,7 +231,7 @@
     if([indexPath section] == 0) {
         return 246;
     } else if([indexPath section] == 1) {
-        return 213;
+        return 163;
     } else if([indexPath section] == 2) {
         return 106;
     }
@@ -229,9 +240,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   // if([indexPath section] == 0 || [indexPath section] == 1) {
-        [cell setBackgroundColor:[UIColor clearColor]];
-   // }
+    [cell setBackgroundColor:[UIColor clearColor]];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -239,12 +248,36 @@
     if([indexPath section] == 0) {
         return 246;
     } else if([indexPath section] == 1) {
-        return 213;
+        return 163;
     } else if([indexPath section] == 2) {
         return 106;
     }
     return 44;
+}
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if(section != 2)
+        return 0;
+    
+    if([self isShowingInformation]) {
+        return 0.0;
+    } else {
+        return 50.0;
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if(section == 2) {
+        if([self isShowingInformation]) {
+            
+        } else {
+            return [self imageSectionHeader];
+        }
+    }
+    
+    return nil;
 }
 
 - (void)populateProfileCell:(STKProfileCell *)c
@@ -254,7 +287,7 @@
     if([p city] && [p state]) {
         NSString *city = [p city];
         NSString *state = [p state];
-        [[c locationLabel] setText:state];
+        [[c locationLabel] setText:[NSString stringWithFormat:@"%@, %@", city, state]];
     } else
         [[c locationLabel] setText:@""];
     
@@ -331,10 +364,14 @@
         [self populateInitialProfileStatisticsCell:c];
         return c;
     } else if([indexPath section] == 2) {
-        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-        [self populateTriImageCell:c forRow:[indexPath row]];
+        if([self isShowingInformation]) {
+            return nil;
+        } else {
+            STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
+            [self populateTriImageCell:c forRow:[indexPath row]];
 
-        return c;
+            return c;
+        }
     }
     return nil;
 }
@@ -347,9 +384,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(section == 2) {
-        if([[self posts] count] % 3 > 0)
-            return [[self posts] count] / 3 + 1;
-        return [[self posts] count] / 3;
+        if(![self isShowingInformation]) {
+            if([[self posts] count] % 3 > 0)
+                return [[self posts] count] / 3 + 1;
+            return [[self posts] count] / 3;
+        } else {
+            return 0;
+        }
     }
     return 1;
 }
