@@ -93,7 +93,7 @@
 - (void)avatarTapped:(id)sender
 {
     STKProfileViewController *vc = [[STKProfileViewController alloc] init];
-    //[vc setProfile:[[self post] creatorProfile]];
+    [vc setUserID:[[self post] creatorUserID]];
     [[self navigationController] pushViewController:vc animated:YES];
 }
 

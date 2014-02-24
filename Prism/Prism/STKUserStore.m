@@ -195,7 +195,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     }];
 }
 
-- (void)fetchUserDetails:(STKUser *)u completion:(void (^)(STKUser *u, NSError *err))block
+- (void)fetchUserDetails:(NSString *)userID completion:(void (^)(STKUser *u, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
@@ -204,7 +204,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[u userID]]];
+        [c setIdentifiers:@[userID]];
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"userID" : @"_id"}];
@@ -244,7 +244,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     }];
 }
 
-- (void)startFollowingProfile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
+- (void)startFollowingUserID:(NSString *)userID completion:(void (^)(id obj, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
@@ -252,12 +252,12 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointAddFollower];
-        [c addQueryValue:[[self currentUser] userID] forKey:@"follower"];
-        [c addQueryValue:[profile profileID] forKey:@"profile"];
-//        [c addQueryValue:@"unknown" forKey:@"title"];
-        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            block(obj, err);
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[userID, @"follow"]];
+        [c addQueryValue:[[self currentUser] userID] forKey:@"creator"];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            
+            block(nil, err);
         }];
     }];
 }

@@ -9,6 +9,7 @@
 #import "UIViewController+STKControllerItems.h"
 #import "STKCreatePostViewController.h"
 #import "STKMenuController.h"
+#import "STKNavigationButton.h"
 
 @implementation UIViewController (STKMenuControllerExtensions)
 
@@ -40,8 +41,10 @@
 
 - (UIBarButtonItem *)settingsBarButtonItem
 {
-    UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 32)];
     [[view imageView] setContentMode:UIViewContentModeCenter];
+    [view setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
+//    [view setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
     [[view imageView] setClipsToBounds:NO];
     [view setClipsToBounds:NO];
     [view addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
@@ -53,13 +56,12 @@
 
 - (UIBarButtonItem *)searchBarButtonItem
 {
-    UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-    [[view imageView] setContentMode:UIViewContentModeCenter];
-    [[view imageView] setClipsToBounds:NO];
-    [view setClipsToBounds:NO];
+    STKNavigationButton *view = [[STKNavigationButton alloc] init];
+    [view setImage:[UIImage imageNamed:@"btn_search"]];
+    [view setSelectedImage:[UIImage imageNamed:@"btn_search_selected"]];
+    [view setOffset:8];
+
     [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
-    [view setImage:[UIImage imageNamed:@"btn_search"] forState:UIControlStateNormal];
-    [view setImage:[UIImage imageNamed:@"btn_search_selected"] forState:UIControlStateHighlighted];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     return bbi;
@@ -67,13 +69,12 @@
 
 - (UIBarButtonItem *)postBarButtonItem
 {
-    UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-    [[view imageView] setContentMode:UIViewContentModeCenter];
-    [[view imageView] setClipsToBounds:NO];
-    [view setClipsToBounds:NO];
+    STKNavigationButton *view = [[STKNavigationButton alloc] init];
     [view addTarget:self action:@selector(createNewPost:) forControlEvents:UIControlEventTouchUpInside];
-    [view setImage:[UIImage imageNamed:@"btn_addcontent"] forState:UIControlStateNormal];
-    [view setImage:[UIImage imageNamed:@"btn_addcontent_active"] forState:UIControlStateHighlighted];
+    [view setOffset:8];
+
+    [view setImage:[UIImage imageNamed:@"btn_addcontent"]];
+    [view setSelectedImage:[UIImage imageNamed:@"btn_addcontent_active"]];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     return bbi;
@@ -81,13 +82,11 @@
 
 - (UIBarButtonItem *)menuBarButtonItem
 {
-    UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
-    [[view imageView] setContentMode:UIViewContentModeCenter];
-    [[view imageView] setClipsToBounds:NO];
-    [view setClipsToBounds:NO];
+    STKNavigationButton *view = [[STKNavigationButton alloc] init];
     [view addTarget:self action:@selector(toggleMenu:) forControlEvents:UIControlEventTouchUpInside];
-    [view setImage:[UIImage imageNamed:@"btn_menu"] forState:UIControlStateNormal];
-    [view setImage:[UIImage imageNamed:@"btn_menu_active"] forState:UIControlStateHighlighted];
+    [view setImage:[UIImage imageNamed:@"btn_menu"]];
+    [view setSelectedImage:[UIImage imageNamed:@"btn_menu_active"]];
+    [view setOffset:-8];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     

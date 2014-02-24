@@ -24,12 +24,10 @@
 
 - (void)populateWithPost:(STKPost *)p
 {
-    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
     [[self contentImageView] setUrlString:[p imageURLString]];
     
-    [[[self headerView] avatarView] setUrlString:[[p creatorProfile] profilePhotoPath]];
-    [[[self headerView] posterLabel] setText:[[p creatorProfile] name]];
+    [[[self headerView] avatarView] setUrlString:[p creatorProfilePhotoURL]];
+    [[[self headerView] posterLabel] setText:[p creatorName]];
     [[[self headerView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
     //    if([p externalSystemID])
     //[[[c headerView] sourceLabel] setText:[p postOrigin]];
@@ -80,8 +78,8 @@
         UIGraphicsEndImageContext();
     }
     [[[self headerView] backdropFadeView] setImage:fadeImage];
-    
-    [[self headerView] setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.33]];
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[self headerView] setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.2]];
 }
 /*
 // Only override drawRect: if you perform custom drawing.

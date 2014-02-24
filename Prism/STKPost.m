@@ -43,13 +43,15 @@ NSString * const STKPostTypeAccolade = @"accolade";
                                                  STKPostURLKey : @"imageURLString",
                                                  @"external_system" : @"externalSystemID",
                                                  @"like_count" : @"likeCount",
-                                                 @"comment_count" : @"commentCount"
+                                                 @"comment_count" : @"commentCount",
+                                                 @"creator" : @"creatorDictionary"
     }];
     
     static NSDateFormatter *df = nil;
     if(!df) {
         df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+        [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     }
     
     [self setDatePosted:[df dateFromString:[jsonObject objectForKey:@"create_date"]]];
@@ -69,6 +71,21 @@ NSString * const STKPostTypeAccolade = @"accolade";
     }
     
     return nil;
+}
+
+- (NSString *)creatorName
+{
+    return [NSString stringWithFormat:@"%@ %@", [[self creatorDictionary] objectForKey:@"first_name"], [[self creatorDictionary] objectForKey:@"last_name"]];
+}
+
+- (NSString *)creatorUserID
+{
+    return [[self creatorDictionary] objectForKey:@"_id"];
+}
+
+- (NSString *)creatorProfilePhotoURL
+{
+    return [[self creatorDictionary] objectForKey:@"profile_photo_url"];
 }
 
 

@@ -187,6 +187,7 @@
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="top" secondItem="MuO-Ko-R2y" secondAttribute="bottom" id="CRL-e1-bDo"/>
                     <constraint firstItem="6QP-zd-FRS" firstAttribute="top" secondItem="Ldn-1H-Ldn" secondAttribute="top" constant="1" id="GaI-2o-7pD"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="leading" secondItem="JP4-cN-kHA" secondAttribute="leading" id="LWT-du-1sK"/>
+                    <constraint firstItem="6QP-zd-FRS" firstAttribute="trailing" secondItem="7BC-Pt-GTX" secondAttribute="trailing" id="LZt-ss-hZe"/>
                     <constraint firstItem="JP4-cN-kHA" firstAttribute="top" secondItem="7BC-Pt-GTX" secondAttribute="bottom" id="P5O-xP-nrc"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="trailing" secondItem="JP4-cN-kHA" secondAttribute="trailing" id="PYf-AW-0E3"/>
                     <constraint firstItem="MuO-Ko-R2y" firstAttribute="top" secondItem="B1Y-Qd-F7e" secondAttribute="top" constant="5" id="Qv6-tj-NKb"/>
@@ -197,12 +198,11 @@
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="trailing" secondItem="MuO-Ko-R2y" secondAttribute="trailing" id="mRA-aE-Xkw"/>
                     <constraint firstItem="CuU-pA-Dxf" firstAttribute="top" secondItem="7BC-Pt-GTX" secondAttribute="top" id="qOq-nY-Xda"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="leading" secondItem="MuO-Ko-R2y" secondAttribute="leading" id="yT0-7Z-Ofo"/>
+                    <constraint firstItem="6QP-zd-FRS" firstAttribute="leading" secondItem="7BC-Pt-GTX" secondAttribute="leading" id="zdc-FX-v9y"/>
                 </constraints>
             </tableViewCellContentView>
             <constraints>
-                <constraint firstItem="6QP-zd-FRS" firstAttribute="leading" secondItem="J9J-bF-ztf" secondAttribute="leading" constant="5" id="6SQ-ls-O0E"/>
                 <constraint firstItem="Ldn-1H-Ldn" firstAttribute="leading" secondItem="J9J-bF-ztf" secondAttribute="leading" constant="16" id="6Tt-wQ-szO"/>
-                <constraint firstAttribute="trailing" secondItem="6QP-zd-FRS" secondAttribute="trailing" constant="5" id="WWp-Dr-dfI"/>
                 <constraint firstAttribute="trailing" secondItem="Ldn-1H-Ldn" secondAttribute="trailing" constant="23" id="cnd-qD-iKE"/>
             </constraints>
             <connections>

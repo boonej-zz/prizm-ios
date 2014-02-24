@@ -63,6 +63,9 @@
 		BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6AEF821857681E00F92DF4 /* STKGenderCell.m */; };
 		BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6AEF831857681E00F92DF4 /* STKGenderCell.xib */; };
 		BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6EB880186395F300E8009D /* STKErrorStore.m */; };
+		BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE778C4018BBE16300DA5EDD /* STKNavigationButton.m */; };
+		BE778C4518BBF82000DA5EDD /* STKFilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE778C4318BBF82000DA5EDD /* STKFilterCell.m */; };
+		BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE778C4418BBF82000DA5EDD /* STKFilterCell.xib */; };
 		BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */; };
 		BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */; };
 		BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE893600186CD05E00FE8263 /* STKContentStore.m */; };
@@ -1943,6 +1946,11 @@
 		BE6AEF831857681E00F92DF4 /* STKGenderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKGenderCell.xib; path = Prism/STKGenderCell.xib; sourceTree = "<group>"; };
 		BE6EB87F186395F300E8009D /* STKErrorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKErrorStore.h; sourceTree = "<group>"; };
 		BE6EB880186395F300E8009D /* STKErrorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKErrorStore.m; sourceTree = "<group>"; };
+		BE778C3F18BBE16300DA5EDD /* STKNavigationButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKNavigationButton.h; sourceTree = "<group>"; };
+		BE778C4018BBE16300DA5EDD /* STKNavigationButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKNavigationButton.m; sourceTree = "<group>"; };
+		BE778C4218BBF82000DA5EDD /* STKFilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFilterCell.h; sourceTree = "<group>"; };
+		BE778C4318BBF82000DA5EDD /* STKFilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKFilterCell.m; sourceTree = "<group>"; };
+		BE778C4418BBF82000DA5EDD /* STKFilterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKFilterCell.xib; sourceTree = "<group>"; };
 		BE7A2DF91831877F00CC6EED /* UIViewController+STKControllerItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+STKControllerItems.h"; sourceTree = "<group>"; };
 		BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+STKControllerItems.m"; sourceTree = "<group>"; };
 		BE7C47FF183EBBAC00C30995 /* STKResolvingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKResolvingImageView.h; sourceTree = "<group>"; };
@@ -2153,8 +2161,8 @@
 				BE1FC3AD186C8131003464E1 /* Cells */,
 				BE02EAD5182A8A5500A5505A /* View */,
 				BE02EAD4182A81B000A5505A /* Controller */,
-				BE02EAB4182A80A200A5505A /* Images.xcassets */,
 				BE02EAA9182A80A200A5505A /* Supporting Files */,
+				BE02EAB4182A80A200A5505A /* Images.xcassets */,
 				BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */,
 			);
 			path = Prism;
@@ -2278,6 +2286,8 @@
 				88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */,
 				BE5767F7187B4E98004AEE1F /* STKPostHeaderView.h */,
 				BE5767F8187B4E98004AEE1F /* STKPostHeaderView.m */,
+				BE778C3F18BBE16300DA5EDD /* STKNavigationButton.h */,
+				BE778C4018BBE16300DA5EDD /* STKNavigationButton.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2335,6 +2345,9 @@
 				BEF361C818B2C3700085A38B /* STKTriImageCell.h */,
 				BEF361C918B2C3700085A38B /* STKTriImageCell.m */,
 				BEF361CA18B2C3700085A38B /* STKTriImageCell.xib */,
+				BE778C4218BBF82000DA5EDD /* STKFilterCell.h */,
+				BE778C4318BBF82000DA5EDD /* STKFilterCell.m */,
+				BE778C4418BBF82000DA5EDD /* STKFilterCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4333,6 +4346,7 @@
 				BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */,
 				BE1FC3B7186C8C22003464E1 /* STKImageCollectionViewCell.xib in Resources */,
 				BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */,
+				BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */,
 				BEAB9767189AD503002A14F5 /* STKProfileInformationCell.xib in Resources */,
 				BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */,
 				BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */,
@@ -4384,6 +4398,7 @@
 				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
 				BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */,
 				BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */,
+				BE778C4518BBF82000DA5EDD /* STKFilterCell.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
@@ -4399,6 +4414,7 @@
 				BEFCEE05182C210600648B9F /* STKConnection.m in Sources */,
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
 				BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */,
+				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,

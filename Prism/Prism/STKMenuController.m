@@ -266,6 +266,7 @@
             [[(UINavigationController *)vc navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                                   NSFontAttributeName : STKFont(22)}];
             [[(UINavigationController *)vc navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
+            [[(UINavigationController *)vc navigationBar] setTitleVerticalPositionAdjustment:4 forBarMetrics:UIBarMetricsDefault];
         } else {
             @throw [NSException exceptionWithName:@"STKMenuControllerException"
                                            reason:@"All view controllers must be embedded in a UINavigationController"

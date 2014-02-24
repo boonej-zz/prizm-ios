@@ -221,6 +221,7 @@
 {
     if(tableView == [[self searchDisplayController] searchResultsTableView]) {
         STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+        
         [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
         [[self navigationController] pushViewController:pvc animated:YES];
     }

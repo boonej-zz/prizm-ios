@@ -56,9 +56,9 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) NSString *externalServiceType;
 @property (nonatomic, strong) NSString *accountStoreID;
 
-@property (nonatomic, retain) NSOrderedSet *requestItems;
-@property (nonatomic, retain) NSOrderedSet *activityItems;
-@property (nonatomic, retain) NSOrderedSet *posts;
+@property (nonatomic) int32_t followerCount;
+@property (nonatomic) int32_t followingCount;
+@property (nonatomic) int32_t postCount;
 
 - (NSString *)name;
 

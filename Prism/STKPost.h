@@ -11,8 +11,6 @@
 #import "STKJSONObject.h"
 @import CoreLocation;
 
-@class STKProfile;
-
 extern NSString * const STKPostTypeAspiration;
 extern NSString * const STKPostTypeInspiration;
 extern NSString * const STKPostTypeExperience;
@@ -40,8 +38,11 @@ extern NSString * const STKPostTypeKey;
 @property (nonatomic, strong) NSString *locationName;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 
-@property (nonatomic, strong) STKProfile *creatorProfile;
-@property (nonatomic, strong) STKProfile *recepientProfile;
+@property (nonatomic, strong, readonly) NSDictionary *creatorDictionary;
+@property (nonatomic, readonly) NSString *creatorName;
+@property (nonatomic, readonly) NSString *creatorUserID;
+@property (nonatomic, readonly) NSString *creatorProfilePhotoURL;
+//@property (nonatomic, strong) STKProfile *recepientProfile;
 
 @property (nonatomic, strong) NSDate *datePosted;
 @property (nonatomic, strong) NSString *referenceTimestamp;

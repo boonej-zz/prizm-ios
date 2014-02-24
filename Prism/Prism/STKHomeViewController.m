@@ -65,8 +65,6 @@
     _homeCellNib = [UINib nibWithNibName:@"STKHomeCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     
-    
-    
     [[self tableView] registerNib:_homeCellNib
            forCellReuseIdentifier:@"STKHomeCell"];
     [[self tableView] setDelaysContentTouches:NO];

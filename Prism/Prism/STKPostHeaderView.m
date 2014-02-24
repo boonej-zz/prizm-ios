@@ -46,6 +46,7 @@
     _postTypeView = [[UIImageView alloc] init];
     _timeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_clock"]];
     
+    [_backdropFadeView setAlpha:0.0];
     [_posterLabel setFont:STKFont(16)];
     [_posterLabel setTextColor:STKTextColor];
 

@@ -20,6 +20,15 @@
 #import "STKRequestItem.h"
 #import "STKEditProfileViewController.h"
 #import "UIERealTimeBlurView.h"
+#import "STKHomeCell.h"
+#import "STKFilterCell.h"
+
+typedef enum {
+    STKProfileSectionHeader,
+    STKProfileSectionStatistics,
+    STKProfileSectionPreinformation,
+    STKProfileSectionInformation
+} STKProfileSection;
 
 @interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate>
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
@@ -28,7 +37,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, getter = isShowingInformation) BOOL showingInformation;
 @property (strong, nonatomic) IBOutlet UIView *imageSectionHeader;
-
+@property (nonatomic) BOOL showPostsInSingleLayout;
 - (BOOL)isShowingCurrentUserProfile;
 
 @end
@@ -69,46 +78,56 @@
     
     [[[self blurView] displayLink] setPaused:NO];
     
-    
-    if(![self profile]) {
-        [self setProfile:[[STKUserStore store] currentUser]];
-    }
-    
-    if([self isShowingCurrentUserProfile]) {
-        [[self navigationItem] setTitle:@"Profile"];
-    } else {
-        [[self navigationItem] setTitle:@"Prism"];
-    }
-    
-    if([self isShowingCurrentUserProfile]) {
-        [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
-        [[self navigationItem] setTitle:@"Profile"];
-    } else {
-        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-        [[self navigationItem] setTitle:@"Prism"];
-    }
-    
-    [[STKUserStore store] fetchUserDetails:[self profile] completion:^(STKUser *p, NSError *err) {
-        [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:0]
-                        withRowAnimation:UITableViewRowAnimationNone];
-    }];
+    NSString *userIDForPostsCall = nil;
+    if([self userID]) {
+        [[STKUserStore store] fetchUserDetails:[self userID] completion:^(STKUser *u, NSError *err) {
+            [self setProfile:u];
+            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionHeader]
+                            withRowAnimation:UITableViewRowAnimationNone];
+            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionStatistics]
+                            withRowAnimation:UITableViewRowAnimationNone];
 
-    [[STKContentStore store] fetchProfilePostsForUser:[self profile]
-                                          inDirection:STKContentStoreFetchDirectionNewer
-                                        referencePost:[[self posts] firstObject]
-                                           completion:^(NSArray *posts, NSError *err) {
-                                               if(!err) {
-                                                   [[self posts] addObjectsFromArray:posts];
-                                                   [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-                                                   
-                                                   
-                                                   [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
-                                                                   withRowAnimation:UITableViewRowAnimationNone];
-                                                   
-                                               } else {
-                                                   // Do nothing?
-                                               }
-                                           }];
+            if(err) {
+                NSLog(@"Display non-obtrusive error somewhere");
+            }
+        }];
+        
+        [[self navigationItem] setTitle:@"Prism"];
+        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        
+        userIDForPostsCall = [self userID];
+    } else {
+        [self setProfile:[[STKUserStore store] currentUser]];
+        [[STKUserStore store] fetchUserDetails:[[self profile] userID] completion:^(STKUser *p, NSError *err) {
+            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionHeader]
+                            withRowAnimation:UITableViewRowAnimationNone];
+            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionStatistics]
+                            withRowAnimation:UITableViewRowAnimationNone];
+        }];
+
+        [[self navigationItem] setTitle:@"Profile"];
+        [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
+
+        userIDForPostsCall = [[self profile] userID];
+    }
+    
+    
+    [[STKContentStore store] fetchProfilePostsForUserID:userIDForPostsCall
+                                            inDirection:STKContentStoreFetchDirectionNewer
+                                          referencePost:[[self posts] firstObject]
+                                             completion:^(NSArray *posts, NSError *err) {
+                                                 if(!err) {
+                                                     [[self posts] addObjectsFromArray:posts];
+                                                     [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                     
+                                                     
+                                                     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
+                                                                     withRowAnimation:UITableViewRowAnimationNone];
+                                                     
+                                                 } else {
+                                                     // Do nothing?
+                                                 }
+                                             }];
     
     
 }
@@ -128,22 +147,49 @@
     }
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
-    [[self tableView] setDelaysContentTouches:NO];
+//    [[self tableView] setDelaysContentTouches:NO];
 }
 
 - (void)scrollToPosts
 {
     if([[self posts] count] > 0)
-        [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:STKProfileSectionInformation]
+                                atScrollPosition:UITableViewScrollPositionTop
+                                        animated:YES];
+}
+
+- (IBAction)showSinglePanePosts:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [self setShowPostsInSingleLayout:YES];
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
+                    withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (IBAction)showGridPosts:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [self setShowPostsInSingleLayout:NO];
+
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
+                    withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (IBAction)toggleFilterByUserPost:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+}
+
+- (IBAction)toggleFilterbyLocation:(id)sender atIndexPath:(NSIndexPath *)ip
+{
 }
 
 - (void)avatarTappedForPostAtIndex:(int)idx
 {
     STKPost *p = [[self posts] objectAtIndex:idx];
+    
   /*  if([[[p creatorProfile] profileID] isEqualToString:[[self profile] profileID]]) {
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
@@ -199,6 +245,11 @@
     [self showPostAtIndex:itemIndex];
 }
 
+- (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [self showPostAtIndex:[ip row]];
+}
+
 - (void)editProfile:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKEditProfileViewController *ep = [[STKEditProfileViewController alloc] init];
@@ -208,8 +259,12 @@
 - (void)toggleInformation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setShowingInformation:![self isShowingInformation]];
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:2]
+    [[self tableView] beginUpdates];
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
                     withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
+                    withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] endUpdates];
 }
 
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -221,21 +276,16 @@
 
 - (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    [[STKUserStore store] startFollowingProfile:[self profile] completion:^(id obj, NSError *err) {
-        
+    [[STKUserStore store] startFollowingUserID:[[self profile] userID] completion:^(id obj, NSError *err) {
+        if(!err) {
+            
+        }
     }];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if([indexPath section] == 0) {
-        return 246;
-    } else if([indexPath section] == 1) {
-        return 163;
-    } else if([indexPath section] == 2) {
-        return 106;
-    }
-    return 44;
+    
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -243,42 +293,6 @@
     [cell setBackgroundColor:[UIColor clearColor]];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath section] == 0) {
-        return 246;
-    } else if([indexPath section] == 1) {
-        return 163;
-    } else if([indexPath section] == 2) {
-        return 106;
-    }
-    return 44;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if(section != 2)
-        return 0;
-    
-    if([self isShowingInformation]) {
-        return 0.0;
-    } else {
-        return 50.0;
-    }
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if(section == 2) {
-        if([self isShowingInformation]) {
-            
-        } else {
-            return [self imageSectionHeader];
-        }
-    }
-    
-    return nil;
-}
 
 - (void)populateProfileCell:(STKProfileCell *)c
 {
@@ -308,21 +322,27 @@
         [[c editButton] setHidden:YES];
     }
     
-    
     [[c circleView] setCircleTitles:@[@"Followers", @"Following", @"Posts"]];
-/*
-    NSString *followerCount = [[self profile] followedCount];
-    NSString *followingCount = [[self profile] followingCount];
-    NSString *postCount = [[self profile] postCount];
+
+    
+    NSString *followerCount = [NSString stringWithFormat:@"%d", [[self profile] followerCount]];
+    NSString *followingCount = [NSString stringWithFormat:@"%d", [[self profile] followingCount]];
+    NSString *postCount = [NSString stringWithFormat:@"%d", [[self profile] postCount]];
     if(!followerCount)
         followerCount = @"0";
     if(!followingCount)
         followingCount = @"0";
     if(!postCount)
         postCount = @"0";
+ 
+    if(![self profile]) {
+        followingCount = @"0";
+        followerCount = @"0";
+        postCount = @"0";
+    }
     
     [[c circleView] setCircleValues:@[followerCount, followingCount, postCount]];
-    */
+    
     [[c circleView] setDelegate:self];
 }
 
@@ -353,45 +373,108 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([indexPath section] == 0) {
+    if([indexPath section] == STKProfileSectionHeader) {
         STKProfileCell *c = [STKProfileCell cellForTableView:tableView target:self];
         
         [self populateProfileCell:c];
         
         return c;
-    } else if ([indexPath section] == 1) {
+    } else if ([indexPath section] == STKProfileSectionStatistics) {
         STKInitialProfileStatisticsCell *c = [STKInitialProfileStatisticsCell cellForTableView:tableView target:self];
         [self populateInitialProfileStatisticsCell:c];
         return c;
-    } else if([indexPath section] == 2) {
+    } else if([indexPath section] == STKProfileSectionInformation) {
         if([self isShowingInformation]) {
             return nil;
         } else {
-            STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-            [self populateTriImageCell:c forRow:[indexPath row]];
-
+            if([self showPostsInSingleLayout]) {
+                STKHomeCell *c = [STKHomeCell cellForTableView:tableView target:self];
+                
+                [c populateWithPost:[[self posts] objectAtIndex:[indexPath row]]];
+                
+                return c;
+            } else {
+                STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
+                [self populateTriImageCell:c forRow:[indexPath row]];
+                
+                return c;
+            }
+        }
+    } else if ([indexPath section] == STKProfileSectionPreinformation) {
+        if(![self isShowingInformation]) {
+            STKFilterCell *c = [STKFilterCell cellForTableView:tableView target:self];
+            return c;
+        } else {
+            UITableViewCell *c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
             return c;
         }
     }
     return nil;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath section] == STKProfileSectionHeader) {
+        return 246;
+    } else if([indexPath section] == STKProfileSectionStatistics) {
+        return 163;
+    } else if ([indexPath section] == STKProfileSectionPreinformation) {
+        return 50;
+    } else if([indexPath section] == STKProfileSectionInformation) {
+        if([self isShowingInformation]) {
+            return 0;
+        }
+        if([self showPostsInSingleLayout]) {
+            return 401;
+        }
+        return 106;
+    }
+    return 44;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath section] == STKProfileSectionHeader) {
+        return 246;
+    } else if([indexPath section] == STKProfileSectionStatistics) {
+        return 163;
+    } else if ([indexPath section] == STKProfileSectionPreinformation) {
+        return 50;
+    } else if([indexPath section] == STKProfileSectionInformation) {
+        if([self isShowingInformation]) {
+            return 0;
+        }
+        if([self showPostsInSingleLayout]) {
+            return 401;
+        }
+        return 106;
+    }
+    return 44;
+}
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(section == 2) {
+    if(section == STKProfileSectionInformation) {
         if(![self isShowingInformation]) {
-            if([[self posts] count] % 3 > 0)
-                return [[self posts] count] / 3 + 1;
-            return [[self posts] count] / 3;
+            if([self showPostsInSingleLayout]) {
+                return [[self posts] count];
+            } else {
+                if([[self posts] count] % 3 > 0)
+                    return [[self posts] count] / 3 + 1;
+                return [[self posts] count] / 3;
+            }
         } else {
             return 0;
         }
     }
+    
     return 1;
 }
 

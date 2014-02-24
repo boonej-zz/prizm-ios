@@ -131,26 +131,24 @@ NSString * const STKContentEndpointPost = @"/post";
             block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/explore"];
         [c addQueryValue:@"30" forKey:@"limit"];
-        [c addQueryValue:STKPostVisibilityPublic forKey:@"visibility_type"];
         
         if(referencePost) {
-            if(fetchDirection == STKContentStoreFetchDirectionNewer) {
-                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_min"];
-            } else if(fetchDirection == STKContentStoreFetchDirectionOlder) {
-                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_max"];
+            [c addQueryValue:[referencePost referenceTimestamp] forKey:@"feature_identifier"];
+            if(fetchDirection == STKContentStoreFetchDirectionOlder) {
+                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"older"];
             }
         } else {
             // Without a reference post, we don't have any posts so we just need to grab off the top of the stack
-            
+            [c addQueryValue:@"2000-01-01T00:00:00.000Z" forKey:@"feature_identifier"];
         }
-        
-        
-        [c setModelGraph:@{@"post" : @[@"STKPost"]}];
-        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+
+        [c setModelGraph:@[@"STKPost"]];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
-                block([obj objectForKey:@"post"], nil);
+                block(obj, nil);
             } else {
                 block(nil, err);
             }
@@ -158,10 +156,10 @@ NSString * const STKContentEndpointPost = @"/post";
     }];
 }
 
-- (void)fetchProfilePostsForUser:(STKUser *)user
-                     inDirection:(STKContentStoreFetchDirection)fetchDirection
-                   referencePost:(STKPost *)referencePost
-                      completion:(void (^)(NSArray *posts, NSError *err))block
+- (void)fetchProfilePostsForUserID:(NSString *)userID
+                       inDirection:(STKContentStoreFetchDirection)fetchDirection
+                     referencePost:(STKPost *)referencePost
+                        completion:(void (^)(NSArray *posts, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
@@ -169,7 +167,7 @@ NSString * const STKContentEndpointPost = @"/post";
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[[user userID], @"posts"]];
+        [c setIdentifiers:@[userID, @"posts"]];
         [c addQueryValue:@"30" forKey:@"limit"];
 
         if(referencePost) {

@@ -39,13 +39,11 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 @dynamic userID;
 @dynamic email;
 @dynamic gender;
-@dynamic requestItems;
-@dynamic activityItems;
-@dynamic posts;
 @dynamic city, state;
 @dynamic zipCode, birthday, firstName, lastName, externalServiceType;
 @dynamic accountStoreID;
 @dynamic profilePhotoPath, coverPhotoPath;
+@dynamic followerCount, followingCount, postCount;
 
 - (NSString *)name
 {
@@ -65,6 +63,9 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
         @"zip_postal" : @"zipCode",
         @"city" : @"city",
         @"state" : @"state",
+        @"followers_count" : @"followerCount",
+        @"following_count" : @"followingCount",
+//        @"posts_count" : @"postCount",
         STKUserProfilePhotoURLStringKey : @"profilePhotoPath",
         STKUserCoverPhotoURLStringKey : @"coverPhotoPath",
         @"birthday" : ^(id inValue) {
