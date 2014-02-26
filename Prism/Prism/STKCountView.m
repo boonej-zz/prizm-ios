@@ -60,7 +60,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    [[UIColor colorWithWhite:1.0 alpha:0.1] setFill];
+    [[UIColor colorWithWhite:1.0 alpha:0.2] setFill];
     [[UIColor colorWithWhite:1.0 alpha:0.5] setStroke];
 
     UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 8, 8)];

@@ -136,6 +136,6 @@
         </view>
     </objects>
     <resources>
-        <image name="img_background" width="309" height="558"/>
+        <image name="img_background" width="320" height="568"/>
     </resources>
 </document>

@@ -272,11 +272,17 @@ typedef enum {
 
 - (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    [[STKUserStore store] startFollowingUserID:[[self profile] userID] completion:^(id obj, NSError *err) {
-        if(!err) {
-            
-        }
-    }];
+    if([[self profile] isFollowedByCurrentUser]) {
+        [[STKUserStore store] unfollowUser:[self profile] completion:^(id obj, NSError *err) {
+            [self refreshStatisticsView];
+        }];
+        
+    } else {
+        [[STKUserStore store] followUser:[self profile] completion:^(id obj, NSError *err) {
+            [self refreshStatisticsView];
+        }];
+    }
+    [self refreshStatisticsView];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

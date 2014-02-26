@@ -48,7 +48,9 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 - (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;
 
-- (void)startFollowingUserID:(NSString *)userID completion:(void (^)(id obj, NSError *err))block;
+- (void)followUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block;
+- (void)unfollowUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block;
+
 - (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block;
 
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block;

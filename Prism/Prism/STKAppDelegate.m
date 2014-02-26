@@ -86,9 +86,7 @@
 
 
 - (void)configureAppearanceProxies
-{
-
-    
+{    
     UIGraphicsBeginImageContext(CGSizeMake(10, 10));
     [[UIColor colorWithWhite:1 alpha:0.2] set];
     UIRectFill(CGRectMake(0, 0, 10, 10));
@@ -96,11 +94,7 @@
     [[UINavigationBar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
              forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-   /* [[UIToolbar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
-                            forToolbarPosition:UIBarPositionAny
-                                    barMetrics:UIBarMetricsDefault];
-    [[UIToolbar appearance] setShadowImage:[[UIImage alloc] init]
-                        forToolbarPosition:UIBarPositionAny];*/
+
     UIGraphicsEndImageContext();
 
 }

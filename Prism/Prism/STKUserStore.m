@@ -222,8 +222,10 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     }];
 }
 
-- (void)startFollowingUserID:(NSString *)userID completion:(void (^)(id obj, NSError *err))block
+- (void)followUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block
 {
+    [user setIsFollowedByCurrentUser:YES];
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
             block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
@@ -231,10 +233,34 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[userID, @"follow"]];
+        [c setIdentifiers:@[[user userID], @"follow"]];
         [c addQueryValue:[[self currentUser] userID] forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            
+            if(err) {
+                [user setIsFollowedByCurrentUser:NO];
+            }
+            block(nil, err);
+        }];
+    }];
+}
+
+- (void)unfollowUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block
+{
+    [user setIsFollowedByCurrentUser:NO];
+
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[user userID], @"unfollow"]];
+        [c addQueryValue:[[self currentUser] userID] forKey:@"creator"];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err) {
+                [user setIsFollowedByCurrentUser:YES];
+            }
             block(nil, err);
         }];
     }];

@@ -60,7 +60,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="0.10000000000000001" colorSpace="calibratedWhite"/>
                     </view>
                     <view contentMode="scaleToFill" id="LiL-4C-O6p" customClass="STKCountView">
                         <rect key="frame" x="0.0" y="56" width="320" height="99"/>

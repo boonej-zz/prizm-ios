@@ -240,7 +240,7 @@
 
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
-    [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
+   /* [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
                                   inDirection:STKContentStoreFetchDirectionNewer
                                 referencePost:[[self items] firstObject] completion:^(NSArray *posts, NSError *err) {
                                     if(!err) {
@@ -250,7 +250,20 @@
                                     } else {
                                         
                                     }
-                                }];
+                                }];*/
+    [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
+                                            referencePost:[[self items] firstObject]
+                                               completion:^(NSArray *posts, NSError *err) {
+                                                   if(!err) {
+                                                       [[self items] addObjectsFromArray:posts];
+                                                       [[self items] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                       [[self tableView] reloadData];
+                                                       
+                                                   } else {
+                                                       // Do nothing?
+                                                   }
+                                               }];
+
 }
 
 - (void)menuWillAppear:(BOOL)animated
