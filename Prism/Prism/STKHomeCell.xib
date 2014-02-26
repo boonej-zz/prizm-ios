@@ -211,6 +211,7 @@
                 <outlet property="hashTagLabel" destination="Ldn-1H-Ldn" id="C8m-bz-YSM"/>
                 <outlet property="headerView" destination="MuO-Ko-R2y" id="4zu-gS-dDq"/>
                 <outlet property="leftInset" destination="2yq-OD-Jrh" id="ukZ-Pb-SGJ"/>
+                <outlet property="likeButton" destination="fdr-Fh-mHx" id="aw8-t1-Zcr"/>
                 <outlet property="likeCountLabel" destination="bDc-bv-DBk" id="OA6-Bn-Amo"/>
                 <outlet property="rightInset" destination="cQ7-04-Ea5" id="egG-ST-TmZ"/>
                 <outlet property="topInset" destination="Qv6-tj-NKb" id="WrY-GE-DGo"/>

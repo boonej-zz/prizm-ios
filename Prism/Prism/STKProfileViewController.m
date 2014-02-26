@@ -31,13 +31,16 @@ typedef enum {
 } STKProfileSection;
 
 @interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) STKInitialProfileStatisticsCell *statsCell;
+
 
 @property (nonatomic, strong) NSMutableArray *posts;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, getter = isShowingInformation) BOOL showingInformation;
-@property (strong, nonatomic) IBOutlet UIView *imageSectionHeader;
 @property (nonatomic) BOOL showPostsInSingleLayout;
+
 - (BOOL)isShowingCurrentUserProfile;
 
 @end
@@ -78,58 +81,49 @@ typedef enum {
     
     [[[self blurView] displayLink] setPaused:NO];
     
-    NSString *userIDForPostsCall = nil;
-    if([self userID]) {
-        [[STKUserStore store] fetchUserDetails:[self userID] completion:^(STKUser *u, NSError *err) {
-            [self setProfile:u];
+    if(![self profile]) {
+        [self setProfile:[[STKUserStore store] currentUser]];
+    }
+    
+    if([self isShowingCurrentUserProfile]) {
+        [[self navigationItem] setTitle:@"Profile"];
+        [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
+
+    } else {
+        [[self navigationItem] setTitle:@"Prism"];
+        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+    }
+    
+    [self refreshStatisticsView];
+    if([self profile]) {
+        [[STKUserStore store] fetchUserDetails:[self profile] completion:^(STKUser *u, NSError *err) {
             [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionHeader]
                             withRowAnimation:UITableViewRowAnimationNone];
-            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionStatistics]
-                            withRowAnimation:UITableViewRowAnimationNone];
+
+            [self refreshStatisticsView];
 
             if(err) {
                 NSLog(@"Display non-obtrusive error somewhere");
             }
         }];
         
-        [[self navigationItem] setTitle:@"Prism"];
-        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-        
-        userIDForPostsCall = [self userID];
-    } else {
-        [self setProfile:[[STKUserStore store] currentUser]];
-        [[STKUserStore store] fetchUserDetails:[[self profile] userID] completion:^(STKUser *p, NSError *err) {
-            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionHeader]
-                            withRowAnimation:UITableViewRowAnimationNone];
-            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionStatistics]
-                            withRowAnimation:UITableViewRowAnimationNone];
-        }];
-
-        [[self navigationItem] setTitle:@"Profile"];
-        [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
-
-        userIDForPostsCall = [[self profile] userID];
+        [[STKContentStore store] fetchProfilePostsForUser:[self profile]
+                                              inDirection:STKContentStoreFetchDirectionNewer
+                                            referencePost:[[self posts] firstObject]
+                                               completion:^(NSArray *posts, NSError *err) {
+                                                   if(!err) {
+                                                       [[self posts] addObjectsFromArray:posts];
+                                                       [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                       
+                                                       
+                                                       [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
+                                                                       withRowAnimation:UITableViewRowAnimationNone];
+                                                       
+                                                   } else {
+                                                       // Do nothing?
+                                                   }
+                                               }];
     }
-    
-    
-    [[STKContentStore store] fetchProfilePostsForUserID:userIDForPostsCall
-                                            inDirection:STKContentStoreFetchDirectionNewer
-                                          referencePost:[[self posts] firstObject]
-                                             completion:^(NSArray *posts, NSError *err) {
-                                                 if(!err) {
-                                                     [[self posts] addObjectsFromArray:posts];
-                                                     [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-                                                     
-                                                     
-                                                     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                                                                     withRowAnimation:UITableViewRowAnimationNone];
-                                                     
-                                                 } else {
-                                                     // Do nothing?
-                                                 }
-                                             }];
-    
-    
 }
 
 - (void)countView:(STKCountView *)countView didSelectCircleAtIndex:(int)index
@@ -152,7 +146,9 @@ typedef enum {
 {
     [super viewDidLoad];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
-//    [[self tableView] setDelaysContentTouches:NO];
+
+    [self setStatsCell:[STKInitialProfileStatisticsCell cellForTableView:[self tableView] target:self]];
+    //    [[self tableView] setDelaysContentTouches:NO];
 }
 
 - (void)scrollToPosts
@@ -307,17 +303,22 @@ typedef enum {
     
     [[c coverPhotoImageView] setUrlString:[p coverPhotoPath]];
     [[c avatarView] setUrlString:[p profilePhotoPath]];
-    
 }
 
-- (void)populateInitialProfileStatisticsCell:(STKInitialProfileStatisticsCell *)c
+- (void)refreshStatisticsView
 {
+    STKInitialProfileStatisticsCell *c = [self statsCell];
     if([self isShowingCurrentUserProfile]) {
         [[c followButton] setHidden:YES];
         [[c trustButton] setHidden:YES];
         [[c editButton] setHidden:NO];
     } else {
         [[c followButton] setHidden:NO];
+        if([[self profile] isFollowedByCurrentUser]) {
+            [[c followButton] setTitle:@"Unfollow" forState:UIControlStateNormal];
+        } else {
+            [[c followButton] setTitle:@"Follow" forState:UIControlStateNormal];
+        }
         [[c trustButton] setHidden:NO];
         [[c editButton] setHidden:YES];
     }
@@ -380,9 +381,7 @@ typedef enum {
         
         return c;
     } else if ([indexPath section] == STKProfileSectionStatistics) {
-        STKInitialProfileStatisticsCell *c = [STKInitialProfileStatisticsCell cellForTableView:tableView target:self];
-        [self populateInitialProfileStatisticsCell:c];
-        return c;
+        return [self statsCell];
     } else if([indexPath section] == STKProfileSectionInformation) {
         if([self isShowingInformation]) {
             return nil;

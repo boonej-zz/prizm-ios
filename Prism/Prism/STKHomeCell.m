@@ -11,6 +11,11 @@
 #import "STKProfile.h"
 #import "STKRelativeDateConverter.h"
 
+@interface STKHomeCell ()
+@property (weak, nonatomic) IBOutlet UIButton *likeButton;
+
+@end
+
 @implementation STKHomeCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -26,15 +31,24 @@
 {
     [[self contentImageView] setUrlString:[p imageURLString]];
     
-    [[[self headerView] avatarView] setUrlString:[p creatorProfilePhotoURL]];
-    [[[self headerView] posterLabel] setText:[p creatorName]];
+    [[[self headerView] avatarView] setUrlString:[[p creator] profilePhotoPath]];
+    [[[self headerView] posterLabel] setText:[[p creator] name]];
     [[[self headerView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
     //    if([p externalSystemID])
     //[[[c headerView] sourceLabel] setText:[p postOrigin]];
     [[[self headerView] postTypeView] setImage:[p typeImage]];
     
-    [[self commentCountLabel] setText:[p commentCount]];
-    [[self likeCountLabel] setText:[p likeCount]];
+    if([p commentCount] == 0)
+        [[self commentCountLabel] setText:@""];
+    else
+        [[self commentCountLabel] setText:[NSString stringWithFormat:@"%d", [p commentCount]]];
+    
+    if([p likeCount] == 0)
+        [[self likeCountLabel] setText:@""];
+    else
+        [[self likeCountLabel] setText:[NSString stringWithFormat:@"%d", [p likeCount]]];
+
+    [[self likeButton] setHighlighted:[p postLikedByCurrentUser]];
 }
 
 - (IBAction)toggleLike:(id)sender

@@ -22,4 +22,10 @@
     #define STKLightBlueColor [UIColor colorWithRed:26.0 / 255.0 green:114.0 / 255.0 blue:178.0 / 255.0 alpha:1]
     #define STKFont(x) [UIFont fontWithName:@"HelveticaNeue-Light" size:x]
 
+#define STRINGIFY(x) #x
+    #define STRINGIFY_TOKEN(x) @STRINGIFY(x)
+
+    #define encodeObject(x) [coder encodeObject:x forKey:STRINGIFY_TOKEN(x)]
+    #define decodeObject(x) x = [coder decodeObjectForKey:STRINGIFY_TOKEN(x)]
+
 #endif

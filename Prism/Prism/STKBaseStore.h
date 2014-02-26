@@ -31,14 +31,12 @@ typedef enum {
 
 + (STKBaseStore *)store;
 
-@property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) NSURLSession *session;
 @property (nonatomic, strong) STKAuthorizationToken *authorizationToken;
 
 
 - (STKConnection *)connectionForEndpoint:(NSString *)endpoint;
 
-- (NSArray *)executeFetchRequest:(NSFetchRequest *)req;
 
 - (void)fetchAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block;
 

@@ -38,10 +38,10 @@ typedef enum {
            referencePost:(STKPost *)referencePost
               completion:(void (^)(NSArray *posts, NSError *err))block;
 
-- (void)fetchProfilePostsForUserID:(NSString *)userID
-                       inDirection:(STKContentStoreFetchDirection)fetchDirection
-                     referencePost:(STKPost *)referencePost
-                        completion:(void (^)(NSArray *posts, NSError *err))block;
+- (void)fetchProfilePostsForUser:(STKUser *)user
+                     inDirection:(STKContentStoreFetchDirection)fetchDirection
+                   referencePost:(STKPost *)referencePost
+                      completion:(void (^)(NSArray *posts, NSError *err))block;
 
 - (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
                        referencePost:(STKPost *)referencePost
@@ -49,5 +49,8 @@ typedef enum {
 
 - (void)fetchLocationNamesForCoordinate:(CLLocationCoordinate2D)coord
                              completion:(void (^)(NSArray *locations, NSError *err))block;
+
+- (void)likePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
+- (void)unlikePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
 
 @end

@@ -12,7 +12,6 @@
 
 @interface STKProfileViewController : UIViewController
 
-@property (nonatomic, strong) NSString *userID;
 @property (nonatomic, strong) STKUser *profile;
 
 @end

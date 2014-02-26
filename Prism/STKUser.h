@@ -37,7 +37,7 @@ extern NSString * const STKUserCoverPhotoURLStringKey;
 extern NSString * const STKUserProfilePhotoURLStringKey;
 
 
-@interface STKUser : NSManagedObject <STKJSONObject>
+@interface STKUser : NSObject <STKJSONObject, NSCoding>
 
 @property (nonatomic) NSString *userID;
 
@@ -56,9 +56,12 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) NSString *externalServiceType;
 @property (nonatomic, strong) NSString *accountStoreID;
 
-@property (nonatomic) int32_t followerCount;
-@property (nonatomic) int32_t followingCount;
-@property (nonatomic) int32_t postCount;
+@property (nonatomic) int followerCount;
+@property (nonatomic) int followingCount;
+@property (nonatomic) int postCount;
+
+@property (nonatomic) BOOL isFollowedByCurrentUser;
+@property (nonatomic) BOOL isFollowingCurrentUser;
 
 - (NSString *)name;
 

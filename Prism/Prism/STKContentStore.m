@@ -23,7 +23,7 @@ NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 NSString * const STKContentFoursquareClientID = @"NPXBWJD343KPWSECQJM1NKJEZ4SYQ4RGRYWEBTLCU21PNUXO";
 NSString * const STKContentFoursquareClientSecret = @"B2KSDXAPXQTWWMZLB2ODCCR3JOJVRQKCS1MNODYKD4TF2VCS";
 
-NSString * const STKContentEndpointPost = @"/post";
+NSString * const STKContentEndpointPost = @"/posts";
 
 
 @interface STKContentStore ()
@@ -42,10 +42,6 @@ NSString * const STKContentEndpointPost = @"/post";
     return store;
 }
 
-- (NSManagedObjectContext *)context
-{
-    return [[STKBaseStore store] context];
-}
 
 - (NSURLSession *)session
 {
@@ -156,10 +152,10 @@ NSString * const STKContentEndpointPost = @"/post";
     }];
 }
 
-- (void)fetchProfilePostsForUserID:(NSString *)userID
-                       inDirection:(STKContentStoreFetchDirection)fetchDirection
-                     referencePost:(STKPost *)referencePost
-                        completion:(void (^)(NSArray *posts, NSError *err))block
+- (void)fetchProfilePostsForUser:(STKUser *)user
+                     inDirection:(STKContentStoreFetchDirection)fetchDirection
+                   referencePost:(STKPost *)referencePost
+                      completion:(void (^)(NSArray *posts, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
@@ -167,7 +163,7 @@ NSString * const STKContentEndpointPost = @"/post";
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[userID, @"posts"]];
+        [c setIdentifiers:@[[user userID], @"posts"]];
         [c addQueryValue:@"30" forKey:@"limit"];
 
         if(referencePost) {
@@ -191,6 +187,65 @@ NSString * const STKContentEndpointPost = @"/post";
             } else {
                 block(nil, err);
             }
+        }];
+    }];
+}
+
+- (void)likePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
+{
+    [post setLikeCount:[post likeCount] + 1];
+    [post setPostLikedByCurrentUser:YES];
+
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
+        if(!granted) {
+            [post setPostLikedByCurrentUser:NO];
+            [post setLikeCount:[post likeCount] - 1];
+
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
+        [c setIdentifiers:@[[post postID], @"like"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+                  forKey:@"creator"];
+
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err) {
+                [post setPostLikedByCurrentUser:NO];
+                [post setLikeCount:[post likeCount] - 1];
+            }
+            block(post, err);
+        }];
+    }];
+}
+
+- (void)unlikePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
+{
+    [post setLikeCount:[post likeCount] - 1];
+    [post setPostLikedByCurrentUser:NO];
+
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
+        if(!granted) {
+            [post setLikeCount:[post likeCount] + 1];
+            [post setPostLikedByCurrentUser:YES];
+
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
+        [c setIdentifiers:@[[post postID], @"unlike"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+                  forKey:@"creator"];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err) {
+                [post setLikeCount:[post likeCount] + 1];
+                [post setPostLikedByCurrentUser:YES];
+            }
+            block(post, err);
         }];
     }];
 }

@@ -42,10 +42,23 @@ NSString * const STKPostTypeAccolade = @"accolade";
                                                  @"create_date" : @"referenceTimestamp",
                                                  STKPostURLKey : @"imageURLString",
                                                  @"external_system" : @"externalSystemID",
-                                                 @"like_count" : @"likeCount",
-                                                 @"comment_count" : @"commentCount",
-                                                 @"creator" : @"creatorDictionary"
+                                                 @"likes_count" : @"likeCount",
+                                                 @"comments_count" : @"commentCount"
     }];
+    
+    NSDictionary *creator = [jsonObject objectForKey:@"creator"];
+    if([self creator]) {
+        [[self creator] readFromJSONObject:creator];
+    } else {
+        STKUser *u = [[STKUser alloc] init];
+        [u readFromJSONObject:creator];
+        [self setCreator:u];
+    }
+
+    NSArray *likes = [[jsonObject objectForKey:@"likes"] valueForKey:@"_id"];
+    if([likes containsObject:[[[STKUserStore store] currentUser] userID]]) {
+        [self setPostLikedByCurrentUser:YES];
+    }
     
     static NSDateFormatter *df = nil;
     if(!df) {
@@ -72,22 +85,6 @@ NSString * const STKPostTypeAccolade = @"accolade";
     
     return nil;
 }
-
-- (NSString *)creatorName
-{
-    return [NSString stringWithFormat:@"%@ %@", [[self creatorDictionary] objectForKey:@"first_name"], [[self creatorDictionary] objectForKey:@"last_name"]];
-}
-
-- (NSString *)creatorUserID
-{
-    return [[self creatorDictionary] objectForKey:@"_id"];
-}
-
-- (NSString *)creatorProfilePhotoURL
-{
-    return [[self creatorDictionary] objectForKey:@"profile_photo_url"];
-}
-
 
 - (UIImage *)typeImage
 {

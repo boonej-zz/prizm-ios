@@ -10,7 +10,7 @@
 #import "STKActivityItem.h"
 #import "STKPost.h"
 #import "STKRequestItem.h"
-
+#import "STKUserStore.h"
 
 NSString * const STKUserGenderMale = @"male";
 NSString * const STKUserGenderFemale = @"female";
@@ -36,20 +36,57 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 
 @implementation STKUser
 
-@dynamic userID;
-@dynamic email;
-@dynamic gender;
-@dynamic city, state;
-@dynamic zipCode, birthday, firstName, lastName, externalServiceType;
-@dynamic accountStoreID;
-@dynamic profilePhotoPath, coverPhotoPath;
-@dynamic followerCount, followingCount, postCount;
-
 - (NSString *)name
 {
     return [NSString stringWithFormat:@"%@ %@", [self firstName], [self lastName]];
 }
 
+
+- (id)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if(self) {
+        decodeObject(_birthday);
+        decodeObject(_userID);
+        decodeObject(_firstName);
+        decodeObject(_lastName);
+        decodeObject(_zipCode);
+        decodeObject(_email);
+        decodeObject(_gender);
+        decodeObject(_city);
+        decodeObject(_state);
+        decodeObject(_coverPhotoPath);
+        decodeObject(_profilePhotoPath);
+        decodeObject(_externalServiceType);
+        decodeObject(_accountStoreID);
+        
+        _followerCount = [coder decodeIntForKey:@"_followerCount"];
+        _followingCount = [coder decodeIntForKey:@"_followingCount"];
+        _postCount = [coder decodeIntForKey:@"_postCount"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    encodeObject(_birthday);
+    encodeObject(_userID);
+    encodeObject(_firstName);
+    encodeObject(_lastName);
+    encodeObject(_zipCode);
+    encodeObject(_email);
+    encodeObject(_gender);
+    encodeObject(_city);
+    encodeObject(_state);
+    encodeObject(_coverPhotoPath);
+    encodeObject(_profilePhotoPath);
+    encodeObject(_externalServiceType);
+    encodeObject(_accountStoreID);
+    
+    [coder encodeInt:_followingCount forKey:@"_followingCount"];
+    [coder encodeInt:_followerCount forKey:@"_followerCount"];
+    [coder encodeInt:_postCount forKey:@"_postCount"];
+}
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -65,7 +102,8 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
         @"state" : @"state",
         @"followers_count" : @"followerCount",
         @"following_count" : @"followingCount",
-//        @"posts_count" : @"postCount",
+        @"posts_count" : @"postCount",
+        @"provider" : @"externalServiceType",
         STKUserProfilePhotoURLStringKey : @"profilePhotoPath",
         STKUserCoverPhotoURLStringKey : @"coverPhotoPath",
         @"birthday" : ^(id inValue) {
@@ -74,6 +112,14 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
             [self setBirthday:[df dateFromString:inValue]];
         }
     }];
+    
+    NSString *currentUserID = [[[STKUserStore store] currentUser] userID];
+    
+    BOOL isFollower = [[[jsonObject objectForKey:@"followers"] valueForKey:@"_id"] containsObject:currentUserID];
+    [self setIsFollowedByCurrentUser:isFollower];
+    
+    BOOL isFollowing = [[[jsonObject objectForKey:@"following"] valueForKey:@"_id"] containsObject:currentUserID];
+    [self setIsFollowingCurrentUser:isFollowing];
     
     return nil;
 }

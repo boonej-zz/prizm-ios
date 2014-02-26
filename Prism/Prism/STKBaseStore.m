@@ -31,7 +31,6 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
 
 @interface STKBaseStore () <NSURLSessionDelegate>
 
-@property (nonatomic, strong) NSManagedObjectContext *lookupContext;
 @property (nonatomic, strong) NSMutableArray *authorizedRequestQueue;
 
 @end
@@ -59,49 +58,7 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
     self = [super init];
     if(self) {
         _authorizedRequestQueue = [[NSMutableArray alloc] init];
-        NSManagedObjectModel *mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"User"
-                                                                                                                withExtension:@"momd"]];
-        NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
         
-        NSString *dbPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"user.db"];
-        NSError *error = nil;
-        if(![psc addPersistentStoreWithType:NSSQLiteStoreType
-                              configuration:nil
-                                        URL:[NSURL fileURLWithPath:dbPath]
-                                    options:nil
-                                      error:&error]) {
-            [NSException raise:@"Open failed" format:@"Reason %@", [error localizedDescription]];
-        }
-        
-        _context = [[NSManagedObjectContext alloc] init];
-        [[self context] setPersistentStoreCoordinator:psc];
-        [[self context] setUndoManager:nil];
-        
-        
-        NSString *lookupPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"lookup.sqlite"];
-        
-        if(![[NSFileManager defaultManager] fileExistsAtPath:lookupPath]) {
-            [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"lookup" ofType:@"sqlite"]
-                                                    toPath:lookupPath
-                                                     error:nil];
-        }
-        
-        mom = [[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"Lookup"
-                                                                                          withExtension:@"momd"]];
-        psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
-        
-        error = nil;
-        if(![psc addPersistentStoreWithType:NSSQLiteStoreType
-                              configuration:nil
-                                        URL:[NSURL fileURLWithPath:lookupPath]
-                                    options:@{NSSQLitePragmasOption : @{@"journal_mode" : @"OFF"}}
-                                      error:&error]) {
-            [NSException raise:@"Open failed" format:@"Reason %@", [error localizedDescription]];
-        }
-        
-        _lookupContext = [[NSManagedObjectContext alloc] init];
-        [[self lookupContext] setPersistentStoreCoordinator:psc];
-        [[self lookupContext] setUndoManager:nil];
 
         
         _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
@@ -205,7 +162,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     [c addQueryValue:STKPrismRedirectURI forKey:@"redirect_uri"];
     [c setAuthorizationString:[self authenticationString]];
     
-    [c setModelGraph:@[@"STKAuthorizationToken"]];
+    [c setModelGraph:@[[STKAuthorizationToken class]]];
     
     [c postWithSession:[self session] completionBlock:^(STKAuthorizationToken *obj, NSError *err) {
         [self setAuthorizationToken:obj];
@@ -213,10 +170,6 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }];
 }
 
-- (NSArray *)executeFetchRequest:(NSFetchRequest *)req
-{
-    return [[self context] executeFetchRequest:req error:nil];
-}
 
 - (STKConnection *)connectionForEndpoint:(NSString *)endpoint
 {

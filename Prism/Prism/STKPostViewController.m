@@ -11,6 +11,7 @@
 #import "STKPost.h"
 #import "STKProfileViewController.h"
 #import "STKLocationViewController.h"
+#import "STKContentStore.h"
 
 @interface STKPostViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
@@ -90,10 +91,30 @@
     [[self navigationController] popViewControllerAnimated:YES];
 }
 
+- (void)toggleLike:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    if([[self post] postLikedByCurrentUser]) {
+        [[STKContentStore store] unlikePost:[self post]
+                                 completion:^(STKPost *p, NSError *err) {
+                                    [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                            withRowAnimation:UITableViewRowAnimationNone];
+                                 }];
+    } else {
+        [[STKContentStore store] likePost:[self post]
+                               completion:^(STKPost *p, NSError *err) {
+                                   [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                           withRowAnimation:UITableViewRowAnimationNone];
+                               }];
+    }
+    [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                            withRowAnimation:UITableViewRowAnimationNone];
+
+}
+
 - (void)avatarTapped:(id)sender
 {
     STKProfileViewController *vc = [[STKProfileViewController alloc] init];
-    [vc setUserID:[[self post] creatorUserID]];
+    [vc setProfile:[[self post] creator]];
     [[self navigationController] pushViewController:vc animated:YES];
 }
 

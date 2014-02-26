@@ -421,6 +421,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
                 obj = [self instanceOfEntityForName:node data:incomingData];
             else
                 obj = [[NSClassFromString(node) alloc] init];
+        } else if ([node class] == node) {
+            obj = [[node alloc] init];
         } else {
             obj = node;
         }
