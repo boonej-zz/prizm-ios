@@ -251,6 +251,7 @@
                                         
                                     }
                                 }];*/
+    /*
     [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
                                             referencePost:[[self items] firstObject]
                                                completion:^(NSArray *posts, NSError *err) {
@@ -262,7 +263,7 @@
                                                    } else {
                                                        // Do nothing?
                                                    }
-                                               }];
+                                               }];*/
 
 }
 
