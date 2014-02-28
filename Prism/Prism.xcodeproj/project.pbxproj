@@ -4306,7 +4306,7 @@
 				ORGANIZATIONNAME = "Higher Altitude";
 				TargetAttributes = {
 					BE02EA9E182A80A200A5505A = {
-						DevelopmentTeam = MU64MV9X8B;
+						DevelopmentTeam = R9AR4U6NWF;
 					};
 					BE02EAB9182A80A200A5505A = {
 						TestTargetID = BE02EA9E182A80A200A5505A;
@@ -4598,6 +4598,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/Prism",
 					/Users/joeconway/Projects/Prism/Prism/Prism,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -4625,6 +4626,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/Prism",
 					/Users/joeconway/Projects/Prism/Prism/Prism,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
