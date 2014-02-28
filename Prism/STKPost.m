@@ -9,6 +9,7 @@
 #import "STKPost.h"
 #import "STKUser.h"
 #import "STKUserStore.h"
+#import "STKPostComment.h"
 
 NSString * const STKPostLocationLatitudeKey = @"location_latitude";
 NSString * const STKPostLocationLongitudeKey = @"location_longitude";
@@ -60,6 +61,16 @@ NSString * const STKPostTypeAccolade = @"accolade";
         [self setPostLikedByCurrentUser:YES];
     }
     
+    
+    NSArray *comments = [jsonObject objectForKey:@"comments"];
+    NSMutableArray *commentObjects = [NSMutableArray array];
+    for(NSDictionary *d in comments) {
+        STKPostComment *c = [[STKPostComment alloc] init];
+        [c readFromJSONObject:d];
+        [commentObjects addObject:c];
+    }
+    [self setComments:[commentObjects copy]];
+    
     static NSDateFormatter *df = nil;
     if(!df) {
         df = [[NSDateFormatter alloc] init];
@@ -69,10 +80,6 @@ NSString * const STKPostTypeAccolade = @"accolade";
     
     [self setDatePosted:[df dateFromString:[jsonObject objectForKey:@"create_date"]]];
     
-    [self setImageURLString:[[self imageURLString] stringByReplacingOccurrencesOfString:@"\\" withString:@""]];
-    
-//    [self setRecepientProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"profile"]]];
-//    [self setCreatorProfile:[[STKUserStore store] profileForProfileDictionary:[jsonObject objectForKey:@"posting_profile"]]];
      
     NSString *lat = [jsonObject objectForKey:STKPostLocationLatitudeKey];
     NSString *lon = [jsonObject objectForKey:STKPostLocationLongitudeKey];

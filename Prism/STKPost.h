@@ -54,6 +54,8 @@ extern NSString * const STKPostTypeKey;
 @property (nonatomic) int likeCount;
 @property (nonatomic) BOOL postLikedByCurrentUser;
 
+@property (nonatomic, strong) NSArray *comments;
+
 - (UIImage *)typeImage;
 
 + (UIImage *)imageForType:(NSString *)t;

@@ -7,12 +7,19 @@
 //
 
 #import "STKCommentCell.h"
+#import "STKResolvingImageView.h"
+
+@import QuartzCore;
 
 @implementation STKCommentCell
 
 - (void)cellDidLoad
 {
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[[self avatarImageView] layer] setCornerRadius:20];
     
+    [[self avatarImageView] setClipsToBounds:YES];
+
 }
 
 - (void)layoutContent
@@ -21,21 +28,3 @@
 }
 
 @end
-
-
-/*
-
- {
-    "meta" : {"status" : true|false},
-    "data" : [
-        {
-            "first_name" : .., "last_name" : ..., "whatever"
-        },
-        {
- 
-        }
-    ]
- }
- 
-
-*/

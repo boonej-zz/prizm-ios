@@ -14,9 +14,9 @@
 #import "STKActivityItem.h"
 #import "STKRequestItem.h"
 #import "STKConnection.h"
-#import "STKProfile.h"
 #import "STKFoursquareConnection.h"
 #import "STKFoursquareLocation.h"
+#import "STKPostComment.h"
 
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 
@@ -88,28 +88,24 @@ NSString * const STKContentEndpointPost = @"/posts";
             block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
             return;
         }
-        
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-       /* [c addQueryObject:[u personalProfile]
-              missingKeys:nil
-               withKeyMap:@{@"profileID" : @"followed_by"}];*/
+                
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
+        [c setIdentifiers:@[[u userID], @"feed"]];
         [c addQueryValue:@"30" forKey:@"limit"];
         if(referencePost) {
-            if(fetchDirection == STKContentStoreFetchDirectionNewer) {
-                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_min"];
-            } else if(fetchDirection == STKContentStoreFetchDirectionOlder) {
-                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"created_max"];
+            [c addQueryValue:[referencePost referenceTimestamp] forKey:@"feature_identifier"];
+            if(fetchDirection == STKContentStoreFetchDirectionOlder) {
+                [c addQueryValue:[referencePost referenceTimestamp] forKey:@"older"];
             }
         } else {
             // Without a reference post, we don't have any posts so we just need to grab off the top of the stack
-            
+            [c addQueryValue:@"2000-01-01T00:00:00.000Z" forKey:@"feature_identifier"];
         }
-
-        [c setModelGraph:@{@"post" : @[@"STKPost"]}];
-        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+        
+        [c setModelGraph:@[@"STKPost"]];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(NSArray *posts, NSError *err) {
             if(!err) {
-                NSArray *posts = [obj objectForKey:@"post"];
-                
                 block(posts, nil);
             } else {
                 block(nil, err);
@@ -250,6 +246,54 @@ NSString * const STKContentEndpointPost = @"/posts";
     }];
 }
 
+- (void)addComment:(NSString *)comment toPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block
+{
+    NSArray *currentComments = [p comments];
+    STKPostComment *pc = [[STKPostComment alloc] init];
+    [pc setUser:[[STKUserStore store] currentUser]];
+    [pc setText:comment];
+    [pc setDate:[NSDate date]];
+    
+    [p setComments:[[p comments] arrayByAddingObject:pc]];
+    [p setCommentCount:[p commentCount] + 1];
+    
+    void (^reversal)(void) = ^{
+        [p setComments:currentComments];
+        [p setCommentCount:[p commentCount] -1];
+    };
+    
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
+        if(!granted) {
+            reversal();
+            
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+       
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
+        [c setIdentifiers:@[[p postID], @"comments"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+                  forKey:@"creator"];
+        [c addQueryValue:comment forKey:@"text"];
+
+        [c postWithSession:[self session] completionBlock:^(NSDictionary *comments, NSError *err) {
+            if(err) {
+                reversal();
+            } else {
+                int count = [[comments objectForKey:@"comments_count"] intValue];
+                [p setCommentCount:count];
+                
+                NSDictionary *newCommentDict = [comments objectForKey:@"comments"];
+                STKPostComment *newComment = [[STKPostComment alloc] init];
+                [newComment readFromJSONObject:newCommentDict];
+                [p setComments:[currentComments arrayByAddingObjectsFromArray:@[newComment]]];
+            }
+            block(p, err);
+        }];
+
+    }];
+}
+
 - (void)fetchRecommendedHashtags:(NSString *)baseString
                       completion:(void (^)(NSArray *suggestions))block
 {
@@ -290,6 +334,30 @@ NSString * const STKContentEndpointPost = @"/posts";
             }
             
             block(obj, err);
+        }];
+    }];
+}
+
+- (void)fetchCommentsForPost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
+        [c setIdentifiers:@[[post postID], @"comments"]];
+        [c setModelGraph:@[@{@"comments": @[[STKPostComment class]]}]];
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *comments, NSError *err) {
+            
+            if(!err) {
+                NSArray *allComments = [comments objectForKey:@"comments"];
+                [post setComments:allComments];
+            } else {
+                
+            }
+            
+            block(post, err);
         }];
     }];
 }

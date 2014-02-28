@@ -10,7 +10,6 @@
 #import <CoreData/CoreData.h>
 #import "STKJSONObject.h"
 #import "STKProfileInformation.h"
-#import "STKProfile.h"
 
 @class STKActivityItem, STKPost, STKRequestItem;
 

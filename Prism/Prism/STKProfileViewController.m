@@ -64,6 +64,12 @@ typedef enum {
     [super viewDidAppear:animated];
 }
 
+- (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [self showPostAtIndex:[ip row]];
+}
+
+
 - (BOOL)isShowingCurrentUserProfile
 {
     return [[[self profile] userID] isEqualToString:[[[STKUserStore store] currentUser] userID]];
@@ -182,9 +188,9 @@ typedef enum {
 {
 }
 
-- (void)avatarTappedForPostAtIndex:(int)idx
+- (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    STKPost *p = [[self posts] objectAtIndex:idx];
+//    STKPost *p = [[self posts] objectAtIndex:idx];
     
   /*  if([[[p creatorProfile] profileID] isEqualToString:[[self profile] profileID]]) {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -195,6 +201,48 @@ typedef enum {
         [[self navigationController] pushViewController:nextProfile animated:NO];
         [self dismissViewControllerAnimated:YES completion:nil];
     }*/
+}
+
+- (void)toggleLike:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKPost *post = [[self posts] objectAtIndex:[ip row]];
+    if([post postLikedByCurrentUser]) {
+        [[STKContentStore store] unlikePost:post
+                                 completion:^(STKPost *p, NSError *err) {
+                                     [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                             withRowAnimation:UITableViewRowAnimationNone];
+                                 }];
+    } else {
+        [[STKContentStore store] likePost:post
+                               completion:^(STKPost *p, NSError *err) {
+                                   [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                           withRowAnimation:UITableViewRowAnimationNone];
+                               }];
+    }
+    [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                            withRowAnimation:UITableViewRowAnimationNone];
+    
+}
+
+- (void)showComments:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [self showPostAtIndex:(int)[ip row]];
+}
+
+
+- (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
+}
+
+- (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
+}
+
+- (void)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
 }
 
 - (void)showPostAtIndex:(int)idx
@@ -241,10 +289,6 @@ typedef enum {
     [self showPostAtIndex:itemIndex];
 }
 
-- (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    [self showPostAtIndex:[ip row]];
-}
 
 - (void)editProfile:(id)sender atIndexPath:(NSIndexPath *)ip
 {

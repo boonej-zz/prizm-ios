@@ -17,7 +17,6 @@
 #import "STKContentStore.h"
 #import "STKPostViewController.h"
 #import "STKUserStore.h"
-#import "STKProfile.h"
 #import "STKSearchProfileCell.h"
 #import "STKProfileViewController.h"
 #import "UIERealTimeBlurView.h"
@@ -210,10 +209,10 @@
     }
     
     STKSearchProfileCell *c = [STKSearchProfileCell cellForTableView:tableView target:self];
-    STKProfile *p = [[self profilesFound] objectAtIndex:[indexPath row]];
-    [[c nameLabel] setText:[p name]];
-    [[c avatarView] setUrlString:[p profilePhotoPath]];
-    
+    STKUser *u = [[self profilesFound] objectAtIndex:[indexPath row]];
+    [[c nameLabel] setText:[u name]];
+    [[c avatarView] setUrlString:[u profilePhotoPath]];
+
     return c;
 }
 
@@ -232,7 +231,7 @@
     if([searchString length] == 0)
         return YES;
     
-    [[STKUserStore store] fetchProfilesWithNameMatching:searchString completion:^(NSArray *profiles, NSError *err) {
+    [[STKUserStore store] searchUsersWithName:searchString completion:^(NSArray *profiles, NSError *err) {
         if(!err) {
             _profilesFound = profiles;
             [[controller searchResultsTableView] reloadData];

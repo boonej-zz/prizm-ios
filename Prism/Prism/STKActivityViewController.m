@@ -14,7 +14,6 @@
 #import "STKUserStore.h"
 #import "STKRequestCell.h"
 #import "STKRequestItem.h"
-#import "STKProfile.h"
 #import "STKRelativeDateConverter.h"
 #import "UIERealTimeBlurView.h"
 
@@ -126,9 +125,9 @@ typedef enum {
         STKRequestCell *cell = [STKRequestCell cellForTableView:tableView target:self];
         STKRequestItem *i = [[self requests] objectAtIndex:[indexPath row]];
         
-        [[cell avatarImageView] setUrlString:[[i requestingProfile] profilePhotoPath]];
+       // [[cell avatarImageView] setUrlString:[[i requestingProfile] profilePhotoPath]];
         [[cell dateLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];
-        [[cell nameLabel] setText:[[i requestingProfile] name]];
+       // [[cell nameLabel] setText:[[i requestingProfile] name]];
 
         NSString *typeString = @"";
         if([[i type] isEqualToString:STKRequestTypeTrust])

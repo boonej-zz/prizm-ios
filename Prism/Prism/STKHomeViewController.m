@@ -15,6 +15,8 @@
 #import "STKBackdropView.h"
 #import "STKContentStore.h"
 #import "UIERealTimeBlurView.h"
+#import "STKPostViewController.h"
+#import "STKProfileViewController.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -97,6 +99,9 @@
             [[c layer] setShadowOpacity:0.75];
             [[c layer] setShadowRadius:5];
         }
+        
+        [[[c headerView] backdropFadeView] setAlpha:1];
+
         
         [c populateWithPost:[[self items] objectAtIndex:[ip row]]];
         
@@ -237,33 +242,22 @@
     [super viewWillAppear:animated];
     
     [[[self blurView] displayLink] setPaused:NO];
-
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
-   /* [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
-                                  inDirection:STKContentStoreFetchDirectionNewer
-                                referencePost:[[self items] firstObject] completion:^(NSArray *posts, NSError *err) {
-                                    if(!err) {
-                                        [[self items] addObjectsFromArray:posts];
-                                        [[self tableView] reloadData];
-                                        [self layoutCards];
-                                    } else {
-                                        
-                                    }
-                                }];*/
-    /*
-    [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
-                                            referencePost:[[self items] firstObject]
-                                               completion:^(NSArray *posts, NSError *err) {
-                                                   if(!err) {
-                                                       [[self items] addObjectsFromArray:posts];
-                                                       [[self items] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-                                                       [[self tableView] reloadData];
-                                                       
-                                                   } else {
-                                                       // Do nothing?
-                                                   }
-                                               }];*/
+    if([[STKUserStore store] currentUser]) {
+        [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
+                                      inDirection:STKContentStoreFetchDirectionNewer
+                                    referencePost:[[self items] firstObject] completion:^(NSArray *posts, NSError *err) {
+                                        if(!err) {
+                                            [[self items] addObjectsFromArray:posts];
+                                            [[self tableView] reloadData];
+                                            [self layoutCards];
+                                        } else {
+                                            
+                                        }
+                                    }];
+    }
+
 
 }
 
@@ -288,6 +282,70 @@
 {
     [super viewDidAppear:animated];
 }
+
+- (void)showComments:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKPost *post = [[self items] objectAtIndex:[ip row]];
+    [self showPost:post];
+}
+
+- (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKPost *post = [[self items] objectAtIndex:[ip row]];
+    [self showPost:post];
+}
+
+- (void)showPost:(STKPost *)p
+{
+    STKPostViewController *vc = [[STKPostViewController alloc] init];
+    [vc setPost:p];
+    [[self navigationController] pushViewController:vc animated:YES];
+}
+
+- (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
+}
+
+- (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
+}
+
+- (void)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
+}
+
+- (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKPost *p = [[self items] objectAtIndex:[ip row]];
+    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+    [vc setProfile:[p creator]];
+    [[self navigationController] pushViewController:vc animated:YES];
+}
+
+- (void)toggleLike:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKPost *post = [[self items] objectAtIndex:[ip row]];
+    if([post postLikedByCurrentUser]) {
+        [[STKContentStore store] unlikePost:post
+                                 completion:^(STKPost *p, NSError *err) {
+                                     [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                             withRowAnimation:UITableViewRowAnimationNone];
+                                 }];
+    } else {
+        [[STKContentStore store] likePost:post
+                               completion:^(STKPost *p, NSError *err) {
+                                   [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                           withRowAnimation:UITableViewRowAnimationNone];
+                               }];
+    }
+    [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                            withRowAnimation:UITableViewRowAnimationNone];
+    
+}
+
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
