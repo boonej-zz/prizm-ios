@@ -10,7 +10,6 @@
 #import <CoreData/CoreData.h>
 #import "STKJSONObject.h"
 
-@class STKProfile;
 
 extern NSString * const STKRequestTypeTrust;
 extern NSString * const STKRequestTypeAccolade;
@@ -22,7 +21,7 @@ extern NSString * const STKRequestStatusBlocked;
 
 @interface STKRequestItem : NSObject <STKJSONObject>
 
-@property (nonatomic, strong) STKProfile *requestingProfile;
+//@property (nonatomic, strong) STKProfile *requestingProfile;
 @property (nonatomic, strong) NSDate *dateCreated;
 @property (nonatomic, strong) NSString *requestID;
 @property (nonatomic, strong) NSString *type;

@@ -19,7 +19,6 @@
 #import "STKBaseStore.h"
 #import "STKUserStore.h"
 #import "STKUser.h"
-#import "STKProfile.h"
 #import "STKLocationListViewController.h"
 #import "STKFoursquareLocation.h"
 

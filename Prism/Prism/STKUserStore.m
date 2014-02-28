@@ -185,7 +185,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user userID]]];
-        
+        [c addQueryValue:[[self currentUser] userID] forKey:@"creator"];
         [c setModelGraph:@[user]];
         
         [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
@@ -195,7 +195,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     }];
 }
 
-- (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block
+- (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
@@ -203,18 +203,15 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUpdateProfile];
-        [c addQueryValue:@"0" forKey:@"offset"];
-        [c addQueryValue:@"20" forKey:@"limit"];
-        [c addQueryValue:name forKey:@"name"];
-                
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c addQueryValue:@"30" forKey:@"limit"];
+        [c addQueryValue:name forKey:@"first_name"];
         
-        [c setExistingMatchMap:@{@"profileID" : @"profile"}];
-        
-        [c setModelGraph:@{@"profile" : @[@"STKProfile"]}];
-        [c getWithSession:[self session] completionBlock:^(NSDictionary *profiles, NSError *err) {
+        [c setModelGraph:@[[STKUser class]]];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(NSArray *profiles, NSError *err) {
             if(!err) {
-                block([profiles objectForKey:@"profile"], nil);
+                block(profiles, nil);
             } else {
                 block(nil, err);
             }
@@ -225,9 +222,13 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 - (void)followUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block
 {
     [user setIsFollowedByCurrentUser:YES];
+    [user setFollowerCount:[user followerCount] + 1];
     
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
+            [user setIsFollowedByCurrentUser:NO];
+            [user setFollowerCount:[user followerCount] - 1];
+
             block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
             return;
         }
@@ -238,6 +239,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
                 [user setIsFollowedByCurrentUser:NO];
+                [user setFollowerCount:[user followerCount] - 1];
             }
             block(nil, err);
         }];
@@ -247,9 +249,13 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 - (void)unfollowUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block
 {
     [user setIsFollowedByCurrentUser:NO];
+    [user setFollowerCount:[user followerCount] - 1];
 
     [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
         if(!granted) {
+            [user setFollowerCount:[user followerCount] + 1];
+            [user setIsFollowedByCurrentUser:YES];
+
             block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
             return;
         }
@@ -259,6 +265,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         [c addQueryValue:[[self currentUser] userID] forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
+                [user setFollowerCount:[user followerCount] + 1];
                 [user setIsFollowedByCurrentUser:YES];
             }
             block(nil, err);
@@ -276,7 +283,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRequest];
         [c addQueryValue:[[self currentUser] userID] forKey:@"requesting_profile"];
-        [c addQueryValue:[profile profileID] forKey:@"profile"];
+//        [c addQueryValue:[profile profileID] forKey:@"profile"];
         [c addQueryValue:requestType forKey:@"request_type"];
         [c addQueryValue:STKRequestStatusPending forKey:@"request_status"];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -384,18 +391,24 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)validateWithTwitterToken:(NSString *)token secret:(NSString *)secret completion:(void (^)(STKUser *u, NSError *err))block
 {
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
-    [c addQueryValue:token forKey:@"provider_token"];
-    [c addQueryValue:secret forKey:@"provider_token_secret"];
-    [c addQueryValue:STKUserExternalSystemTwitter forKey:@"provider"];
-
-    if([self currentUser])
-        [c setModelGraph:@[[self currentUser]]];
-    else
-        [c setModelGraph:@[[STKUser class]]];
-
-    [c postWithSession:[self session]
-       completionBlock:block];
+    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
+        if(!granted) {
+            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+        [c addQueryValue:token forKey:@"provider_token"];
+        [c addQueryValue:secret forKey:@"provider_token_secret"];
+        [c addQueryValue:STKUserExternalSystemTwitter forKey:@"provider"];
+        
+        if([self currentUser])
+            [c setModelGraph:@[[self currentUser]]];
+        else
+            [c setModelGraph:@[[STKUser class]]];
+        
+        [c postWithSession:[self session]
+           completionBlock:block];
+    }];
 }
 
 - (void)fetchTwitterAccessToken:(ACAccount *)acct completion:(void (^)(NSString *token, NSString *tokenSecret, NSError *err))block

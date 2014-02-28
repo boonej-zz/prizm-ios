@@ -8,7 +8,6 @@
 
 #import "STKHomeCell.h"
 #import "STKPost.h"
-#import "STKProfile.h"
 #import "STKRelativeDateConverter.h"
 
 @interface STKHomeCell ()
@@ -81,6 +80,11 @@
     ROUTE(sender);
 }
 
+- (void)avatarTapped:(id)sender 
+{
+    ROUTE(sender);
+}
+
 - (void)cellDidLoad
 {
     static UIImage *fadeImage = nil;
@@ -94,14 +98,7 @@
     [[[self headerView] backdropFadeView] setImage:fadeImage];
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     [[self headerView] setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.2]];
+    [[[self headerView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

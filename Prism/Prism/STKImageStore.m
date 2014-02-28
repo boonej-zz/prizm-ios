@@ -63,8 +63,16 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     
         _amazonClient = [[AmazonS3Client alloc] initWithAccessKey:STKImageStoreS3KeyID
                                                     withSecretKey:STKImageStoreS3Key];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearCache:)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     }
     return self;
+}
+
+- (void)clearCache:(id)sender
+{
+    [[self memoryCache] removeAllObjects];
 }
 
 - (NSString *)cachePath

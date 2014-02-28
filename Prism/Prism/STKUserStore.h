@@ -46,7 +46,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 - (void)fetchUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
 
-- (void)fetchProfilesWithNameMatching:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;
+- (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;
 
 - (void)followUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block;
 - (void)unfollowUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block;

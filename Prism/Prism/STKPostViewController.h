@@ -10,14 +10,6 @@
 
 @class STKPost, STKPostViewController, STKProfile;
 
-
-@protocol STKPostViewControllerDelegate <NSObject>
-
-- (void)postViewController:(STKPostViewController *)postViewController
-          didSelectProfile:(STKProfile *)profile;
-
-@end
-
 @interface STKPostViewController : UIViewController
 
 @property (nonatomic, strong) STKPost *post;

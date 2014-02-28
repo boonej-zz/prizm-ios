@@ -8,6 +8,12 @@
 
 #import "STKTableViewCell.h"
 
+@class STKResolvingImageView;
+
 @interface STKCommentCell : STKTableViewCell
+@property (weak, nonatomic) IBOutlet STKResolvingImageView *avatarImageView;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 @end

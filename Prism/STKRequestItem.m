@@ -8,7 +8,6 @@
 
 #import "STKRequestItem.h"
 #import "STKUserStore.h"
-#import "STKProfile.h"
 
 NSString * const STKRequestTypeTrust = @"1";
 NSString * const STKRequestTypeAccolade = @"2";
