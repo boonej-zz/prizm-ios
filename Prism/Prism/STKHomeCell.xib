@@ -23,19 +23,19 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6QP-zd-FRS">
                         <rect key="frame" x="5" y="325" width="310" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="0.51023608576642332" green="0.50099794708029199" blue="0.57450387773722633" alpha="0.34000000000000002" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.34000000000000002" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="gZW-3n-KpV"/>
                         </constraints>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ldn-1H-Ldn">
-                        <rect key="frame" x="16" y="324" width="281" height="28"/>
+                        <rect key="frame" x="12" y="324" width="296" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.99836575255102045" green="0.99836575255102045" blue="0.99836575255102045" alpha="0.0" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="N4E-Ia-kSF"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.75294117647058822" green="0.75686274509803919" blue="0.83529411764705885" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -202,8 +202,8 @@
                 </constraints>
             </tableViewCellContentView>
             <constraints>
-                <constraint firstItem="Ldn-1H-Ldn" firstAttribute="leading" secondItem="J9J-bF-ztf" secondAttribute="leading" constant="16" id="6Tt-wQ-szO"/>
-                <constraint firstAttribute="trailing" secondItem="Ldn-1H-Ldn" secondAttribute="trailing" constant="23" id="cnd-qD-iKE"/>
+                <constraint firstItem="Ldn-1H-Ldn" firstAttribute="leading" secondItem="J9J-bF-ztf" secondAttribute="leading" constant="12" id="6Tt-wQ-szO"/>
+                <constraint firstAttribute="trailing" secondItem="Ldn-1H-Ldn" secondAttribute="trailing" constant="12" id="cnd-qD-iKE"/>
             </constraints>
             <connections>
                 <outlet property="commentButton" destination="bxX-HE-9lH" id="aR8-GE-Qoo"/>
@@ -229,7 +229,7 @@
         <image name="action_pin_active" width="18" height="25"/>
         <image name="action_prism" width="56" height="56"/>
         <image name="action_prism_active" width="56" height="56"/>
-        <image name="action_share" width="56" height="56"/>
+        <image name="action_share" width="24" height="24"/>
         <image name="action_share_selected" width="56" height="56"/>
     </resources>
 </document>

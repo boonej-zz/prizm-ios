@@ -15,6 +15,8 @@ NSString * const STKPostLocationLatitudeKey = @"location_latitude";
 NSString * const STKPostLocationLongitudeKey = @"location_longitude";
 NSString * const STKPostLocationNameKey = @"location_name";
 
+NSString * const STKPostHashTagsKey = @"hash_tags";
+
 NSString * const STKPostURLKey = @"file_path";
 NSString * const STKPostTextKey = @"text";
 NSString * const STKPostTypeKey = @"category";
@@ -44,7 +46,8 @@ NSString * const STKPostTypeAccolade = @"accolade";
                                                  STKPostURLKey : @"imageURLString",
                                                  @"external_system" : @"externalSystemID",
                                                  @"likes_count" : @"likeCount",
-                                                 @"comments_count" : @"commentCount"
+                                                 @"comments_count" : @"commentCount",
+                                                 @"hash_tags" : @"hashTags"
     }];
     
     NSDictionary *creator = [jsonObject objectForKey:@"creator"];
@@ -60,7 +63,6 @@ NSString * const STKPostTypeAccolade = @"accolade";
     if([likes containsObject:[[[STKUserStore store] currentUser] userID]]) {
         [self setPostLikedByCurrentUser:YES];
     }
-    
     
     NSArray *comments = [jsonObject objectForKey:@"comments"];
     NSMutableArray *commentObjects = [NSMutableArray array];

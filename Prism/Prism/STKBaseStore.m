@@ -12,7 +12,11 @@
 
 @import Security;
 
+#ifdef BASE_URL_DEV
+NSString * const STKUserBaseURLString = @"https://ec2-54-186-28-238.us-west-2.compute.amazonaws.com";
+#elif BASE_URL_STAGING
 NSString * const STKUserBaseURLString = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com";
+#endif
 
 NSString * const STKPrismClientSecret = @"f27198fb-689d-4965-acb0-0e9c5f61ddec";
 NSString * const STKPrismClientID = @"67e1fe4f-db1b-4d5c-bdc7-56270b0822e2";
@@ -77,7 +81,6 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
     if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > 0) {
         request(YES);
     } else {
-        NSLog(@"Auth token has expired, queuing and requesting");
         [[self authorizedRequestQueue] addObject:request];
         if([[self authorizationToken] refreshToken]) {
             [self refreshAccessToken:^(STKAuthorizationToken *token, NSError *err) {

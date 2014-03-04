@@ -71,27 +71,23 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         [components setPath:[self endpoint]];
     }
     
-    NSMutableString *queryString = [[NSMutableString alloc] init];
-    NSArray *allKeys = [[self internalArguments] allKeys];
-    for(NSString *key in allKeys) {
-        NSString *value = [[self internalArguments] objectForKey:key];
-        NSString *v = nil;
-        if([value rangeOfString:@"{"].location == NSNotFound) {
-            v = [value stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLArgumentAllowedCharacterSet]];
-        } else {
-            v = value;
-        }
-
-        [queryString appendFormat:@"%@=%@", key, v];
-        if(key != [allKeys lastObject])
-            [queryString appendString:@"&"];
-    }
-    
     NSMutableURLRequest *req = [[NSMutableURLRequest alloc] init];
-    if([queryString length] > 0) {
-        if([self method] == STKConnectionMethodPOST) {
-            [req setHTTPBody:[queryString dataUsingEncoding:NSUTF8StringEncoding]];
+
+    if([[self internalArguments] count] > 0) {
+        if([self method] == STKConnectionMethodPOST || [self method] == STKConnectionMethodPUT) {
+            [req setHTTPBody:[NSJSONSerialization dataWithJSONObject:[self internalArguments] options:0 error:nil]];
+            [req addValue:@"application/json;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
         } else {
+            NSMutableString *queryString = [[NSMutableString alloc] init];
+            NSArray *allKeys = [[self internalArguments] allKeys];
+            for(NSString *key in allKeys) {
+                NSString *value = [[self internalArguments] objectForKey:key];
+                
+                [queryString appendFormat:@"%@=%@", key, [value stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLArgumentAllowedCharacterSet]]];
+                if(key != [allKeys lastObject])
+                    [queryString appendString:@"&"];
+            }
+            
             [components setPercentEncodedQuery:queryString];
         }
     }
@@ -103,7 +99,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
                          @(STKConnectionMethodDELETE) : @"DELETE",
                          @(STKConnectionMethodPUT) : @"PUT"}[@([self method])]];
 
-    
+    // If we set the body manually instead of via query key-values
     if(![req HTTPBody])
         [req setHTTPBody:[self HTTPBody]];
     
@@ -149,7 +145,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 {
     if(!value || !key)
         return;
-    if([value isKindOfClass:[NSString class]]) {
+    
+    if([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSArray class]]) {
         [_internalArguments setObject:value forKey:key];
     } else if([value isKindOfClass:[NSDictionary class]]) {
         [self addQueryDictionary:value forKey:key];

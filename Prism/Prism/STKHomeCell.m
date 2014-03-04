@@ -61,6 +61,12 @@
         [[self locationButton] setImage:[UIImage imageNamed:@"action_pin"]
                                forState:UIControlStateNormal];
     }
+    
+    NSMutableString *tags = [[NSMutableString alloc] init];
+    for(NSString *tag in [p hashTags]) {
+        [tags appendFormat:@"#%@ ", tag];
+    }
+    [[self hashTagLabel] setText:tags];
 }
 
 - (IBAction)toggleLike:(id)sender

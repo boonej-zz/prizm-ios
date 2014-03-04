@@ -176,7 +176,7 @@
 
 - (void)dismiss:(id)sender
 {
-    [self setVisible:NO animated:YES];
+    [[self delegate] menuView:self didSelectItemAtIndex:[self selectedIndex]];
 }
 
 - (BOOL)isVisible

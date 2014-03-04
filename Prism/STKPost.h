@@ -30,6 +30,7 @@ extern NSString * const STKPostLocationNameKey;
 extern NSString * const STKPostURLKey;
 extern NSString * const STKPostTextKey;
 extern NSString * const STKPostTypeKey;
+extern NSString * const STKPostHashTagsKey;
 
 @interface STKPost : NSObject <STKJSONObject>
 
@@ -54,6 +55,7 @@ extern NSString * const STKPostTypeKey;
 @property (nonatomic) int likeCount;
 @property (nonatomic) BOOL postLikedByCurrentUser;
 
+@property (nonatomic, strong) NSArray *hashTags;
 @property (nonatomic, strong) NSArray *comments;
 
 - (UIImage *)typeImage;
