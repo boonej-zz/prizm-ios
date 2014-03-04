@@ -114,7 +114,11 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="avatarImageView" destination="2PN-kn-BDQ" id="Fuz-G7-gCv"/>
+                <outlet property="clockImageView" destination="ge7-HD-XRM" id="9Uu-WA-7dd"/>
                 <outlet property="commentLabel" destination="jUK-9y-kQb" id="uy1-ww-pPY"/>
+                <outlet property="likeButton" destination="zjT-pU-sIW" id="wwX-wX-Vdc"/>
+                <outlet property="likeCountLabel" destination="wCh-kh-FbI" id="3BP-mK-UhZ"/>
+                <outlet property="likeImageView" destination="xrs-5s-4lK" id="CeQ-Mx-p9q"/>
                 <outlet property="nameLabel" destination="clC-ZP-ojw" id="s6t-cu-eWa"/>
                 <outlet property="timeLabel" destination="kbA-GE-iNM" id="F9q-3v-ViW"/>
             </connections>

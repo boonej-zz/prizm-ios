@@ -80,14 +80,14 @@
 
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeWidth
                                                               relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_avatarView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+                                                                 toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeHeight
                                                               relatedBy:NSLayoutRelationEqual
-                                                                 toItem:_avatarView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+                                                                 toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual
-                                                        toItem:_avatarView attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
+                                                        toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
-                                                        toItem:_avatarView attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
+                                                        toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|"
                                                                  options:0

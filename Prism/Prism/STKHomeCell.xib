@@ -206,6 +206,7 @@
                 <constraint firstAttribute="trailing" secondItem="Ldn-1H-Ldn" secondAttribute="trailing" constant="23" id="cnd-qD-iKE"/>
             </constraints>
             <connections>
+                <outlet property="commentButton" destination="bxX-HE-9lH" id="aR8-GE-Qoo"/>
                 <outlet property="commentCountLabel" destination="EIV-R2-0fK" id="DHr-9f-0XW"/>
                 <outlet property="contentImageView" destination="7BC-Pt-GTX" id="7Dt-sw-8W8"/>
                 <outlet property="hashTagLabel" destination="Ldn-1H-Ldn" id="C8m-bz-YSM"/>
@@ -213,6 +214,7 @@
                 <outlet property="leftInset" destination="2yq-OD-Jrh" id="ukZ-Pb-SGJ"/>
                 <outlet property="likeButton" destination="fdr-Fh-mHx" id="aw8-t1-Zcr"/>
                 <outlet property="likeCountLabel" destination="bDc-bv-DBk" id="OA6-Bn-Amo"/>
+                <outlet property="locationButton" destination="yKi-Sp-cUR" id="6yf-0U-Isf"/>
                 <outlet property="rightInset" destination="cQ7-04-Ea5" id="egG-ST-TmZ"/>
                 <outlet property="topInset" destination="Qv6-tj-NKb" id="WrY-GE-DGo"/>
             </connections>

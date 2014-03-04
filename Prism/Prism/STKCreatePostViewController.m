@@ -98,6 +98,13 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                           NSFontAttributeName : STKFont(22)}];
     [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
 
+    if([self imageURLString]) {
+        [[self postInfo] setObject:[self imageURLString] forKey:STKPostURLKey];
+        [[STKImageStore store] fetchImageForURLString:[self imageURLString]
+                                           completion:^(UIImage *img) {
+                                               [[self imageView] setImage:img];
+                                           }];
+    }
 }
 
 - (void)setPostImage:(UIImage *)postImage
@@ -223,9 +230,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if(collectionView == [self categoryCollectionView])
+    if(collectionView == [self categoryCollectionView]) {
         return [[self categoryItems] count];
+    }
     
+
     return [[self optionItems] count];
 }
 
@@ -287,9 +296,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     // Verify that we have everything
     if(![[self postInfo] objectForKey:STKPostTypeKey]) {
         msg = @"Choose the category this post belongs to from the bottom of the screen before posting.";
-    } else if(![[self postInfo] objectForKey:STKPostURLKey]) {
-        msg = @"Choose an image for this post before posting.";
     }
+    
     
     if(msg) {
         [[[UIAlertView alloc] initWithTitle:@"Missing Information"

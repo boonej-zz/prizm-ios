@@ -96,9 +96,12 @@
 
 - (void)createNewPost:(id)sender
 {
+    
     STKCreatePostViewController *cpc = [[STKCreatePostViewController alloc] init];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:cpc];
-    [self presentViewController:nvc animated:YES completion:nil];
+    [self presentViewController:nvc animated:YES completion:^{
+        [[self menuController] setMenuVisible:NO];
+    }];
 }
 
 - (void)toggleMenu:(id)sender

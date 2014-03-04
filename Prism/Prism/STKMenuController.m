@@ -238,15 +238,6 @@
     [self setMenuVisible:![self isMenuVisible] animated:YES];
 }
 
-- (void)createNewPost:(id)sender
-{
-    [self setMenuVisible:NO animated:YES];
-    
-    STKCreatePostViewController *cvc = [[STKCreatePostViewController alloc] init];
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:cvc];
-    [self presentViewController:nvc animated:YES completion:nil];
-}
-
 - (void)setViewControllers:(NSArray *)viewControllers
 {
     for(UIViewController *vc in [self viewControllers]) {

@@ -17,6 +17,7 @@
 #import "UIERealTimeBlurView.h"
 #import "STKPostViewController.h"
 #import "STKProfileViewController.h"
+#import "STKCreatePostViewController.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -88,7 +89,6 @@
 {
     STKHomeCell *c = [[self cardMap] objectForKey:ip];
     if(!c) {
-        
         c = [[self reusableCards] lastObject];
         if(c) {
             [[self reusableCards] removeObjectIdenticalTo:c];
@@ -101,7 +101,6 @@
         }
         
         [[[c headerView] backdropFadeView] setAlpha:1];
-
         
         [c populateWithPost:[[self items] objectAtIndex:[ip row]]];
         
@@ -212,7 +211,6 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self layoutCards];
-    
 }
 
 
@@ -224,17 +222,6 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [cell setBackgroundColor:[UIColor clearColor]];
-/*
-    if([[self backdropView] shouldBlurImageForIndexPath:indexPath]) {
-        STKHomeCell *blurCell = [[self backdropView] dequeueCellForReuseIdentifier:@"STKHomeCell"];
-        [blurCell setBackgroundColor:[UIColor clearColor]];
-        [blurCell populateWithPost:[[self items] objectAtIndex:[indexPath row]]];
-
-        CGRect rect = [cell frame];
-        [[self backdropView] addBlurredImageFromCell:blurCell
-                                             forRect:rect
-                                           indexPath:indexPath];
-    }*/
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -250,6 +237,7 @@
                                     referencePost:[[self items] firstObject] completion:^(NSArray *posts, NSError *err) {
                                         if(!err) {
                                             [[self items] addObjectsFromArray:posts];
+                                            [[self items] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
                                             [[self tableView] reloadData];
                                             [self layoutCards];
                                         } else {
@@ -304,7 +292,12 @@
 
 - (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
 {
+    STKCreatePostViewController *pvc = [[STKCreatePostViewController alloc] init];
+    [pvc setImageURLString:[[[self items] objectAtIndex:[ip row]] imageURLString]];
     
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
+
+    [self presentViewController:nvc animated:YES completion:nil];
 }
 
 - (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip

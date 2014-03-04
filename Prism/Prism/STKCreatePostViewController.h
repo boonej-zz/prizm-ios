@@ -10,4 +10,6 @@
 
 @interface STKCreatePostViewController : UIViewController
 
+@property (nonatomic, strong) NSString *imageURLString;
+
 @end
