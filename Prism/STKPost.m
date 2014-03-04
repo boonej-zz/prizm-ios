@@ -86,7 +86,7 @@ NSString * const STKPostTypeAccolade = @"accolade";
     if(lat && lon && ![lat isKindOfClass:[NSNull class]] && ![lon isKindOfClass:[NSNull class]]) {
         CLLocationCoordinate2D coord;
         coord.latitude = [lat doubleValue];
-        coord.longitude = [lat doubleValue];
+        coord.longitude = [lon doubleValue];
         [self setCoordinate:coord];
     }
     

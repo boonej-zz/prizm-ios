@@ -22,6 +22,7 @@
 #import "UIERealTimeBlurView.h"
 #import "STKHomeCell.h"
 #import "STKFilterCell.h"
+#import "STKCreatePostViewController.h"
 
 typedef enum {
     STKProfileSectionHeader,
@@ -232,6 +233,12 @@ typedef enum {
 
 - (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
 {
+    STKCreatePostViewController *pvc = [[STKCreatePostViewController alloc] init];
+    [pvc setImageURLString:[[[self posts] objectAtIndex:[ip row]] imageURLString]];
+    
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
+    
+    [self presentViewController:nvc animated:YES completion:nil];
     
 }
 
@@ -366,8 +373,14 @@ typedef enum {
         [[c followButton] setHidden:NO];
         if([[self profile] isFollowedByCurrentUser]) {
             [[c followButton] setTitle:@"Unfollow" forState:UIControlStateNormal];
+            [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
+                              forState:UIControlStateNormal];
+            [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 60, 0, 0)];
         } else {
             [[c followButton] setTitle:@"Follow" forState:UIControlStateNormal];
+            [[c followButton] setImage:[UIImage imageNamed:@"btn_followarrow"]
+                              forState:UIControlStateNormal];
+            [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 50, 0, 0)];
         }
         [[c trustButton] setHidden:NO];
         [[c editButton] setHidden:YES];

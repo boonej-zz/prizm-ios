@@ -37,10 +37,15 @@
     //[[[c headerView] sourceLabel] setText:[p postOrigin]];
     [[[self headerView] postTypeView] setImage:[p typeImage]];
     
-    if([p commentCount] == 0)
+    if([p commentCount] == 0) {
         [[self commentCountLabel] setText:@""];
-    else
+        [[self commentButton] setImage:[UIImage imageNamed:@"action_comment"]
+                              forState:UIControlStateNormal];
+    } else {
         [[self commentCountLabel] setText:[NSString stringWithFormat:@"%d", [p commentCount]]];
+        [[self commentButton] setImage:[UIImage imageNamed:@"action_comment_active"]
+                              forState:UIControlStateNormal];
+    }
     
     if([p likeCount] == 0)
         [[self likeCountLabel] setText:@""];
@@ -48,6 +53,14 @@
         [[self likeCountLabel] setText:[NSString stringWithFormat:@"%d", [p likeCount]]];
 
     [[self likeButton] setHighlighted:[p postLikedByCurrentUser]];
+    
+    if([p locationName]) {
+        [[self locationButton] setImage:[UIImage imageNamed:@"action_pin_selected"]
+                               forState:UIControlStateNormal];
+    } else {
+        [[self locationButton] setImage:[UIImage imageNamed:@"action_pin"]
+                               forState:UIControlStateNormal];
+    }
 }
 
 - (IBAction)toggleLike:(id)sender

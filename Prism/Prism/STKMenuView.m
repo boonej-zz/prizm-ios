@@ -29,6 +29,8 @@
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setClipsToBounds:YES];
 
+        [self addTarget:self action:@selector(dismiss:) forControlEvents:UIControlEventTouchUpInside];
+        
         _backgroundImageView = [[UIImageView alloc] init];
         [_backgroundImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [_backgroundImageView setContentMode:UIViewContentModeScaleAspectFill];
@@ -170,6 +172,11 @@
     } else {
         [[self underlayLayer] setOpacity:0.5];
     }
+}
+
+- (void)dismiss:(id)sender
+{
+    [self setVisible:NO animated:YES];
 }
 
 - (BOOL)isVisible

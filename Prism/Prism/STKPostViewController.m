@@ -17,6 +17,7 @@
 #import "STKUserStore.h"
 #import "STKUser.h"
 #import "STKRelativeDateConverter.h"
+#import "STKCreatePostViewController.h"
 
 @interface STKPostViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
@@ -28,6 +29,10 @@
 - (void)dismissKeyboard:(id)sender;
 
 - (IBAction)postComment:(id)sender;
+
+- (BOOL)postHasText;
+
+- (STKPostComment *)commentForIndexPath:(NSIndexPath *)ip;
 
 @end
 
@@ -42,10 +47,30 @@
     return self;
 }
 
+- (BOOL)postHasText
+{
+    return [[[self post] text] length] > 0;
+}
+
+- (STKPostComment *)commentForIndexPath:(NSIndexPath *)ip
+{
+    NSInteger index = [ip row];
+    
+    if([self postHasText]) {
+        index --;
+    }
+    
+    if(index >= 0 && index < [[[self post] comments] count])
+        return [[[self post] comments] objectAtIndex:index];
+    
+    return nil;
+}
+
 - (IBAction)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
     [lvc setCoordinate:[[self post] coordinate]];
+    [lvc setLocationName:[[self post] locationName]];
     [[self navigationController] pushViewController:lvc animated:YES];
 }
 
@@ -64,8 +89,6 @@
     [gr setDelaysTouchesEnded:NO];
     [[self view] addGestureRecognizer:gr];
 }
-
-
 
 
 - (void)viewWillAppear:(BOOL)animated
@@ -171,7 +194,13 @@
 
 - (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
 {
+    STKCreatePostViewController *pvc = [[STKCreatePostViewController alloc] init];
+    [pvc setImageURLString:[[self post] imageURLString]];
     
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
+    
+    [self presentViewController:nvc animated:YES completion:nil];
+
 }
 
 - (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -214,8 +243,12 @@
     if([indexPath section] == 0) {
         return 421;
     }
+    STKPostComment *pc = [self commentForIndexPath:indexPath];
+    NSString *text = [pc text];
+    if(!pc)
+        text = [[self post] text];
     
-    return [self heightForTableViewGivenCommentText:[[[[self post] comments] objectAtIndex:[indexPath row]] text]];
+    return [self heightForTableViewGivenCommentText:text];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -223,9 +256,12 @@
         return 421;
     }
     
-    
-    return [self heightForTableViewGivenCommentText:[[[[self post] comments] objectAtIndex:[indexPath row]] text]];
+    STKPostComment *pc = [self commentForIndexPath:indexPath];
+    NSString *text = [pc text];
+    if(!pc)
+        text = [[self post] text];
 
+    return [self heightForTableViewGivenCommentText:text];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -238,8 +274,11 @@
     if(section == 0)
         return 1;
     
-    // Comments
-    return [[[self post] comments] count];
+    NSInteger count = [[[self post] comments] count];
+    if([self postHasText])
+        count ++;
+    
+    return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -255,12 +294,32 @@
         return c;
     } else {
         STKCommentCell *c = [STKCommentCell cellForTableView:tableView target:self];
-        STKPostComment *comment = [[[self post] comments] objectAtIndex:[indexPath row]];
         
-        [[c commentLabel] setText:[comment text]];
-        [[c avatarImageView] setUrlString:[[comment user] profilePhotoPath]];
-        [[c nameLabel] setText:[[comment user] name]];
-        [[c timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[comment date]]];
+        if([self postHasText] && [indexPath row] == 0) {
+            [[c commentLabel] setText:[[self post] text]];
+            [[c nameLabel] setText:[[[self post] creator] name]];
+            [[c avatarImageView] setUrlString:[[[self post] creator] profilePhotoPath]];
+            
+            [[c timeLabel] setHidden:YES];
+            [[c clockImageView] setHidden:YES];
+            [[c likeButton] setHidden:YES];
+            [[c likeImageView] setHidden:YES];
+            [[c likeCountLabel] setHidden:YES];
+        } else {
+            STKPostComment *comment = [self commentForIndexPath:indexPath];
+            
+            [[c commentLabel] setText:[comment text]];
+            [[c avatarImageView] setUrlString:[[comment user] profilePhotoPath]];
+            [[c nameLabel] setText:[[comment user] name]];
+            [[c timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[comment date]]];
+
+            [[c timeLabel] setHidden:NO];
+            [[c clockImageView] setHidden:NO];
+            [[c likeButton] setHidden:NO];
+            [[c likeImageView] setHidden:NO];
+            [[c likeCountLabel] setHidden:NO];
+
+        }
         
         return c;
     }
@@ -282,7 +341,12 @@
     [[self commentTextField] setText:nil];
     [[self tableView] reloadData];
     [[self view] endEditing:YES];
-    [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[[[self post] comments] count] - 1
+    
+    NSInteger index = [[[self post] comments] count] -1;
+    if([self postHasText])
+        index --;
+    
+    [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index
                                                                 inSection:1]
                             atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }

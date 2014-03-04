@@ -16,7 +16,7 @@
 
 @end
 
-@interface STKMenuView : UIView
+@interface STKMenuView : UIControl
 
 @property (nonatomic, getter = isVisible) BOOL visible;
 @property (nonatomic, weak) id <STKMenuViewDelegate> delegate;
