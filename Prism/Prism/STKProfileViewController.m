@@ -23,6 +23,7 @@
 #import "STKHomeCell.h"
 #import "STKFilterCell.h"
 #import "STKCreatePostViewController.h"
+#import "STKLocationViewController.h"
 
 typedef enum {
     STKProfileSectionHeader,
@@ -249,7 +250,11 @@ typedef enum {
 
 - (void)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
+    [lvc setCoordinate:[[[self posts] objectAtIndex:[ip row]] coordinate]];
+    [lvc setLocationName:[[[self posts] objectAtIndex:[ip row]] locationName]];
+    [[self navigationController] pushViewController:lvc animated:YES];
+   
 }
 
 - (void)showPostAtIndex:(int)idx

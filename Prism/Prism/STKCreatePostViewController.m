@@ -35,6 +35,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 @property (nonatomic, strong) STKHashtagToolbar *hashtagToolbar;
 @property (nonatomic) NSRange hashtagRange;
 
+@property (nonatomic, getter = isUploadingImage) BOOL uploadingImage;
+@property (nonatomic) BOOL waitingForImageToFinish;
 
 @property (nonatomic, strong) NSArray *categoryItems;
 @property (nonatomic, strong) NSArray *optionItems;
@@ -110,12 +112,22 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)setPostImage:(UIImage *)postImage
 {
     _postImage = postImage;
+    [self setUploadingImage:YES];
     
     [[STKImageStore store] uploadImage:_postImage intoDirectory:[[[STKUserStore store] currentUser] userID] completion:^(NSString *URLString, NSError *err) {
         if(postImage == [self postImage]) {
+            
+            NSLog(@"image upload finished");
+            [self setUploadingImage:NO];
+            
             if(!err) {
                 [[self postInfo] setObject:URLString forKey:STKPostURLKey];
+                if([self waitingForImageToFinish]) {
+                    [self createPost];
+                }
             } else {
+                [self setWaitingForImageToFinish:NO];
+                
                 [[self imageView] setImage:nil];
                 [[self imageButton] setImage:[UIImage imageNamed:@"upload_camera"]
                                     forState:UIControlStateNormal];
@@ -290,6 +302,29 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)createPost
+{
+    if([self isUploadingImage]) {
+        [STKProcessingView present];
+        [self setWaitingForImageToFinish:YES];
+        return;
+    }
+
+    // If we were waiting, the processing view is already up, but if we were not, make sure it goes up
+    if(![self waitingForImageToFinish]) {
+        [STKProcessingView present];
+    }
+    
+    [[STKContentStore store] addPostWithInfo:[self postInfo] completion:^(STKPost *post, NSError *err) {
+        [STKProcessingView dismiss];
+        if(!err) {
+            [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
+        }
+    }];
+}
+
 - (void)post:(id)sender
 {
     NSString *msg = nil;
@@ -310,17 +345,30 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                             forKey:STKPostTextKey];
     }
     
-    [STKProcessingView present];
+
+    NSArray *tags = [self hashTagsFromText:[[self postInfo] objectForKey:STKPostTextKey]];
+    if([tags count] > 0) {
+        [[self postInfo] setObject:[tags copy] forKey:STKPostHashTagsKey];
+    }
     
-    [[STKContentStore store] addPostWithInfo:[self postInfo] completion:^(STKPost *post, NSError *err) {
-        [STKProcessingView dismiss];
-        if(!err) {
-            [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            [[STKErrorStore alertViewForError:err delegate:nil] show];
+    [self createPost];
+}
+
+- (NSArray *)hashTagsFromText:(NSString *)text
+{
+    if(!text)
+        return nil;
+    
+    NSMutableArray *tags = [NSMutableArray array];
+    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#([^\\s]*)" options:0 error:nil];
+    [exp enumerateMatchesInString:text options:0 range:NSMakeRange(0, [text length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        if([result numberOfRanges] == 2) {
+            NSString *tag = [text substringWithRange:[result rangeAtIndex:1]];
+            [tags addObject:tag];
         }
     }];
     
+    return [tags copy];
 }
 
 - (void)hashtagToolbarClickedDone:(STKHashtagToolbar *)tb

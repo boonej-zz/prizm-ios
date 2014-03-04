@@ -53,7 +53,7 @@ typedef enum {
 @property (nonatomic, strong) NSDictionary *existingMatchMap;
 @property (nonatomic, copy) void (^insertionBlock)(NSManagedObject *rootObject);
 @property (nonatomic, strong) NSManagedObjectContext *context;
-@property (nonatomic) int statusCode;
+@property (nonatomic) NSInteger statusCode;
 
 
 

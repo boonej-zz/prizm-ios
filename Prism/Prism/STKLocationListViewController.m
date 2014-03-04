@@ -11,9 +11,11 @@
 #import "STKContentStore.h"
 @import CoreLocation;
 
-@interface STKLocationListViewController () <CLLocationManagerDelegate>
+@interface STKLocationListViewController () <CLLocationManagerDelegate, UISearchDisplayDelegate>
 @property (nonatomic, strong) CLLocationManager *locationManager;
-
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) UISearchDisplayController *searchController;
+@property (nonatomic, strong) NSArray *filteredLocations;
 @end
 
 @implementation STKLocationListViewController
@@ -27,9 +29,18 @@
         [_locationManager setDelegate:self];
         
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+        [[self navigationItem] setRightBarButtonItem:bbi];
+        [[self navigationItem] setTitle:@"Locations"];
+        
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        bbi = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
         [[self navigationItem] setLeftBarButtonItem:bbi];
         
-        
+        UISearchBar *sb = [[UISearchBar alloc] init];
+        [sb setPlaceholder:@"Find location"];
+        UISearchDisplayController *sdc = [[UISearchDisplayController alloc] initWithSearchBar:sb contentsController:self];
+        [sdc setDelegate:self];
+        [self setSearchController:sdc];
     }
     return self;
 }
@@ -44,22 +55,34 @@
     [super viewDidLoad];
     [[self tableView] registerClass:[UITableViewCell class]
              forCellReuseIdentifier:@"UITableViewCell"];
+
+    [[[self searchDisplayController] searchResultsTableView] setDataSource:self];
+    [[[self searchDisplayController] searchResultsTableView] setDelegate:self];
+    [[[self searchDisplayController] searchResultsTableView] registerClass:[UITableViewCell class]
+                                                    forCellReuseIdentifier:@"UITableViewCell"];
+    
+    [[self tableView] setTableHeaderView:[[self searchDisplayController] searchBar]];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"poweredByFoursquare_gray"]];
+    [imageView setContentMode:UIViewContentModeScaleAspectFit];
+    [imageView setFrame:CGRectMake(0, 0, 320, 100)];
+    [[self tableView] setTableFooterView:imageView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[self locationManager] startUpdatingLocation];
+    [[self activityIndicator] startAnimating];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     CLLocation *l = [locations lastObject];
     if([[l timestamp] timeIntervalSinceNow] > -60 * 3) {
+        [[self activityIndicator] stopAnimating];
         [[self locationManager] stopUpdatingLocation];
         
-        //[[self postInfo] setObject:@([l coordinate].latitude) forKey:STKPostLocationLatitudeKey];
-        //[[self postInfo] setObject:@([l coordinate].longitude) forKey:STKPostLocationLongitudeKey];
         [[STKContentStore store] fetchLocationNamesForCoordinate:[l coordinate] completion:^(NSArray *locations, NSError *err) {
             if(!err) {
                 [self setLocations:locations];
@@ -78,8 +101,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[self delegate] locationListViewController:self
-                                  choseLocation:[[self locations] objectAtIndex:[indexPath row]]];
+    if(tableView == [self tableView]) {
+        [[self delegate] locationListViewController:self
+                                      choseLocation:[[self locations] objectAtIndex:[indexPath row]]];
+    } else {
+        [[self delegate] locationListViewController:self
+                                      choseLocation:[[self filteredLocations] objectAtIndex:[indexPath row]]];
+    }
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -91,6 +119,7 @@
                                        cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [av show];
     [manager stopUpdatingLocation];
+    [[self activityIndicator] stopAnimating];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -103,16 +132,52 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self locations] count];
+    if(tableView == [self tableView]) {
+        if(![self locations]) {
+            return 1;
+        }
+        
+        return [[self locations] count];
+    }
+    
+    return [[self filteredLocations] count];
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // poweredByFoursquare_gray
+    if(![self locations]) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+        [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
+        [[cell textLabel] setText:@"Searching nearby..."];
+        [[cell imageView] setImage:nil];
+        return cell;
+    }
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
     
-    [[cell textLabel] setText:[[[self locations] objectAtIndex:[indexPath row]] name]];
+    NSString *locationName = nil;
+    
+    if(tableView != [self tableView]) {
+        locationName = [[[self filteredLocations] objectAtIndex:[indexPath row]] name];
+    } else {
+        locationName = [[[self locations] objectAtIndex:[indexPath row]] name];
+    }
+    [[cell textLabel] setText:locationName];
     
     return cell;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    if(![self locations])
+        return NO;
+    
+    _filteredLocations = [[self locations] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name contains[cd] %@", searchString]];
+    
+    
+    return YES;
 }
 
 
