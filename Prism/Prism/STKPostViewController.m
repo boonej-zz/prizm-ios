@@ -18,6 +18,7 @@
 #import "STKUser.h"
 #import "STKRelativeDateConverter.h"
 #import "STKCreatePostViewController.h"
+#import "STKImageSharer.h"
 
 @interface STKPostViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
@@ -26,6 +27,8 @@
 @property (strong, nonatomic) IBOutlet UIView *commentFooterView;
 @property (weak, nonatomic) IBOutlet UITextField *commentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomCommentConstraint;
+@property (nonatomic, strong) UIView *commentHeaderView;
+
 - (void)dismissKeyboard:(id)sender;
 
 - (IBAction)postComment:(id)sender;
@@ -79,9 +82,23 @@
     [super viewDidLoad];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
 
-    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:1]];
+    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, [[self commentFooterView] bounds].size.height, 0)];
     [[self tableView] setDelaysContentTouches:NO];
+    
+    [[self commentTextField] setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Write a comment..."
+                                                                                      attributes:@{NSFontAttributeName : STKFont(12),
+                                                                                                   NSForegroundColorAttributeName : [UIColor whiteColor]}]];
+    
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    UIView *internalFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, -1, 320, 300)];
+    [footerView addSubview:internalFooterView];
+    [internalFooterView setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.65]];
+    [footerView setBackgroundColor:[UIColor clearColor]];
+    
+    [[self tableView] setTableFooterView:footerView];
     
     UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     [gr setCancelsTouchesInView:NO];
@@ -158,8 +175,6 @@
 
 }
 
-
-
 - (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [[self navigationController] popViewControllerAnimated:YES];
@@ -205,10 +220,10 @@
 
 - (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
+    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image] text:[[self post] text]];
+    [self presentViewController:vc animated:YES completion:nil];
 }
-
-
 
 - (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
@@ -217,6 +232,24 @@
         [vc setProfile:[[self post] creator]];
         [[self navigationController] pushViewController:vc animated:YES];
     }
+}
+
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath section] == 1) {
+        if([self postHasText]) {
+            return [indexPath row] >= 1;
+        } else {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -237,11 +270,10 @@
     return r.size.height + 62;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
-        return 421;
+        return 441;
     }
     STKPostComment *pc = [self commentForIndexPath:indexPath];
     NSString *text = [pc text];
@@ -250,10 +282,11 @@
     
     return [self heightForTableViewGivenCommentText:text];
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
-        return 421;
+        return 441;
     }
     
     STKPostComment *pc = [self commentForIndexPath:indexPath];
@@ -263,6 +296,43 @@
 
     return [self heightForTableViewGivenCommentText:text];
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if(section == 1)
+        return 21;
+    
+    return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if(section == 1) {
+        if(![self commentHeaderView]) {
+            _commentHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 21)];
+            [_commentHeaderView setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+            [[_commentHeaderView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+            [[_commentHeaderView layer] setShadowOffset:CGSizeMake(0, -1)];
+            [[_commentHeaderView layer] setShadowOpacity:0.35];
+            [[_commentHeaderView layer] setShadowRadius:0];
+            UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, 320, 1)];
+            [[_commentHeaderView layer] setShadowPath:[bp CGPath]];
+
+            UILabel *lbl = [[UILabel alloc] initWithFrame:[_commentHeaderView bounds]];
+            [lbl setBackgroundColor:[UIColor clearColor]];
+            [lbl setTextAlignment:NSTextAlignmentCenter];
+            [lbl setTextColor:STKTextColor];
+            [lbl setFont:STKFont(13)];
+            [lbl setText:@"Comments"];
+            [_commentHeaderView addSubview:lbl];
+        }
+        
+        return [self commentHeaderView];
+    }
+    
+    return nil;
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -285,9 +355,8 @@
 {
     if([indexPath section] == 0) {
         STKHomeCell *c = [STKHomeCell cellForTableView:tableView target:self];
-        [[c topInset] setConstant:0];
-        [[c leftInset] setConstant:0];
-        [[c rightInset] setConstant:0];
+
+        [c setDisplayFullBleed:YES];
         
         [c populateWithPost:[self post]];
         

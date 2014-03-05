@@ -16,7 +16,7 @@
 
 - (id)init
 {
-    self = [super initWithFrame:CGRectMake(0, 0, 36, 36)];
+    self = [super initWithFrame:CGRectMake(0, 0, 38, 38)];
     if (self) {
         [self setBackgroundColor:[UIColor clearColor]];
         _imageView = [[UIImageView alloc] init];

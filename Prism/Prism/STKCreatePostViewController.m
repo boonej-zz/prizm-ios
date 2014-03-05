@@ -147,6 +147,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     STKLocationListViewController *lvc = [[STKLocationListViewController alloc] init];
     [lvc setDelegate:self];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:lvc];
+    [[nvc navigationBar] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     [self presentViewController:nvc animated:YES completion:nil];
 }
 
