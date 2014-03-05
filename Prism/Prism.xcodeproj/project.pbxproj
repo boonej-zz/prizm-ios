@@ -69,6 +69,7 @@
 		BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */; };
 		BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */; };
 		BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE893600186CD05E00FE8263 /* STKContentStore.m */; };
+		BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */; };
 		BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */; };
 		BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */; };
 		BE95438B1892CD1400DCC3B1 /* STKCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9543891892CD1400DCC3B1 /* STKCommentCell.m */; };
@@ -1957,6 +1958,8 @@
 		BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKResolvingImageView.m; sourceTree = "<group>"; };
 		BE8935FF186CD05E00FE8263 /* STKContentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKContentStore.h; sourceTree = "<group>"; };
 		BE893600186CD05E00FE8263 /* STKContentStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKContentStore.m; sourceTree = "<group>"; };
+		BE8BBF0118C7B1F500D53BF5 /* STKImageSharer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKImageSharer.h; sourceTree = "<group>"; };
+		BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKImageSharer.m; sourceTree = "<group>"; };
 		BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKHomeCell.xib; path = Prism/STKHomeCell.xib; sourceTree = "<group>"; };
 		BE8F35E71833D48D00C4ED03 /* STKHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKHomeCell.h; path = Prism/STKHomeCell.h; sourceTree = "<group>"; };
 		BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKHomeCell.m; path = Prism/STKHomeCell.m; sourceTree = "<group>"; };
@@ -4208,6 +4211,8 @@
 				BED773FC1890A546008770F0 /* STKCaptureView.m */,
 				BE3014C01891F24F0069F31E /* STKCaptureOverlayView.h */,
 				BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */,
+				BE8BBF0118C7B1F500D53BF5 /* STKImageSharer.h */,
+				BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -4436,6 +4441,7 @@
 				BEAB9766189AD503002A14F5 /* STKProfileInformationCell.m in Sources */,
 				BE05502118A404E600F6B534 /* UIImage+BoxBlur.m in Sources */,
 				BE1FC3B0186C817C003464E1 /* STKTextImageCell.m in Sources */,
+				BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */,

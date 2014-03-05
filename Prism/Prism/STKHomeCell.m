@@ -12,6 +12,10 @@
 
 @interface STKHomeCell ()
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *hashTagTopOffset;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerHeightConstraint;
+@property (weak, nonatomic) IBOutlet UIView *hashTagContainer;
+@property (weak, nonatomic) IBOutlet UIView *buttonContainer;
 
 @end
 
@@ -67,6 +71,30 @@
         [tags appendFormat:@"#%@ ", tag];
     }
     [[self hashTagLabel] setText:tags];
+}
+
+- (void)setDisplayFullBleed:(BOOL)displayFullBleed
+{
+    _displayFullBleed = displayFullBleed;
+    
+    if(_displayFullBleed) {
+        [[self topInset] setConstant:0];
+        [[self leftInset] setConstant:0];
+        [[self rightInset] setConstant:0];
+        [[self hashTagTopOffset] setConstant:300];
+        [[self headerHeightConstraint] setConstant:64];
+        [[self hashTagContainer] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+        [[self buttonContainer] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
+
+        UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(0, 27, 320, 1)];
+        [[[self hashTagContainer] layer] setShadowOpacity:1];
+        [[[self hashTagContainer] layer] setShadowColor:[[UIColor blackColor] CGColor]];
+        [[[self hashTagContainer] layer] setShadowOffset:CGSizeMake(0, 2)];
+        [[[self hashTagContainer] layer] setShadowRadius:5];
+        [[[self hashTagContainer] layer] setShadowPath:[bp CGPath]];
+    } else {
+        
+    }
 }
 
 - (IBAction)toggleLike:(id)sender

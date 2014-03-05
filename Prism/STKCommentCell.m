@@ -16,7 +16,7 @@
 - (void)cellDidLoad
 {
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [[[self avatarImageView] layer] setCornerRadius:20];
+    [[[self avatarImageView] layer] setCornerRadius:16];
     
     [[self avatarImageView] setClipsToBounds:YES];
 
