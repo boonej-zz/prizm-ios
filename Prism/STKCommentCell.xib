@@ -13,10 +13,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="82"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziV-3o-fzS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="86"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ziV-3o-fzS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="82"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" red="0.67450982332229614" green="0.70588237047195435" blue="0.75294125080108643" alpha="1" colorSpace="deviceRGB"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.75" colorSpace="deviceRGB"/>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2PN-kn-BDQ" customClass="STKResolvingImageView">
                         <rect key="frame" x="18" y="9" width="30" height="30"/>
@@ -46,67 +46,66 @@
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_clock" translatesAutoresizingMaskIntoConstraints="NO" id="ge7-HD-XRM">
-                        <rect key="frame" x="66" y="62" width="12" height="12"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockdark" translatesAutoresizingMaskIntoConstraints="NO" id="ge7-HD-XRM">
+                        <rect key="frame" x="56" y="62" width="12" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="12" id="6Z2-YA-IZA"/>
                             <constraint firstAttribute="height" constant="12" id="Nur-s5-eP0"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbA-GE-iNM">
-                        <rect key="frame" x="84" y="61" width="29" height="15"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label - Like" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbA-GE-iNM">
+                        <rect key="frame" x="74" y="61" width="61" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wCh-kh-FbI">
-                        <rect key="frame" x="178" y="61" width="7" height="15"/>
+                        <rect key="frame" x="156" y="61" width="7" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zjT-pU-sIW">
-                        <rect key="frame" x="121" y="54" width="29" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="29" id="XEq-vK-q8b"/>
-                            <constraint firstAttribute="height" constant="30" id="z5r-Lr-zGh"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
-                        <state key="normal" title="- Like">
-                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                    </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="action_heart_like" translatesAutoresizingMaskIntoConstraints="NO" id="xrs-5s-4lK">
-                        <rect key="frame" x="162" y="64" width="12" height="10"/>
+                        <rect key="frame" x="140" y="64" width="12" height="10"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="12" id="aW8-gV-GE1"/>
                             <constraint firstAttribute="height" constant="10" id="wZm-XA-ddf"/>
                         </constraints>
                     </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YOL-96-fKX" customClass="UIControl">
+                        <rect key="frame" x="56" y="54" width="107" height="28"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="28" id="lVH-W6-xuF"/>
+                        </constraints>
+                        <connections>
+                            <action selector="toggleCommentLike:" destination="TZf-0Y-Lx6" eventType="touchUpInside" id="bWf-dc-9qz"/>
+                        </connections>
+                    </view>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="wCh-kh-FbI" firstAttribute="trailing" secondItem="YOL-96-fKX" secondAttribute="trailing" id="3Nk-Pd-Zxc"/>
+                    <constraint firstItem="ge7-HD-XRM" firstAttribute="leading" secondItem="jUK-9y-kQb" secondAttribute="leading" id="4an-tz-AN1"/>
                     <constraint firstItem="wCh-kh-FbI" firstAttribute="leading" secondItem="xrs-5s-4lK" secondAttribute="trailing" constant="4" id="6Tg-bN-2XM"/>
+                    <constraint firstItem="kbA-GE-iNM" firstAttribute="centerY" secondItem="xrs-5s-4lK" secondAttribute="centerY" constant="-0.5" id="Cao-hh-viT"/>
+                    <constraint firstItem="ge7-HD-XRM" firstAttribute="leading" secondItem="YOL-96-fKX" secondAttribute="leading" id="DmB-mu-5CW"/>
                     <constraint firstItem="2PN-kn-BDQ" firstAttribute="leading" secondItem="lFB-pH-7wd" secondAttribute="leading" constant="18" id="JFP-Aa-Yiv"/>
                     <constraint firstItem="2PN-kn-BDQ" firstAttribute="top" secondItem="lFB-pH-7wd" secondAttribute="top" constant="9" id="Jv2-u6-uJC"/>
                     <constraint firstItem="clC-ZP-ojw" firstAttribute="leading" secondItem="2PN-kn-BDQ" secondAttribute="trailing" constant="8" id="KAN-6K-qLy"/>
+                    <constraint firstItem="xrs-5s-4lK" firstAttribute="leading" secondItem="kbA-GE-iNM" secondAttribute="trailing" constant="5" id="OAP-xT-n9M"/>
                     <constraint firstItem="ziV-3o-fzS" firstAttribute="top" secondItem="lFB-pH-7wd" secondAttribute="top" id="R1Y-P4-OI0"/>
                     <constraint firstItem="ziV-3o-fzS" firstAttribute="leading" secondItem="lFB-pH-7wd" secondAttribute="leading" id="RNy-hi-BVP"/>
                     <constraint firstItem="jUK-9y-kQb" firstAttribute="leading" secondItem="2PN-kn-BDQ" secondAttribute="trailing" constant="8" id="SKk-7r-7Ys"/>
                     <constraint firstAttribute="bottom" secondItem="ge7-HD-XRM" secondAttribute="bottom" constant="8" id="Tel-6l-UaT"/>
-                    <constraint firstItem="zjT-pU-sIW" firstAttribute="centerY" secondItem="xrs-5s-4lK" secondAttribute="centerY" id="Vjd-mD-mG0"/>
                     <constraint firstItem="wCh-kh-FbI" firstAttribute="centerY" secondItem="xrs-5s-4lK" secondAttribute="centerY" constant="-0.5" id="Wgv-29-h3g"/>
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="leading" secondItem="ge7-HD-XRM" secondAttribute="trailing" constant="6" id="Wjw-Uc-N36"/>
-                    <constraint firstItem="zjT-pU-sIW" firstAttribute="leading" secondItem="kbA-GE-iNM" secondAttribute="trailing" constant="8" id="fzi-nY-1KL"/>
                     <constraint firstAttribute="trailing" secondItem="ziV-3o-fzS" secondAttribute="trailing" id="gr3-kT-PN3"/>
-                    <constraint firstItem="kbA-GE-iNM" firstAttribute="centerY" secondItem="zjT-pU-sIW" secondAttribute="centerY" constant="-0.5" id="i5p-mM-0UG"/>
                     <constraint firstItem="jUK-9y-kQb" firstAttribute="top" secondItem="clC-ZP-ojw" secondAttribute="bottom" constant="3" id="jiM-bD-3Vl"/>
-                    <constraint firstItem="xrs-5s-4lK" firstAttribute="leading" secondItem="zjT-pU-sIW" secondAttribute="trailing" constant="12" id="pAQ-Jm-khy"/>
+                    <constraint firstItem="YOL-96-fKX" firstAttribute="top" secondItem="jUK-9y-kQb" secondAttribute="bottom" id="jsY-Tr-6aq"/>
                     <constraint firstItem="ge7-HD-XRM" firstAttribute="top" secondItem="jUK-9y-kQb" secondAttribute="bottom" constant="8" id="ttZ-qC-bm2"/>
-                    <constraint firstItem="ge7-HD-XRM" firstAttribute="leading" secondItem="lFB-pH-7wd" secondAttribute="leading" constant="66" id="u7t-GB-AzY"/>
                     <constraint firstAttribute="bottom" secondItem="ziV-3o-fzS" secondAttribute="bottom" id="zWt-VK-bUZ"/>
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="top" secondItem="ge7-HD-XRM" secondAttribute="top" constant="-1" id="zdo-Um-gff"/>
                     <constraint firstItem="2PN-kn-BDQ" firstAttribute="top" secondItem="clC-ZP-ojw" secondAttribute="top" constant="-2" id="zwO-jH-ahq"/>
@@ -116,7 +115,7 @@
                 <outlet property="avatarImageView" destination="2PN-kn-BDQ" id="Fuz-G7-gCv"/>
                 <outlet property="clockImageView" destination="ge7-HD-XRM" id="9Uu-WA-7dd"/>
                 <outlet property="commentLabel" destination="jUK-9y-kQb" id="uy1-ww-pPY"/>
-                <outlet property="likeButton" destination="zjT-pU-sIW" id="wwX-wX-Vdc"/>
+                <outlet property="likeButton" destination="YOL-96-fKX" id="thl-vQ-FOn"/>
                 <outlet property="likeCountLabel" destination="wCh-kh-FbI" id="3BP-mK-UhZ"/>
                 <outlet property="likeImageView" destination="xrs-5s-4lK" id="CeQ-Mx-p9q"/>
                 <outlet property="nameLabel" destination="clC-ZP-ojw" id="s6t-cu-eWa"/>
@@ -126,6 +125,6 @@
     </objects>
     <resources>
         <image name="action_heart_like" width="23" height="20"/>
-        <image name="btn_clock" width="10" height="10"/>
+        <image name="clockdark" width="10" height="10"/>
     </resources>
 </document>

@@ -19,6 +19,7 @@
 
 @implementation STKImageChooser
 
+
 + (STKImageChooser *)sharedImageChooser
 {
     static STKImageChooser *chooser = nil;
@@ -33,6 +34,8 @@
                                       forType:(STKImageChooserType)type
                                    completion:(void (^)(UIImage *))block
 {
+    
+    
     [self setImageBlock:block];
     [self setSourceViewController:vc];
     

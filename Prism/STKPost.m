@@ -95,6 +95,14 @@ NSString * const STKPostTypeAccolade = @"accolade";
     return nil;
 }
 
+- (void)setComments:(NSArray *)comments
+{
+    _comments = comments;
+    for(STKPostComment *pc in _comments) {
+        [pc setPost:self];
+    }
+}
+
 - (UIImage *)typeImage
 {
     return [[self class] imageForType:[self type]];

@@ -29,6 +29,7 @@
         [_locationManager setDelegate:self];
         
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blueColor], NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
         [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Locations"];
         
@@ -37,6 +38,7 @@
         [[self navigationItem] setLeftBarButtonItem:bbi];
         
         UISearchBar *sb = [[UISearchBar alloc] init];
+
         [sb setPlaceholder:@"Find location"];
         UISearchDisplayController *sdc = [[UISearchDisplayController alloc] initWithSearchBar:sb contentsController:self];
         [sdc setDelegate:self];
@@ -74,6 +76,7 @@
     [super viewWillAppear:animated];
     [[self locationManager] startUpdatingLocation];
     [[self activityIndicator] startAnimating];
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : STKFont(22)}];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -151,12 +154,14 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
         [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
         [[cell textLabel] setText:@"Searching nearby..."];
+        [[cell textLabel] setFont:STKFont(16)];
         [[cell imageView] setImage:nil];
         return cell;
     }
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
-    
+    [[cell textLabel] setFont:STKFont(16)];
+
     NSString *locationName = nil;
     
     if(tableView != [self tableView]) {

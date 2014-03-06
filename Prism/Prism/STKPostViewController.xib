@@ -47,7 +47,7 @@
                                 <constraint firstAttribute="height" constant="30" id="foC-7t-PS4"/>
                             </constraints>
                             <color key="textColor" red="1" green="0.98118490609552445" blue="0.97396248674542918" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
                                 <outlet property="delegate" destination="-1" id="kZJ-7k-36p"/>
@@ -70,7 +70,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.67450980392156867" green="0.70588235294117641" blue="0.75294117647058822" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.76064664931356707" green="0.79824031353144864" blue="0.85816545050761417" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="ywj-I7-cIa" firstAttribute="leading" secondItem="6xr-3p-wiV" secondAttribute="trailing" constant="8" id="Biw-hY-80W"/>
                         <constraint firstAttribute="centerY" secondItem="ywj-I7-cIa" secondAttribute="centerY" id="LWZ-82-95b"/>

@@ -124,5 +124,14 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
     return nil;
 }
 
+- (BOOL)isEqual:(id)object
+{
+    if([object isKindOfClass:[STKUser class]]) {
+        if([[(STKUser *)object userID] isEqualToString:[self userID]])
+            return YES;
+    }
+    return NO;
+}
+
 
 @end

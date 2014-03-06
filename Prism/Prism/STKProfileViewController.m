@@ -192,17 +192,15 @@ typedef enum {
 
 - (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-//    STKPost *p = [[self posts] objectAtIndex:idx];
+    STKPost *p = [[self posts] objectAtIndex:[ip row]];
+    if([[p creator] isEqual:[self profile]]) {
+        return;
+    }
     
-  /*  if([[[p creatorProfile] profileID] isEqualToString:[[self profile] profileID]]) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        // Needs testing
-        STKProfileViewController *nextProfile = [[STKProfileViewController alloc] init];
-        [nextProfile setProfile:[p creatorProfile]];
-        [[self navigationController] pushViewController:nextProfile animated:NO];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }*/
+    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+    [vc setProfile:[p creator]];
+    [[self navigationController] pushViewController:vc animated:YES];
+
 }
 
 - (void)toggleLike:(id)sender atIndexPath:(NSIndexPath *)ip

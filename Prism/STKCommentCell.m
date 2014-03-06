@@ -19,7 +19,11 @@
     [[[self avatarImageView] layer] setCornerRadius:16];
     
     [[self avatarImageView] setClipsToBounds:YES];
+}
 
+- (IBAction)toggleCommentLike:(id)sender
+{
+    ROUTE(sender);
 }
 
 - (void)layoutContent

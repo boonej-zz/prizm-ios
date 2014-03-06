@@ -141,6 +141,13 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     [self beginWithSession:session];
 }
 
+- (void)deleteWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block
+{
+    [self setCompletionBlock:block];
+    [self setMethod:STKConnectionMethodDELETE];
+    [self beginWithSession:session];
+}
+
 - (void)addQueryValue:(id)value forKey:(NSString *)key
 {
     if(!value || !key)

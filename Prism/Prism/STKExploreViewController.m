@@ -74,10 +74,6 @@
 }
 
 
-- (void)avatarTappedForPost:(STKPost *)p
-{
-
-}
 
 - (void)showPostAtIndex:(int)idx
 {
