@@ -71,6 +71,7 @@ typedef enum {
 
 - (void)postWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 - (void)getWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
+- (void)deleteWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 
 // Verifies keys, returns YES if all keys are in object.
 // Optionally pass missingKeysOut to see which keys are missing

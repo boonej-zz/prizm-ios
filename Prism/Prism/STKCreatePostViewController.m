@@ -101,6 +101,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
 
     if([self imageURLString]) {
+        [[[self navigationItem] rightBarButtonItem] setTitle:@"Repost"];
         [[self postInfo] setObject:[self imageURLString] forKey:STKPostURLKey];
         [[STKImageStore store] fetchImageForURLString:[self imageURLString]
                                            completion:^(UIImage *img) {

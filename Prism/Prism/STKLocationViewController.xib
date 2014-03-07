@@ -60,29 +60,29 @@
                                 <constraint firstAttribute="height" constant="30" id="5Tg-GN-Fkg"/>
                                 <constraint firstAttribute="width" constant="30" id="bhF-mG-suj"/>
                             </constraints>
-                            <state key="normal" image="btn_singleview">
+                            <state key="normal" image="btn_gridview">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="toggleSingleView:" destination="-1" eventType="touchUpInside" id="RCz-Pt-VvG"/>
+                                <action selector="toggleGridView:" destination="-1" eventType="touchUpInside" id="UuR-2S-AXf"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NSz-cn-tZI">
-                            <rect key="frame" x="64" y="10" width="30" height="30"/>
+                            <rect key="frame" x="76" y="10" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="8kb-it-EcV"/>
                                 <constraint firstAttribute="width" constant="30" id="gQN-Q1-sD8"/>
                             </constraints>
-                            <state key="normal" image="btn_gridview">
+                            <state key="normal" image="btn_singleview">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="toggleGridView:" destination="-1" eventType="touchUpInside" id="n5h-qF-zAj"/>
+                                <action selector="toggleSingleView:" destination="-1" eventType="touchUpInside" id="pYr-D1-wbg"/>
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QIc-Yi-INM">
-                            <rect key="frame" x="51" y="18" width="1" height="14"/>
+                            <rect key="frame" x="57" y="18" width="1" height="14"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
                             <constraints>
@@ -93,14 +93,14 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="NSz-cn-tZI" firstAttribute="leading" secondItem="QIc-Yi-INM" secondAttribute="trailing" constant="12" id="6vz-qy-E3i"/>
+                        <constraint firstItem="NSz-cn-tZI" firstAttribute="leading" secondItem="QIc-Yi-INM" secondAttribute="trailing" constant="18" id="6vz-qy-E3i"/>
                         <constraint firstAttribute="centerY" secondItem="QIc-Yi-INM" secondAttribute="centerY" id="OHZ-LW-u93"/>
                         <constraint firstAttribute="centerY" secondItem="jz1-py-gFt" secondAttribute="centerY" id="YQU-bY-63g"/>
                         <constraint firstAttribute="trailing" secondItem="jz1-py-gFt" secondAttribute="trailing" constant="20" id="YUL-HA-TBn"/>
                         <constraint firstAttribute="centerY" secondItem="NSz-cn-tZI" secondAttribute="centerY" id="fmB-vb-HJz"/>
                         <constraint firstItem="C2U-hu-Swo" firstAttribute="leading" secondItem="bgv-T4-0Hh" secondAttribute="leading" constant="9" id="fyy-n9-JbN"/>
                         <constraint firstAttribute="height" constant="50" id="jsC-5v-EWN"/>
-                        <constraint firstItem="QIc-Yi-INM" firstAttribute="leading" secondItem="C2U-hu-Swo" secondAttribute="trailing" constant="12" id="qvC-Ti-024"/>
+                        <constraint firstItem="QIc-Yi-INM" firstAttribute="leading" secondItem="C2U-hu-Swo" secondAttribute="trailing" constant="18" id="qvC-Ti-024"/>
                         <constraint firstAttribute="centerY" secondItem="C2U-hu-Swo" secondAttribute="centerY" id="smT-xW-afp"/>
                     </constraints>
                 </view>

@@ -91,6 +91,9 @@
     [[self commentTextField] setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Write a comment..."
                                                                                       attributes:@{NSFontAttributeName : STKFont(12),
                                                                                                    NSForegroundColorAttributeName : [UIColor whiteColor]}]];
+    [[[self commentFooterView] layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+    [[[self commentFooterView] layer] setShadowOffset:CGSizeMake(0, -1)];
+    [[[self commentFooterView] layer] setShadowOpacity:0.5];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     UIView *internalFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, -1, 320, 300)];
@@ -126,6 +129,13 @@
                                            [[self tableView] reloadData];
                                        }];
     
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{/*
+    if([scrollView contentOffset].y < 0) {
+        [scrollView setContentOffset:CGPointMake(0, 0)];
+    }*/
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -221,7 +231,11 @@
 - (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
-    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image] text:[[self post] text]];
+    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image]
+                                                                                             text:[[self post] text]
+                                                                                    finishHandler:^(UIDocumentInteractionController *doc) {
+                                                                                        [doc presentOpenInMenuFromRect:[[self view] bounds] inView:[self view] animated:YES];
+                                                                                    }];
     [self presentViewController:vc animated:YES completion:nil];
 }
 
@@ -234,19 +248,48 @@
     }
 }
 
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)toggleCommentLike:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    STKPostComment *pc = [self commentForIndexPath:ip];
+    if([pc isLikedByCurrentUser]) {
+        [[STKContentStore store] unlikeComment:[self commentForIndexPath:ip]
+                                    completion:^(STKPostComment *p, NSError *err) {
+                                        [[self tableView] reloadData];
+                                    }];
+
+    } else {
+        [[STKContentStore store] likeComment:[self commentForIndexPath:ip]
+                                  completion:^(STKPostComment *p, NSError *err) {
+                                      [[self tableView] reloadData];
+                                  }];
+    }
+}
+
+
+- (void)tableView:(UITableView *)tableView
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(editingStyle == UITableViewCellEditingStyleDelete) {
+        STKPostComment *pc = [self commentForIndexPath:indexPath];
+        [[STKContentStore store] deleteComment:pc completion:^(STKPost *p, NSError *err) {
+            [[self tableView] reloadData];
+        }];
+        [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [[self tableView] reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                                withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 1) {
-        if([self postHasText]) {
-            return [indexPath row] >= 1;
-        } else {
-            return YES;
+        STKPostComment *pc = [self commentForIndexPath:indexPath];
+        if(pc) {
+            if([[[self post] creator] isEqual:[[STKUserStore store] currentUser]]
+               || [[pc user] isEqual:[[STKUserStore store] currentUser]]) {
+                return YES;
+            }
         }
     }
     return NO;
@@ -380,8 +423,15 @@
             [[c commentLabel] setText:[comment text]];
             [[c avatarImageView] setUrlString:[[comment user] profilePhotoPath]];
             [[c nameLabel] setText:[[comment user] name]];
-            [[c timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[comment date]]];
+            
+            NSString *likeActionText = @"Like";
+            if([comment isLikedByCurrentUser]) {
+                likeActionText = @"Unlike";
+            }
+            [[c timeLabel] setText:[NSString stringWithFormat:@"%@ - %@", [STKRelativeDateConverter relativeDateStringFromDate:[comment date]], likeActionText]];
 
+            [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [comment likeCount]]];
+            
             [[c timeLabel] setHidden:NO];
             [[c clockImageView] setHidden:NO];
             [[c likeButton] setHidden:NO];
@@ -404,19 +454,39 @@
 
 - (IBAction)postComment:(id)sender
 {
+    if([[[self commentTextField] text] length] == 0) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Please enter a comment"
+                                                     message:@"Enter text into the comment field before posting a comment."
+                                                    delegate:nil
+                                           cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        return;
+    }
+    
+    int commentCountNow = [[[self post] comments] count];
     [[STKContentStore store] addComment:[[self commentTextField] text] toPost:[self post] completion:^(STKPost *p, NSError *err) {
-        [[self tableView] reloadData];
+        if(err)
+            [[self tableView] reloadData];
     }];
     [[self commentTextField] setText:nil];
-    [[self tableView] reloadData];
+    /*
+    commentCountNow ++;
+    if(commentCountNow < [[[self post] comments] count]) {
+        int row = commentCountNow - 1;
+        if([self postHasText])
+            row ++;
+        [[self tableView] insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:1]]
+                                withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    
     [[self view] endEditing:YES];
     
-    NSInteger index = [[[self post] comments] count] -1;
+    NSInteger index = [[[self post] comments] count] - 1;
     if([self postHasText])
-        index --;
+        index ++;
     
-    [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index
-                                                                inSection:1]
-                            atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:1]
+                            atScrollPosition:UITableViewScrollPositionBottom
+                                    animated:YES];*/
 }
 @end

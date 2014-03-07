@@ -10,7 +10,7 @@
 #import "STKPost.h"
 @import CoreLocation;
 
-@class STKUser;
+@class STKUser, STKPostComment;
 
 extern NSString * const STKContentStoreErrorDomain;
 typedef enum {
@@ -45,7 +45,17 @@ typedef enum {
 
 - (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
                        referencePost:(STKPost *)referencePost
+                              filter:(NSDictionary *)filterDict
                           completion:(void (^)(NSArray *posts, NSError *err))block;
+
+- (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
+                       referencePost:(STKPost *)referencePost
+                          completion:(void (^)(NSArray *posts, NSError *err))block;
+
+- (void)fetchPostsForLocationName:(NSString *)locationName
+                        direction:(STKContentStoreFetchDirection)fetchDirection
+                    referencePost:(STKPost *)referencePost
+                       completion:(void (^)(NSArray *posts, NSError *err))block;
 
 - (void)fetchLocationNamesForCoordinate:(CLLocationCoordinate2D)coord
                              completion:(void (^)(NSArray *locations, NSError *err))block;
@@ -55,5 +65,9 @@ typedef enum {
 
 - (void)addComment:(NSString *)comment toPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block;
 - (void)fetchCommentsForPost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
+- (void)likeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block;
+- (void)unlikeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block;
+- (void)deleteComment:(STKPostComment *)comment completion:(void (^)(STKPost *p, NSError *err))block;
+
 
 @end

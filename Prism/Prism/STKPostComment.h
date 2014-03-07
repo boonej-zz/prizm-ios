@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "STKJSONObject.h"
-@class STKUser;
+@class STKUser, STKPost;
 
 @interface STKPostComment : NSObject <STKJSONObject>
 
@@ -16,5 +16,8 @@
 @property (nonatomic, strong) STKUser *user;
 @property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSDate *date;
+@property (nonatomic, weak) STKPost *post;
+@property (nonatomic) int likeCount;
+@property (nonatomic, getter = isLikedByCurrentUser) BOOL likedByCurrentUser;
 
 @end

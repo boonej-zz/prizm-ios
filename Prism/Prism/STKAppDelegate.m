@@ -67,7 +67,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    
+
     if(![[STKUserStore store] currentUser]) {
         STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
         STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
@@ -77,6 +77,8 @@
     
     return YES;
 }
+
+
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
@@ -98,6 +100,8 @@
 
     UIGraphicsEndImageContext();
 
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:STKFont(14)];
+    
 }
 
 @end

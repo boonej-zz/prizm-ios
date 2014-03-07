@@ -14,6 +14,8 @@
 
 + (STKImageSharer *)defaultSharer;
 
-- (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image text:(NSString *)text;
+- (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image
+                                                        text:(NSString *)text
+                                               finishHandler:(void (^)(UIDocumentInteractionController *))block;
 
 @end
