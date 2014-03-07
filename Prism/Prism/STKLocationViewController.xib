@@ -38,7 +38,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jz1-py-gFt">
-                            <rect key="frame" x="203" y="10" width="97" height="30"/>
+                            <rect key="frame" x="209" y="10" width="97" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="FGh-6k-dr0"/>
@@ -96,7 +96,7 @@
                         <constraint firstItem="NSz-cn-tZI" firstAttribute="leading" secondItem="QIc-Yi-INM" secondAttribute="trailing" constant="18" id="6vz-qy-E3i"/>
                         <constraint firstAttribute="centerY" secondItem="QIc-Yi-INM" secondAttribute="centerY" id="OHZ-LW-u93"/>
                         <constraint firstAttribute="centerY" secondItem="jz1-py-gFt" secondAttribute="centerY" id="YQU-bY-63g"/>
-                        <constraint firstAttribute="trailing" secondItem="jz1-py-gFt" secondAttribute="trailing" constant="20" id="YUL-HA-TBn"/>
+                        <constraint firstAttribute="trailing" secondItem="jz1-py-gFt" secondAttribute="trailing" constant="14" id="YUL-HA-TBn"/>
                         <constraint firstAttribute="centerY" secondItem="NSz-cn-tZI" secondAttribute="centerY" id="fmB-vb-HJz"/>
                         <constraint firstItem="C2U-hu-Swo" firstAttribute="leading" secondItem="bgv-T4-0Hh" secondAttribute="leading" constant="9" id="fyy-n9-JbN"/>
                         <constraint firstAttribute="height" constant="50" id="jsC-5v-EWN"/>

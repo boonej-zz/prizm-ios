@@ -9,6 +9,7 @@
                 <outlet property="categoryCollectionView" destination="y5v-O0-9uB" id="Xn4-wJ-dmL"/>
                 <outlet property="imageView" destination="QXR-Ft-Vam" id="T4M-GD-tJw"/>
                 <outlet property="optionCollectionView" destination="BVv-6Z-JvL" id="FEo-Y6-wvF"/>
+                <outlet property="optionHeightConstraint" destination="wKo-uX-3X4" id="eY2-BL-pLk"/>
                 <outlet property="postTextView" destination="1Dz-r9-03S" id="eag-cP-jY7"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>

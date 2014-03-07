@@ -27,6 +27,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 @interface STKCreatePostViewController ()
     <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKHashtagToolbarDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *optionHeightConstraint;
 @property (weak, nonatomic) IBOutlet UITextView *postTextView;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -68,14 +69,14 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
             @{@"title" : @"Experiences", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"btn_experiences"]},
             @{@"title" : @"Achievements", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"btn_achievements"]},
             @{@"title" : @"Inspirations", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"btn_inspirations"]},
-            @{@"title" : @"Personal", STKPostTypeKey : @"0", @"image" : [UIImage imageNamed:@"btn_personal"]}
+            @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"btn_personal"]}
         ];
         
         _optionItems = @[
                          @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"btn_camera"], @"action" : @"changeImage:"},
             @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"action" : @"findLocation:"},
             @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"]},
-            @{@"key" : @"web", @"image" : [UIImage imageNamed:@"btn_globe"]},
+                         @{@"key" : @"visibility", @"image" : [UIImage imageNamed:@"btn_globe"], @"action" : @"toggleTrust:"},
             @{@"key" : @"facebook", @"image" : [UIImage imageNamed:@"btn_facebook"]},
             @{@"key" : @"twitter", @"image" : [UIImage imageNamed:@"btn_tweeter"]},
             @{@"key" : @"tumblr", @"image" : [UIImage imageNamed:@"btn_tumblr"]},
@@ -107,6 +108,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                            completion:^(UIImage *img) {
                                                [[self imageView] setImage:img];
                                            }];
+        [[self optionHeightConstraint] setConstant:47];
     }
 }
 
@@ -218,6 +220,30 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }
 }
 
+- (void)toggleTrust:(id)sender
+{
+    NSString *postType = [[self postInfo] objectForKey:STKPostTypeKey];
+    if([postType isEqualToString:STKPostTypePersonal]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Visibility"
+                                                     message:@"This button changes whether this post is visible to everyone or just members of your trust. However, you have selected that this is a 'Personal' post which is only viewable to you. You can select another category and then choose the visibility options for this post."
+                                                    delegate:nil
+                                           cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        return;
+    }
+    
+    NSString *postVisibility = [[self postInfo] objectForKey:STKPostVisibilityKey];
+    if(!postVisibility) {
+        [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
+    } else if([postVisibility isEqualToString:STKPostVisibilityPublic]) {
+        [[self postInfo] setObject:STKPostVisibilityTrust forKey:STKPostVisibilityKey];
+    } else {
+        [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
+    }
+    
+    [[self optionCollectionView] reloadData];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -274,9 +300,15 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         NSDictionary *item = [[self optionItems] objectAtIndex:[indexPath row]];
         STKImageCollectionViewCell *cell = (STKImageCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKImageCollectionViewCell"
                                                                                                forIndexPath:indexPath];
-
+        [cell setBackgroundColor:[UIColor clearColor]];
         [[cell imageView] setImage:[item objectForKey:@"image"]];
 
+        if([[item objectForKey:@"key"] isEqualToString:@"visibility"]) {
+            if([[[self postInfo] objectForKey:STKPostVisibilityKey] isEqualToString:STKPostVisibilityPublic]) {
+                [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+            }
+        }
+        
         return cell;
     }
 
@@ -287,9 +319,15 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if(collectionView == [self categoryCollectionView]) {
-        [[self postInfo] setObject:[[[self categoryItems] objectAtIndex:[indexPath row]] objectForKey:STKPostTypeKey]
+        NSString *category = [[[self categoryItems] objectAtIndex:[indexPath row]] objectForKey:STKPostTypeKey];
+        [[self postInfo] setObject:category
                             forKey:STKPostTypeKey];
         [collectionView reloadData];
+        
+        if([category isEqualToString:STKPostTypePersonal]) {
+            [[self postInfo] removeObjectForKey:STKPostVisibilityKey];
+            [[self optionCollectionView] reloadData];
+        }
     } else if(collectionView == [self optionCollectionView]) {
         NSString *action = [[[self optionItems] objectAtIndex:[indexPath row]] objectForKey:@"action"];
         if(action) {

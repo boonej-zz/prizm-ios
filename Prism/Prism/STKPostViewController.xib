@@ -9,7 +9,12 @@
                 <outlet property="bottomCommentConstraint" destination="Clc-wI-K3j" id="GCk-Nc-pdI"/>
                 <outlet property="commentFooterView" destination="Dln-PT-0fM" id="ful-9b-Qwr"/>
                 <outlet property="commentTextField" destination="6xr-3p-wiV" id="TIs-Gy-bDL"/>
+                <outlet property="fakeContainerView" destination="Qys-Ur-GtV" id="mfm-2t-fYh"/>
+                <outlet property="fakeHeaderView" destination="KfP-Fo-rS2" id="xMr-38-VzX"/>
                 <outlet property="overlayVIew" destination="tVf-Km-kul" id="Nbq-Kg-kOs"/>
+                <outlet property="stretchHeightConstraint" destination="azu-WG-Jyg" id="lnS-o0-M1j"/>
+                <outlet property="stretchView" destination="NL1-hu-ihE" id="Zn3-2k-DfY"/>
+                <outlet property="stretchWidthConstraint" destination="S1K-bu-XGJ" id="nNU-ge-hYU"/>
                 <outlet property="tableView" destination="UWv-rb-JIt" id="2RV-uC-lZ7"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -28,12 +33,21 @@
                         <outlet property="delegate" destination="-1" id="ux7-rk-QwG"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dln-PT-0fM">
+                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NL1-hu-ihE" customClass="STKResolvingImageView">
+                    <rect key="frame" x="0.0" y="64" width="320" height="300"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.90220494923857864" green="0.90220494923857864" blue="0.90220494923857864" alpha="0.0" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="S1K-bu-XGJ"/>
+                        <constraint firstAttribute="height" constant="300" id="azu-WG-Jyg"/>
+                    </constraints>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dln-PT-0fM" userLabel="Comment Container">
                     <rect key="frame" x="0.0" y="532" width="320" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="write_commentnote" translatesAutoresizingMaskIntoConstraints="NO" id="sSO-FA-qQw">
-                            <rect key="frame" x="20" y="10" width="16" height="16"/>
+                            <rect key="frame" x="14" y="10" width="16" height="16"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="16" id="X3B-Cy-LXW"/>
@@ -41,7 +55,7 @@
                             </constraints>
                         </imageView>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Write a comment..." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6xr-3p-wiV">
-                            <rect key="frame" x="45" y="3" width="211" height="30"/>
+                            <rect key="frame" x="39" y="3" width="215" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="foC-7t-PS4"/>
@@ -54,7 +68,7 @@
                             </connections>
                         </textField>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ywj-I7-cIa">
-                            <rect key="frame" x="264" y="6" width="44" height="24"/>
+                            <rect key="frame" x="262" y="6" width="44" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="24" id="M22-9g-dXC"/>
@@ -75,14 +89,43 @@
                         <constraint firstItem="ywj-I7-cIa" firstAttribute="leading" secondItem="6xr-3p-wiV" secondAttribute="trailing" constant="8" id="Biw-hY-80W"/>
                         <constraint firstAttribute="centerY" secondItem="ywj-I7-cIa" secondAttribute="centerY" id="LWZ-82-95b"/>
                         <constraint firstAttribute="centerY" secondItem="sSO-FA-qQw" secondAttribute="centerY" id="STu-a1-b9e"/>
-                        <constraint firstItem="sSO-FA-qQw" firstAttribute="leading" secondItem="Dln-PT-0fM" secondAttribute="leading" constant="20" id="Sld-JS-HDg"/>
+                        <constraint firstItem="sSO-FA-qQw" firstAttribute="leading" secondItem="Dln-PT-0fM" secondAttribute="leading" constant="14" id="Sld-JS-HDg"/>
                         <constraint firstAttribute="height" constant="36" id="d7s-Gs-nYh"/>
                         <constraint firstItem="6xr-3p-wiV" firstAttribute="leading" secondItem="sSO-FA-qQw" secondAttribute="trailing" constant="9" id="gbl-JP-Sg3"/>
-                        <constraint firstAttribute="trailing" secondItem="ywj-I7-cIa" secondAttribute="trailing" constant="12" id="gga-ls-2mF"/>
+                        <constraint firstAttribute="trailing" secondItem="ywj-I7-cIa" secondAttribute="trailing" constant="14" id="gga-ls-2mF"/>
                         <constraint firstAttribute="centerY" secondItem="6xr-3p-wiV" secondAttribute="centerY" id="zQe-jm-mDU"/>
                     </constraints>
                 </view>
-                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tVf-Km-kul">
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qys-Ur-GtV" userLabel="Fake Header View">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="igP-1O-4nf">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="568" id="MMX-qi-o2b"/>
+                            </constraints>
+                        </imageView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KfP-Fo-rS2" customClass="STKPostHeaderView">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="igP-1O-4nf" firstAttribute="leading" secondItem="Qys-Ur-GtV" secondAttribute="leading" id="3SN-3G-h0N"/>
+                        <constraint firstAttribute="trailing" secondItem="igP-1O-4nf" secondAttribute="trailing" id="3WT-vk-WhA"/>
+                        <constraint firstAttribute="height" constant="64" id="FSY-rB-Yxa"/>
+                        <constraint firstItem="igP-1O-4nf" firstAttribute="top" secondItem="Qys-Ur-GtV" secondAttribute="top" id="QSo-If-7hW"/>
+                        <constraint firstAttribute="bottom" secondItem="KfP-Fo-rS2" secondAttribute="bottom" id="WO1-t0-Hd5"/>
+                        <constraint firstAttribute="trailing" secondItem="KfP-Fo-rS2" secondAttribute="trailing" id="gbc-UD-x7p"/>
+                        <constraint firstItem="KfP-Fo-rS2" firstAttribute="leading" secondItem="Qys-Ur-GtV" secondAttribute="leading" id="s8s-wV-jan"/>
+                        <constraint firstItem="KfP-Fo-rS2" firstAttribute="top" secondItem="Qys-Ur-GtV" secondAttribute="top" id="yC8-oj-qvc"/>
+                    </constraints>
+                </view>
+                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tVf-Km-kul" userLabel="Overlay View">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="532"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.10000000000000001" colorSpace="calibratedRGB"/>
@@ -94,19 +137,25 @@
                 <constraint firstAttribute="bottom" secondItem="UWv-rb-JIt" secondAttribute="bottom" id="3bw-CU-oir"/>
                 <constraint firstAttribute="bottom" secondItem="Dln-PT-0fM" secondAttribute="bottom" id="Clc-wI-K3j"/>
                 <constraint firstItem="tVf-Km-kul" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Gpf-Td-mF3"/>
+                <constraint firstItem="Qys-Ur-GtV" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="IES-am-wsu"/>
                 <constraint firstAttribute="trailing" secondItem="tVf-Km-kul" secondAttribute="trailing" id="JBW-Gr-Mkn"/>
+                <constraint firstAttribute="centerX" secondItem="NL1-hu-ihE" secondAttribute="centerX" id="LVI-2M-ELG"/>
                 <constraint firstItem="tVf-Km-kul" firstAttribute="top" secondItem="1" secondAttribute="top" id="SMn-LW-ghm"/>
                 <constraint firstAttribute="trailing" secondItem="UWv-rb-JIt" secondAttribute="trailing" id="VV1-CE-a53"/>
                 <constraint firstItem="UWv-rb-JIt" firstAttribute="top" secondItem="1" secondAttribute="top" id="Zrr-ne-0eP"/>
                 <constraint firstItem="UWv-rb-JIt" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bgL-ds-W2k"/>
+                <constraint firstItem="NL1-hu-ihE" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="ihK-qf-XXo"/>
                 <constraint firstAttribute="trailing" secondItem="Dln-PT-0fM" secondAttribute="trailing" id="pyR-OX-hKL"/>
                 <constraint firstItem="Dln-PT-0fM" firstAttribute="top" secondItem="tVf-Km-kul" secondAttribute="bottom" id="vBR-zk-VoJ"/>
+                <constraint firstItem="Qys-Ur-GtV" firstAttribute="top" secondItem="1" secondAttribute="top" id="web-b5-z8y"/>
+                <constraint firstAttribute="trailing" secondItem="Qys-Ur-GtV" secondAttribute="trailing" id="yGT-uD-Pw9"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
+        <image name="img_background" width="320" height="568"/>
         <image name="postcta" width="42" height="23"/>
         <image name="write_commentnote" width="11" height="11"/>
     </resources>

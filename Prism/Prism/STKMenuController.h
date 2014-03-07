@@ -15,6 +15,7 @@
 @property (nonatomic, copy) NSArray *viewControllers;
 @property (nonatomic, strong) UIViewController *selectedViewController;
 @property (nonatomic, getter = isMenuVisible) BOOL menuVisible;
+@property (nonatomic) CGRect imageTransitionRect;
 
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
 

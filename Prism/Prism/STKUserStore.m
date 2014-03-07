@@ -177,9 +177,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)fetchUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         
@@ -197,9 +197,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         
@@ -224,12 +224,12 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     [user setIsFollowedByCurrentUser:YES];
     [user setFollowerCount:[user followerCount] + 1];
     
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
             [user setIsFollowedByCurrentUser:NO];
             [user setFollowerCount:[user followerCount] - 1];
 
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            block(nil, err);
             return;
         }
         
@@ -251,12 +251,12 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     [user setIsFollowedByCurrentUser:NO];
     [user setFollowerCount:[user followerCount] - 1];
 
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
             [user setFollowerCount:[user followerCount] + 1];
             [user setIsFollowedByCurrentUser:YES];
 
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            block(nil, err);
             return;
         }
         
@@ -275,9 +275,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         
@@ -294,9 +294,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetRequests];
@@ -391,9 +391,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)validateWithTwitterToken:(NSString *)token secret:(NSString *)secret completion:(void (^)(STKUser *u, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
@@ -589,9 +589,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)validateWithFacebook:(NSString *)oauthToken completion:(void (^)(STKUser *u, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
@@ -756,9 +756,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)validateWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
@@ -779,9 +779,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 - (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];

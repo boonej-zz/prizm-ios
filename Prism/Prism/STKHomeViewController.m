@@ -18,6 +18,8 @@
 #import "STKPostViewController.h"
 #import "STKProfileViewController.h"
 #import "STKCreatePostViewController.h"
+#import "STKLocationViewController.h"
+#import "STKImageSharer.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -71,6 +73,7 @@
     [[self tableView] registerNib:_homeCellNib
            forCellReuseIdentifier:@"STKHomeCell"];
     [[self tableView] setDelaysContentTouches:NO];
+
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setRowHeight:401];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -302,12 +305,26 @@
 
 - (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
 {
+    STKPost *p = [[self items] objectAtIndex:[ip row]];
+    STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
+    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image]
+                                                                                             text:[p text]
+                                                                                    finishHandler:^(UIDocumentInteractionController *doc) {
+                                                                                        [doc presentOpenInMenuFromRect:[[self view] bounds] inView:[self view] animated:YES];
+                                                                                    }];
+    [self presentViewController:vc animated:YES completion:nil];
     
 }
 
 - (void)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    STKPost *p = [[self items] objectAtIndex:[ip row]];
+    if([p locationName]) {
+        STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
+        [lvc setCoordinate:[p coordinate]];
+        [lvc setLocationName:[p locationName]];
+        [[self navigationController] pushViewController:lvc animated:YES];
+    }
 }
 
 - (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip

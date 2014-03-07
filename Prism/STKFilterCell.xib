@@ -20,7 +20,7 @@
                         <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tem-Xp-JP9">
-                        <rect key="frame" x="9" y="10" width="30" height="30"/>
+                        <rect key="frame" x="8" y="10" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <state key="normal" image="btn_gridview">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,7 +40,7 @@
                         </connections>
                     </button>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Raj-7X-ihF">
-                        <rect key="frame" x="57" y="18" width="1" height="14"/>
+                        <rect key="frame" x="56" y="18" width="1" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
                     </view>
@@ -55,7 +55,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eXG-2n-9ic">
-                        <rect key="frame" x="76" y="10" width="30" height="30"/>
+                        <rect key="frame" x="75" y="10" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <state key="normal" image="btn_singleview">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>

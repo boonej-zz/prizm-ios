@@ -76,23 +76,23 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
     return self;
 }
 
-- (void)executeAuthorizedRequest:(void (^)(BOOL granted))request
+- (void)executeAuthorizedRequest:(void (^)(NSError *))request
 {
     if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > 0) {
-        request(YES);
+        request(nil);
     } else {
         [[self authorizedRequestQueue] addObject:request];
         if([[self authorizationToken] refreshToken]) {
             [self refreshAccessToken:^(STKAuthorizationToken *token, NSError *err) {
-                for(void (^req)(BOOL) in [self authorizedRequestQueue]) {
-                    req(err == nil);
+                for(void (^req)(NSError *err) in [self authorizedRequestQueue]) {
+                    req(err);
                 }
                 [[self authorizedRequestQueue] removeAllObjects];
             }];
         } else {
             [self fetchAccessToken:^(STKAuthorizationToken *token, NSError *err) {
-                for(void (^req)(BOOL) in [self authorizedRequestQueue]) {
-                    req(err == nil);
+                for(void (^req)(NSError *err) in [self authorizedRequestQueue]) {
+                    req(err);
                 }
                 [[self authorizedRequestQueue] removeAllObjects];
             }];

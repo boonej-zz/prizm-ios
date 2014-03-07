@@ -38,6 +38,7 @@
                 <constraint firstAttribute="trailing" secondItem="REZ-Ig-9w5" secondAttribute="trailing" constant="0.5" id="v8m-vB-4hS"/>
             </constraints>
             <connections>
+                <outlet property="backdropView" destination="REZ-Ig-9w5" id="IEj-ND-WZQ"/>
                 <outlet property="imageView" destination="Gau-sZ-TH2" id="bjY-oY-dPp"/>
             </connections>
         </collectionViewCell>

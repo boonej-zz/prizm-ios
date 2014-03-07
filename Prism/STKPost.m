@@ -15,6 +15,7 @@ NSString * const STKPostLocationLatitudeKey = @"location_latitude";
 NSString * const STKPostLocationLongitudeKey = @"location_longitude";
 NSString * const STKPostLocationNameKey = @"location_name";
 
+NSString * const STKPostVisibilityKey = @"scope";
 NSString * const STKPostHashTagsKey = @"hash_tags";
 
 NSString * const STKPostURLKey = @"file_path";
@@ -23,12 +24,14 @@ NSString * const STKPostTypeKey = @"category";
 
 NSString * const STKPostVisibilityPublic = @"public";
 NSString * const STKPostVisibilityPrivate = @"private";
+NSString * const STKPostVisibilityTrust = @"trust";
 
 NSString * const STKPostTypeAspiration = @"aspiration";
 NSString * const STKPostTypeInspiration = @"inspiration";
 NSString * const STKPostTypeExperience = @"experience";
 NSString * const STKPostTypeAchievement = @"achievement";
 NSString * const STKPostTypePassion = @"passion";
+NSString * const STKPostTypePersonal = @"personal";
 NSString * const STKPostTypeAccolade = @"accolade";
 
 

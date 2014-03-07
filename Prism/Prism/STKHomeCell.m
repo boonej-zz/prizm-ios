@@ -9,6 +9,7 @@
 #import "STKHomeCell.h"
 #import "STKPost.h"
 #import "STKRelativeDateConverter.h"
+#import "STKAvatarView.h"
 
 @interface STKHomeCell ()
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
@@ -34,12 +35,14 @@
 {
     [[self contentImageView] setUrlString:[p imageURLString]];
     
-    [[[self headerView] avatarView] setUrlString:[[p creator] profilePhotoPath]];
-    [[[self headerView] posterLabel] setText:[[p creator] name]];
-    [[[self headerView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
-    //    if([p externalSystemID])
-    //[[[c headerView] sourceLabel] setText:[p postOrigin]];
-    [[[self headerView] postTypeView] setImage:[p typeImage]];
+    if(![self displayFullBleed]) {
+        [[[self headerView] avatarView] setUrlString:[[p creator] profilePhotoPath]];
+        [[[self headerView] posterLabel] setText:[[p creator] name]];
+        [[[self headerView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
+        //    if([p externalSystemID])
+        //[[[c headerView] sourceLabel] setText:[p postOrigin]];
+        [[[self headerView] postTypeView] setImage:[p typeImage]];
+    }
     
     if([p commentCount] == 0) {
         [[self commentCountLabel] setText:@""];
@@ -86,11 +89,11 @@
         [[self hashTagContainer] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
         [[self buttonContainer] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
 
-        UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(0, 27, 320, 1)];
+        UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(0, 19, 320, 1)];
         [[[self hashTagContainer] layer] setShadowOpacity:1];
         [[[self hashTagContainer] layer] setShadowColor:[[UIColor blackColor] CGColor]];
-        [[[self hashTagContainer] layer] setShadowOffset:CGSizeMake(0, 2)];
-        [[[self hashTagContainer] layer] setShadowRadius:5];
+        [[[self hashTagContainer] layer] setShadowOffset:CGSizeMake(0, 1)];
+        [[[self hashTagContainer] layer] setShadowRadius:4];
         [[[self hashTagContainer] layer] setShadowPath:[bp CGPath]];
     } else {
         
