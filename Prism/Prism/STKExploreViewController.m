@@ -73,16 +73,33 @@
     [[self navigationItem] setRightBarButtonItem:[self searchBarButtonItem]];
 }
 
+- (CGRect)rectForPostAtIndex:(int)idx
+{
+    int row = idx / 3;
+    int offset = idx % 3;
+    
+    STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
 
+    CGRect r = CGRectZero;
+    if(offset == 0)
+        r = [[c leftImageView] frame];
+    else if(offset == 1)
+        r = [[c centerImageView] frame];
+    else if(offset == 2)
+        r = [[c rightImageView] frame];
+    
+    return [[self view] convertRect:r fromView:c];
+}
 
 - (void)showPostAtIndex:(int)idx
 {
     if(idx < [[self posts] count]) {
+        
         STKPost *p = [[self posts] objectAtIndex:idx];
-        STKPostViewController *vc = [[STKPostViewController alloc] init];
-        [vc setPost:p];
-
-        [[self navigationController] pushViewController:vc animated:YES];
+        [[self menuController] transitionToPost:p
+                                       fromRect:[self rectForPostAtIndex:idx]
+                               inViewController:self
+                                       animated:YES];
     }
 }
 
@@ -133,6 +150,8 @@
  
     [[[self blurView] displayLink] setPaused:NO];
 
+    NSArray *deletedPosts = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKPostStatusDeleted]];
+    [[self posts] removeObjectsInArray:deletedPosts];
 
     [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
                                             referencePost:[[self posts] firstObject]

@@ -34,6 +34,7 @@ NSString * const STKPostTypePassion = @"passion";
 NSString * const STKPostTypePersonal = @"personal";
 NSString * const STKPostTypeAccolade = @"accolade";
 
+NSString * const STKPostStatusDeleted = @"deleted";
 
 @implementation STKPost
 
@@ -50,7 +51,8 @@ NSString * const STKPostTypeAccolade = @"accolade";
                                                  @"external_system" : @"externalSystemID",
                                                  @"likes_count" : @"likeCount",
                                                  @"comments_count" : @"commentCount",
-                                                 @"hash_tags" : @"hashTags"
+                                                 @"hash_tags" : @"hashTags",
+                                                 @"status" : @"status"
     }];
     
     NSDictionary *creator = [jsonObject objectForKey:@"creator"];

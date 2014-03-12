@@ -94,6 +94,10 @@ typedef enum {
         [self setProfile:[[STKUserStore store] currentUser]];
     }
     
+    NSArray *deletedPosts = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKPostStatusDeleted]];
+    [[self posts] removeObjectsInArray:deletedPosts];
+
+    
     if([self isShowingCurrentUserProfile]) {
         [[self navigationItem] setTitle:@"Profile"];
         [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
@@ -268,11 +272,37 @@ typedef enum {
 - (void)showPostAtIndex:(int)idx
 {
     if(idx < [[self posts] count]) {
-        STKPostViewController *vc = [[STKPostViewController alloc] init];
-        [vc setPost:[[self posts] objectAtIndex:idx]];
-        [[self navigationController] pushViewController:vc animated:YES];
+        [[self menuController] transitionToPost:[[self posts] objectAtIndex:idx]
+                                       fromRect:[self rectForPostAtIndex:idx]
+                               inViewController:self
+                                       animated:YES];
     }
 }
+
+- (CGRect)rectForPostAtIndex:(int)idx
+{
+    if([self showPostsInSingleLayout]) {
+        STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:STKProfileSectionInformation]];
+        
+        return [[self view] convertRect:[[c contentImageView] frame] fromView:[[c contentImageView] superview]];
+    } else {
+        int row = idx / 3;
+        int offset = idx % 3;
+        
+        STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:STKProfileSectionInformation]];
+        
+        CGRect r = CGRectZero;
+        if(offset == 0)
+            r = [[c leftImageView] frame];
+        else if(offset == 1)
+            r = [[c centerImageView] frame];
+        else if(offset == 2)
+            r = [[c rightImageView] frame];
+        
+        return [[self view] convertRect:r fromView:c];
+    }
+}
+
 
 - (void)menuWillAppear:(BOOL)animated
 {
@@ -385,13 +415,13 @@ typedef enum {
     } else {
         [[c followButton] setHidden:NO];
         if([[self profile] isFollowedByCurrentUser]) {
-            [[c followButton] setTitle:@"Unfollow" forState:UIControlStateNormal];
-            [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
+            [[c followButton] setTitle:@"Following" forState:UIControlStateNormal];
+            [[c followButton] setImage:[UIImage imageNamed:@"reject"]
                               forState:UIControlStateNormal];
-            [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 60, 0, 0)];
+            [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 66, 0, 0)];
         } else {
             [[c followButton] setTitle:@"Follow" forState:UIControlStateNormal];
-            [[c followButton] setImage:[UIImage imageNamed:@"btn_followarrow"]
+            [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
                               forState:UIControlStateNormal];
             [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 50, 0, 0)];
         }

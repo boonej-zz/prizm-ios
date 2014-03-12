@@ -520,6 +520,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 {
     [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
         if(!err) {
+            NSLog(@"%@", [[acct credential] oauthToken]);
             [self validateWithFacebook:[[acct credential] oauthToken]
                             completion:^(STKUser *user, NSError *valError) {
                 if(!valError) {
@@ -569,6 +570,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                                               completion:^(BOOL granted, NSError *error) {
                                                   if(granted) {
                                                       NSArray *accounts = [[self accountStore] accountsWithAccountType:type];
+                                                      NSLog(@"%@", accounts);
                                                       if([accounts count] == 1) {
                                                           ACAccount *acct = [accounts firstObject];
                                                           [[NSOperationQueue mainQueue] addOperationWithBlock:^{

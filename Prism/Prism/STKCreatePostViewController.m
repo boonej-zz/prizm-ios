@@ -57,11 +57,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     if (self) {
         _postInfo = [[NSMutableDictionary alloc] init];
         UIBarButtonItem *bbiCancel = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
-        UIBarButtonItem *bbiPost = [[UIBarButtonItem alloc] initWithTitle:@"Post" style:UIBarButtonItemStylePlain target:self action:@selector(post:)];
+        UIBarButtonItem *bbiPost = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(post:)];
         
         [[self navigationItem] setLeftBarButtonItem:bbiCancel];
         [[self navigationItem] setRightBarButtonItem:bbiPost];
-        [[self navigationItem] setTitle:@"Prism"];
+        [[self navigationItem] setTitle:@"Post"];
         
         _categoryItems = @[
             @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"btn_cloud_aspirations"]},
@@ -102,7 +102,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
 
     if([self imageURLString]) {
-        [[[self navigationItem] rightBarButtonItem] setTitle:@"Repost"];
+        [[self navigationItem] setTitle:@"Repost"];
         [[self postInfo] setObject:[self imageURLString] forKey:STKPostURLKey];
         [[STKImageStore store] fetchImageForURLString:[self imageURLString]
                                            completion:^(UIImage *img) {
@@ -110,6 +110,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                            }];
         [[self optionHeightConstraint] setConstant:47];
     }
+    
+    [[self optionCollectionView] reloadData];
 }
 
 - (void)setPostImage:(UIImage *)postImage
@@ -257,10 +259,12 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];
     [[self categoryCollectionView] setBackgroundColor:[UIColor clearColor]];
+    [[self categoryCollectionView] setScrollEnabled:NO];
     
     [[self optionCollectionView] registerNib:[UINib nibWithNibName:@"STKImageCollectionViewCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKImageCollectionViewCell"];
     [[self optionCollectionView] setBackgroundColor:[UIColor clearColor]];
+    [[self optionCollectionView] setScrollEnabled:NO];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -286,11 +290,10 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                                                forIndexPath:indexPath];
         [[cell label] setText:[item objectForKey:@"title"]];
         [[cell imageView] setImage:[item objectForKey:@"image"]];
+        [cell setBackgroundColor:[UIColor clearColor]];
         
         if([[[self postInfo] objectForKey:STKPostTypeKey] isEqual:[item objectForKey:STKPostTypeKey]]) {
             [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
-        } else {
-            [cell setBackgroundColor:[UIColor clearColor]];
         }
         
         return cell;
@@ -305,6 +308,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
         if([[item objectForKey:@"key"] isEqualToString:@"visibility"]) {
             if([[[self postInfo] objectForKey:STKPostVisibilityKey] isEqualToString:STKPostVisibilityPublic]) {
+                [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+            }
+        }
+        if([[item objectForKey:@"key"] isEqualToString:@"location"]) {
+            if([[self postInfo] objectForKey:STKPostLocationNameKey]) {
                 [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
             }
         }

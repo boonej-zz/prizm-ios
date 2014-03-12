@@ -269,6 +269,30 @@ NSString * const STKContentEndpointPost = @"/posts";
     }];
 }
 
+- (void)deletePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
+        [c setIdentifiers:@[[post postID]]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
+        
+        [c deleteWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(!err) {
+                
+            } else {
+                
+            }
+            
+            block(obj, err);
+        }];
+    }];
+}
+
 - (void)likeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block
 {
     if(![comment commentID]) {

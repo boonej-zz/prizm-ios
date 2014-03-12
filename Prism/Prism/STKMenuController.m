@@ -25,6 +25,7 @@
 #import "STKPostViewController.h"
 #import "STKImageStore.h"
 #import "STKResolvingImageView.h"
+#import "STKPost.h"
 
 @import QuartzCore;
 
@@ -35,6 +36,8 @@
 @property (nonatomic, strong) NSLayoutConstraint *menuTopConstraint;
 
 @property (nonatomic, strong, readonly) STKResolvingImageView *transitionImageView;
+@property (nonatomic) CGRect imageTransitionRect;
+
 
 @end
 
@@ -332,6 +335,20 @@
     return _transitionImageView;
 }
 
+- (void)transitionToPost:(STKPost *)p
+                fromRect:(CGRect)r
+        inViewController:(UIViewController *)vc
+                animated:(BOOL)animated
+{
+    [self setImageTransitionRect:r];
+    
+    [[self transitionImageView] setUrlString:[p imageURLString]];
+    
+    STKPostViewController *postVC = [[STKPostViewController alloc] init];
+    [postVC setPost:p];
+    [[vc navigationController] pushViewController:postVC animated:animated];
+}
+
 - (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
                                   animationControllerForOperation:(UINavigationControllerOperation)operation
                                                fromViewController:(UIViewController *)fromVC
@@ -341,10 +358,16 @@
     || [toVC class] == [STKPostViewController class]) {
         
         if(![[self transitionImageView] superview]) {
-            //[[self view] addSubview:[self transitionImageView]];
+            [[self view] addSubview:[self transitionImageView]];
         }
         
-        return nil;
+        if([fromVC class] == [STKPostViewController class]) {
+            [[self transitionImageView] setFrame:CGRectMake(0, 64, 320, 300)];
+        } else {
+            [[self transitionImageView] setFrame:[self imageTransitionRect]];
+        }
+        
+        return self;
     }
     
     return nil;
@@ -353,20 +376,33 @@
 
 - (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
 {
-    return 0.2;
+    return 0.3;
 }
 
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext
 {
     UIViewController *inVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIViewController *outVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];    
+    if([inVC class] == [STKPostViewController class]) {
+        [[inVC view] setAlpha:0];
+        [[transitionContext containerView] addSubview:[inVC view]];
+    } else {
+        [[transitionContext containerView] insertSubview:[inVC view]
+                                            belowSubview:[outVC view]];
+    }
     
-    [[transitionContext containerView] addSubview:[inVC view]];
-    [[inVC view] setAlpha:0];
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        [[inVC view] setAlpha:1];
+        if([inVC class] == [STKPostViewController class]) {
+            [[self transitionImageView] setFrame:CGRectMake(0, 64, 320, 300)];
+            [[inVC view] setAlpha:1];
+        } else {
+            [[self transitionImageView] setFrame:[self imageTransitionRect]];
+            [[outVC view] setAlpha:0];
+        }
     }
      completion:^(BOOL finished) {
          [transitionContext completeTransition:finished];
+         [[self transitionImageView] removeFromSuperview];
      }];
 }
 

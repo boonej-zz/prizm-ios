@@ -80,10 +80,16 @@ NSString * const STKErrorBadPassword = @"invalid_user_credentials";
         [errorMap setObject:@{
             @"Any" : @"There was a problem communicating with the server. Ensure you have internet access and try again."
         } forKey:NSURLErrorDomain];
+
     }
     
     return errorMap;
 }
+
+/*
+ "error": "OAuthException",
+ "error_description": "Error validating access token: The session has been invalidated because the user has changed the password."
+ */
 
 + (NSString *)errorTitleStringForError:(NSError *)err
 {

@@ -4639,8 +4639,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos7.0]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator7.0]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
@@ -4856,8 +4856,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos7.0]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator7.0]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",

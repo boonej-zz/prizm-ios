@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -39,7 +39,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="234" translatesAutoresizingMaskIntoConstraints="NO" id="jUK-9y-kQb">
-                        <rect key="frame" x="52" y="32" width="234" height="22"/>
+                        <rect key="frame" x="52" y="27" width="234" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="234" id="Nr1-XV-FSo"/>
@@ -76,7 +76,7 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YOL-96-fKX" customClass="UIControl">
-                        <rect key="frame" x="52" y="54" width="107" height="28"/>
+                        <rect key="frame" x="52" y="49" width="107" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -104,8 +104,8 @@
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="leading" secondItem="ge7-HD-XRM" secondAttribute="trailing" constant="6" id="Wjw-Uc-N36"/>
                     <constraint firstItem="clC-ZP-ojw" firstAttribute="leading" secondItem="kwb-YQ-uOI" secondAttribute="trailing" constant="8" id="er8-GK-4V3"/>
                     <constraint firstAttribute="trailing" secondItem="ziV-3o-fzS" secondAttribute="trailing" id="gr3-kT-PN3"/>
-                    <constraint firstItem="jUK-9y-kQb" firstAttribute="top" secondItem="clC-ZP-ojw" secondAttribute="bottom" id="jiM-bD-3Vl"/>
-                    <constraint firstItem="YOL-96-fKX" firstAttribute="top" secondItem="jUK-9y-kQb" secondAttribute="bottom" id="jsY-Tr-6aq"/>
+                    <constraint firstItem="jUK-9y-kQb" firstAttribute="top" secondItem="clC-ZP-ojw" secondAttribute="bottom" constant="-5" id="jiM-bD-3Vl"/>
+                    <constraint firstItem="YOL-96-fKX" firstAttribute="top" secondItem="jUK-9y-kQb" secondAttribute="bottom" constant="-5" id="jsY-Tr-6aq"/>
                     <constraint firstItem="jUK-9y-kQb" firstAttribute="leading" secondItem="kwb-YQ-uOI" secondAttribute="trailing" constant="8" id="rEr-qv-SjC"/>
                     <constraint firstItem="ge7-HD-XRM" firstAttribute="top" secondItem="jUK-9y-kQb" secondAttribute="bottom" constant="8" id="ttZ-qC-bm2"/>
                     <constraint firstAttribute="bottom" secondItem="ziV-3o-fzS" secondAttribute="bottom" id="zWt-VK-bUZ"/>

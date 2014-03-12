@@ -74,7 +74,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     NSMutableURLRequest *req = [[NSMutableURLRequest alloc] init];
 
     if([[self internalArguments] count] > 0) {
-        if([self method] == STKConnectionMethodPOST || [self method] == STKConnectionMethodPUT) {
+        if([self method] == STKConnectionMethodPOST || [self method] == STKConnectionMethodPUT || [self method] == STKConnectionMethodDELETE) {
             [req setHTTPBody:[NSJSONSerialization dataWithJSONObject:[self internalArguments] options:0 error:nil]];
             [req addValue:@"application/json;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
         } else {
@@ -110,6 +110,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
     NSURLSessionDataTask *dt = [session dataTaskWithRequest:[self request]
                                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                              NSLog(@"%@ %@ %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], error, response);
                                               if(error) {
                                                   [self handleError:error];
                                               } else {
@@ -176,7 +177,6 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     }
     
     NSString *formatted = [NSString stringWithFormat:@"{%@}", str];
-    NSLog(@"%@", formatted);
     [self addQueryValue:formatted forKey:key];
 }
 
