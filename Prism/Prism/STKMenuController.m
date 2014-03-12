@@ -22,18 +22,24 @@
 #import "STKVerticalNavigationController.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKBaseStore.h"
+#import "STKPostViewController.h"
+#import "STKImageStore.h"
+#import "STKResolvingImageView.h"
 
 @import QuartzCore;
 
-@interface STKMenuController () <UINavigationControllerDelegate, STKMenuViewDelegate>
+@interface STKMenuController () <UINavigationControllerDelegate, STKMenuViewDelegate, UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, strong) STKMenuView *menuView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSLayoutConstraint *menuTopConstraint;
+
+@property (nonatomic, strong, readonly) STKResolvingImageView *transitionImageView;
+
 @end
 
 @implementation STKMenuController
-
+@synthesize transitionImageView = _transitionImageView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -318,5 +324,55 @@
     [[self backgroundImageView] setImage:[self backgroundImage]];
 }
 
+- (STKResolvingImageView *)transitionImageView
+{
+    if(!_transitionImageView) {
+        _transitionImageView = [[STKResolvingImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
+    }
+    return _transitionImageView;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                  animationControllerForOperation:(UINavigationControllerOperation)operation
+                                               fromViewController:(UIViewController *)fromVC
+                                                 toViewController:(UIViewController *)toVC
+{
+    if([fromVC class] == [STKPostViewController class]
+    || [toVC class] == [STKPostViewController class]) {
+        
+        if(![[self transitionImageView] superview]) {
+            //[[self view] addSubview:[self transitionImageView]];
+        }
+        
+        return nil;
+    }
+    
+    return nil;
+}
+
+
+- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
+{
+    return 0.2;
+}
+
+- (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext
+{
+    UIViewController *inVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    
+    [[transitionContext containerView] addSubview:[inVC view]];
+    [[inVC view] setAlpha:0];
+    [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+        [[inVC view] setAlpha:1];
+    }
+     completion:^(BOOL finished) {
+         [transitionContext completeTransition:finished];
+     }];
+}
+
+- (void)animationEnded:(BOOL) transitionCompleted
+{
+    
+}
 
 @end

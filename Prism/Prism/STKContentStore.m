@@ -83,9 +83,9 @@ NSString * const STKContentEndpointPost = @"/posts";
            referencePost:(STKPost *)referencePost
               completion:(void (^)(NSArray *posts, NSError *err))block;
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
                 
@@ -119,9 +119,9 @@ NSString * const STKContentEndpointPost = @"/posts";
                               filter:(NSDictionary *)filterDict
                           completion:(void (^)(NSArray *posts, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/explore"];
@@ -176,9 +176,9 @@ NSString * const STKContentEndpointPost = @"/posts";
                    referencePost:(STKPost *)referencePost
                       completion:(void (^)(NSArray *posts, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
@@ -215,12 +215,12 @@ NSString * const STKContentEndpointPost = @"/posts";
     [post setLikeCount:[post likeCount] + 1];
     [post setPostLikedByCurrentUser:YES];
 
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
-        if(!granted) {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
             [post setPostLikedByCurrentUser:NO];
             [post setLikeCount:[post likeCount] - 1];
 
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            block(nil, err);
             return;
         }
         
@@ -245,12 +245,12 @@ NSString * const STKContentEndpointPost = @"/posts";
     [post setLikeCount:[post likeCount] - 1];
     [post setPostLikedByCurrentUser:NO];
 
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
-        if(!granted) {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
             [post setLikeCount:[post likeCount] + 1];
             [post setPostLikedByCurrentUser:YES];
 
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            block(nil, err);
             return;
         }
         
@@ -271,15 +271,22 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)likeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block
 {
+    if(![comment commentID]) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(nil, nil);
+        }];
+        return;
+    }
+    
     [comment setLikeCount:[comment likeCount] + 1];
     [comment setLikedByCurrentUser:YES];
     
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
-        if(!granted) {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
             [comment setLikeCount:[comment likeCount] - 1];
             [comment setLikedByCurrentUser:NO];
             
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
@@ -297,15 +304,22 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)unlikeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block
 {
+    if(![comment commentID]) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(nil, nil);
+        }];
+        return;
+    }
+
     [comment setLikeCount:[comment likeCount] - 1];
     [comment setLikedByCurrentUser:NO];
     
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
-        if(!granted) {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
             [comment setLikeCount:[comment likeCount] + 1];
             [comment setLikedByCurrentUser:YES];
             
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
@@ -338,11 +352,11 @@ NSString * const STKContentEndpointPost = @"/posts";
         [p setCommentCount:[p commentCount] -1];
     };
     
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
-        if(!granted) {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
             reversal();
             
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            block(nil, err);
             return;
         }
        
@@ -383,11 +397,11 @@ NSString * const STKContentEndpointPost = @"/posts";
     [[comment post] setComments:comments];
     [[comment post] setCommentCount:[[comment post] commentCount] - 1];
     
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted) {
-        if(!granted) {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
             reversal();
             
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+            block(nil, err);
             return;
         }
         
@@ -422,25 +436,29 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
-        NSLog(@"Posting: %@", info);
+
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
         [c setIdentifiers:@[[[[STKUserStore store] currentUser] userID], @"posts"]];
-        [c addQueryValue:@"public" forKey:@"scope"];
+        
         [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
         
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
         }
         
+        // This will wash away any Visibility modifiers as intended
+        if([[info objectForKey:STKPostTypeKey] isEqualToString:STKPostTypePersonal]) {
+            [c addQueryValue:STKPostVisibilityPrivate forKey:STKPostVisibilityKey];
+        }
+        
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-
             if(!err) {
-                    // Should catch, but you know, can't yet
+                
             } else {
             
             }
@@ -452,9 +470,9 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)fetchCommentsForPost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(BOOL granted){
-        if(!granted) {
-            block(nil, [NSError errorWithDomain:STKAuthenticationErrorDomain code:-1 userInfo:nil]);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];

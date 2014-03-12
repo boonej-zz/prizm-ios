@@ -101,18 +101,19 @@ NSString * const STKErrorBadPassword = @"invalid_user_credentials";
     
     NSString *text = nil;
     if([userInfo objectForKey:@"error"]) {
-        return [domainErrors objectForKey:[userInfo objectForKey:@"error"]];
+        text = [domainErrors objectForKey:[userInfo objectForKey:@"error"]];
     } else {
         text = [domainErrors objectForKey:@([err code])];
+    }
+    
+    if(!text) {
+        text = [domainErrors objectForKey:@"Any"];
         if(!text) {
-            text = [domainErrors objectForKey:@"Any"];
+            text = [[err userInfo] objectForKey:NSLocalizedDescriptionKey];
             if(!text) {
-                text = [[err userInfo] objectForKey:NSLocalizedDescriptionKey];
-                if(!text) {
-                    text = @"There was an unexpected error.";
-                } else {
-                    userInfo = nil;
-                }
+                text = @"There was an unexpected error.";
+            } else {
+                userInfo = nil;
             }
         }
     }

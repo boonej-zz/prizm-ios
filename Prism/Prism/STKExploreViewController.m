@@ -115,6 +115,10 @@
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setTableHeaderView:[self searchBar]];
+    
+    float top = [[self tableView] contentInset].top;
+    [[self tableView] setContentOffset:CGPointMake(0, [[self searchBar] bounds].size.height - top) animated:YES];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -129,8 +133,6 @@
  
     [[[self blurView] displayLink] setPaused:NO];
 
-    float top = [[self tableView] contentInset].top;
-    [[self tableView] setContentOffset:CGPointMake(0, [[self searchBar] bounds].size.height - top) animated:YES];
 
     [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
                                             referencePost:[[self posts] firstObject]

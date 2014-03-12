@@ -19,15 +19,23 @@
 #import "STKRelativeDateConverter.h"
 #import "STKCreatePostViewController.h"
 #import "STKImageSharer.h"
+#import "STKAvatarView.h"
+#import "STKPostHeaderView.h"
 
 @interface STKPostViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet STKPostHeaderView *fakeHeaderView;
+@property (weak, nonatomic) IBOutlet UIView *fakeContainerView;
 @property (weak, nonatomic) IBOutlet UIControl *overlayVIew;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentFooterView;
 @property (weak, nonatomic) IBOutlet UITextField *commentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomCommentConstraint;
 @property (nonatomic, strong) UIView *commentHeaderView;
+
+@property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchWidthConstraint;
 
 - (void)dismissKeyboard:(id)sender;
 
@@ -71,10 +79,12 @@
 
 - (IBAction)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
-    [lvc setCoordinate:[[self post] coordinate]];
-    [lvc setLocationName:[[self post] locationName]];
-    [[self navigationController] pushViewController:lvc animated:YES];
+    if([[self post] locationName]) {
+        STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
+        [lvc setCoordinate:[[self post] coordinate]];
+        [lvc setLocationName:[[self post] locationName]];
+        [[self navigationController] pushViewController:lvc animated:YES];
+    }
 }
 
 - (void)viewDidLoad
@@ -87,13 +97,15 @@
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, [[self commentFooterView] bounds].size.height, 0)];
     [[self tableView] setDelaysContentTouches:NO];
-    
+
     [[self commentTextField] setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Write a comment..."
                                                                                       attributes:@{NSFontAttributeName : STKFont(12),
                                                                                                    NSForegroundColorAttributeName : [UIColor whiteColor]}]];
     [[[self commentFooterView] layer] setShadowColor:[[UIColor whiteColor] CGColor]];
     [[[self commentFooterView] layer] setShadowOffset:CGSizeMake(0, -1)];
     [[[self commentFooterView] layer] setShadowOpacity:0.5];
+    
+    [[[self fakeHeaderView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     UIView *internalFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, -1, 320, 300)];
@@ -124,24 +136,38 @@
     [[self overlayVIew] setHidden:YES];
     [[self tableView] reloadData];
     
+    [[self stretchView] setUrlString:[[self post] imageURLString]];
+    
     [[STKContentStore store] fetchCommentsForPost:[self post]
                                        completion:^(STKPost *p, NSError *err) {
                                            [[self tableView] reloadData];
                                        }];
     
+    [[[self fakeHeaderView] avatarView] setUrlString:[[[self post] creator] profilePhotoPath]];
+    [[[self fakeHeaderView] posterLabel] setText:[[[self post] creator] name]];
+    [[[self fakeHeaderView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[[self post] datePosted]]];
+    [[[self fakeHeaderView] postTypeView] setImage:[[self post] typeImage]];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{/*
+{
     if([scrollView contentOffset].y < 0) {
-        [scrollView setContentOffset:CGPointMake(0, 0)];
-    }*/
+        [[self stretchView] setHidden:NO];
+        float y = fabs([scrollView contentOffset].y);
+        [[self stretchHeightConstraint] setConstant:300 + y];
+        [[self stretchWidthConstraint] setConstant:320 + y];
+        
+    } else {
+        [[self stretchView] setHidden:YES];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+
     [[self navigationController] setNavigationBarHidden:NO];
+    
     [[self overlayVIew] setHidden:YES];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -239,30 +265,29 @@
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+- (void)avatarTapped:(id)sender
 {
-    if([ip section] == 0) {
-        STKProfileViewController *vc = [[STKProfileViewController alloc] init];
-        [vc setProfile:[[self post] creator]];
-        [[self navigationController] pushViewController:vc animated:YES];
-    }
+    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+    [vc setProfile:[[self post] creator]];
+    [[self navigationController] pushViewController:vc animated:YES];
 }
 
 - (void)toggleCommentLike:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKPostComment *pc = [self commentForIndexPath:ip];
     if([pc isLikedByCurrentUser]) {
-        [[STKContentStore store] unlikeComment:[self commentForIndexPath:ip]
+        [[STKContentStore store] unlikeComment:pc
                                     completion:^(STKPostComment *p, NSError *err) {
                                         [[self tableView] reloadData];
                                     }];
 
     } else {
-        [[STKContentStore store] likeComment:[self commentForIndexPath:ip]
+        [[STKContentStore store] likeComment:pc
                                   completion:^(STKPostComment *p, NSError *err) {
                                       [[self tableView] reloadData];
                                   }];
     }
+    [[self tableView] reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 
@@ -316,7 +341,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
-        return 441;
+        return 433;
     }
     STKPostComment *pc = [self commentForIndexPath:indexPath];
     NSString *text = [pc text];
@@ -329,7 +354,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
-        return 441;
+        return 433;
     }
     
     STKPostComment *pc = [self commentForIndexPath:indexPath];
@@ -463,30 +488,22 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         return;
     }
     
-    int commentCountNow = [[[self post] comments] count];
     [[STKContentStore store] addComment:[[self commentTextField] text] toPost:[self post] completion:^(STKPost *p, NSError *err) {
         if(err)
             [[self tableView] reloadData];
     }];
     [[self commentTextField] setText:nil];
-    /*
-    commentCountNow ++;
-    if(commentCountNow < [[[self post] comments] count]) {
-        int row = commentCountNow - 1;
-        if([self postHasText])
-            row ++;
-        [[self tableView] insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:1]]
-                                withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    
     [[self view] endEditing:YES];
-    
-    NSInteger index = [[[self post] comments] count] - 1;
-    if([self postHasText])
+
+    int index = [[[self post] comments] count] - 1;
+    if([self postHasText]) {
         index ++;
-    
-    [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:1]
+    }
+    NSIndexPath *ip = [NSIndexPath indexPathForRow:index inSection:1];
+    [[self tableView] insertRowsAtIndexPaths:@[ip]
+                            withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] scrollToRowAtIndexPath:ip
                             atScrollPosition:UITableViewScrollPositionBottom
-                                    animated:YES];*/
+                                    animated:YES];
 }
 @end

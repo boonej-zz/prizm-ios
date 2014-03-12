@@ -24,6 +24,7 @@
 #import "STKFilterCell.h"
 #import "STKCreatePostViewController.h"
 #import "STKLocationViewController.h"
+#import "STKImageSharer.h"
 
 typedef enum {
     STKProfileSectionHeader,
@@ -243,15 +244,24 @@ typedef enum {
 
 - (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    STKPost *p = [[self posts] objectAtIndex:[ip row]];
+    STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
+    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image]
+                                                                                             text:[p text]
+                                                                                    finishHandler:^(UIDocumentInteractionController *doc) {
+                                                                                        [doc presentOpenInMenuFromRect:[[self view] bounds] inView:[self view] animated:YES];
+                                                                                    }];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
-    [lvc setCoordinate:[[[self posts] objectAtIndex:[ip row]] coordinate]];
-    [lvc setLocationName:[[[self posts] objectAtIndex:[ip row]] locationName]];
-    [[self navigationController] pushViewController:lvc animated:YES];
+    if([[[self posts] objectAtIndex:[ip row]] locationName]) {
+        STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
+        [lvc setCoordinate:[[[self posts] objectAtIndex:[ip row]] coordinate]];
+        [lvc setLocationName:[[[self posts] objectAtIndex:[ip row]] locationName]];
+        [[self navigationController] pushViewController:lvc animated:YES];
+    }
    
 }
 
@@ -482,7 +492,7 @@ typedef enum {
     if([indexPath section] == STKProfileSectionHeader) {
         return 246;
     } else if([indexPath section] == STKProfileSectionStatistics) {
-        return 163;
+        return 155;
     } else if ([indexPath section] == STKProfileSectionPreinformation) {
         return 50;
     } else if([indexPath section] == STKProfileSectionInformation) {
@@ -503,7 +513,7 @@ typedef enum {
     if([indexPath section] == STKProfileSectionHeader) {
         return 246;
     } else if([indexPath section] == STKProfileSectionStatistics) {
-        return 163;
+        return 155;
     } else if ([indexPath section] == STKProfileSectionPreinformation) {
         return 50;
     } else if([indexPath section] == STKProfileSectionInformation) {

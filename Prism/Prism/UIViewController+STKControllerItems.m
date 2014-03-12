@@ -41,14 +41,12 @@
 
 - (UIBarButtonItem *)settingsBarButtonItem
 {
-    UIButton *view = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 32)];
-    [[view imageView] setContentMode:UIViewContentModeCenter];
-    [view setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
-//    [view setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
-    [[view imageView] setClipsToBounds:NO];
-    [view setClipsToBounds:NO];
+    STKNavigationButton *view = [[STKNavigationButton alloc] init];
+    [view setImage:[UIImage imageNamed:@"btn_settings"]];
+    [view setSelectedImage:[UIImage imageNamed:@"btn_settings"]];
+    [view setOffset:8];
+    
     [view addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
-    [view setImage:[UIImage imageNamed:@"btn_settings"] forState:UIControlStateNormal];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     return bbi;
@@ -71,7 +69,7 @@
 {
     STKNavigationButton *view = [[STKNavigationButton alloc] init];
     [view addTarget:self action:@selector(createNewPost:) forControlEvents:UIControlEventTouchUpInside];
-    [view setOffset:8];
+    [view setOffset:9];
 
     [view setImage:[UIImage imageNamed:@"btn_addcontent"]];
     [view setSelectedImage:[UIImage imageNamed:@"btn_addcontent_active"]];
@@ -86,7 +84,7 @@
     [view addTarget:self action:@selector(toggleMenu:) forControlEvents:UIControlEventTouchUpInside];
     [view setImage:[UIImage imageNamed:@"btn_menu"]];
     [view setSelectedImage:[UIImage imageNamed:@"btn_menu_active"]];
-    [view setOffset:-8];
+    [view setOffset:-11];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     

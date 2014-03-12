@@ -19,6 +19,7 @@ extern NSString * const STKPostTypeExperience;
 extern NSString * const STKPostTypeAchievement;
 extern NSString * const STKPostTypePassion;
 extern NSString * const STKPostTypeAccolade;
+extern NSString * const STKPostTypePersonal;
 
 extern NSString * const STKPostVisibilityPublic;
 extern NSString * const STKPostVisibilityTrust;
@@ -30,6 +31,7 @@ extern NSString * const STKPostLocationNameKey;
 extern NSString * const STKPostURLKey;
 extern NSString * const STKPostTextKey;
 extern NSString * const STKPostTypeKey;
+extern NSString * const STKPostVisibilityKey;
 extern NSString * const STKPostHashTagsKey;
 
 @interface STKPost : NSObject <STKJSONObject>

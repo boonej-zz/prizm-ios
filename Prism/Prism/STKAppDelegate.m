@@ -21,7 +21,7 @@
 
 
 #import <GooglePlus/GooglePlus.h>
-
+#import <Crashlytics/Crashlytics.h>
 
 #import "STKAuthorizationToken.h"
 
@@ -35,6 +35,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    [Crashlytics startWithAPIKey:@"e70b092ac5acf46c6e8a86bc59e79c34df550f5f"];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     

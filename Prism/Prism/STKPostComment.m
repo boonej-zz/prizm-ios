@@ -8,6 +8,7 @@
 
 #import "STKPostComment.h"
 #import "STKUser.h"
+#import "STKUserStore.h"
 
 @implementation STKPostComment
 - (NSError *)readFromJSONObject:(id)jsonObject
@@ -21,6 +22,15 @@
     [self setDate:[df dateFromString:[jsonObject objectForKey:@"create_date"]]];
     [self setText:[jsonObject objectForKey:@"text"]];
     [self setCommentID:[jsonObject objectForKey:@"_id"]];
+    
+    [self setLikeCount:[[jsonObject objectForKey:@"likes_count"] intValue]];
+    
+    [self setLikedByCurrentUser:NO];
+    for(NSDictionary *d in [jsonObject objectForKey:@"likes"]) {
+        if([[d objectForKey:@"_id"] isEqualToString:[[[STKUserStore store] currentUser] userID]]) {
+            [self setLikedByCurrentUser:YES];
+        }
+    }
     
     if([[jsonObject objectForKey:@"creator"] isKindOfClass:[NSDictionary class]]) {
         STKUser *u = [[STKUser alloc] init];

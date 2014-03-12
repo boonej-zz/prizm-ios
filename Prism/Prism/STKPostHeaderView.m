@@ -7,7 +7,7 @@
 //
 
 #import "STKPostHeaderView.h"
-#import "STKResolvingImageView.h"
+#import "STKAvatarView.h"
 
 @interface STKPostHeaderView ()
 @property (nonatomic, strong) UIImageView *timeImageView;
@@ -39,12 +39,13 @@
     
     _avatarButton = [[UIControl alloc] init];
     _backdropFadeView = [[UIImageView alloc] init];
-    _avatarView = [[STKResolvingImageView alloc] init];
+    _avatarView = [[STKAvatarView alloc] init];
     _posterLabel = [[UILabel alloc] init];
     _timeLabel = [[UILabel alloc] init];
     _sourceLabel = [[UILabel alloc] init];
     _postTypeView = [[UIImageView alloc] init];
     _timeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_clock"]];
+    
     
     [_backdropFadeView setAlpha:0.0];
     [_posterLabel setFont:STKFont(16)];
@@ -56,9 +57,6 @@
     [_sourceLabel setFont:STKFont(10)];
     [_sourceLabel setTextColor:STKTextTransparentColor];
     [_sourceLabel setTextAlignment:NSTextAlignmentRight];
-    
-    [[_avatarView layer] setCornerRadius:16];
-    [_avatarView setClipsToBounds:YES];
     
     [_postTypeView setContentMode:UIViewContentModeCenter];
     
@@ -77,18 +75,15 @@
         [v setTranslatesAutoresizingMaskIntoConstraints:NO];
     }
     
-
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeWidth
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeHeight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual
-                                                        toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual
-                                                        toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
-    
+    // Make _avatarButton and _backdropFadeView fit the entire bar
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|"
+                                                                 options:0
+                                                                 metrics:nil
+                                                                   views:@{@"v" : _avatarButton}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|"
+                                                                 options:0
+                                                                 metrics:nil
+                                                                   views:@{@"v" : _avatarButton}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|"
                                                                  options:0
                                                                  metrics:nil
@@ -99,13 +94,15 @@
                                                                    views:@{@"v" : _backdropFadeView}]];
     
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-9-[ava(==30)]-8-[poster]-8-[type(==20)]-9-|"
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual
+                                                        toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:4]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[ava(==30)]-8-[poster(==224)]-8-[type(==22)]"
                                                                  options:NSLayoutFormatAlignAllTop metrics:nil
                                                                    views:@{@"ava" : _avatarView, @"poster" : _posterLabel, @"type" : _postTypeView}]];
     [_avatarView addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
                                                                toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:30]];
     [_postTypeView addConstraint:[NSLayoutConstraint constraintWithItem:_postTypeView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
-                                                               toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:20]];
+                                                               toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:22]];
 
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
                                                         toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-10]];

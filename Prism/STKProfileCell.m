@@ -22,10 +22,6 @@
     [[self nameLabel] setTextColor:STKTextColor];
     [[self locationLabel] setTextColor:STKTextTransparentColor];
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
-    [[_avatarView layer] setCornerRadius:16];
-    [_avatarView setClipsToBounds:YES];
-
 }
 
 - (void)layoutContent

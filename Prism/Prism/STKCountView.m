@@ -21,6 +21,7 @@
 {
     self = [super initWithFrame:frame];
     if(self) {
+        
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _countLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [_titleLabel setTextColor:STKTextColor];
@@ -53,6 +54,7 @@
                                                                 relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
                                                                multiplier:1 constant:20]];
         [self setBackgroundColor:[UIColor clearColor]];
+
         [self setContentMode:UIViewContentModeRedraw];
     }
     return self;
@@ -63,7 +65,13 @@
     [[UIColor colorWithWhite:1.0 alpha:0.2] setFill];
     [[UIColor colorWithWhite:1.0 alpha:0.5] setStroke];
 
-    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 8, 8)];
+    CGRect r = CGRectInset([self bounds], 1, 1);
+    if(r.size.width < r.size.height)
+        r.size.height = r.size.width;
+    else if(r.size.height < r.size.width)
+        r.size.width = r.size.height;
+    
+    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];
     [bp setLineWidth:2];
     [bp fill];
     [bp stroke];
@@ -110,7 +118,7 @@
     }
     _circleViews = [a copy];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-4-[v0]-8-[v1(==v0)]-8-[v2(==v0)]-4-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-14-[v0]-8-[v1(==v0)]-8-[v2(==v0)]-14-|"
                                                                  options:0
                                                                  metrics:nil
                                                                    views:@{@"v0" : a[0], @"v1" : a[1], @"v2" : a[2]}]];

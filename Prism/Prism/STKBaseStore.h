@@ -40,6 +40,6 @@ typedef enum {
 
 - (void)fetchAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block;
 
-- (void)executeAuthorizedRequest:(void (^)(BOOL granted))request;
+- (void)executeAuthorizedRequest:(void (^)(NSError *err))request;
 
 @end
