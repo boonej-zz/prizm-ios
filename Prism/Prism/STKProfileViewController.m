@@ -18,7 +18,7 @@
 #import "STKBaseStore.h"
 #import "STKPostViewController.h"
 #import "STKRequestItem.h"
-#import "STKEditProfileViewController.h"
+#import "STKCreateProfileViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "STKHomeCell.h"
 #import "STKFilterCell.h"
@@ -342,7 +342,7 @@ typedef enum {
 
 - (void)editProfile:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    STKEditProfileViewController *ep = [[STKEditProfileViewController alloc] init];
+    STKCreateProfileViewController *ep = [[STKCreateProfileViewController alloc] initWithProfileForEditing:[self profile]];
     [[self navigationController] pushViewController:ep animated:YES];
 }
 
@@ -362,6 +362,11 @@ typedef enum {
     [[STKUserStore store] createRequestOfType:STKRequestTypeTrust profile:[self profile] completion:^(id obj, NSError *err) {
         
     }];
+}
+
+- (void)showAccolades:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    
 }
 
 - (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -409,10 +414,12 @@ typedef enum {
 {
     STKInitialProfileStatisticsCell *c = [self statsCell];
     if([self isShowingCurrentUserProfile]) {
+        [[c accoladesButton] setHidden:NO];
         [[c followButton] setHidden:YES];
         [[c trustButton] setHidden:YES];
         [[c editButton] setHidden:NO];
     } else {
+        [[c accoladesButton] setHidden:YES];
         [[c followButton] setHidden:NO];
         if([[self profile] isFollowedByCurrentUser]) {
             [[c followButton] setTitle:@"Following" forState:UIControlStateNormal];

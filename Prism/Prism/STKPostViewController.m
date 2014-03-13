@@ -40,7 +40,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchWidthConstraint;
 
 @property (nonatomic, strong) STKHomeCell *postCell;
-
+@property (nonatomic) BOOL editingPostText;
 
 - (IBAction)postComment:(id)sender;
 
@@ -208,6 +208,8 @@
     return YES;
 }
 
+
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if([scrollView contentOffset].y < 0) {
@@ -255,6 +257,8 @@
 
 - (void)keyboardWillDisappear:(NSNotification *)note
 {
+    [self setEditingPostText:NO];
+
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, [[self commentFooterView] bounds].size.height, 0)];
 
@@ -269,7 +273,15 @@
                      } completion:nil];
 
     [[self overlayVIew] setHidden:YES];
+}
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath row] == 0 && ![self commentForIndexPath:indexPath] && [[[self post] creator] isEqual:[[STKUserStore store] currentUser]]) {
+        [self setEditingPostText:YES];
+        [[self commentTextField] setText:[[self post] text]];
+        [[self commentTextField] becomeFirstResponder];
+    }
 }
 
 - (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -326,6 +338,21 @@
 {
     STKProfileViewController *vc = [[STKProfileViewController alloc] init];
     [vc setProfile:[[self post] creator]];
+    [[self navigationController] pushViewController:vc animated:YES];
+}
+
+- (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKPostComment *pc = [self commentForIndexPath:ip];
+    STKUser *u = nil;
+    if(pc) {
+        u = [pc user];
+    } else {
+        u = [[self post] creator];
+    }
+    
+    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+    [vc setProfile:u];
     [[self navigationController] pushViewController:vc animated:YES];
 }
 
@@ -525,32 +552,33 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (IBAction)postComment:(id)sender
 {
     if([[[self commentTextField] text] length] == 0) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Please enter a comment"
-                                                     message:@"Enter text into the comment field before posting a comment."
-                                                    delegate:nil
-                                           cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
         return;
     }
     
-    [[STKContentStore store] addComment:[[self commentTextField] text] toPost:[self post] completion:^(STKPost *p, NSError *err) {
-        if(err) {
-            [[self postCell] populateWithPost:[self post]];
-        }
-    }];
-    [[self postCell] populateWithPost:[self post]];
-    [[self commentTextField] setText:nil];
-    [[self view] endEditing:YES];
+    if([self editingPostText]) {
+        [self setEditingPostText:NO];
+        
+    } else {
+        
+        [[STKContentStore store] addComment:[[self commentTextField] text] toPost:[self post] completion:^(STKPost *p, NSError *err) {
+            if(err) {
+                [[self postCell] populateWithPost:[self post]];
+            }
+        }];
+        [[self postCell] populateWithPost:[self post]];
+        [[self commentTextField] setText:nil];
+        [[self view] endEditing:YES];
 
-    int index = [[[self post] comments] count] - 1;
-    if([self postHasText]) {
-        index ++;
+        int index = [[[self post] comments] count] - 1;
+        if([self postHasText]) {
+            index ++;
+        }
+        NSIndexPath *ip = [NSIndexPath indexPathForRow:index inSection:1];
+        [[self tableView] insertRowsAtIndexPaths:@[ip]
+                                withRowAnimation:UITableViewRowAnimationAutomatic];
+        [[self tableView] scrollToRowAtIndexPath:ip
+                                atScrollPosition:UITableViewScrollPositionBottom
+                                        animated:YES];
     }
-    NSIndexPath *ip = [NSIndexPath indexPathForRow:index inSection:1];
-    [[self tableView] insertRowsAtIndexPaths:@[ip]
-                            withRowAnimation:UITableViewRowAnimationAutomatic];
-    [[self tableView] scrollToRowAtIndexPath:ip
-                            atScrollPosition:UITableViewScrollPositionBottom
-                                    animated:YES];
 }
 @end

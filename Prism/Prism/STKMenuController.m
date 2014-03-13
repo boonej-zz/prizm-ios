@@ -354,8 +354,8 @@
                                                fromViewController:(UIViewController *)fromVC
                                                  toViewController:(UIViewController *)toVC
 {
-    if([fromVC class] == [STKPostViewController class]
-    || [toVC class] == [STKPostViewController class]) {
+    if(([fromVC class] == [STKPostViewController class] && operation == UINavigationControllerOperationPop)
+    || ([toVC class] == [STKPostViewController class] && operation == UINavigationControllerOperationPush)) {
         
         if(![[self transitionImageView] superview]) {
             [[self view] addSubview:[self transitionImageView]];

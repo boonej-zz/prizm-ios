@@ -80,8 +80,6 @@
 		BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE96C61B185A0D0C005D44BC /* STKWebViewController.m */; };
 		BEAB9766189AD503002A14F5 /* STKProfileInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAB9764189AD503002A14F5 /* STKProfileInformationCell.m */; };
 		BEAB9767189AD503002A14F5 /* STKProfileInformationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAB9765189AD503002A14F5 /* STKProfileInformationCell.xib */; };
-		BEAB976B189AD81C002A14F5 /* STKEditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAB9769189AD81C002A14F5 /* STKEditProfileViewController.m */; };
-		BEAB976C189AD81C002A14F5 /* STKEditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAB976A189AD81C002A14F5 /* STKEditProfileViewController.xib */; };
 		BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */; };
 		BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */; };
 		BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A618522D6C00F0B211 /* STKTextFieldCell.m */; };
@@ -1978,9 +1976,6 @@
 		BEAB9763189AD503002A14F5 /* STKProfileInformationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProfileInformationCell.h; sourceTree = "<group>"; };
 		BEAB9764189AD503002A14F5 /* STKProfileInformationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProfileInformationCell.m; sourceTree = "<group>"; };
 		BEAB9765189AD503002A14F5 /* STKProfileInformationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKProfileInformationCell.xib; sourceTree = "<group>"; };
-		BEAB9768189AD81C002A14F5 /* STKEditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKEditProfileViewController.h; sourceTree = "<group>"; };
-		BEAB9769189AD81C002A14F5 /* STKEditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKEditProfileViewController.m; sourceTree = "<group>"; };
-		BEAB976A189AD81C002A14F5 /* STKEditProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKEditProfileViewController.xib; sourceTree = "<group>"; };
 		BEAC71A01852285700F0B211 /* STKCreateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreateProfileViewController.h; sourceTree = "<group>"; };
 		BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCreateProfileViewController.m; sourceTree = "<group>"; };
 		BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCreateProfileViewController.xib; sourceTree = "<group>"; };
@@ -2266,9 +2261,6 @@
 				BE4C642A18970BE500467E2D /* STKLocationViewController.h */,
 				BE4C642B18970BE500467E2D /* STKLocationViewController.m */,
 				BE4C642C18970BE500467E2D /* STKLocationViewController.xib */,
-				BEAB9768189AD81C002A14F5 /* STKEditProfileViewController.h */,
-				BEAB9769189AD81C002A14F5 /* STKEditProfileViewController.m */,
-				BEAB976A189AD81C002A14F5 /* STKEditProfileViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4379,7 +4371,6 @@
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
 				BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */,
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
-				BEAB976C189AD81C002A14F5 /* STKEditProfileViewController.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
 				BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
@@ -4440,7 +4431,6 @@
 				BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */,
 				BE1FC3B5186C8C0A003464E1 /* STKImageCollectionViewCell.m in Sources */,
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
-				BEAB976B189AD81C002A14F5 /* STKEditProfileViewController.m in Sources */,
 				BE02EAAF182A80A200A5505A /* main.m in Sources */,
 				BE3FFDF918AE9744005B531E /* STKAuthorizationToken.m in Sources */,
 				BEFCEE05182C210600648B9F /* STKConnection.m in Sources */,

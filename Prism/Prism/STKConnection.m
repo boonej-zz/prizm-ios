@@ -128,6 +128,13 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     [dt resume];
 }
 
+- (void)putWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block
+{
+    [self setCompletionBlock:block];
+    [self setMethod:STKConnectionMethodPUT];
+    [self beginWithSession:session];
+}
+
 - (void)postWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block
 {
     [self setCompletionBlock:block];
