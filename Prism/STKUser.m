@@ -104,6 +104,8 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
         @"following_count" : @"followingCount",
         @"posts_count" : @"postCount",
         @"provider" : @"externalServiceType",
+        @"info" : @"blurb",
+        @"website" : @"website",
         STKUserProfilePhotoURLStringKey : @"profilePhotoPath",
         STKUserCoverPhotoURLStringKey : @"coverPhotoPath",
         @"birthday" : ^(id inValue) {

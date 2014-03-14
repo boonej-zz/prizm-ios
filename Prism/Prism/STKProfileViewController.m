@@ -27,6 +27,7 @@
 #import "STKImageSharer.h"
 #import "STKUserListViewController.h"
 #import "STKUserPostListViewController.h"
+#import "STKProfileInformationCell.h"
 
 typedef enum {
     STKProfileSectionHeader,
@@ -512,7 +513,9 @@ typedef enum {
         return [self statsCell];
     } else if([indexPath section] == STKProfileSectionInformation) {
         if([self isShowingInformation]) {
-            return nil;
+            STKProfileInformationCell *c = [STKProfileInformationCell cellForTableView:tableView target:self];
+            [[c infoLabel] setText:[[self profile] blurb]];
+            return c;
         } else {
             if([self showPostsInSingleLayout]) {
                 STKHomeCell *c = [STKHomeCell cellForTableView:tableView target:self];
@@ -549,7 +552,7 @@ typedef enum {
         return 50;
     } else if([indexPath section] == STKProfileSectionInformation) {
         if([self isShowingInformation]) {
-            return 0;
+            return [self heightForInfoCell];
         }
         if([self showPostsInSingleLayout]) {
             return 401;
@@ -570,7 +573,7 @@ typedef enum {
         return 50;
     } else if([indexPath section] == STKProfileSectionInformation) {
         if([self isShowingInformation]) {
-            return 0;
+            return [self heightForInfoCell];
         }
         if([self showPostsInSingleLayout]) {
             return 401;
@@ -578,6 +581,19 @@ typedef enum {
         return 106;
     }
     return 44;
+}
+
+- (CGFloat)heightForInfoCell
+{
+    static UIFont *f = nil;
+    if(!f) {
+        f = STKFont(14);
+    }
+    CGRect r = [[[self profile] blurb] boundingRectWithSize:CGSizeMake(200, 10000)
+                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                      attributes:@{NSFontAttributeName : f} context:nil];
+
+    return r.size.height + 60;
 }
 
 
@@ -598,8 +614,12 @@ typedef enum {
                 return [[self posts] count] / 3;
             }
         } else {
-            return 0;
+            return 1;
         }
+    } else if(section == STKProfileSectionPreinformation) {
+        if([self isShowingInformation])
+            return 0;
+        return 1;
     }
     
     return 1;

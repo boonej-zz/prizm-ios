@@ -74,6 +74,8 @@
 		BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5ADE18D36050005D3893 /* STKUserListViewController.xib */; };
 		BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5AE218D37327005D3893 /* STKUserPostListViewController.m */; };
 		BE7D5AE518D37327005D3893 /* STKUserPostListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5AE318D37327005D3893 /* STKUserPostListViewController.xib */; };
+		BE7D5AE918D382E5005D3893 /* STKTextInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */; };
+		BE7D5AEA18D382E5005D3893 /* STKTextInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */; };
 		BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE893600186CD05E00FE8263 /* STKContentStore.m */; };
 		BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */; };
 		BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */; };
@@ -1969,6 +1971,9 @@
 		BE7D5AE118D37327005D3893 /* STKUserPostListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKUserPostListViewController.h; sourceTree = "<group>"; };
 		BE7D5AE218D37327005D3893 /* STKUserPostListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUserPostListViewController.m; sourceTree = "<group>"; };
 		BE7D5AE318D37327005D3893 /* STKUserPostListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKUserPostListViewController.xib; sourceTree = "<group>"; };
+		BE7D5AE618D382E5005D3893 /* STKTextInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTextInputViewController.h; sourceTree = "<group>"; };
+		BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTextInputViewController.m; sourceTree = "<group>"; };
+		BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKTextInputViewController.xib; sourceTree = "<group>"; };
 		BE8935FF186CD05E00FE8263 /* STKContentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKContentStore.h; sourceTree = "<group>"; };
 		BE893600186CD05E00FE8263 /* STKContentStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKContentStore.m; sourceTree = "<group>"; };
 		BE8BBF0118C7B1F500D53BF5 /* STKImageSharer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKImageSharer.h; sourceTree = "<group>"; };
@@ -2277,6 +2282,9 @@
 				BE7D5AE118D37327005D3893 /* STKUserPostListViewController.h */,
 				BE7D5AE218D37327005D3893 /* STKUserPostListViewController.m */,
 				BE7D5AE318D37327005D3893 /* STKUserPostListViewController.xib */,
+				BE7D5AE618D382E5005D3893 /* STKTextInputViewController.h */,
+				BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */,
+				BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4380,6 +4388,7 @@
 				BE7D5AE518D37327005D3893 /* STKUserPostListViewController.xib in Resources */,
 				BEC01A0F182AF42600080601 /* STKTrustViewController.xib in Resources */,
 				BE1E09D01850DF0A00975652 /* STKLoginViewController.xib in Resources */,
+				BE7D5AEA18D382E5005D3893 /* STKTextInputViewController.xib in Resources */,
 				BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */,
 				BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */,
 				BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */,
@@ -4469,6 +4478,7 @@
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
 				BEE0FA43185B621A009FCA3B /* STKProfileInformation.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
+				BE7D5AE918D382E5005D3893 /* STKTextInputViewController.m in Sources */,
 				BEE5F03D187DC03300CB5325 /* STKInitialProfileStatisticsCell.m in Sources */,
 				BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */,
 				BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */,

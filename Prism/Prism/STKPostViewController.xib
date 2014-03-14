@@ -14,6 +14,7 @@
                 <outlet property="fakeContainerView" destination="Qys-Ur-GtV" id="mfm-2t-fYh"/>
                 <outlet property="fakeHeaderView" destination="KfP-Fo-rS2" id="xMr-38-VzX"/>
                 <outlet property="overlayVIew" destination="tVf-Km-kul" id="Nbq-Kg-kOs"/>
+                <outlet property="postButton" destination="ywj-I7-cIa" id="UqV-K9-EEW"/>
                 <outlet property="stretchHeightConstraint" destination="azu-WG-Jyg" id="lnS-o0-M1j"/>
                 <outlet property="stretchView" destination="NL1-hu-ihE" id="Zn3-2k-DfY"/>
                 <outlet property="stretchWidthConstraint" destination="S1K-bu-XGJ" id="nNU-ge-hYU"/>

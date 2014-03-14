@@ -43,6 +43,7 @@
 - (void)cellDidLoad
 {
     UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    [tap setCancelsTouchesInView:NO];
     [[self contentView] addGestureRecognizer:tap];
     
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];

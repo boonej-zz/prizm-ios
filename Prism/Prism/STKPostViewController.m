@@ -35,6 +35,7 @@
 @property (nonatomic, strong) UIView *commentHeaderView;
 @property (weak, nonatomic) IBOutlet UIButton *deletePostButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteCommentButton;
+@property (weak, nonatomic) IBOutlet UIButton *postButton;
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
@@ -65,6 +66,19 @@
 - (BOOL)postHasText
 {
     return [[[self post] text] length] > 0;
+}
+
+- (void)setEditingPostText:(BOOL)editingPostText
+{
+    _editingPostText = editingPostText;
+    if([self editingPostText]) {
+        [[self postButton] setTitle:@"Edit" forState:UIControlStateNormal];
+        [[self deleteCommentButton] setHidden:YES];
+    } else {
+        [[self postButton] setTitle:@"Post" forState:UIControlStateNormal];
+        [[self deleteCommentButton] setHidden:NO];
+    }
+
 }
 
 - (STKPostComment *)commentForIndexPath:(NSIndexPath *)ip
@@ -261,10 +275,8 @@
     [[self overlayVIew] setHidden:NO];
 
     if([self editingPostText]) {
-        [[self deleteCommentButton] setHidden:YES];
         [[self tableView] setContentOffset:CGPointMake(0, 216) animated:YES];
     } else {
-        [[self deleteCommentButton] setHidden:NO];
         [[self tableView] scrollRectToVisible:CGRectMake(0, [[self tableView] contentSize].height - 1, 1, 1) animated:YES];
     }
 }
@@ -572,11 +584,15 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     if([self editingPostText]) {
         [self setEditingPostText:NO];
         
+        
         [[STKContentStore store] editPost:[self post]
                                  withInfo:@{@"text" : [[self commentTextField] text]}
                                completion:^(STKPost *p, NSError *err) {
                                    [[self tableView] reloadData];
                                }];
+        
+        [[self commentTextField] setText:nil];
+        [[self view] endEditing:YES];
     } else {
         
         [[STKContentStore store] addComment:[[self commentTextField] text] toPost:[self post] completion:^(STKPost *p, NSError *err) {

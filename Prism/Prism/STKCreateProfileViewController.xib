@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKCreateProfileViewController">
             <connections>
+                <outlet property="backgroundImageView" destination="goM-3J-oOt" id="S3D-Ql-aWz"/>
                 <outlet property="coverOverlayView" destination="lid-zU-hbX" id="hxF-p4-o4n"/>
                 <outlet property="coverPhotoButton" destination="uCp-R9-fYJ" id="Bat-HZ-Vz4"/>
                 <outlet property="coverPhotoImageView" destination="XYa-Fr-Bxy" id="Nkl-0Z-uag"/>
@@ -23,6 +24,10 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="goM-3J-oOt">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XYa-Fr-Bxy" customClass="STKResolvingImageView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="188"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -86,17 +91,21 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="goM-3J-oOt" secondAttribute="bottom" id="0zw-Sn-teX"/>
                 <constraint firstItem="XYa-Fr-Bxy" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="55E-Rb-Tcf"/>
                 <constraint firstAttribute="trailing" secondItem="XYa-Fr-Bxy" secondAttribute="trailing" id="59i-vu-z8b"/>
                 <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="XYa-Fr-Bxy" secondAttribute="bottom" id="5xU-xZ-pok"/>
+                <constraint firstAttribute="trailing" secondItem="goM-3J-oOt" secondAttribute="trailing" id="6Jp-az-Nce"/>
                 <constraint firstItem="uCp-R9-fYJ" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="A1D-jE-cgQ"/>
                 <constraint firstAttribute="bottom" secondItem="7Yn-5Y-IYC" secondAttribute="bottom" id="Cz0-39-lTh"/>
                 <constraint firstAttribute="centerX" secondItem="bmB-56-liW" secondAttribute="centerX" id="FEH-ox-95u"/>
                 <constraint firstAttribute="trailing" secondItem="7Yn-5Y-IYC" secondAttribute="trailing" id="GKX-bc-gnh"/>
+                <constraint firstItem="goM-3J-oOt" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Mdq-lk-TZk"/>
                 <constraint firstItem="7Yn-5Y-IYC" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Qrd-eY-Lsn"/>
                 <constraint firstAttribute="trailing" secondItem="lid-zU-hbX" secondAttribute="trailing" id="Ulu-Yq-iMt"/>
                 <constraint firstItem="XYa-Fr-Bxy" firstAttribute="top" secondItem="1" secondAttribute="top" id="XRT-fY-QVV"/>
                 <constraint firstItem="lid-zU-hbX" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="b3d-wP-H7G"/>
+                <constraint firstItem="goM-3J-oOt" firstAttribute="top" secondItem="1" secondAttribute="top" id="gt1-13-fIr"/>
                 <constraint firstItem="XYa-Fr-Bxy" firstAttribute="top" secondItem="lid-zU-hbX" secondAttribute="top" id="mh7-Ad-PHK"/>
                 <constraint firstItem="uCp-R9-fYJ" firstAttribute="bottom" secondItem="XYa-Fr-Bxy" secondAttribute="bottom" constant="-6" id="rU0-cg-mqf"/>
                 <constraint firstItem="bmB-56-liW" firstAttribute="bottom" secondItem="XYa-Fr-Bxy" secondAttribute="bottom" constant="-35" id="sjo-2X-9CN"/>
@@ -202,6 +211,7 @@
     </objects>
     <resources>
         <image name="btn_lg" width="303" height="44"/>
+        <image name="img_background" width="320" height="568"/>
         <image name="upload_camera" width="77" height="77"/>
         <image name="upload_image" width="15" height="15"/>
     </resources>

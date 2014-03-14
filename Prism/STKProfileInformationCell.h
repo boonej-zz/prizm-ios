@@ -10,4 +10,6 @@
 
 @interface STKProfileInformationCell : STKTableViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *infoLabel;
+
 @end

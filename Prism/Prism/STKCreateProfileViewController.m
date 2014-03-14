@@ -18,6 +18,7 @@
 #import "STKImageChooser.h"
 #import "STKUser.h"
 #import "STKBaseStore.h"
+#import "STKTextInputViewController.h"
 
 @import AddressBook;
 @import Social;
@@ -31,6 +32,7 @@ const long STKCreateProgressGeocoding = 4;
     <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) STKUser *user;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 
 @property (nonatomic) long progressMask;
 @property (nonatomic) BOOL retryRegisterOnProgressMaskClear;
@@ -168,6 +170,9 @@ const long STKCreateProgressGeocoding = 4;
 
 - (void)configureInterface
 {
+    [[self backgroundImageView] setHidden:![self isEditingProfile]];
+    
+    
     if([[self user] coverPhotoPath] || [[self user] coverPhoto] || [self progressMask] & STKCreateProgressUploadingCover) {
         [[self coverOverlayView] setHidden:NO];
         [[self coverPhotoButton] setTitle:@"Edit" forState:UIControlStateNormal];
@@ -410,12 +415,15 @@ const long STKCreateProgressGeocoding = 4;
                                            }];
     }
     [self configureInterface];
+    [[self tableView] reloadData];
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
 {
     CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, r.size.height, 0)];
+    
+    
 }
 
 - (void)keyboardWillDisappear:(NSNotification *)note
@@ -457,14 +465,6 @@ const long STKCreateProgressGeocoding = 4;
     if([[[[self items] objectAtIndex:[ip row]] objectForKey:@"cellType"] isEqualToString:@"date"]) {
         STKDateCell *c = (STKDateCell *)[[self tableView] cellForRowAtIndexPath:ip];
         [[self user] setBirthday:[c date]];
-    }
-    if([[[[self items] objectAtIndex:[ip row]] objectForKey:@"cellType"] isEqualToString:@"textView"]) {
-        UITextView *tv = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 320, 200)];
-        
-        [tv setFont:STKFont(14)];
-        NSString *key = [[[self items] objectAtIndex:[ip row]] objectForKey:@"key"];
-        [tv setText:[[self user] valueForKey:key]];
-        [textField setInputAccessoryView:tv];
     }
     [self setEditingIndexPath:ip];
 }
@@ -694,7 +694,21 @@ const long STKCreateProgressGeocoding = 4;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [[self items] objectAtIndex:[indexPath row]];
-
+    NSLog(@"%@", item);
+    if([[item objectForKey:@"cellType"] isEqualToString:@"textView"]) {
+        STKTextInputViewController *ivc = [[STKTextInputViewController alloc] init];
+        [ivc setText:[[self user] valueForKeyPath:[item objectForKey:@"key"]]];
+        
+        __weak STKTextInputViewController *wivc = ivc;
+        [ivc setCompletion:^(NSString *str) {
+            [[self user] setValue:str forKeyPath:[item objectForKey:@"key"]];
+            [[STKUserStore store] updateUserDetails:[self user] completion:^(STKUser *u, NSError *err) {
+                
+            }];
+            [[wivc navigationController] popViewControllerAnimated:YES];
+        }];
+        [[self navigationController] pushViewController:ivc animated:YES];
+    }
     
 }
 
@@ -747,6 +761,12 @@ const long STKCreateProgressGeocoding = 4;
     }
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
+    
+    if([cellType isEqual:@"textView"]) {
+        [[c textField] setEnabled:NO];
+    } else {
+        [[c textField] setEnabled:YES];
+    }
     
     [[c label] setText:[item objectForKey:@"title"]];
     NSString *value = [[self user] valueForKey:[item objectForKey:@"key"]];
