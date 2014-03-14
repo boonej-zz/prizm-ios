@@ -34,8 +34,6 @@ extern NSString * const STKPostTypeKey;
 extern NSString * const STKPostVisibilityKey;
 extern NSString * const STKPostHashTagsKey;
 
-extern NSString * const STKPostStatusDeleted;
-
 @interface STKPost : NSObject <STKJSONObject>
 
 @property (nonatomic, strong) NSString *postID;
@@ -53,9 +51,6 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, retain) NSString *imageURLString;
 
 @property (nonatomic, retain) NSString *externalSystemID;
-
-@property (nonatomic, strong) NSString *status;
-
 
 @property (nonatomic) NSString *type;
 @property (nonatomic) int commentCount;

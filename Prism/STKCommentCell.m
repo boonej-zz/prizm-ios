@@ -28,8 +28,4 @@
     
 }
 
-- (IBAction)avatarTapped:(id)sender
-{
-    ROUTE(sender);
-}
 @end

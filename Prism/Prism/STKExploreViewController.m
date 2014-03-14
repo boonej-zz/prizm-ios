@@ -20,40 +20,16 @@
 #import "STKSearchProfileCell.h"
 #import "STKProfileViewController.h"
 #import "UIERealTimeBlurView.h"
-#import "STKTextImageCell.h"
 
-typedef enum {
-    STKExploreTypeLatest = 0,
-    STKExploreTypePopular = 1
-} STKExploreType;
-typedef enum {
-    STKSearchTypeUser,
-    STKSearchTypeHashTag
-} STKSearchType;
 
-@interface STKExploreViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface STKExploreViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) NSArray *filterPostOptions;
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *exploreTypeControl;
 @property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *posts;
-@property (weak, nonatomic) IBOutlet UITableView *searchResultsTableView;
-@property (weak, nonatomic) IBOutlet UITextField *searchTextField;
-@property (weak, nonatomic) IBOutlet UICollectionView *filterOptionView;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 
-@property (weak, nonatomic) IBOutlet UIView *searchContainer;
-@property (weak, nonatomic) IBOutlet UIButton *usersFilterButton;
-@property (weak, nonatomic) IBOutlet UIButton *hashTagFilterButton;
-@property (nonatomic) STKSearchType searchType;
-@property (nonatomic, strong) NSArray *postsFound;
 @property (nonatomic, strong) NSArray *profilesFound;
-
-- (IBAction)exploreTypeChanged:(id)sender;
-- (IBAction)showHashTagResults:(id)sender;
-- (IBAction)showUserResults:(id)sender;
-- (IBAction)toggleFilterView:(id)sender;
 
 @end
 
@@ -67,69 +43,22 @@ typedef enum {
         [[self navigationItem] setTitle:@"Explore"];
         [[self navigationItem] setRightBarButtonItem:[self searchBarButtonItem]];
         
-        [self setAutomaticallyAdjustsScrollViewInsets:NO];
-        
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_explore"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
-        
         _posts = [[NSMutableArray alloc] init];
-        
-        _filterPostOptions = @[
-                               @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"btn_cloud_aspirations"]},
-                               @{@"title" : @"Passions", STKPostTypeKey : STKPostTypePassion, @"image" : [UIImage imageNamed:@"btn_heart"]},
-                               @{@"title" : @"Experiences", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"btn_experiences"]},
-                               @{@"title" : @"Achievements", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"btn_achievements"]},
-                               @{@"title" : @"Inspirations", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"btn_inspirations"]},
-                               @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"btn_personal"]}
-                               ];
-        
     }
     return self;
 }
 
-- (IBAction)dismissSearchContainer:(id)sender
-{
-    [self setSearchBarActive:NO];
-}
 - (void)initiateSearch:(id)sender
 {
-    [self setSearchBarActive:![self isSearchBarActive]];
-}
-
-- (void)setSearchBarActive:(BOOL)active
-{
-    if(active) {
-        [[self tableView] setHidden:YES];
-        [[self searchContainer] setHidden:NO];
-        [[self exploreTypeControl] setHidden:YES];
-        [[self searchTextField] becomeFirstResponder];
-        [self reloadSearchResults];
+    float top = [[self tableView] contentInset].top;
+    if(-[[self tableView] contentOffset].y == top) {
+        [[self tableView] setContentOffset:CGPointMake(0, [[self searchBar] bounds].size.height - top) animated:YES];
     } else {
-        [[self tableView] setHidden:NO];
-
-        [[self searchTextField] setText:nil];
-        [[self searchContainer] setHidden:YES];
-        [[self exploreTypeControl] setHidden:NO];
-        [[self view] endEditing:YES];
+        [[self tableView] setContentOffset:CGPointMake(0, -top) animated:YES];
     }
-}
-
-- (void)refreshSearchTypeControl
-{
-    UIColor *onColor = [UIColor colorWithRed:0.0 green:0.5 blue:0.8 alpha:1];
-    UIColor *offColor = [UIColor colorWithRed:0.8 green:0.95 blue:1 alpha:1];
-    if([self searchType] == STKSearchTypeHashTag) {
-        [[self usersFilterButton] setBackgroundColor:offColor];
-        [[self hashTagFilterButton] setBackgroundColor:onColor];
-    } else {
-        [[self usersFilterButton] setBackgroundColor:onColor];
-        [[self hashTagFilterButton] setBackgroundColor:offColor];
-    }
-}
-
-- (BOOL)isSearchBarActive
-{
-    return ![[self searchContainer] isHidden];
+    
 }
 
 - (void)menuWillAppear:(BOOL)animated
@@ -144,44 +73,16 @@ typedef enum {
     [[self navigationItem] setRightBarButtonItem:[self searchBarButtonItem]];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if(scrollView == [self searchResultsTableView])
-        [[self searchTextField] resignFirstResponder];
-}
 
-- (CGRect)rectForPostAtIndex:(int)idx inTableView:(UITableView *)tv
-{
-    int row = idx / 3;
-    int offset = idx % 3;
-    
-    STKTriImageCell *c = (STKTriImageCell *)[tv cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
-
-    CGRect r = CGRectZero;
-    if(offset == 0)
-        r = [[c leftImageView] frame];
-    else if(offset == 1)
-        r = [[c centerImageView] frame];
-    else if(offset == 2)
-        r = [[c rightImageView] frame];
-    
-    return [[self view] convertRect:r fromView:c];
-}
 
 - (void)showPostAtIndex:(int)idx
 {
-    NSArray *posts = [self posts];
-    UITableView *tv = [self tableView];
-    if([self isSearchBarActive] && [self searchType] == STKSearchTypeHashTag) {
-        posts = [self postsFound];
-        tv = [self searchResultsTableView];
-    }
-    if(idx < [posts count]) {
-        STKPost *p = [posts objectAtIndex:idx];
-        [[self menuController] transitionToPost:p
-                                       fromRect:[self rectForPostAtIndex:idx inTableView:tv]
-                               inViewController:self
-                                       animated:YES];
+    if(idx < [[self posts] count]) {
+        STKPost *p = [[self posts] objectAtIndex:idx];
+        STKPostViewController *vc = [[STKPostViewController alloc] init];
+        [vc setPost:p];
+
+        [[self navigationController] pushViewController:vc animated:YES];
     }
 }
 
@@ -213,89 +114,11 @@ typedef enum {
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
-    [[[self usersFilterButton] layer] setCornerRadius:5];
-    [[[self hashTagFilterButton] layer] setCornerRadius:5];
-    [[self usersFilterButton] setClipsToBounds:YES];
-    [[self hashTagFilterButton] setClipsToBounds:YES];
-    [self refreshSearchTypeControl];
+    [[self tableView] setTableHeaderView:[self searchBar]];
     
-    [[self filterOptionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
-                    forCellWithReuseIdentifier:@"STKTextImageCell"];
-    [[self filterOptionView] setBackgroundColor:[UIColor clearColor]];
-    [[self filterOptionView] setScrollEnabled:NO];
+    float top = [[self tableView] contentInset].top;
+    [[self tableView] setContentOffset:CGPointMake(0, [[self searchBar] bounds].size.height - top) animated:YES];
 
-    [[self searchResultsTableView] setBackgroundColor:[UIColor clearColor]];
-
-    
-    [self configureSearchArea];
-    [self configureSegmentedControl];
-}
-
-
-- (void)refreshPosts
-{
-    NSDictionary *filter = nil;
-    if([[self exploreTypeControl] selectedSegmentIndex] == STKExploreTypeLatest) {
-        filter = nil;
-    } else {
-        filter = @{@"sort_field" : @"likes_count"};
-    }
-
-    [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
-                                            referencePost:[[self posts] firstObject]
-                                                   filter:filter
-                                               completion:^(NSArray *posts, NSError *err) {
-                                                   [[self posts] addObjectsFromArray:posts];
-                                                   
-                                                   if([[self exploreTypeControl] selectedSegmentIndex] == STKExploreTypeLatest)
-                                                       [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-                                                   
-                                                   [[self tableView] reloadData];
-                                               }];
-
-}
-
-- (void)configureSearchArea
-{
-}
-
-- (void)configureSegmentedControl
-{
-    [[self exploreTypeControl] setTitleTextAttributes:@{NSFontAttributeName : STKFont(16),
-                                                        NSForegroundColorAttributeName : [UIColor whiteColor]}
-                                             forState:UIControlStateNormal];
-    [[self exploreTypeControl] setTitleTextAttributes:@{NSFontAttributeName : STKFont(16),
-                                                        NSForegroundColorAttributeName : [UIColor purpleColor]}
-                                             forState:UIControlStateSelected];
-    
-    // 'On state'
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:0.86 green:0.87 blue:.92 alpha:0.3] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self exploreTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
-                                         forState:UIControlStateSelected
-                                       barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
-    
-    // 'Off' state
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:91.0/255.0 green:186.0/255.0 blue:255.0/255.0 alpha:0.3] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self exploreTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
-                                         forState:UIControlStateNormal
-                                       barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
-    
-    // Divider
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:0.4 green:0.4 blue:0.5 alpha:0.5] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self exploreTypeControl] setDividerImage:UIGraphicsGetImageFromCurrentImageContext()
-                           forLeftSegmentState:UIControlStateNormal
-                             rightSegmentState:UIControlStateNormal
-                                    barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -310,12 +133,19 @@ typedef enum {
  
     [[[self blurView] displayLink] setPaused:NO];
 
-    [[self tableView] setContentInset:UIEdgeInsetsMake([[self exploreTypeControl] frame].origin.y + [[self exploreTypeControl] frame].size.height, 0, 0, 0)];
-    
-    NSArray *deletedPosts = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKPostStatusDeleted]];
-    [[self posts] removeObjectsInArray:deletedPosts];
 
-    [self refreshPosts];
+    [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
+                                            referencePost:[[self posts] firstObject]
+                                               completion:^(NSArray *posts, NSError *err) {
+                                                   if(!err) {
+                                                       [[self posts] addObjectsFromArray:posts];
+                                                       [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                       [[self tableView] reloadData];
+                                                       
+                                                   } else {
+                                                       // Do nothing?
+                                                   }
+                                               }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -327,24 +157,10 @@ typedef enum {
 {
     if(tableView == [self tableView]) {
         [cell setBackgroundColor:[UIColor clearColor]];
-    } else {
-        if([self searchType] == STKSearchTypeHashTag) {
-            [cell setBackgroundColor:[UIColor clearColor]];
-        }
+        return;
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(tableView == [self tableView])
-        return [[self tableView] rowHeight];
-    
-    if([self searchType] == STKSearchTypeHashTag) {
-        return [[self tableView] rowHeight];
-    }
-    
-    return 44.0;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -354,31 +170,28 @@ typedef enum {
         return [[self posts] count] / 3;
     }
     
-    if([self searchType] == STKSearchTypeHashTag)
-        return [[self postsFound] count];
-    
     return [[self profilesFound] count];
 }
 
-- (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row inArray:(NSArray *)posts
+- (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row
 {
     int arrayIndex = row * 3;
     
-    if(arrayIndex + 0 < [posts count]) {
-        STKPost *p = [posts objectAtIndex:arrayIndex + 0];
+    if(arrayIndex + 0 < [[self posts] count]) {
+        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 0];
         [[c leftImageView] setUrlString:[p imageURLString]];
     } else {
         [[c leftImageView] setUrlString:nil];
     }
-    if(arrayIndex + 1 < [posts count]) {
-        STKPost *p = [posts objectAtIndex:arrayIndex + 1];
+    if(arrayIndex + 1 < [[self posts] count]) {
+        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 1];
         [[c centerImageView] setUrlString:[p imageURLString]];
     } else {
         [[c centerImageView] setUrlString:nil];
     }
     
-    if(arrayIndex + 2 < [posts count]) {
-        STKPost *p = [posts objectAtIndex:arrayIndex + 2];
+    if(arrayIndex + 2 < [[self posts] count]) {
+        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 2];
         [[c rightImageView] setUrlString:[p imageURLString]];
     } else {
         [[c rightImageView] setUrlString:nil];
@@ -389,14 +202,7 @@ typedef enum {
 {
     if(tableView == [self tableView]) {
         STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-        [self populateTriImageCell:c forRow:(int)[indexPath row] inArray:[self posts]];
-        
-        return c;
-    }
-    
-    if([self searchType] == STKSearchTypeHashTag) {
-        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-        [self populateTriImageCell:c forRow:(int)[indexPath row] inArray:[self postsFound]];
+        [self populateTriImageCell:c forRow:(int)[indexPath row]];
         
         return c;
     }
@@ -411,113 +217,26 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(tableView == [self searchResultsTableView]) {
-        [self setSearchBarActive:NO];
+    if(tableView == [[self searchDisplayController] searchResultsTableView]) {
         STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+        
         [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
         [[self navigationController] pushViewController:pvc animated:YES];
-        
     }
 }
 
-
-- (IBAction)searchFieldDidChange:(UITextField *)sender
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
-    NSString *searchString = [sender text];
-    if([searchString length] < 2) {
-        [self reloadSearchResults];
-        return;
-    }
-    if([self searchType] == STKSearchTypeHashTag) {
-        [[STKContentStore store] searchPostsForHashtag:searchString completion:^(NSArray *posts, NSError *err) {
-            [self setPostsFound:posts];
-            [self reloadSearchResults];
-        }];
-    } else {
-        [[STKUserStore store] searchUsersWithName:searchString completion:^(NSArray *profiles, NSError *err) {
-            if(!err) {
-                _profilesFound = profiles;
-                [self reloadSearchResults];
-            }
-        }];
-    }
-}
-
-- (BOOL)textFieldShouldClear:(UITextField *)textField
-{
-    [self setProfilesFound:nil];
-    [self reloadSearchResults];
-    return YES;
-}
-
-- (void)reloadSearchResults
-{
+    if([searchString length] == 0)
+        return YES;
     
-    if([self searchType] == STKSearchTypeHashTag) {
-        
-        [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
-        if([[self postsFound] count] == 0) {
-            [[self searchResultsTableView] setHidden:YES];
-        } else {
-            [[self searchResultsTableView] setHidden:NO];
+    [[STKUserStore store] searchUsersWithName:searchString completion:^(NSArray *profiles, NSError *err) {
+        if(!err) {
+            _profilesFound = profiles;
+            [[controller searchResultsTableView] reloadData];
         }
-    } else {
-        [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
-        
-        if([[self profilesFound] count] == 0) {
-            [[self searchResultsTableView] setHidden:YES];
-        } else {
-            [[self searchResultsTableView] setHidden:NO];
-        }
-    }
-    [[self searchResultsTableView] reloadData];
+    }];
+    return NO;
 }
-
-- (IBAction)exploreTypeChanged:(UISegmentedControl *)sender
-{
-    [[self posts] removeAllObjects];
-    [[self tableView] reloadData];
-    [self refreshPosts];
-}
-
-- (IBAction)showHashTagResults:(id)sender
-{
-    [self setSearchType:STKSearchTypeHashTag];
-    [self refreshSearchTypeControl];
-}
-
-- (IBAction)showUserResults:(id)sender
-{
-    [self setSearchType:STKSearchTypeUser];
-    [self refreshSearchTypeControl];
-}
-
-- (IBAction)toggleFilterView:(id)sender
-{
-//    [[self filterOptionView] setHidden:![[self filterOptionView] isHidden]];
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return [[self filterPostOptions] count];
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [[self filterPostOptions] objectAtIndex:[indexPath row]];
-    STKTextImageCell *cell = (STKTextImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKTextImageCell"
-                                                                                           forIndexPath:indexPath];
-    [[cell label] setText:[item objectForKey:@"title"]];
-    [[cell imageView] setImage:[item objectForKey:@"image"]];
-    [cell setBackgroundColor:[UIColor clearColor]];
-    
-    /*   if([[[self postInfo] objectForKey:STKPostTypeKey] isEqual:[item objectForKey:STKPostTypeKey]]) {
-     [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
-     }
-     */
-    return cell;
-}
-
 
 @end

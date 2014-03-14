@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "STKJSONObject.h"
-
-
-#import <GoogleOpenSource/GoogleOpenSource.h>
-#import <GooglePlus/GooglePlus.h>
+#import "STKProfileInformation.h"
 
 @class STKActivityItem, STKPost, STKRequestItem;
 
@@ -52,13 +49,9 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) NSString *city;
 @property (nonatomic, strong) NSString *state;
 
-@property (nonatomic, strong) NSString *blurb;
-@property (nonatomic, strong) NSString *website;
-
 @property (nonatomic, strong) NSString *coverPhotoPath;
 @property (nonatomic, strong) NSString *profilePhotoPath;
 
-@property (nonatomic, strong) NSString *externalServiceID;
 @property (nonatomic, strong) NSString *externalServiceType;
 @property (nonatomic, strong) NSString *accountStoreID;
 
@@ -70,20 +63,6 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic) BOOL isFollowingCurrentUser;
 
 - (NSString *)name;
-
-// For auth/creating
-@property (nonatomic, strong) UIImage *profilePhoto;
-@property (nonatomic, strong) UIImage *coverPhoto;
-
-@property (nonatomic, strong) NSString *token;
-@property (nonatomic, strong) NSString *secret;
-
-@property (nonatomic, strong) NSString *password;
-
-- (void)setValuesFromFacebook:(NSDictionary *)vals;
-- (void)setValuesFromTwitter:(NSArray *)vals;
-- (void)setValuesFromGooglePlus:(GTLPlusPerson *)vals;
-
 
 @end
 

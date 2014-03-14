@@ -333,20 +333,13 @@
             smallSide = sz.height;
 
         float scale = [[self editScrollView] bounds].size.width / smallSide;
-        UIEdgeInsets insets = UIEdgeInsetsZero;
         
         CGSize imageViewSize = sz;
-        if(imageViewSize.width > imageViewSize.height) {
-            float i = -fabs(imageViewSize.height - [[self editScrollView] frame].size.height) / 4.0;
-            insets.top = i;
-            insets.bottom = i;
+        if(imageViewSize.width > imageViewSize.height)
             imageViewSize.height = imageViewSize.width;
-        } else {
-            float i = fabs(imageViewSize.width - [[self editScrollView] frame].size.width) / 4.0;
-            insets.left = -i;
-            insets.right = -i;
+        else
             imageViewSize.width = imageViewSize.height;
-        }
+        
         [newImageView setTranslatesAutoresizingMaskIntoConstraints:YES];
         [[self editScrollView] addSubview:newImageView];
         [newImageView setContentMode:UIViewContentModeCenter];
@@ -361,13 +354,6 @@
         float centerDiffY = (imageViewSize.height * scale  - [[self editScrollView] frame].size.height) / 2.0;
 
         [[self editScrollView] setContentOffset:CGPointMake(centerDiffX, centerDiffY)];
-        
-        if([self type] == STKImageChooserTypeCover) {
-            float coverInset = ([[self editScrollView] frame].size.height - STKUserCoverPhotoSize.height) / 2.0;
-            insets.top += coverInset;
-            insets.bottom += coverInset;
-        }
-        [[self editScrollView] setContentInset:insets];
     }];
 }
 

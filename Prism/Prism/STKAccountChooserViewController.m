@@ -55,11 +55,12 @@
 {
     ACAccount *acct = [[self accounts] objectAtIndex:[indexPath row]];
     [STKProcessingView present];
-    [[STKUserStore store] connectWithTwitterAccount:acct completion:^(STKUser *existingUser, STKUser *registrationData, NSError *err) {
+    [[STKUserStore store] connectWithTwitterAccount:acct completion:^(STKUser *existingUser, STKProfileInformation *registrationData, NSError *err) {
         [STKProcessingView dismiss];
         if(!err) {
             if(registrationData) {
-                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:registrationData];
+                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] init];
+                [pvc setProfileInformation:registrationData];
                 [[self navigationController] pushViewController:pvc animated:YES];
             } else if(existingUser) {
                 [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];

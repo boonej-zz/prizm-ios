@@ -55,11 +55,12 @@
                 [[self navigationController] pushViewController:accChooser animated:YES];
             } else {
                 ACAccount *acct = [accounts objectAtIndex:0];
-                [[STKUserStore store] connectWithTwitterAccount:acct completion:^(STKUser *existingUser, STKUser *registrationData, NSError *err) {
+                [[STKUserStore store] connectWithTwitterAccount:acct completion:^(STKUser *existingUser, STKProfileInformation *registrationData, NSError *err) {
                     [STKProcessingView dismiss];
                     if(!err) {
                         if(registrationData) {
-                            STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:registrationData];
+                            STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] init];
+                            [pvc setProfileInformation:registrationData];
                             [[self navigationController] pushViewController:pvc animated:YES];
                         } else if(existingUser) {
                             [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
@@ -78,14 +79,15 @@
 - (IBAction)connectWithGoogle:(id)sender
 {
     [STKProcessingView present];
-    [[STKUserStore store] connectWithGoogle:^(STKUser *u, STKUser *googleData, NSError *err) {
+    [[STKUserStore store] connectWithGoogle:^(STKUser *u, STKProfileInformation *googleData, NSError *err) {
         [STKProcessingView dismiss];
         
         if(!err) {
             if(u) {
                 [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
             } else {
-                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:googleData];
+                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] init];
+                [pvc setProfileInformation:googleData];
                 [[self navigationController] pushViewController:pvc animated:YES];
             }
         } else {
@@ -97,13 +99,14 @@
 - (IBAction)connectWithFacebook:(id)sender
 {
     [STKProcessingView present];
-    [[STKUserStore store] connectWithFacebook:^(STKUser *u, STKUser *facebookData, NSError *err) {
+    [[STKUserStore store] connectWithFacebook:^(STKUser *u, STKProfileInformation *facebookData, NSError *err) {
         [STKProcessingView dismiss];
         if(!err) {
             if(u) {
                 [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
             } else {
-                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:facebookData];
+                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] init];
+                [pvc setProfileInformation:facebookData];
                 [[self navigationController] pushViewController:pvc animated:YES];
             }
         } else {
@@ -118,7 +121,7 @@
 }
 - (IBAction)registerAccount:(id)sender
 {
-    STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:nil];
+    STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] init];
     [[self navigationController] pushViewController:pvc animated:YES];
 }
 

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class STKUser, STKPost, STKActivityItem, STKRequestItem;
+@class STKUser, STKPost, STKActivityItem, STKRequestItem, STKProfileInformation;
 @class ACAccount, STKProfile;
 
 extern NSString * const STKUserStoreErrorDomain;
@@ -34,12 +34,12 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
 
-- (void)registerAccount:(STKUser *)info completion:(void (^)(STKUser *user, NSError *err))block;
+- (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block;
 
-// If returning STKUser, you are logged in as that user. If returning 2nd user, you have access to social account, but no Prism account exists.
-- (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKUser *facebookData, NSError *err))block;
-- (void)connectWithTwitterAccount:(ACAccount *)acct completion:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))block;
-- (void)connectWithGoogle:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))block;
+// If returning STKUser, you are logged in as that user. If returning STKProfileInformation, you have access to social account, but no Prism account exists.
+- (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKProfileInformation *facebookData, NSError *err))block;
+- (void)connectWithTwitterAccount:(ACAccount *)acct completion:(void (^)(STKUser *existingUser, STKProfileInformation *registrationData, NSError *err))block;
+- (void)connectWithGoogle:(void (^)(STKUser *existingUser, STKProfileInformation *registrationData, NSError *err))block;
 
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;

@@ -54,11 +54,6 @@
                               forState:UIControlStateNormal];
     }
     
-    if([p text]) {
-        [[self commentButton] setImage:[UIImage imageNamed:@"action_comment_active"]
-                              forState:UIControlStateNormal];
-    }
-    
     if([p likeCount] == 0)
         [[self likeCountLabel] setText:@""];
     else
@@ -145,7 +140,7 @@
     static UIImage *fadeImage = nil;
     if(!fadeImage) {
         UIGraphicsBeginImageContext(CGSizeMake(2, 2));
-        [[UIColor colorWithRed:11.0 / 255.0 green:53.0 / 255.0 blue:110.0 / 255.0 alpha:0.95] set];
+        [[UIColor colorWithRed:0.06 green:0.15 blue:0.40 alpha:0.95] set];
         UIRectFill(CGRectMake(0, 0, 2, 2));
         fadeImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

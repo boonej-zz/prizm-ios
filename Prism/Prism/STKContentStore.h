@@ -32,7 +32,6 @@ typedef enum {
 
 
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
-- (void)editPost:(STKPost *)p withInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
 
 - (void)fetchFeedForUser:(STKUser *)u
              inDirection:(STKContentStoreFetchDirection)fetchDirection
@@ -61,19 +60,14 @@ typedef enum {
 - (void)fetchLocationNamesForCoordinate:(CLLocationCoordinate2D)coord
                              completion:(void (^)(NSArray *locations, NSError *err))block;
 
-- (void)searchPostsForHashtag:(NSString *)hashTag
-                   completion:(void (^)(NSArray *posts, NSError *err))block;
-
 - (void)likePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
 - (void)unlikePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
-- (void)deletePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
 
 - (void)addComment:(NSString *)comment toPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block;
 - (void)fetchCommentsForPost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
 - (void)likeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block;
 - (void)unlikeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block;
 - (void)deleteComment:(STKPostComment *)comment completion:(void (^)(STKPost *p, NSError *err))block;
-- (void)flagPost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
 
 
 @end

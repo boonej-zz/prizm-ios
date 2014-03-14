@@ -41,23 +41,6 @@
     return pi;
 }
 
-- (void)transferValuesIntoUser:(STKUser *)user
-{
-#define STKT(x, y) if(x) [user setValue:x forKey:y]
-    STKT([self firstName], @"firstName");
-    STKT([self lastName], @"lastName");
-    STKT([self email], @"email");
-    STKT([self gender], @"gender");
-    STKT([self birthday], @"birthday");
-    STKT([self zipCode], @"zipCode");
-    STKT([self externalID], @"externalServiceID");
-    STKT([self externalService], @"externalServiceType");
-    STKT([self accountStoreID], @"accountStoreID");
-    STKT([self city], @"city");
-    STKT([self state], @"state");
-#undef STKT
-}
-
 - (void)setValuesFromFacebook:(NSDictionary *)d
 {
     NSString *v = [d objectForKey:@"first_name"];

@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class STKPost;
-
 @interface STKMenuController : UIViewController
 
 @property (nonatomic, strong) UIImage *backgroundImage;
@@ -17,15 +15,8 @@
 @property (nonatomic, copy) NSArray *viewControllers;
 @property (nonatomic, strong) UIViewController *selectedViewController;
 @property (nonatomic, getter = isMenuVisible) BOOL menuVisible;
-
-
+@property (nonatomic) CGRect imageTransitionRect;
 
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
-
-// Pass image's rect in vc's view coordinate space
-- (void)transitionToPost:(STKPost *)p
-                fromRect:(CGRect)r
-        inViewController:(UIViewController *)vc
-                animated:(BOOL)animated;
 
 @end

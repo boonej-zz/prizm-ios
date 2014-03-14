@@ -34,9 +34,4 @@
     ROUTE(sender);
 }
 
-- (IBAction)showAccolades:(id)sender
-{
-    ROUTE(sender);
-}
-
 @end

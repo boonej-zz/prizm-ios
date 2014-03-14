@@ -11,6 +11,7 @@
 #import "STKActivityItem.h"
 #import "STKRequestItem.h"
 #import "STKPost.h"
+#import "STKProfileInformation.h"
 #import "STKConnection.h"
 #import "STKUser.h"
 #import <GoogleOpenSource/GoogleOpenSource.h>
@@ -204,7 +205,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c addQueryValue:@"30" forKey:@"limit"];
-        [c addQueryValue:name forKey:@"name"];
+        [c addQueryValue:name forKey:@"first_name"];
         
         [c setModelGraph:@[[STKUser class]]];
         [c setShouldReturnArray:YES];
@@ -353,7 +354,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                                               }];
 }
 
-- (void)connectWithTwitterAccount:(ACAccount *)acct completion:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))block
+- (void)connectWithTwitterAccount:(ACAccount *)acct completion:(void (^)(STKUser *existingUser, STKProfileInformation *registrationData, NSError *err))block
 {
     [self fetchTwitterAccessToken:acct completion:^(NSString *token, NSString *secret, NSError *tokenError) {
         if(!tokenError) {
@@ -369,7 +370,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                         block(nil, nil, valErr);
                     } else {
                         // Return Twitter Information for Registration
-                        [self fetchTwitterDataForAccount:acct completion:^(STKUser *profInfo, NSError *dataErr) {
+                        [self fetchTwitterDataForAccount:acct completion:^(STKProfileInformation *profInfo, NSError *dataErr) {
                             if([dataErr isConnectionError]) {
                                 block(nil, nil, dataErr);
                             } else {
@@ -468,7 +469,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     }];
 }
 
-- (void)fetchTwitterDataForAccount:(ACAccount *)acct completion:(void (^)(STKUser *acct, NSError *err))block
+- (void)fetchTwitterDataForAccount:(ACAccount *)acct completion:(void (^)(STKProfileInformation *acct, NSError *err))block
 {
     NSString *requestString = [NSString stringWithFormat:@"https://api.twitter.com/1/users/lookup.json?screen_name=%@", [acct username]];
     SLRequest *req = [SLRequest requestForServiceType:SLServiceTypeTwitter
@@ -479,7 +480,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         if(!userError && userData) {
             NSArray *a = [NSJSONSerialization JSONObjectWithData:userData options:0 error:nil];
             
-            STKUser *pi = [[STKUser alloc] init];
+            STKProfileInformation *pi = [[STKProfileInformation alloc] init];
             [pi setValuesFromTwitter:a];
             [pi setAccountStoreID:[acct identifier]];
             
@@ -500,7 +501,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                     if(!coverError) {
                         NSDictionary *coverDict = [NSJSONSerialization JSONObjectWithData:coverData options:0 error:nil];
                         NSString *urlString = [coverDict valueForKeyPath:@"sizes.mobile_retina.url"];
-                        [pi setCoverPhotoPath:urlString];
+                        [pi setCoverPhotoURLString:urlString];
                     }
                     block(pi, nil);
                 }];
@@ -515,7 +516,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 #pragma mark Facebook
 
-- (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKUser *facebookData, NSError *err))block
+- (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKProfileInformation *facebookData, NSError *err))block
 {
     [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
         if(!err) {
@@ -533,7 +534,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                         block(nil, nil, valError);
                     } else {
                         // Fallback to registration
-                        [self fetchFacebookDataForAccount:acct completion:^(STKUser *profInfo, NSError *dataErr) {
+                        [self fetchFacebookDataForAccount:acct completion:^(STKProfileInformation *profInfo, NSError *dataErr) {
                             if([dataErr isConnectionError]) {
                                 block(nil, nil, dataErr);
                             } else {
@@ -568,7 +569,6 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                                               completion:^(BOOL granted, NSError *error) {
                                                   if(granted) {
                                                       NSArray *accounts = [[self accountStore] accountsWithAccountType:type];
-                                                      NSLog(@"%@", accounts);
                                                       if([accounts count] == 1) {
                                                           ACAccount *acct = [accounts firstObject];
                                                           [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -605,7 +605,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     }];
 }
 
-- (void)fetchFacebookDataForAccount:(ACAccount *)acct completion:(void (^)(STKUser *acct, NSError *err))block
+- (void)fetchFacebookDataForAccount:(ACAccount *)acct completion:(void (^)(STKProfileInformation *acct, NSError *err))block
 {
     SLRequest *req = [SLRequest requestForServiceType:SLServiceTypeFacebook
                                         requestMethod:SLRequestMethodGET
@@ -615,7 +615,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         if(!userError && userData) {
             NSDictionary *userDict = [NSJSONSerialization JSONObjectWithData:userData options:0 error:nil];
             
-            STKUser *pi = [[STKUser alloc] init];
+            STKProfileInformation *pi = [[STKProfileInformation alloc] init];
             [pi setValuesFromFacebook:userDict];
             [pi setToken:[[acct credential] oauthToken]];
             [pi setAccountStoreID:[acct identifier]];
@@ -638,7 +638,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                     if(!coverError && coverData) {
                         NSDictionary *coverDict = [NSJSONSerialization JSONObjectWithData:coverData options:0 error:nil];
                         NSString *source = [coverDict valueForKeyPath:@"cover.source"];
-                        [pi setCoverPhotoPath:source];
+                        [pi setCoverPhotoURLString:source];
                     }
                     
                     block(pi, nil);
@@ -653,7 +653,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 #pragma mark Google
 
-- (void)connectWithGoogle:(void (^)(STKUser *, STKUser *, NSError *))block
+- (void)connectWithGoogle:(void (^)(STKUser *, STKProfileInformation *, NSError *))block
 {
     [self fetchGoogleAccount:^(GTMOAuth2Authentication *auth, NSError *err) {
         if(!err) {
@@ -668,7 +668,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                     if([err isConnectionError]) {
                         block(nil, nil, err);
                     } else {
-                        [self fetchGoogleDataForAuth:auth completion:^(STKUser *pi, NSError *err) {
+                        [self fetchGoogleDataForAuth:auth completion:^(STKProfileInformation *pi, NSError *err) {
                             if(!err)
                                 block(nil, pi, nil);
                             else
@@ -708,9 +708,9 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     [c getWithSession:[self session] completionBlock:block];
 }
 
-- (void)fetchGoogleDataForAuth:(GTMOAuth2Authentication *)auth completion:(void (^)(STKUser *pi, NSError *err))block
+- (void)fetchGoogleDataForAuth:(GTMOAuth2Authentication *)auth completion:(void (^)(STKProfileInformation *pi, NSError *err))block
 {
-    STKUser *pi = [[STKUser alloc] init];
+    STKProfileInformation *pi = [[STKProfileInformation alloc] init];
     [pi setEmail:[auth userEmail]];
     [pi setToken:[auth accessToken]];
     
@@ -777,7 +777,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 #pragma mark Uniform
 
-- (void)registerAccount:(STKUser *)info completion:(void (^)(STKUser *user, NSError *err))block
+- (void)registerAccount:(STKProfileInformation *)info completion:(void (^)(STKUser *user, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -796,8 +796,8 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                                             @"zipCode" : @"zip_postal",
                                             @"city" : @"city",
                                             @"state" : @"state",
-                                            @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
-                                            @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
+                                            @"coverPhotoURLString" : STKUserCoverPhotoURLStringKey,
+                                            @"profilePhotoURLString" : STKUserProfilePhotoURLStringKey,
                                             @"birthday" : ^(id value) {
                                                     NSDateFormatter *df = [[NSDateFormatter alloc] init];
                                                     [df setDateFormat:@"MM-dd-yyyy"];
@@ -813,11 +813,11 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
             return;
         }
         
-        if([info externalServiceType] && [info externalServiceID]) {
-            [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalServiceID" : @"provider_id",
-                                                                @"externalServiceType" : @"provider",
+        if([info externalService] && [info externalID]) {
+            [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalID" : @"provider_id",
+                                                                @"externalService" : @"provider",
                                                                 @"token" : @"provider_token"}];
-            if([[info externalServiceType] isEqualToString:STKUserExternalSystemTwitter]) {
+            if([[info externalService] isEqualToString:STKUserExternalSystemTwitter]) {
                 [c addQueryValue:[info secret] forKey:@"provider_token_secret"];
             }
         } else if([info password]) {
@@ -825,7 +825,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments
-                                         data:@[@"password", @"externalServiceType", @"externalServiceID"]]);
+                                         data:@[@"password", @"externalService", @"externalID"]]);
             }];
             return;
         }
@@ -838,10 +838,10 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                     if(!valErr) {
                         if([info password]) {
                             STKSecurityStorePassword([u email], [info password]);
-                        } /*else {
+                        } else {
                             [u setExternalServiceType:[info externalService]];
                             [u setAccountStoreID:[info accountStoreID]];
-                        }*/
+                        }
                         [self authenticateUser:u];
                         
                         block(u, nil);
@@ -851,11 +851,11 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                 };
                 
                 // Now let us authenticate
-                if([[info externalServiceType] isEqualToString:STKUserExternalSystemGoogle]) {
+                if([[info externalService] isEqualToString:STKUserExternalSystemGoogle]) {
                     [self validateWithGoogle:[info token] completion:validationBlock];
-                } else if([[info externalServiceType] isEqualToString:STKUserExternalSystemFacebook]) {
+                } else if([[info externalService] isEqualToString:STKUserExternalSystemFacebook]) {
                     validationBlock(registeredUser, nil);
-                } else if([[info externalServiceType] isEqualToString:STKUserExternalSystemTwitter]) {
+                } else if([[info externalService] isEqualToString:STKUserExternalSystemTwitter]) {
                     validationBlock(registeredUser, nil);
                 } else {
                     validationBlock(registeredUser, nil);

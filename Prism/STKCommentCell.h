@@ -19,6 +19,5 @@
 @property (weak, nonatomic) IBOutlet UIControl *likeButton;
 @property (weak, nonatomic) IBOutlet UIImageView *likeImageView;
 @property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
-- (IBAction)avatarTapped:(id)sender;
 
 @end

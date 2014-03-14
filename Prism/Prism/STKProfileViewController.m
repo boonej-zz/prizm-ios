@@ -18,7 +18,7 @@
 #import "STKBaseStore.h"
 #import "STKPostViewController.h"
 #import "STKRequestItem.h"
-#import "STKCreateProfileViewController.h"
+#import "STKEditProfileViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "STKHomeCell.h"
 #import "STKFilterCell.h"
@@ -93,10 +93,6 @@ typedef enum {
     if(![self profile]) {
         [self setProfile:[[STKUserStore store] currentUser]];
     }
-    
-    NSArray *deletedPosts = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKPostStatusDeleted]];
-    [[self posts] removeObjectsInArray:deletedPosts];
-
     
     if([self isShowingCurrentUserProfile]) {
         [[self navigationItem] setTitle:@"Profile"];
@@ -272,37 +268,11 @@ typedef enum {
 - (void)showPostAtIndex:(int)idx
 {
     if(idx < [[self posts] count]) {
-        [[self menuController] transitionToPost:[[self posts] objectAtIndex:idx]
-                                       fromRect:[self rectForPostAtIndex:idx]
-                               inViewController:self
-                                       animated:YES];
+        STKPostViewController *vc = [[STKPostViewController alloc] init];
+        [vc setPost:[[self posts] objectAtIndex:idx]];
+        [[self navigationController] pushViewController:vc animated:YES];
     }
 }
-
-- (CGRect)rectForPostAtIndex:(int)idx
-{
-    if([self showPostsInSingleLayout]) {
-        STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:STKProfileSectionInformation]];
-        
-        return [[self view] convertRect:[[c contentImageView] frame] fromView:[[c contentImageView] superview]];
-    } else {
-        int row = idx / 3;
-        int offset = idx % 3;
-        
-        STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:STKProfileSectionInformation]];
-        
-        CGRect r = CGRectZero;
-        if(offset == 0)
-            r = [[c leftImageView] frame];
-        else if(offset == 1)
-            r = [[c centerImageView] frame];
-        else if(offset == 2)
-            r = [[c rightImageView] frame];
-        
-        return [[self view] convertRect:r fromView:c];
-    }
-}
-
 
 - (void)menuWillAppear:(BOOL)animated
 {
@@ -342,7 +312,7 @@ typedef enum {
 
 - (void)editProfile:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    STKCreateProfileViewController *ep = [[STKCreateProfileViewController alloc] initWithProfileForEditing:[self profile]];
+    STKEditProfileViewController *ep = [[STKEditProfileViewController alloc] init];
     [[self navigationController] pushViewController:ep animated:YES];
 }
 
@@ -362,11 +332,6 @@ typedef enum {
     [[STKUserStore store] createRequestOfType:STKRequestTypeTrust profile:[self profile] completion:^(id obj, NSError *err) {
         
     }];
-}
-
-- (void)showAccolades:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    
 }
 
 - (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -414,21 +379,19 @@ typedef enum {
 {
     STKInitialProfileStatisticsCell *c = [self statsCell];
     if([self isShowingCurrentUserProfile]) {
-        [[c accoladesButton] setHidden:NO];
         [[c followButton] setHidden:YES];
         [[c trustButton] setHidden:YES];
         [[c editButton] setHidden:NO];
     } else {
-        [[c accoladesButton] setHidden:YES];
         [[c followButton] setHidden:NO];
         if([[self profile] isFollowedByCurrentUser]) {
-            [[c followButton] setTitle:@"Following" forState:UIControlStateNormal];
-            [[c followButton] setImage:[UIImage imageNamed:@"reject"]
+            [[c followButton] setTitle:@"Unfollow" forState:UIControlStateNormal];
+            [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
                               forState:UIControlStateNormal];
-            [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 66, 0, 0)];
+            [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 60, 0, 0)];
         } else {
             [[c followButton] setTitle:@"Follow" forState:UIControlStateNormal];
-            [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
+            [[c followButton] setImage:[UIImage imageNamed:@"btn_followarrow"]
                               forState:UIControlStateNormal];
             [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 50, 0, 0)];
         }

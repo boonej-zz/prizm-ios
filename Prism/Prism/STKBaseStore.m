@@ -70,9 +70,7 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
                                             delegateQueue:[NSOperationQueue mainQueue]];
         
         
-        //     "error": "OAuthException",
-//        "error_description": "Error validating access token: The session has been invalidated because the user has changed the password."
-
+//
 
     }
     return self;

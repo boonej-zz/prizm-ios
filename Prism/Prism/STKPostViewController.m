@@ -21,9 +21,8 @@
 #import "STKImageSharer.h"
 #import "STKAvatarView.h"
 #import "STKPostHeaderView.h"
-#import "STKProcessingView.h"
 
-@interface STKPostViewController () <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface STKPostViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet STKPostHeaderView *fakeHeaderView;
 @property (weak, nonatomic) IBOutlet UIView *fakeContainerView;
@@ -33,14 +32,12 @@
 @property (weak, nonatomic) IBOutlet UITextField *commentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomCommentConstraint;
 @property (nonatomic, strong) UIView *commentHeaderView;
-@property (weak, nonatomic) IBOutlet UIButton *deletePostButton;
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchWidthConstraint;
 
-@property (nonatomic, strong) STKHomeCell *postCell;
-@property (nonatomic) BOOL editingPostText;
+- (void)dismissKeyboard:(id)sender;
 
 - (IBAction)postComment:(id)sender;
 
@@ -80,31 +77,6 @@
     return nil;
 }
 
-- (IBAction)deleteMainPost:(id)sender
-{
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Delete Post"
-                                                 message:@"Are you sure you want to delete this post?"
-                                                delegate:self
-                                       cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
-
-    [av show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if(buttonIndex == 1) {
-        [STKProcessingView present];
-        [[STKContentStore store] deletePost:[self post] completion:^(id obj, NSError *err) {
-            [STKProcessingView dismiss];
-            if(err) {
-                [[STKErrorStore alertViewForError:err delegate:nil] show];
-            } else {
-                [[self navigationController] popViewControllerAnimated:YES];
-            }
-        }];
-    }
-}
-
 - (IBAction)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     if([[self post] locationName]) {
@@ -129,43 +101,31 @@
     [[self commentTextField] setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Write a comment..."
                                                                                       attributes:@{NSFontAttributeName : STKFont(12),
                                                                                                    NSForegroundColorAttributeName : [UIColor whiteColor]}]];
-    [[[self commentFooterView] layer] setShadowColor:[[UIColor lightGrayColor] CGColor]];
+    [[[self commentFooterView] layer] setShadowColor:[[UIColor whiteColor] CGColor]];
     [[[self commentFooterView] layer] setShadowOffset:CGSizeMake(0, -1)];
     [[[self commentFooterView] layer] setShadowOpacity:0.5];
-    [[[self commentFooterView] layer] setShadowRadius:0];
- 
+    
     [[[self fakeHeaderView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [[self fakeHeaderView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     UIView *internalFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, -1, 320, 300)];
     [footerView addSubview:internalFooterView];
-    [internalFooterView setBackgroundColor:[UIColor colorWithRed:190.0/255.0 green:195.0/255.0 blue:209.0/255.0 alpha:1]];
+    [internalFooterView setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.65]];
     [footerView setBackgroundColor:[UIColor clearColor]];
     
     [[self tableView] setTableFooterView:footerView];
     
-    
-    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeDown:)];
-    [swipe setDirection:UISwipeGestureRecognizerDirectionDown];
-    [swipe setDelegate:self];
-    [[self view] addGestureRecognizer:swipe];
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+    [gr setCancelsTouchesInView:NO];
+    [gr setDelaysTouchesBegan:NO];
+    [gr setDelaysTouchesEnded:NO];
+    [[self view] addGestureRecognizer:gr];
 }
 
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [[self deletePostButton] setHidden:![[[self post] creator] isEqual:[[STKUserStore store] currentUser]]];
-    
-    STKHomeCell *c = [STKHomeCell cellForTableView:[self tableView] target:self];
-    [c setDisplayFullBleed:YES];
-    [c populateWithPost:[self post]];
-    [self setPostCell:c];
-    
-    [[[self postCell] contentImageView] setHidden:YES];
-    
     [[self navigationController] setNavigationBarHidden:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:)
                                                  name:UIKeyboardWillShowNotification
@@ -189,27 +149,6 @@
     [[[self fakeHeaderView] postTypeView] setImage:[[self post] typeImage]];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [[[self postCell] contentImageView] setHidden:NO];
-
-}
-
-- (void)swipeDown:(UIGestureRecognizer *)sender
-{
-//    if([sender state] == UIGestureRecognizerStateEnded) {
-//        [[self view] endEditing:YES];
-//    }
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return YES;
-}
-
-
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if([scrollView contentOffset].y < 0) {
@@ -218,8 +157,6 @@
         [[self stretchHeightConstraint] setConstant:300 + y];
         [[self stretchWidthConstraint] setConstant:320 + y];
         
-        if([scrollView contentOffset].y < -100)
-            [[self view] endEditing:YES];
     } else {
         [[self stretchView] setHidden:YES];
     }
@@ -232,7 +169,7 @@
     [[self navigationController] setNavigationBarHidden:NO];
     
     [[self overlayVIew] setHidden:YES];
-    [[[self postCell] contentImageView] setHidden:YES];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -252,13 +189,11 @@
                      } completion:nil];
 
     [[self overlayVIew] setHidden:NO];
-    [[self tableView] scrollRectToVisible:CGRectMake(0, [[self tableView] contentSize].height - 1, 1, 1) animated:YES];
+
 }
 
 - (void)keyboardWillDisappear:(NSNotification *)note
 {
-    [self setEditingPostText:NO];
-
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, [[self commentFooterView] bounds].size.height, 0)];
 
@@ -273,15 +208,7 @@
                      } completion:nil];
 
     [[self overlayVIew] setHidden:YES];
-}
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row] == 0 && ![self commentForIndexPath:indexPath] && [[[self post] creator] isEqual:[[STKUserStore store] currentUser]]) {
-        [self setEditingPostText:YES];
-        [[self commentTextField] setText:[[self post] text]];
-        [[self commentTextField] becomeFirstResponder];
-    }
 }
 
 - (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -294,15 +221,18 @@
     if([[self post] postLikedByCurrentUser]) {
         [[STKContentStore store] unlikePost:[self post]
                                  completion:^(STKPost *p, NSError *err) {
-                                     [[self postCell] populateWithPost:[self post]];
+                                    [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                            withRowAnimation:UITableViewRowAnimationNone];
                                  }];
     } else {
         [[STKContentStore store] likePost:[self post]
                                completion:^(STKPost *p, NSError *err) {
-                                   [[self postCell] populateWithPost:[self post]];
+                                   [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                           withRowAnimation:UITableViewRowAnimationNone];
                                }];
     }
-    [[self postCell] populateWithPost:[self post]];
+    [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                            withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)showComments:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -326,9 +256,9 @@
 
 - (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[[self postCell] contentImageView] image]
+    STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
+    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image]
                                                                                              text:[[self post] text]
-                                                                                            object:[self post]
                                                                                     finishHandler:^(UIDocumentInteractionController *doc) {
                                                                                         [doc presentOpenInMenuFromRect:[[self view] bounds] inView:[self view] animated:YES];
                                                                                     }];
@@ -339,21 +269,6 @@
 {
     STKProfileViewController *vc = [[STKProfileViewController alloc] init];
     [vc setProfile:[[self post] creator]];
-    [[self navigationController] pushViewController:vc animated:YES];
-}
-
-- (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    STKPostComment *pc = [self commentForIndexPath:ip];
-    STKUser *u = nil;
-    if(pc) {
-        u = [pc user];
-    } else {
-        u = [[self post] creator];
-    }
-    
-    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
-    [vc setProfile:u];
     [[self navigationController] pushViewController:vc animated:YES];
 }
 
@@ -507,7 +422,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
-        return [self postCell];
+        STKHomeCell *c = [STKHomeCell cellForTableView:tableView target:self];
+
+        [c setDisplayFullBleed:YES];
+        
+        [c populateWithPost:[self post]];
+        
+        return c;
     } else {
         STKCommentCell *c = [STKCommentCell cellForTableView:tableView target:self];
         
@@ -550,36 +471,39 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     return nil;
 }
 
+- (void)dismissKeyboard:(id)sender
+{
+ //   [[self view] endEditing:YES];
+
+}
+
 - (IBAction)postComment:(id)sender
 {
     if([[[self commentTextField] text] length] == 0) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Please enter a comment"
+                                                     message:@"Enter text into the comment field before posting a comment."
+                                                    delegate:nil
+                                           cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
         return;
     }
     
-    if([self editingPostText]) {
-        [self setEditingPostText:NO];
-        
-    } else {
-        
-        [[STKContentStore store] addComment:[[self commentTextField] text] toPost:[self post] completion:^(STKPost *p, NSError *err) {
-            if(err) {
-                [[self postCell] populateWithPost:[self post]];
-            }
-        }];
-        [[self postCell] populateWithPost:[self post]];
-        [[self commentTextField] setText:nil];
-        [[self view] endEditing:YES];
+    [[STKContentStore store] addComment:[[self commentTextField] text] toPost:[self post] completion:^(STKPost *p, NSError *err) {
+        if(err)
+            [[self tableView] reloadData];
+    }];
+    [[self commentTextField] setText:nil];
+    [[self view] endEditing:YES];
 
-        int index = [[[self post] comments] count] - 1;
-        if([self postHasText]) {
-            index ++;
-        }
-        NSIndexPath *ip = [NSIndexPath indexPathForRow:index inSection:1];
-        [[self tableView] insertRowsAtIndexPaths:@[ip]
-                                withRowAnimation:UITableViewRowAnimationAutomatic];
-        [[self tableView] scrollToRowAtIndexPath:ip
-                                atScrollPosition:UITableViewScrollPositionBottom
-                                        animated:YES];
+    int index = [[[self post] comments] count] - 1;
+    if([self postHasText]) {
+        index ++;
     }
+    NSIndexPath *ip = [NSIndexPath indexPathForRow:index inSection:1];
+    [[self tableView] insertRowsAtIndexPaths:@[ip]
+                            withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] scrollToRowAtIndexPath:ip
+                            atScrollPosition:UITableViewScrollPositionBottom
+                                    animated:YES];
 }
 @end
