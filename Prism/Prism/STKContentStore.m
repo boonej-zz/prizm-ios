@@ -266,6 +266,29 @@ NSString * const STKContentEndpointPost = @"/posts";
     }];
 }
 
+- (void)flagPost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err){
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
+        [c setIdentifiers:@[[post postID], @"flag"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"reporter"];
+        
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err || ![obj isKindOfClass:[NSString class]]){
+                block(nil, err);
+                return;
+            }
+            block(post, err);
+        }];
+         
+    }];
+}
+
 - (void)unlikePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
 {
     [post setLikeCount:[post likeCount] - 1];
