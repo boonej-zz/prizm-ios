@@ -170,6 +170,8 @@ typedef enum {
 
 - (void)showPostAtIndex:(int)idx
 {
+    [[self view] endEditing:YES];
+    
     NSArray *posts = [self posts];
     UITableView *tv = [self tableView];
     if([self isSearchBarActive] && [self searchType] == STKSearchTypeHashTag) {
@@ -411,12 +413,11 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(tableView == [self searchResultsTableView]) {
+    if(tableView == [self searchResultsTableView] && [self searchType] == STKSearchTypeUser) {
         [self setSearchBarActive:NO];
         STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
         [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
         [[self navigationController] pushViewController:pvc animated:YES];
-        
     }
 }
 

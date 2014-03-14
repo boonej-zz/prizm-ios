@@ -247,7 +247,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
     NSString *requestString = [[self request] description];
-    if([[[self request] HTTPMethod] isEqualToString:@"POST"]) {
+    if(![[[self request] HTTPMethod] isEqualToString:@"GET"]) {
         requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
     }
     NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n", i, requestString, [[self request] HTTPMethod], [self statusCode]);
@@ -270,7 +270,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
     NSString *requestString = [[self request] description];
-    if([[[self request] HTTPMethod] isEqualToString:@"POST"]) {
+    if(![[[self request] HTTPMethod] isEqualToString:@"GET"] ) {
         requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
     }
 

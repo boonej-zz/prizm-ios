@@ -25,6 +25,8 @@
 #import "STKCreatePostViewController.h"
 #import "STKLocationViewController.h"
 #import "STKImageSharer.h"
+#import "STKUserListViewController.h"
+#import "STKUserPostListViewController.h"
 
 typedef enum {
     STKProfileSectionHeader,
@@ -143,13 +145,26 @@ typedef enum {
 {
     switch (index) {
         case 0: {
-            
+            STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+            [vc setTitle:@"Followers"];
+            [[self navigationController] pushViewController:vc animated:YES];
+            [[STKUserStore store] fetchFollowersOfUser:[self profile] completion:^(NSArray *followers, NSError *err) {
+                [vc setUsers:followers];
+            }];
         } break;
         case 1: {
-            
+            STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+            [vc setTitle:@"Following"];
+            [[self navigationController] pushViewController:vc animated:YES];
+            [[STKUserStore store] fetchUsersFollowingOfUser:[self profile] completion:^(NSArray *followers, NSError *err) {
+                [vc setUsers:followers];
+            }];
         } break;
         case 2: {
-            [self scrollToPosts];
+            STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] init];
+            [pvc setTitle:[[self profile] name]];
+            [pvc setPosts:[self posts]];
+            [[self navigationController] pushViewController:pvc animated:YES];
         } break;
     }
 }

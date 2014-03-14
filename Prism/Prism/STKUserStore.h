@@ -44,12 +44,17 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
 
+
 - (void)fetchUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
+- (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
+
 
 - (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;
 
 - (void)followUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block;
 - (void)unfollowUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block;
+- (void)fetchFollowersOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
+- (void)fetchUsersFollowingOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
 
 - (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block;
 

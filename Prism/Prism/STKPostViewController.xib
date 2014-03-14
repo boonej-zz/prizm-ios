@@ -9,6 +9,7 @@
                 <outlet property="bottomCommentConstraint" destination="Clc-wI-K3j" id="GCk-Nc-pdI"/>
                 <outlet property="commentFooterView" destination="Dln-PT-0fM" id="ful-9b-Qwr"/>
                 <outlet property="commentTextField" destination="6xr-3p-wiV" id="TIs-Gy-bDL"/>
+                <outlet property="deleteCommentButton" destination="3RX-hR-78U" id="Qb9-Zk-rAN"/>
                 <outlet property="deletePostButton" destination="3RX-hR-78U" id="8HX-qJ-86o"/>
                 <outlet property="fakeContainerView" destination="Qys-Ur-GtV" id="mfm-2t-fYh"/>
                 <outlet property="fakeHeaderView" destination="KfP-Fo-rS2" id="xMr-38-VzX"/>
