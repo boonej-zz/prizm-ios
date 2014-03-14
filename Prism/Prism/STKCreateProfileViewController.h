@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @import Accounts;
-@class STKProfileInformation;
+@class STKUser;
 
 @interface STKCreateProfileViewController : UIViewController
 
-@property (nonatomic, strong) STKProfileInformation *profileInformation;
+- (id)initWithProfileForEditing:(STKUser *)user;
+- (id)initWithProfileForCreating:(STKUser *)user;
+
 
 @end

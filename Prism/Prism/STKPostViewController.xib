@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKPostViewController">
@@ -9,6 +9,7 @@
                 <outlet property="bottomCommentConstraint" destination="Clc-wI-K3j" id="GCk-Nc-pdI"/>
                 <outlet property="commentFooterView" destination="Dln-PT-0fM" id="ful-9b-Qwr"/>
                 <outlet property="commentTextField" destination="6xr-3p-wiV" id="TIs-Gy-bDL"/>
+                <outlet property="deletePostButton" destination="3RX-hR-78U" id="8HX-qJ-86o"/>
                 <outlet property="fakeContainerView" destination="Qys-Ur-GtV" id="mfm-2t-fYh"/>
                 <outlet property="fakeHeaderView" destination="KfP-Fo-rS2" id="xMr-38-VzX"/>
                 <outlet property="overlayVIew" destination="tVf-Km-kul" id="Nbq-Kg-kOs"/>
@@ -55,7 +56,7 @@
                             </constraints>
                         </imageView>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Write a comment..." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6xr-3p-wiV">
-                            <rect key="frame" x="39" y="3" width="215" height="30"/>
+                            <rect key="frame" x="39" y="3" width="172" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="foC-7t-PS4"/>
@@ -83,16 +84,32 @@
                                 <action selector="postComment:" destination="-1" eventType="touchUpInside" id="Qmf-ta-UHn"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3RX-hR-78U">
+                            <rect key="frame" x="226" y="5" width="22" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="25" id="bSs-td-pxa"/>
+                                <constraint firstAttribute="width" constant="22" id="sgb-IA-ysH"/>
+                            </constraints>
+                            <state key="normal" image="btntrash2">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="deleteMainPost:" destination="-1" eventType="touchUpInside" id="vgF-hm-ufZ"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.76064664931356707" green="0.79824031353144864" blue="0.85816545050761417" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstItem="ywj-I7-cIa" firstAttribute="leading" secondItem="6xr-3p-wiV" secondAttribute="trailing" constant="8" id="Biw-hY-80W"/>
+                        <constraint firstItem="3RX-hR-78U" firstAttribute="leading" secondItem="6xr-3p-wiV" secondAttribute="trailing" constant="15" id="JlT-IM-Z1c"/>
                         <constraint firstAttribute="centerY" secondItem="ywj-I7-cIa" secondAttribute="centerY" id="LWZ-82-95b"/>
                         <constraint firstAttribute="centerY" secondItem="sSO-FA-qQw" secondAttribute="centerY" id="STu-a1-b9e"/>
                         <constraint firstItem="sSO-FA-qQw" firstAttribute="leading" secondItem="Dln-PT-0fM" secondAttribute="leading" constant="14" id="Sld-JS-HDg"/>
                         <constraint firstAttribute="height" constant="36" id="d7s-Gs-nYh"/>
                         <constraint firstItem="6xr-3p-wiV" firstAttribute="leading" secondItem="sSO-FA-qQw" secondAttribute="trailing" constant="9" id="gbl-JP-Sg3"/>
                         <constraint firstAttribute="trailing" secondItem="ywj-I7-cIa" secondAttribute="trailing" constant="14" id="gga-ls-2mF"/>
+                        <constraint firstAttribute="centerY" secondItem="3RX-hR-78U" secondAttribute="centerY" id="r0K-U9-pWB"/>
+                        <constraint firstItem="ywj-I7-cIa" firstAttribute="leading" secondItem="3RX-hR-78U" secondAttribute="trailing" constant="14" id="x81-Fb-3LV"/>
                         <constraint firstAttribute="centerY" secondItem="6xr-3p-wiV" secondAttribute="centerY" id="zQe-jm-mDU"/>
                     </constraints>
                 </view>
@@ -155,6 +172,7 @@
         </view>
     </objects>
     <resources>
+        <image name="btntrash2" width="22" height="25"/>
         <image name="img_background" width="320" height="568"/>
         <image name="postcta" width="42" height="23"/>
         <image name="write_commentnote" width="11" height="11"/>

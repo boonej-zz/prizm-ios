@@ -7,11 +7,12 @@
 //
 
 #import "STKTableViewCell.h"
-#import "STKResolvingImageView.h"
+#import "STKAvatarView.h"
+
 
 @interface STKSearchProfileCell : STKTableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet STKResolvingImageView *avatarView;
+@property (weak, nonatomic) IBOutlet STKAvatarView *avatarView;
 
 @end

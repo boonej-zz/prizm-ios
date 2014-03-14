@@ -29,7 +29,7 @@
         [_locationManager setDelegate:self];
         
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blueColor], NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blueColor], NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:16]} forState:UIControlStateNormal];
         [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Locations"];
         

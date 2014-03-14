@@ -69,7 +69,9 @@ typedef enum {
 - (void)beginWithSession:(NSURLSession *)session;
 - (void)beginWithSession:(NSURLSession *)session method:(STKConnectionMethod)method completionBlock:(void (^)(id obj, NSError *err))block;
 
+
 - (void)postWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
+- (void)putWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 - (void)getWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 - (void)deleteWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKCreateProfileViewController">
@@ -13,6 +13,7 @@
                 <outlet property="profilePhotoButton" destination="bmB-56-liW" id="rDe-OC-SFU"/>
                 <outlet property="tableView" destination="7Yn-5Y-IYC" id="Twu-fQ-hgf"/>
                 <outlet property="toolbar" destination="aE9-wJ-xea" id="X6p-6d-geE"/>
+                <outlet property="topOffset" destination="XRT-fY-QVV" id="7hj-Dm-zhy"/>
                 <outlet property="tosButton" destination="I4v-xD-8nb" id="wm3-rs-sQH"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -89,17 +90,16 @@
                 <constraint firstAttribute="trailing" secondItem="XYa-Fr-Bxy" secondAttribute="trailing" id="59i-vu-z8b"/>
                 <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="XYa-Fr-Bxy" secondAttribute="bottom" id="5xU-xZ-pok"/>
                 <constraint firstItem="uCp-R9-fYJ" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="A1D-jE-cgQ"/>
-                <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="bmB-56-liW" secondAttribute="bottom" constant="35" id="Cxh-2q-HUu"/>
                 <constraint firstAttribute="bottom" secondItem="7Yn-5Y-IYC" secondAttribute="bottom" id="Cz0-39-lTh"/>
                 <constraint firstAttribute="centerX" secondItem="bmB-56-liW" secondAttribute="centerX" id="FEH-ox-95u"/>
                 <constraint firstAttribute="trailing" secondItem="7Yn-5Y-IYC" secondAttribute="trailing" id="GKX-bc-gnh"/>
-                <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="lid-zU-hbX" secondAttribute="bottom" id="ILr-eL-OrM"/>
                 <constraint firstItem="7Yn-5Y-IYC" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Qrd-eY-Lsn"/>
                 <constraint firstAttribute="trailing" secondItem="lid-zU-hbX" secondAttribute="trailing" id="Ulu-Yq-iMt"/>
                 <constraint firstItem="XYa-Fr-Bxy" firstAttribute="top" secondItem="1" secondAttribute="top" id="XRT-fY-QVV"/>
                 <constraint firstItem="lid-zU-hbX" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="b3d-wP-H7G"/>
-                <constraint firstItem="lid-zU-hbX" firstAttribute="top" secondItem="1" secondAttribute="top" id="eDh-Ak-zOs"/>
-                <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="uCp-R9-fYJ" secondAttribute="bottom" constant="6" id="p6b-Tt-ezB"/>
+                <constraint firstItem="XYa-Fr-Bxy" firstAttribute="top" secondItem="lid-zU-hbX" secondAttribute="top" id="mh7-Ad-PHK"/>
+                <constraint firstItem="uCp-R9-fYJ" firstAttribute="bottom" secondItem="XYa-Fr-Bxy" secondAttribute="bottom" constant="-6" id="rU0-cg-mqf"/>
+                <constraint firstItem="bmB-56-liW" firstAttribute="bottom" secondItem="XYa-Fr-Bxy" secondAttribute="bottom" constant="-35" id="sjo-2X-9CN"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
