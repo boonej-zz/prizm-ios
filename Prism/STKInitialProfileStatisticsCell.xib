@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -59,6 +59,21 @@
                                     <action selector="follow:" destination="2" eventType="touchUpInside" id="fow-XR-dVa"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OBD-7E-jyS">
+                                <rect key="frame" x="14" y="13" width="102" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <inset key="titleEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="74" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Accolades" image="btn_accolades">
+                                    <color key="titleColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="follow:" destination="2" eventType="touchUpInside" id="q3X-SX-7dg"/>
+                                    <action selector="showAccolades:" destination="2" eventType="touchUpInside" id="iEL-Ia-1I6"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="0.10000000000000001" colorSpace="calibratedWhite"/>
                     </view>
@@ -70,6 +85,7 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="accoladesButton" destination="OBD-7E-jyS" id="SbP-ZJ-OTg"/>
                 <outlet property="circleView" destination="LiL-4C-O6p" id="rTg-O1-mxw"/>
                 <outlet property="editButton" destination="pE3-Ln-jzB" id="zq5-hm-7aC"/>
                 <outlet property="followButton" destination="YqS-S7-smM" id="Kum-xI-0vk"/>
@@ -78,6 +94,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="btn_accolades" width="16" height="16"/>
         <image name="btn_followarrow" width="24" height="24"/>
         <image name="btn_trust" width="26" height="24"/>
         <image name="btn_usertg" width="22" height="21"/>

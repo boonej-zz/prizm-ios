@@ -134,4 +134,89 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 }
 
 
+- (void)setValuesFromFacebook:(NSDictionary *)d
+{
+    NSString *v = [d objectForKey:@"first_name"];
+    if(v)
+        [self setFirstName:v];
+    
+    v = [d objectForKey:@"last_name"];
+    if(v)
+        [self setLastName:v];
+    
+    v = [d objectForKey:@"id"];
+    if(v) {
+        [self setExternalServiceID:v];
+        [self setExternalServiceType:STKUserExternalSystemFacebook];
+    }
+    
+    v = [d objectForKey:@"email"];
+    if(v)
+        [self setEmail:v];
+    
+    v = [d objectForKey:@"gender"];
+    if(v) {
+        if([v isEqualToString:@"male"]) {
+            [self setGender:STKUserGenderMale];
+        }
+        if([v isEqualToString:@"female"]) {
+            [self setGender:STKUserGenderFemale];
+        }
+    }
+    v = [d objectForKey:@"birthday"];
+    if(v) {
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"MM/dd/yyyy"];
+        
+        [self setBirthday:[df dateFromString:v]];
+    }
+}
+
+
+- (void)setValuesFromTwitter:(NSArray *)vals
+{
+    NSDictionary *d = [vals firstObject];
+    
+    NSString *v = [d objectForKey:@"id_str"];
+    if(v) {
+        [self setExternalServiceID:v];
+        [self setExternalServiceType:STKUserExternalSystemTwitter];
+    }
+    
+    v = [d objectForKey:@"name"];
+    if(v) {
+        NSArray *comps = [v componentsSeparatedByString:@" "];
+        if([comps count] >= 2) {
+            [self setFirstName:[comps firstObject]];
+            [self setLastName:[comps lastObject]];
+        } else {
+            [self setFirstName:v];
+        }
+    }
+}
+
+- (void)setValuesFromGooglePlus:(GTLPlusPerson *)vals
+{
+    if([vals birthday]) {
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"YYYY-MM-dd"];
+        [self setBirthday:[df dateFromString:[vals birthday]]];
+    }
+    if([[vals gender] isEqualToString:@"male"]) {
+        [self setGender:STKUserGenderMale];
+    }
+    if([[vals gender] isEqualToString:@"female"]) {
+        [self setGender:STKUserGenderFemale];
+    }
+    
+    [self setFirstName:[[vals name] givenName]];
+    [self setLastName:[[vals name] familyName]];
+    [self setExternalServiceID:[vals identifier]];
+    [self setExternalServiceType:STKUserExternalSystemGoogle];
+    
+    [self setProfilePhotoPath:[[vals image] url]];
+    [self setCoverPhotoPath:[[[vals cover] coverPhoto] url]];
+}
+
+
 @end

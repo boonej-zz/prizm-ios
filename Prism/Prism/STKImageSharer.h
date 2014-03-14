@@ -18,4 +18,9 @@
                                                         text:(NSString *)text
                                                finishHandler:(void (^)(UIDocumentInteractionController *))block;
 
+- (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image
+                                                        text:(NSString *)text
+                                                      object:(id)object
+                                               finishHandler:(void (^)(UIDocumentInteractionController *))block;
+
 @end
