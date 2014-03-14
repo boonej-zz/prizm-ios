@@ -535,7 +535,7 @@ NSString * const STKContentEndpointPost = @"/posts";
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
         }
-        
+//        [c setModelGraph:@[p]];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(!err) {
                 

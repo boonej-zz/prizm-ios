@@ -39,17 +39,6 @@ NSString * const STKUserStoreExternalCredentialTwitterConsumerSecret = @"sJHdOEw
 NSString * const STKUserEndpointUser = @"/users";
 NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
-NSString * const STKUserEndpointValidateFacebook = @"/common/ajax/validate_facebook.php";
-NSString * const STKUserEndpointValidateTwitter = @"/common/ajax/validate_twitter.php";
-NSString * const STKUserEndpointValidateGoogle = @"/common/ajax/validate_google.php";
-
-
-NSString * const STKUserEndpointUpdateProfile = @"/common/ajax/update_profile.php";
-NSString * const STKUserEndpointAddFollower = @"/common/ajax/create_profile_follower.php";
-NSString * const STKUserEndpointRequest = @"/common/ajax/create_request.php";
-NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
-
-
 @import CoreData;
 @import Accounts;
 @import Social;
@@ -174,6 +163,44 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     return _currentUser;
 }
 
+- (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[user userID]]];
+
+        [c addQueryObject:user
+              missingKeys:nil
+               withKeyMap:@{@"firstName" : @"first_name",
+                            @"lastName" : @"last_name",
+                            @"gender" : @"gender",
+                            @"zipCode" : @"zip_postal",
+                            @"city" : @"city",
+                            @"state" : @"state",
+                            @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
+                            @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
+                            @"birthday" : ^(id value) {
+                                NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                                [df setDateFormat:@"MM-dd-yyyy"];
+                                return @{@"birthday" : [df stringFromDate:value]};
+                            },
+                            @"website" : @"website",
+                            @"blurb" : @"info"
+        }];
+        
+        [c setModelGraph:@[user]];
+        [c putWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
+            
+            block(user, err);
+        }];
+    }];
+}
+
 - (void)fetchUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
@@ -272,9 +299,45 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
     }];
 }
 
-- (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
+- (void)fetchFollowersOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[user userID], @"followers"]];
+        [c setModelGraph:@[[STKUser class]]];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)fetchUsersFollowingOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[user userID], @"following"]];
+        [c setModelGraph:@[[STKUser class]]];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
+{
+/*    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
             return;
@@ -288,12 +351,12 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             block(obj, err);
         }];
-    }];
+    }];*/
 }
 
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+   /* [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
             return;
@@ -312,7 +375,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
                 block(nil, err);
             }
         }];
-    }];
+    }];*/
 }
 
 #pragma mark Authentication Nonsense
@@ -659,7 +722,7 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
         if(!err) {
             [self validateWithGoogle:[auth accessToken] completion:^(STKUser *u, NSError *err) {
                 if(!err) {
-                    [u setExternalServiceType:STKUserEndpointValidateGoogle];
+                    [u setExternalServiceType:STKUserExternalSystemGoogle];
 
                     [self authenticateUser:u];
                     
@@ -700,12 +763,12 @@ NSString * const STKUserEndpointGetRequests = @"/common/ajax/get_requests.php";
 
 
 - (void)validateWithGoogle:(NSString *)token completion:(void (^)(STKUser *, NSError *))block
-{
+{/*
     STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateGoogle];
     [c addQueryValue:token forKey:@"ext_token"];
     [c setEntityName:@"STKUser"];
     [c setExistingMatchMap:@{@"userID" : @"entity"}];
-    [c getWithSession:[self session] completionBlock:block];
+    [c getWithSession:[self session] completionBlock:block];*/
 }
 
 - (void)fetchGoogleDataForAuth:(GTMOAuth2Authentication *)auth completion:(void (^)(STKUser *pi, NSError *err))block

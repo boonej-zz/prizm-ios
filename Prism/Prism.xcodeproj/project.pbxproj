@@ -70,6 +70,10 @@
 		BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE778C4418BBF82000DA5EDD /* STKFilterCell.xib */; };
 		BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */; };
 		BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */; };
+		BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5ADD18D36050005D3893 /* STKUserListViewController.m */; };
+		BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5ADE18D36050005D3893 /* STKUserListViewController.xib */; };
+		BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5AE218D37327005D3893 /* STKUserPostListViewController.m */; };
+		BE7D5AE518D37327005D3893 /* STKUserPostListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5AE318D37327005D3893 /* STKUserPostListViewController.xib */; };
 		BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE893600186CD05E00FE8263 /* STKContentStore.m */; };
 		BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */; };
 		BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */; };
@@ -1959,6 +1963,12 @@
 		BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+STKControllerItems.m"; sourceTree = "<group>"; };
 		BE7C47FF183EBBAC00C30995 /* STKResolvingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKResolvingImageView.h; sourceTree = "<group>"; };
 		BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKResolvingImageView.m; sourceTree = "<group>"; };
+		BE7D5ADC18D36050005D3893 /* STKUserListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKUserListViewController.h; sourceTree = "<group>"; };
+		BE7D5ADD18D36050005D3893 /* STKUserListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUserListViewController.m; sourceTree = "<group>"; };
+		BE7D5ADE18D36050005D3893 /* STKUserListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKUserListViewController.xib; sourceTree = "<group>"; };
+		BE7D5AE118D37327005D3893 /* STKUserPostListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKUserPostListViewController.h; sourceTree = "<group>"; };
+		BE7D5AE218D37327005D3893 /* STKUserPostListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUserPostListViewController.m; sourceTree = "<group>"; };
+		BE7D5AE318D37327005D3893 /* STKUserPostListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKUserPostListViewController.xib; sourceTree = "<group>"; };
 		BE8935FF186CD05E00FE8263 /* STKContentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKContentStore.h; sourceTree = "<group>"; };
 		BE893600186CD05E00FE8263 /* STKContentStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKContentStore.m; sourceTree = "<group>"; };
 		BE8BBF0118C7B1F500D53BF5 /* STKImageSharer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKImageSharer.h; sourceTree = "<group>"; };
@@ -2261,6 +2271,12 @@
 				BE4C642A18970BE500467E2D /* STKLocationViewController.h */,
 				BE4C642B18970BE500467E2D /* STKLocationViewController.m */,
 				BE4C642C18970BE500467E2D /* STKLocationViewController.xib */,
+				BE7D5ADC18D36050005D3893 /* STKUserListViewController.h */,
+				BE7D5ADD18D36050005D3893 /* STKUserListViewController.m */,
+				BE7D5ADE18D36050005D3893 /* STKUserListViewController.xib */,
+				BE7D5AE118D37327005D3893 /* STKUserPostListViewController.h */,
+				BE7D5AE218D37327005D3893 /* STKUserPostListViewController.m */,
+				BE7D5AE318D37327005D3893 /* STKUserPostListViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4361,6 +4377,7 @@
 				BEF361CC18B2C3700085A38B /* STKTriImageCell.xib in Resources */,
 				BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */,
 				BEF7A08218439E0800A3AFFB /* STKRegisterViewController.xib in Resources */,
+				BE7D5AE518D37327005D3893 /* STKUserPostListViewController.xib in Resources */,
 				BEC01A0F182AF42600080601 /* STKTrustViewController.xib in Resources */,
 				BE1E09D01850DF0A00975652 /* STKLoginViewController.xib in Resources */,
 				BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */,
@@ -4369,6 +4386,7 @@
 				BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */,
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
+				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
 				BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */,
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
@@ -4422,6 +4440,7 @@
 				BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */,
 				BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */,
 				BE778C4518BBF82000DA5EDD /* STKFilterCell.m in Sources */,
+				BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
@@ -4460,6 +4479,7 @@
 				BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
 				BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */,
+				BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */,
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,

@@ -113,6 +113,11 @@ const long STKCreateProgressGeocoding = 4;
         [self setUser:user];
         [self setEditingProfile:YES];
         [[self navigationItem] setTitle:@"Edit Profile"];
+        
+        
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(saveChanges:)];
+        [[self navigationItem] setRightBarButtonItem:bbi];
+        
         _items = @[
                    // Public
                    @{@"title" : @"First Name", @"key" : @"firstName",
@@ -231,6 +236,17 @@ const long STKCreateProgressGeocoding = 4;
     }
 }
 
+- (void)saveChanges:(id)sender
+{
+    [STKProcessingView present];
+    [[STKUserStore store] updateUserDetails:[self user] completion:^(STKUser *u, NSError *err) {
+        [STKProcessingView dismiss];
+        if(err) {
+            UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+            [av show];
+        }
+    }];
+}
 
 - (void)dateChanged:(id)sender atIndexPath:(NSIndexPath *)ip
 {
@@ -458,10 +474,12 @@ const long STKCreateProgressGeocoding = 4;
 {
     NSArray *allKeys = [[self items] valueForKey:@"key"];
     for(NSString *k in allKeys) {
-        if([[self user] valueForKey:k]) {
-            NSLog(@"OK");
-        } else {
-            NSLog(@"not ok %@", k);
+        if(![k isKindOfClass:[NSNull class]]) {
+            if([[self user] valueForKey:k]) {
+                NSLog(@"OK");
+            } else {
+                NSLog(@"not ok %@", k);
+            }
         }
     }
 }
