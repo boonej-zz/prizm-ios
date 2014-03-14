@@ -355,6 +355,7 @@
 {
     UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[[self postCell] contentImageView] image]
                                                                                              text:[[self post] text]
+                                                                                            object:[self post]
                                                                                     finishHandler:^(UIDocumentInteractionController *doc) {
                                                                                         [doc presentOpenInMenuFromRect:[[self view] bounds] inView:[self view] animated:YES];
                                                                                     }];

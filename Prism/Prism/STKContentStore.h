@@ -73,6 +73,7 @@ typedef enum {
 - (void)likeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block;
 - (void)unlikeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block;
 - (void)deleteComment:(STKPostComment *)comment completion:(void (^)(STKPost *p, NSError *err))block;
+- (void)flagPost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
 
 
 @end

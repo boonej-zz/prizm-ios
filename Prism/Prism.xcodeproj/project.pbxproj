@@ -43,7 +43,6 @@
 		BE24B523183AA653009BC02A /* STKCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B522183AA653009BC02A /* STKCircleView.m */; };
 		BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */; };
 		BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */; };
-		BE36BC4718CA14B200694145 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE36BC4618CA14B200694145 /* Crashlytics.framework */; };
 		BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3D2FDE18C9626500E9F58C /* STKAvatarView.m */; };
 		BE3FFDF918AE9744005B531E /* STKAuthorizationToken.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3FFDF818AE9744005B531E /* STKAuthorizationToken.m */; };
 		BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE477C1B186E2ED4003672A0 /* STKProfileCell.m */; };
@@ -153,6 +152,7 @@
 		BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEE03182C210600648B9F /* NSError+STKConnection.m */; };
 		BEFCEE0B182C211A00648B9F /* STKUserStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEE0A182C211A00648B9F /* STKUserStore.m */; };
 		BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEE0D182C212800648B9F /* STKImageStore.m */; };
+		D097F29518D353B30053F479 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE36BC4618CA14B200694145 /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2095,6 +2095,7 @@
 		BEFCEE0A182C211A00648B9F /* STKUserStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUserStore.m; sourceTree = "<group>"; };
 		BEFCEE0C182C212800648B9F /* STKImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKImageStore.h; sourceTree = "<group>"; };
 		BEFCEE0D182C212800648B9F /* STKImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKImageStore.m; sourceTree = "<group>"; };
+		D097F29318D3533E0053F479 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Prism/Crashlytics.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2102,9 +2103,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D097F29518D353B30053F479 /* Crashlytics.framework in Frameworks */,
 				BED0B274185F68EB00564300 /* SystemConfiguration.framework in Frameworks */,
 				BED0B272185F68E500564300 /* Security.framework in Frameworks */,
-				BE36BC4718CA14B200694145 /* Crashlytics.framework in Frameworks */,
 				BED0B270185F68E000564300 /* MediaPlayer.framework in Frameworks */,
 				BED0B26E185F68D900564300 /* CoreText.framework in Frameworks */,
 				BED0B26C185F68D300564300 /* CoreMotion.framework in Frameworks */,
@@ -2153,6 +2154,7 @@
 		BE02EAA1182A80A200A5505A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D097F29318D3533E0053F479 /* Crashlytics.framework */,
 				BE36BC4618CA14B200694145 /* Crashlytics.framework */,
 				BED0B273185F68EB00564300 /* SystemConfiguration.framework */,
 				BED0B271185F68E500564300 /* Security.framework */,
@@ -4337,7 +4339,7 @@
 				ORGANIZATIONNAME = "Higher Altitude";
 				TargetAttributes = {
 					BE02EA9E182A80A200A5505A = {
-						DevelopmentTeam = MU64MV9X8B;
+						DevelopmentTeam = R9AR4U6NWF;
 					};
 					BE02EAB9182A80A200A5505A = {
 						TestTargetID = BE02EA9E182A80A200A5505A;
@@ -4653,8 +4655,11 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/Prism",
 					/Users/joeconway/Projects/Prism/Prism/Prism,
 					/Users/joeconway/Projects/Prism/Prism,
+					"$(PROJECT_DIR)/Prism",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
@@ -4681,8 +4686,11 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/Prism",
 					/Users/joeconway/Projects/Prism/Prism/Prism,
 					/Users/joeconway/Projects/Prism/Prism,
+					"$(PROJECT_DIR)/Prism",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
@@ -4784,8 +4792,11 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/Prism",
 					/Users/joeconway/Projects/Prism/Prism/Prism,
 					/Users/joeconway/Projects/Prism/Prism,
+					"$(PROJECT_DIR)/Prism",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
@@ -4870,8 +4881,11 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)/Prism",
 					/Users/joeconway/Projects/Prism/Prism/Prism,
 					/Users/joeconway/Projects/Prism/Prism,
+					"$(PROJECT_DIR)/Prism",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";

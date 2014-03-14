@@ -9,6 +9,7 @@
 #import "STKImageSharer.h"
 #import "STKPost.h"
 #import "STKImageStore.h"
+#import "STKContentStore.h"
 
 @class STKActivity;
 
@@ -229,6 +230,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @end
 
 @interface STKActivityReport : STKActivity
+@property (nonatomic, strong) STKPost *currentPost;
 @end
 @implementation STKActivityReport
 - (NSString *)activityType
@@ -246,6 +248,30 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 + (UIActivityCategory)activityCategory
 {
     return UIActivityCategoryAction;
+}
+
+- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
+{
+    for(id obj in activityItems) {
+        if([obj isKindOfClass:[STKPost class]] && [obj respondsToSelector:@selector(postID)]) {
+            [self setCurrentPost:(STKPost *)obj];
+        }
+    }
+    
+    if(!_currentPost)
+        return NO;
+
+    return YES;
+}
+
+- (void)performActivity
+{
+    [[STKContentStore store] flagPost:_currentPost completion:^(STKPost *p, NSError *err) {
+        if(err){
+            //user must have already reported it -- need some sort of ui action?
+        }
+        [self activityDidFinish:YES];
+    }];
 }
 
 
@@ -277,12 +303,22 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                                                         text:(NSString *)text
                                                finishHandler:(void (^)(UIDocumentInteractionController *))block
 {
+    return [self activityViewControllerForImage:image text:text object:nil finishHandler:block];
+}
+
+- (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image
+                                                        text:(NSString *)text
+                                                      object:(id)object
+                                               finishHandler:(void (^)(UIDocumentInteractionController *))block
+{
     [self setFinishHandler:block];
     NSMutableArray *a = [NSMutableArray array];
     if(image)
         [a addObject:image];
     if(text)
         [a addObject:text];
+    if(object)
+        [a addObject:object];
 
     NSArray *activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
                             [[STKActivityReport alloc] initWithDelegate:self],
