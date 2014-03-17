@@ -301,14 +301,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 - (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image
                                                         text:(NSString *)text
-                                               finishHandler:(void (^)(UIDocumentInteractionController *))block
-{
-    return [self activityViewControllerForImage:image text:text object:nil finishHandler:block];
-}
-
-- (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image
-                                                        text:(NSString *)text
-                                                      object:(id)object
+                                                      post:(STKPost *)post
                                                finishHandler:(void (^)(UIDocumentInteractionController *))block
 {
     [self setFinishHandler:block];
@@ -317,8 +310,8 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         [a addObject:image];
     if(text)
         [a addObject:text];
-    if(object)
-        [a addObject:object];
+    if(post)
+        [a addObject:post];
 
     NSArray *activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
                             [[STKActivityReport alloc] initWithDelegate:self],

@@ -339,6 +339,7 @@
     STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
     UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image]
                                                                                              text:[p text]
+                                                                                           post:p
                                                                                     finishHandler:^(UIDocumentInteractionController *doc) {
                                                                                         [doc presentOpenInMenuFromRect:[[self view] bounds] inView:[self view] animated:YES];
                                                                                     }];

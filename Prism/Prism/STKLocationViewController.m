@@ -157,6 +157,7 @@
     STKPost *post = [[self posts] objectAtIndex:[ip row]];
     UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image]
                                                                                              text:[post text]
+                                                                                             post:post
                                                                                     finishHandler:^(UIDocumentInteractionController *doc) {
                                                                                         [doc presentPreviewAnimated:YES];
                                                                                     }];
