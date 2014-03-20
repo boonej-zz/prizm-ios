@@ -35,7 +35,7 @@
     if([[jsonObject objectForKey:@"creator"] isKindOfClass:[NSDictionary class]]) {
         STKUser *u = [[STKUser alloc] init];
         [u readFromJSONObject:[jsonObject objectForKey:@"creator"]];
-        [self setUser:u];
+        [self setCreator:u];
     }
     
     return nil;

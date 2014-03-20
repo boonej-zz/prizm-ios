@@ -14,11 +14,6 @@
 extern NSString * const STKRequestTypeTrust;
 extern NSString * const STKRequestTypeAccolade;
 
-extern NSString * const STKRequestStatusPending;
-extern NSString * const STKRequestStatusAccepted;
-extern NSString * const STKRequestStatusRejected;
-extern NSString * const STKRequestStatusBlocked;
-
 @interface STKRequestItem : NSObject <STKJSONObject>
 
 //@property (nonatomic, strong) STKProfile *requestingProfile;

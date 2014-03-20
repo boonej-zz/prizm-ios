@@ -32,7 +32,9 @@
 
 - (void)commonInit
 {
+    [self setOutlineWidth:2];
     [self setBackgroundColor:[UIColor clearColor]];
+    [self setOutlineColor:[UIColor colorWithRed:135 / 255.0 green:135 / 255.0 blue:162 / 255.0 alpha:1]];
 }
 
 - (void)setUrlString:(NSString *)urlString
@@ -54,6 +56,29 @@
     
 }
 
+- (void)setOverlayColor:(UIColor *)overlayColor
+{
+    _overlayColor = overlayColor;
+    [self setNeedsDisplay];
+}
+
+- (void)setOutlineColor:(UIColor *)outlineColor
+{
+    _outlineColor = outlineColor;
+    [self setNeedsDisplay];
+}
+
+- (void)setOutlineWidth:(CGFloat)outlineWidth
+{
+    _outlineWidth = outlineWidth;
+    [self setNeedsDisplay];
+}
+
+- (void)setImage:(UIImage *)image
+{
+    _image = image;
+    [self setNeedsDisplay];
+}
 
 - (void)drawRect:(CGRect)rect
 {
@@ -63,10 +88,15 @@
     UIGraphicsPushContext(UIGraphicsGetCurrentContext());
     [bpInner addClip];
     [[self image] drawInRect:[self bounds]];
+    
+    if([self overlayColor]) {
+        [[self overlayColor] set];
+        [bpInner fill];
+    }
     UIGraphicsPopContext();
     
-    [[UIColor colorWithRed:135 / 255.0 green:135 / 255.0 blue:162 / 255.0 alpha:1] set];
-    [bpInner setLineWidth:2];
+    [[self outlineColor] set];
+    [bpInner setLineWidth:[self outlineWidth]];
     [bpInner stroke];
 }
 

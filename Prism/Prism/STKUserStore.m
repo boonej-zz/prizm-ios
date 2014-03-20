@@ -19,10 +19,7 @@
 #import "NSError+STKConnection.h"
 #import "STKSecurePassword.h"
 #import "STKBaseStore.h"
-
-// To erase DB data:
-// curl prism.neadwerx.com/common/ajax/delete_all_entities_and_data.php
-
+#import "STKTrust.h"
 
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 
@@ -335,47 +332,91 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block
+- (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block
 {
-/*    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointRequest];
-        [c addQueryValue:[[self currentUser] userID] forKey:@"requesting_profile"];
-//        [c addQueryValue:[profile profileID] forKey:@"profile"];
-        [c addQueryValue:requestType forKey:@"request_type"];
-        [c addQueryValue:STKRequestStatusPending forKey:@"request_status"];
-        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[user userID], @"trusts"]];
+        [c addQueryValue:[[self currentUser] userID] forKey:@"creator"];
+
+        STKTrust *t = [[STKTrust alloc] init];
+        [t setOtherUser:user];
+        [t setStatus:STKRequestStatusPending];
+        [t setCurrentUserIsOwner:YES];
+        [[[self currentUser] trusts] addObject:t];
+        
+        [c setModelGraph:@[t]];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err) {
+                [[[self currentUser] trusts] removeObjectIdenticalTo:t];
+            }
             block(obj, err);
         }];
-    }];*/
+    }];
 }
 
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block
 {
-   /* [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointGetRequests];
-        [c addQueryValue:[[self currentUser] userID]
-                  forKey:@"profile"];
         
-        [c setModelGraph:@{@"request" : @[@"STKRequestItem"]}];
-        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[self currentUser] userID], @"trusts"]];
+        //[c setShouldReturnArray:YES];
+        [c setModelGraph:@[@{@"trusts" : @[[STKTrust class]]}]];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
-            if(!err) {
-                NSArray *requests = [obj objectForKey:@"request"];
-                block(requests, nil);
-            } else {
-                block(nil, err);
-            }
+            block([obj objectForKey:@"trusts"], err);
         }];
-    }];*/
+    }];
+
+}
+
+- (void)acceptTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[self currentUser] userID], @"trusts", [t trustID]]];
+        [c addQueryValue:@"accepted" forKey:@"status"];
+        
+        [c setModelGraph:@[[STKTrust class]]];
+        [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+    
+}
+
+- (void)rejectTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[self currentUser] userID], @"trusts", [t trustID]]];
+        [c addQueryValue:@"rejected" forKey:@"status"];
+        
+        [c setModelGraph:@[[STKTrust class]]];
+        [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+    
 }
 
 #pragma mark Authentication Nonsense

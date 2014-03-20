@@ -74,7 +74,7 @@
     [[[self internalNavigationController] view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [[self view] addSubview:_barContainer];
 
-    _backButton = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, [[self view] bounds].size.width, 86)];
+    _backButton = [[UIControl alloc] initWithFrame:CGRectMake(160 - 40, 0, 80, 86)];
     [_backButton addTarget:self action:@selector(pop:) forControlEvents:UIControlEventTouchUpInside];
     [[self barContainer] addSubview:_backButton];
     [_backButton setHidden:YES];

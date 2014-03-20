@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKUserListViewController">
             <connections>
+                <outlet property="blurView" destination="Lhr-qt-1gM" id="qUn-Wr-tSp"/>
                 <outlet property="tableView" destination="iDu-HP-lI9" id="ffw-o0-LqW"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -24,8 +25,21 @@
                         <outlet property="delegate" destination="-1" id="RI8-TG-JQg"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lhr-qt-1gM" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="oQS-wb-sSt"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Lhr-qt-1gM" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="LH1-l7-AcR"/>
+                <constraint firstItem="Lhr-qt-1gM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="XJq-EY-mUQ"/>
+                <constraint firstAttribute="trailing" secondItem="Lhr-qt-1gM" secondAttribute="trailing" id="zqf-eA-njE"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>

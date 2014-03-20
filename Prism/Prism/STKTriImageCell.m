@@ -7,6 +7,8 @@
 //
 
 #import "STKTriImageCell.h"
+#import "STKPost.h"
+#import "STKResolvingImageView.h"
 
 @implementation STKTriImageCell
 
@@ -18,6 +20,29 @@
 - (void)layoutContent
 {
     
+}
+
+- (void)populateWithPosts:(NSArray *)posts indexOffset:(NSInteger)arrayIndex
+{
+    if(arrayIndex + 0 < [posts count]) {
+        STKPost *p = [posts objectAtIndex:arrayIndex + 0];
+        [[self leftImageView] setUrlString:[p imageURLString]];
+    } else {
+        [[self leftImageView] setUrlString:nil];
+    }
+    if(arrayIndex + 1 < [posts count]) {
+        STKPost *p = [posts objectAtIndex:arrayIndex + 1];
+        [[self centerImageView] setUrlString:[p imageURLString]];
+    } else {
+        [[self centerImageView] setUrlString:nil];
+    }
+    
+    if(arrayIndex + 2 < [posts count]) {
+        STKPost *p = [posts objectAtIndex:arrayIndex + 2];
+        [[self rightImageView] setUrlString:[p imageURLString]];
+    } else {
+        [[self rightImageView] setUrlString:nil];
+    }
 }
 
 - (IBAction)leftImageButtonTapped:(id)sender

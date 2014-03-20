@@ -10,9 +10,11 @@
 #import "STKSearchProfileCell.h"
 #import "STKUser.h"
 #import "STKProfileViewController.h"
+#import "UIERealTimeBlurView.h"
 
 @interface STKUserListViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 @end
 
@@ -40,6 +42,14 @@
                                               landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                            target:self action:@selector(back:)];
     [[self navigationItem] setLeftBarButtonItem:bbi];
+    
+    [[[self blurView] displayLink] setPaused:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (void)back:(id)sender
@@ -51,6 +61,17 @@
 {
     [super viewDidLoad];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
+    [[self tableView] setSeparatorColor:STKTextTransparentColor];
+    
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    [v setBackgroundColor:[UIColor clearColor]];
+    [[self tableView] setTableFooterView:v];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -70,6 +91,7 @@
     STKUser *u = [[self users] objectAtIndex:[indexPath row]];
     STKSearchProfileCell *c = [STKSearchProfileCell cellForTableView:tableView target:self];
     
+    [[c nameLabel] setTextColor:STKTextColor];
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
     

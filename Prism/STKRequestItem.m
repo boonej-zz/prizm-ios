@@ -9,13 +9,8 @@
 #import "STKRequestItem.h"
 #import "STKUserStore.h"
 
-NSString * const STKRequestTypeTrust = @"1";
-NSString * const STKRequestTypeAccolade = @"2";
-
-NSString * const STKRequestStatusPending = @"1";
-NSString * const STKRequestStatusAccepted = @"2";
-NSString * const STKRequestStatusRejected = @"3";
-NSString * const STKRequestStatusBlocked = @"4";
+NSString * const STKRequestTypeTrust = @"trust";
+NSString * const STKRequestTypeAccolade = @"accolade";
 
 
 @implementation STKRequestItem

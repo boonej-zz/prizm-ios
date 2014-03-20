@@ -36,6 +36,13 @@ NSString * const STKPostTypeAccolade = @"accolade";
 
 NSString * const STKPostStatusDeleted = @"deleted";
 
+@interface STKPost ()
+
+@property (nonatomic, strong) NSSet *commentsSet;
+@property (nonatomic, strong) NSSet *hashTagsSet;
+
+@end
+
 @implementation STKPost
 
 
@@ -128,6 +135,11 @@ NSString * const STKPostStatusDeleted = @"deleted";
     }
     
     return nil;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"0x%x %@ %@", (int)self, [self postID], [self text]];
 }
 
 @end

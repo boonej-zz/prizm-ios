@@ -7,16 +7,18 @@
 //
 
 #import "STKTableViewCell.h"
-#import "STKResolvingImageView.h"
+#import "STKAvatarView.h"
+
 
 @interface STKRequestCell : STKTableViewCell
 
-@property (weak, nonatomic) IBOutlet STKResolvingImageView *avatarImageView;
+@property (weak, nonatomic) IBOutlet STKAvatarView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *typeLabel;
 
 - (IBAction)acceptRequest:(id)sender;
 - (IBAction)rejectRequest:(id)sender;
+- (IBAction)profileTapped:(id)sender;
 
 @end

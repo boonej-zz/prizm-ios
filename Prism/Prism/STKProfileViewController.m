@@ -20,7 +20,7 @@
 #import "STKRequestItem.h"
 #import "STKCreateProfileViewController.h"
 #import "UIERealTimeBlurView.h"
-#import "STKHomeCell.h"
+#import "STKPostCell.h"
 #import "STKFilterCell.h"
 #import "STKCreatePostViewController.h"
 #import "STKLocationViewController.h"
@@ -28,6 +28,8 @@
 #import "STKUserListViewController.h"
 #import "STKUserPostListViewController.h"
 #import "STKProfileInformationCell.h"
+#import "STKTrust.h"
+#import "STKPostController.h"
 
 typedef enum {
     STKProfileSectionHeader,
@@ -36,14 +38,13 @@ typedef enum {
     STKProfileSectionInformation
 } STKProfileSection;
 
-@interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate>
+@interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate, STKPostControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) STKInitialProfileStatisticsCell *statsCell;
 
-
-@property (nonatomic, strong) NSMutableArray *posts;
+@property (nonatomic, strong) STKPostController *postController;
 @property (nonatomic, getter = isShowingInformation) BOOL showingInformation;
 @property (nonatomic) BOOL showPostsInSingleLayout;
 
@@ -60,7 +61,8 @@ typedef enum {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
-        _posts = [[NSMutableArray alloc] init];
+        _postController = [[STKPostController alloc] initWithViewController:self];
+        [[self postController] setDelegate:self];
     }
     return self;
 }
@@ -68,11 +70,6 @@ typedef enum {
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-}
-
-- (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    [self showPostAtIndex:[ip row]];
 }
 
 
@@ -96,10 +93,6 @@ typedef enum {
     if(![self profile]) {
         [self setProfile:[[STKUserStore store] currentUser]];
     }
-    
-    NSArray *deletedPosts = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKPostStatusDeleted]];
-    [[self posts] removeObjectsInArray:deletedPosts];
-
     
     if([self isShowingCurrentUserProfile]) {
         [[self navigationItem] setTitle:@"Profile"];
@@ -125,12 +118,10 @@ typedef enum {
         
         [[STKContentStore store] fetchProfilePostsForUser:[self profile]
                                               inDirection:STKContentStoreFetchDirectionNewer
-                                            referencePost:[[self posts] firstObject]
+                                            referencePost:[[[self postController] posts] firstObject]
                                                completion:^(NSArray *posts, NSError *err) {
                                                    if(!err) {
-                                                       [[self posts] addObjectsFromArray:posts];
-                                                       [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-                                                       
+                                                       [[self postController] addPosts:posts];
                                                        
                                                        [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
                                                                        withRowAnimation:UITableViewRowAnimationNone];
@@ -164,7 +155,7 @@ typedef enum {
         case 2: {
             STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] init];
             [pvc setTitle:[[self profile] name]];
-            [pvc setPosts:[self posts]];
+            [pvc setPosts:[[self postController] posts]];
             [[self navigationController] pushViewController:pvc animated:YES];
         } break;
     }
@@ -182,7 +173,7 @@ typedef enum {
 
 - (void)scrollToPosts
 {
-    if([[self posts] count] > 0)
+    if([[[self postController] posts] count] > 0)
         [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:STKProfileSectionInformation]
                                 atScrollPosition:UITableViewScrollPositionTop
                                         animated:YES];
@@ -211,95 +202,20 @@ typedef enum {
 {
 }
 
-- (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+
+- (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingAvatarAtIndex:(int)idx
 {
-    STKPost *p = [[self posts] objectAtIndex:[ip row]];
+    STKPost *p = [[[self postController] posts] objectAtIndex:idx];
     if([[p creator] isEqual:[self profile]]) {
-        return;
+        return NO;
     }
-    
-    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
-    [vc setProfile:[p creator]];
-    [[self navigationController] pushViewController:vc animated:YES];
-
+    return YES;
 }
 
-- (void)toggleLike:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    STKPost *post = [[self posts] objectAtIndex:[ip row]];
-    if([post postLikedByCurrentUser]) {
-        [[STKContentStore store] unlikePost:post
-                                 completion:^(STKPost *p, NSError *err) {
-                                     [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                                             withRowAnimation:UITableViewRowAnimationNone];
-                                 }];
-    } else {
-        [[STKContentStore store] likePost:post
-                               completion:^(STKPost *p, NSError *err) {
-                                   [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                                           withRowAnimation:UITableViewRowAnimationNone];
-                               }];
-    }
-    [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                            withRowAnimation:UITableViewRowAnimationNone];
-    
-}
-
-- (void)showComments:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    [self showPostAtIndex:(int)[ip row]];
-}
-
-
-- (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    STKCreatePostViewController *pvc = [[STKCreatePostViewController alloc] init];
-    [pvc setImageURLString:[[[self posts] objectAtIndex:[ip row]] imageURLString]];
-    
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
-    
-    [self presentViewController:nvc animated:YES completion:nil];
-    
-}
-
-- (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    STKPost *p = [[self posts] objectAtIndex:[ip row]];
-    STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
-    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image]
-                                                                                             text:[p text]
-                                                                                             post:p
-                                                                                    finishHandler:^(UIDocumentInteractionController *doc) {
-                                                                                        [doc presentOpenInMenuFromRect:[[self view] bounds] inView:[self view] animated:YES];
-                                                                                    }];
-    [self presentViewController:vc animated:YES completion:nil];
-}
-
-- (void)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    if([[[self posts] objectAtIndex:[ip row]] locationName]) {
-        STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
-        [lvc setCoordinate:[[[self posts] objectAtIndex:[ip row]] coordinate]];
-        [lvc setLocationName:[[[self posts] objectAtIndex:[ip row]] locationName]];
-        [[self navigationController] pushViewController:lvc animated:YES];
-    }
-   
-}
-
-- (void)showPostAtIndex:(int)idx
-{
-    if(idx < [[self posts] count]) {
-        [[self menuController] transitionToPost:[[self posts] objectAtIndex:idx]
-                                       fromRect:[self rectForPostAtIndex:idx]
-                               inViewController:self
-                                       animated:YES];
-    }
-}
-
-- (CGRect)rectForPostAtIndex:(int)idx
+- (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {
     if([self showPostsInSingleLayout]) {
-        STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:STKProfileSectionInformation]];
+        STKPostCell *c = (STKPostCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:STKProfileSectionInformation]];
         
         return [[self view] convertRect:[[c contentImageView] frame] fromView:[[c contentImageView] superview]];
     } else {
@@ -333,30 +249,6 @@ typedef enum {
     [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
 }
 
-
-- (void)leftImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    NSInteger row = [ip row];
-    int itemIndex = (int)row * 3;
-    [self showPostAtIndex:itemIndex];
-}
-
-- (void)centerImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    NSInteger row = [ip row];
-    int itemIndex = (int)row * 3 + 1;
-    [self showPostAtIndex:itemIndex];
-
-}
-
-- (void)rightImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    NSInteger row = [ip row];
-    int itemIndex = (int)row * 3 + 2;
-    [self showPostAtIndex:itemIndex];
-}
-
-
 - (void)editProfile:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKCreateProfileViewController *ep = [[STKCreateProfileViewController alloc] initWithProfileForEditing:[self profile]];
@@ -376,9 +268,10 @@ typedef enum {
 
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    [[STKUserStore store] createRequestOfType:STKRequestTypeTrust profile:[self profile] completion:^(id obj, NSError *err) {
-        
+    [[STKUserStore store] requestTrustForUser:[self profile] completion:^(STKTrust *requestItem, NSError *err) {
+        [self refreshStatisticsView];
     }];
+    [self refreshStatisticsView];
 }
 
 - (void)showAccolades:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -451,6 +344,24 @@ typedef enum {
         }
         [[c trustButton] setHidden:NO];
         [[c editButton] setHidden:YES];
+    
+        STKTrust *t = [[self profile] trustForUser:[[STKUserStore store] currentUser]];
+        if(!t) {
+            [[c trustButton] setTitle:@"Request Trust" forState:UIControlStateNormal];
+            [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
+            [[c trustButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 95, 0, 0)];
+        } else {
+            if([t isPending]) {
+                [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
+                [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+            } else if([t isRejected]) {
+                [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
+                [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+            } else if([t isAccepted]) {
+                [[c trustButton] setTitle:@"Trusted" forState:UIControlStateNormal];
+                [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+            }
+        }
     }
     
     [[c circleView] setCircleTitles:@[@"Followers", @"Following", @"Posts"]];
@@ -473,34 +384,11 @@ typedef enum {
     }
     
     [[c circleView] setCircleValues:@[followerCount, followingCount, postCount]];
-    
     [[c circleView] setDelegate:self];
+    
+
 }
 
-- (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row
-{
-    int arrayIndex = row * 3;
-    
-    if(arrayIndex + 0 < [[self posts] count]) {
-        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 0];
-        [[c leftImageView] setUrlString:[p imageURLString]];
-    } else {
-        [[c leftImageView] setUrlString:nil];
-    }
-    if(arrayIndex + 1 < [[self posts] count]) {
-        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 1];
-        [[c centerImageView] setUrlString:[p imageURLString]];
-    } else {
-        [[c centerImageView] setUrlString:nil];
-    }
-    
-    if(arrayIndex + 2 < [[self posts] count]) {
-        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 2];
-        [[c rightImageView] setUrlString:[p imageURLString]];
-    } else {
-        [[c rightImageView] setUrlString:nil];
-    }
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -519,14 +407,14 @@ typedef enum {
             return c;
         } else {
             if([self showPostsInSingleLayout]) {
-                STKHomeCell *c = [STKHomeCell cellForTableView:tableView target:self];
+                STKPostCell *c = [STKPostCell cellForTableView:tableView target:[self postController]];
                 
-                [c populateWithPost:[[self posts] objectAtIndex:[indexPath row]]];
+                [c populateWithPost:[[[self postController] posts] objectAtIndex:[indexPath row]]];
                 
                 return c;
             } else {
-                STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-                [self populateTriImageCell:c forRow:[indexPath row]];
+                STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self postController]];
+                [c populateWithPosts:[[self postController] posts] indexOffset:[indexPath row] * 3];
                 
                 return c;
             }
@@ -607,12 +495,13 @@ typedef enum {
 {
     if(section == STKProfileSectionInformation) {
         if(![self isShowingInformation]) {
+            int count = [[[self postController] posts] count];
             if([self showPostsInSingleLayout]) {
-                return [[self posts] count];
+                return count;
             } else {
-                if([[self posts] count] % 3 > 0)
-                    return [[self posts] count] / 3 + 1;
-                return [[self posts] count] / 3;
+                if(count % 3 > 0)
+                    return count / 3 + 1;
+                return count / 3;
             }
         } else {
             return 1;

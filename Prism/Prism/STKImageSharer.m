@@ -47,7 +47,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 {
     return UIActivityCategoryShare;
 }
-
+/*
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
@@ -56,7 +56,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         }
     }
     return YES;
-}
+}*/
 
 @end
 
@@ -79,10 +79,6 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
-    if(![super canPerformWithActivityItems:activityItems]) {
-        return NO;
-    }
-    
     if(![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"instagram://app"]])
         return NO;
     
@@ -135,10 +131,6 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 }
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
-    if(![super canPerformWithActivityItems:activityItems]) {
-        return NO;
-    }
-    
     if(![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tumblr://"]])
         return NO;
     
@@ -192,9 +184,6 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 }
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
-    if(![super canPerformWithActivityItems:activityItems]) {
-        return NO;
-    }
     
     if(![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"whatsapp://"]])
         return NO;
@@ -274,8 +263,6 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     }];
 }
 
-
-
 @end
 
 @interface STKImageSharer () <UIDocumentInteractionControllerDelegate>
@@ -299,20 +286,25 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     return sharer;
 }
 
-- (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image
-                                                        text:(NSString *)text
-                                                      post:(STKPost *)post
-                                               finishHandler:(void (^)(UIDocumentInteractionController *))block
+- (UIActivityViewController *)activityViewControllerForPost:(STKPost *)post
+                                              finishHandler:(void (^)(UIDocumentInteractionController *))block
 {
-    [self setFinishHandler:block];
+    UIImage *image = [[STKImageStore store] cachedImageForURLString:[post imageURLString]];
+    if(!image) {
+        return nil;
+    }
+    
     NSMutableArray *a = [NSMutableArray array];
     if(image)
         [a addObject:image];
-    if(text)
-        [a addObject:text];
+    if([post text])
+        [a addObject:[post text]];
     if(post)
         [a addObject:post];
 
+    
+    [self setFinishHandler:block];
+    
     NSArray *activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
                             [[STKActivityReport alloc] initWithDelegate:self],
                             [[STKActivityTumblr alloc] initWithDelegate:self],

@@ -13,9 +13,10 @@
 #import "STKActivityItem.h"
 #import "STKUserStore.h"
 #import "STKRequestCell.h"
-#import "STKRequestItem.h"
+#import "STKTrust.h"
 #import "STKRelativeDateConverter.h"
 #import "UIERealTimeBlurView.h"
+#import "STKUser.h"
 
 typedef enum {
     STKActivityViewControllerTypeActivity,
@@ -27,6 +28,7 @@ typedef enum {
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *activityTypeControl;
 
 @property (nonatomic, strong) NSArray *requests;
 @property (nonatomic, strong) NSArray *activities;
@@ -56,9 +58,47 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 60, 0, 0)];
     [[self tableView] setSeparatorColor:[UIColor colorWithWhite:1 alpha:0.5]];
+    [[self tableView] setBackgroundColor:[UIColor clearColor]];
+
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    [v setBackgroundColor:[UIColor clearColor]];
+    [[self tableView] setTableFooterView:v];
+
+    // 'On state'
+    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
+    [[UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.4] set];    UIRectFill(CGRectMake(0, 0, 1, 1));
+    [[self activityTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
+                                         forState:UIControlStateSelected
+                                       barMetrics:UIBarMetricsDefault];
+    UIGraphicsEndImageContext();
+    [[self activityTypeControl] setTitleTextAttributes:@{NSFontAttributeName : STKFont(16),
+                                                        NSForegroundColorAttributeName : [UIColor colorWithRed:70.0/255.0 green:34.0/255.0 blue:151.0/255.0 alpha:1]}
+                                             forState:UIControlStateSelected];
+    
+    
+    // 'Off' state
+    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
+    [[UIColor colorWithRed:78.0/255.0 green:118.0/255.0 blue:157.0/255.0 alpha:0.4] set];
+    UIRectFill(CGRectMake(0, 0, 1, 1));
+    [[self activityTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
+                                         forState:UIControlStateNormal
+                                       barMetrics:UIBarMetricsDefault];
+    UIGraphicsEndImageContext();
+    [[self activityTypeControl] setTitleTextAttributes:@{NSFontAttributeName : STKFont(16),
+                                                        NSForegroundColorAttributeName : [UIColor whiteColor]}
+                                             forState:UIControlStateNormal];
+    
+    // Divider
+    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
+    [[UIColor colorWithRed:74.0/255.0 green:114.0/255.0 blue:153.0/255.0 alpha:0.8] set];
+    UIRectFill(CGRectMake(0, 0, 1, 1));
+    [[self activityTypeControl] setDividerImage:UIGraphicsGetImageFromCurrentImageContext()
+                           forLeftSegmentState:UIControlStateNormal
+                             rightSegmentState:UIControlStateNormal
+                                    barMetrics:UIBarMetricsDefault];
+    UIGraphicsEndImageContext();
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,12 +127,32 @@ typedef enum {
         
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
         [[STKUserStore store] fetchRequestsForCurrentUser:^(NSArray *requests, NSError *err) {
-            if(!err)
-                _requests = requests;
-            
+            if(!err) {
+                _requests = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@ and currentUserIsOwner == NO", STKRequestStatusPending]];
+            }
             [[self tableView] reloadData];
         }];
     }
+}
+
+- (void)acceptRequest:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [[STKUserStore store] acceptTrustRequest:[[self requests] objectAtIndex:[ip row]] completion:^(STKTrust *requestItem, NSError *err) {
+        
+    }];
+}
+
+- (void)rejectRequest:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [[STKUserStore store] rejectTrustRequest:[[self requests] objectAtIndex:[ip row]] completion:^(STKTrust *requestItem, NSError *err) {
+        
+    }];
+
+}
+
+- (void)profileTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -107,7 +167,7 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setBackgroundColor:[UIColor clearColor]];
+    [cell setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.1]];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -123,17 +183,14 @@ typedef enum {
         [[cell imageReferenceView] setUrlString:[i referenceImageURLString]];
     } else if ([self currentType] == STKActivityViewControllerTypeRequest) {
         STKRequestCell *cell = [STKRequestCell cellForTableView:tableView target:self];
-        STKRequestItem *i = [[self requests] objectAtIndex:[indexPath row]];
+        STKTrust *i = [[self requests] objectAtIndex:[indexPath row]];
         
-       // [[cell avatarImageView] setUrlString:[[i requestingProfile] profilePhotoPath]];
         [[cell dateLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];
-       // [[cell nameLabel] setText:[[i requestingProfile] name]];
-
-        NSString *typeString = @"";
-        if([[i type] isEqualToString:STKRequestTypeTrust])
-            typeString = @"requested to join your trust.";
-        else if([[i type] isEqualToString:STKRequestTypeAccolade])
-            typeString = @"gave you an accolade!";
+        [[cell avatarImageView] setUrlString:[[i otherUser] profilePhotoPath]];
+        [[cell nameLabel] setText:[[i otherUser] name]];
+        
+        NSString *typeString = @"requested to join your trust.";
+        
         
         [[cell typeLabel] setText:typeString];
         return cell;

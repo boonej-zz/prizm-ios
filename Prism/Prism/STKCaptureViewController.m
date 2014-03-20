@@ -337,16 +337,17 @@
         
         CGSize imageViewSize = sz;
         if(imageViewSize.width > imageViewSize.height) {
-            float i = -fabs(imageViewSize.height - [[self editScrollView] frame].size.height) / 4.0;
+            float i = scale * -fabs(imageViewSize.width - imageViewSize.height) / 2.0;
             insets.top = i;
             insets.bottom = i;
             imageViewSize.height = imageViewSize.width;
-        } else {
-            float i = fabs(imageViewSize.width - [[self editScrollView] frame].size.width) / 4.0;
-            insets.left = -i;
-            insets.right = -i;
+        } else if(imageViewSize.height > imageViewSize.width){
+            float i = scale * -fabs(imageViewSize.height - imageViewSize.width) / 2.0;
+            insets.left = i;
+            insets.right = i;
             imageViewSize.width = imageViewSize.height;
         }
+        
         [newImageView setTranslatesAutoresizingMaskIntoConstraints:YES];
         [[self editScrollView] addSubview:newImageView];
         [newImageView setContentMode:UIViewContentModeCenter];
@@ -354,13 +355,8 @@
         _capturedImageView = newImageView;
 
         [[self editScrollView] setContentSize:imageViewSize];
-        [[self editScrollView] setZoomScale:scale];
         [[self editScrollView] setMinimumZoomScale:scale];
-        
-        float centerDiffX = (imageViewSize.width * scale - [[self editScrollView] frame].size.width) / 2.0;
-        float centerDiffY = (imageViewSize.height * scale  - [[self editScrollView] frame].size.height) / 2.0;
-
-        [[self editScrollView] setContentOffset:CGPointMake(centerDiffX, centerDiffY)];
+        [[self editScrollView] setZoomScale:scale];
         
         if([self type] == STKImageChooserTypeCover) {
             float coverInset = ([[self editScrollView] frame].size.height - STKUserCoverPhotoSize.height) / 2.0;
@@ -368,6 +364,11 @@
             insets.bottom += coverInset;
         }
         [[self editScrollView] setContentInset:insets];
+        
+        float centerDiffX = ceilf((imageViewSize.width * scale - [[self editScrollView] frame].size.width) / 2.0);
+        float centerDiffY = ceilf((imageViewSize.height * scale  - [[self editScrollView] frame].size.height) / 2.0);
+
+        [[self editScrollView] setContentOffset:CGPointMake(centerDiffX, centerDiffY)];
     }];
 }
 

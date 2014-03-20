@@ -22,4 +22,6 @@
 // Returns the resized local image
 - (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block;
 
+- (UIImage *)cachedImageForURLString:(NSString *)url;
+
 @end

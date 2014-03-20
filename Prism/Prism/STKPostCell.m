@@ -6,21 +6,21 @@
 //  Copyright (c) 2013 Higher Altitude. All rights reserved.
 //
 
-#import "STKHomeCell.h"
+#import "STKPostCell.h"
 #import "STKPost.h"
 #import "STKRelativeDateConverter.h"
 #import "STKAvatarView.h"
 
-@interface STKHomeCell ()
+@interface STKPostCell ()
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *hashTagTopOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIView *hashTagContainer;
 @property (weak, nonatomic) IBOutlet UIView *buttonContainer;
-
+@property (nonatomic, weak) STKPost *post;
 @end
 
-@implementation STKHomeCell
+@implementation STKPostCell
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -33,6 +33,8 @@
 
 - (void)populateWithPost:(STKPost *)p
 {
+    [self setPost:p];
+    
     [[self contentImageView] setUrlString:[p imageURLString]];
     
     if(![self displayFullBleed]) {
@@ -63,8 +65,8 @@
         [[self likeCountLabel] setText:@""];
     else
         [[self likeCountLabel] setText:[NSString stringWithFormat:@"%d", [p likeCount]]];
-
-    [[self likeButton] setHighlighted:[p postLikedByCurrentUser]];
+    
+    [[self likeButton] setSelected:[p postLikedByCurrentUser]];
     
     if([p locationName]) {
         [[self locationButton] setImage:[UIImage imageNamed:@"action_pin_selected"]
@@ -107,6 +109,21 @@
 
 - (IBAction)toggleLike:(id)sender
 {
+    if([[self likeButton] isSelected]) {
+        [[self likeButton] setSelected:NO];
+        int count = [[self post] likeCount] - 1;
+        if(count <= 0) {
+            [[self likeCountLabel] setHidden:YES];
+        } else {
+            [[self likeCountLabel] setText:[NSString stringWithFormat:@"%d", count]];
+            [[self likeCountLabel] setHidden:NO];
+        }
+    } else {
+        [[self likeButton] setSelected:YES];
+        int count = [[self post] likeCount] + 1;
+        [[self likeCountLabel] setHidden:NO];
+        [[self likeCountLabel] setText:[NSString stringWithFormat:@"%d", count]];
+    }
     ROUTE(sender);
 }
 

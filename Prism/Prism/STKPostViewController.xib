@@ -58,7 +58,7 @@
                             </constraints>
                         </imageView>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Write a comment..." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6xr-3p-wiV">
-                            <rect key="frame" x="39" y="3" width="172" height="30"/>
+                            <rect key="frame" x="39" y="3" width="177" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="foC-7t-PS4"/>
@@ -87,11 +87,11 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3RX-hR-78U">
-                            <rect key="frame" x="226" y="5" width="22" height="25"/>
+                            <rect key="frame" x="231" y="8" width="17" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="25" id="bSs-td-pxa"/>
-                                <constraint firstAttribute="width" constant="22" id="sgb-IA-ysH"/>
+                                <constraint firstAttribute="height" constant="20" id="bSs-td-pxa"/>
+                                <constraint firstAttribute="width" constant="17" id="sgb-IA-ysH"/>
                             </constraints>
                             <state key="normal" image="btntrash2">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>

@@ -16,6 +16,10 @@
 - (void)cellDidLoad
 {
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    [[[self textView] textContainer] setLineFragmentPadding:0];
+    [[self textView] setTextContainerInset:UIEdgeInsetsZero];
+    [[self textView] setDelaysContentTouches:NO];
 }
 
 - (IBAction)toggleCommentLike:(id)sender

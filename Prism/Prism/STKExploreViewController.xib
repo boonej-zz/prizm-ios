@@ -97,7 +97,7 @@
                                 <outlet property="delegate" destination="-1" id="AHb-5a-gyi"/>
                             </connections>
                         </textField>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_search" translatesAutoresizingMaskIntoConstraints="NO" id="NzK-bF-oSB">
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="searchfilter_search" translatesAutoresizingMaskIntoConstraints="NO" id="NzK-bF-oSB">
                             <rect key="frame" x="14" y="11" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
@@ -108,12 +108,12 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="THa-x5-S04">
                             <rect key="frame" x="270" y="0.0" width="50" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.34082701425774398" green="0.56854894959387514" blue="1" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.30588235294117649" green="0.46274509803921571" blue="0.61568627450980395" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="CLw-N9-ZCP"/>
                                 <constraint firstAttribute="width" constant="50" id="Ta0-1i-GGg"/>
                             </constraints>
-                            <state key="normal" image="searchfilter_filter">
+                            <state key="normal" image="searchfilter_filteron">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -134,7 +134,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zDp-47-h6a">
-                                    <rect key="frame" x="20" y="10" width="130" height="30"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="160" height="50"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                                     <state key="normal" title="Users">
@@ -146,7 +146,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xxn-eE-TI9">
-                                    <rect key="frame" x="170" y="10" width="130" height="30"/>
+                                    <rect key="frame" x="160" y="0.0" width="160" height="50"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                                     <state key="normal" title="Hashtags">
@@ -158,7 +158,7 @@
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" red="0.42642229853346825" green="0.59035320730181806" blue="1" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.30588235294117649" green="0.46274509803921571" blue="0.61568627450980395" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="l6Y-Ae-BMb"/>
                             </constraints>
@@ -237,8 +237,8 @@
         </view>
     </objects>
     <resources>
-        <image name="btn_search" width="56" height="56"/>
         <image name="img_background" width="320" height="568"/>
-        <image name="searchfilter_filter" width="56" height="56"/>
+        <image name="searchfilter_filteron" width="56" height="56"/>
+        <image name="searchfilter_search" width="56" height="56"/>
     </resources>
 </document>

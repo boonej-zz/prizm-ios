@@ -22,4 +22,6 @@
 - (IBAction)centerImageButtonTapped:(id)sender;
 - (IBAction)rightImageButtonTapped:(id)sender;
 
+- (void)populateWithPosts:(NSArray *)posts indexOffset:(NSInteger)offset;
+
 @end

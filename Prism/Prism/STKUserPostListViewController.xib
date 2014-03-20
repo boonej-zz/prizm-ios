@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKUserPostListViewController">
             <connections>
+                <outlet property="blurView" destination="Xc3-2h-k1Z" id="PvX-rM-kyl"/>
                 <outlet property="filterBar" destination="JUn-fv-37I" id="EVL-q0-Oin"/>
                 <outlet property="tableView" destination="TCM-Ns-ZEc" id="fZB-8U-GXi"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -25,6 +26,14 @@
                         <outlet property="delegate" destination="-1" id="O52-C7-rFc"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xc3-2h-k1Z" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="115"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="115" id="Il0-7U-xDb"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JUn-fv-37I">
                     <rect key="frame" x="0.0" y="65" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -32,61 +41,96 @@
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQx-zI-aQv">
                             <rect key="frame" x="3" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="category_passion">
+                            <state key="normal" image="heartwhite">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="selected" image="category_passion"/>
+                            <connections>
+                                <action selector="togglePassions:" destination="-1" eventType="touchUpInside" id="lPc-Nc-evU"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u3g-QQ-nyU">
                             <rect key="frame" x="53" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="category_aspirations">
+                            <state key="normal" image="aspirationwhite">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="selected" image="category_aspirations"/>
+                            <connections>
+                                <action selector="toggleAspirations:" destination="-1" eventType="touchUpInside" id="1hR-iu-7Mk"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGT-3s-4Nk">
-                            <rect key="frame" x="105" y="0.0" width="48" height="48"/>
+                            <rect key="frame" x="122" y="12" width="23" height="23"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="category_experiences">
+                            <state key="normal" image="checkwhite">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="selected" image="btn_experiences"/>
+                            <connections>
+                                <action selector="toggleExperiences:" destination="-1" eventType="touchUpInside" id="dDl-lQ-pxW"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAP-Qu-4Rj">
                             <rect key="frame" x="161" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="category_achievements">
+                            <state key="normal" image="trophywhite">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="selected" image="category_achievements"/>
+                            <connections>
+                                <action selector="toggleAchievements:" destination="-1" eventType="touchUpInside" id="Am4-b8-kVY"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H5K-Hv-SNX">
-                            <rect key="frame" x="215" y="0.0" width="48" height="48"/>
+                            <rect key="frame" x="217" y="1" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="category_inspirations">
+                            <state key="normal" image="ightbulbwhite">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="selected" image="category_inspirations"/>
+                            <connections>
+                                <action selector="toggleInspirations:" destination="-1" eventType="touchUpInside" id="DSR-mI-h0l"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="THA-mD-uDP">
                             <rect key="frame" x="269" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="btn_personal">
+                            <state key="normal" image="starwhite">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="selected" image="btn_personal"/>
+                            <connections>
+                                <action selector="togglePersonal:" destination="-1" eventType="touchUpInside" id="687-ab-ugr"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Xc3-2h-k1Z" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="54d-AK-krL"/>
+                <constraint firstAttribute="trailing" secondItem="Xc3-2h-k1Z" secondAttribute="trailing" id="AVZ-Hn-bMS"/>
+                <constraint firstItem="Xc3-2h-k1Z" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="sTs-RL-78b"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
+        <image name="aspirationwhite" width="22" height="16"/>
+        <image name="btn_experiences" width="23" height="23"/>
         <image name="btn_personal" width="24" height="23"/>
         <image name="category_achievements" width="23" height="23"/>
         <image name="category_aspirations" width="56" height="56"/>
-        <image name="category_experiences" width="56" height="56"/>
         <image name="category_inspirations" width="56" height="56"/>
         <image name="category_passion" width="56" height="56"/>
+        <image name="checkwhite" width="23" height="23"/>
+        <image name="heartwhite" width="22" height="19"/>
+        <image name="ightbulbwhite" width="13" height="22"/>
+        <image name="starwhite" width="24" height="23"/>
+        <image name="trophywhite" width="22" height="22"/>
     </resources>
 </document>

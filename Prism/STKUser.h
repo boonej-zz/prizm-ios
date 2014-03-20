@@ -14,7 +14,7 @@
 #import <GoogleOpenSource/GoogleOpenSource.h>
 #import <GooglePlus/GooglePlus.h>
 
-@class STKActivityItem, STKPost, STKRequestItem;
+@class STKActivityItem, STKPost, STKTrust;
 
 extern NSString * const STKUserGenderMale;
 extern NSString * const STKUserGenderFemale;
@@ -54,6 +54,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 @property (nonatomic, strong) NSString *blurb;
 @property (nonatomic, strong) NSString *website;
+@property (nonatomic, strong) NSMutableArray *trusts;
 
 @property (nonatomic, strong) NSString *coverPhotoPath;
 @property (nonatomic, strong) NSString *profilePhotoPath;
@@ -70,6 +71,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic) BOOL isFollowingCurrentUser;
 
 - (NSString *)name;
+- (STKTrust *)trustForUser:(STKUser *)u;
+
 
 // For auth/creating
 @property (nonatomic, strong) UIImage *profilePhoto;

@@ -18,6 +18,18 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.75" colorSpace="deviceRGB"/>
                     </view>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2L-fa-zU1">
+                        <rect key="frame" x="52" y="31" width="234" height="21"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.53798979922279799" green="0.53798979922279799" blue="0.53798979922279799" alpha="0.0" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="234" id="SdZ-SU-0Hd"/>
+                        </constraints>
+                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
+                    </textView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kwb-YQ-uOI" customClass="STKAvatarView">
                         <rect key="frame" x="14" y="9" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -36,23 +48,14 @@
                         </connections>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="clC-ZP-ojw">
-                        <rect key="frame" x="52" y="11" width="234" height="21"/>
+                        <rect key="frame" x="52" y="11" width="234" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="234" id="3fW-IL-ySW"/>
-                            <constraint firstAttribute="height" constant="21" id="57g-3u-Npr"/>
+                            <constraint firstAttribute="height" constant="20" id="57g-3u-Npr"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="234" translatesAutoresizingMaskIntoConstraints="NO" id="jUK-9y-kQb">
-                        <rect key="frame" x="52" y="27" width="234" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="234" id="Nr1-XV-FSo"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clockdark" translatesAutoresizingMaskIntoConstraints="NO" id="ge7-HD-XRM">
@@ -84,7 +87,7 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YOL-96-fKX" customClass="UIControl">
-                        <rect key="frame" x="52" y="47" width="107" height="28"/>
+                        <rect key="frame" x="52" y="52" width="107" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -101,25 +104,25 @@
                     <constraint firstItem="kwb-YQ-uOI" firstAttribute="leading" secondItem="lFB-pH-7wd" secondAttribute="leading" constant="14" id="3Bv-GE-528"/>
                     <constraint firstItem="kwb-YQ-uOI" firstAttribute="top" secondItem="lFB-pH-7wd" secondAttribute="top" constant="9" id="3KJ-45-z6G"/>
                     <constraint firstItem="wCh-kh-FbI" firstAttribute="trailing" secondItem="YOL-96-fKX" secondAttribute="trailing" id="3Nk-Pd-Zxc"/>
-                    <constraint firstItem="ge7-HD-XRM" firstAttribute="leading" secondItem="jUK-9y-kQb" secondAttribute="leading" id="4an-tz-AN1"/>
                     <constraint firstAttribute="bottom" secondItem="6Ze-Ak-mfw" secondAttribute="bottom" id="6Q6-1Q-JIl"/>
                     <constraint firstItem="wCh-kh-FbI" firstAttribute="leading" secondItem="xrs-5s-4lK" secondAttribute="trailing" constant="4" id="6Tg-bN-2XM"/>
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="centerY" secondItem="xrs-5s-4lK" secondAttribute="centerY" constant="-0.5" id="Cao-hh-viT"/>
                     <constraint firstItem="ge7-HD-XRM" firstAttribute="leading" secondItem="YOL-96-fKX" secondAttribute="leading" id="DmB-mu-5CW"/>
+                    <constraint firstItem="YOL-96-fKX" firstAttribute="top" secondItem="K2L-fa-zU1" secondAttribute="bottom" id="Ja4-n7-vLi"/>
+                    <constraint firstItem="ge7-HD-XRM" firstAttribute="top" secondItem="K2L-fa-zU1" secondAttribute="bottom" constant="4" id="OA3-dt-f4D"/>
                     <constraint firstItem="xrs-5s-4lK" firstAttribute="leading" secondItem="kbA-GE-iNM" secondAttribute="trailing" constant="5" id="OAP-xT-n9M"/>
+                    <constraint firstItem="ge7-HD-XRM" firstAttribute="leading" secondItem="K2L-fa-zU1" secondAttribute="leading" id="QMQ-zQ-z0y"/>
                     <constraint firstItem="ziV-3o-fzS" firstAttribute="top" secondItem="lFB-pH-7wd" secondAttribute="top" id="R1Y-P4-OI0"/>
                     <constraint firstItem="ziV-3o-fzS" firstAttribute="leading" secondItem="lFB-pH-7wd" secondAttribute="leading" id="RNy-hi-BVP"/>
                     <constraint firstItem="kwb-YQ-uOI" firstAttribute="top" secondItem="clC-ZP-ojw" secondAttribute="top" constant="-2" id="SDX-0I-aXu"/>
+                    <constraint firstItem="K2L-fa-zU1" firstAttribute="leading" secondItem="kwb-YQ-uOI" secondAttribute="trailing" constant="8" id="SUy-ST-T1W"/>
                     <constraint firstAttribute="bottom" secondItem="ge7-HD-XRM" secondAttribute="bottom" constant="14" id="Tel-6l-UaT"/>
                     <constraint firstItem="6Ze-Ak-mfw" firstAttribute="top" secondItem="lFB-pH-7wd" secondAttribute="top" id="W7t-5e-PUt"/>
                     <constraint firstItem="wCh-kh-FbI" firstAttribute="centerY" secondItem="xrs-5s-4lK" secondAttribute="centerY" constant="-0.5" id="Wgv-29-h3g"/>
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="leading" secondItem="ge7-HD-XRM" secondAttribute="trailing" constant="6" id="Wjw-Uc-N36"/>
                     <constraint firstItem="clC-ZP-ojw" firstAttribute="leading" secondItem="kwb-YQ-uOI" secondAttribute="trailing" constant="8" id="er8-GK-4V3"/>
                     <constraint firstAttribute="trailing" secondItem="ziV-3o-fzS" secondAttribute="trailing" id="gr3-kT-PN3"/>
-                    <constraint firstItem="jUK-9y-kQb" firstAttribute="top" secondItem="clC-ZP-ojw" secondAttribute="bottom" constant="-5" id="jiM-bD-3Vl"/>
-                    <constraint firstItem="YOL-96-fKX" firstAttribute="top" secondItem="jUK-9y-kQb" secondAttribute="bottom" constant="-5" id="jsY-Tr-6aq"/>
-                    <constraint firstItem="jUK-9y-kQb" firstAttribute="leading" secondItem="kwb-YQ-uOI" secondAttribute="trailing" constant="8" id="rEr-qv-SjC"/>
-                    <constraint firstItem="ge7-HD-XRM" firstAttribute="top" secondItem="jUK-9y-kQb" secondAttribute="bottom" constant="4" id="ttZ-qC-bm2"/>
+                    <constraint firstItem="K2L-fa-zU1" firstAttribute="top" secondItem="clC-ZP-ojw" secondAttribute="bottom" id="jtB-6Q-oeP"/>
                     <constraint firstAttribute="bottom" secondItem="ziV-3o-fzS" secondAttribute="bottom" id="zWt-VK-bUZ"/>
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="top" secondItem="ge7-HD-XRM" secondAttribute="top" constant="-1" id="zdo-Um-gff"/>
                 </constraints>
@@ -127,11 +130,11 @@
             <connections>
                 <outlet property="avatarImageView" destination="kwb-YQ-uOI" id="9mC-qq-Ot8"/>
                 <outlet property="clockImageView" destination="ge7-HD-XRM" id="9Uu-WA-7dd"/>
-                <outlet property="commentLabel" destination="jUK-9y-kQb" id="uy1-ww-pPY"/>
                 <outlet property="likeButton" destination="YOL-96-fKX" id="thl-vQ-FOn"/>
                 <outlet property="likeCountLabel" destination="wCh-kh-FbI" id="3BP-mK-UhZ"/>
                 <outlet property="likeImageView" destination="xrs-5s-4lK" id="CeQ-Mx-p9q"/>
                 <outlet property="nameLabel" destination="clC-ZP-ojw" id="s6t-cu-eWa"/>
+                <outlet property="textView" destination="K2L-fa-zU1" id="bMh-CN-Ji1"/>
                 <outlet property="timeLabel" destination="kbA-GE-iNM" id="F9q-3v-ViW"/>
             </connections>
         </tableViewCell>

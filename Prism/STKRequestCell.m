@@ -29,4 +29,9 @@
 {
     ROUTE(sender);
 }
+
+- (IBAction)profileTapped:(id)sender
+{
+    ROUTE(sender);
+}
 @end

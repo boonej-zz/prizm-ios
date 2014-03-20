@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKActivityViewController">
             <connections>
+                <outlet property="activityTypeControl" destination="dpd-dE-8bZ" id="YoI-jb-Qa7"/>
                 <outlet property="blurView" destination="pIz-2f-31L" id="DBC-cL-wW9"/>
                 <outlet property="tableView" destination="7H2-7Q-gtH" id="Ufk-b7-bHN"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -16,53 +17,68 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="98K-yS-Cp7">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="VBc-AJ-ttb">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pIz-2f-31L" customClass="UIERealTimeBlurView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="104"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D5F-uA-SdR" userLabel="Container">
+                    <rect key="frame" x="0.0" y="114" width="320" height="454"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7H2-7Q-gtH">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="454"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="fmY-dO-K07"/>
+                                <outlet property="delegate" destination="-1" id="y83-rd-PsF"/>
+                            </connections>
+                        </tableView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="7H2-7Q-gtH" secondAttribute="bottom" id="8Sh-nJ-TKN"/>
+                        <constraint firstItem="7H2-7Q-gtH" firstAttribute="top" secondItem="D5F-uA-SdR" secondAttribute="top" id="DOR-vl-xYV"/>
+                        <constraint firstAttribute="trailing" secondItem="7H2-7Q-gtH" secondAttribute="trailing" id="m2U-cS-ada"/>
+                        <constraint firstItem="7H2-7Q-gtH" firstAttribute="leading" secondItem="D5F-uA-SdR" secondAttribute="leading" id="uMi-qe-X6z"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pIz-2f-31L" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="114" id="nbw-hc-7Dt"/>
+                    </constraints>
                 </view>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dpd-dE-8bZ">
-                    <rect key="frame" x="20" y="72" width="280" height="29"/>
+                    <rect key="frame" x="0.0" y="64" width="320" height="51"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="28" id="PSy-JS-wZa"/>
+                        <constraint firstAttribute="height" constant="50" id="isg-FZ-L5S"/>
                     </constraints>
                     <segments>
-                        <segment title="Activity"/>
+                        <segment title="Notifications"/>
                         <segment title="Requests"/>
                     </segments>
                     <connections>
                         <action selector="typeChanged:" destination="-1" eventType="valueChanged" id="DTT-fC-sRf"/>
                     </connections>
                 </segmentedControl>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7H2-7Q-gtH">
-                    <rect key="frame" x="0.0" y="108" width="320" height="460"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="fmY-dO-K07"/>
-                        <outlet property="delegate" destination="-1" id="y83-rd-PsF"/>
-                    </connections>
-                </tableView>
             </subviews>
             <color key="backgroundColor" red="0.79587720788043481" green="0.79587720788043481" blue="0.79587720788043481" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="98K-yS-Cp7" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="7dR-6c-wqV"/>
-                <constraint firstAttribute="bottom" secondItem="7H2-7Q-gtH" secondAttribute="bottom" id="8wB-2T-Met"/>
-                <constraint firstAttribute="trailing" secondItem="7H2-7Q-gtH" secondAttribute="trailing" id="LMJ-vJ-qg9"/>
-                <constraint firstItem="7H2-7Q-gtH" firstAttribute="top" secondItem="dpd-dE-8bZ" secondAttribute="bottom" constant="8" id="Ng3-4d-vzc"/>
-                <constraint firstItem="dpd-dE-8bZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="72" id="Nn9-q6-e1y"/>
-                <constraint firstAttribute="trailing" secondItem="dpd-dE-8bZ" secondAttribute="trailing" constant="20" id="PbI-U9-ltb"/>
-                <constraint firstAttribute="bottom" secondItem="98K-yS-Cp7" secondAttribute="bottom" id="a0p-YT-mJT"/>
-                <constraint firstItem="98K-yS-Cp7" firstAttribute="top" secondItem="1" secondAttribute="top" id="dtb-6x-24n"/>
-                <constraint firstItem="7H2-7Q-gtH" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="gQI-qU-Ppg"/>
-                <constraint firstItem="dpd-dE-8bZ" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" id="h2y-DJ-eMZ"/>
-                <constraint firstAttribute="trailing" secondItem="98K-yS-Cp7" secondAttribute="trailing" id="ubF-qb-i3X"/>
+                <constraint firstAttribute="bottom" secondItem="D5F-uA-SdR" secondAttribute="bottom" id="44Q-vK-Asw"/>
+                <constraint firstItem="dpd-dE-8bZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="9jK-94-P4s"/>
+                <constraint firstItem="pIz-2f-31L" firstAttribute="top" secondItem="1" secondAttribute="top" id="GVV-A7-XHY"/>
+                <constraint firstItem="dpd-dE-8bZ" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GzN-7S-M26"/>
+                <constraint firstAttribute="trailing" secondItem="dpd-dE-8bZ" secondAttribute="trailing" id="QyW-lM-fT1"/>
+                <constraint firstItem="D5F-uA-SdR" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="RJB-hV-5SU"/>
+                <constraint firstAttribute="trailing" secondItem="D5F-uA-SdR" secondAttribute="trailing" id="YVr-uH-3sY"/>
+                <constraint firstItem="D5F-uA-SdR" firstAttribute="top" secondItem="dpd-dE-8bZ" secondAttribute="bottom" id="l0c-hy-LCE"/>
+                <constraint firstAttribute="trailing" secondItem="pIz-2f-31L" secondAttribute="trailing" id="pYp-1N-blk"/>
+                <constraint firstItem="pIz-2f-31L" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="y5T-us-DZO"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>

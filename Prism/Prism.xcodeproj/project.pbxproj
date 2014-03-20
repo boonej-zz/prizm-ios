@@ -28,6 +28,9 @@
 		BE09FFEF184E27B30059115B /* STKBackdropView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE09FFEE184E27B30059115B /* STKBackdropView.m */; };
 		BE13648E18689F39003D9D5C /* STKAccountChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE13648C18689F39003D9D5C /* STKAccountChooserViewController.m */; };
 		BE13648F18689F39003D9D5C /* STKAccountChooserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE13648D18689F39003D9D5C /* STKAccountChooserViewController.xib */; };
+		BE1A73C518D8BFB8004A3BB3 /* STKLockCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1A73C318D8BFB8004A3BB3 /* STKLockCell.m */; };
+		BE1A73C618D8BFB8004A3BB3 /* STKLockCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE1A73C418D8BFB8004A3BB3 /* STKLockCell.xib */; };
+		BE1A73C918D8ECBB004A3BB3 /* STKPostController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1A73C818D8ECBB004A3BB3 /* STKPostController.m */; };
 		BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1E09CD1850DF0A00975652 /* STKLoginViewController.m */; };
 		BE1E09D01850DF0A00975652 /* STKLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE1E09CE1850DF0A00975652 /* STKLoginViewController.xib */; };
 		BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1E09D31850E58900975652 /* STKVerticalNavigationController.m */; };
@@ -75,10 +78,11 @@
 		BE7D5AE518D37327005D3893 /* STKUserPostListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5AE318D37327005D3893 /* STKUserPostListViewController.xib */; };
 		BE7D5AE918D382E5005D3893 /* STKTextInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */; };
 		BE7D5AEA18D382E5005D3893 /* STKTextInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */; };
+		BE8368FB18DA186300526637 /* STKTrust.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8368FA18DA186300526637 /* STKTrust.m */; };
 		BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE893600186CD05E00FE8263 /* STKContentStore.m */; };
 		BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */; };
-		BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */; };
-		BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */; };
+		BE8F35E61833D48300C4ED03 /* STKPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKPostCell.xib */; };
+		BE8F35E91833D48D00C4ED03 /* STKPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8F35E81833D48D00C4ED03 /* STKPostCell.m */; };
 		BE95438B1892CD1400DCC3B1 /* STKCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9543891892CD1400DCC3B1 /* STKCommentCell.m */; };
 		BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE95438E1892FE5C00DCC3B1 /* STKSearchProfileCell.m */; };
 		BE9543911892FE5C00DCC3B1 /* STKSearchProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE95438F1892FE5C00DCC3B1 /* STKSearchProfileCell.xib */; };
@@ -116,7 +120,6 @@
 		BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */ = {isa = PBXBuildFile; fileRef = BED773FC1890A546008770F0 /* STKCaptureView.m */; };
 		BED773FF1890A5BB008770F0 /* STKCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BED773FE1890A5BB008770F0 /* STKCaptureViewController.xib */; };
 		BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE0FA3F185B5914009FCA3B /* STKProcessingView.m */; };
-		BEE0FA43185B621A009FCA3B /* STKProfileInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */; };
 		BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE0FA45185B6722009FCA3B /* STKDateCell.m */; };
 		BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE0FA46185B6722009FCA3B /* STKDateCell.xib */; };
 		BEE5F03D187DC03300CB5325 /* STKInitialProfileStatisticsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE5F03B187DC03300CB5325 /* STKInitialProfileStatisticsCell.m */; };
@@ -199,6 +202,11 @@
 		BE13648B18689F39003D9D5C /* STKAccountChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKAccountChooserViewController.h; sourceTree = "<group>"; };
 		BE13648C18689F39003D9D5C /* STKAccountChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKAccountChooserViewController.m; sourceTree = "<group>"; };
 		BE13648D18689F39003D9D5C /* STKAccountChooserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKAccountChooserViewController.xib; sourceTree = "<group>"; };
+		BE1A73C218D8BFB8004A3BB3 /* STKLockCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLockCell.h; sourceTree = "<group>"; };
+		BE1A73C318D8BFB8004A3BB3 /* STKLockCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLockCell.m; sourceTree = "<group>"; };
+		BE1A73C418D8BFB8004A3BB3 /* STKLockCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLockCell.xib; sourceTree = "<group>"; };
+		BE1A73C718D8ECBB004A3BB3 /* STKPostController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPostController.h; sourceTree = "<group>"; };
+		BE1A73C818D8ECBB004A3BB3 /* STKPostController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKPostController.m; sourceTree = "<group>"; };
 		BE1E09CC1850DF0A00975652 /* STKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLoginViewController.h; sourceTree = "<group>"; };
 		BE1E09CD1850DF0A00975652 /* STKLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLoginViewController.m; sourceTree = "<group>"; };
 		BE1E09CE1850DF0A00975652 /* STKLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLoginViewController.xib; sourceTree = "<group>"; };
@@ -1974,13 +1982,15 @@
 		BE7D5AE618D382E5005D3893 /* STKTextInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTextInputViewController.h; sourceTree = "<group>"; };
 		BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTextInputViewController.m; sourceTree = "<group>"; };
 		BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKTextInputViewController.xib; sourceTree = "<group>"; };
+		BE8368F918DA186300526637 /* STKTrust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTrust.h; sourceTree = "<group>"; };
+		BE8368FA18DA186300526637 /* STKTrust.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTrust.m; sourceTree = "<group>"; };
 		BE8935FF186CD05E00FE8263 /* STKContentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKContentStore.h; sourceTree = "<group>"; };
 		BE893600186CD05E00FE8263 /* STKContentStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKContentStore.m; sourceTree = "<group>"; };
 		BE8BBF0118C7B1F500D53BF5 /* STKImageSharer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKImageSharer.h; sourceTree = "<group>"; };
 		BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKImageSharer.m; sourceTree = "<group>"; };
-		BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKHomeCell.xib; path = Prism/STKHomeCell.xib; sourceTree = "<group>"; };
-		BE8F35E71833D48D00C4ED03 /* STKHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKHomeCell.h; path = Prism/STKHomeCell.h; sourceTree = "<group>"; };
-		BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKHomeCell.m; path = Prism/STKHomeCell.m; sourceTree = "<group>"; };
+		BE8F35E51833D48300C4ED03 /* STKPostCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKPostCell.xib; path = Prism/STKPostCell.xib; sourceTree = "<group>"; };
+		BE8F35E71833D48D00C4ED03 /* STKPostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKPostCell.h; path = Prism/STKPostCell.h; sourceTree = "<group>"; };
+		BE8F35E81833D48D00C4ED03 /* STKPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKPostCell.m; path = Prism/STKPostCell.m; sourceTree = "<group>"; };
 		BE9543881892CD1400DCC3B1 /* STKCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCommentCell.h; sourceTree = "<group>"; };
 		BE9543891892CD1400DCC3B1 /* STKCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCommentCell.m; sourceTree = "<group>"; };
 		BE95438D1892FE5C00DCC3B1 /* STKSearchProfileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchProfileCell.h; sourceTree = "<group>"; };
@@ -2034,8 +2044,6 @@
 		BED773FE1890A5BB008770F0 /* STKCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCaptureViewController.xib; sourceTree = "<group>"; };
 		BEE0FA3E185B5914009FCA3B /* STKProcessingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProcessingView.h; sourceTree = "<group>"; };
 		BEE0FA3F185B5914009FCA3B /* STKProcessingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProcessingView.m; sourceTree = "<group>"; };
-		BEE0FA41185B621A009FCA3B /* STKProfileInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProfileInformation.h; sourceTree = "<group>"; };
-		BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProfileInformation.m; sourceTree = "<group>"; };
 		BEE0FA44185B6722009FCA3B /* STKDateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKDateCell.h; path = Prism/STKDateCell.h; sourceTree = "<group>"; };
 		BEE0FA45185B6722009FCA3B /* STKDateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKDateCell.m; path = Prism/STKDateCell.m; sourceTree = "<group>"; };
 		BEE0FA46185B6722009FCA3B /* STKDateCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKDateCell.xib; path = Prism/STKDateCell.xib; sourceTree = "<group>"; };
@@ -2287,6 +2295,8 @@
 				BE7D5AE618D382E5005D3893 /* STKTextInputViewController.h */,
 				BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */,
 				BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */,
+				BE1A73C718D8ECBB004A3BB3 /* STKPostController.h */,
+				BE1A73C818D8ECBB004A3BB3 /* STKPostController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2333,9 +2343,9 @@
 				BEE6CBBC1832DCB500BC72F4 /* STKExploreCell.h */,
 				BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */,
 				BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */,
-				BE8F35E71833D48D00C4ED03 /* STKHomeCell.h */,
-				BE8F35E81833D48D00C4ED03 /* STKHomeCell.m */,
-				BE8F35E51833D48300C4ED03 /* STKHomeCell.xib */,
+				BE8F35E71833D48D00C4ED03 /* STKPostCell.h */,
+				BE8F35E81833D48D00C4ED03 /* STKPostCell.m */,
+				BE8F35E51833D48300C4ED03 /* STKPostCell.xib */,
 				BEAC71A518522D6C00F0B211 /* STKTextFieldCell.h */,
 				BEAC71A618522D6C00F0B211 /* STKTextFieldCell.m */,
 				BEAC71A718522D6C00F0B211 /* STKTextFieldCell.xib */,
@@ -2378,6 +2388,9 @@
 				BE778C4318BBF82000DA5EDD /* STKFilterCell.m */,
 				BE778C4418BBF82000DA5EDD /* STKFilterCell.xib */,
 				BEE8F04718C103AA001A28CD /* STKCommentCell.xib */,
+				BE1A73C218D8BFB8004A3BB3 /* STKLockCell.h */,
+				BE1A73C318D8BFB8004A3BB3 /* STKLockCell.m */,
+				BE1A73C418D8BFB8004A3BB3 /* STKLockCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4204,12 +4217,12 @@
 				BEFAC1A1183D512F005E8933 /* STKUser.m */,
 				BEFAC19D183D512E005E8933 /* STKRequestItem.h */,
 				BEFAC19E183D512E005E8933 /* STKRequestItem.m */,
-				BEE0FA41185B621A009FCA3B /* STKProfileInformation.h */,
-				BEE0FA42185B621A009FCA3B /* STKProfileInformation.m */,
 				BE4C64241896F83A00467E2D /* STKFoursquareLocation.h */,
 				BE4C64251896F83A00467E2D /* STKFoursquareLocation.m */,
 				BEE8F04418C0F5E6001A28CD /* STKPostComment.h */,
 				BEE8F04518C0F5E6001A28CD /* STKPostComment.m */,
+				BE8368F918DA186300526637 /* STKTrust.h */,
+				BE8368FA18DA186300526637 /* STKTrust.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -4395,6 +4408,7 @@
 				BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */,
 				BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */,
 				BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */,
+				BE1A73C618D8BFB8004A3BB3 /* STKLockCell.xib in Resources */,
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
@@ -4407,7 +4421,7 @@
 				BE13648F18689F39003D9D5C /* STKAccountChooserViewController.xib in Resources */,
 				BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */,
 				BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */,
-				BE8F35E61833D48300C4ED03 /* STKHomeCell.xib in Resources */,
+				BE8F35E61833D48300C4ED03 /* STKPostCell.xib in Resources */,
 				BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4446,7 +4460,7 @@
 				BEF361CB18B2C3700085A38B /* STKTriImageCell.m in Sources */,
 				BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */,
 				BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */,
-				BE8F35E91833D48D00C4ED03 /* STKHomeCell.m in Sources */,
+				BE8F35E91833D48D00C4ED03 /* STKPostCell.m in Sources */,
 				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
 				BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */,
 				BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */,
@@ -4454,6 +4468,7 @@
 				BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
+				BE1A73C518D8BFB8004A3BB3 /* STKLockCell.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,
@@ -4478,7 +4493,6 @@
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
-				BEE0FA43185B621A009FCA3B /* STKProfileInformation.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
 				BE7D5AE918D382E5005D3893 /* STKTextInputViewController.m in Sources */,
 				BEE5F03D187DC03300CB5325 /* STKInitialProfileStatisticsCell.m in Sources */,
@@ -4522,9 +4536,11 @@
 				BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */,
 				BEFAC1A5183D512F005E8933 /* STKActivityItem.m in Sources */,
 				BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */,
+				BE1A73C918D8ECBB004A3BB3 /* STKPostController.m in Sources */,
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
 				BE1FC3BD186CC966003464E1 /* STKBaseStore.m in Sources */,
 				BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */,
+				BE8368FB18DA186300526637 /* STKTrust.m in Sources */,
 				BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */,
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
 				BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */,

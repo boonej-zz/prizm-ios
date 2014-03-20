@@ -8,17 +8,20 @@
 
 #import "STKLocationViewController.h"
 #import "STKContentStore.h"
-#import "STKHomeCell.h"
+#import "STKPostCell.h"
 #import "STKTriImageCell.h"
 #import "STKPostViewController.h"
 #import "STKCreatePostViewController.h"
 #import "STKProfileViewController.h"
 #import "STKImageSharer.h"
+#import "STKPostController.h"
 
 @import MapKit;
 
-@interface STKLocationViewController () <UITableViewDataSource, UITableViewDelegate>
-@property (nonatomic, strong) NSMutableArray *posts;
+@interface STKLocationViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
+
+@property (nonatomic, strong) STKPostController *localPosts;
+
 @property (nonatomic) BOOL showPostsInSingleLayout;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -34,7 +37,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        _posts = [[NSMutableArray alloc] init];
+        _localPosts = [[STKPostController alloc] initWithViewController:self];
+        [_localPosts setDelegate:self];
     }
     return self;
 }
@@ -69,11 +73,10 @@
     
     [[STKContentStore store] fetchPostsForLocationName:[self locationName]
                                              direction:STKContentStoreFetchDirectionNewer
-                                         referencePost:[[self posts] firstObject]
+                                         referencePost:[[[self localPosts] posts] firstObject]
                                             completion:^(NSArray *posts, NSError *err) {
                                                 if(!err) {
-                                                    [[self posts] addObjectsFromArray:posts];
-                                                    [[self posts] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+                                                    [[self localPosts] addPosts:posts];
                                                 }
                                                 [[self tableView] reloadData];
                                             }];
@@ -104,125 +107,29 @@
     [[self tableView] reloadData];
 }
 
-- (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+- (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {
-    STKPost *p = [[self posts] objectAtIndex:[ip row]];
-    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
-    [vc setProfile:[p creator]];
-    [[self navigationController] pushViewController:vc animated:YES];
+    if([self showPostsInSingleLayout]) {
+        STKPostCell *c = (STKPostCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0]];
+        
+        return [[self view] convertRect:[[c contentImageView] frame]
+                               fromView:[[c contentImageView] superview]];
 
-}
-
-- (void)toggleLike:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    STKPost *post = [[self posts] objectAtIndex:[ip row]];
-    if([post postLikedByCurrentUser]) {
-        [[STKContentStore store] unlikePost:post
-                                 completion:^(STKPost *p, NSError *err) {
-                                     [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                                             withRowAnimation:UITableViewRowAnimationNone];
-                                 }];
     } else {
-        [[STKContentStore store] likePost:post
-                               completion:^(STKPost *p, NSError *err) {
-                                   [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                                           withRowAnimation:UITableViewRowAnimationNone];
-                               }];
-    }
-    [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                            withRowAnimation:UITableViewRowAnimationNone];
-    
-}
-
-- (void)showComments:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    [self showPostAtIndex:(int)[ip row]];
-}
-
-
-- (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    STKCreatePostViewController *pvc = [[STKCreatePostViewController alloc] init];
-    [pvc setImageURLString:[[[self posts] objectAtIndex:[ip row]] imageURLString]];
-    
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
-    
-    [self presentViewController:nvc animated:YES completion:nil];
-    
-}
-
-- (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    STKHomeCell *c = (STKHomeCell *)[[self tableView] cellForRowAtIndexPath:ip];
-    STKPost *post = [[self posts] objectAtIndex:[ip row]];
-    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[c contentImageView] image]
-                                                                                             text:[post text]
-                                                                                             post:post
-                                                                                    finishHandler:^(UIDocumentInteractionController *doc) {
-                                                                                        [doc presentPreviewAnimated:YES];
-                                                                                    }];
-    [self presentViewController:vc animated:YES completion:nil];
-   
-}
-
-- (void)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    // DO nothing!
-}
-
-- (void)showPostAtIndex:(int)idx
-{
-    if(idx < [[self posts] count]) {
-        STKPostViewController *vc = [[STKPostViewController alloc] init];
-        [vc setPost:[[self posts] objectAtIndex:idx]];
-        [[self navigationController] pushViewController:vc animated:YES];
-    }
-}
-- (void)leftImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    NSInteger row = [ip row];
-    int itemIndex = (int)row * 3;
-    [self showPostAtIndex:itemIndex];
-}
-
-- (void)centerImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    NSInteger row = [ip row];
-    int itemIndex = (int)row * 3 + 1;
-    [self showPostAtIndex:itemIndex];
-    
-}
-
-- (void)rightImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    NSInteger row = [ip row];
-    int itemIndex = (int)row * 3 + 2;
-    [self showPostAtIndex:itemIndex];
-}
-
-
-- (void)populateTriImageCell:(STKTriImageCell *)c forRow:(int)row
-{
-    int arrayIndex = row * 3;
-    
-    if(arrayIndex + 0 < [[self posts] count]) {
-        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 0];
-        [[c leftImageView] setUrlString:[p imageURLString]];
-    } else {
-        [[c leftImageView] setUrlString:nil];
-    }
-    if(arrayIndex + 1 < [[self posts] count]) {
-        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 1];
-        [[c centerImageView] setUrlString:[p imageURLString]];
-    } else {
-        [[c centerImageView] setUrlString:nil];
-    }
-    
-    if(arrayIndex + 2 < [[self posts] count]) {
-        STKPost *p = [[self posts] objectAtIndex:arrayIndex + 2];
-        [[c rightImageView] setUrlString:[p imageURLString]];
-    } else {
-        [[c rightImageView] setUrlString:nil];
+        int row = idx / 3;
+        int offset = idx % 3;
+        
+        STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+        
+        CGRect r = CGRectZero;
+        if(offset == 0)
+            r = [[c leftImageView] frame];
+        else if(offset == 1)
+            r = [[c centerImageView] frame];
+        else if(offset == 2)
+            r = [[c rightImageView] frame];
+        
+        return [[self view] convertRect:r fromView:c];
     }
 }
 
@@ -235,14 +142,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([self showPostsInSingleLayout]) {
-        STKHomeCell *c = [STKHomeCell cellForTableView:tableView target:self];
+        STKPostCell *c = [STKPostCell cellForTableView:tableView target:[self localPosts]];
         
-        [c populateWithPost:[[self posts] objectAtIndex:[indexPath row]]];
+        [c populateWithPost:[[[self localPosts] posts] objectAtIndex:[indexPath row]]];
         
         return c;
     } else {
-        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-        [self populateTriImageCell:c forRow:[indexPath row]];
+        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self localPosts]];
+        [c populateWithPosts:[[self localPosts] posts] indexOffset:[indexPath row]];
         
         return c;
     }
@@ -269,13 +176,12 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if([self showPostsInSingleLayout]) {
-        return [[self posts] count];
+        return [[[self localPosts] posts] count];
     } else {
-        if([[self posts] count] % 3 > 0)
-            return [[self posts] count] / 3 + 1;
-        return [[self posts] count] / 3;
+        if([[[self localPosts] posts] count] % 3 > 0)
+            return [[[self localPosts] posts] count] / 3 + 1;
+        return [[[self localPosts] posts] count] / 3;
     }
 }
-
 
 @end

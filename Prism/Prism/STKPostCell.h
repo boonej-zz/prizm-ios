@@ -13,7 +13,7 @@
 
 @class STKPost;
 
-@interface STKHomeCell : STKTableViewCell
+@interface STKPostCell : STKTableViewCell
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *contentImageView;
 @property (weak, nonatomic) IBOutlet UILabel *hashTagLabel;

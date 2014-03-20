@@ -9,7 +9,7 @@
 #import "STKUser.h"
 #import "STKActivityItem.h"
 #import "STKPost.h"
-#import "STKRequestItem.h"
+#import "STKTrust.h"
 #import "STKUserStore.h"
 
 NSString * const STKUserGenderMale = @"male";
@@ -123,6 +123,25 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
     BOOL isFollowing = [[[jsonObject objectForKey:@"following"] valueForKey:@"_id"] containsObject:currentUserID];
     [self setIsFollowingCurrentUser:isFollowing];
     
+    if(![self trusts])
+        [self setTrusts:[[NSMutableArray alloc] init]];
+    /*
+    for(NSDictionary *d in [jsonObject objectForKey:@"trusts"]) {
+        STKTrust *t = [[STKTrust alloc] init];
+        [t readFromJSONObject:d];
+        [[self trusts] addObject:t];
+    }*/
+    
+    return nil;
+}
+
+- (STKTrust *)trustForUser:(STKUser *)u
+{
+    for(STKTrust *t in [self trusts]) {
+        if([[t otherUser] isEqual:u]) {
+            return t;
+        }
+    }
     return nil;
 }
 

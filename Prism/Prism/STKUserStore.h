@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@class STKUser, STKPost, STKActivityItem, STKRequestItem;
-@class ACAccount, STKProfile;
+@class STKUser, STKPost, STKActivityItem, STKTrust;
+@class ACAccount;
 
 extern NSString * const STKUserStoreErrorDomain;
 typedef enum {
@@ -56,9 +56,10 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 - (void)fetchFollowersOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
 - (void)fetchUsersFollowingOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
 
-- (void)createRequestOfType:(NSString *)requestType profile:(STKProfile *)profile completion:(void (^)(id obj, NSError *err))block;
-
+- (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block;
+- (void)acceptTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
+- (void)rejectTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 
 - (void)logout;
 

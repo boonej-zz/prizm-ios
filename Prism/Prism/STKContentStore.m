@@ -18,6 +18,7 @@
 #import "STKFoursquareLocation.h"
 #import "STKPostComment.h"
 #import "STKPostComment.h"
+
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 
 NSString * const STKContentFoursquareClientID = @"NPXBWJD343KPWSECQJM1NKJEZ4SYQ4RGRYWEBTLCU21PNUXO";
@@ -25,10 +26,8 @@ NSString * const STKContentFoursquareClientSecret = @"B2KSDXAPXQTWWMZLB2ODCCR3JO
 
 NSString * const STKContentEndpointPost = @"/posts";
 
-
 @interface STKContentStore ()
 
-@property (nonatomic) BOOL hasBuiltTemporaryData;
 @end
 
 @implementation STKContentStore
@@ -414,7 +413,7 @@ NSString * const STKContentEndpointPost = @"/posts";
 {
     NSArray *currentComments = [p comments];
     STKPostComment *pc = [[STKPostComment alloc] init];
-    [pc setUser:[[STKUserStore store] currentUser]];
+    [pc setCreator:[[STKUserStore store] currentUser]];
     [pc setText:comment];
     [pc setDate:[NSDate date]];
     
@@ -523,6 +522,9 @@ NSString * const STKContentEndpointPost = @"/posts";
         
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
+        }
+        if(![info objectForKey:STKPostVisibilityKey]) {
+            [c addQueryValue:STKPostVisibilityTrust forKey:STKPostVisibilityKey];
         }
         
         // This will wash away any Visibility modifiers as intended

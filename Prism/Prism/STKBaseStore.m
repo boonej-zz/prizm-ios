@@ -80,7 +80,7 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
 
 - (void)executeAuthorizedRequest:(void (^)(NSError *))request
 {
-    if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > 0) {
+    if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > -10) {
         request(nil);
     } else {
         [[self authorizedRequestQueue] addObject:request];

@@ -19,6 +19,8 @@
 #import "STKUser.h"
 #import "STKBaseStore.h"
 #import "STKTextInputViewController.h"
+#import "STKAvatarView.h"
+#import "STKLockCell.h"
 
 @import AddressBook;
 @import Social;
@@ -35,16 +37,19 @@ const long STKCreateProgressGeocoding = 4;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 
 @property (nonatomic) long progressMask;
-@property (nonatomic) BOOL retryRegisterOnProgressMaskClear;
+@property (nonatomic) BOOL retrySyncOnProgressMaskClear;
 
 @property (nonatomic, strong) CLGeocoder *geocoder;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSArray *items;
+@property (nonatomic, strong) NSArray *requiredKeys;
+@property (nonatomic, strong) NSMutableDictionary *previousValues;
 
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIView *topContainer;
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *coverPhotoImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *profilePictureImageView;
+@property (weak, nonatomic) IBOutlet STKAvatarView *avatarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *footerView;
 
@@ -98,6 +103,14 @@ const long STKCreateProgressGeocoding = 4;
                    
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                    ];
+
+        _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+
+        if([[self user] externalServiceType]) {
+            _items = [[self items] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"key != %@", @"password"]];
+            _requiredKeys = [[self requiredKeys] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", @"password"]];
+        }
+        
         
         _locationManager = [[CLLocationManager alloc] init];
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
@@ -117,7 +130,8 @@ const long STKCreateProgressGeocoding = 4;
         [[self navigationItem] setTitle:@"Edit Profile"];
         
         
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(saveChanges:)];
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(finishProfile:)];
+        [bbi setTitlePositionAdjustment:UIOffsetMake(-3, 0) forBarMetrics:UIBarMetricsDefault];
         [[self navigationItem] setRightBarButtonItem:bbi];
         
         _items = @[
@@ -135,13 +149,13 @@ const long STKCreateProgressGeocoding = 4;
                    
                    
                    // Private
-                   @{@"title" : @"Private", @"image" : [UIImage imageNamed:@"lockpassword"], @"cellType" : @"none"},
+                   @{@"title" : @"Private", @"image" : [UIImage imageNamed:@"lockpassword"], @"cellType" : @"lock"},
                    
                    @{@"title" : @"Email", @"key" : @"email",
                      @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                    
-                   @{@"title" : @"Password", @"key" : @"password",
-                     @"options" : @{@"secureTextEntry" : @(YES)}},
+                   //@{@"title" : @"Password", @"key" : @"password",
+                //@"options" : @{@"secureTextEntry" : @(YES)}},
                    
                    
                    @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
@@ -150,6 +164,21 @@ const long STKCreateProgressGeocoding = 4;
                    
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                    ];
+        
+        _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+        
+        _previousValues = [[NSMutableDictionary alloc] init];
+        for(NSDictionary *d in [self items]) {
+            NSString *key = [d objectForKeyedSubscript:@"key"];
+            if(key) {
+                NSString *val = [[self user] valueForKey:key];
+                if(val) {
+                    [[self previousValues] setObject:val forKey:key];
+                } else {
+                    [[self previousValues] setObject:[NSNull null] forKey:key];
+                }
+            }
+        }
         
         _locationManager = [[CLLocationManager alloc] init];
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
@@ -171,8 +200,7 @@ const long STKCreateProgressGeocoding = 4;
 - (void)configureInterface
 {
     [[self backgroundImageView] setHidden:![self isEditingProfile]];
-    
-    
+        
     if([[self user] coverPhotoPath] || [[self user] coverPhoto] || [self progressMask] & STKCreateProgressUploadingCover) {
         [[self coverOverlayView] setHidden:NO];
         [[self coverPhotoButton] setTitle:@"Edit" forState:UIControlStateNormal];
@@ -188,14 +216,25 @@ const long STKCreateProgressGeocoding = 4;
     if([[self user] profilePhotoPath] || [[self user] profilePhoto] || [self progressMask] & STKCreateProgressUploadingProfile) {
         [[self profilePhotoButton] setTitle:@"Edit" forState:UIControlStateNormal];
         [[self profilePhotoButton] setTitleColor:STKTextColor forState:UIControlStateNormal];
-        [[self profilePhotoButton] setBackgroundImage:[[self user] profilePhoto] forState:UIControlStateNormal];
+        [[self profilePhotoButton] setBackgroundImage:nil forState:UIControlStateNormal];
+        [[self avatarView] setOverlayColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
+        [[self avatarView] setHidden:NO];
     } else {
         [[self profilePhotoButton] setBackgroundImage:[UIImage imageNamed:@"upload_camera"] forState:UIControlStateNormal];
         [[self profilePhotoButton] setTitle:@"Upload" forState:UIControlStateNormal];
         [[self profilePhotoButton] setTitleColor:STKLightBlueColor forState:UIControlStateNormal];
+        [[self avatarView] setHidden:YES];
     }
 }
 
+- (CGFloat)topOffsetConstant
+{
+    if([self isEditingProfile]) {
+        return 64;
+    }
+    
+    return 0;
+}
 
 - (void)viewDidLoad
 {
@@ -204,8 +243,11 @@ const long STKCreateProgressGeocoding = 4;
     if(![self isEditingProfile]) {
         [[self tableView] setTableFooterView:[self footerView]];
     } else {
-        [[self topOffset] setConstant:64];
+
     }
+    
+    [[self topOffset] setConstant:[self topOffsetConstant]];
+    
     [[self tableView] setRowHeight:44];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
@@ -222,6 +264,8 @@ const long STKCreateProgressGeocoding = 4;
     
     [[self coverOverlayView] setHidden:YES];
     
+    [[self avatarView] setOutlineWidth:3];
+    [[self avatarView] setOutlineColor:STKTextColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -235,23 +279,12 @@ const long STKCreateProgressGeocoding = 4;
     long old = _progressMask;
     _progressMask = progressMask;
     
-    if([self retryRegisterOnProgressMaskClear] && old != 0 && _progressMask == 0) {
-        [self setRetryRegisterOnProgressMaskClear:NO];
+    if([self retrySyncOnProgressMaskClear] && old != 0 && _progressMask == 0) {
+        [self setRetrySyncOnProgressMaskClear:NO];
         [self finishProfile:nil];
     }
 }
 
-- (void)saveChanges:(id)sender
-{
-    [STKProcessingView present];
-    [[STKUserStore store] updateUserDetails:[self user] completion:^(STKUser *u, NSError *err) {
-        [STKProcessingView dismiss];
-        if(err) {
-            UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-            [av show];
-        }
-    }];
-}
 
 - (void)dateChanged:(id)sender atIndexPath:(NSIndexPath *)ip
 {
@@ -272,6 +305,14 @@ const long STKCreateProgressGeocoding = 4;
         }
     }];
 
+    if(!title) {
+        // Specific keys
+        if([key isEqualToString:@"coverPhotoPath"])
+            title = @"A cover photo";
+        if([key isEqualToString:@"profilePhotoPath"])
+            title = @"A profile photo";
+    }
+    
     if(!val) {
         *msg = [NSString stringWithFormat:@"%@ is required.", title];
         return NO;
@@ -312,59 +353,55 @@ const long STKCreateProgressGeocoding = 4;
 
 - (BOOL)verifyFields:(BOOL)displayFailures
 {
-    __block BOOL result = YES;
-    [[self items] enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx, BOOL *stop) {
+    NSArray *filteredKeys = [self requiredKeys];
+    
+    // If we're in the process of uploading these images, then don't consider them required for this purpose and kick the
+    // delay to the registration process
+    if([self progressMask] & STKCreateProgressUploadingCover) {
+        filteredKeys = [filteredKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", @"coverPhotoPath"]];
+    }
+    if([self progressMask] & STKCreateProgressUploadingProfile) {
+        filteredKeys = [filteredKeys filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", @"profilePhotoPath"]];
+    }
+    
+    for(NSString *key in filteredKeys) {
+        NSString *val = [[self user] valueForKey:key];
         NSString *outMsg = nil;
-        NSString *val = [[self user] valueForKey:[d objectForKey:@"key"]];
-        if(![self verifyValue:val forKey:[d objectForKey:@"key"] errorMessage:&outMsg]) {
-            result = NO;
-            *stop = YES;
+        if(![self verifyValue:val forKey:key errorMessage:&outMsg]) {
+            
             if(displayFailures) {
-                
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Something is Missing" message:outMsg
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Registration Incomplete" message:outMsg
                                                             delegate:nil
                                                    cancelButtonTitle:@"OK"
                                                    otherButtonTitles:nil];
                 [av show];
-                
-                NSIndexPath *ip = [NSIndexPath indexPathForRow:idx inSection:0];
+/*                NSIndexPath *ip = [NSIndexPath indexPathForRow:idx inSection:0];
                 [[self tableView] scrollToRowAtIndexPath:ip
                                         atScrollPosition:UITableViewScrollPositionNone
-                                                animated:NO];
-                UITableViewCell *c = [[self tableView] cellForRowAtIndexPath:ip];
-                
-                CAKeyframeAnimation *kf = [CAKeyframeAnimation animationWithKeyPath:@"backgroundColor"];
-                
-                [kf setValues:@[(__bridge id)[[UIColor clearColor] CGColor],
-                                (__bridge id)[[UIColor colorWithRed:1 green:0 blue:0 alpha:0.4] CGColor],
-                                (__bridge id)[[UIColor clearColor] CGColor],
-                                (__bridge id)[[UIColor colorWithRed:1 green:0 blue:0 alpha:0.4] CGColor],
-                                (__bridge id)[[UIColor clearColor] CGColor]]];
-                [kf setDuration:0.45];
-                [[[c contentView] layer] addAnimation:kf forKey:@"pulse"];
-            }
-        }
-    }];
+                                                animated:NO];*/
 
-    if(result) {
-        if(![[self user] coverPhotoPath]) {
-            if(!([self progressMask] & STKCreateProgressUploadingCover)) {
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Choose a Cover Photo" message:@"Upload a cover photo before continuing." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                return NO;
             }
-        }
-        if(![[self user] profilePhotoPath]) {
-            if(!([self progressMask] & STKCreateProgressUploadingProfile)) {
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Choose a Profile Photo" message:@"Upload a profile photo before continuing." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-                return NO;
-            }
+            
+            return NO;
         }
     }
     
-    return result;
+    return YES;
 }
+- (void)back:(id)sender
+{
+    // Restore values
+    for(NSString *key in [self previousValues]) {
+        id val = [[self previousValues] objectForKey:key];
+        if([val isKindOfClass:[NSNull class]]) {
+            [[self user] setValue:nil forKey:key];
+        } else {
+            [[self user] setValue:val forKey:key];
+        }
+    }
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -378,41 +415,65 @@ const long STKCreateProgressGeocoding = 4;
                                                object:nil];
     [[self locationManager] startUpdatingLocation];
     
-    // If we are using an external service, remove password from options
-    if([[self user] externalServiceType]) {
-        NSArray *i = [[self items] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"key != %@", @"password"]];
-        _items = i;
+    
+    if([self isEditingProfile]) {
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                               target:self action:@selector(back:)];
+        [[self navigationItem] setLeftBarButtonItem:bbi];
     }
+    
     
     if(![[self user] gender]) {
         [[self user] setGender:STKUserGenderFemale];
     }
     
     // If we got the profile/cover photo from ane external service, upload it to our server
-    if([[self user] profilePhoto]) {
-        [self setProfileImage:[[self user] profilePhoto]];
-    }
-    if([[self user] coverPhoto]) {
-        [self setCoverImage:[[self user] coverPhoto]];
-    }
-    if([[self user] coverPhotoPath]) {
-        NSString *imageURLString = [[self user] coverPhotoPath];
-        [[self user] setCoverPhotoPath:nil];
-        [self setProgressMask:STKCreateProgressUploadingCover | [self progressMask]];
-        [[STKImageStore store] fetchImageForURLString:imageURLString
-                                           completion:^(UIImage *img) {
-                                               [self setCoverImage:img];
-                                           }];
-    }
-    if([[self user] profilePhotoPath]) {
-        NSString *imageURLString = [[self user] profilePhotoPath];
-        [[self user] setProfilePhotoPath:nil];
-        [self setProgressMask:STKCreateProgressUploadingProfile | [self progressMask]];
+    if([self isEditingProfile]) {
+        if([[self user] coverPhotoPath]) {
 
-        [[STKImageStore store] fetchImageForURLString:imageURLString
-                                           completion:^(UIImage *img) {
-                                               [self setProfileImage:img];
-                                           }];
+            NSString *imageURLString = [[self user] coverPhotoPath];
+            [[STKImageStore store] fetchImageForURLString:imageURLString
+                                               completion:^(UIImage *img) {
+                                                   [[self coverPhotoImageView] setImage:img];
+                                                   [self configureInterface];
+                                               }];
+        }
+        if([[self user] profilePhotoPath]) {
+            NSString *imageURLString = [[self user] profilePhotoPath];
+            [[STKImageStore store] fetchImageForURLString:imageURLString
+                                               completion:^(UIImage *img) {
+                                                   [[self avatarView] setImage:img];
+                                                   [self configureInterface];
+                                               }];
+        }
+
+    } else {
+        if([[self user] profilePhoto]) {
+            [self setProfileImage:[[self user] profilePhoto]];
+        }
+        if([[self user] coverPhoto]) {
+            [self setCoverImage:[[self user] coverPhoto]];
+        }
+        if([[self user] coverPhotoPath]) {
+            NSString *imageURLString = [[self user] coverPhotoPath];
+            [[self user] setCoverPhotoPath:nil];
+            [self setProgressMask:STKCreateProgressUploadingCover | [self progressMask]];
+            [[STKImageStore store] fetchImageForURLString:imageURLString
+                                               completion:^(UIImage *img) {
+                                                   [self setCoverImage:img];
+                                               }];
+        }
+        if([[self user] profilePhotoPath]) {
+            NSString *imageURLString = [[self user] profilePhotoPath];
+            [[self user] setProfilePhotoPath:nil];
+            [self setProgressMask:STKCreateProgressUploadingProfile | [self progressMask]];
+
+            [[STKImageStore store] fetchImageForURLString:imageURLString
+                                               completion:^(UIImage *img) {
+                                                   [self setProfileImage:img];
+                                               }];
+        }
     }
     [self configureInterface];
     [[self tableView] reloadData];
@@ -423,12 +484,22 @@ const long STKCreateProgressGeocoding = 4;
     CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, r.size.height, 0)];
     
-    
+    [[self topOffset] setConstant:-[[self topContainer] bounds].size.height + 64];
+
+    [UIView animateWithDuration:[[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue]
+                          delay:0
+                        options:[[[note userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]
+                     animations:^{
+                         [[self view] layoutIfNeeded];
+                     } completion:^(BOOL finished) {
+                         
+                     }];
 }
 
 - (void)keyboardWillDisappear:(NSNotification *)note
 {
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+    [[self topOffset] setConstant:[self topOffsetConstant]];
 }
 
 - (UITableViewCell *)visibleCellForKey:(NSString *)key
@@ -543,16 +614,14 @@ const long STKCreateProgressGeocoding = 4;
     if(img) {
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingProfile];
         
-        CGRect r = CGRectZero;
-        r.size = STKUserProfilePhotoSize;
-        r.size.width *= 2.0;
-        r.size.height *= 2.0;
-        UIImage *resizedImage = [[STKImageStore store] uploadImage:img size:r.size intoDirectory:@"profile" completion:^(NSString *URLString, NSError *err) {
+        [[STKImageStore store] uploadImage:img intoDirectory:@"profile" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self user] setProfilePhotoPath:URLString];
             } else {
-                [[self user] setProfilePhotoPath:nil];
-                [[self user] setProfilePhoto:nil];
+                if(![self isEditingProfile]) {
+                    [[self user] setProfilePhotoPath:nil];
+                    [[self user] setProfilePhoto:nil];
+                }
                 
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Profile Image Upload Failed"
                                                              message:@"The profile image failed to upload. Ensure you have an internet connection and try again."
@@ -566,26 +635,9 @@ const long STKCreateProgressGeocoding = 4;
             [self setProgressMask:[self progressMask] & ~STKCreateProgressUploadingProfile];
             [self configureInterface];
         }];
-        
-        UIGraphicsBeginImageContextWithOptions(r.size, NO, 0.0);
-        
-        UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(r, 6, 6)];
-        
-
-        [STKTextTransparentColor set];
-        [bp setLineWidth:6 * [[UIScreen mainScreen] scale]];
-        [bp stroke];
-        [bp addClip];
-        
-        [resizedImage drawInRect:r];
-        
-        [[UIColor colorWithWhite:0 alpha:0.5] set];
-        [bp fill];
-
-        [[self user] setProfilePhoto:UIGraphicsGetImageFromCurrentImageContext()];
-
-        UIGraphicsEndImageContext();
+  
     }
+    [[self avatarView] setImage:img];
     [self configureInterface];
 }
 
@@ -594,15 +646,14 @@ const long STKCreateProgressGeocoding = 4;
     UIImage *resizedImage = img;
     if(img) {
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingCover];
-        CGSize sz = STKUserCoverPhotoSize;
-        sz.width *= 2.0;
-        sz.height *= 2.0;
-        resizedImage = [[STKImageStore store] uploadImage:img size:STKUserCoverPhotoSize intoDirectory:@"covers" completion:^(NSString *URLString, NSError *err) {
+        [[STKImageStore store] uploadImage:img intoDirectory:@"covers" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self user] setCoverPhotoPath:URLString];
             } else {
-                [[self user] setCoverPhotoPath:nil];
-                [self setCoverImage:nil];
+                if(![self isEditingProfile]) {
+                    [[self user] setCoverPhotoPath:nil];
+                    [self setCoverImage:nil];
+                }
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Cover Image Upload Failed"
                                                              message:@"The cover image failed to upload. Ensure you have an internet connection and try again."
                                                             delegate:nil
@@ -631,27 +682,43 @@ const long STKCreateProgressGeocoding = 4;
 
 - (IBAction)finishProfile:(id)sender
 {
+    
     [[self view] endEditing:YES];
     if([self verifyFields:YES]) {
         [STKProcessingView present];
         
         if([self progressMask] != 0) {
-            [self setRetryRegisterOnProgressMaskClear:YES];
+            [self setRetrySyncOnProgressMaskClear:YES];
             return;
         }
         
-        void (^registerBlock)(void) = ^{
-            [[STKUserStore store] registerAccount:[self user]
-                                       completion:^(id user, NSError *err) {
-                                           [STKProcessingView dismiss];
-                                           if(!err) {
-                                               [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-                                           } else {
-                                               [[STKErrorStore alertViewForError:err delegate:nil] show];
-                                           }
-                                       }];
-        };
+        void (^registerBlock)(void) = nil;
         
+        if([self isEditingProfile]) {
+            registerBlock = ^{
+                [[STKUserStore store] updateUserDetails:[self user] completion:^(STKUser *u, NSError *err) {
+                    [STKProcessingView dismiss];
+                    if(err) {
+                        UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+                        [av show];
+                    } else {
+                        [[self navigationController] popViewControllerAnimated:YES];
+                    }
+                }];
+            };
+        } else {
+            registerBlock = ^{
+                [[STKUserStore store] registerAccount:[self user]
+                                           completion:^(id user, NSError *err) {
+                                               [STKProcessingView dismiss];
+                                               if(!err) {
+                                                   [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                               } else {
+                                                   [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                               }
+                                           }];
+            };
+        }
         if(![[self user] city]) {
             CLGeocoder *gc = [[CLGeocoder alloc] init];
             [gc geocodeAddressDictionary:@{(__bridge NSString *)kABPersonAddressZIPKey : [[self user] zipCode]}
@@ -694,7 +761,6 @@ const long STKCreateProgressGeocoding = 4;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [[self items] objectAtIndex:[indexPath row]];
-    NSLog(@"%@", item);
     if([[item objectForKey:@"cellType"] isEqualToString:@"textView"]) {
         STKTextInputViewController *ivc = [[STKTextInputViewController alloc] init];
         [ivc setText:[[self user] valueForKeyPath:[item objectForKey:@"key"]]];
@@ -746,16 +812,9 @@ const long STKCreateProgressGeocoding = 4;
             [c setDate:[[self user] birthday]];
             [[c textField] setInputAccessoryView:[self toolbar]];
             return c;
-        } else if([cellType isEqualToString:@"none"]) {
-            UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
-            if(!c) {
-                c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
-                [[c textLabel] setFont:STKFont(14)];
-                [[c textLabel] setTextColor:[UIColor whiteColor]];
-            }
-            
-            [[c textLabel] setText:[item objectForKey:@"title"]];
-            [[c imageView] setImage:[item objectForKey:@"image"]];
+        } else if([cellType isEqualToString:@"lock"]) {
+            STKLockCell *c = [STKLockCell cellForTableView:tableView target:self];
+
             return c;
         }
     }

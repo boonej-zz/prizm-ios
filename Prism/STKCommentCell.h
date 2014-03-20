@@ -13,7 +13,7 @@
 @interface STKCommentCell : STKTableViewCell
 @property (weak, nonatomic) IBOutlet STKAvatarView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *clockImageView;
 @property (weak, nonatomic) IBOutlet UIControl *likeButton;

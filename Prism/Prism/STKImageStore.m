@@ -84,14 +84,13 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     return _cachePath;
 }
 
-- (BOOL)fetchImageForURLString:(NSString *)urlString completion:(void (^)(UIImage *img))block
+- (UIImage *)cachedImageForURLString:(NSString *)url
 {
-    NSString *cachePath = [self cachePathForURLString:urlString];
+    NSString *cachePath = [self cachePathForURLString:url];
     
     UIImage *img = [[self memoryCache] objectForKey:cachePath];
     if(img) {
-        block(img);
-        return YES;
+        return img;
     }
     
     
@@ -99,10 +98,21 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     if(fileData) {
         img = [UIImage imageWithData:fileData];
         [[self memoryCache] setObject:img forKey:cachePath];
+        return img;
+    }
+    
+    return nil;
+}
+
+- (BOOL)fetchImageForURLString:(NSString *)urlString completion:(void (^)(UIImage *img))block
+{
+    NSString *cachePath = [self cachePathForURLString:urlString];
+    
+    UIImage *img = [self cachedImageForURLString:urlString];
+    if(img) {
         block(img);
         return YES;
     }
-    
 
     // If this image really didn't exist <2 minutes ago, then don't bother re-fetching it.
     // However, if we last tried over 2 minutes ago, go ahead and try again.

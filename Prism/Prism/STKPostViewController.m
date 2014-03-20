@@ -7,7 +7,7 @@
 //
 
 #import "STKPostViewController.h"
-#import "STKHomeCell.h"
+#import "STKPostCell.h"
 #import "STKPost.h"
 #import "STKProfileViewController.h"
 #import "STKLocationViewController.h"
@@ -22,8 +22,11 @@
 #import "STKAvatarView.h"
 #import "STKPostHeaderView.h"
 #import "STKProcessingView.h"
+#import "STKWebViewController.h"
+#import "STKPostController.h"
 
-@interface STKPostViewController () <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface STKPostViewController ()
+    <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, STKPostControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet STKPostHeaderView *fakeHeaderView;
 @property (weak, nonatomic) IBOutlet UIView *fakeContainerView;
@@ -41,8 +44,10 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchWidthConstraint;
 
-@property (nonatomic, strong) STKHomeCell *postCell;
+@property (nonatomic, strong) STKPostCell *postCell;
 @property (nonatomic) BOOL editingPostText;
+
+@property (nonatomic, strong) STKPostController *postController;
 
 - (IBAction)postComment:(id)sender;
 
@@ -59,8 +64,17 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
+        _postController = [[STKPostController alloc] initWithViewController:self];
+        [[self postController] setDelegate:self];
+
     }
     return self;
+}
+
+- (void)setPost:(STKPost *)post
+{
+    _post = post;
+    [[self postController] addPosts:@[post]];
 }
 
 - (BOOL)postHasText
@@ -105,6 +119,16 @@
     [av show];
 }
 
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
+{
+    if([[URL scheme] isEqualToString:@"http"]) {
+        STKWebViewController *wvc = [[STKWebViewController alloc] init];
+        [wvc setUrl:URL];
+        [self presentViewController:wvc animated:YES completion:nil];
+    }
+    return NO;
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(buttonIndex == 1) {
@@ -120,15 +144,6 @@
     }
 }
 
-- (IBAction)showLocation:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    if([[self post] locationName]) {
-        STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
-        [lvc setCoordinate:[[self post] coordinate]];
-        [lvc setLocationName:[[self post] locationName]];
-        [[self navigationController] pushViewController:lvc animated:YES];
-    }
-}
 
 - (void)viewDidLoad
 {
@@ -174,12 +189,13 @@
     
     [[self deletePostButton] setHidden:![[[self post] creator] isEqual:[[STKUserStore store] currentUser]]];
     
-    STKHomeCell *c = [STKHomeCell cellForTableView:[self tableView] target:self];
+    STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setDisplayFullBleed:YES];
     [c populateWithPost:[self post]];
     [self setPostCell:c];
     
-    [[[self postCell] contentImageView] setHidden:YES];
+    if([self isMovingToParentViewController])
+        [[[self postCell] contentImageView] setHidden:YES];
     
     [[self navigationController] setNavigationBarHidden:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:)
@@ -252,7 +268,9 @@
     [[self navigationController] setNavigationBarHidden:NO];
     
     [[self overlayVIew] setHidden:YES];
-    [[[self postCell] contentImageView] setHidden:YES];
+    if([self isMovingFromParentViewController]) {
+        [[[self postCell] contentImageView] setHidden:YES];
+    }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -311,55 +329,21 @@
     }
 }
 
-- (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+- (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingImageAtIndex:(int)idx
 {
     [[self navigationController] popViewControllerAnimated:YES];
+    
+    return NO;
 }
 
-- (void)toggleLike:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    if([[self post] postLikedByCurrentUser]) {
-        [[STKContentStore store] unlikePost:[self post]
-                                 completion:^(STKPost *p, NSError *err) {
-                                     [[self postCell] populateWithPost:[self post]];
-                                 }];
-    } else {
-        [[STKContentStore store] likePost:[self post]
-                               completion:^(STKPost *p, NSError *err) {
-                                   [[self postCell] populateWithPost:[self post]];
-                               }];
-    }
-    [[self postCell] populateWithPost:[self post]];
-}
-
-- (void)showComments:(id)sender atIndexPath:(NSIndexPath *)ip
+- (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingCommentsAtIndex:(int)idx
 {
     if([[[self post] comments] count] > 0) {
         [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]
                                 atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-}
-
-- (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    STKCreatePostViewController *pvc = [[STKCreatePostViewController alloc] init];
-    [pvc setImageURLString:[[self post] imageURLString]];
     
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
-    
-    [self presentViewController:nvc animated:YES completion:nil];
-
-}
-
-- (void)sharePost:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[[self postCell] contentImageView] image]
-                                                                                             text:[[self post] text]
-                                                                                            post:[self post]
-                                                                                    finishHandler:^(UIDocumentInteractionController *doc) {
-                                                                                        [doc presentOpenInMenuFromRect:[[self view] bounds] inView:[self view] animated:YES];
-                                                                                    }];
-    [self presentViewController:vc animated:YES completion:nil];
+    return NO;
 }
 
 - (void)avatarTapped:(id)sender
@@ -369,12 +353,14 @@
     [[self navigationController] pushViewController:vc animated:YES];
 }
 
+
+// This is for comments
 - (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKPostComment *pc = [self commentForIndexPath:ip];
     STKUser *u = nil;
     if(pc) {
-        u = [pc user];
+        u = [pc creator];
     } else {
         u = [[self post] creator];
     }
@@ -424,7 +410,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         STKPostComment *pc = [self commentForIndexPath:indexPath];
         if(pc) {
             if([[[self post] creator] isEqual:[[STKUserStore store] currentUser]]
-               || [[pc user] isEqual:[[STKUserStore store] currentUser]]) {
+               || [[pc creator] isEqual:[[STKUserStore store] currentUser]]) {
                 return YES;
             }
         }
@@ -445,11 +431,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     }
     CGRect r = [commentText boundingRectWithSize:CGSizeMake(234, 10000)
                                          options:NSStringDrawingUsesLineFragmentOrigin
-                                      attributes:@{NSFontAttributeName : f} context:nil];
-    
-    return r.size.height + 62;
-}
+                                      attributes:@{NSFontAttributeName : f}
+                                         context:nil];
 
+    return (int)r.size.height + 65;
+}
+/*
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
@@ -461,7 +448,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         text = [[self post] text];
     
     return [self heightForTableViewGivenCommentText:text];
-}
+}*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -537,9 +524,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         return [self postCell];
     } else {
         STKCommentCell *c = [STKCommentCell cellForTableView:tableView target:self];
+        [[c textView] setDelegate:self];
         
         if([self postHasText] && [indexPath row] == 0) {
-            [[c commentLabel] setText:[[self post] text]];
+            [[c textView] setText:[[self post] text]];
             [[c nameLabel] setText:[[[self post] creator] name]];
             [[c avatarImageView] setUrlString:[[[self post] creator] profilePhotoPath]];
             
@@ -551,9 +539,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         } else {
             STKPostComment *comment = [self commentForIndexPath:indexPath];
             
-            [[c commentLabel] setText:[comment text]];
-            [[c avatarImageView] setUrlString:[[comment user] profilePhotoPath]];
-            [[c nameLabel] setText:[[comment user] name]];
+            [[c textView] setText:[comment text]];
+            [[c avatarImageView] setUrlString:[[comment creator] profilePhotoPath]];
+            [[c nameLabel] setText:[[comment creator] name]];
             
             NSString *likeActionText = @"Like";
             if([comment isLikedByCurrentUser]) {
