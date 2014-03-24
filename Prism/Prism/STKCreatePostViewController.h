@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class STKPost;
 
 @interface STKCreatePostViewController : UIViewController
 
-@property (nonatomic, strong) NSString *imageURLString;
+@property (nonatomic, weak) STKPost *originalPost;
 
 @end

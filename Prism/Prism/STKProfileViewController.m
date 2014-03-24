@@ -268,9 +268,43 @@ typedef enum {
 
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    [[STKUserStore store] requestTrustForUser:[self profile] completion:^(STKTrust *requestItem, NSError *err) {
-        [self refreshStatisticsView];
-    }];
+    STKTrust *t = [[self profile] trustForUser:[[STKUserStore store] currentUser]];
+
+    if(!t || [t isCancelled]) {
+        [[STKUserStore store] requestTrustForUser:[self profile] completion:^(STKTrust *requestItem, NSError *err) {
+            [self refreshStatisticsView];
+        }];
+    } else if([t isPending]) {
+        // IMPORTANT:
+        // This trust object is the currently showing user's trust object, so the properties
+        // related to the trust object are not from the vantage point of the current user.
+        
+        if(![t isOwner]) {
+            // Cancel
+            [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                [self refreshStatisticsView];
+            }];
+        } else {
+            // Accept
+            [[STKUserStore store] acceptTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                [self refreshStatisticsView];
+            }];
+
+        }
+    } else if([t isRejected]) {
+        if(![t isOwner]) {
+            [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                [self refreshStatisticsView];
+            }];
+
+        } else {
+            // Do nothing, is rejected
+        }
+    } else if([t isAccepted]) {
+        [[STKUserStore store] rejectTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+            [self refreshStatisticsView];
+        }];
+    }
     [self refreshStatisticsView];
 }
 
@@ -346,17 +380,27 @@ typedef enum {
         [[c editButton] setHidden:YES];
     
         STKTrust *t = [[self profile] trustForUser:[[STKUserStore store] currentUser]];
-        if(!t) {
+        if(!t || [t isCancelled]) {
             [[c trustButton] setTitle:@"Request Trust" forState:UIControlStateNormal];
             [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
             [[c trustButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 95, 0, 0)];
         } else {
             if([t isPending]) {
-                [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
-                [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+                if(![t isOwner]) {
+                    [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
+                    [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+                } else {
+                    [[c trustButton] setTitle:@"Accept" forState:UIControlStateNormal];
+                    [[c trustButton] setImage:[UIImage imageNamed:@"activity_accept_trust"] forState:UIControlStateNormal];
+                }
             } else if([t isRejected]) {
-                [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
-                [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+                if([t isOwner]) {
+                    [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
+                    [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+                } else {
+                    [[c trustButton] setTitle:@"Rejected" forState:UIControlStateNormal];
+                    [[c trustButton] setImage:nil forState:UIControlStateNormal];
+                }
             } else if([t isAccepted]) {
                 [[c trustButton] setTitle:@"Trusted" forState:UIControlStateNormal];
                 [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
@@ -385,8 +429,6 @@ typedef enum {
     
     [[c circleView] setCircleValues:@[followerCount, followingCount, postCount]];
     [[c circleView] setDelegate:self];
-    
-
 }
 
 

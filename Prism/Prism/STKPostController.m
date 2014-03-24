@@ -14,6 +14,9 @@
 #import "STKProfileViewController.h"
 #import "STKContentStore.h"
 #import "STKImageSharer.h"
+#import "STKUserStore.h"
+#import "STKUser.h"
+#import "STKUserListViewController.h"
 
 @implementation STKPostController
 
@@ -30,6 +33,19 @@
     }
     return self;
 }
+
+- (void)addPosts:(NSArray *)posts
+{
+    NSArray *dupes = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"postID in %@", [posts valueForKey:@"postID"]]];
+    [[self posts] removeObjectsInArray:dupes];
+    
+    [[self posts] addObjectsFromArray:posts];
+    
+    if([[self sortDescriptors] count] > 0) {
+        [[self posts] sortUsingDescriptors:[self sortDescriptors]];
+    }
+}
+
 
 - (void)showPost:(STKPost *)p
 {
@@ -79,17 +95,6 @@
     }
 }
 
-- (void)addPosts:(NSArray *)posts
-{
-    NSArray *dupes = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"postID in %@", [posts valueForKey:@"postID"]]];
-    [[self posts] removeObjectsInArray:dupes];
-    
-    [[self posts] addObjectsFromArray:posts];
-    
-    if([[self sortDescriptors] count] > 0) {
-        [[self posts] sortUsingDescriptors:[self sortDescriptors]];
-    }
-}
 
 - (void)showComments:(id)sender atIndexPath:(NSIndexPath *)ip
 {
@@ -121,7 +126,7 @@
 - (void)addToPrism:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKCreatePostViewController *pvc = [[STKCreatePostViewController alloc] init];
-    [pvc setImageURLString:[[[self posts] objectAtIndex:[ip row]] imageURLString]];
+    [pvc setOriginalPost:[[self posts] objectAtIndex:[ip row]]];
     
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
     
@@ -171,23 +176,32 @@
 - (void)toggleLike:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKPost *post = [[self posts] objectAtIndex:[ip row]];
-    if([post postLikedByCurrentUser]) {
-        [[STKContentStore store] unlikePost:post
-                                 completion:^(STKPost *p, NSError *err) {/*
-                                     [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                                             withRowAnimation:UITableViewRowAnimationNone];*/
-                                 }];
+    if([[post creator] isEqual:[[STKUserStore store] currentUser]]) {
+        STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+        [[STKContentStore store] fetchLikersForPost:[[self posts] objectAtIndex:[ip row]]
+                                         completion:^(NSArray *likers, NSError *err) {
+                                             [vc setUsers:likers];
+                                         }];
+        [[[self viewController] navigationController] pushViewController:vc animated:YES];
     } else {
-        [[STKContentStore store] likePost:post
-                               completion:^(STKPost *p, NSError *err) {
-                                   /*[[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                                           withRowAnimation:UITableViewRowAnimationNone];*/
-                               }];
+        if([post postLikedByCurrentUser]) {
+            [[STKContentStore store] unlikePost:post
+                                     completion:^(STKPost *p, NSError *err) {/*
+                                         [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                                 withRowAnimation:UITableViewRowAnimationNone];*/
+                                     }];
+        } else {
+            [[STKContentStore store] likePost:post
+                                   completion:^(STKPost *p, NSError *err) {
+                                       /*[[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                                               withRowAnimation:UITableViewRowAnimationNone];*/
+                                   }];
+        }
+        /*
+        [[self tableView] reloadRowsAtIndexPaths:@[ip]
+                                withRowAnimation:UITableViewRowAnimationNone];*/
+        
     }
-    /*
-    [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                            withRowAnimation:UITableViewRowAnimationNone];*/
-    
 }
 
 @end

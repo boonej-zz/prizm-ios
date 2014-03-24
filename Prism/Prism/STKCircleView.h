@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface STKCircleView : UIView
+@interface STKCircleView : UIControl
 @property (nonatomic, strong) UIImage *image;
 @end

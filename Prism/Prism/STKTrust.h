@@ -24,8 +24,12 @@ extern NSString * const STKRequestStatusCancelled;
 @property (nonatomic, strong) STKUser *otherUser;
 @property (nonatomic, strong) NSDate *dateCreated;
 
-@property (nonatomic) BOOL currentUserIsOwner;
+@property (nonatomic, weak) STKUser *owningUser;
 
+// Don't use this flag AFAIK
+@property (nonatomic) BOOL isOwner;
+
+- (BOOL)currentUserIsOwner;
 - (BOOL)isPending;
 - (BOOL)isAccepted;
 - (BOOL)isRejected;

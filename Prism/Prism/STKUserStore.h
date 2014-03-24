@@ -60,6 +60,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block;
 - (void)acceptTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)rejectTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
+- (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
+- (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
 
 - (void)logout;
 

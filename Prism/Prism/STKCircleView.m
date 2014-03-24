@@ -42,12 +42,14 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    CGRect r = CGRectInset([self bounds], 2, 2);
-    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];
-    [[UIColor lightGrayColor] set];
-    [bp stroke];
-    [bp addClip];
-    [[self image] drawInRect:r];
+    if([self image]) {
+        CGRect r = CGRectInset([self bounds], 2, 2);
+        UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];
+        [[UIColor lightGrayColor] set];
+        [bp stroke];
+        [bp addClip];
+        [[self image] drawInRect:r];
+    }
 }
 
 

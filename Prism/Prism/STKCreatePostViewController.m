@@ -101,10 +101,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                           NSFontAttributeName : STKFont(22)}];
     [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
 
-    if([self imageURLString]) {
+    if([self originalPost]) {
         [[self navigationItem] setTitle:@"Repost"];
-        [[self postInfo] setObject:[self imageURLString] forKey:STKPostURLKey];
-        [[STKImageStore store] fetchImageForURLString:[self imageURLString]
+        [[self postInfo] setObject:[[self originalPost] imageURLString] forKey:STKPostURLKey];
+        [[self postInfo] setObject:[[self originalPost] postID] forKey:STKPostOriginIDKey];
+        [[STKImageStore store] fetchImageForURLString:[[self originalPost] imageURLString]
                                            completion:^(UIImage *img) {
                                                [[self imageView] setImage:img];
                                            }];
@@ -122,7 +123,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[STKImageStore store] uploadImage:_postImage intoDirectory:[[[STKUserStore store] currentUser] userID] completion:^(NSString *URLString, NSError *err) {
         if(postImage == [self postImage]) {
             
-            NSLog(@"image upload finished");
             [self setUploadingImage:NO];
             
             if(!err) {

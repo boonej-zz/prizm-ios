@@ -21,6 +21,7 @@ NSString * const STKPostHashTagsKey = @"hash_tags";
 NSString * const STKPostURLKey = @"file_path";
 NSString * const STKPostTextKey = @"text";
 NSString * const STKPostTypeKey = @"category";
+NSString * const STKPostOriginIDKey = @"origin_post_id";
 
 NSString * const STKPostVisibilityPublic = @"public";
 NSString * const STKPostVisibilityPrivate = @"private";

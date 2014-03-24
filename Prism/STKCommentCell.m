@@ -36,4 +36,9 @@
 {
     ROUTE(sender);
 }
+
+- (IBAction)showLikes:(id)sender
+{
+    ROUTE(sender);
+}
 @end

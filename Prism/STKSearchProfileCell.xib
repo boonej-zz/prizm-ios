@@ -31,11 +31,15 @@
                         <state key="normal" image="following">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
+                        <connections>
+                            <action selector="toggleFollow:" destination="2" eventType="touchUpInside" id="y0h-KS-fmi"/>
+                        </connections>
                     </button>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="avatarView" destination="7et-gZ-jKt" id="yxQ-5Z-ULP"/>
+                <outlet property="followButton" destination="wSu-8r-2na" id="2BT-5u-M4a"/>
                 <outlet property="nameLabel" destination="DLx-wG-Oym" id="Foy-jc-eOV"/>
             </connections>
         </tableViewCell>

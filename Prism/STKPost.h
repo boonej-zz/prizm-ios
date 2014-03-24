@@ -33,6 +33,7 @@ extern NSString * const STKPostTextKey;
 extern NSString * const STKPostTypeKey;
 extern NSString * const STKPostVisibilityKey;
 extern NSString * const STKPostHashTagsKey;
+extern NSString * const STKPostOriginIDKey;
 
 extern NSString * const STKPostStatusDeleted;
 

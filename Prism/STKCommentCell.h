@@ -20,5 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *likeImageView;
 @property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
 - (IBAction)avatarTapped:(id)sender;
+- (IBAction)showLikes:(id)sender;
 
 @end

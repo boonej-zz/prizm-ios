@@ -97,7 +97,7 @@
                                 <outlet property="delegate" destination="-1" id="AHb-5a-gyi"/>
                             </connections>
                         </textField>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="searchfilter_search" translatesAutoresizingMaskIntoConstraints="NO" id="NzK-bF-oSB">
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="explore_search_blue" translatesAutoresizingMaskIntoConstraints="NO" id="NzK-bF-oSB">
                             <rect key="frame" x="14" y="11" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
@@ -237,8 +237,8 @@
         </view>
     </objects>
     <resources>
+        <image name="explore_search_blue" width="22" height="22"/>
         <image name="img_background" width="320" height="568"/>
         <image name="searchfilter_filteron" width="56" height="56"/>
-        <image name="searchfilter_search" width="56" height="56"/>
     </resources>
 </document>

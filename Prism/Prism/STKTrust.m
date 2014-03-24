@@ -8,11 +8,12 @@
 
 #import "STKTrust.h"
 #import "STKUser.h"
+#import "STKUserStore.h"
 
 NSString * const STKRequestStatusPending = @"pending";
 NSString * const STKRequestStatusAccepted = @"accepted";
 NSString * const STKRequestStatusRejected = @"rejected";
-NSString * const STKRequestStatusCancelled = @"canceled";
+NSString * const STKRequestStatusCancelled = @"cancelled";
 
 
 @implementation STKTrust
@@ -23,9 +24,16 @@ NSString * const STKRequestStatusCancelled = @"canceled";
     [self setTrustID:[t objectForKey:@"_id"]];
     [self setStatus:[t objectForKey:@"status"]];
     
-    STKUser *u = [[STKUser alloc] init];
-    [u readFromJSONObject:[t objectForKey:@"user_id"]];
-    [self setOtherUser:u];
+    if([[t objectForKey:@"user_id"] isKindOfClass:[NSDictionary class]]) {
+        STKUser *u = [[STKUser alloc] init];
+        [u readFromJSONObject:[t objectForKey:@"user_id"]];
+        [self setOtherUser:u];
+    } else {
+        // This is a temporary hack, remove once fixed.
+        STKUser *u = [[STKUser alloc] init];
+        [u setUserID:[t objectForKey:@"user_id"]];
+        [self setOtherUser:u];
+    }
     
     static NSDateFormatter *df = nil;
     if(!df) {
@@ -35,9 +43,14 @@ NSString * const STKRequestStatusCancelled = @"canceled";
     }
     [self setDateCreated:[df dateFromString:[t objectForKey:@"create_date"]]];
     
-    [self setCurrentUserIsOwner:[[jsonObject objectForKey:@"is_owner"] boolValue]];
+    [self setIsOwner:[[jsonObject objectForKey:@"is_owner"] boolValue]];
     
     return nil;
+}
+
+- (BOOL)currentUserIsOwner
+{
+    return [[[STKUserStore store] currentUser] isEqual:[self owningUser]];
 }
 
 - (BOOL)isPending

@@ -36,6 +36,7 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
 @interface STKBaseStore () <NSURLSessionDelegate>
 
 @property (nonatomic, strong) NSMutableArray *authorizedRequestQueue;
+@property (nonatomic, getter = isAuthenticating) BOOL authenticating;
 
 @end
 
@@ -80,24 +81,27 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
 
 - (void)executeAuthorizedRequest:(void (^)(NSError *))request
 {
-    if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > -10) {
+    if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > 10) {
         request(nil);
     } else {
         [[self authorizedRequestQueue] addObject:request];
-        if([[self authorizationToken] refreshToken]) {
-            [self refreshAccessToken:^(STKAuthorizationToken *token, NSError *err) {
+        
+        if(![self isAuthenticating]) {
+            
+            [self setAuthenticating:YES];
+            void (^completion)(STKAuthorizationToken *token, NSError *err) = ^(STKAuthorizationToken *token, NSError *err) {
+                [self setAuthenticating:NO];
                 for(void (^req)(NSError *err) in [self authorizedRequestQueue]) {
                     req(err);
                 }
                 [[self authorizedRequestQueue] removeAllObjects];
-            }];
-        } else {
-            [self fetchAccessToken:^(STKAuthorizationToken *token, NSError *err) {
-                for(void (^req)(NSError *err) in [self authorizedRequestQueue]) {
-                    req(err);
-                }
-                [[self authorizedRequestQueue] removeAllObjects];
-            }];
+            };
+            
+            if([[self authorizationToken] refreshToken]) {
+                [self refreshAccessToken:completion];
+            } else {
+                [self fetchAccessToken:completion];
+            }
         }
     }
 }

@@ -17,6 +17,7 @@
 #import "STKRelativeDateConverter.h"
 #import "UIERealTimeBlurView.h"
 #import "STKUser.h"
+#import "STKProfileViewController.h"
 
 typedef enum {
     STKActivityViewControllerTypeActivity,
@@ -128,7 +129,7 @@ typedef enum {
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
         [[STKUserStore store] fetchRequestsForCurrentUser:^(NSArray *requests, NSError *err) {
             if(!err) {
-                _requests = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@ and currentUserIsOwner == NO", STKRequestStatusPending]];
+                _requests = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending]];
             }
             [[self tableView] reloadData];
         }];
@@ -138,16 +139,17 @@ typedef enum {
 - (void)acceptRequest:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [[STKUserStore store] acceptTrustRequest:[[self requests] objectAtIndex:[ip row]] completion:^(STKTrust *requestItem, NSError *err) {
-        
+        [[self tableView] reloadData];
     }];
+    [[self tableView] reloadData];
 }
 
 - (void)rejectRequest:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [[STKUserStore store] rejectTrustRequest:[[self requests] objectAtIndex:[ip row]] completion:^(STKTrust *requestItem, NSError *err) {
-        
+        [[self tableView] reloadData];
     }];
-
+[[self tableView] reloadData];
 }
 
 - (void)profileTapped:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -170,6 +172,18 @@ typedef enum {
     [cell setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.1]];
 }
 
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([self currentType] == STKActivityViewControllerTypeRequest) {
+        STKUser *u = [[[self requests] objectAtIndex:[indexPath row]] otherUser];
+        STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+        [vc setProfile:u];
+        [[self navigationController] pushViewController:vc animated:YES];
+    }
+    
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([self currentType] == STKActivityViewControllerTypeActivity) {
@@ -183,16 +197,10 @@ typedef enum {
         [[cell imageReferenceView] setUrlString:[i referenceImageURLString]];
     } else if ([self currentType] == STKActivityViewControllerTypeRequest) {
         STKRequestCell *cell = [STKRequestCell cellForTableView:tableView target:self];
+
         STKTrust *i = [[self requests] objectAtIndex:[indexPath row]];
+        [cell populateWithTrust:i];
         
-        [[cell dateLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];
-        [[cell avatarImageView] setUrlString:[[i otherUser] profilePhotoPath]];
-        [[cell nameLabel] setText:[[i otherUser] name]];
-        
-        NSString *typeString = @"requested to join your trust.";
-        
-        
-        [[cell typeLabel] setText:typeString];
         return cell;
     }
     
@@ -213,6 +221,7 @@ typedef enum {
 - (IBAction)typeChanged:(id)sender
 {
     [self setCurrentType:[sender selectedSegmentIndex]];
+    [[self tableView] reloadData];
 }
 
 @end

@@ -57,6 +57,16 @@
     [[self navigationController] popViewControllerAnimated:YES];
 }
 
+- (void)toggleFollow:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Not Implemented"
+                                                 message:@"THis feature has not yet been implemented yet, but we know about it, so there is no reason note it."
+                                                delegate:nil
+                                       cancelButtonTitle:@"OK"
+                                       otherButtonTitles:nil];
+    [av show];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

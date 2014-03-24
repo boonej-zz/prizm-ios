@@ -24,6 +24,7 @@
 #import "STKProcessingView.h"
 #import "STKWebViewController.h"
 #import "STKPostController.h"
+#import "STKUserListViewController.h"
 
 @interface STKPostViewController ()
     <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, STKPostControllerDelegate>
@@ -387,6 +388,20 @@
     }
     [[self tableView] reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
+
+- (void)showLikes:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+    STKPostComment *pc = [self commentForIndexPath:ip];
+    if(pc) {
+        [[STKContentStore store] fetchLikersForComment:pc completion:^(NSArray *likers, NSError *err) {
+            [vc setUsers:likers];
+        }];
+        [[self navigationController] pushViewController:vc animated:YES];
+    }
+
+}
+
 
 
 - (void)tableView:(UITableView *)tableView

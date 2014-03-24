@@ -39,7 +39,7 @@
                             <constraint firstAttribute="width" constant="30" id="SV8-Kl-iP7"/>
                         </constraints>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ze-Ak-mfw" customClass="UIControl">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ze-Ak-mfw" userLabel="Avatar Button" customClass="UIControl" colorLabel="IBBuiltInLabel-Yellow">
                         <rect key="frame" x="0.0" y="0.0" width="44" height="82"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -86,8 +86,8 @@
                             <constraint firstAttribute="height" constant="10" id="wZm-XA-ddf"/>
                         </constraints>
                     </imageView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YOL-96-fKX" customClass="UIControl">
-                        <rect key="frame" x="52" y="52" width="107" height="28"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YOL-96-fKX" userLabel="Like Control" customClass="UIControl">
+                        <rect key="frame" x="52" y="52" width="79" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -97,13 +97,24 @@
                             <action selector="toggleCommentLike:" destination="TZf-0Y-Lx6" eventType="touchUpInside" id="bWf-dc-9qz"/>
                         </connections>
                     </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jfN-Pg-A51" userLabel="Show Likes Control" customClass="UIControl">
+                        <rect key="frame" x="135" y="53" width="80" height="25"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="DIy-YU-f9G"/>
+                            <constraint firstAttribute="height" constant="25" id="RoZ-3k-EhK"/>
+                        </constraints>
+                        <connections>
+                            <action selector="showLikes:" destination="TZf-0Y-Lx6" eventType="touchUpInside" id="SNA-k2-N14"/>
+                        </connections>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="6Ze-Ak-mfw" firstAttribute="leading" secondItem="lFB-pH-7wd" secondAttribute="leading" id="2vk-bT-fMk"/>
                     <constraint firstItem="6Ze-Ak-mfw" firstAttribute="trailing" secondItem="kwb-YQ-uOI" secondAttribute="trailing" id="3BK-62-CGY"/>
                     <constraint firstItem="kwb-YQ-uOI" firstAttribute="leading" secondItem="lFB-pH-7wd" secondAttribute="leading" constant="14" id="3Bv-GE-528"/>
                     <constraint firstItem="kwb-YQ-uOI" firstAttribute="top" secondItem="lFB-pH-7wd" secondAttribute="top" constant="9" id="3KJ-45-z6G"/>
-                    <constraint firstItem="wCh-kh-FbI" firstAttribute="trailing" secondItem="YOL-96-fKX" secondAttribute="trailing" id="3Nk-Pd-Zxc"/>
                     <constraint firstAttribute="bottom" secondItem="6Ze-Ak-mfw" secondAttribute="bottom" id="6Q6-1Q-JIl"/>
                     <constraint firstItem="wCh-kh-FbI" firstAttribute="leading" secondItem="xrs-5s-4lK" secondAttribute="trailing" constant="4" id="6Tg-bN-2XM"/>
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="centerY" secondItem="xrs-5s-4lK" secondAttribute="centerY" constant="-0.5" id="Cao-hh-viT"/>
@@ -120,9 +131,12 @@
                     <constraint firstItem="6Ze-Ak-mfw" firstAttribute="top" secondItem="lFB-pH-7wd" secondAttribute="top" id="W7t-5e-PUt"/>
                     <constraint firstItem="wCh-kh-FbI" firstAttribute="centerY" secondItem="xrs-5s-4lK" secondAttribute="centerY" constant="-0.5" id="Wgv-29-h3g"/>
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="leading" secondItem="ge7-HD-XRM" secondAttribute="trailing" constant="6" id="Wjw-Uc-N36"/>
+                    <constraint firstItem="jfN-Pg-A51" firstAttribute="leading" secondItem="kbA-GE-iNM" secondAttribute="trailing" constant="4" id="b5O-Re-JzD"/>
                     <constraint firstItem="clC-ZP-ojw" firstAttribute="leading" secondItem="kwb-YQ-uOI" secondAttribute="trailing" constant="8" id="er8-GK-4V3"/>
                     <constraint firstAttribute="trailing" secondItem="ziV-3o-fzS" secondAttribute="trailing" id="gr3-kT-PN3"/>
+                    <constraint firstItem="kbA-GE-iNM" firstAttribute="trailing" secondItem="YOL-96-fKX" secondAttribute="trailing" id="iB9-vE-Oz6"/>
                     <constraint firstItem="K2L-fa-zU1" firstAttribute="top" secondItem="clC-ZP-ojw" secondAttribute="bottom" id="jtB-6Q-oeP"/>
+                    <constraint firstItem="wCh-kh-FbI" firstAttribute="centerY" secondItem="jfN-Pg-A51" secondAttribute="centerY" constant="-3" id="yi2-ye-bCy"/>
                     <constraint firstAttribute="bottom" secondItem="ziV-3o-fzS" secondAttribute="bottom" id="zWt-VK-bUZ"/>
                     <constraint firstItem="kbA-GE-iNM" firstAttribute="top" secondItem="ge7-HD-XRM" secondAttribute="top" constant="-1" id="zdo-Um-gff"/>
                 </constraints>

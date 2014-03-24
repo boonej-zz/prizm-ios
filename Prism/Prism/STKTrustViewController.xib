@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKTrustViewController">
             <connections>
+                <outlet property="backgroundImageView" destination="alL-qq-7Ni" id="oCE-NJ-aDk"/>
                 <outlet property="countView" destination="RwR-nx-6cr" id="XKi-sa-zJl"/>
-                <outlet property="toolbar" destination="7YY-nm-ywx" id="jwo-xl-yMH"/>
+                <outlet property="selectedNameLabel" destination="II4-Au-G5q" id="g8C-Hh-MMX"/>
                 <outlet property="trustView" destination="XNh-yH-M0i" id="vGZ-Wj-sru"/>
                 <outlet property="underlayView" destination="yrH-qv-7qp" id="Dei-jm-30j"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -18,14 +19,10 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7YY-nm-ywx">
-                    <rect key="frame" x="0.0" y="379" width="320" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="cal-Ql-Dqo"/>
-                    </constraints>
-                    <items/>
-                </toolbar>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="alL-qq-7Ni">
+                    <rect key="frame" x="0.0" y="64" width="320" height="315"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RwR-nx-6cr" customClass="STKCountView">
                     <rect key="frame" x="0.0" y="441" width="320" height="99"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -35,7 +32,7 @@
                         <constraint firstAttribute="height" constant="99" id="XPD-Ag-4id"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XNh-yH-M0i" customClass="STKTrustView">
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XNh-yH-M0i" customClass="STKTrustView">
                     <rect key="frame" x="0.0" y="64" width="320" height="315"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -48,21 +45,62 @@
                         <constraint firstAttribute="height" constant="64" id="1e1-Qi-QHU"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ION-au-gvc">
+                    <rect key="frame" x="0.0" y="371" width="320" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="II4-Au-G5q">
+                            <rect key="frame" x="52" y="9" width="216" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                            <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MuV-mW-Rlm">
+                            <rect key="frame" x="276" y="14" width="24" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="btn_email">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="sendEmail:" destination="-1" eventType="touchUpInside" id="aKy-Ww-sSH"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vrf-Nf-cJj">
+                            <rect key="frame" x="20" y="14" width="24" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="btn_trust">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="showList:" destination="-1" eventType="touchUpInside" id="vl2-nG-456"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="Jak-gm-8be"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.6845703125" green="0.6845703125" blue="0.6845703125" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="7YY-nm-ywx" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="0qV-C6-mUa"/>
+                <constraint firstAttribute="trailing" secondItem="ION-au-gvc" secondAttribute="trailing" id="2Zd-sy-IFf"/>
                 <constraint firstAttribute="trailing" secondItem="RwR-nx-6cr" secondAttribute="trailing" id="93a-qS-tIn"/>
-                <constraint firstAttribute="trailing" secondItem="7YY-nm-ywx" secondAttribute="trailing" id="Bzy-D0-1Om"/>
                 <constraint firstItem="RwR-nx-6cr" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GZf-0y-PHO"/>
                 <constraint firstItem="yrH-qv-7qp" firstAttribute="top" secondItem="1" secondAttribute="top" id="IfZ-5K-CUV"/>
                 <constraint firstAttribute="trailing" secondItem="yrH-qv-7qp" secondAttribute="trailing" id="SGt-fu-GHE"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="WHr-oL-3Es"/>
-                <constraint firstItem="RwR-nx-6cr" firstAttribute="top" secondItem="7YY-nm-ywx" secondAttribute="bottom" constant="18" id="icW-LY-AZs"/>
+                <constraint firstItem="XNh-yH-M0i" firstAttribute="height" secondItem="alL-qq-7Ni" secondAttribute="height" id="dSZ-np-Xs8"/>
+                <constraint firstItem="ION-au-gvc" firstAttribute="top" secondItem="XNh-yH-M0i" secondAttribute="bottom" id="eHw-Y4-Jhr"/>
                 <constraint firstItem="yrH-qv-7qp" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="j8F-MK-7Wj"/>
-                <constraint firstItem="7YY-nm-ywx" firstAttribute="top" secondItem="XNh-yH-M0i" secondAttribute="bottom" id="lbf-l9-dCM"/>
+                <constraint firstItem="XNh-yH-M0i" firstAttribute="leading" secondItem="alL-qq-7Ni" secondAttribute="leading" id="m8F-gQ-noN"/>
                 <constraint firstAttribute="trailing" secondItem="XNh-yH-M0i" secondAttribute="trailing" id="oW0-Iw-oiD"/>
+                <constraint firstItem="RwR-nx-6cr" firstAttribute="top" secondItem="ION-au-gvc" secondAttribute="bottom" constant="20" id="r4n-Y0-s36"/>
+                <constraint firstItem="XNh-yH-M0i" firstAttribute="width" secondItem="alL-qq-7Ni" secondAttribute="width" id="raI-N5-CMN"/>
                 <constraint firstAttribute="bottom" secondItem="RwR-nx-6cr" secondAttribute="bottom" constant="28" id="uks-4R-6DK"/>
+                <constraint firstItem="ION-au-gvc" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="v4k-Jd-oBr"/>
+                <constraint firstItem="XNh-yH-M0i" firstAttribute="top" secondItem="alL-qq-7Ni" secondAttribute="top" id="vkH-OY-M7Q"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="zMh-qt-WxP"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -70,4 +108,8 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
+    <resources>
+        <image name="btn_email" width="24" height="17"/>
+        <image name="btn_trust" width="26" height="24"/>
+    </resources>
 </document>

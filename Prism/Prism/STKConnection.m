@@ -110,7 +110,6 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
     NSURLSessionDataTask *dt = [session dataTaskWithRequest:[self request]
                                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                              NSLog(@"%@ %@ %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding], error, response);
                                               if(error) {
                                                   [self handleError:error];
                                               } else {

@@ -125,12 +125,13 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
     
     if(![self trusts])
         [self setTrusts:[[NSMutableArray alloc] init]];
-    /*
+    
     for(NSDictionary *d in [jsonObject objectForKey:@"trusts"]) {
         STKTrust *t = [[STKTrust alloc] init];
         [t readFromJSONObject:d];
         [[self trusts] addObject:t];
-    }*/
+        [t setOwningUser:self];
+    }
     
     return nil;
 }

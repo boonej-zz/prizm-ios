@@ -20,4 +20,8 @@
     
 }
 
+- (IBAction)toggleFollow:(id)sender
+{
+    ROUTE(sender);
+}
 @end

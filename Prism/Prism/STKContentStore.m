@@ -209,7 +209,7 @@ NSString * const STKContentEndpointPost = @"/posts";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
         [c setIdentifiers:@[[user userID], @"posts"]];
         [c addQueryValue:@"30" forKey:@"limit"];
-
+        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
         if(referencePost) {
             [c addQueryValue:[referencePost referenceTimestamp] forKey:@"feature_identifier"];
             if(fetchDirection == STKContentStoreFetchDirectionOlder) {
@@ -408,6 +408,26 @@ NSString * const STKContentEndpointPost = @"/posts";
     }];
 }
 
+- (void)fetchLikersForPost:(STKPost *)post completion:(void (^)(NSArray *likers, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
+        [c setIdentifiers:@[[post postID], @"likes"]];
+
+        [c setModelGraph:@[@{@"likes" : @[[STKUser class]]}]];
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            if(err) {
+
+            }
+            block([obj objectForKey:@"likes"], err);
+        }];
+    }];
+}
+
 
 - (void)addComment:(NSString *)comment toPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block
 {
@@ -594,6 +614,21 @@ NSString * const STKContentEndpointPost = @"/posts";
             }
             
             block(post, err);
+        }];
+    }];
+}
+- (void)fetchLikersForComment:(STKPostComment *)postComment completion:(void (^)(NSArray *likers, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
+        [c setIdentifiers:@[[[postComment post] postID], @"comments", [postComment commentID], @"likes"]];
+        [c setModelGraph:@[@{@"likes": @[[STKUser class]]}]];
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            block([obj objectForKey:@"likes"], err);
         }];
     }];
 }

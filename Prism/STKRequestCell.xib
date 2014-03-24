@@ -88,13 +88,21 @@
                             <constraint firstAttribute="height" constant="30" id="xal-Ie-QWx"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <state key="normal" title="A">
+                        <state key="normal" image="activity_accept_trust">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <connections>
                             <action selector="acceptRequest:" destination="2" eventType="touchUpInside" id="8u1-de-jQf"/>
                         </connections>
                     </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="activity_check_blue" translatesAutoresizingMaskIntoConstraints="NO" id="jmk-zf-GjI">
+                        <rect key="frame" x="32" y="8" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="16" id="RtY-Ce-WZZ"/>
+                            <constraint firstAttribute="width" constant="16" id="Tt4-UF-g5j"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
@@ -108,21 +116,28 @@
                     <constraint firstItem="1Cu-Uz-HHT" firstAttribute="leading" secondItem="QgB-CC-xg6" secondAttribute="trailing" constant="6" id="IE5-cy-Xx2"/>
                     <constraint firstItem="4oo-ni-g3S" firstAttribute="baseline" secondItem="VRx-24-fLv" secondAttribute="baseline" id="NsH-DX-kmS"/>
                     <constraint firstItem="fGJ-lc-BAB" firstAttribute="bottom" secondItem="QgB-CC-xg6" secondAttribute="bottom" constant="-5" id="OdH-5S-b6c"/>
+                    <constraint firstItem="QgB-CC-xg6" firstAttribute="top" secondItem="jmk-zf-GjI" secondAttribute="top" id="QXH-W1-F89"/>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="top" secondItem="1Cu-Uz-HHT" secondAttribute="top" id="SeV-9D-I9H"/>
                     <constraint firstAttribute="centerY" secondItem="fNS-VJ-bJH" secondAttribute="centerY" id="gcM-HN-beb"/>
                     <constraint firstItem="fVl-2d-H2N" firstAttribute="leading" secondItem="fNS-VJ-bJH" secondAttribute="trailing" constant="4" id="jHl-fa-Z6k"/>
                     <constraint firstAttribute="centerY" secondItem="fVl-2d-H2N" secondAttribute="centerY" id="vqn-bu-3lU"/>
+                    <constraint firstItem="QgB-CC-xg6" firstAttribute="trailing" secondItem="jmk-zf-GjI" secondAttribute="trailing" id="yQP-jc-Qjh"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="acceptButton" destination="fVl-2d-H2N" id="3Te-e7-5Ob"/>
                 <outlet property="avatarImageView" destination="QgB-CC-xg6" id="gxB-Tv-FfR"/>
                 <outlet property="dateLabel" destination="4oo-ni-g3S" id="2Pc-MT-hQq"/>
                 <outlet property="nameLabel" destination="1Cu-Uz-HHT" id="dD3-hu-qMi"/>
+                <outlet property="rejectButton" destination="fNS-VJ-bJH" id="3Kz-Tw-tql"/>
                 <outlet property="typeLabel" destination="VRx-24-fLv" id="eDC-Xt-W94"/>
+                <outlet property="unreadIndicatorView" destination="jmk-zf-GjI" id="uHT-hJ-dSs"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
+        <image name="activity_accept_trust" width="24" height="24"/>
+        <image name="activity_check_blue" width="19" height="19"/>
         <image name="btn_clock" width="10" height="10"/>
         <image name="reject" width="24" height="24"/>
     </resources>

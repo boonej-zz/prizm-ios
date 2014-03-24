@@ -345,15 +345,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:[[self currentUser] userID] forKey:@"creator"];
 
         STKTrust *t = [[STKTrust alloc] init];
-        [t setOtherUser:user];
+        [t setOtherUser:[self currentUser]];
         [t setStatus:STKRequestStatusPending];
-        [t setCurrentUserIsOwner:YES];
-        [[[self currentUser] trusts] addObject:t];
+        [t setOwningUser:user];
+        [[user trusts] addObject:t];
         
         [c setModelGraph:@[t]];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
-                [[[self currentUser] trusts] removeObjectIdenticalTo:t];
+                [[user trusts] removeObjectIdenticalTo:t];
             }
             block(obj, err);
         }];
@@ -373,7 +373,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //[c setShouldReturnArray:YES];
         [c setModelGraph:@[@{@"trusts" : @[[STKTrust class]]}]];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
-            block([obj objectForKey:@"trusts"], err);
+            NSArray *reqs = [obj objectForKey:@"trusts"];
+            for(STKTrust *t in reqs) {
+                [t setOwningUser:[self currentUser]];
+            }
+            block(reqs, err);
         }];
     }];
 
@@ -381,18 +385,25 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)acceptTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block
 {
+    [t setStatus:STKRequestStatusAccepted];
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
+            [t setStatus:STKRequestStatusPending];
             block(nil, err);
             return;
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[self currentUser] userID], @"trusts", [t trustID]]];
-        [c addQueryValue:@"accepted" forKey:@"status"];
+        [c addQueryValue:STKRequestStatusAccepted forKey:@"status"];
+        [c setIdentifiers:@[[[t owningUser] userID], @"trusts", [t trustID]]];
+        [c addQueryValue:[[t otherUser] userID] forKey:@"creator"];
         
         [c setModelGraph:@[[STKTrust class]]];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err) {
+                [t setStatus:STKRequestStatusPending];
+            }
             block(obj, err);
         }];
     }];
@@ -401,6 +412,61 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)rejectTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block
 {
+    NSString *prevState = [t status];
+    [t setStatus:STKRequestStatusRejected];
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            [t setStatus:prevState];
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[t owningUser] userID], @"trusts", [t trustID]]];
+        [c addQueryValue:[[t otherUser] userID] forKey:@"creator"];
+        [c addQueryValue:STKRequestStatusRejected forKey:@"status"];
+        
+        [c setModelGraph:@[[STKTrust class]]];
+        [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err) {
+                [t setStatus:prevState];
+            }
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block
+{
+    NSString *prevState = [t status];
+    [t setStatus:STKRequestStatusCancelled];
+    
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            [t setStatus:prevState];
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[t owningUser] userID], @"trusts", [t trustID]]];
+        [c addQueryValue:[[t otherUser] userID] forKey:@"creator"];
+        [c addQueryValue:STKRequestStatusCancelled forKey:@"status"];
+
+        
+        [c setModelGraph:@[[STKTrust class]]];
+        [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err) {
+                [t setStatus:prevState];
+            }
+            block(obj, err);
+        }];
+    }];
+
+}
+
+- (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block
+{
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -408,15 +474,19 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[self currentUser] userID], @"trusts", [t trustID]]];
-        [c addQueryValue:@"rejected" forKey:@"status"];
-        
-        [c setModelGraph:@[[STKTrust class]]];
-        [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            block(obj, err);
+        [c setIdentifiers:@[[[self currentUser] userID], @"trusts"]];
+
+        [c setModelGraph:@[@{@"trusts" : @[[STKTrust class]]}]];
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            
+            NSArray *trusts = nil;
+            if(!err) {
+                trusts = [[obj objectForKey:@"trusts"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusAccepted]];
+            }
+            
+            block(trusts, err);
         }];
     }];
-    
 }
 
 #pragma mark Authentication Nonsense
@@ -672,7 +742,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                               completion:^(BOOL granted, NSError *error) {
                                                   if(granted) {
                                                       NSArray *accounts = [[self accountStore] accountsWithAccountType:type];
-                                                      NSLog(@"%@", accounts);
+
                                                       if([accounts count] == 1) {
                                                           ACAccount *acct = [accounts firstObject];
                                                           [[NSOperationQueue mainQueue] addOperationWithBlock:^{
