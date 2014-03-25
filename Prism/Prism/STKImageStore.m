@@ -51,6 +51,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 {
     self = [super init];
     if(self) {
+        
         _callbackMap = [[NSMutableDictionary alloc] init];
         _activeQueue = [[NSMutableArray alloc] init];
         _throttleQueue = [[NSMutableArray alloc] init];
@@ -84,6 +85,23 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     return _cachePath;
 }
 
+- (UIImage *)bestCachedImageForURLString:(NSString *)url
+{
+    NSArray *paths = @[
+                [self thumbnailPathForURLString:url size:STKImageStoreThumbnailNone],
+                [self thumbnailPathForURLString:url size:STKImageStoreThumbnailLarge],
+                [self thumbnailPathForURLString:url size:STKImageStoreThumbnailMedium],
+                [self thumbnailPathForURLString:url size:STKImageStoreThumbnailSmall]
+    ];
+    
+    for(NSString *path in paths) {
+        UIImage *img = [self cachedImageForURLString:path];
+        if(img)
+            return img;
+    }
+    return nil;
+}
+
 - (UIImage *)cachedImageForURLString:(NSString *)url
 {
     NSString *cachePath = [self cachePathForURLString:url];
@@ -102,6 +120,41 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     }
     
     return nil;
+}
+
+- (NSString *)thumbnailPathForURLString:(NSString *)URLString size:(STKImageStoreThumbnail)size
+{
+    NSString *code = @"";
+    switch(size) {
+        case STKImageStoreThumbnailNone:
+            return URLString;
+        case STKImageStoreThumbnailLarge:
+            code = @"2"; break;
+        case STKImageStoreThumbnailMedium:
+            code = @"4"; break;
+        case STKImageStoreThumbnailSmall:
+            code = @"8"; break;
+        
+    }
+    
+    NSString *stripExtension = [URLString stringByDeletingPathExtension];
+    return [stripExtension stringByAppendingFormat:@"_%@.jpg", code];
+}
+
+- (void)fetchImageForURLString:(NSString *)url preferredSize:(STKImageStoreThumbnail)size completion:(void (^)(UIImage *img))block
+{
+    NSString *path = [self thumbnailPathForURLString:url size:size];
+    
+    [self fetchImageForURLString:path completion:^(UIImage *img) {
+        if(img) {
+            block(img);
+        } else {
+            NSLog(@"Failed to get %d at %@", size, url);
+            if(size != STKImageStoreThumbnailNone) {
+                [self fetchImageForURLString:url completion:block];
+            }
+        }
+    }];
 }
 
 - (BOOL)fetchImageForURLString:(NSString *)urlString completion:(void (^)(UIImage *img))block
@@ -214,39 +267,95 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
                                                range:NSMakeRange(0, [url length])];
 }
 
-- (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block
+- (NSArray *)uploadPathsInDirectory:(NSString *)directory thumbnailCount:(int)count
 {
-    UIGraphicsBeginImageContextWithOptions(sz, YES, 1.0);
-    [image drawInRect:CGRectMake(0, 0, sz.width, sz.height)];
-    UIImage *resizedImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    NSUUID *uuid = [[NSUUID alloc] init];
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyyMMddhhmmss"];
     
-    [self uploadImage:resizedImage intoDirectory:directory completion:block];
+    NSString *base = [NSString stringWithFormat:@"%@/%@_%@", directory, [df stringFromDate:[NSDate date]], [uuid UUIDString]];
 
-    return resizedImage;
+    NSMutableArray *paths = [[NSMutableArray alloc] init];
+    [paths addObject:[base stringByAppendingPathExtension:@"jpg"]];
+    for(int i = 0; i < count; i++) {
+        int p = (int)pow(2, i + 1);
+        [paths addObject:[[base stringByAppendingFormat:@"_%d", p] stringByAppendingPathExtension:@"jpg"]];
+    }
+    return [paths copy];
 }
 
-- (void)uploadImage:(UIImage *)image intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block
+- (void)uploadImage:(UIImage *)image
+     thumbnailCount:(int)thumbnailCount
+      intoDirectory:(NSString *)directory
+         completion:(void (^)(NSString *URLString, NSError *err))block
 {
+    NSArray *paths = [self uploadPathsInDirectory:directory thumbnailCount:thumbnailCount];
+    
+    NSMutableArray *thumbnails = [NSMutableArray array];
+    UIImage *t = image;
+    for(int i = 0; i < thumbnailCount; i++) {
+        CGSize tSize = [t size];
+        tSize.width = floor(tSize.width / 2.0);
+        tSize.height = floor(tSize.height / 2.0);
+        
+        UIGraphicsBeginImageContextWithOptions(tSize, YES, 1);
+        [t drawInRect:CGRectMake(0, 0, tSize.width, tSize.height)];
+        t = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        [thumbnails addObject:t];
+    }
+
+    if([thumbnails count] != [paths count] + 1) {
+        NSLog(@"Mismatch in thumbnails");
+    }
+    
+    [self uploadImage:image toPath:[paths firstObject] completion:^(NSString *URLString, NSError *err) {
+        block(URLString, err);
+        
+        if(!err) {
+            NSMutableArray *tPaths = [NSMutableArray array];
+            for(int i = 1; i < [paths count]; i++) {
+                [tPaths addObject:[paths objectAtIndex:i]];
+            }
+            [self uploadThumbnailImages:thumbnails paths:tPaths];
+        }
+    }];
+}
+
+- (void)uploadThumbnailImages:(NSArray *)images paths:(NSArray *)paths
+{
+    if([paths count] == 0 || [images count] == 0)
+        return;
+    
+    NSString *path = [paths objectAtIndex:0];
+    UIImage *img = [images objectAtIndex:0];
+    
+    NSMutableArray *newPaths = [NSMutableArray array];
+    NSMutableArray *newImages = [NSMutableArray array];
+    for(int i = 1; i < [paths count]; i++) {
+        [newPaths addObject:[paths objectAtIndex:i]];
+    }
+    for(int i = 1; i < [images count]; i++) {
+        [newImages addObject:[images objectAtIndex:i]];
+    }
+    
+    [self uploadImage:img toPath:path completion:^(NSString *URLString, NSError *err) {
+        [self uploadThumbnailImages:newImages paths:newPaths];
+    }];
+}
+
+- (void)uploadImage:(UIImage *)img toPath:(NSString *)fileName completion:(void (^)(NSString *URLString, NSError *err))block
+{
+    NSLog(@"Uploading image of size %@ to path %@", NSStringFromCGSize([img size]), fileName);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
-        const void *cStr = [imageData bytes];
-        unsigned char result[CC_MD5_DIGEST_LENGTH];
-        
-        CC_MD5(cStr, (uint32_t)[imageData length], result);
-        
-        NSUUID *uuid = [[NSUUID alloc] init];
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyyMMddhhmmss"];
-        
-        NSString *fileName = [NSString stringWithFormat:@"%@/%@_%@.jpg", directory, [df stringFromDate:[NSDate date]], [uuid UUIDString]];
-        fileName = [fileName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLPathAllowedCharacterSet]];
-        
         S3PutObjectRequest *req = [[S3PutObjectRequest alloc] initWithKey:fileName inBucket:STKImageStoreBucketName];
+        NSData *imageData = UIImageJPEGRepresentation(img, 1.0);
         
         [req setContentType:@"image/jpeg"];
         [req setData:imageData];
         [req setCannedACL:[S3CannedACL publicRead]];
+        
         S3PutObjectResponse *response = [[self amazonClient] putObject:req];
         if(![response error] && ![response exception]) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -262,6 +371,12 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
             });
         }
     });
+}
+
+- (void)uploadImage:(UIImage *)image intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block
+{
+    NSString *fileName = [[self uploadPathsInDirectory:directory thumbnailCount:0] firstObject];
+    [self uploadImage:image toPath:fileName completion:block];
 }
 
 @end

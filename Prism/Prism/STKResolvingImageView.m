@@ -11,6 +11,30 @@
 
 @implementation STKResolvingImageView
 
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if(self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit
+{
+    [self setPreferredSize:STKImageStoreThumbnailNone];
+}
+
 - (void)setUrlString:(NSString *)urlString
 {
     _urlString = urlString;
@@ -20,9 +44,13 @@
     if(_urlString) {
         __weak STKResolvingImageView *iv = self;
         [[STKImageStore store] fetchImageForURLString:_urlString
+                                        preferredSize:[self preferredSize]
                                            completion:^(UIImage *img) {
                                                if([urlString isEqualToString:[iv urlString]]) {
                                                    [iv setImage:img];
+                                                   if([self imageResolvedCompletion]) {
+                                                       [self imageResolvedCompletion](img != nil);
+                                                   }
                                                    //[iv setNeedsDisplay];
                                                }
                                            }];

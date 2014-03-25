@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "STKImageStore.h"
 
 @interface STKResolvingImageView : UIImageView
 
 @property (nonatomic, copy) NSString *urlString;
+@property (nonatomic) STKImageStoreThumbnail preferredSize;
+
+// Only pass weak references to parent object!
+@property (nonatomic, strong) void (^imageResolvedCompletion)(BOOL success);
 
 @end

@@ -35,7 +35,7 @@
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSLayoutConstraint *menuTopConstraint;
 
-@property (nonatomic, strong, readonly) STKResolvingImageView *transitionImageView;
+@property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
 
 
@@ -327,22 +327,25 @@
     [[self backgroundImageView] setImage:[self backgroundImage]];
 }
 
-- (STKResolvingImageView *)transitionImageView
+- (UIImageView *)transitionImageView
 {
     if(!_transitionImageView) {
-        _transitionImageView = [[STKResolvingImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
+        _transitionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
+        [[self view] addSubview:_transitionImageView];
     }
     return _transitionImageView;
 }
 
 - (void)transitionToPost:(STKPost *)p
                 fromRect:(CGRect)r
+              usingImage:(UIImage *)image
         inViewController:(UIViewController *)vc
                 animated:(BOOL)animated
 {
     [self setImageTransitionRect:r];
     
-    [[self transitionImageView] setUrlString:[p imageURLString]];
+    NSLog(@"image == %@", image);
+    [[self transitionImageView] setImage:image];
     
     STKPostViewController *postVC = [[STKPostViewController alloc] init];
     [postVC setPost:p];
@@ -357,9 +360,6 @@
     if(([fromVC class] == [STKPostViewController class] && operation == UINavigationControllerOperationPop)
     || ([toVC class] == [STKPostViewController class] && operation == UINavigationControllerOperationPush)) {
         
-        if(![[self transitionImageView] superview]) {
-            [[self view] addSubview:[self transitionImageView]];
-        }
         
         if([fromVC class] == [STKPostViewController class]) {
             [[self transitionImageView] setFrame:CGRectMake(0, 64, 320, 300)];
@@ -391,6 +391,9 @@
                                             belowSubview:[outVC view]];
     }
     
+    [[self view] bringSubviewToFront:[self transitionImageView]];
+    [[self transitionImageView] setHidden:NO];
+
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         if([inVC class] == [STKPostViewController class]) {
             [[self transitionImageView] setFrame:CGRectMake(0, 64, 320, 300)];
@@ -402,8 +405,17 @@
     }
      completion:^(BOOL finished) {
          [transitionContext completeTransition:finished];
-         [[self transitionImageView] removeFromSuperview];
+         if(finished) {
+             if(![inVC isKindOfClass:[STKPostViewController class]]) {
+                 [[self transitionImageView] setHidden:YES];
+             }
+         }
      }];
+}
+
+- (void)completeTransitionToPostViewController
+{
+    [[self transitionImageView] setHidden:YES];
 }
 
 - (void)animationEnded:(BOOL) transitionCompleted

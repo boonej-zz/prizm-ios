@@ -614,7 +614,7 @@ const long STKCreateProgressGeocoding = 4;
     if(img) {
         [self setProgressMask:[self progressMask] | STKCreateProgressUploadingProfile];
         
-        [[STKImageStore store] uploadImage:img intoDirectory:@"profile" completion:^(NSString *URLString, NSError *err) {
+        [[STKImageStore store] uploadImage:img thumbnailCount:3 intoDirectory:@"profile" completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 [[self user] setProfilePhotoPath:URLString];
             } else {

@@ -58,8 +58,6 @@
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
         
-        _postController = [[STKPostController alloc] initWithViewController:self];
-        [[self postController] setDelegate:self];
     }
     return self;
 }
@@ -72,6 +70,9 @@
     _homeCellNib = [UINib nibWithNibName:@"STKPostCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     
+    
+    _postController = [[STKPostController alloc] initWithViewController:self];
+
     [[self tableView] setDelaysContentTouches:NO];
 
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
@@ -236,6 +237,7 @@
 {
     [self layoutCards];
 }
+
 
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {

@@ -37,8 +37,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        _localPosts = [[STKPostController alloc] initWithViewController:self];
-        [_localPosts setDelegate:self];
     }
     return self;
 }
@@ -46,6 +44,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _localPosts = [[STKPostController alloc] initWithViewController:self];
+    
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }

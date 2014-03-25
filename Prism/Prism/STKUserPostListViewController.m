@@ -32,8 +32,6 @@
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-        _postController = [[STKPostController alloc] initWithViewController:self];
-        [[self postController] setDelegate:self];
     }
     return self;
 }
@@ -88,6 +86,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _postController = [[STKPostController alloc] initWithViewController:self];
+
+    
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];

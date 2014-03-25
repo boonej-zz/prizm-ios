@@ -76,7 +76,7 @@
     [[self trustView] setUser:[[STKUserStore store] currentUser]];
     
     if(![[self backgroundImageView] image]) {
-        [[STKImageStore store] fetchImageForURLString:[[[STKUserStore store] currentUser] profilePhotoPath] completion:^(UIImage *img) {
+        [[STKImageStore store] fetchImageForURLString:[[[STKUserStore store] currentUser] profilePhotoPath] preferredSize:STKImageStoreThumbnailSmall completion:^(UIImage *img) {
             UIGraphicsBeginImageContext(CGSizeMake(80, 80));
             [img drawInRect:CGRectMake(0, 0, 80, 80)];
             UIImage *blurredImage = [[STKRenderServer renderServer] blurredImageWithImage:UIGraphicsGetImageFromCurrentImageContext() affineClamp:YES];

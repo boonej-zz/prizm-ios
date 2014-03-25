@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    STKImageStoreThumbnailNone,
+    STKImageStoreThumbnailLarge,
+    STKImageStoreThumbnailMedium,
+    STKImageStoreThumbnailSmall
+} STKImageStoreThumbnail;
+
 @interface STKImageStore : NSObject
 
 + (STKImageStore *)store;
@@ -17,11 +24,20 @@
 // The return value of this method signifies nothing about the image being available/returned/valid.
 - (BOOL)fetchImageForURLString:(NSString *)url completion:(void (^)(UIImage *img))block;
 
-- (void)uploadImage:(UIImage *)image intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block;
+- (void)fetchImageForURLString:(NSString *)url preferredSize:(STKImageStoreThumbnail)size completion:(void (^)(UIImage *img))block;
 
-// Returns the resized local image
-- (UIImage *)uploadImage:(UIImage *)image size:(CGSize)sz intoDirectory:(NSString *)directory completion:(void (^)(NSString *URLString, NSError *err))block;
+- (void)uploadImage:(UIImage *)image
+      intoDirectory:(NSString *)directory
+         completion:(void (^)(NSString *URLString, NSError *err))block;
+
+- (void)uploadImage:(UIImage *)image
+     thumbnailCount:(int)thumbnailCount
+      intoDirectory:(NSString *)directory
+         completion:(void (^)(NSString *URLString, NSError *err))block;
+
 
 - (UIImage *)cachedImageForURLString:(NSString *)url;
+- (UIImage *)bestCachedImageForURLString:(NSString *)url;
+
 
 @end

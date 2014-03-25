@@ -61,8 +61,6 @@ typedef enum {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
-        _postController = [[STKPostController alloc] initWithViewController:self];
-        [[self postController] setDelegate:self];
     }
     return self;
 }
@@ -165,6 +163,9 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _postController = [[STKPostController alloc] initWithViewController:self];
+
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
 
     [self setStatsCell:[STKInitialProfileStatisticsCell cellForTableView:[self tableView] target:self]];

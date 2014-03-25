@@ -25,7 +25,10 @@
 // Pass image's rect in vc's view coordinate space
 - (void)transitionToPost:(STKPost *)p
                 fromRect:(CGRect)r
+              usingImage:(UIImage *)image
         inViewController:(UIViewController *)vc
                 animated:(BOOL)animated;
+
+- (void)completeTransitionToPostViewController;
 
 @end

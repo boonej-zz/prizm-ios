@@ -17,18 +17,19 @@
 #import "STKUserStore.h"
 #import "STKUser.h"
 #import "STKUserListViewController.h"
+#import "STKImageStore.h"
 
 @implementation STKPostController
 
 // Should know how to filter deleted posts in some way!
 
-- (id)initWithViewController:(UIViewController *)viewController
+- (id)initWithViewController:(UIViewController <STKPostControllerDelegate> *)viewController
 {
     self = [super init];
     if(self) {
         _posts = [[NSMutableArray alloc] init];
+        [self setDelegate:viewController];
         [self setViewController:viewController];
-        
         [self setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
     }
     return self;
@@ -51,15 +52,19 @@
 {
     NSInteger idx = [[self posts] indexOfObject:p];
     
+    UIImage *img = [[STKImageStore store] bestCachedImageForURLString:[p imageURLString]];
+    
     if([[self delegate] respondsToSelector:@selector(postController:rectForPostAtIndex:)]) {
         CGRect r = [[self delegate] postController:self rectForPostAtIndex:idx];
         [[[self viewController] menuController] transitionToPost:p
                                                         fromRect:r
+                                                      usingImage:img
                                                 inViewController:[self viewController]
                                                         animated:YES];
     } else {
         [[[self viewController] menuController] transitionToPost:p
                                                         fromRect:CGRectZero
+                                                      usingImage:img
                                                 inViewController:[self viewController]
                                                         animated:NO];
     }

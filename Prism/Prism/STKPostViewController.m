@@ -25,6 +25,7 @@
 #import "STKWebViewController.h"
 #import "STKPostController.h"
 #import "STKUserListViewController.h"
+#import "UIViewController+STKControllerItems.h"
 
 @interface STKPostViewController ()
     <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, STKPostControllerDelegate>
@@ -65,8 +66,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
-        _postController = [[STKPostController alloc] initWithViewController:self];
-        [[self postController] setDelegate:self];
 
     }
     return self;
@@ -149,6 +148,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    _postController = [[STKPostController alloc] initWithViewController:self];
+
+    
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
 
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
@@ -192,6 +195,12 @@
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setDisplayFullBleed:YES];
+    __weak STKPostViewController *weakSelf = self;
+    [[c contentImageView] setImageResolvedCompletion:^(BOOL success) {
+        if(success) {
+            [[weakSelf menuController] completeTransitionToPostViewController];
+        }
+    }];
     [c populateWithPost:[self post]];
     [self setPostCell:c];
     
@@ -587,7 +596,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     if([self editingPostText]) {
         [self setEditingPostText:NO];
-        
         
         [[STKContentStore store] editPost:[self post]
                                  withInfo:@{@"text" : [[self commentTextField] text]}

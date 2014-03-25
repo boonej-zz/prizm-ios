@@ -23,12 +23,13 @@
 
 @end
 
-@interface STKPostController : NSObject
+@interface STKPostController : NSObject <UITableViewDataSource, UITableViewDelegate>
 
-- (id)initWithViewController:(UIViewController *)viewController;
+- (id)initWithViewController:(UIViewController <STKPostControllerDelegate> *)viewController;
 
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (nonatomic, weak) UIViewController *viewController;
+@property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NSArray *sortDescriptors;
 
 

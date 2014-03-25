@@ -60,7 +60,7 @@
 - (void)setUser:(STKUser *)user
 {
     _user = user;
-    [[STKImageStore store] fetchImageForURLString:[user profilePhotoPath] completion:^(UIImage *img) {
+    [[STKImageStore store] fetchImageForURLString:[user profilePhotoPath] preferredSize:STKImageStoreThumbnailLarge completion:^(UIImage *img) {
         [[[self circleViews] objectAtIndex:0] setImage:img];
     }];
 }
@@ -86,7 +86,7 @@
         STKCircleView *cv = [[self circleViews] objectAtIndex:i + 1];
         STKUser *u = [[self users] objectAtIndex:i];
         
-        [[STKImageStore store] fetchImageForURLString:[u profilePhotoPath] completion:^(UIImage *img) {
+        [[STKImageStore store] fetchImageForURLString:[u profilePhotoPath] preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
             [cv setImage:img];
         }];
     }

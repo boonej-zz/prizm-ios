@@ -15,6 +15,10 @@
 - (void)cellDidLoad
 {
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[self leftImageView] setPreferredSize:STKImageStoreThumbnailMedium];
+    [[self centerImageView] setPreferredSize:STKImageStoreThumbnailMedium];
+    [[self rightImageView] setPreferredSize:STKImageStoreThumbnailMedium];
+    
 }
 
 - (void)layoutContent
