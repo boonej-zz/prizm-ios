@@ -171,6 +171,8 @@
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     [[self headerView] setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.2]];
     [[[self headerView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[self contentImageView] setPreferredSize:STKImageStoreThumbnailLarge];
 }
 
 @end

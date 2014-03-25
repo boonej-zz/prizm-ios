@@ -195,6 +195,7 @@
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setDisplayFullBleed:YES];
+    [[c contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
     __weak STKPostViewController *weakSelf = self;
     [[c contentImageView] setImageResolvedCompletion:^(BOOL success) {
         if(success) {
