@@ -35,7 +35,7 @@
     NSString                               *snapshotId;
     NSString                               *attribute;
     NSString                               *operationType;
-    NSMutableArray                         *userIds;
+    NSMutableArray                         *uniqueIDs;
     NSMutableArray                         *groupNames;
     EC2CreateVolumePermissionModifications *createVolumePermission;
 }
@@ -76,7 +76,7 @@
  * <code>createVolumePermission</code> attribute is being modified.
  * </note>
  */
-@property (nonatomic, retain) NSMutableArray *userIds;
+@property (nonatomic, retain) NSMutableArray *uniqueIDs;
 
 /**
  * The AWS group names to add to or remove from the list of groups that
@@ -113,10 +113,10 @@
 -(id)initWithSnapshotId:(NSString *)theSnapshotId andAttribute:(NSString *)theAttribute andOperationType:(NSString *)theOperationType;
 
 /**
- * Adds a single object to userIds.
- * This function will alloc and init userIds if not already done.
+ * Adds a single object to uniqueIDs.
+ * This function will alloc and init uniqueIDs if not already done.
  */
--(void)addUserId:(NSString *)userIdObject;
+-(void)adduniqueID:(NSString *)uniqueIDObject;
 
 /**
  * Adds a single object to groupNames.

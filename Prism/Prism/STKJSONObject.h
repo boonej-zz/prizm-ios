@@ -17,7 +17,8 @@
 
 - (void)bindFromDictionary:(NSDictionary *)d
                  sourceKey:(NSString *)sourceKey
-            destinationKey:(NSString *)destKey;
+            destinationKey:(NSString *)destKey
+                  matchMap:(NSDictionary *)matchMap;
 
 - (void)bindFromDictionary:(NSDictionary *)d
                  sourceKey:(NSString *)sourceKey

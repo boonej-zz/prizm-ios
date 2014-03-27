@@ -55,6 +55,8 @@
         
         [[self navigationItem] setTitle:@"Prism"];
         
+        _postController = [[STKPostController alloc] initWithViewController:self];
+        
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
         
@@ -71,7 +73,7 @@
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     
     
-    _postController = [[STKPostController alloc] initWithViewController:self];
+    
 
     [[self tableView] setDelaysContentTouches:NO];
 

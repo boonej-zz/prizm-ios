@@ -21,7 +21,7 @@ typedef enum STKActivityItemEnum : int16_t {
 
 @interface STKActivityItem : NSManagedObject
 
-@property (nonatomic) int32_t userID;
+@property (nonatomic) int32_t uniqueID;
 @property (nonatomic, retain) NSString *userName;
 @property (nonatomic, retain) NSString *profileImageURLString;
 @property (nonatomic) BOOL recent;

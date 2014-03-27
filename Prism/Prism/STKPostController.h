@@ -23,7 +23,7 @@
 
 @end
 
-@interface STKPostController : NSObject <UITableViewDataSource, UITableViewDelegate>
+@interface STKPostController : NSObject
 
 - (id)initWithViewController:(UIViewController <STKPostControllerDelegate> *)viewController;
 

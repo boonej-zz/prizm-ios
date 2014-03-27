@@ -34,7 +34,7 @@
     BOOL           dryRunIsSet;
     NSMutableArray *snapshotIds;
     NSMutableArray *ownerIds;
-    NSMutableArray *restorableByUserIds;
+    NSMutableArray *restorableByuniqueIDs;
     NSMutableArray *filters;
 }
 
@@ -73,7 +73,7 @@
  * An optional list of users. The described snapshots are scoped to only
  * those snapshots from which these users can create volumes.
  */
-@property (nonatomic, retain) NSMutableArray *restorableByUserIds;
+@property (nonatomic, retain) NSMutableArray *restorableByuniqueIDs;
 
 /**
  * A list of filters used to match properties for Snapshots. For a
@@ -97,10 +97,10 @@
 -(void)addOwnerId:(NSString *)ownerIdObject;
 
 /**
- * Adds a single object to restorableByUserIds.
- * This function will alloc and init restorableByUserIds if not already done.
+ * Adds a single object to restorableByuniqueIDs.
+ * This function will alloc and init restorableByuniqueIDs if not already done.
  */
--(void)addRestorableByUserId:(NSString *)restorableByUserIdObject;
+-(void)addRestorableByuniqueID:(NSString *)restorableByuniqueIDObject;
 
 /**
  * Adds a single object to filters.

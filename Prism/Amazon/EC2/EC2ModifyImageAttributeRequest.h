@@ -35,7 +35,7 @@
     NSString                         *imageId;
     NSString                         *attribute;
     NSString                         *operationType;
-    NSMutableArray                   *userIds;
+    NSMutableArray                   *uniqueIDs;
     NSMutableArray                   *userGroups;
     NSMutableArray                   *productCodes;
     NSString                         *value;
@@ -74,7 +74,7 @@
  * launch permissions for this AMI. Only valid when the launchPermission
  * attribute is being modified.
  */
-@property (nonatomic, retain) NSMutableArray *userIds;
+@property (nonatomic, retain) NSMutableArray *uniqueIDs;
 
 /**
  * The user group being added to or removed from the list of user groups
@@ -126,10 +126,10 @@
 -(id)initWithImageId:(NSString *)theImageId andAttribute:(NSString *)theAttribute;
 
 /**
- * Adds a single object to userIds.
- * This function will alloc and init userIds if not already done.
+ * Adds a single object to uniqueIDs.
+ * This function will alloc and init uniqueIDs if not already done.
  */
--(void)addUserId:(NSString *)userIdObject;
+-(void)adduniqueID:(NSString *)uniqueIDObject;
 
 /**
  * Adds a single object to userGroups.

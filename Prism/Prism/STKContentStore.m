@@ -26,6 +26,10 @@ NSString * const STKContentFoursquareClientSecret = @"B2KSDXAPXQTWWMZLB2ODCCR3JO
 
 NSString * const STKContentEndpointPost = @"/posts";
 
+
+NSString * const STKContentStorePostDeletedNotification = @"STKContentStorePostDeletedNotification";
+NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey";
+
 @interface STKContentStore ()
 
 @end
@@ -77,11 +81,53 @@ NSString * const STKContentEndpointPost = @"/posts";
     }];
 }
 
+- (NSArray *)cachedPostsForPredicate:(NSPredicate *)predicate
+                         inDirection:(STKContentStoreFetchDirection)fetchDirection
+                       referencePost:(STKPost *)referencePost
+{
+    if(!referencePost) {
+        NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
+        [req setPredicate:predicate];
+        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+        [req setFetchLimit:30];
+        
+        return [[[STKUserStore store] context] executeFetchRequest:req error:nil];
+    } else {
+        NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
+        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+        [req setFetchLimit:30];
+        
+        if(fetchDirection == STKContentStoreFetchDirectionNewer) {
+            [req setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:@[predicate,
+                                                                                   [NSPredicate predicateWithFormat:@"datePosted > %@", [referencePost datePosted]]]]];
+        } else {
+            [req setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:@[predicate,
+                                                                                   [NSPredicate predicateWithFormat:@"datePosted < %@", [referencePost datePosted]]]]];
+        }
+        
+        return [[[STKUserStore store] context] executeFetchRequest:req error:nil];
+    }
+    return @[];
+}
+
 - (void)fetchFeedForUser:(STKUser *)u
              inDirection:(STKContentStoreFetchDirection)fetchDirection
            referencePost:(STKPost *)referencePost
               completion:(void (^)(NSArray *posts, NSError *err))block;
 {
+    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
+                                        inDirection:fetchDirection
+                                      referencePost:referencePost];
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        block(cached, nil);
+    }];
+    
+    if(fetchDirection == STKContentStoreFetchDirectionNewer)
+        referencePost = [cached firstObject];
+    else
+        referencePost = [cached lastObject];
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -89,7 +135,7 @@ NSString * const STKContentEndpointPost = @"/posts";
         }
                 
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[[u userID], @"feed"]];
+        [c setIdentifiers:@[[u uniqueID], @"feed"]];
         [c addQueryValue:@"30" forKey:@"limit"];
         if(referencePost) {
             [c addQueryValue:[referencePost referenceTimestamp] forKey:@"feature_identifier"];
@@ -102,9 +148,13 @@ NSString * const STKContentEndpointPost = @"/posts";
         }
         
         [c setModelGraph:@[@"STKPost"]];
+        [c setContext:[[STKUserStore store] context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *posts, NSError *err) {
             if(!err) {
+                [[[[STKUserStore store] currentUser] mutableSetValueForKeyPath:@"fFeedPosts"] addObjectsFromArray:posts];
+                [[[STKUserStore store] context] save:nil];
                 block(posts, nil);
             } else {
                 block(nil, err);
@@ -141,9 +191,12 @@ NSString * const STKContentEndpointPost = @"/posts";
         }
         
         [c setModelGraph:@[@"STKPost"]];
+        [c setContext:[[STKUserStore store] context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
+                [[[STKUserStore store] context] save:nil];
                 block(obj, nil);
             } else {
                 block(nil, err);
@@ -201,15 +254,29 @@ NSString * const STKContentEndpointPost = @"/posts";
                    referencePost:(STKPost *)referencePost
                       completion:(void (^)(NSArray *posts, NSError *err))block
 {
+    
+    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"creator == %@", [[STKUserStore store] currentUser]]
+                                        inDirection:fetchDirection
+                                      referencePost:referencePost];
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        block(cached, nil);
+    }];
+    
+    if(fetchDirection == STKContentStoreFetchDirectionNewer)
+        referencePost = [cached firstObject];
+    else
+        referencePost = [cached lastObject];
+
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[[user userID], @"posts"]];
+        [c setIdentifiers:@[[user uniqueID], @"posts"]];
         [c addQueryValue:@"30" forKey:@"limit"];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         if(referencePost) {
             [c addQueryValue:[referencePost referenceTimestamp] forKey:@"feature_identifier"];
             if(fetchDirection == STKContentStoreFetchDirectionOlder) {
@@ -222,11 +289,14 @@ NSString * const STKContentEndpointPost = @"/posts";
         
         
         [c setModelGraph:@[@"STKPost"]];
+        [c setContext:[[STKUserStore store] context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
                 obj = [obj sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted"
                                                                                        ascending:NO]]];
+                [[[STKUserStore store] context] save:nil];
                 block(obj, nil);
             } else {
                 block(nil, err);
@@ -238,11 +308,12 @@ NSString * const STKContentEndpointPost = @"/posts";
 - (void)likePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
 {
     [post setLikeCount:[post likeCount] + 1];
-    [post setPostLikedByCurrentUser:YES];
+    [[post mutableSetValueForKey:@"likes"] addObject:[[STKUserStore store] currentUser]];
 
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
-            [post setPostLikedByCurrentUser:NO];
+            [[post mutableSetValueForKey:@"likes"] removeObject:[[STKUserStore store] currentUser]];
+
             [post setLikeCount:[post likeCount] - 1];
 
             block(nil, err);
@@ -251,15 +322,17 @@ NSString * const STKContentEndpointPost = @"/posts";
         
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[post postID], @"like"]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+        [c setIdentifiers:@[[post uniqueID], @"like"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID]
                   forKey:@"creator"];
-
+        [c setModelGraph:@[post]];
+        [c setContext:[[STKUserStore store] context]];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
-                [post setPostLikedByCurrentUser:NO];
+                [[post mutableSetValueForKey:@"likes"] removeObject:[[STKUserStore store] currentUser]];
                 [post setLikeCount:[post likeCount] - 1];
             }
+            [[[STKUserStore store] context] save:nil];
             block(post, err);
         }];
     }];
@@ -274,8 +347,8 @@ NSString * const STKContentEndpointPost = @"/posts";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[post postID], @"flag"]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"reporter"];
+        [c setIdentifiers:@[[post uniqueID], @"flag"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"reporter"];
         
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err || ![obj isKindOfClass:[NSString class]]){
@@ -291,27 +364,32 @@ NSString * const STKContentEndpointPost = @"/posts";
 - (void)unlikePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
 {
     [post setLikeCount:[post likeCount] - 1];
-    [post setPostLikedByCurrentUser:NO];
+    [[post mutableSetValueForKey:@"likes"] removeObject:[[STKUserStore store] currentUser]];
 
+    void (^reversal)(void) = ^{
+        [post setLikeCount:[post likeCount] + 1];
+        [[post mutableSetValueForKey:@"likes"] addObject:[[STKUserStore store] currentUser]];
+        [[[STKUserStore store] context] save:nil];
+    };
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
-            [post setLikeCount:[post likeCount] + 1];
-            [post setPostLikedByCurrentUser:YES];
-
+            reversal();
+            
             block(nil, err);
             return;
         }
         
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[post postID], @"unlike"]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+        [c setIdentifiers:@[[post uniqueID], @"unlike"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID]
                   forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
-                [post setLikeCount:[post likeCount] + 1];
-                [post setPostLikedByCurrentUser:YES];
+                reversal();
             }
+            [[[STKUserStore store] context] save:nil];
             block(post, err);
         }];
     }];
@@ -319,22 +397,23 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)deletePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
 {
-    [post setStatus:STKPostStatusDeleted];
-    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
-            [post setStatus:nil];
             block(nil, err);
             return;
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[post postID]]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
+        [c setIdentifiers:@[[post uniqueID]]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         
         [c deleteWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            if(err) {
-                [post setStatus:nil];
+            if(!err) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:STKContentStorePostDeletedNotification
+                                                                    object:self
+                                                                  userInfo:@{STKContentStorePostDeletedKey : post}];
+                [[[STKUserStore store] context] deleteObject:post];
+                [[[STKUserStore store] context] save:nil];
             }
             
             block(obj, err);
@@ -344,7 +423,7 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)likeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block
 {
-    if(![comment commentID]) {
+    if(![comment uniqueID]) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(nil, nil);
         }];
@@ -352,23 +431,30 @@ NSString * const STKContentEndpointPost = @"/posts";
     }
     
     [comment setLikeCount:[comment likeCount] + 1];
-    [comment setLikedByCurrentUser:YES];
+    [[comment mutableSetValueForKey:@"likes"] addObject:[[STKUserStore store] currentUser]];
+    
+    void (^reversal)(void) = ^{
+        [comment setLikeCount:[comment likeCount] - 1];
+        [[comment mutableSetValueForKey:@"likes"] removeObject:[[STKUserStore store] currentUser]];
+        [[[STKUserStore store] context] save:nil];
+    };
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
-            [comment setLikeCount:[comment likeCount] - 1];
-            [comment setLikedByCurrentUser:NO];
+            reversal();
             
             block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[[comment post] postID], @"comments", [comment commentID], @"like"]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
+        [c setIdentifiers:@[[[comment post] uniqueID], @"comments", [comment uniqueID], @"like"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
+
         [c postWithSession:[self session] completionBlock:^(STKPostComment *obj, NSError *err) {
             if(err) {
-                [comment setLikeCount:[comment likeCount] - 1];
-                [comment setLikedByCurrentUser:NO];
+                reversal();
+            } else {
+                [[[STKUserStore store] context] save:nil];
             }
             block(obj, err);
         }];
@@ -377,7 +463,7 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)unlikeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block
 {
-    if(![comment commentID]) {
+    if(![comment uniqueID]) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(nil, nil);
         }];
@@ -385,23 +471,30 @@ NSString * const STKContentEndpointPost = @"/posts";
     }
 
     [comment setLikeCount:[comment likeCount] - 1];
-    [comment setLikedByCurrentUser:NO];
+    [[comment mutableSetValueForKey:@"likes"] removeObject:[[STKUserStore store] currentUser]];
+    
+    void (^reversal)(void) = ^{
+        [comment setLikeCount:[comment likeCount] + 1];
+        [[comment mutableSetValueForKey:@"likes"] addObject:[[STKUserStore store] currentUser]];
+        [[[STKUserStore store] context] save:nil];
+    };
+
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
-            [comment setLikeCount:[comment likeCount] + 1];
-            [comment setLikedByCurrentUser:YES];
+            reversal();
             
             block(nil, err);
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[[comment post] postID], @"comments", [comment commentID], @"unlike"]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
+        [c setIdentifiers:@[[[comment post] uniqueID], @"comments", [comment uniqueID], @"unlike"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(STKPostComment *obj, NSError *err) {
             if(err) {
-                [comment setLikeCount:[comment likeCount] + 1];
-                [comment setLikedByCurrentUser:YES];
+                reversal();
+            } else {
+                [[[STKUserStore store] context] save:nil];
             }
             block(obj, err);
         }];
@@ -416,12 +509,14 @@ NSString * const STKContentEndpointPost = @"/posts";
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[post postID], @"likes"]];
+        [c setIdentifiers:@[[post uniqueID], @"likes"]];
 
-        [c setModelGraph:@[@{@"likes" : @[[STKUser class]]}]];
+        [c setModelGraph:@[@{@"likes" : @[@"STKUser"]}]];
+        [c setContext:[[STKUserStore store] context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
-            if(err) {
-
+            if(!err) {
+                [post setLikes:[NSSet setWithArray:[obj objectForKey:@"likes"]]];
             }
             block([obj objectForKey:@"likes"], err);
         }];
@@ -431,45 +526,43 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)addComment:(NSString *)comment toPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block
 {
-    NSArray *currentComments = [p comments];
-    STKPostComment *pc = [[STKPostComment alloc] init];
+    STKPostComment *pc = [NSEntityDescription insertNewObjectForEntityForName:@"STKPostComment"
+                                                       inManagedObjectContext:[[STKUserStore store] context]];
     [pc setCreator:[[STKUserStore store] currentUser]];
     [pc setText:comment];
     [pc setDate:[NSDate date]];
     
-    [p setComments:[[p comments] arrayByAddingObject:pc]];
+    [[p mutableSetValueForKey:@"comments"] addObject:pc];
     [p setCommentCount:[p commentCount] + 1];
     
     void (^reversal)(void) = ^{
-        [p setComments:currentComments];
+        [[[STKUserStore store] context] deleteObject:pc];
         [p setCommentCount:[p commentCount] -1];
+        [[[STKUserStore store] context] save:nil];
     };
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
             reversal();
-            
+
             block(nil, err);
             return;
         }
        
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[p postID], @"comments"]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+        [c setIdentifiers:@[[p uniqueID], @"comments"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID]
                   forKey:@"creator"];
         [c addQueryValue:comment forKey:@"text"];
-
+        
+        [c setContext:[[STKUserStore store] context]];
+        [c setModelGraph:@[@{@"comments" : pc}]];
+        
         [c postWithSession:[self session] completionBlock:^(NSDictionary *comments, NSError *err) {
             if(err) {
                 reversal();
             } else {
-                int count = [[comments objectForKey:@"comments_count"] intValue];
-                [p setCommentCount:count];
-                
-                NSDictionary *newCommentDict = [comments objectForKey:@"comments"];
-                STKPostComment *newComment = [[STKPostComment alloc] init];
-                [newComment readFromJSONObject:newCommentDict];
-                [p setComments:[currentComments arrayByAddingObjectsFromArray:@[newComment]]];
+                [[[STKUserStore store] context] save:nil];
             }
             block(p, err);
         }];
@@ -479,17 +572,17 @@ NSString * const STKContentEndpointPost = @"/posts";
 
 - (void)deleteComment:(STKPostComment *)comment completion:(void (^)(STKPost *p, NSError *err))block
 {
-    NSArray *currentComments = [[comment post] comments];
-    int currentCount = [[comment post] commentCount];
+    STKPost *p = [comment post];
+
+    [p setCommentCount:[p commentCount] - 1];
+    [[p mutableSetValueForKey:@"comments"] removeObject:comment];
+    
     void (^reversal)(void) = ^{
-        [[comment post] setComments:currentComments];
-        [[comment post] setCommentCount:currentCount];
+        [p setCommentCount:[p commentCount] + 1];
+        [[p mutableSetValueForKey:@"comments"] addObject:comment];
+        [[[STKUserStore store] context] save:nil];
     };
-    
-    NSArray *comments = [[[comment post] comments] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"commentID != %@", [comment commentID]]];
-    [[comment post] setComments:comments];
-    [[comment post] setCommentCount:[[comment post] commentCount] - 1];
-    
+        
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
             reversal();
@@ -499,15 +592,18 @@ NSString * const STKContentEndpointPost = @"/posts";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[[comment post] postID], @"comments", [comment commentID]]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID]
+        [c setIdentifiers:@[[p uniqueID], @"comments", [comment uniqueID]]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID]
                   forKey:@"creator"];
         
         [c deleteWithSession:[self session] completionBlock:^(id comments, NSError *err) {
             if(err) {
                 reversal();
+            } else {
+                [[[STKUserStore store] context] deleteObject:comment];
+                [[[STKUserStore store] context] save:nil];
             }
-            block([comment post], err);
+            block(p, err);
         }];
         
     }];
@@ -516,14 +612,14 @@ NSString * const STKContentEndpointPost = @"/posts";
 - (void)fetchRecommendedHashtags:(NSString *)baseString
                       completion:(void (^)(NSArray *suggestions))block
 {
-    NSArray *basics = @[@"football", @"prism", @"family",
-                        @"school", @"education", @"altruism",
-                        @"wisconsin", @"volunteer", @"pride"];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"title beginswith %@", baseString];
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKHashTag"];
+    [req setPredicate:p];
+    [req setFetchLimit:5];
     
-    NSArray *matches = [basics filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self beginswith %@", baseString]];
-    
+    NSArray *results = [[[STKUserStore store] context] executeFetchRequest:req error:nil];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        block(matches);
+        block(results);
     }];
 }
 
@@ -536,9 +632,9 @@ NSString * const STKContentEndpointPost = @"/posts";
         }
 
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[[[[STKUserStore store] currentUser] userID], @"posts"]];
+        [c setIdentifiers:@[[[[STKUserStore store] currentUser] uniqueID], @"posts"]];
         
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
@@ -552,14 +648,16 @@ NSString * const STKContentEndpointPost = @"/posts";
             [c addQueryValue:STKPostVisibilityPrivate forKey:STKPostVisibilityKey];
         }
         
-        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+        [c setContext:[[STKUserStore store] context]];
+        [c setModelGraph:@[@"STKPost"]];
+        
+        [c postWithSession:[self session] completionBlock:^(STKPost *post, NSError *err) {
             if(!err) {
-                
-            } else {
-            
+                [post setFInverseFeed:[[STKUserStore store] currentUser]];
+                [[[STKUserStore store] context] save:nil];
             }
-            
-            block(obj, err);
+
+            block(post, err);
         }];
     }];
 }
@@ -573,17 +671,17 @@ NSString * const STKContentEndpointPost = @"/posts";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[p postID]]];
+        [c setIdentifiers:@[[p uniqueID]]];
         
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
         }
-//        [c setModelGraph:@[p]];
+        [c setModelGraph:@[p]];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(!err) {
-                
+                [[[STKUserStore store] context] save:nil];
             } else {
                 
             }
@@ -601,14 +699,16 @@ NSString * const STKContentEndpointPost = @"/posts";
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[post postID], @"comments"]];
-        [c addQueryValue:[[[STKUserStore store] currentUser] userID] forKey:@"creator"];
-        [c setModelGraph:@[@{@"comments": @[[STKPostComment class]]}]];
+        [c setIdentifiers:@[[post uniqueID], @"comments"]];
+        [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
+        [c setModelGraph:@[@{@"comments": @[@"STKPostComment"]}]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c setContext:[[STKUserStore store] context]];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *comments, NSError *err) {
-            
             if(!err) {
-                NSArray *allComments = [comments objectForKey:@"comments"];
-                [post setComments:allComments];
+                [post setComments:[NSSet setWithArray:[comments objectForKey:@"comments"]]];
+                
+                [[[STKUserStore store] context] save:nil];
             } else {
                 
             }
@@ -625,9 +725,15 @@ NSString * const STKContentEndpointPost = @"/posts";
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[[postComment post] postID], @"comments", [postComment commentID], @"likes"]];
-        [c setModelGraph:@[@{@"likes": @[[STKUser class]]}]];
+        [c setIdentifiers:@[[[postComment post] uniqueID], @"comments", [postComment uniqueID], @"likes"]];
+        [c setModelGraph:@[@{@"likes": @[@"STKUser"]}]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[[STKUserStore store] context]];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            if(!err) {
+                [postComment setLikes:[NSSet setWithArray:[obj objectForKey:@"likes"]]];
+                [[[STKUserStore store] context] save:nil];
+            }
             block([obj objectForKey:@"likes"], err);
         }];
     }];

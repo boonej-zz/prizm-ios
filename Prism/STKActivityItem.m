@@ -12,7 +12,7 @@
 
 @implementation STKActivityItem
 
-@dynamic userID;
+@dynamic uniqueID;
 @dynamic userName;
 @dynamic profileImageURLString;
 @dynamic recent;

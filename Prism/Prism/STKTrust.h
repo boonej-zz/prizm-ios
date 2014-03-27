@@ -17,17 +17,15 @@ extern NSString * const STKRequestStatusRejected;
 extern NSString * const STKRequestStatusCancelled;
 
 
-@interface STKTrust : NSObject <STKJSONObject>
+@interface STKTrust : NSManagedObject <STKJSONObject>
 
-@property (nonatomic, strong) NSString *trustID;
+@property (nonatomic, strong) NSString *uniqueID;
 @property (nonatomic, strong) NSString *status;
-@property (nonatomic, strong) STKUser *otherUser;
 @property (nonatomic, strong) NSDate *dateCreated;
 
-@property (nonatomic, weak) STKUser *owningUser;
+@property (nonatomic, strong) STKUser *owningUser;
+@property (nonatomic, strong) STKUser *otherUser;
 
-// Don't use this flag AFAIK
-@property (nonatomic) BOOL isOwner;
 
 - (BOOL)currentUserIsOwner;
 - (BOOL)isPending;

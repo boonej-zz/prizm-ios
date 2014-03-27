@@ -79,7 +79,12 @@ typedef enum {
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_explore"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
         
+        _recentPostsController = [[STKPostController alloc] initWithViewController:self];
         
+        _popularPostsController = [[STKPostController alloc] initWithViewController:self];
+        [_popularPostsController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO],
+                                                      [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+
         
         _filterPostOptions = @[
                                @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"btn_cloud_aspirations"]},
@@ -198,11 +203,6 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    _recentPostsController = [[STKPostController alloc] initWithViewController:self];
-    
-    _popularPostsController = [[STKPostController alloc] initWithViewController:self];
-    [_popularPostsController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO],
-                                                  [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
 
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
@@ -251,7 +251,6 @@ typedef enum {
                                                    
                                                    [[self tableView] reloadData];
                                                }];
-
 }
 
 - (void)configureSearchArea
@@ -263,7 +262,7 @@ typedef enum {
     // 'On state'
     UIGraphicsBeginImageContext(CGSizeMake(1, 1));
     //[[UIColor colorWithRed:0.86 green:0.87 blue:.92 alpha:0.3] set];
-    [[UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.4] set];
+    [[UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.5] set];
     UIRectFill(CGRectMake(0, 0, 1, 1));
     [[self exploreTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
                                          forState:UIControlStateSelected

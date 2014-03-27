@@ -28,6 +28,12 @@
     self = [super init];
     if(self) {
         _posts = [[NSMutableArray alloc] init];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(mocUpdated:)
+                                                     name:STKContentStorePostDeletedNotification
+                                                   object:nil];
+        
         [self setDelegate:viewController];
         [self setViewController:viewController];
         [self setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
@@ -35,9 +41,15 @@
     return self;
 }
 
+- (void)mocUpdated:(NSNotification *)note
+{
+    STKPost *deletedPost = [[note userInfo] objectForKey:STKContentStorePostDeletedKey];
+    [[self posts] removeObject:deletedPost];
+}
+
 - (void)addPosts:(NSArray *)posts
 {
-    NSArray *dupes = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"postID in %@", [posts valueForKey:@"postID"]]];
+    NSArray *dupes = [[self posts] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uniqueID in %@", [posts valueForKey:@"uniqueID"]]];
     [[self posts] removeObjectsInArray:dupes];
     
     [[self posts] addObjectsFromArray:posts];
@@ -189,7 +201,7 @@
                                          }];
         [[[self viewController] navigationController] pushViewController:vc animated:YES];
     } else {
-        if([post postLikedByCurrentUser]) {
+        if([post isPostLikedByUser:[[STKUserStore store] currentUser]]) {
             [[STKContentStore store] unlikePost:post
                                      completion:^(STKPost *p, NSError *err) {/*
                                          [[self tableView] reloadRowsAtIndexPaths:@[ip]
@@ -207,6 +219,10 @@
                                 withRowAnimation:UITableViewRowAnimationNone];*/
         
     }
+}
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

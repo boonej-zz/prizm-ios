@@ -242,7 +242,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
-        if([obj isKindOfClass:[STKPost class]] && [obj respondsToSelector:@selector(postID)]) {
+        if([obj isKindOfClass:[STKPost class]] && [obj respondsToSelector:@selector(uniqueID)]) {
             [self setCurrentPost:(STKPost *)obj];
         }
     }

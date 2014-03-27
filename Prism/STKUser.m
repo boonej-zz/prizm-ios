@@ -35,110 +35,76 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 
 
 @implementation STKUser
+@dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
+state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
+followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
+accountStoreID;
+@synthesize profilePhoto, coverPhoto, token, secret, password;
+
 
 - (NSString *)name
 {
     return [NSString stringWithFormat:@"%@ %@", [self firstName], [self lastName]];
 }
 
-
-- (id)initWithCoder:(NSCoder *)coder
-{
-    self = [super init];
-    if(self) {
-        decodeObject(_birthday);
-        decodeObject(_userID);
-        decodeObject(_firstName);
-        decodeObject(_lastName);
-        decodeObject(_zipCode);
-        decodeObject(_email);
-        decodeObject(_gender);
-        decodeObject(_city);
-        decodeObject(_state);
-        decodeObject(_coverPhotoPath);
-        decodeObject(_profilePhotoPath);
-        decodeObject(_externalServiceType);
-        decodeObject(_accountStoreID);
-        
-        _followerCount = [coder decodeIntForKey:@"_followerCount"];
-        _followingCount = [coder decodeIntForKey:@"_followingCount"];
-        _postCount = [coder decodeIntForKey:@"_postCount"];
-    }
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)coder
-{
-    encodeObject(_birthday);
-    encodeObject(_userID);
-    encodeObject(_firstName);
-    encodeObject(_lastName);
-    encodeObject(_zipCode);
-    encodeObject(_email);
-    encodeObject(_gender);
-    encodeObject(_city);
-    encodeObject(_state);
-    encodeObject(_coverPhotoPath);
-    encodeObject(_profilePhotoPath);
-    encodeObject(_externalServiceType);
-    encodeObject(_accountStoreID);
-    
-    [coder encodeInt:_followingCount forKey:@"_followingCount"];
-    [coder encodeInt:_followerCount forKey:@"_followerCount"];
-    [coder encodeInt:_postCount forKey:@"_postCount"];
-}
-
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
+    if([jsonObject isKindOfClass:[NSString class]]) {
+        [self bindFromDictionary:@{@"_id" : jsonObject} keyMap:@{@"_id" : @"uniqueID"}];
+        return nil;
+    }
+    
     [self bindFromDictionary:jsonObject keyMap:
     @{
-        @"_id" : @"userID",
+        @"_id" : @"uniqueID",
+        @"city" : @"city",
         @"email" : @"email",
-        @"gender" : @"gender",
         @"first_name" : @"firstName",
         @"last_name" : @"lastName",
-        @"zip_postal" : @"zipCode",
-        @"city" : @"city",
+
+        @"provider" : @"externalServiceType",
+        @"provider_id" : @"externalServiceID",
+        
         @"state" : @"state",
+        @"zip_postal" : @"zipCode",
+        @"gender" : @"gender",
+        
+        @"info" : @"blurb",
+        @"website" : @"website",
+
+        STKUserProfilePhotoURLStringKey : @"profilePhotoPath",
+        STKUserCoverPhotoURLStringKey : @"coverPhotoPath",
+
+        @"religion" : @"religion",
+        @"ethnicity" : @"ethnicity",
+        
         @"followers_count" : @"followerCount",
         @"following_count" : @"followingCount",
         @"posts_count" : @"postCount",
-        @"provider" : @"externalServiceType",
-        @"info" : @"blurb",
-        @"website" : @"website",
-        STKUserProfilePhotoURLStringKey : @"profilePhotoPath",
-        STKUserCoverPhotoURLStringKey : @"coverPhotoPath",
-        @"birthday" : ^(id inValue) {
+
+        @"trusts" : @{@"key" : @"ownedTrusts", @"match" : @{@"uniqueID" : @"_id"}},
+        @"followers" : @{@"key" : @"followers", @"match" : @{@"uniqueID" : @"_id"}},
+        @"following" : @{@"key" : @"following", @"match" : @{@"uniqueID" : @"_id"}},
+        
+        @"birthday" : ^(NSString *inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
             [df setDateFormat:@"MM-dd-yyyy"];
             [self setBirthday:[df dateFromString:inValue]];
+        },
+        @"date_created" : ^(NSString *inValue) {
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+            [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+            [self setDateCreated:[df dateFromString:inValue]];
         }
     }];
-    
-    NSString *currentUserID = [[[STKUserStore store] currentUser] userID];
-    
-    BOOL isFollower = [[[jsonObject objectForKey:@"followers"] valueForKey:@"_id"] containsObject:currentUserID];
-    [self setIsFollowedByCurrentUser:isFollower];
-    
-    BOOL isFollowing = [[[jsonObject objectForKey:@"following"] valueForKey:@"_id"] containsObject:currentUserID];
-    [self setIsFollowingCurrentUser:isFollowing];
-    
-    if(![self trusts])
-        [self setTrusts:[[NSMutableArray alloc] init]];
-    
-    for(NSDictionary *d in [jsonObject objectForKey:@"trusts"]) {
-        STKTrust *t = [[STKTrust alloc] init];
-        [t readFromJSONObject:d];
-        [[self trusts] addObject:t];
-        [t setOwningUser:self];
-    }
-    
+
     return nil;
 }
 
 - (STKTrust *)trustForUser:(STKUser *)u
 {
-    for(STKTrust *t in [self trusts]) {
+    for(STKTrust *t in [self ownedTrusts]) {
         if([[t otherUser] isEqual:u]) {
             return t;
         }
@@ -146,15 +112,17 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
     return nil;
 }
 
-- (BOOL)isEqual:(id)object
+- (BOOL)isFollowedByUser:(STKUser *)u
 {
-    if([object isKindOfClass:[STKUser class]]) {
-        if([[(STKUser *)object userID] isEqualToString:[self userID]])
-            return YES;
-    }
-    return NO;
+    return [[self followers] member:u] != nil;
 }
 
+- (BOOL)isFollowingUser:(STKUser *)u
+{
+    return [[self following] member:u] != nil;
+}
+
+/////
 
 - (void)setValuesFromFacebook:(NSDictionary *)d
 {

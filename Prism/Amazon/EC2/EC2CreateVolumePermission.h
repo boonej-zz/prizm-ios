@@ -23,7 +23,7 @@
 @interface EC2CreateVolumePermission:NSObject
 
 {
-    NSString *userId;
+    NSString *uniqueID;
     NSString *group;
 }
 
@@ -39,7 +39,7 @@
 /**
  * The user ID of the user that can create volumes from the snapshot.
  */
-@property (nonatomic, retain) NSString *userId;
+@property (nonatomic, retain) NSString *uniqueID;
 
 /**
  * The group that is allowed to create volumes from the snapshot

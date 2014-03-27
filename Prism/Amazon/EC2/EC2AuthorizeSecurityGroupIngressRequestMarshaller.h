@@ -22,7 +22,7 @@
 #import "EC2Request.h"
 #import "EC2AuthorizeSecurityGroupIngressRequest.h"
 #import "EC2IpPermission.h"
-#import "EC2UserIdGroupPair.h"
+#import "EC2uniqueIDGroupPair.h"
 
 
 /**

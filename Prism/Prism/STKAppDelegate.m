@@ -41,12 +41,16 @@
     
     [self configureAppearanceProxies];
     
+    
+    STKUser *u =[[STKUserStore store] currentUser];
+    
     UIViewController *hvc = [[STKHomeViewController alloc] init];
     UIViewController *evc = [[STKExploreViewController alloc] init];
     UIViewController *tvc = [[STKTrustViewController alloc] init];
     UIViewController *pvc = [[STKProfileViewController alloc] init];
     UIViewController *avc = [[STKActivityViewController alloc] init];
     UIViewController *gvc = [[STKGraphViewController alloc] init];
+
 
     STKMenuController *nvc = [[STKMenuController alloc] init];
     [nvc setViewControllers:@[
@@ -68,8 +72,9 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
+    
 
-    if(![[STKUserStore store] currentUser]) {
+    if(!u) {
         STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
         STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
         

@@ -427,9 +427,12 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         
         id obj = nil;
         if([node isKindOfClass:[NSString class]]) {
-            if([self context])
-                obj = [self instanceOfEntityForName:node data:incomingData];
-            else
+            if([self context]) {
+                obj = [[self context] instanceForEntityName:node
+                                                     object:incomingData
+                                                   matchMap:[self existingMatchMap]
+                                              alreadyExists:nil];
+            } else
                 obj = [[NSClassFromString(node) alloc] init];
         } else if ([node class] == node) {
             obj = [[node alloc] init];
@@ -454,7 +457,10 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         return [self jsonRootObject];
     } else if ([self entityName]) {
         
-        id obj = [self instanceOfEntityForName:[self entityName] data:incomingData];
+        id obj = [[self context] instanceForEntityName:[self entityName]
+                                                object:incomingData
+                                              matchMap:[self existingMatchMap]
+                                         alreadyExists:nil];
         
         *err = [obj readFromJSONObject:incomingData];
         
@@ -463,33 +469,6 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     return incomingData;
 }
 
-- (NSManagedObject <STKJSONObject> *)instanceOfEntityForName:(NSString *)name data:(id)incomingData
-{
-    if(![self context]) {
-        @throw [NSException exceptionWithName:@"STKConnection No Context" reason:@"Trying to instantiate entity without context" userInfo:nil];
-    }
-    
-    id obj = nil;
-    if([self existingMatchMap]) {
-        NSMutableArray *predicates = [NSMutableArray array];
-        for(NSString *key in [self existingMatchMap]) {
-            NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %@", key, [incomingData valueForKeyPath:[[self existingMatchMap] objectForKey:key]]];
-            [predicates addObject:p];
-        }
-        NSPredicate *p = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
-        NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:name];
-        [req setPredicate:p];
-        
-        NSArray *results = [[self context] executeFetchRequest:req error:nil];
-        obj = [results firstObject];
-    }
-    
-    if(!obj) {
-        obj = [NSEntityDescription insertNewObjectForEntityForName:name
-                                            inManagedObjectContext:[self context]];
-    }
-    return obj;
-}
 
 
 + (void)cancelAllConnections {

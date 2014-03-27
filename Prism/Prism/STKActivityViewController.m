@@ -69,7 +69,8 @@ typedef enum {
 
     // 'On state'
     UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.4] set];    UIRectFill(CGRectMake(0, 0, 1, 1));
+    [[UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.5] set];
+    UIRectFill(CGRectMake(0, 0, 1, 1));
     [[self activityTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
                                          forState:UIControlStateSelected
                                        barMetrics:UIBarMetricsDefault];

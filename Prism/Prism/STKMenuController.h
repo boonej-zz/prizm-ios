@@ -18,7 +18,7 @@
 @property (nonatomic, strong) UIViewController *selectedViewController;
 @property (nonatomic, getter = isMenuVisible) BOOL menuVisible;
 
-
+@property (nonatomic, readonly) UIImage *transitioningImage;
 
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
 
@@ -28,7 +28,5 @@
               usingImage:(UIImage *)image
         inViewController:(UIViewController *)vc
                 animated:(BOOL)animated;
-
-- (void)completeTransitionToPostViewController;
 
 @end

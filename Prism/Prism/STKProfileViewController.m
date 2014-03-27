@@ -61,6 +61,7 @@ typedef enum {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
+        _postController = [[STKPostController alloc] initWithViewController:self];
     }
     return self;
 }
@@ -73,7 +74,7 @@ typedef enum {
 
 - (BOOL)isShowingCurrentUserProfile
 {
-    return [[[self profile] userID] isEqualToString:[[[STKUserStore store] currentUser] userID]];
+    return [[[self profile] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -164,7 +165,7 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    _postController = [[STKPostController alloc] initWithViewController:self];
+    
 
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
 
@@ -280,7 +281,7 @@ typedef enum {
         // This trust object is the currently showing user's trust object, so the properties
         // related to the trust object are not from the vantage point of the current user.
         
-        if(![t isOwner]) {
+        if(![[t owningUser] isEqual:[self profile]]) {
             // Cancel
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
                 [self refreshStatisticsView];
@@ -293,7 +294,7 @@ typedef enum {
 
         }
     } else if([t isRejected]) {
-        if(![t isOwner]) {
+        if(![[t owningUser] isEqual:[self profile]]) {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
                 [self refreshStatisticsView];
             }];
@@ -316,7 +317,7 @@ typedef enum {
 
 - (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    if([[self profile] isFollowedByCurrentUser]) {
+    if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
         [[STKUserStore store] unfollowUser:[self profile] completion:^(id obj, NSError *err) {
             [self refreshStatisticsView];
         }];
@@ -366,7 +367,7 @@ typedef enum {
     } else {
         [[c accoladesButton] setHidden:YES];
         [[c followButton] setHidden:NO];
-        if([[self profile] isFollowedByCurrentUser]) {
+        if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
             [[c followButton] setTitle:@"Following" forState:UIControlStateNormal];
             [[c followButton] setImage:[UIImage imageNamed:@"reject"]
                               forState:UIControlStateNormal];
@@ -387,7 +388,7 @@ typedef enum {
             [[c trustButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 95, 0, 0)];
         } else {
             if([t isPending]) {
-                if(![t isOwner]) {
+                if(![[t owningUser] isEqual:[self profile]]) {
                     [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
                     [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
                 } else {
@@ -395,7 +396,7 @@ typedef enum {
                     [[c trustButton] setImage:[UIImage imageNamed:@"activity_accept_trust"] forState:UIControlStateNormal];
                 }
             } else if([t isRejected]) {
-                if([t isOwner]) {
+                if([[t owningUser] isEqual:[self profile]]) {
                     [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
                     [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
                 } else {

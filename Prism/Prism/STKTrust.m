@@ -17,33 +17,28 @@ NSString * const STKRequestStatusCancelled = @"cancelled";
 
 
 @implementation STKTrust
+@dynamic uniqueID, status, dateCreated, owningUser, otherUser;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
-    NSDictionary *t = (NSDictionary *)jsonObject;
-    [self setTrustID:[t objectForKey:@"_id"]];
-    [self setStatus:[t objectForKey:@"status"]];
-    
-    if([[t objectForKey:@"user_id"] isKindOfClass:[NSDictionary class]]) {
-        STKUser *u = [[STKUser alloc] init];
-        [u readFromJSONObject:[t objectForKey:@"user_id"]];
-        [self setOtherUser:u];
-    } else {
-        // This is a temporary hack, remove once fixed.
-        STKUser *u = [[STKUser alloc] init];
-        [u setUserID:[t objectForKey:@"user_id"]];
-        [self setOtherUser:u];
-    }
-    
     static NSDateFormatter *df = nil;
     if(!df) {
         df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     }
-    [self setDateCreated:[df dateFromString:[t objectForKey:@"create_date"]]];
+
+    [self bindFromDictionary:jsonObject keyMap:@{
+                                                 @"_id" : @"uniqueID",
+                                                 @"status" : @"status",
+                                                 @"user_id" : @{@"key" : @"otherUser", @"match" : @{@"uniqueID" : @"_id"}},
+                                                 @"create_date" : ^(NSString *inValue) {
+                                                     [self setDateCreated:[df dateFromString:inValue]];
+                                                 },
+                                                 
+    }];
     
-    [self setIsOwner:[[jsonObject objectForKey:@"is_owner"] boolValue]];
+//    [self setIsOwner:[[jsonObject objectForKey:@"is_owner"] boolValue]];
     
     return nil;
 }

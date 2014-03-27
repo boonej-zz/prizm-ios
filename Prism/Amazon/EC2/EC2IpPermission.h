@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-#import "EC2UserIdGroupPair.h"
+#import "EC2uniqueIDGroupPair.h"
 
 
 
@@ -27,7 +27,7 @@
     NSString       *ipProtocol;
     NSNumber       *fromPort;
     NSNumber       *toPort;
-    NSMutableArray *userIdGroupPairs;
+    NSMutableArray *uniqueIDGroupPairs;
     NSMutableArray *ipRanges;
 }
 
@@ -63,7 +63,7 @@
 /**
  * The list of AWS user IDs and groups included in this permission.
  */
-@property (nonatomic, retain) NSMutableArray *userIdGroupPairs;
+@property (nonatomic, retain) NSMutableArray *uniqueIDGroupPairs;
 
 /**
  * The list of CIDR IP ranges included in this permission.
@@ -71,10 +71,10 @@
 @property (nonatomic, retain) NSMutableArray *ipRanges;
 
 /**
- * Adds a single object to userIdGroupPairs.
- * This function will alloc and init userIdGroupPairs if not already done.
+ * Adds a single object to uniqueIDGroupPairs.
+ * This function will alloc and init uniqueIDGroupPairs if not already done.
  */
--(void)addUserIdGroupPair:(EC2UserIdGroupPair *)userIdGroupPairObject;
+-(void)adduniqueIDGroupPair:(EC2uniqueIDGroupPair *)uniqueIDGroupPairObject;
 
 /**
  * Adds a single object to ipRanges.

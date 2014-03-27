@@ -39,54 +39,64 @@ extern NSString * const STKUserCoverPhotoURLStringKey;
 extern NSString * const STKUserProfilePhotoURLStringKey;
 
 
-@interface STKUser : NSObject <STKJSONObject, NSCoding>
+@interface STKUser : NSManagedObject <STKJSONObject>
 
-@property (nonatomic) NSString *userID;
+@property (nonatomic) NSString *uniqueID;
 
 @property (nonatomic, retain) NSDate *birthday;
+@property (nonatomic, strong) NSString *city;
+@property (nonatomic, strong) NSDate *dateCreated;
+@property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *firstName;
 @property (nonatomic, retain) NSString *lastName;
-@property (nonatomic, retain) NSString *zipCode;
-@property (nonatomic, retain) NSString *email;
-@property (nonatomic, retain) NSString *gender;
-@property (nonatomic, strong) NSString *city;
+
+@property (nonatomic, strong) NSString *externalServiceType;
+@property (nonatomic, strong) NSString *externalServiceID;
+
 @property (nonatomic, strong) NSString *state;
+@property (nonatomic, retain) NSString *zipCode;
+@property (nonatomic, retain) NSString *gender;
 
 @property (nonatomic, strong) NSString *blurb;
 @property (nonatomic, strong) NSString *website;
-@property (nonatomic, strong) NSMutableArray *trusts;
 
 @property (nonatomic, strong) NSString *coverPhotoPath;
 @property (nonatomic, strong) NSString *profilePhotoPath;
 
-@property (nonatomic, strong) NSString *externalServiceID;
-@property (nonatomic, strong) NSString *externalServiceType;
-@property (nonatomic, strong) NSString *accountStoreID;
+@property (nonatomic, strong) NSString *religion;
+@property (nonatomic, strong) NSString *ethnicity;
 
 @property (nonatomic) int followerCount;
 @property (nonatomic) int followingCount;
 @property (nonatomic) int postCount;
 
-@property (nonatomic) BOOL isFollowedByCurrentUser;
-@property (nonatomic) BOOL isFollowingCurrentUser;
+@property (nonatomic, strong) NSSet *ownedTrusts;
+@property (nonatomic, strong) NSSet *receivedTrusts;
+@property (nonatomic, strong) NSSet *followers;
+@property (nonatomic, strong) NSSet *following;
+@property (nonatomic, strong) NSSet *comments;
+@property (nonatomic, strong) NSSet *createdPosts;
+@property (nonatomic, strong) NSSet *likedComments;
+@property (nonatomic, strong) NSSet *likedPosts;
+@property (nonatomic, strong) NSSet *fFeedPosts;
+
+@property (nonatomic, strong) NSString *accountStoreID;
 
 - (NSString *)name;
 - (STKTrust *)trustForUser:(STKUser *)u;
+- (BOOL)isFollowedByUser:(STKUser *)u;
+- (BOOL)isFollowingUser:(STKUser *)u;
 
-
-// For auth/creating
+// For auth/creating - not stored, used only for creating a user.
 @property (nonatomic, strong) UIImage *profilePhoto;
 @property (nonatomic, strong) UIImage *coverPhoto;
-
 @property (nonatomic, strong) NSString *token;
 @property (nonatomic, strong) NSString *secret;
-
 @property (nonatomic, strong) NSString *password;
 
 - (void)setValuesFromFacebook:(NSDictionary *)vals;
 - (void)setValuesFromTwitter:(NSArray *)vals;
 - (void)setValuesFromGooglePlus:(GTLPlusPerson *)vals;
-
 
 @end
 

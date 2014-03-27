@@ -14,7 +14,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "EC2UserIdGroupPair.h"
+#import "EC2uniqueIDGroupPair.h"
 #import "EC2ResponseUnmarshaller.h"
 #ifdef AWS_MULTI_FRAMEWORK
 #import <AWSRuntime/AmazonValueUnmarshaller.h>
@@ -28,12 +28,12 @@
 /**
  * User Id Group Pair Unmarshaller
  */
-@interface EC2UserIdGroupPairUnmarshaller:EC2ResponseUnmarshaller {
-    EC2UserIdGroupPair *response;
+@interface EC2uniqueIDGroupPairUnmarshaller:EC2ResponseUnmarshaller {
+    EC2uniqueIDGroupPair *response;
 }
 
 
-@property (nonatomic, readonly) EC2UserIdGroupPair *response;
+@property (nonatomic, readonly) EC2uniqueIDGroupPair *response;
 
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict;

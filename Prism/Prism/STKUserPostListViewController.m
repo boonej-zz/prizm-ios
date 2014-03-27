@@ -30,7 +30,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
-        
+        _postController = [[STKPostController alloc] initWithViewController:self];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
     }
     return self;
@@ -87,7 +87,7 @@
 {
     [super viewDidLoad];
     
-    _postController = [[STKPostController alloc] initWithViewController:self];
+    
 
     
     [[self tableView] setRowHeight:106];

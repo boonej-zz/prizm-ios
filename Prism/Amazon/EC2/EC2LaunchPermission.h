@@ -23,7 +23,7 @@
 @interface EC2LaunchPermission:NSObject
 
 {
-    NSString *userId;
+    NSString *uniqueID;
     NSString *group;
 }
 
@@ -39,7 +39,7 @@
 /**
  * The AWS user ID of the user involved in this launch permission.
  */
-@property (nonatomic, retain) NSString *userId;
+@property (nonatomic, retain) NSString *uniqueID;
 
 /**
  * The AWS group of the user involved in this launch permission. <p>

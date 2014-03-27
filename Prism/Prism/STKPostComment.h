@@ -10,17 +10,17 @@
 #import "STKJSONObject.h"
 @class STKUser, STKPost;
 
-@interface STKPostComment : NSObject <STKJSONObject>
+@interface STKPostComment : NSManagedObject <STKJSONObject>
 
-@property (nonatomic, strong) NSString *commentID;
-@property (nonatomic, strong) STKUser *creator;
+@property (nonatomic, strong) NSString *uniqueID;
 @property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSDate *date;
-@property (nonatomic, weak) STKPost *post;
 @property (nonatomic) int likeCount;
 
-@property (nonatomic, strong) NSSet *userLikes;
+@property (nonatomic, strong) STKUser *creator;
+@property (nonatomic, strong) NSSet *likes;
+@property (nonatomic, strong) STKPost *post;
 
-@property (nonatomic, getter = isLikedByCurrentUser) BOOL likedByCurrentUser;
+- (BOOL)isLikedByUser:(STKUser *)u;
 
 @end

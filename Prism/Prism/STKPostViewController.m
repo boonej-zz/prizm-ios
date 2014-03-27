@@ -50,6 +50,7 @@
 @property (nonatomic) BOOL editingPostText;
 
 @property (nonatomic, strong) STKPostController *postController;
+@property (nonatomic, strong) NSMutableArray *comments;
 
 - (IBAction)postComment:(id)sender;
 
@@ -66,6 +67,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
+        [self setComments:[[NSMutableArray alloc] init]];
+        _postController = [[STKPostController alloc] initWithViewController:self];
 
     }
     return self;
@@ -75,6 +78,14 @@
 {
     _post = post;
     [[self postController] addPosts:@[post]];
+    [self extractComments];
+}
+
+- (void)extractComments
+{
+    [self setComments:[[[[self post] comments] allObjects] mutableCopy]];
+    [[self comments] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES]]];
+
 }
 
 - (BOOL)postHasText
@@ -102,9 +113,10 @@
     if([self postHasText]) {
         index --;
     }
-    
-    if(index >= 0 && index < [[[self post] comments] count])
-        return [[[self post] comments] objectAtIndex:index];
+
+    if(index >= 0 && index < [[self comments] count]) {
+        return [[self comments] objectAtIndex:index];
+    }
     
     return nil;
 }
@@ -121,7 +133,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-    if([[URL scheme] isEqualToString:@"http"]) {
+    if([[URL scheme] isEqualToString:@"http"] || [[URL scheme] isEqualToString:@"https"]) {
         STKWebViewController *wvc = [[STKWebViewController alloc] init];
         [wvc setUrl:URL];
         [self presentViewController:wvc animated:YES completion:nil];
@@ -149,7 +161,6 @@
 {
     [super viewDidLoad];
 
-    _postController = [[STKPostController alloc] initWithViewController:self];
 
     
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
@@ -196,15 +207,11 @@
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setDisplayFullBleed:YES];
     [[c contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
-    __weak STKPostViewController *weakSelf = self;
-    [[c contentImageView] setImageResolvedCompletion:^(BOOL success) {
-        if(success) {
-            [[weakSelf menuController] completeTransitionToPostViewController];
-        }
-    }];
     [c populateWithPost:[self post]];
     [self setPostCell:c];
-    
+
+    [[c contentImageView] setImage:[[self menuController] transitioningImage]];
+
     if([self isMovingToParentViewController])
         [[[self postCell] contentImageView] setHidden:YES];
     
@@ -349,7 +356,7 @@
 
 - (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingCommentsAtIndex:(int)idx
 {
-    if([[[self post] comments] count] > 0) {
+    if([[self comments] count] > 0) {
         [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]
                                 atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
@@ -384,7 +391,7 @@
 - (void)toggleCommentLike:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKPostComment *pc = [self commentForIndexPath:ip];
-    if([pc isLikedByCurrentUser]) {
+    if([pc isLikedByUser:[[STKUserStore store] currentUser]]) {
         [[STKContentStore store] unlikeComment:pc
                                     completion:^(STKPostComment *p, NSError *err) {
                                         [[self tableView] reloadData];
@@ -421,11 +428,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     if(editingStyle == UITableViewCellEditingStyleDelete) {
         STKPostComment *pc = [self commentForIndexPath:indexPath];
         [[STKContentStore store] deleteComment:pc completion:^(STKPost *p, NSError *err) {
+            [self extractComments];
             [[self tableView] reloadData];
         }];
+        [self extractComments];
         [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [[self tableView] reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-                                withRowAnimation:UITableViewRowAnimationNone];
+        [[self postCell] populateWithPost:[[[self postController] posts] firstObject]];
     }
 }
 
@@ -536,7 +544,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     if(section == 0)
         return 1;
     
-    NSInteger count = [[[self post] comments] count];
+    NSInteger count = [[self comments] count];
     if([self postHasText])
         count ++;
     
@@ -569,7 +577,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             [[c nameLabel] setText:[[comment creator] name]];
             
             NSString *likeActionText = @"Like";
-            if([comment isLikedByCurrentUser]) {
+            if([comment isLikedByUser:[[STKUserStore store] currentUser]]) {
                 likeActionText = @"Unlike";
             }
             [[c timeLabel] setText:[NSString stringWithFormat:@"%@ - %@", [STKRelativeDateConverter relativeDateStringFromDate:[comment date]], likeActionText]];
@@ -598,9 +606,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     if([self editingPostText]) {
         [self setEditingPostText:NO];
         
+        [STKProcessingView present];
         [[STKContentStore store] editPost:[self post]
-                                 withInfo:@{@"text" : [[self commentTextField] text]}
+                                 withInfo:@{STKPostTextKey : [[self commentTextField] text]}
                                completion:^(STKPost *p, NSError *err) {
+                                   [STKProcessingView dismiss];
                                    [[self tableView] reloadData];
                                }];
         
@@ -609,15 +619,19 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     } else {
         
         [[STKContentStore store] addComment:[[self commentTextField] text] toPost:[self post] completion:^(STKPost *p, NSError *err) {
+            [self extractComments];
             if(err) {
                 [[self postCell] populateWithPost:[self post]];
             }
         }];
+        
+        [self extractComments];
+
         [[self postCell] populateWithPost:[self post]];
         [[self commentTextField] setText:nil];
         [[self view] endEditing:YES];
 
-        int index = [[[self post] comments] count] - 1;
+        int index = [[self comments] count] - 1;
         if([self postHasText]) {
             index ++;
         }

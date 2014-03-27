@@ -10,6 +10,7 @@
 #import "STKPost.h"
 #import "STKRelativeDateConverter.h"
 #import "STKAvatarView.h"
+#import "STKUserStore.h"
 
 @interface STKPostCell ()
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
@@ -66,7 +67,7 @@
     else
         [[self likeCountLabel] setText:[NSString stringWithFormat:@"%d", [p likeCount]]];
     
-    [[self likeButton] setSelected:[p postLikedByCurrentUser]];
+    [[self likeButton] setSelected:[p isPostLikedByUser:[[STKUserStore store] currentUser]]];
     
     if([p locationName]) {
         [[self locationButton] setImage:[UIImage imageNamed:@"action_pin_selected"]

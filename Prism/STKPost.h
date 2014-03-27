@@ -13,6 +13,8 @@
 
 @import CoreLocation;
 
+@class STKPost;
+
 extern NSString * const STKPostTypeAspiration;
 extern NSString * const STKPostTypeInspiration;
 extern NSString * const STKPostTypeExperience;
@@ -37,30 +39,33 @@ extern NSString * const STKPostOriginIDKey;
 
 extern NSString * const STKPostStatusDeleted;
 
-@interface STKPost : NSObject <STKJSONObject>
+@interface STKPost : NSManagedObject <STKJSONObject>
 
-@property (nonatomic, strong) NSString *postID;
-@property (nonatomic, strong) NSString *text;
-
+@property (nonatomic, strong) NSString *uniqueID;
+@property (nonatomic) NSString *type;
+@property (nonatomic, strong) NSDate *datePosted;
+@property (nonatomic, retain) NSString *imageURLString;
 @property (nonatomic, strong) NSString *locationName;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
-
-@property (nonatomic, strong) STKUser *creator;
-
-@property (nonatomic, strong) NSDate *datePosted;
-@property (nonatomic, strong) NSString *referenceTimestamp;
-
-@property (nonatomic, retain) NSString *imageURLString;
-
+@property (nonatomic, strong) NSString *visibility;
 @property (nonatomic, strong) NSString *status;
+@property (nonatomic, getter = isRepost) BOOL repost;
+@property (nonatomic, strong) NSString *text;
+@property (nonatomic, strong) NSString *referenceTimestamp;
+//@property (nonatomic, strong) NSString *targetID;
 
-@property (nonatomic) NSString *type;
 @property (nonatomic) int commentCount;
 @property (nonatomic) int likeCount;
-@property (nonatomic) BOOL postLikedByCurrentUser;
 
-@property (nonatomic, strong) NSArray *hashTags;
-@property (nonatomic, strong) NSArray *comments;
+@property (nonatomic, strong) STKUser *creator;
+@property (nonatomic, strong) STKPost *originalPost;
+
+@property (nonatomic, strong) NSSet *likes;
+@property (nonatomic, strong) NSSet *hashTags;
+@property (nonatomic, strong) NSSet *comments;
+@property (nonatomic, strong) STKUser *fInverseFeed;
+
+- (BOOL)isPostLikedByUser:(STKUser *)u;
 
 - (UIImage *)typeImage;
 

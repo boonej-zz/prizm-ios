@@ -20,8 +20,6 @@ typedef enum {
     STKUserStoreErrorCodeNoPassword
 } STKUserStoreErrorCode;
 
-
-
 extern NSString * const STKUserCoverPhotoURLStringKey;
 extern NSString * const STKUserProfilePhotoURLStringKey;
 
@@ -29,8 +27,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 + (STKUserStore *)store;
 
+@property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) STKUser *currentUser;
-@property (nonatomic) BOOL currentUserIsAuthorized;
 
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
 
@@ -44,10 +42,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
 
-
 - (void)fetchUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
 - (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
-
 
 - (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;
 
@@ -64,6 +60,5 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 - (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
 
 - (void)logout;
-
 
 @end

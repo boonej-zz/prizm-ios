@@ -352,6 +352,11 @@
     [[vc navigationController] pushViewController:postVC animated:animated];
 }
 
+- (UIImage *)transitioningImage
+{
+    return [[self transitionImageView] image];
+}
+
 - (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
                                   animationControllerForOperation:(UINavigationControllerOperation)operation
                                                fromViewController:(UIViewController *)fromVC
@@ -406,17 +411,11 @@
      completion:^(BOOL finished) {
          [transitionContext completeTransition:finished];
          if(finished) {
-             if(![inVC isKindOfClass:[STKPostViewController class]]) {
-                 [[self transitionImageView] setHidden:YES];
-             }
+             [[self transitionImageView] setHidden:YES];
          }
      }];
 }
 
-- (void)completeTransitionToPostViewController
-{
-    [[self transitionImageView] setHidden:YES];
-}
 
 - (void)animationEnded:(BOOL) transitionCompleted
 {

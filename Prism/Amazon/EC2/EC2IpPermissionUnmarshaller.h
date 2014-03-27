@@ -29,7 +29,7 @@
 #else
 #import "../AmazonListUnmarshaller.h"
 #endif
-#import "EC2UserIdGroupPairUnmarshaller.h"
+#import "EC2uniqueIDGroupPairUnmarshaller.h"
 
 #ifdef AWS_MULTI_FRAMEWORK
 #import <AWSRuntime/AmazonListUnmarshaller.h>

@@ -23,7 +23,7 @@
 @interface SecurityTokenServiceFederatedUser:NSObject
 
 {
-    NSString *federatedUserId;
+    NSString *federateduniqueID;
     NSString *arn;
 }
 
@@ -37,7 +37,7 @@
  * <b>Length: </b>2 - 96<br/>
  * <b>Pattern: </b>[\w+=,.@\:-]*<br/>
  */
-@property (nonatomic, retain) NSString *federatedUserId;
+@property (nonatomic, retain) NSString *federateduniqueID;
 
 /**
  * The ARN that specifies the federated user that is associated with the
@@ -62,7 +62,7 @@
  * Constructs a new FederatedUser object.
  * Callers should use properties to initialize any additional object members.
  *
- * @param theFederatedUserId The string that identifies the federated
+ * @param theFederateduniqueID The string that identifies the federated
  * user associated with the credentials, similar to the unique ID of an
  * IAM user.
  * @param theArn The ARN that specifies the federated user that is
@@ -71,7 +71,7 @@
  * ttp://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html"
  * target="_blank">Identifiers for IAM Entities</a> in <i>Using IAM</i>.
  */
--(id)initWithFederatedUserId:(NSString *)theFederatedUserId andArn:(NSString *)theArn;
+-(id)initWithFederateduniqueID:(NSString *)theFederateduniqueID andArn:(NSString *)theArn;
 
 /**
  * Returns a string representation of this object; useful for testing and

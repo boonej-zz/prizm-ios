@@ -11,6 +11,7 @@
 #import "STKUserStore.h"
 
 @implementation STKPostComment
+@dynamic uniqueID, text, date, likeCount, likes, post, creator;
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
     static NSDateFormatter *df = nil;
@@ -19,25 +20,24 @@
         [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     }
-    [self setDate:[df dateFromString:[jsonObject objectForKey:@"create_date"]]];
-    [self setText:[jsonObject objectForKey:@"text"]];
-    [self setCommentID:[jsonObject objectForKey:@"_id"]];
-    
-    [self setLikeCount:[[jsonObject objectForKey:@"likes_count"] intValue]];
-    
-    [self setLikedByCurrentUser:NO];
-    for(NSDictionary *d in [jsonObject objectForKey:@"likes"]) {
-        if([[d objectForKey:@"_id"] isEqualToString:[[[STKUserStore store] currentUser] userID]]) {
-            [self setLikedByCurrentUser:YES];
-        }
-    }
-    
-    if([[jsonObject objectForKey:@"creator"] isKindOfClass:[NSDictionary class]]) {
-        STKUser *u = [[STKUser alloc] init];
-        [u readFromJSONObject:[jsonObject objectForKey:@"creator"]];
-        [self setCreator:u];
-    }
-    
+
+    [self bindFromDictionary:jsonObject keyMap:@{
+        @"_id" : @"uniqueID",
+        @"creator" : @{@"key" : @"creator", @"match" : @{@"uniqueID" : @"_id"}},
+        @"text" : @"text",
+        @"create_date" : ^(NSString *inValue) {
+            [self setDate:[df dateFromString:inValue]];
+        },
+        // post
+        @"likes_count" : @"likeCount",
+        @"likes" : @{@"key" : @"likes", @"match" : @{@"uniqueID" : @"_id"}},
+    }];
     return nil;
 }
+
+- (BOOL)isLikedByUser:(STKUser *)u
+{
+    return [[self likes] member:u] != nil;
+}
+
 @end

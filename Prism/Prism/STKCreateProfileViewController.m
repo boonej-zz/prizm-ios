@@ -82,7 +82,8 @@ const long STKCreateProgressGeocoding = 4;
     if(self) {
         [self setUser:user];
         if(![self user])
-            [self setUser:[[STKUser alloc] init]];
+            [self setUser:[NSEntityDescription insertNewObjectForEntityForName:@"STKUser"
+                                                        inManagedObjectContext:[[STKUserStore store] context]]];
         
         _items = @[
                    @{@"title" : @"Email", @"key" : @"email",

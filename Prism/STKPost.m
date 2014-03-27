@@ -38,82 +38,70 @@ NSString * const STKPostTypeAccolade = @"accolade";
 NSString * const STKPostStatusDeleted = @"deleted";
 
 @interface STKPost ()
-
-@property (nonatomic, strong) NSSet *commentsSet;
-@property (nonatomic, strong) NSSet *hashTagsSet;
-
+@property (nonatomic) double locationLatitude;
+@property (nonatomic) double locationLongitude;
 @end
 
 @implementation STKPost
-
-
+@dynamic coordinate;
+@dynamic hashTags, imageURLString, uniqueID, datePosted, locationLatitude, locationLongitude, locationName,
+visibility, status, repost, referenceTimestamp, text, comments, commentCount, creator, originalPost, likes, likeCount,
+type, fInverseFeed;
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
-    [self bindFromDictionary:jsonObject keyMap:@{
-                                                 @"_id" : @"postID",
-                                                 STKPostTextKey : @"text",
-                                                 STKPostTypeKey : @"type",
-                                                 STKPostLocationNameKey : @"locationName",
-                                                 @"create_date" : @"referenceTimestamp",
-                                                 STKPostURLKey : @"imageURLString",
-                                                 @"external_system" : @"externalSystemID",
-                                                 @"likes_count" : @"likeCount",
-                                                 @"comments_count" : @"commentCount",
-                                                 @"hash_tags" : @"hashTags",
-                                                 @"status" : @"status"
-    }];
-    
-    NSDictionary *creator = [jsonObject objectForKey:@"creator"];
-    if([self creator]) {
-        [[self creator] readFromJSONObject:creator];
-    } else {
-        STKUser *u = [[STKUser alloc] init];
-        [u readFromJSONObject:creator];
-        [self setCreator:u];
-    }
-
-    NSArray *likes = [[jsonObject objectForKey:@"likes"] valueForKey:@"_id"];
-    if([likes containsObject:[[[STKUserStore store] currentUser] userID]]) {
-        [self setPostLikedByCurrentUser:YES];
-    }
-    
-    NSArray *comments = [jsonObject objectForKey:@"comments"];
-    NSMutableArray *commentObjects = [NSMutableArray array];
-    for(NSDictionary *d in comments) {
-        STKPostComment *c = [[STKPostComment alloc] init];
-        [c readFromJSONObject:d];
-        [commentObjects addObject:c];
-    }
-    [self setComments:[commentObjects copy]];
-    
     static NSDateFormatter *df = nil;
     if(!df) {
         df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
         [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     }
-    
-    [self setDatePosted:[df dateFromString:[jsonObject objectForKey:@"create_date"]]];
-    
-     
-    NSString *lat = [jsonObject objectForKey:STKPostLocationLatitudeKey];
-    NSString *lon = [jsonObject objectForKey:STKPostLocationLongitudeKey];
-    if(lat && lon && ![lat isKindOfClass:[NSNull class]] && ![lon isKindOfClass:[NSNull class]]) {
-        CLLocationCoordinate2D coord;
-        coord.latitude = [lat doubleValue];
-        coord.longitude = [lon doubleValue];
-        [self setCoordinate:coord];
-    }
+
+    [self bindFromDictionary:jsonObject keyMap:@{
+                                                 @"_id" : @"uniqueID",
+                                                 STKPostTypeKey : @"type",
+
+                                                 STKPostURLKey : @"imageURLString",
+                                                 STKPostLocationNameKey : @"locationName",
+                                                 STKPostLocationLatitudeKey : @"locationLatitude",
+                                                 STKPostLocationLongitudeKey : @"locationLongitude",
+                                                 STKPostVisibilityKey : @"visibility",
+                                                 @"status" : @"status",
+                                                 @"is_repost" : @"repost",
+                                                 STKPostTextKey : @"text",
+                                                 
+                                                 
+                                                 @"likes_count" : @"likeCount",
+                                                 @"comments_count" : @"commentCount",
+                                                 @"hash_tags" : @{@"key" : @"hashTags", @"match" : @{@"title" : @"title"}},
+                                                 
+                                                 @"creator" : @{@"key" : @"creator", @"match" : @{@"uniqueID" : @"_id"}},
+                                                 @"likes" : @{@"key" : @"likes", @"match" : @{@"uniqueID" : @"_id"}},
+                                                 @"comments" : @{@"key" : @"comments", @"match" : @{@"uniqueID" : @"_id"}},
+                                                 
+                                                 @"create_date" : ^(NSString *inValue) {
+                                                    [self setReferenceTimestamp:inValue];
+                                                    [self setDatePosted:[df dateFromString:inValue]];
+                                                 }
+    }];
     
     return nil;
 }
 
-- (void)setComments:(NSArray *)comments
+- (BOOL)isPostLikedByUser:(STKUser *)u
 {
-    _comments = comments;
-    for(STKPostComment *pc in _comments) {
-        [pc setPost:self];
-    }
+    return [[self likes] member:u] != nil;
+}
+
+- (void)setCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    [self setLocationLatitude:coordinate.latitude];
+    [self setLocationLongitude:coordinate.longitude];
+}
+
+- (CLLocationCoordinate2D)coordinate
+{
+    return CLLocationCoordinate2DMake([self locationLatitude],
+                                      [self locationLongitude]);
 }
 
 - (UIImage *)typeImage
@@ -140,7 +128,7 @@ NSString * const STKPostStatusDeleted = @"deleted";
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"0x%x %@ %@", (int)self, [self postID], [self text]];
+    return [NSString stringWithFormat:@"0x%x %@ %@", (int)self, [self uniqueID], [self text]];
 }
 
 @end

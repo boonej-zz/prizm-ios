@@ -20,10 +20,10 @@
  * User Id Group Pair
  */
 
-@interface EC2UserIdGroupPair:NSObject
+@interface EC2uniqueIDGroupPair:NSObject
 
 {
-    NSString *userId;
+    NSString *uniqueID;
     NSString *groupName;
     NSString *groupId;
 }
@@ -40,7 +40,7 @@
 /**
  * The AWS user ID of an account.
  */
-@property (nonatomic, retain) NSString *userId;
+@property (nonatomic, retain) NSString *uniqueID;
 
 /**
  * Name of the security group in the specified AWS account. Cannot be

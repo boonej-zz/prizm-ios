@@ -104,7 +104,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     if([self originalPost]) {
         [[self navigationItem] setTitle:@"Repost"];
         [[self postInfo] setObject:[[self originalPost] imageURLString] forKey:STKPostURLKey];
-        [[self postInfo] setObject:[[self originalPost] postID] forKey:STKPostOriginIDKey];
+        [[self postInfo] setObject:[[self originalPost] uniqueID] forKey:STKPostOriginIDKey];
         [[STKImageStore store] fetchImageForURLString:[[self originalPost] imageURLString]
                                            completion:^(UIImage *img) {
                                                [[self imageView] setImage:img];
@@ -120,7 +120,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     _postImage = postImage;
     [self setUploadingImage:YES];
     
-    [[STKImageStore store] uploadImage:_postImage thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] userID] completion:^(NSString *URLString, NSError *err) {
+    [[STKImageStore store] uploadImage:_postImage thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
         if(postImage == [self postImage]) {
             
             [self setUploadingImage:NO];
