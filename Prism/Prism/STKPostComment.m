@@ -23,14 +23,14 @@
 
     [self bindFromDictionary:jsonObject keyMap:@{
         @"_id" : @"uniqueID",
-        @"creator" : @{@"key" : @"creator", @"match" : @{@"uniqueID" : @"_id"}},
+        @"creator" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"text" : @"text",
         @"create_date" : ^(NSString *inValue) {
             [self setDate:[df dateFromString:inValue]];
         },
         // post
         @"likes_count" : @"likeCount",
-        @"likes" : @{@"key" : @"likes", @"match" : @{@"uniqueID" : @"_id"}},
+        @"likes" : @{STKJSONBindFieldKey : @"likes", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
     }];
     return nil;
 }

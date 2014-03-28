@@ -7,6 +7,13 @@
 //
 #import "STKJSONObject.h"
 
+NSString * const STKJSONBindFieldKey = @"key";
+NSString * const STKJSONBindMatchDictionaryKey = @"match";
+NSString * const STKJSONBindFunctionKey = @"func";
+NSString * const STKJSONBindFunctionReplace = @"replace";
+NSString * const STKJSONBindFunctionAdd = @"add";
+
+
 @implementation NSObject (STKJSONBind)
 
 - (void)bindFromDictionary:(NSDictionary *)d
@@ -19,7 +26,9 @@
         return;
     if([value isKindOfClass:[NSNull class]])
         return;
-    
+    /*
+     // I don't think we should allow normal binds for relationships
+     // we really need to pass STKJSONBindFieldKey as part of the config
     if([self isKindOfClass:[NSManagedObject class]]) {
         // Is this a relationship?
 
@@ -36,7 +45,7 @@
             }
             return;
         }
-    }
+    }*/
     
     [self setValue:value forKey:destKey];
 }
@@ -58,7 +67,18 @@
         NSRelationshipDescription *relationship = [relationships objectForKey:[config objectForKey:@"key"]];
         if(relationship) {
             
+            
             if([value isKindOfClass:[NSArray class]]) {
+                NSString *bindFunction = STKJSONBindFunctionReplace;
+                if([config objectForKey:STKJSONBindFunctionKey]) {
+                    bindFunction = [config objectForKey:STKJSONBindFunctionKey];
+                }
+                
+                // If the bind function is replace, kill the existing
+                if([bindFunction isEqualToString:STKJSONBindFunctionReplace]) {
+                    [(NSManagedObject *)self setValue:nil forKey:[relationship name]];
+                }
+                
                 for(NSDictionary *d in value) {
                     [self createOrInsertJSONObject:d forRelationship:relationship matchMap:[config objectForKey:@"match"]];
                 }

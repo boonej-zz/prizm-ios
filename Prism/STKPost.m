@@ -72,11 +72,11 @@ type, fInverseFeed;
                                                  
                                                  @"likes_count" : @"likeCount",
                                                  @"comments_count" : @"commentCount",
-                                                 @"hash_tags" : @{@"key" : @"hashTags", @"match" : @{@"title" : @"title"}},
+                                                 @"hash_tags" : @{STKJSONBindFieldKey : @"hashTags", STKJSONBindMatchDictionaryKey : @{@"title" : @"title"}},
                                                  
-                                                 @"creator" : @{@"key" : @"creator", @"match" : @{@"uniqueID" : @"_id"}},
-                                                 @"likes" : @{@"key" : @"likes", @"match" : @{@"uniqueID" : @"_id"}},
-                                                 @"comments" : @{@"key" : @"comments", @"match" : @{@"uniqueID" : @"_id"}},
+                                                 @"creator" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+                                                 @"likes" : @{STKJSONBindFieldKey : @"likes", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+                                                 @"comments" : @{STKJSONBindFieldKey : @"comments", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  
                                                  @"create_date" : ^(NSString *inValue) {
                                                     [self setReferenceTimestamp:inValue];

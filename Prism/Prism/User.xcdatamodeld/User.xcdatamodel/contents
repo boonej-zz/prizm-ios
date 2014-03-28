@@ -44,6 +44,7 @@
     <entity name="STKTrust" representedClassName="STKTrust" syncable="YES">
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="owningUserRequestedTrust" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="otherUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="receivedTrusts" inverseEntity="STKUser" syncable="YES"/>
@@ -87,7 +88,7 @@
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="88"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="403"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="163"/>
-        <element name="STKTrust" positionX="18" positionY="153" width="128" height="133"/>
+        <element name="STKTrust" positionX="18" positionY="153" width="128" height="150"/>
         <element name="STKUser" positionX="0" positionY="0" width="128" height="523"/>
     </elements>
 </model>

@@ -15,9 +15,12 @@ NSString * const STKRequestStatusAccepted = @"accepted";
 NSString * const STKRequestStatusRejected = @"rejected";
 NSString * const STKRequestStatusCancelled = @"cancelled";
 
+@interface STKTrust ()
+
+@end
 
 @implementation STKTrust
-@dynamic uniqueID, status, dateCreated, owningUser, otherUser;
+@dynamic uniqueID, status, dateCreated, owningUser, otherUser, owningUserRequestedTrust;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -31,21 +34,23 @@ NSString * const STKRequestStatusCancelled = @"cancelled";
     [self bindFromDictionary:jsonObject keyMap:@{
                                                  @"_id" : @"uniqueID",
                                                  @"status" : @"status",
-                                                 @"user_id" : @{@"key" : @"otherUser", @"match" : @{@"uniqueID" : @"_id"}},
+                                                 @"is_owner" : @"owningUserRequestedTrust",
+                                                 @"user_id" : @{STKJSONBindFieldKey : @"otherUser", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"create_date" : ^(NSString *inValue) {
                                                      [self setDateCreated:[df dateFromString:inValue]];
                                                  },
                                                  
     }];
     
-//    [self setIsOwner:[[jsonObject objectForKey:@"is_owner"] boolValue]];
-    
     return nil;
 }
 
-- (BOOL)currentUserIsOwner
+- (STKUser *)requestor
 {
-    return [[[STKUserStore store] currentUser] isEqual:[self owningUser]];
+    if([self owningUserRequestedTrust])
+        return [self owningUser];
+    
+    return [self otherUser];
 }
 
 - (BOOL)isPending

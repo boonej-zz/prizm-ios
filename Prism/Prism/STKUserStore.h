@@ -20,8 +20,6 @@ typedef enum {
     STKUserStoreErrorCodeNoPassword
 } STKUserStoreErrorCode;
 
-extern NSString * const STKUserCoverPhotoURLStringKey;
-extern NSString * const STKUserProfilePhotoURLStringKey;
 
 @interface STKUserStore : NSObject
 
@@ -42,14 +40,22 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
 
+// Complete
 - (void)fetchUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
+
+// Complete - should introduce 'editing context'
 - (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
 
+// Complete
 - (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;
 
+// Complete - remove cached posts from home feed! Also update UI
 - (void)followUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block;
 - (void)unfollowUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block;
+
+// Complete
 - (void)fetchFollowersOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
+// Complete
 - (void)fetchUsersFollowingOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
 
 - (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block;

@@ -26,8 +26,10 @@ extern NSString * const STKRequestStatusCancelled;
 @property (nonatomic, strong) STKUser *owningUser;
 @property (nonatomic, strong) STKUser *otherUser;
 
+@property (nonatomic) BOOL owningUserRequestedTrust;
 
-- (BOOL)currentUserIsOwner;
+@property (nonatomic, readonly) STKUser *requestor;
+
 - (BOOL)isPending;
 - (BOOL)isAccepted;
 - (BOOL)isRejected;

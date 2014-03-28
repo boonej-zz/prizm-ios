@@ -277,30 +277,23 @@ typedef enum {
             [self refreshStatisticsView];
         }];
     } else if([t isPending]) {
-        // IMPORTANT:
-        // This trust object is the currently showing user's trust object, so the properties
-        // related to the trust object are not from the vantage point of the current user.
-        
-        if(![[t owningUser] isEqual:[self profile]]) {
-            // Cancel
-            [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
-                [self refreshStatisticsView];
-            }];
-        } else {
+        if([[t requestor] isEqual:[self profile]]) {
             // Accept
             [[STKUserStore store] acceptTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
                 [self refreshStatisticsView];
             }];
-
-        }
-    } else if([t isRejected]) {
-        if(![[t owningUser] isEqual:[self profile]]) {
+        } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
                 [self refreshStatisticsView];
             }];
-
-        } else {
+        }
+    } else if([t isRejected]) {
+        if([[t requestor] isEqual:[self profile]]) {
             // Do nothing, is rejected
+        } else {
+            [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                [self refreshStatisticsView];
+            }];
         }
     } else if([t isAccepted]) {
         [[STKUserStore store] rejectTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
@@ -388,20 +381,20 @@ typedef enum {
             [[c trustButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 95, 0, 0)];
         } else {
             if([t isPending]) {
-                if(![[t owningUser] isEqual:[self profile]]) {
-                    [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
-                    [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
-                } else {
+                if([[t requestor] isEqual:[self profile]]) {
                     [[c trustButton] setTitle:@"Accept" forState:UIControlStateNormal];
                     [[c trustButton] setImage:[UIImage imageNamed:@"activity_accept_trust"] forState:UIControlStateNormal];
-                }
-            } else if([t isRejected]) {
-                if([[t owningUser] isEqual:[self profile]]) {
+                } else {
                     [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
                     [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
-                } else {
+                }
+            } else if([t isRejected]) {
+                if([[t requestor] isEqual:[self profile]]) {
                     [[c trustButton] setTitle:@"Rejected" forState:UIControlStateNormal];
                     [[c trustButton] setImage:nil forState:UIControlStateNormal];
+                } else {
+                    [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
+                    [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
                 }
             } else if([t isAccepted]) {
                 [[c trustButton] setTitle:@"Trusted" forState:UIControlStateNormal];

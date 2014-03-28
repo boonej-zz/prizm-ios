@@ -11,7 +11,7 @@
 #import "STKRelativeDateConverter.h"
 #import "STKAvatarView.h"
 #import "STKUserStore.h"
-
+#import "STKHashTag.h"
 @interface STKPostCell ()
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *hashTagTopOffset;
@@ -78,7 +78,7 @@
     }
     
     NSMutableString *tags = [[NSMutableString alloc] init];
-    for(NSString *tag in [p hashTags]) {
+    for(NSString *tag in [[p hashTags] valueForKey:@"title"]) {
         [tags appendFormat:@"#%@ ", tag];
     }
     [[self hashTagLabel] setText:tags];

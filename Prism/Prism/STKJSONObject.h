@@ -7,6 +7,12 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const STKJSONBindFieldKey;
+extern NSString * const STKJSONBindMatchDictionaryKey;
+extern NSString * const STKJSONBindFunctionKey;
+    extern NSString * const STKJSONBindFunctionReplace; // Default
+    extern NSString * const STKJSONBindFunctionAdd;
+
 @protocol STKJSONObject <NSObject>
 
 - (NSError *)readFromJSONObject:(id)jsonObject;

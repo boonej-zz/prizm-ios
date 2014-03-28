@@ -82,9 +82,9 @@ accountStoreID;
         @"following_count" : @"followingCount",
         @"posts_count" : @"postCount",
 
-        @"trusts" : @{@"key" : @"ownedTrusts", @"match" : @{@"uniqueID" : @"_id"}},
-        @"followers" : @{@"key" : @"followers", @"match" : @{@"uniqueID" : @"_id"}},
-        @"following" : @{@"key" : @"following", @"match" : @{@"uniqueID" : @"_id"}},
+        @"trusts" : @{STKJSONBindFieldKey : @"ownedTrusts", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+        @"followers" : @{STKJSONBindFieldKey : @"followers", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+        @"following" : @{STKJSONBindFieldKey : @"following", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         
         @"birthday" : ^(NSString *inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];

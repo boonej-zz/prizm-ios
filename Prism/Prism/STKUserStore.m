@@ -238,8 +238,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
         
         [c setModelGraph:@[user]];
+        [c setContext:[self context]];
         [c putWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
-            
+            if(!err) {
+                [[self context] save:nil];
+            }
             block(user, err);
         }];
     }];
@@ -259,7 +262,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setModelGraph:@[user]];
         [c setContext:[self context]];
         [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
-
+            if(!err) {
+                [[self context] save:nil];
+            }
             block(user, err);
         }];
     }];
@@ -277,7 +282,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:@"30" forKey:@"limit"];
         [c addQueryValue:name forKey:@"name"];
         
-        [c setModelGraph:@[[STKUser class]]];
+        [c setModelGraph:@[@"STKUser"]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *profiles, NSError *err) {
             if(!err) {
@@ -290,15 +297,20 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 }
 
 - (void)followUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block
-{/*
-    [user setIsFollowedByCurrentUser:YES];
+{
     [user setFollowerCount:[user followerCount] + 1];
+    [[user mutableSetValueForKey:@"followers"] addObject:[self currentUser]];
+    
+    void (^reversal)(void) = ^{
+        [user setFollowerCount:[user followerCount] - 1];
+        [[user mutableSetValueForKey:@"followers"] removeObject:[self currentUser]];
+        [[self context] save:nil];
+    };
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
-            [user setIsFollowedByCurrentUser:NO];
-            [user setFollowerCount:[user followerCount] - 1];
-
+            reversal();
+            
             block(nil, err);
             return;
         }
@@ -308,24 +320,30 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:[[self currentUser] uniqueID] forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
-                [user setIsFollowedByCurrentUser:NO];
-                [user setFollowerCount:[user followerCount] - 1];
+                reversal();
+            } else {
+                [[self context] save:nil];
             }
             block(nil, err);
         }];
-    }];*/
+    }];
 }
 
 - (void)unfollowUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block
-{/*
-    [user setIsFollowedByCurrentUser:NO];
+{
+    [[user mutableSetValueForKey:@"followers"] removeObject:[self currentUser]];
     [user setFollowerCount:[user followerCount] - 1];
+    
+    void (^reversal)(void) = ^{
+        [[user mutableSetValueForKey:@"followers"] addObject:[self currentUser]];
+        [user setFollowerCount:[user followerCount] + 1];
+        [[self context] save:nil];
+    };
 
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
-            [user setFollowerCount:[user followerCount] + 1];
-            [user setIsFollowedByCurrentUser:YES];
-
+            reversal();
+            
             block(nil, err);
             return;
         }
@@ -335,12 +353,13 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:[[self currentUser] uniqueID] forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
-                [user setFollowerCount:[user followerCount] + 1];
-                [user setIsFollowedByCurrentUser:YES];
+                reversal();
+            } else {
+                [[self context] save:nil];
             }
             block(nil, err);
         }];
-    }];*/
+    }];
 }
 
 - (void)fetchFollowersOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block
@@ -353,9 +372,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user uniqueID], @"followers"]];
-        [c setModelGraph:@[[STKUser class]]];
+        [c setModelGraph:@[@"STKUser"]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(!err) {
+                [[self context] save:nil];
+            }
             block(obj, err);
         }];
     }];
@@ -371,16 +395,42 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user uniqueID], @"following"]];
-        [c setModelGraph:@[[STKUser class]]];
+        [c setModelGraph:@[@"STKUser"]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(!err) {
+                [[self context] save:nil];
+            }
+
             block(obj, err);
         }];
     }];
 }
 
 - (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block
-{/*
+{
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"otherUser == %@", [self currentUser]];
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+    [req setPredicate:p];
+    NSArray *results = [[self context] executeFetchRequest:req error:nil];
+        
+    STKTrust *t = nil;
+    if([results count] > 0) {
+        t = [results firstObject];
+        [t setStatus:STKRequestStatusPending];
+        [t setOwningUserRequestedTrust:NO];
+    } else {
+        t = [NSEntityDescription insertNewObjectForEntityForName:@"STKTrust"
+                                                    inManagedObjectContext:[self context]];
+        [t setStatus:STKRequestStatusPending];
+        [t setOwningUser:user];
+        [t setOtherUser:[self currentUser]];
+        [t setOwningUserRequestedTrust:NO];
+    }
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -390,21 +440,17 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user uniqueID], @"trusts"]];
         [c addQueryValue:[[self currentUser] uniqueID] forKey:@"creator"];
-
-        STKTrust *t = [[STKTrust alloc] init];
-        [t setOtherUser:[self currentUser]];
-        [t setStatus:STKRequestStatusPending];
-        [t setOwningUser:user];
-        [[user trusts] addObject:t];
         
         [c setModelGraph:@[t]];
-        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+        [c postWithSession:[self session] completionBlock:^(STKTrust *trust, NSError *err) {
             if(err) {
-                [[user trusts] removeObjectIdenticalTo:t];
+                [[self context] deleteObject:t];
             }
-            block(obj, err);
+            [[self context] save:nil];
+            
+            block(trust, err);
         }];
-    }];*/
+    }];
 }
 
 - (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block
@@ -417,14 +463,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[[self currentUser] uniqueID], @"trusts"]];
-        //[c setShouldReturnArray:YES];
-        [c setModelGraph:@[@{@"trusts" : @[[STKTrust class]]}]];
+        [c setModelGraph:@[@{@"trusts" : @[@"STKTrust"]}]];
+        [c setContext:[self context]];
+        
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
-            NSArray *reqs = [obj objectForKey:@"trusts"];
-            for(STKTrust *t in reqs) {
-                [t setOwningUser:[self currentUser]];
+            
+            NSArray *trusts = [obj objectForKey:@"trusts"];
+            for(STKTrust *t in trusts) {
+                [t setOwningUser:[[STKUserStore store] currentUser]];
             }
-            block(reqs, err);
+            block(trusts, err);
         }];
     }];
 
@@ -442,11 +490,13 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c addQueryValue:STKRequestStatusAccepted forKey:@"status"];
         [c setIdentifiers:@[[[t owningUser] uniqueID], @"trusts", [t uniqueID]]];
+        [c addQueryValue:STKRequestStatusAccepted forKey:@"status"];
         [c addQueryValue:[[t otherUser] uniqueID] forKey:@"creator"];
         
-        [c setModelGraph:@[[STKTrust class]]];
+        [c setModelGraph:@[t]];
+        [c setContext:[self context]];
+        
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
                 [t setStatus:STKRequestStatusPending];
@@ -473,7 +523,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:[[t otherUser] uniqueID] forKey:@"creator"];
         [c addQueryValue:STKRequestStatusRejected forKey:@"status"];
         
-        [c setModelGraph:@[[STKTrust class]]];
+        [c setModelGraph:@[t]];
+        [c setContext:[self context]];
+
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
                 [t setStatus:prevState];
@@ -501,7 +553,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:STKRequestStatusCancelled forKey:@"status"];
 
         
-        [c setModelGraph:@[[STKTrust class]]];
+        [c setModelGraph:@[t]];
+        [c setContext:[self context]];
+
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
                 [t setStatus:prevState];
@@ -523,14 +577,17 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[[self currentUser] uniqueID], @"trusts"]];
 
-        [c setModelGraph:@[@{@"trusts" : @[[STKTrust class]]}]];
+        [c setModelGraph:@[@{@"trusts" : @[@"STKTrust"]}]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
             
             NSArray *trusts = nil;
             if(!err) {
                 trusts = [[obj objectForKey:@"trusts"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusAccepted]];
+                [[self context] save:nil];
             }
-            
+        
             block(trusts, err);
         }];
     }];
@@ -624,8 +681,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if([self currentUser])
             [c setModelGraph:@[[self currentUser]]];
         else
-            [c setModelGraph:@[[STKUser class]]];
-        
+            [c setModelGraph:@[@"STKUser"]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+
         [c postWithSession:[self session]
            completionBlock:block];
     }];
@@ -699,8 +758,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [self executeSocialRequest:req forAccount:acct completion:^(NSData *userData, NSError *userError) {
         if(!userError && userData) {
             NSArray *a = [NSJSONSerialization JSONObjectWithData:userData options:0 error:nil];
+        
+            STKUser *pi = [NSEntityDescription insertNewObjectForEntityForName:@"STKUser"
+                                                        inManagedObjectContext:[self context]];
             
-            STKUser *pi = [[STKUser alloc] init];
             [pi setValuesFromTwitter:a];
             [pi setAccountStoreID:[acct identifier]];
             

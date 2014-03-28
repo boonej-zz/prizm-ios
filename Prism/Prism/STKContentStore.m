@@ -255,7 +255,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
                       completion:(void (^)(NSArray *posts, NSError *err))block
 {
     
-    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"creator == %@", [[STKUserStore store] currentUser]]
+    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"creator == %@", user]
                                         inDirection:fetchDirection
                                       referencePost:referencePost];
     
@@ -617,7 +617,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     [req setPredicate:p];
     [req setFetchLimit:5];
     
-    NSArray *results = [[[STKUserStore store] context] executeFetchRequest:req error:nil];
+    NSArray *results = [[[[STKUserStore store] context] executeFetchRequest:req error:nil] valueForKey:@"title"];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         block(results);
     }];
@@ -678,9 +678,10 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
         }
-        [c setModelGraph:@[p]];
+        //[c setModelGraph:@[p]];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(!err) {
+                [p setValuesForKeysWithDictionary:info];
                 [[[STKUserStore store] context] save:nil];
             } else {
                 
