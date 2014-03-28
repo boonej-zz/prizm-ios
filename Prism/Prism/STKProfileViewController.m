@@ -45,8 +45,10 @@ typedef enum {
 @property (nonatomic, strong) STKInitialProfileStatisticsCell *statsCell;
 
 @property (nonatomic, strong) STKPostController *postController;
+
 @property (nonatomic, getter = isShowingInformation) BOOL showingInformation;
 @property (nonatomic) BOOL showPostsInSingleLayout;
+@property (nonatomic) BOOL filterByLocation;
 
 - (BOOL)isShowingCurrentUserProfile;
 
@@ -186,6 +188,8 @@ typedef enum {
     [self setShowPostsInSingleLayout:YES];
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
                     withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
+                    withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (IBAction)showGridPosts:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -194,6 +198,9 @@ typedef enum {
 
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
                     withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
+                    withRowAnimation:UITableViewRowAnimationNone];
+
 }
 
 - (IBAction)toggleFilterByUserPost:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -202,6 +209,11 @@ typedef enum {
 
 - (IBAction)toggleFilterbyLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
+    [self setFilterByLocation:![self filterByLocation]];
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
+                    withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
+                    withRowAnimation:UITableViewRowAnimationNone];
 }
 
 
@@ -347,6 +359,8 @@ typedef enum {
     
     [[c coverPhotoImageView] setUrlString:[p coverPhotoPath]];
     [[c avatarView] setUrlString:[p profilePhotoPath]];
+    
+    [c setShowPrismImageForToggleButton:[self isShowingInformation]];
 }
 
 - (void)refreshStatisticsView
@@ -459,6 +473,10 @@ typedef enum {
     } else if ([indexPath section] == STKProfileSectionPreinformation) {
         if(![self isShowingInformation]) {
             STKFilterCell *c = [STKFilterCell cellForTableView:tableView target:self];
+            [[c gridViewButton] setSelected:![self showPostsInSingleLayout]];
+            [[c singleViewButton] setSelected:[self showPostsInSingleLayout]];
+            [[c locationButton] setSelected:[self filterByLocation]];
+
             return c;
         } else {
             UITableViewCell *c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];

@@ -10,6 +10,8 @@
 
 @interface STKNavigationButton : UIControl
 @property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) UIImage *highlightedImage;
 @property (nonatomic, strong) UIImage *selectedImage;
+
 @property (nonatomic) float offset;
 @end

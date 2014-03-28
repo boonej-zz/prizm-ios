@@ -66,7 +66,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNS-VJ-bJH">
-                        <rect key="frame" x="248" y="13" width="30" height="30"/>
+                        <rect key="frame" x="245" y="13" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="OYB-6f-kqy"/>
@@ -81,7 +81,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fVl-2d-H2N">
-                        <rect key="frame" x="282" y="13" width="30" height="30"/>
+                        <rect key="frame" x="279" y="13" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="tyC-aq-aUm"/>
@@ -112,7 +112,7 @@
                     <constraint firstItem="VRx-24-fLv" firstAttribute="leading" secondItem="4oo-ni-g3S" secondAttribute="trailing" constant="4" id="6Zm-l0-pwn"/>
                     <constraint firstItem="4oo-ni-g3S" firstAttribute="bottom" secondItem="fGJ-lc-BAB" secondAttribute="bottom" constant="1" id="BHn-wk-T4d"/>
                     <constraint firstItem="4oo-ni-g3S" firstAttribute="leading" secondItem="fGJ-lc-BAB" secondAttribute="trailing" constant="3" id="FB6-G2-Ljg"/>
-                    <constraint firstAttribute="trailing" secondItem="fVl-2d-H2N" secondAttribute="trailing" constant="8" id="FoV-Dl-qqU"/>
+                    <constraint firstAttribute="trailing" secondItem="fVl-2d-H2N" secondAttribute="trailing" constant="11" id="FoV-Dl-qqU"/>
                     <constraint firstItem="1Cu-Uz-HHT" firstAttribute="leading" secondItem="QgB-CC-xg6" secondAttribute="trailing" constant="6" id="IE5-cy-Xx2"/>
                     <constraint firstItem="4oo-ni-g3S" firstAttribute="baseline" secondItem="VRx-24-fLv" secondAttribute="baseline" id="NsH-DX-kmS"/>
                     <constraint firstItem="fGJ-lc-BAB" firstAttribute="bottom" secondItem="QgB-CC-xg6" secondAttribute="bottom" constant="-5" id="OdH-5S-b6c"/>

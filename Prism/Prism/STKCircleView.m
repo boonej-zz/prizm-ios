@@ -39,16 +39,29 @@
     _image = image;
     [self setNeedsDisplay];
 }
+- (void)setBorderColor:(UIColor *)borderColor
+{
+    _borderColor = borderColor;
+    [self setNeedsDisplay];
+}
 
 - (void)drawRect:(CGRect)rect
 {
+    CGRect r = CGRectInset([self bounds], 2, 2);
+    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];
+    if([self borderColor])
+        [[self borderColor] set];
+    else
+        [STKTextColor set];
+    [bp setLineWidth:4];
+    [bp stroke];
+    [bp addClip];
+    
     if([self image]) {
-        CGRect r = CGRectInset([self bounds], 2, 2);
-        UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];
-        [[UIColor lightGrayColor] set];
-        [bp stroke];
-        [bp addClip];
         [[self image] drawInRect:r];
+    } else {
+        [[UIColor whiteColor] set];
+        [bp fill];
     }
 }
 

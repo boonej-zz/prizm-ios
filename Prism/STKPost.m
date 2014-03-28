@@ -111,11 +111,11 @@ type, fInverseFeed;
 
 + (UIImage *)imageForType:(NSString *)t
 {
-    NSDictionary *m = @{STKPostTypeAchievement : @"category_achievements",
-                        STKPostTypeAspiration : @"category_aspirations",
-                        STKPostTypeExperience : @"category_experiences",
-                        STKPostTypeInspiration : @"category_inspirations",
-                        STKPostTypePassion : @"category_passion"};
+    NSDictionary *m = @{STKPostTypeAchievement : @"category_achievements_sm",
+                        STKPostTypeAspiration : @"category_aspirations_sm",
+                        STKPostTypeExperience : @"category_experiences_sm",
+                        STKPostTypeInspiration : @"category_inspiration_sm",
+                        STKPostTypePassion : @"category_passions_sm"};
     
     NSString *imageName = m[t];
     

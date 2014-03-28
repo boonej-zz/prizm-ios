@@ -10,4 +10,5 @@
 
 @interface STKCircleView : UIControl
 @property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) UIColor *borderColor;
 @end

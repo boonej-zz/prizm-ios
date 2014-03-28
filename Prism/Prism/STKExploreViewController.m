@@ -22,19 +22,21 @@
 #import "UIERealTimeBlurView.h"
 #import "STKTextImageCell.h"
 #import "STKPostController.h"
+#import "STKNavigationButton.h"
 
 
 typedef enum {
     STKExploreTypeLatest = 0,
     STKExploreTypePopular = 1
 } STKExploreType;
+
 typedef enum {
     STKSearchTypeUser,
     STKSearchTypeHashTag
 } STKSearchType;
 
 @interface STKExploreViewController ()
-    <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, STKPostControllerDelegate>
+    <UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) NSArray *filterPostOptions;
 
@@ -56,6 +58,8 @@ typedef enum {
 @property (nonatomic) STKSearchType searchType;
 @property (nonatomic, strong) NSArray *postsFound;
 @property (nonatomic, strong) NSArray *profilesFound;
+@property (nonatomic, strong) STKNavigationButton *searchButton;
+@property (nonatomic, strong) UIBarButtonItem *searchButtonItem;
 
 - (IBAction)exploreTypeChanged:(id)sender;
 - (IBAction)showHashTagResults:(id)sender;
@@ -72,7 +76,19 @@ typedef enum {
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setTitle:@"Explore"];
-        [[self navigationItem] setRightBarButtonItem:[self searchBarButtonItem]];
+        
+        STKNavigationButton *view = [[STKNavigationButton alloc] init];
+        [view setImage:[UIImage imageNamed:@"btn_search"]];
+        [view setHighlightedImage:[UIImage imageNamed:@"btn_search_selected"]];
+        [view setSelectedImage:[UIImage imageNamed:@"btn_search_selected"]];
+        [view setOffset:8];
+        [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
+        [self setSearchButton:view];
+        
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+        [self setSearchButtonItem:bbi];
+        
+        [[self navigationItem] setRightBarButtonItem:bbi];
         
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         
@@ -85,15 +101,6 @@ typedef enum {
         [_popularPostsController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO],
                                                       [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
 
-        
-        _filterPostOptions = @[
-                               @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"btn_cloud_aspirations"]},
-                               @{@"title" : @"Passions", STKPostTypeKey : STKPostTypePassion, @"image" : [UIImage imageNamed:@"btn_heart"]},
-                               @{@"title" : @"Experiences", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"btn_experiences"]},
-                               @{@"title" : @"Achievements", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"btn_achievements"]},
-                               @{@"title" : @"Inspirations", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"btn_inspirations"]},
-                               @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"btn_personal"]}
-                               ];
         
     }
     return self;
@@ -115,6 +122,8 @@ typedef enum {
         [[self searchContainer] setHidden:NO];
         [[self exploreTypeControl] setHidden:YES];
         [[self searchTextField] becomeFirstResponder];
+        [[self searchButton] setSelected:YES];
+        [[self navigationItem] setTitle:@"Search"];
         [self reloadSearchResults];
     } else {
         [[self tableView] setHidden:NO];
@@ -122,6 +131,10 @@ typedef enum {
         [[self searchTextField] setText:nil];
         [[self searchContainer] setHidden:YES];
         [[self exploreTypeControl] setHidden:NO];
+        [[self searchButton] setSelected:NO];
+
+        [[self navigationItem] setTitle:@"Explore"];
+        
         [[self view] endEditing:YES];
     }
 }
@@ -153,7 +166,7 @@ typedef enum {
 - (void)menuWillDisappear:(BOOL)animated
 {
     [[self blurView] setOverlayOpacity:0.0];
-    [[self navigationItem] setRightBarButtonItem:[self searchBarButtonItem]];
+    [[self navigationItem] setRightBarButtonItem:[self searchButtonItem]];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -199,11 +212,42 @@ typedef enum {
     }*/
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+- (void)swipe:(UISwipeGestureRecognizer *)gr
+{
+    if([gr state] == UIGestureRecognizerStateEnded) {
+        if([gr direction] == UISwipeGestureRecognizerDirectionRight) {
+            if([self exploreType] == STKExploreTypePopular) {
+                [[self exploreTypeControl] setSelectedSegmentIndex:0];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            }
+        } else {
+            if([self exploreType] == STKExploreTypeLatest) {
+                [[self exploreTypeControl] setSelectedSegmentIndex:1];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            }
+        }
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+    [leftSwipe setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [leftSwipe setDelegate:self];
+    [[self view] addGestureRecognizer:leftSwipe];
 
+    UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+    [rightSwipe setDirection:UISwipeGestureRecognizerDirectionRight];
+    [rightSwipe setDelegate:self];
+    [[self view] addGestureRecognizer:rightSwipe];
+
+    
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -311,6 +355,7 @@ typedef enum {
     else if([self exploreType] == STKExploreTypePopular)
         [self setActivePostController:[self popularPostsController]];
 
+    [[self searchButton] setSelected:[self isSearchBarActive]];
     
     [[[self blurView] displayLink] setPaused:NO];
 

@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="backgroundImageView" destination="alL-qq-7Ni" id="oCE-NJ-aDk"/>
                 <outlet property="countView" destination="RwR-nx-6cr" id="XKi-sa-zJl"/>
+                <outlet property="numberImageView" destination="aaD-L5-veV" id="LIp-PG-nlQ"/>
                 <outlet property="selectedNameLabel" destination="II4-Au-G5q" id="g8C-Hh-MMX"/>
                 <outlet property="trustView" destination="XNh-yH-M0i" id="vGZ-Wj-sru"/>
                 <outlet property="underlayView" destination="yrH-qv-7qp" id="Dei-jm-30j"/>
@@ -49,16 +50,23 @@
                     <rect key="frame" x="0.0" y="371" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="II4-Au-G5q">
-                            <rect key="frame" x="52" y="9" width="216" height="21"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="II4-Au-G5q">
+                            <rect key="frame" x="85" y="9" width="135" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="WgJ-ax-nje"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                             <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MuV-mW-Rlm">
-                            <rect key="frame" x="276" y="14" width="24" height="22"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MuV-mW-Rlm">
+                            <rect key="frame" x="268" y="14" width="24" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="24" id="SvR-79-zkL"/>
+                                <constraint firstAttribute="height" constant="22" id="kDm-im-VfT"/>
+                            </constraints>
                             <state key="normal" image="btn_email">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -66,20 +74,42 @@
                                 <action selector="sendEmail:" destination="-1" eventType="touchUpInside" id="aKy-Ww-sSH"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vrf-Nf-cJj">
-                            <rect key="frame" x="20" y="14" width="24" height="22"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vrf-Nf-cJj">
+                            <rect key="frame" x="11" y="14" width="24" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="btn_trust">
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="SFO-bM-N3X"/>
+                                <constraint firstAttribute="width" constant="24" id="p0J-4m-6xQ"/>
+                            </constraints>
+                            <state key="normal" image="trust_menu">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <state key="selected" image="trust_menu_selected"/>
+                            <state key="highlighted" image="trust_menu_selected"/>
                             <connections>
                                 <action selector="showList:" destination="-1" eventType="touchUpInside" id="vl2-nG-456"/>
                             </connections>
                         </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aaD-L5-veV">
+                            <rect key="frame" x="53" y="13" width="24" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="24" id="3Iw-Xc-nba"/>
+                                <constraint firstAttribute="height" constant="24" id="P5j-1I-TUN"/>
+                            </constraints>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="Jak-gm-8be"/>
+                        <constraint firstItem="II4-Au-G5q" firstAttribute="leading" secondItem="aaD-L5-veV" secondAttribute="trailing" constant="8" id="OXr-eb-3qn"/>
+                        <constraint firstItem="II4-Au-G5q" firstAttribute="top" secondItem="ION-au-gvc" secondAttribute="top" constant="9" id="Sfn-hY-xd1"/>
+                        <constraint firstAttribute="centerY" secondItem="MuV-mW-Rlm" secondAttribute="centerY" id="ZoL-XN-fut"/>
+                        <constraint firstAttribute="centerX" secondItem="II4-Au-G5q" secondAttribute="centerX" id="dZq-ro-XmY"/>
+                        <constraint firstAttribute="centerY" secondItem="aaD-L5-veV" secondAttribute="centerY" id="hp4-Ml-9r0"/>
+                        <constraint firstItem="Vrf-Nf-cJj" firstAttribute="leading" secondItem="ION-au-gvc" secondAttribute="leading" constant="11" id="jVw-DW-KnF"/>
+                        <constraint firstAttribute="trailing" secondItem="MuV-mW-Rlm" secondAttribute="trailing" constant="20" id="r7o-PD-lns"/>
+                        <constraint firstAttribute="centerY" secondItem="Vrf-Nf-cJj" secondAttribute="centerY" id="tPX-cL-tXF"/>
                     </constraints>
                 </view>
             </subviews>
@@ -110,6 +140,7 @@
     </objects>
     <resources>
         <image name="btn_email" width="24" height="17"/>
-        <image name="btn_trust" width="26" height="24"/>
+        <image name="trust_menu" width="18" height="13"/>
+        <image name="trust_menu_selected" width="18" height="13"/>
     </resources>
 </document>

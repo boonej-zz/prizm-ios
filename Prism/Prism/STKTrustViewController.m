@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UIView *underlayView;
 @property (nonatomic, strong) NSArray *trusts;
+@property (weak, nonatomic) IBOutlet UIImageView *numberImageView;
 
 - (IBAction)showList:(id)sender;
 - (IBAction)sendEmail:(id)sender;
@@ -65,6 +66,15 @@
         STKUser *u = [[[self trusts] valueForKey:@"otherUser"] objectAtIndex:idx];
         
         [[self selectedNameLabel] setText:[u name]];
+        [[self trustView] setSelectedIndex:idx + 1];
+        
+        NSDictionary *lookup = @{@(1) : @"trust_one",
+                                 @(2) : @"trust_two",
+                                 @(3) : @"trust_three",
+                                 @(4) : @"trust_four",
+                                 @(5) : @"trust_five"};
+        UIImage *img = [UIImage imageNamed:[lookup objectForKey:@(idx + 1)]];
+        [[self numberImageView] setImage:img];
     }
     
 }
@@ -126,15 +136,8 @@
 }
 
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (IBAction)showList:(id)sender
 {
-
     
 }
 

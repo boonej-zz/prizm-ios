@@ -49,9 +49,22 @@
     [[self imageView] setFrame:r];
 }
 
+- (void)setSelected:(BOOL)selected
+{
+    [super setSelected:selected];
+    if([self isSelected]) {
+        if([self selectedImage])
+            [[self imageView] setImage:[self selectedImage]];
+        else
+            [[self imageView] setImage:[self image]];
+    } else {
+        [[self imageView] setImage:[self image]];
+    }
+}
+
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    [[self imageView] setImage:[self selectedImage]];
+    [[self imageView] setImage:[self highlightedImage]];
     return YES;
 }
 

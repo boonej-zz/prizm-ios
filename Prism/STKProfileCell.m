@@ -9,8 +9,7 @@
 #import "STKProfileCell.h"
 
 @interface STKProfileCell ()
-@property (nonatomic) BOOL showPrismImageForToggleButton;
-@property (weak, nonatomic) IBOutlet UIButton *toggleButton;
+
 @end
 
 @implementation STKProfileCell
@@ -29,10 +28,10 @@
     
 }
 
-- (IBAction)toggleInformation:(id)sender
+- (void)setShowPrismImageForToggleButton:(BOOL)showPrismImageForToggleButton
 {
-    [self setShowPrismImageForToggleButton:![self showPrismImageForToggleButton]];
-
+    _showPrismImageForToggleButton = showPrismImageForToggleButton;
+    
     if([self showPrismImageForToggleButton]) {
         [[self toggleButton] setImage:[UIImage imageNamed:@"btn_prismbtn"]
                              forState:UIControlStateNormal];
@@ -40,6 +39,13 @@
         [[self toggleButton] setImage:[UIImage imageNamed:@"btn_info"]
                              forState:UIControlStateNormal];
     }
+
+}
+
+- (IBAction)toggleInformation:(id)sender
+{
+    [self setShowPrismImageForToggleButton:![self showPrismImageForToggleButton]];
+
     
     ROUTE(sender);
 }

@@ -9,6 +9,9 @@
 #import "STKTableViewCell.h"
 
 @interface STKFilterCell : STKTableViewCell
+@property (weak, nonatomic) IBOutlet UIButton *gridViewButton;
+@property (weak, nonatomic) IBOutlet UIButton *singleViewButton;
+@property (weak, nonatomic) IBOutlet UIButton *locationButton;
 
 - (IBAction)showSinglePanePosts:(id)sender;
 - (IBAction)showGridPosts:(id)sender;

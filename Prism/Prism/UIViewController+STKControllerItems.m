@@ -43,7 +43,7 @@
 {
     STKNavigationButton *view = [[STKNavigationButton alloc] init];
     [view setImage:[UIImage imageNamed:@"btn_settings"]];
-    [view setSelectedImage:[UIImage imageNamed:@"btn_settings"]];
+    [view setHighlightedImage:[UIImage imageNamed:@"btn_settings"]];
     [view setOffset:8];
     
     [view addTarget:self action:@selector(showSettings:) forControlEvents:UIControlEventTouchUpInside];
@@ -52,18 +52,6 @@
     return bbi;
 }
 
-- (UIBarButtonItem *)searchBarButtonItem
-{
-    STKNavigationButton *view = [[STKNavigationButton alloc] init];
-    [view setImage:[UIImage imageNamed:@"btn_search"]];
-    [view setSelectedImage:[UIImage imageNamed:@"btn_search_selected"]];
-    [view setOffset:8];
-
-    [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
-    
-    return bbi;
-}
 
 - (UIBarButtonItem *)postBarButtonItem
 {
@@ -72,7 +60,7 @@
     [view setOffset:9];
 
     [view setImage:[UIImage imageNamed:@"btn_addcontent"]];
-    [view setSelectedImage:[UIImage imageNamed:@"btn_addcontent_active"]];
+    [view setHighlightedImage:[UIImage imageNamed:@"btn_addcontent_active"]];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     return bbi;
@@ -83,7 +71,7 @@
     STKNavigationButton *view = [[STKNavigationButton alloc] init];
     [view addTarget:self action:@selector(toggleMenu:) forControlEvents:UIControlEventTouchUpInside];
     [view setImage:[UIImage imageNamed:@"btn_menu"]];
-    [view setSelectedImage:[UIImage imageNamed:@"btn_menu_active"]];
+    [view setHighlightedImage:[UIImage imageNamed:@"btn_menu_active"]];
     [view setOffset:-11];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     

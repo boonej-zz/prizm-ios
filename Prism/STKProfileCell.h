@@ -17,6 +17,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *coverPhotoImageView;
 @property (weak, nonatomic) IBOutlet STKAvatarView *avatarView;
+@property (weak, nonatomic) IBOutlet UIButton *toggleButton;
+
+@property (nonatomic) BOOL showPrismImageForToggleButton;
 
 - (IBAction)toggleInformation:(id)sender;
 

@@ -128,7 +128,6 @@
 		BEE5F03D187DC03300CB5325 /* STKInitialProfileStatisticsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE5F03B187DC03300CB5325 /* STKInitialProfileStatisticsCell.m */; };
 		BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE5F03C187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib */; };
 		BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE5F040187DD01C00CB5325 /* NSCharacterSet+STKURL.m */; };
-		BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */; };
 		BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */; };
 		BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */; };
 		BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE8F04518C0F5E6001A28CD /* STKPostComment.m */; };
@@ -2062,7 +2061,6 @@
 		BEE5F03C187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInitialProfileStatisticsCell.xib; sourceTree = "<group>"; };
 		BEE5F03F187DD01C00CB5325 /* NSCharacterSet+STKURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCharacterSet+STKURL.h"; sourceTree = "<group>"; };
 		BEE5F040187DD01C00CB5325 /* NSCharacterSet+STKURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSCharacterSet+STKURL.m"; sourceTree = "<group>"; };
-		BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Temporary.xcassets; sourceTree = "<group>"; };
 		BEE6CBBC1832DCB500BC72F4 /* STKExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKExploreCell.h; path = Prism/STKExploreCell.h; sourceTree = "<group>"; };
 		BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKExploreCell.m; path = Prism/STKExploreCell.m; sourceTree = "<group>"; };
 		BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKExploreCell.xib; path = Prism/STKExploreCell.xib; sourceTree = "<group>"; };
@@ -2204,7 +2202,6 @@
 				BE02EAD4182A81B000A5505A /* Controller */,
 				BE02EAA9182A80A200A5505A /* Supporting Files */,
 				BE02EAB4182A80A200A5505A /* Images.xcassets */,
-				BEE6CBB91832DBC600BC72F4 /* Temporary.xcassets */,
 			);
 			path = Prism;
 			sourceTree = "<group>";
@@ -4417,7 +4414,6 @@
 				BED773FF1890A5BB008770F0 /* STKCaptureViewController.xib in Resources */,
 				BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */,
 				BE1FC3B7186C8C22003464E1 /* STKImageCollectionViewCell.xib in Resources */,
-				BEE6CBBA1832DBC600BC72F4 /* Temporary.xcassets in Resources */,
 				BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */,
 				BEAB9767189AD503002A14F5 /* STKProfileInformationCell.xib in Resources */,
 				BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */,
@@ -4716,7 +4712,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84F14F4B-846D-4488-9E52-6A2E85FFAE41";
+				PROVISIONING_PROFILE = "3777E50B-571E-447D-896B-546F8794071F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Staging)";
@@ -4746,7 +4742,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84F14F4B-846D-4488-9E52-6A2E85FFAE41";
+				PROVISIONING_PROFILE = "3777E50B-571E-447D-896B-546F8794071F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -4852,7 +4848,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84F14F4B-846D-4488-9E52-6A2E85FFAE41";
+				PROVISIONING_PROFILE = "3777E50B-571E-447D-896B-546F8794071F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (Staging)";
@@ -4942,7 +4938,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84F14F4B-846D-4488-9E52-6A2E85FFAE41";
+				PROVISIONING_PROFILE = "3777E50B-571E-447D-896B-546F8794071F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Dev)";
