@@ -1002,17 +1002,32 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 
 - (void)validateWithGoogle:(NSString *)token completion:(void (^)(STKUser *, NSError *))block
-{/*
-    STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointValidateGoogle];
-    [c addQueryValue:token forKey:@"ext_token"];
-    [c setEntityName:@"STKUser"];
-    [c setExistingMatchMap:@{@"uniqueID" : @"entity"}];
-    [c getWithSession:[self session] completionBlock:block];*/
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err){
+            block(nil, err);
+            return;
+        }
+        STKConnection * c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+        [c addQueryValue:token forKey:@"provider_token"];
+        [c addQueryValue:STKUserExternalSystemGoogle forKey:@"provider"];
+        
+        if([self currentUser])
+            [c setModelGraph:@[[self currentUser]]];
+        else
+            [c setModelGraph:@[@"STKUser"]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        
+        [c postWithSession:[self session] completionBlock:block];
+        
+    }];
 }
 
 - (void)fetchGoogleDataForAuth:(GTMOAuth2Authentication *)auth completion:(void (^)(STKUser *pi, NSError *err))block
 {
-    STKUser *pi = [[STKUser alloc] init];
+    STKUser *pi = [NSEntityDescription insertNewObjectForEntityForName:@"STKUser"
+                                                inManagedObjectContext:[self context]];
     [pi setEmail:[auth userEmail]];
     [pi setToken:[auth accessToken]];
     
