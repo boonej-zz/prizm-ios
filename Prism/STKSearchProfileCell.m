@@ -12,7 +12,7 @@
 
 - (void)cellDidLoad
 {
-    
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 
 - (void)layoutContent

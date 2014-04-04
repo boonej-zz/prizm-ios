@@ -17,6 +17,8 @@
 
 @property (nonatomic, readonly) STKMenuController *menuController;
 
+- (UIBarButtonItem *)backButtonItem;
+
 - (void)menuWillAppear:(BOOL)animated;
 - (void)menuWillDisappear:(BOOL)animated;
 

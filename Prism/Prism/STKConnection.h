@@ -36,26 +36,26 @@ typedef enum {
 
 - (id)initWithBaseURL:(NSURL *)url endpoint:(NSString *)endpoint;
 
+// Request Information
 @property (nonatomic, readonly) NSURLRequest *request;
 @property (nonatomic) STKConnectionMethod method;
 @property (nonatomic, strong) NSArray *identifiers;
-
 @property (nonatomic, strong) NSDictionary *parameters;
 @property (nonatomic, strong) NSString *authorizationString;
-@property (nonatomic, copy) void (^completionBlock)(id obj, NSError *err);
 @property (nonatomic, strong) NSData *HTTPBody;
+@property (nonatomic, strong) NSDictionary *resolutionQueries;
+@property (nonatomic, strong) NSDictionary *containQueries;
+@property (nonatomic, strong) NSArray *fieldQueries;
+@property (nonatomic, strong) NSDictionary *searchQuery;
 
+// Parsing Information
 @property (nonatomic, strong) id <STKJSONObject> jsonRootObject;
 @property (nonatomic) BOOL shouldReturnArray;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, copy) NSString *entityName;
-
 // { ourName : theirName}
 @property (nonatomic, strong) NSDictionary *existingMatchMap;
 @property (nonatomic, copy) void (^insertionBlock)(NSManagedObject *rootObject);
-@property (nonatomic, strong) NSManagedObjectContext *context;
-@property (nonatomic) NSInteger statusCode;
-
-
 
 // Pass either an array or dictionary containing any number of arrays, dictionaries and strings.
 // The structure of the modelGraph is used is to match the structure of the incoming *internal* JSON.
@@ -65,6 +65,10 @@ typedef enum {
 // If used in cojunction with context, ClassName will be treated as Core data entities
 // Only supports homogenous arrays.
 @property (nonatomic, strong) id modelGraph;
+
+// Response Information
+@property (nonatomic) NSInteger statusCode;
+@property (nonatomic, copy) void (^completionBlock)(id obj, NSError *err);
 
 - (void)beginWithSession:(NSURLSession *)session;
 - (void)beginWithSession:(NSURLSession *)session method:(STKConnectionMethod)method completionBlock:(void (^)(id obj, NSError *err))block;
@@ -84,6 +88,9 @@ typedef enum {
             withKeyMap:(NSDictionary *)keyMap;
 
 - (void)addQueryValue:(id)value forKey:(NSString *)key;
+
+- (void)addResolutionQuery:(NSDictionary *)query;
+- (void)addContainQuery:(NSDictionary *)query;
 
 + (NSMutableArray *)activeConnections;
 - (void)reportFailureWithError:(NSError *)err;

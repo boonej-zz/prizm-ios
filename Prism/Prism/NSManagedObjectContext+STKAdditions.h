@@ -16,4 +16,12 @@
                                                   matchMap:(NSDictionary *)matchMap
                                              alreadyExists:(BOOL *)alreadyExists;
 
+// If you call one of these....
+- (id)obtainEditableCopy:(NSManagedObject *)object;
+- (id)obtainEditableInstanceOfEntity:(NSString *)entityName;
+
+// You must call one of these in the future
+- (void)confirmChangesToEditableObject:(NSManagedObject *)object;
+- (void)discardChangesToEditableObject:(NSManagedObject *)object;
+
 @end

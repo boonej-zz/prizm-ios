@@ -1,15 +1,14 @@
 //
-//  STKLabelCell.m
+//  STKSettingsShareCell.m
 //  Prism
 //
-//  Created by Joe Conway on 2/12/14.
+//  Created by Joe Conway on 4/3/14.
 //  Copyright (c) 2014 Higher Altitude. All rights reserved.
 //
 
-#import "STKLabelCell.h"
+#import "STKSettingsShareCell.h"
 
-
-@implementation STKLabelCell
+@implementation STKSettingsShareCell
 
 - (void)cellDidLoad
 {

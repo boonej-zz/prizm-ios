@@ -42,7 +42,7 @@
     [self configureAppearanceProxies];
     
     
-    STKUser *u =[[STKUserStore store] currentUser];
+    STKUser *u = [[STKUserStore store] currentUser];
     
     UIViewController *hvc = [[STKHomeViewController alloc] init];
     UIViewController *evc = [[STKExploreViewController alloc] init];
@@ -72,8 +72,6 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    
-
     if(!u) {
         STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
         STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
@@ -107,6 +105,7 @@
     UIGraphicsEndImageContext();
 
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:STKFont(14)];
+    
     
 }
 

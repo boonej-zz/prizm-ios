@@ -47,6 +47,26 @@ NSString * const STKPostStatusDeleted = @"deleted";
 @dynamic hashTags, imageURLString, uniqueID, datePosted, locationLatitude, locationLongitude, locationName,
 visibility, status, repost, referenceTimestamp, text, comments, commentCount, creator, originalPost, likes, likeCount,
 type, fInverseFeed;
+
++ (NSDictionary *)reverseKeyMap
+{
+    return @{
+             
+             @"uniqueID": @"_id" ,
+             @"type" : STKPostTypeKey,
+             
+             @"imageURLString" : STKPostURLKey,
+             @"locationName" : STKPostLocationNameKey,
+             STKPostLocationLatitudeKey : @"locationLatitude",
+             STKPostLocationLongitudeKey : @"locationLongitude",
+             STKPostVisibilityKey : @"visibility",
+             @"status" : @"status",
+             @"is_repost" : @"repost",
+             STKPostTextKey : @"text"
+             
+             };
+}
+
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
     static NSDateFormatter *df = nil;

@@ -31,6 +31,10 @@
 #import "STKTrust.h"
 #import "STKPostController.h"
 
+#import "STKInstagramAuthViewController.h"
+#import "STKNetworkStore.h"
+#import "STKSettingsViewController.h"
+
 typedef enum {
     STKProfileSectionHeader,
     STKProfileSectionStatistics,
@@ -73,6 +77,12 @@ typedef enum {
     [super viewDidAppear:animated];
 }
 
+- (void)showSettings:(id)sender
+{
+    STKSettingsViewController *svc = [[STKSettingsViewController alloc] initWithItems:nil];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:svc];
+    [self presentViewController:nvc animated:YES completion:nil];
+}
 
 - (BOOL)isShowingCurrentUserProfile
 {
@@ -104,9 +114,13 @@ typedef enum {
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
     }
     
+    if([[[self navigationController] viewControllers] indexOfObject:self] > 0) {
+        [[self navigationItem] setLeftBarButtonItem:[self backButtonItem]];
+    }
+    
     [self refreshStatisticsView];
     if([self profile]) {
-        [[STKUserStore store] fetchUserDetails:[self profile] completion:^(STKUser *u, NSError *err) {
+        [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:nil completion:^(STKUser *u, NSError *err) {
             [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionHeader]
                             withRowAnimation:UITableViewRowAnimationNone];
 

@@ -662,7 +662,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     }];
 }
 
-- (void)editPost:(STKPost *)p withInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block
+- (void)editPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -675,13 +675,11 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         
-        for(NSString *key in info) {
-            [c addQueryValue:[info objectForKey:key] forKey:key];
-        }
+
         //[c setModelGraph:@[p]];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(!err) {
-                [p setValuesForKeysWithDictionary:info];
+               // [p setValuesForKeysWithDictionary:info];
                 [[[STKUserStore store] context] save:nil];
             } else {
                 

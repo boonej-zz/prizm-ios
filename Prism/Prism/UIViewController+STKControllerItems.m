@@ -13,6 +13,19 @@
 
 @implementation UIViewController (STKMenuControllerExtensions)
 
+- (UIBarButtonItem *)backButtonItem
+{
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                              landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                           target:self action:@selector(back:)];
+    return bbi;
+}
+
+- (void)back:(id)sender
+{
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+
 - (STKMenuController *)menuController
 {
     UIViewController *parent = [self parentViewController];

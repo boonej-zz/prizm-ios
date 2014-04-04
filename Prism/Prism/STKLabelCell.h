@@ -11,5 +11,6 @@
 @interface STKLabelCell : STKTableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *label;
+@property (weak, nonatomic) IBOutlet UIView *overlayView;
 
 @end

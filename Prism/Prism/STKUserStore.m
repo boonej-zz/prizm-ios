@@ -20,6 +20,7 @@
 #import "STKSecurePassword.h"
 #import "STKBaseStore.h"
 #import "STKTrust.h"
+#import "STKNetworkStore.h"
 
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 
@@ -124,6 +125,21 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)authenticateUser:(STKUser *)u
 {
     [self setCurrentUser:u];
+    
+    // Scan external networks
+    if([u instagramToken]) {
+        [[STKNetworkStore store] transferPostsFromInstagramWithToken:[u instagramToken]
+                                                       lastMinimumID:[u instagramLastMinID]
+                                                          completion:^(NSString *lastID, NSError *err) {
+                                                              if(!err && lastID) {
+                                                                  [u setInstagramLastMinID:lastID];
+                                                                  [self updateUserDetails:u completion:^(STKUser *user, NSError *err) {
+                                                                      
+                                                                  }];
+                                                              }
+                                                          }];
+    }
+
 }
 
 
@@ -193,9 +209,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 [self setContext:ctx];
                 [self setCurrentUser:u];
                 [self pruneDatabase];
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    [self attemptTransparentLoginWithUser:u];
-                }];
+                
+                [self attemptTransparentLoginWithUser:u];
+                
                 
                 return;
             }
@@ -218,29 +234,22 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user uniqueID]]];
 
-        [c addQueryObject:user
-              missingKeys:nil
-               withKeyMap:@{@"firstName" : @"first_name",
-                            @"lastName" : @"last_name",
-                            @"gender" : @"gender",
-                            @"zipCode" : @"zip_postal",
-                            @"city" : @"city",
-                            @"state" : @"state",
-                            @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
-                            @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
-                            @"birthday" : ^(id value) {
-                                NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                                [df setDateFormat:@"MM-dd-yyyy"];
-                                return @{@"birthday" : [df stringFromDate:value]};
-                            },
-                            @"website" : @"website",
-                            @"blurb" : @"info"
-        }];
+        NSMutableDictionary *changedValues = [user changedValues];
+        NSDictionary *keyMap = [STKUser reverseKeyMap];
+        for(NSString *key in changedValues) {            
+            NSString *val = [changedValues objectForKey:key];
+            NSString *newKey = [keyMap objectForKey:key];
+            if(val && newKey) {
+                [c addQueryValue:val
+                          forKey:newKey];
+            }
+        }
         
         [c setModelGraph:@[user]];
-        [c setContext:[self context]];
+        [c setContext:[user managedObjectContext]];
         [c putWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
             if(!err) {
+                [[user managedObjectContext] save:nil];
                 [[self context] save:nil];
             }
             block(user, err);
@@ -248,7 +257,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)fetchUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block
+- (void)fetchUserDetails:(STKUser *)user additionalFields:(NSArray *)fields completion:(void (^)(STKUser *u, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -258,7 +267,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user uniqueID]]];
-        [c addQueryValue:[[self currentUser] uniqueID] forKey:@"creator"];
+        if(![user isEqual:[self currentUser]]) {
+            [c addContainQuery:@{@"followers" : @{@"_id" : [[self currentUser] uniqueID]}}];
+            [c addContainQuery:@{@"following" : @{@"_id" : [[self currentUser] uniqueID]}}];
+        }
+        [c setFieldQueries:fields];
+        
         [c setModelGraph:@[user]];
         [c setContext:[self context]];
         [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
@@ -278,9 +292,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c addQueryValue:@"30" forKey:@"limit"];
-        [c addQueryValue:name forKey:@"name"];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/search"];
+        [c setIdentifiers:@[@"users"]];
+
+        [c setSearchQuery:@{@"name" : name}];
         
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
@@ -375,6 +390,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c addResolutionQuery:@{@"_id" : @{@"format" : @"short"}}];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(!err) {

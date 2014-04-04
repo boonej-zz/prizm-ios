@@ -21,6 +21,7 @@
 #import "STKTextInputViewController.h"
 #import "STKAvatarView.h"
 #import "STKLockCell.h"
+#import "UIViewController+STKControllerItems.h"
 
 @import AddressBook;
 @import Social;
@@ -80,10 +81,12 @@ const long STKCreateProgressGeocoding = 4;
 {
     self = [super initWithNibName:nil bundle:nil];
     if(self) {
-        [self setUser:user];
-        if(![self user])
-            [self setUser:[NSEntityDescription insertNewObjectForEntityForName:@"STKUser"
-                                                        inManagedObjectContext:[[STKUserStore store] context]]];
+        if(user) {
+            STKUser *u = (STKUser *)[[user managedObjectContext] obtainEditableCopy:user];
+            [self setUser:u];
+        } else {
+            [self setUser:(STKUser *)[[[STKUserStore store] context] obtainEditableInstanceOfEntity:@"STKUser"]];
+        }
         
         _items = @[
                    @{@"title" : @"Email", @"key" : @"email",
@@ -403,6 +406,15 @@ const long STKCreateProgressGeocoding = 4;
     [[self navigationController] popViewControllerAnimated:YES];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+ 
+    if([self isMovingFromParentViewController]) {
+        [[[self user] managedObjectContext] discardChangesToEditableObject:[self user]];
+        [self setUser:nil];
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -418,10 +430,7 @@ const long STKCreateProgressGeocoding = 4;
     
     
     if([self isEditingProfile]) {
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
-                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
-                                                               target:self action:@selector(back:)];
-        [[self navigationItem] setLeftBarButtonItem:bbi];
+        [[self navigationItem] setLeftBarButtonItem:[self backButtonItem]];
     }
     
     
@@ -769,9 +778,6 @@ const long STKCreateProgressGeocoding = 4;
         __weak STKTextInputViewController *wivc = ivc;
         [ivc setCompletion:^(NSString *str) {
             [[self user] setValue:str forKeyPath:[item objectForKey:@"key"]];
-            [[STKUserStore store] updateUserDetails:[self user] completion:^(STKUser *u, NSError *err) {
-                
-            }];
             [[wivc navigationController] popViewControllerAnimated:YES];
         }];
         [[self navigationController] pushViewController:ivc animated:YES];

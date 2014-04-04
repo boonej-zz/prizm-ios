@@ -298,10 +298,13 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     if(image)
         [a addObject:image];
     if([post text])
-        [a addObject:[post text]];
+        [a addObject:[NSString stringWithFormat:@"%@ @beprismatic", [post text]]];
+    else
+        [a addObject:@"@beprismatic"];
+
     if(post)
         [a addObject:post];
-
+    
     
     [self setFinishHandler:block];
     
@@ -311,7 +314,8 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];
     _activityViewController = [[UIActivityViewController alloc] initWithActivityItems:a
                                                                 applicationActivities:activities];
-    [_activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypePrint]];
+    [_activityViewController setExcludedActivityTypes:
+     @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail]];
     
 
     return [self activityViewController];

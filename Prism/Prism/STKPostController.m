@@ -195,6 +195,7 @@
     STKPost *post = [[self posts] objectAtIndex:[ip row]];
     if([[post creator] isEqual:[[STKUserStore store] currentUser]]) {
         STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+        [vc setTitle:@"Likes"];
         [[STKContentStore store] fetchLikersForPost:[[self posts] objectAtIndex:[ip row]]
                                          completion:^(NSArray *likers, NSError *err) {
                                              [vc setUsers:likers];

@@ -266,6 +266,11 @@ typedef enum {
     [[self searchResultsTableView] setBackgroundColor:[UIColor clearColor]];
     [[self searchResultsTableView] setSeparatorColor:STKTextTransparentColor];
     [[self searchResultsTableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
+
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    [v setBackgroundColor:[UIColor clearColor]];
+    [[self searchResultsTableView] setTableFooterView:v];
+
     
     [self configureSearchArea];
     [self configureSegmentedControl];
@@ -371,7 +376,11 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setBackgroundColor:[UIColor clearColor]];
+    if([cell isKindOfClass:[STKSearchProfileCell class]]) {
+        [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
+    } else {
+        [cell setBackgroundColor:[UIColor clearColor]];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -429,7 +438,6 @@ typedef enum {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(tableView == [self searchResultsTableView] && [self searchType] == STKSearchTypeUser) {
-        [self setSearchBarActive:NO];
         STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
         [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
         [[self navigationController] pushViewController:pvc animated:YES];

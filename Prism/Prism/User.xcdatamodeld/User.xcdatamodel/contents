@@ -65,6 +65,8 @@
         <attribute name="followerCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="followingCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="instagramLastMinID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="instagramToken" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -89,6 +91,6 @@
         <element name="STKPost" positionX="0" positionY="144" width="128" height="403"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="163"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="150"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="523"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="555"/>
     </elements>
 </model>

@@ -306,7 +306,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         [thumbnails addObject:t];
     }
 
-    if([thumbnails count] != [paths count] + 1) {
+    if([thumbnails count] + 1 != [paths count]) {
         NSLog(@"Mismatch in thumbnails");
     }
     

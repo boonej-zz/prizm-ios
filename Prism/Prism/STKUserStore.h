@@ -41,7 +41,7 @@ typedef enum {
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
 
 // Complete
-- (void)fetchUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
+- (void)fetchUserDetails:(STKUser *)user additionalFields:(NSArray *)fields completion:(void (^)(STKUser *u, NSError *err))block;
 
 // Complete - should introduce 'editing context'
 - (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;

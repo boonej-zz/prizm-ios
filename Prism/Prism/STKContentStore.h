@@ -38,7 +38,7 @@ extern NSString * const STKContentStorePostDeletedKey;
 // Complete
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
 // * Requires update to service to include post in response body
-- (void)editPost:(STKPost *)p withInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
+- (void)editPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block;
 
 // Complete - Verify 'Older'
 - (void)fetchFeedForUser:(STKUser *)u

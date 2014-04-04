@@ -38,13 +38,40 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 @dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
-accountStoreID;
+accountStoreID, instagramLastMinID, instagramToken;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 
 - (NSString *)name
 {
     return [NSString stringWithFormat:@"%@ %@", [self firstName], [self lastName]];
+}
+
++ (NSDictionary *)reverseKeyMap
+{
+    return @{
+             @"city" : @"city",
+             @"uniqueID" : @"_id",
+             @"email" : @"email",
+             @"firstName" : @"first_name",
+             @"lastName" : @"last_name",
+             @"state" : @"state",
+             @"zipCode" : @"zip_postal",
+             @"gender" : @"gender",
+             @"blurb" : @"info",
+             @"website" : @"website",
+             @"religion" : @"religion",
+             @"ethnicity" : @"ethnicity",
+             @"instagramToken" : @"instagram_token",
+             @"instagramLastMinID" : @"instagram_min_id",
+             @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
+             @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
+             @"birthday" : ^(id value) {
+                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                 [df setDateFormat:@"MM-dd-yyyy"];
+                 return @{@"birthday" : [df stringFromDate:value]};
+             }
+    };
 }
 
 - (NSError *)readFromJSONObject:(id)jsonObject
@@ -82,6 +109,9 @@ accountStoreID;
         @"following_count" : @"followingCount",
         @"posts_count" : @"postCount",
 
+        @"instagram_token" : @"instagramToken",
+        @"instagram_min_id" : @"instagramLastMinID",
+        
         @"trusts" : @{STKJSONBindFieldKey : @"ownedTrusts", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"followers" : @{STKJSONBindFieldKey : @"followers", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"following" : @{STKJSONBindFieldKey : @"following", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},

@@ -20,7 +20,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Save"
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                 style:UIBarButtonItemStyleBordered
                                                                target:self action:@selector(save:)];
         [[self navigationItem] setRightBarButtonItem:bbi];

@@ -41,6 +41,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 @interface STKUser : NSManagedObject <STKJSONObject>
 
++ (NSDictionary *)reverseKeyMap;
+
 @property (nonatomic) NSString *uniqueID;
 
 @property (nonatomic, retain) NSDate *birthday;
@@ -65,6 +67,9 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 @property (nonatomic, strong) NSString *religion;
 @property (nonatomic, strong) NSString *ethnicity;
+
+@property (nonatomic, strong) NSString *instagramToken;
+@property (nonatomic, strong) NSString *instagramLastMinID;
 
 @property (nonatomic) int followerCount;
 @property (nonatomic) int followingCount;

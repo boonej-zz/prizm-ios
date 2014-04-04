@@ -607,9 +607,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         [self setEditingPostText:NO];
         
         [STKProcessingView present];
-        [[STKContentStore store] editPost:[self post]
-                                 withInfo:@{STKPostTextKey : [[self commentTextField] text]}
-                               completion:^(STKPost *p, NSError *err) {
+        STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
+        [p setText:[[self commentTextField] text]];
+        [[STKContentStore store] editPost:p
+                               completion:^(STKPost *result, NSError *err) {
+                                   [[p managedObjectContext] discardChangesToEditableObject:p];
                                    [STKProcessingView dismiss];
                                    [[self tableView] reloadData];
                                }];

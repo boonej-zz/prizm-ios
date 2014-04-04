@@ -14,13 +14,15 @@
 
 #ifdef BASE_URL_DEV
 NSString * const STKUserBaseURLString = @"https://ec2-54-186-28-238.us-west-2.compute.amazonaws.com";
+//NSString * const STKPrismRedirectURI = @"https://ec2-54-186-28-238.us-west-2.compute.amazonaws.com/callback";
+NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com/callback";
 #elif BASE_URL_STAGING
 NSString * const STKUserBaseURLString = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com";
+NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com/callback";
 #endif
 
 NSString * const STKPrismClientSecret = @"f27198fb-689d-4965-acb0-0e9c5f61ddec";
 NSString * const STKPrismClientID = @"67e1fe4f-db1b-4d5c-bdc7-56270b0822e2";
-NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com/callback";
 
 NSString * const STKBaseStoreEndpointAuthorization = @"/oauth2/authorize";
 NSString * const STKBaseStoreEndpointToken = @"/oauth2/token";
@@ -88,7 +90,6 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
         [[self authorizedRequestQueue] addObject:request];
         
         if(![self isAuthenticating]) {
-            
             [self setAuthenticating:YES];
             void (^completion)(STKAuthorizationToken *token, NSError *err) = ^(STKAuthorizationToken *token, NSError *err) {
                 [self setAuthenticating:NO];
