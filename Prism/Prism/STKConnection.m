@@ -17,8 +17,6 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
 @property (nonatomic, weak) NSURLSessionDataTask *internalConnection;
 @property (nonatomic, strong) NSMutableDictionary *internalArguments;
-@property (nonatomic, strong) NSMutableDictionary *internalResolutionQueries;
-@property (nonatomic, strong) NSMutableDictionary *internalContainQueries;
 
 @property (nonatomic, strong) NSURL *baseURL;
 @property (nonatomic, strong) NSString *endpoint;
@@ -28,7 +26,6 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 @end
 
 @implementation STKConnection
-@dynamic parameters, resolutionQueries, containQueries;
 
 + (NSMutableArray *)activeConnections
 {
@@ -97,27 +94,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         }
     }
     
-    NSMutableDictionary *xArgumentsBody = [[NSMutableDictionary alloc] init];
-    if([self internalResolutionQueries]) {
-        [xArgumentsBody setObject:[self internalResolutionQueries] forKey:@"resolve"];
-    }
-    if([self containQueries]) {
-        [xArgumentsBody setObject:[self containQueries] forKey:@"contains"];
-    }
-    if([self fieldQueries]) {
-        NSString *delim = [[self fieldQueries] componentsJoinedByString:@" "];
-        [xArgumentsBody setObject:delim forKey:@"fields"];
-    }
-    if([self searchQuery]) {
-        if([[self searchQuery] count] > 1) {
-            @throw [NSException exceptionWithName:@"STKConnectionException"
-                                           reason:@"Can only specify one key-value pair for searchquery" userInfo:nil];
-        }
-        [xArgumentsBody setObject:[self searchQuery] forKey:@"search"];
-    }
-    
-    if([xArgumentsBody count] > 0) {
-        NSData *json = [NSJSONSerialization dataWithJSONObject:xArgumentsBody options:0 error:nil];
+    if([self queryObject]) {
+        NSData *json = [NSJSONSerialization dataWithJSONObject:[[self queryObject] dictionaryRepresentation] options:0 error:nil];
         NSString *encodedJSON = [json base64EncodedStringWithOptions:0];
         [req addValue:encodedJSON forHTTPHeaderField:@"X-Arguments"];
     }
@@ -268,53 +246,6 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 - (NSDictionary *)parameters
 {
     return [[self internalArguments] copy];
-}
-
-- (void)addResolutionQuery:(NSDictionary *)query
-{
-    if(!_internalResolutionQueries) {
-        _internalResolutionQueries = [[NSMutableDictionary alloc] init];
-    }
-    
-    [_internalResolutionQueries addEntriesFromDictionary:query];
-}
-
-- (NSDictionary *)resolutionQueries
-{
-    return [[self internalResolutionQueries] copy];
-}
-
-- (void)setResolutionQueries:(NSDictionary *)resolutionQueries
-{
-    [_internalResolutionQueries removeAllObjects];
-    for(NSString *key in resolutionQueries) {
-        id val = [resolutionQueries objectForKey:key];
-        [self addResolutionQuery:val];
-    }
-
-}
-
-- (NSDictionary *)containQueries
-{
-    return [[self internalContainQueries] copy];
-}
-
-- (void)setContainQueries:(NSDictionary *)containQueries
-{
-    [_internalContainQueries removeAllObjects];
-    for(NSString *key in containQueries) {
-        id val = [containQueries objectForKey:key];
-        [self addContainQuery:val];
-    }
-}
-
-- (void)addContainQuery:(NSDictionary *)query
-{
-    if(![self internalContainQueries]) {
-        _internalContainQueries = [[NSMutableDictionary alloc] init];
-    }
-    
-    [_internalContainQueries addEntriesFromDictionary:query];
 }
 
 - (void)handleError:(NSError *)error

@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "STKJSONObject.h"
+#import "STKQueryObject.h"
 
 @import CoreData;
 
@@ -43,10 +44,7 @@ typedef enum {
 @property (nonatomic, strong) NSDictionary *parameters;
 @property (nonatomic, strong) NSString *authorizationString;
 @property (nonatomic, strong) NSData *HTTPBody;
-@property (nonatomic, strong) NSDictionary *resolutionQueries;
-@property (nonatomic, strong) NSDictionary *containQueries;
-@property (nonatomic, strong) NSArray *fieldQueries;
-@property (nonatomic, strong) NSDictionary *searchQuery;
+@property (nonatomic, strong) STKQueryObject *queryObject;
 
 // Parsing Information
 @property (nonatomic, strong) id <STKJSONObject> jsonRootObject;
@@ -73,7 +71,6 @@ typedef enum {
 - (void)beginWithSession:(NSURLSession *)session;
 - (void)beginWithSession:(NSURLSession *)session method:(STKConnectionMethod)method completionBlock:(void (^)(id obj, NSError *err))block;
 
-
 - (void)postWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 - (void)putWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 - (void)getWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
@@ -88,9 +85,6 @@ typedef enum {
             withKeyMap:(NSDictionary *)keyMap;
 
 - (void)addQueryValue:(id)value forKey:(NSString *)key;
-
-- (void)addResolutionQuery:(NSDictionary *)query;
-- (void)addContainQuery:(NSDictionary *)query;
 
 + (NSMutableArray *)activeConnections;
 - (void)reportFailureWithError:(NSError *)err;

@@ -26,6 +26,7 @@
 #import "STKPostController.h"
 #import "STKUserListViewController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKRenderServer.h"
 
 @interface STKPostViewController ()
     <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, STKPostControllerDelegate>
@@ -41,6 +42,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *deletePostButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteCommentButton;
 @property (weak, nonatomic) IBOutlet UIButton *postButton;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *visibilityControl;
+@property (weak, nonatomic) IBOutlet UIView *editOverlayView;
+@property (weak, nonatomic) IBOutlet UIImageView *editMenuBackgroundImageView;
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
@@ -48,12 +52,15 @@
 
 @property (nonatomic, strong) STKPostCell *postCell;
 @property (nonatomic) BOOL editingPostText;
+@property (nonatomic) BOOL editMenuVisible;
 
 @property (nonatomic, strong) STKPostController *postController;
 @property (nonatomic, strong) NSMutableArray *comments;
 
-- (IBAction)postComment:(id)sender;
+@property (strong, nonatomic) IBOutlet UIView *editView;
 
+- (IBAction)postComment:(id)sender;
+- (IBAction)changeVisibility:(id)sender;
 - (BOOL)postHasText;
 
 - (STKPostComment *)commentForIndexPath:(NSIndexPath *)ip;
@@ -121,8 +128,33 @@
     return nil;
 }
 
+- (void)setEditMenuVisible:(BOOL)editMenuVisible
+{
+    _editMenuVisible = editMenuVisible;
+    
+    if([self editMenuVisible]) {
+        [[self editOverlayView] setHidden:NO];
+        int index = [[@{STKPostVisibilityPublic : @0, STKPostVisibilityTrust : @1, STKPostVisibilityPrivate : @2}
+                      objectForKey:[[self post] visibility]] intValue];
+        [[self visibilityControl] setSelectedSegmentIndex:index];
+        
+        
+        CGRect r = [[self view] convertRect:[[self editView] frame]
+                                   fromView:[self overlayVIew]];
+        
+        UIImage *img = [[STKRenderServer renderServer] instantBlurredImageForView:[self view] inSubrect:r];
+        [[self editMenuBackgroundImageView] setImage:img];
+
+    } else {
+        [[self editOverlayView] setHidden:YES];
+    }
+    
+
+}
+
 - (IBAction)deleteMainPost:(id)sender
 {
+    [self setEditMenuVisible:NO];
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Delete Post"
                                                  message:@"Are you sure you want to delete this post?"
                                                 delegate:self
@@ -160,8 +192,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-
     
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
 
@@ -191,11 +221,10 @@
     [[self tableView] setTableFooterView:footerView];
     
     
-    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeDown:)];
-    [swipe setDirection:UISwipeGestureRecognizerDirectionDown];
-    [swipe setDelegate:self];
-    [[self view] addGestureRecognizer:swipe];
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTapped:)];
+    [[self editOverlayView] addGestureRecognizer:gr];
 }
+
 
 
 - (void)viewWillAppear:(BOOL)animated
@@ -223,6 +252,9 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [[self overlayVIew] setHidden:YES];
+
+    [self setEditMenuVisible:NO];
+    
     [[self tableView] reloadData];
     
     [[self stretchView] setUrlString:[[self post] imageURLString]];
@@ -245,19 +277,12 @@
 
 }
 
-- (void)swipeDown:(UIGestureRecognizer *)sender
+- (void)overlayTapped:(UITapGestureRecognizer *)gr
 {
-//    if([sender state] == UIGestureRecognizerStateEnded) {
-//        [[self view] endEditing:YES];
-//    }
+    if([gr state] == UIGestureRecognizerStateEnded) {
+        [self setEditMenuVisible:NO];
+    }
 }
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return YES;
-}
-
-
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -337,14 +362,14 @@
     [[self overlayVIew] setHidden:YES];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (IBAction)editPostText:(id)sender
 {
-    if([indexPath row] == 0 && ![self commentForIndexPath:indexPath] && [[[self post] creator] isEqual:[[STKUserStore store] currentUser]]) {
-        [self setEditingPostText:YES];
-        [[self commentTextField] setText:[[self post] text]];
-        [[self commentTextField] becomeFirstResponder];
-        [[self commentTextField] selectAll:nil];
-    }
+    [self setEditMenuVisible:NO];
+    
+    [self setEditingPostText:YES];
+    [[self commentTextField] setText:[[self post] text]];
+    [[self commentTextField] becomeFirstResponder];
+    [[self commentTextField] selectAll:nil];
 }
 
 - (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingImageAtIndex:(int)idx
@@ -419,7 +444,11 @@
 
 }
 
-
+- (void)editButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [[self view] endEditing:YES];
+    [self setEditMenuVisible:YES];
+}
 
 - (void)tableView:(UITableView *)tableView
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
@@ -569,13 +598,15 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             [[c likeButton] setHidden:YES];
             [[c likeImageView] setHidden:YES];
             [[c likeCountLabel] setHidden:YES];
+            [[c editButton] setHidden:NO];
         } else {
             STKPostComment *comment = [self commentForIndexPath:indexPath];
             
             [[c textView] setText:[comment text]];
             [[c avatarImageView] setUrlString:[[comment creator] profilePhotoPath]];
             [[c nameLabel] setText:[[comment creator] name]];
-            
+            [[c editButton] setHidden:YES];
+
             NSString *likeActionText = @"Like";
             if([comment isLikedByUser:[[STKUserStore store] currentUser]]) {
                 likeActionText = @"Unlike";
@@ -611,7 +642,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         [p setText:[[self commentTextField] text]];
         [[STKContentStore store] editPost:p
                                completion:^(STKPost *result, NSError *err) {
-                                   [[p managedObjectContext] discardChangesToEditableObject:p];
+                                   [[[self post] managedObjectContext] discardChangesToEditableObject:p];
                                    [STKProcessingView dismiss];
                                    [[self tableView] reloadData];
                                }];
@@ -645,4 +676,21 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
                                         animated:YES];
     }
 }
+
+- (IBAction)changeVisibility:(UISegmentedControl *)sender
+{
+    NSString *visibilityString = [@{@0 : STKPostVisibilityPublic, @1 : STKPostVisibilityTrust, @2: STKPostVisibilityPrivate}
+                                   objectForKey:@([sender selectedSegmentIndex])];
+    [STKProcessingView present];
+    STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
+    [p setVisibility:visibilityString];
+    [[STKContentStore store] editPost:p
+                           completion:^(STKPost *result, NSError *err) {
+                               [[[self post] managedObjectContext] discardChangesToEditableObject:p];
+                               [STKProcessingView dismiss];
+                               [[self tableView] reloadData];
+                           }];
+}
+
+
 @end

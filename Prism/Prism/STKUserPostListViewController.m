@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *filterBar;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+@property (weak, nonatomic) IBOutlet UIButton *personalButton;
 @property (nonatomic, strong) STKPostController *postController;
 @end
 
@@ -87,7 +88,7 @@
 {
     [super viewDidLoad];
     
-    
+    [[self personalButton] setHidden:![self allowPersonalFilter]];
 
     
     [[self tableView] setRowHeight:106];

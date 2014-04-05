@@ -18,6 +18,16 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.75" colorSpace="deviceRGB"/>
                     </view>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NAX-11-hUs">
+                        <rect key="frame" x="290" y="6" width="30" height="30"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" title="v">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="editButtonTapped:" destination="TZf-0Y-Lx6" eventType="touchUpInside" id="dMv-iR-0xV"/>
+                        </connections>
+                    </button>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2L-fa-zU1">
                         <rect key="frame" x="52" y="31" width="234" height="21"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -144,6 +154,7 @@
             <connections>
                 <outlet property="avatarImageView" destination="kwb-YQ-uOI" id="9mC-qq-Ot8"/>
                 <outlet property="clockImageView" destination="ge7-HD-XRM" id="9Uu-WA-7dd"/>
+                <outlet property="editButton" destination="NAX-11-hUs" id="t1T-1i-4ae"/>
                 <outlet property="likeButton" destination="YOL-96-fKX" id="thl-vQ-FOn"/>
                 <outlet property="likeCountLabel" destination="wCh-kh-FbI" id="3BP-mK-UhZ"/>
                 <outlet property="likeImageView" destination="xrs-5s-4lK" id="CeQ-Mx-p9q"/>

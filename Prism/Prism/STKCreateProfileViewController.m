@@ -81,12 +81,7 @@ const long STKCreateProgressGeocoding = 4;
 {
     self = [super initWithNibName:nil bundle:nil];
     if(self) {
-        if(user) {
-            STKUser *u = (STKUser *)[[user managedObjectContext] obtainEditableCopy:user];
-            [self setUser:u];
-        } else {
-            [self setUser:(STKUser *)[[[STKUserStore store] context] obtainEditableInstanceOfEntity:@"STKUser"]];
-        }
+        [self setUser:[[[STKUserStore store] context] obtainEditableInstanceOfEntity:@"STKUser"]];
         
         _items = @[
                    @{@"title" : @"Email", @"key" : @"email",
@@ -129,7 +124,9 @@ const long STKCreateProgressGeocoding = 4;
 {
     self = [super initWithNibName:nil bundle:nil];
     if(self) {
-        [self setUser:user];
+        STKUser *u = [[user managedObjectContext] obtainEditableCopy:user];
+        [self setUser:u];
+
         [self setEditingProfile:YES];
         [[self navigationItem] setTitle:@"Edit Profile"];
         
@@ -487,6 +484,19 @@ const long STKCreateProgressGeocoding = 4;
     }
     [self configureInterface];
     [[self tableView] reloadData];
+    
+    if([self isEditingProfile]) {
+        [STKProcessingView present];
+        [[STKUserStore store] fetchUserDetails:[self user] additionalFields:@[@"zip_postal", @"birthday", @"gender"]
+                                    completion:^(STKUser *u, NSError *err) {
+                                        [STKProcessingView dismiss];
+                                        if(err ) {
+                                            [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                            [[self navigationController] popViewControllerAnimated:YES];
+                                        }
+                                        [[self tableView] reloadData];
+                                    }];
+    }
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note

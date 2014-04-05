@@ -164,7 +164,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [NSException raise:@"Open failed" format:@"Reason %@", [error localizedDescription]];
     }
     
-    NSManagedObjectContext *ctx = [[NSManagedObjectContext alloc] init];
+    NSManagedObjectContext *ctx = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [ctx setPersistentStoreCoordinator:psc];
     [ctx setUndoManager:nil];
 
@@ -234,7 +234,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user uniqueID]]];
 
-        NSMutableDictionary *changedValues = [user changedValues];
+        NSDictionary *changedValues = [user changedValues];
         NSDictionary *keyMap = [STKUser reverseKeyMap];
         for(NSString *key in changedValues) {            
             NSString *val = [changedValues objectForKey:key];
@@ -267,7 +267,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user uniqueID]]];
-        if(![user isEqual:[self currentUser]]) {
+        if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {
             [c addContainQuery:@{@"followers" : @{@"_id" : [[self currentUser] uniqueID]}}];
             [c addContainQuery:@{@"following" : @{@"_id" : [[self currentUser] uniqueID]}}];
         }
@@ -390,7 +390,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c addResolutionQuery:@{@"_id" : @{@"format" : @"short"}}];
+        [c addResolutionQuery:@{@"followers" : @{@"format": @"short", @"contains" : @{@"followers" : [[self currentUser] uniqueID]}}}];
+/*
+        [c addResolutionQueryForEntity:@"STKUser"
+                               typeKey:@"users"
+                                   key:@"followers"
+                                  body:@{@"format" : @"short", @"contains" : @{@"followers" : [[self currentUser] uniqueID]}} ];
+        
+        */
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(!err) {
@@ -414,6 +421,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c addResolutionQuery:@{@"following" : @{@"format" : @"short"}}];
 
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -605,6 +613,28 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             }
         
             block(trusts, err);
+        }];
+    }];
+}
+
+- (void)fetchActivityForUser:(STKUser *)u completion:(void (^)(NSArray *activities, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[self currentUser] uniqueID], @"activites"]];
+        
+//        [c setModelGraph:@[@{@"trusts" : @[@"STKTrust"]}]];
+//        [c setContext:[self context]];
+//        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            NSLog(@"%@", obj);
+            
+            block(nil, err);
         }];
     }];
 }
@@ -1292,7 +1322,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             }];
         }
     }
-    
     
 }
 

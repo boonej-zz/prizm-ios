@@ -675,11 +675,21 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         
+        NSDictionary *changedValues = [p changedValues];
+        NSDictionary *keyMap = [STKPost reverseKeyMap];
+        for(NSString *key in changedValues) {
+            NSString *val = [changedValues objectForKey:key];
+            NSString *newKey = [keyMap objectForKey:key];
+            if(val && newKey) {
+                [c addQueryValue:val
+                          forKey:newKey];
+            }
+        }
+        
 
-        //[c setModelGraph:@[p]];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(!err) {
-               // [p setValuesForKeysWithDictionary:info];
+                [[p managedObjectContext] save:nil];
                 [[[STKUserStore store] context] save:nil];
             } else {
                 

@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface STKUserPostListViewController : UIViewController
+
 @property (nonatomic, strong) NSArray *posts;
+@property (nonatomic) BOOL allowPersonalFilter;
+
 @end

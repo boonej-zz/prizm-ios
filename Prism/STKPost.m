@@ -57,12 +57,11 @@ type, fInverseFeed;
              
              @"imageURLString" : STKPostURLKey,
              @"locationName" : STKPostLocationNameKey,
-             STKPostLocationLatitudeKey : @"locationLatitude",
-             STKPostLocationLongitudeKey : @"locationLongitude",
-             STKPostVisibilityKey : @"visibility",
+             @"locationLatitude": STKPostLocationLatitudeKey,
+             @"locationLongitude" : STKPostLocationLongitudeKey,
+             @"visibility": STKPostVisibilityKey,
              @"status" : @"status",
-             @"is_repost" : @"repost",
-             STKPostTextKey : @"text"
+             @"text" : STKPostTextKey
              
              };
 }

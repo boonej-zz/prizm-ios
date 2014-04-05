@@ -41,4 +41,9 @@
 {
     ROUTE(sender);
 }
+
+- (IBAction)editButtonTapped:(id)sender
+{
+    ROUTE(sender);
+}
 @end

@@ -41,6 +41,8 @@ extern NSString * const STKPostStatusDeleted;
 
 @interface STKPost : NSManagedObject <STKJSONObject>
 
++ (NSDictionary *)reverseKeyMap;
+
 @property (nonatomic, strong) NSString *uniqueID;
 @property (nonatomic) NSString *type;
 @property (nonatomic, strong) NSDate *datePosted;

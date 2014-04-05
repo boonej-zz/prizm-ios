@@ -12,14 +12,7 @@
 
 @implementation STKActivityItem
 
-@dynamic uniqueID;
-@dynamic userName;
-@dynamic profileImageURLString;
-@dynamic recent;
-@dynamic type;
-@dynamic referenceImageURLString;
-@dynamic date;
-@dynamic user;
+@dynamic uniqueID, user, otherUser, recent, type, referenceImageURLString, date;
 
 
 + (NSString *)stringForActivityItemType:(STKActivityItemType)t

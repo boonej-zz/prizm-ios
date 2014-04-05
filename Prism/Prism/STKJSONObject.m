@@ -16,6 +16,16 @@ NSString * const STKJSONBindFunctionAdd = @"add";
 
 @implementation NSObject (STKJSONBind)
 
++ (NSDictionary *)inboundKeyMap
+{
+    return @{};
+}
+
++ (NSDictionary *)outboundKeyMap
+{
+    return @{};
+}
+
 - (void)bindFromDictionary:(NSDictionary *)d
                  sourceKey:(NSString *)sourceKey
             destinationKey:(NSString *)destKey

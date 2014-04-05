@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class STKUser;
 
 typedef enum STKActivityItemEnum : int16_t {
     STKActivityItemTypeComment,
@@ -21,14 +22,13 @@ typedef enum STKActivityItemEnum : int16_t {
 
 @interface STKActivityItem : NSManagedObject
 
-@property (nonatomic) int32_t uniqueID;
-@property (nonatomic, retain) NSString *userName;
-@property (nonatomic, retain) NSString *profileImageURLString;
+@property (nonatomic) NSString *uniqueID;
+@property (nonatomic, retain) STKUser *user;
+@property (nonatomic, strong) STKUser *otherUser;
 @property (nonatomic) BOOL recent;
 @property (nonatomic) STKActivityItemType type;
 @property (nonatomic, retain) NSString *referenceImageURLString;
 @property (nonatomic, retain) NSDate *date;
-@property (nonatomic, retain) STKUser *user;
 
 + (NSString *)stringForActivityItemType:(STKActivityItemType)t;
 

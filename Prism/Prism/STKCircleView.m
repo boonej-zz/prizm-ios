@@ -47,21 +47,29 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    CGRect r = CGRectInset([self bounds], 2, 2);
-    UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];
-    if([self borderColor])
-        [[self borderColor] set];
-    else
-        [STKTextColor set];
-    [bp setLineWidth:4];
-    [bp stroke];
-    [bp addClip];
-    
     if([self image]) {
-        [[self image] drawInRect:r];
+        CGRect r = CGRectInset([self bounds], 2, 2);
+        UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];
+        if([self borderColor])
+            [[self borderColor] set];
+        else
+            [STKTextColor set];
+        [bp setLineWidth:4];
+        [bp stroke];
+        [bp addClip];
+        
+        [[self image] drawInRect:r];        
     } else {
-        [[UIColor whiteColor] set];
-        [bp fill];
+        CGRect r = [self bounds];
+        UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];
+        if([self borderColor])
+            [[self borderColor] set];
+        else
+            [STKTextColor set];
+        [bp setLineWidth:4];
+        [bp addClip];
+        
+        [[UIImage imageNamed:@"trust_user_missing"] drawInRect:r];
     }
 }
 

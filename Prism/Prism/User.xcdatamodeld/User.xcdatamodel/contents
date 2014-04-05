@@ -28,7 +28,7 @@
         <relationship name="derivativePosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="originalPost" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="fInverseFeed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="fFeedPosts" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="hashTags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKHashTag" inverseName="posts" inverseEntity="STKHashTag" syncable="YES"/>
-        <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedPosts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="likes" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedPosts" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="originalPost" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="derivativePosts" inverseEntity="STKPost" syncable="YES"/>
     </entity>
     <entity name="STKPostComment" representedClassName="STKPostComment" syncable="YES">
@@ -37,8 +37,8 @@
         <attribute name="likeCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="comments" inverseEntity="STKUser" syncable="YES"/>
-        <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedComments" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="creator" optional="YES" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="comments" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="likes" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedComments" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="comments" inverseEntity="STKPost" syncable="YES"/>
     </entity>
     <entity name="STKTrust" representedClassName="STKTrust" syncable="YES">
@@ -47,8 +47,8 @@
         <attribute name="owningUserRequestedTrust" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="otherUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="receivedTrusts" inverseEntity="STKUser" syncable="YES"/>
-        <relationship name="owningUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedTrusts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="otherUser" optional="YES" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="receivedTrusts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="owningUser" optional="YES" transient="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedTrusts" inverseEntity="STKUser" syncable="YES"/>
     </entity>
     <entity name="STKUser" representedClassName="STKUser" syncable="YES">
         <attribute name="accountStoreID" optional="YES" attributeType="String" syncable="YES"/>
@@ -76,21 +76,21 @@
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="creator" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="comments" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="creator" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="createdPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="creator" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="fFeedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="fInverseFeed" inverseEntity="STKPost" syncable="YES"/>
-        <relationship name="followers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="following" inverseEntity="STKUser" syncable="YES"/>
-        <relationship name="following" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="followers" inverseEntity="STKUser" syncable="YES"/>
-        <relationship name="likedComments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="likes" inverseEntity="STKPostComment" syncable="YES"/>
-        <relationship name="likedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="likes" inverseEntity="STKPost" syncable="YES"/>
-        <relationship name="ownedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="owningUser" inverseEntity="STKTrust" syncable="YES"/>
-        <relationship name="receivedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="otherUser" inverseEntity="STKTrust" syncable="YES"/>
+        <relationship name="followers" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="following" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="following" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="followers" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="likedComments" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="likes" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="likedPosts" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="likes" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="ownedTrusts" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="owningUser" inverseEntity="STKTrust" syncable="YES"/>
+        <relationship name="receivedTrusts" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="otherUser" inverseEntity="STKTrust" syncable="YES"/>
     </entity>
     <elements>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="88"/>
-        <element name="STKPost" positionX="0" positionY="144" width="128" height="403"/>
-        <element name="STKPostComment" positionX="18" positionY="162" width="128" height="163"/>
+        <element name="STKPost" positionX="0" positionY="144" width="128" height="405"/>
+        <element name="STKPostComment" positionX="18" positionY="162" width="128" height="165"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="150"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="555"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="553"/>
     </elements>
 </model>

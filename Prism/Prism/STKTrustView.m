@@ -37,13 +37,14 @@
     return self;
 }
 
+
 - (void)commonInit
 {
     [self setBackgroundColor:[UIColor clearColor]];
     
     NSMutableArray *a = [NSMutableArray array];
     for(int i = 0; i < 6; i++) {
-        STKCircleView *sv = [[STKCircleView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        STKCircleView *sv = [[STKCircleView alloc] initWithFrame:CGRectMake(0, 0, [[self class] minorCircleSize], [[self class] minorCircleSize])];
         [sv addTarget:self action:@selector(circleTapped:)
      forControlEvents:UIControlEventTouchUpInside];
         [a addObject:sv];
@@ -58,6 +59,11 @@
     [[self spinLayer] setContents:(__bridge id)[[UIImage imageNamed:@"explosion.png"] CGImage]];
     [[self layer] addSublayer:[self spinLayer]];
     [[self spinLayer] setHidden:YES];
+}
+
++ (float)minorCircleSize
+{
+    return 53;
 }
 
 - (void)circleTapped:(id)sender
@@ -141,27 +147,43 @@
     [self setNeedsDisplay];
 }
 
+- (CGPoint)lineEndpointForLineFrom:(CGPoint)from to:(CGPoint)to minusLength:(float)minusLength
+{
+    float dist = sqrtf(powf(from.x - to.x, 2) + powf(from.y - to.y, 2));
+    
+    float x = (to.x - from.x) / dist;
+    float y = (to.y - from.y) / dist;
+
+    dist -= minusLength;
+    dist += 1;
+    
+    return CGPointMake(from.x + x * dist, from.y + y * dist);
+}
+
 - (void)drawRect:(CGRect)rect
 {
     CGRect b = [self bounds];
-    [STKTextColor set];
+    [[STKTextColor colorWithAlphaComponent:0.5] set];
     UIBezierPath *bp = [UIBezierPath bezierPath];
     
-    [bp moveToPoint:CGPointMake(b.size.width / 2.0, b.size.height / 2.0)];
-    [bp addLineToPoint:[[[self circleViews] objectAtIndex:1] center]];
-    [bp moveToPoint:CGPointMake(b.size.width / 2.0, b.size.height / 2.0)];
-    [bp addLineToPoint:[[[self circleViews] objectAtIndex:2] center]];
-    [bp moveToPoint:CGPointMake(b.size.width / 2.0, b.size.height / 2.0)];
-    [bp addLineToPoint:[[[self circleViews] objectAtIndex:3] center]];
+    CGPoint initialPoint = CGPointMake(b.size.width / 2.0, b.size.height / 2.0);
+    [bp moveToPoint:initialPoint];
+    [bp addLineToPoint:[self lineEndpointForLineFrom:initialPoint to:[[[self circleViews] objectAtIndex:1] center] minusLength:[[self class] minorCircleSize] / 2.0]];
+
+    [bp moveToPoint:initialPoint];
+    [bp addLineToPoint:[self lineEndpointForLineFrom:initialPoint to:[[[self circleViews] objectAtIndex:2] center] minusLength:[[self class] minorCircleSize] / 2.0]];
+
+    [bp moveToPoint:initialPoint];
+    [bp addLineToPoint:[self lineEndpointForLineFrom:initialPoint to:[[[self circleViews] objectAtIndex:3] center] minusLength:[[self class] minorCircleSize] / 2.0]];
     
-    [bp moveToPoint:CGPointMake(b.size.width / 2.0, b.size.height / 2.0)];
-    [bp addLineToPoint:[[[self circleViews] objectAtIndex:4] center]];
-    [bp moveToPoint:CGPointMake(b.size.width / 2.0, b.size.height / 2.0)];
-    [bp addLineToPoint:[[[self circleViews] objectAtIndex:5] center]];
+    [bp moveToPoint:initialPoint];
+    [bp addLineToPoint:[self lineEndpointForLineFrom:initialPoint to:[[[self circleViews] objectAtIndex:4] center] minusLength:[[self class] minorCircleSize] / 2.0]];
+
+    [bp moveToPoint:initialPoint];
+    [bp addLineToPoint:[self lineEndpointForLineFrom:initialPoint to:[[[self circleViews] objectAtIndex:5] center] minusLength:[[self class] minorCircleSize] / 2.0]];
+    
     [bp setLineWidth:2];
     [bp stroke];
-
-
 }
 
 @end

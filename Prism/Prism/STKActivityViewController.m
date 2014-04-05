@@ -127,6 +127,10 @@ typedef enum {
 {
     if([self currentType] == STKActivityViewControllerTypeActivity) {
         
+        [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser] completion:^(NSArray *activities, NSError *err) {
+            
+        }];
+        
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
         [[STKUserStore store] fetchRequestsForCurrentUser:^(NSArray *requests, NSError *err) {
             if(!err) {
@@ -190,10 +194,11 @@ typedef enum {
     if([self currentType] == STKActivityViewControllerTypeActivity) {
         STKActivityCell *cell = [STKActivityCell cellForTableView:tableView target:self];
         STKActivityItem *i = [[self requests] objectAtIndex:[indexPath row]];
+        STKUser *u = [i otherUser];
         
-        [[cell profileImageView] setUrlString:[i profileImageURLString]];
+        [[cell profileImageView] setUrlString:[u profilePhotoPath]];
         [[cell recentIndicatorImageView] setHidden:![i recent]];
-        [[cell nameLabel] setText:[i userName]];
+        [[cell nameLabel] setText:[u name]];
         [[cell activityTypeLabel] setText:[STKActivityItem stringForActivityItemType:[i type]]];
         [[cell imageReferenceView] setUrlString:[i referenceImageURLString]];
     } else if ([self currentType] == STKActivityViewControllerTypeRequest) {

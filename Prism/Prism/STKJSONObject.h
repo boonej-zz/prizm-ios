@@ -33,4 +33,7 @@ extern NSString * const STKJSONBindFunctionKey;
 - (void)bindFromDictionary:(NSDictionary *)dataDictionary
                     keyMap:(NSDictionary *)keyMap;
 
++ (NSDictionary *)inboundKeyMap;
++ (NSDictionary *)outboundKeyMap;
+
 @end

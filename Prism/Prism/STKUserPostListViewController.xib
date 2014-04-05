@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="blurView" destination="Xc3-2h-k1Z" id="PvX-rM-kyl"/>
                 <outlet property="filterBar" destination="JUn-fv-37I" id="EVL-q0-Oin"/>
+                <outlet property="personalButton" destination="THA-mD-uDP" id="th9-CI-2LW"/>
                 <outlet property="tableView" destination="TCM-Ns-ZEc" id="fZB-8U-GXi"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

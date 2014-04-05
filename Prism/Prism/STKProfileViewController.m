@@ -171,6 +171,7 @@ typedef enum {
             STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] init];
             [pvc setTitle:[[self profile] name]];
             [pvc setPosts:[[self postController] posts]];
+            [pvc setAllowPersonalFilter:[[self profile] isEqual:[[STKUserStore store] currentUser]]];
             [[self navigationController] pushViewController:pvc animated:YES];
         } break;
     }
@@ -201,7 +202,7 @@ typedef enum {
 {
     [self setShowPostsInSingleLayout:YES];
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                    withRowAnimation:UITableViewRowAnimationAutomatic];
+                    withRowAnimation:UITableViewRowAnimationNone];
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
                     withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -211,7 +212,7 @@ typedef enum {
     [self setShowPostsInSingleLayout:NO];
 
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                    withRowAnimation:UITableViewRowAnimationAutomatic];
+                    withRowAnimation:UITableViewRowAnimationNone];
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
                     withRowAnimation:UITableViewRowAnimationNone];
 
@@ -225,7 +226,7 @@ typedef enum {
 {
     [self setFilterByLocation:![self filterByLocation]];
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                    withRowAnimation:UITableViewRowAnimationAutomatic];
+                    withRowAnimation:UITableViewRowAnimationNone];
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
                     withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -288,9 +289,9 @@ typedef enum {
     [self setShowingInformation:![self isShowingInformation]];
     [[self tableView] beginUpdates];
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
-                    withRowAnimation:UITableViewRowAnimationAutomatic];
+                    withRowAnimation:UITableViewRowAnimationNone];
     [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                    withRowAnimation:UITableViewRowAnimationAutomatic];
+                    withRowAnimation:UITableViewRowAnimationNone];
     [[self tableView] endUpdates];
 }
 
