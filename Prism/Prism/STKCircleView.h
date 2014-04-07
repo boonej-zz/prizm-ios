@@ -11,4 +11,5 @@
 @interface STKCircleView : UIControl
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UIColor *borderColor;
+@property (nonatomic, strong) NSString *overlayText;
 @end

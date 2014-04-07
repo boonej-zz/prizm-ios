@@ -8,6 +8,9 @@
 #import <Foundation/Foundation.h>
 #import "STKJSONObject.h"
 #import "STKQueryObject.h"
+#import "STKResolutionQuery.h"
+#import "STKContainQuery.h"
+#import "STKSearchQuery.h"
 
 @import CoreData;
 
@@ -80,7 +83,7 @@ typedef enum {
 // Optionally pass missingKeysOut to see which keys are missing
 // keyMap values can either be an NSString
 // or ^ NSDictionary * (id value) block, where the NSDictionary is @{outputKey : value}
-- (BOOL)addQueryObject:(id)object
+- (BOOL)addQueryValues:(id)object
            missingKeys:(NSArray **)missingKeysOut
             withKeyMap:(NSDictionary *)keyMap;
 

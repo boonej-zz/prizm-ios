@@ -26,6 +26,8 @@
 @property (weak, nonatomic) IBOutlet UIView *underlayView;
 @property (nonatomic, strong) NSArray *trusts;
 @property (weak, nonatomic) IBOutlet UIImageView *numberImageView;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (nonatomic, weak) STKUser *selectedUser;
 
 - (IBAction)showList:(id)sender;
 - (IBAction)sendEmail:(id)sender;
@@ -64,6 +66,7 @@
 {
     if(idx >= 0 && idx < [[self trusts] count]) {
         STKUser *u = [[[self trusts] valueForKey:@"otherUser"] objectAtIndex:idx];
+        [self setSelectedUser:u];
         
         [[self selectedNameLabel] setText:[u name]];
         [[self trustView] setSelectedIndex:idx + 1];
@@ -75,6 +78,12 @@
                                  @(5) : @"trust_five"};
         UIImage *img = [UIImage imageNamed:[lookup objectForKey:@(idx + 1)]];
         [[self numberImageView] setImage:img];
+        
+        NSDate *dateCreated = [u dateCreated];
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+        [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        [[self dateLabel] setText:[NSString stringWithFormat:@"Member Since %@", [df stringFromDate:dateCreated]]];
     }
     
 }
@@ -82,6 +91,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     
     [[self trustView] setUser:[[STKUserStore store] currentUser]];
     

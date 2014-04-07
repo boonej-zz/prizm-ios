@@ -7,8 +7,11 @@
 //
 
 #import "STKWebViewController.h"
+#import "UIERealTimeBlurView.h"
 
 @interface STKWebViewController () <UIWebViewDelegate>
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 @end
 
@@ -34,22 +37,16 @@
 {
     _url = url;
     if([self isViewLoaded] && _url) {
-        [(UIWebView *)[self view] loadRequest:[NSURLRequest requestWithURL:[self url]]];
+        [[self webView] loadRequest:[NSURLRequest requestWithURL:[self url]]];
     }
 }
 
-- (void)loadView
-{
-    UIWebView *wv = [[UIWebView alloc] init];
-    [self setView:wv];
-    [wv setDelegate:self];
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     if([self url])
-        [(UIWebView *)[self view] loadRequest:[NSURLRequest requestWithURL:[self url]]];
+        [[self webView] loadRequest:[NSURLRequest requestWithURL:[self url]]];
 }
 
 @end

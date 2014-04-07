@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="backgroundImageView" destination="alL-qq-7Ni" id="oCE-NJ-aDk"/>
                 <outlet property="countView" destination="RwR-nx-6cr" id="XKi-sa-zJl"/>
+                <outlet property="dateLabel" destination="8x9-xm-oZA" id="Qy4-hT-2ZE"/>
                 <outlet property="numberImageView" destination="aaD-L5-veV" id="LIp-PG-nlQ"/>
                 <outlet property="selectedNameLabel" destination="II4-Au-G5q" id="g8C-Hh-MMX"/>
                 <outlet property="trustView" destination="XNh-yH-M0i" id="vGZ-Wj-sru"/>
@@ -112,6 +113,16 @@
                         <constraint firstAttribute="centerY" secondItem="Vrf-Nf-cJj" secondAttribute="centerY" id="tPX-cL-tXF"/>
                     </constraints>
                 </view>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8x9-xm-oZA">
+                    <rect key="frame" x="139" y="547" width="42" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="s9a-5X-bYI"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.6845703125" green="0.6845703125" blue="0.6845703125" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
@@ -119,6 +130,7 @@
                 <constraint firstAttribute="trailing" secondItem="RwR-nx-6cr" secondAttribute="trailing" id="93a-qS-tIn"/>
                 <constraint firstItem="RwR-nx-6cr" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GZf-0y-PHO"/>
                 <constraint firstItem="yrH-qv-7qp" firstAttribute="top" secondItem="1" secondAttribute="top" id="IfZ-5K-CUV"/>
+                <constraint firstAttribute="bottom" secondItem="8x9-xm-oZA" secondAttribute="bottom" id="M4L-MZ-bHi"/>
                 <constraint firstAttribute="trailing" secondItem="yrH-qv-7qp" secondAttribute="trailing" id="SGt-fu-GHE"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="WHr-oL-3Es"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="height" secondItem="alL-qq-7Ni" secondAttribute="height" id="dSZ-np-Xs8"/>
@@ -132,6 +144,7 @@
                 <constraint firstItem="ION-au-gvc" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="v4k-Jd-oBr"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="top" secondItem="alL-qq-7Ni" secondAttribute="top" id="vkH-OY-M7Q"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="zMh-qt-WxP"/>
+                <constraint firstAttribute="centerX" secondItem="8x9-xm-oZA" secondAttribute="centerX" id="zaG-fg-cKT"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>

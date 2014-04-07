@@ -267,11 +267,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[user uniqueID]]];
+        
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+        [q setFields:fields];
         if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {
-            [c addContainQuery:@{@"followers" : @{@"_id" : [[self currentUser] uniqueID]}}];
-            [c addContainQuery:@{@"following" : @{@"_id" : [[self currentUser] uniqueID]}}];
+            [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
+            [q addSubquery:[STKContainQuery containQueryForField:@"following" key:@"_id" value:[[self currentUser] uniqueID]]];
         }
-        [c setFieldQueries:fields];
+        
+        [c setQueryObject:q];
         
         [c setModelGraph:@[user]];
         [c setContext:[self context]];
@@ -295,7 +299,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/search"];
         [c setIdentifiers:@[@"users"]];
 
-        [c setSearchQuery:@{@"name" : name}];
+        [c setQueryObject:[STKSearchQuery searchQueryForField:@"name" value:name]];
         
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
@@ -390,7 +394,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c addResolutionQuery:@{@"followers" : @{@"format": @"short", @"contains" : @{@"followers" : [[self currentUser] uniqueID]}}}];
+        STKResolutionQuery *q = [STKResolutionQuery resolutionQueryForEntityName:@"STKUser" serverTypeKey:@"users" field:@"followers"];
+        [q setFormat:STKQueryObjectFormatShort];
+//        [q addSubquery:[STKContainQuery containQueryForField:@"_id" value:[[self currentUser] uniqueID]]];
+        [c setQueryObject:q];
 /*
         [c addResolutionQueryForEntity:@"STKUser"
                                typeKey:@"users"
@@ -421,7 +428,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c addResolutionQuery:@{@"following" : @{@"format" : @"short"}}];
+      //  [c addResolutionQuery:@{@"following" : @{@"format" : @"short"}}];
 
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -1136,7 +1143,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         
         NSArray *missingKeys = nil;
-        BOOL verified = [c addQueryObject:info
+        BOOL verified = [c addQueryValues:info
                               missingKeys:&missingKeys
                                withKeyMap:@{@"firstName" : @"first_name",
                                             @"lastName" : @"last_name",
@@ -1163,14 +1170,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         
         if([info externalServiceType] && [info externalServiceID]) {
-            [c addQueryObject:info missingKeys:nil withKeyMap:@{@"externalServiceID" : @"provider_id",
+            [c addQueryValues:info missingKeys:nil withKeyMap:@{@"externalServiceID" : @"provider_id",
                                                                 @"externalServiceType" : @"provider",
                                                                 @"token" : @"provider_token"}];
             if([[info externalServiceType] isEqualToString:STKUserExternalSystemTwitter]) {
                 [c addQueryValue:[info secret] forKey:@"provider_token_secret"];
             }
         } else if([info password]) {
-            [c addQueryObject:info missingKeys:nil withKeyMap:@{@"password" : @"password"}];
+            [c addQueryValues:info missingKeys:nil withKeyMap:@{@"password" : @"password"}];
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments

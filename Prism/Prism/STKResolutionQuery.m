@@ -23,16 +23,11 @@
     return a;
 }
 
-- (NSString *)parentKey
-{
-    return @"resolve";
-}
-
 - (NSDictionary *)dictionaryRepresentation
 {
     NSDictionary *base = [super dictionaryRepresentation];
     
-    return @{[self field] : base};
+    return @{@"resolve" : @{[self field] : base}};
 }
 
 @end

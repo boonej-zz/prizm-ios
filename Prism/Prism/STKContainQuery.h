@@ -10,9 +10,12 @@
 
 @interface STKContainQuery : STKQueryObject
 
-+ (STKContainQuery *)containQueryForField:(NSString *)field value:(NSString *)value;
++ (STKContainQuery *)containQueryForField:(NSString *)field
+                                      key:(NSString *)key
+                                    value:(NSString *)value;
 
 @property (nonatomic, strong) NSString *field;
+@property (nonatomic, strong) NSString *key;
 @property (nonatomic, strong) NSString *value;
 
 @end

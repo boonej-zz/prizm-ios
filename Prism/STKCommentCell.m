@@ -11,6 +11,10 @@
 
 @import QuartzCore;
 
+@interface STKCommentCell () <UITextViewDelegate>
+
+@end
+
 @implementation STKCommentCell
 
 - (void)cellDidLoad
@@ -19,13 +23,14 @@
     
     [[[self textView] textContainer] setLineFragmentPadding:0];
     [[self textView] setTextContainerInset:UIEdgeInsetsZero];
-    [[self textView] setDelaysContentTouches:NO];
+//    [[self textView] setDelaysContentTouches:NO];
 }
 
 - (IBAction)toggleCommentLike:(id)sender
 {
     ROUTE(sender);
 }
+
 
 - (void)layoutContent
 {

@@ -49,6 +49,10 @@
      forControlEvents:UIControlEventTouchUpInside];
         [a addObject:sv];
         [self addSubview:sv];
+        
+        if(i > 0) {
+            [sv setOverlayText:[NSString stringWithFormat:@"%d", i]];
+        }
     }
     [self setCircleViews:[a copy]];
     [[[self circleViews] objectAtIndex:0] setFrame:CGRectMake(0, 0, 75, 75)];

@@ -67,6 +67,9 @@
 		BE5F68F718F0A4FC006D2CD1 /* STKQueryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5F68F618F0A4FC006D2CD1 /* STKQueryObject.m */; };
 		BE5F68FA18F0A522006D2CD1 /* STKResolutionQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5F68F918F0A522006D2CD1 /* STKResolutionQuery.m */; };
 		BE5F68FD18F0A53D006D2CD1 /* STKContainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5F68FC18F0A53D006D2CD1 /* STKContainQuery.m */; };
+		BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5F68FF18F21146006D2CD1 /* STKSearchQuery.m */; };
+		BE5F690218F2131F006D2CD1 /* STKWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE5F690118F2131F006D2CD1 /* STKWebViewController.xib */; };
+		BE5F690518F214C8006D2CD1 /* STKTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5F690418F214C8006D2CD1 /* STKTextView.m */; };
 		BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE610859183D1588003A182C /* STKTableViewCell.m */; };
 		BE61085E183D159E003A182C /* STKActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE61085C183D159E003A182C /* STKActivityCell.m */; };
 		BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE61085D183D159E003A182C /* STKActivityCell.xib */; };
@@ -1978,6 +1981,11 @@
 		BE5F68F918F0A522006D2CD1 /* STKResolutionQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKResolutionQuery.m; sourceTree = "<group>"; };
 		BE5F68FB18F0A53D006D2CD1 /* STKContainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKContainQuery.h; sourceTree = "<group>"; };
 		BE5F68FC18F0A53D006D2CD1 /* STKContainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKContainQuery.m; sourceTree = "<group>"; };
+		BE5F68FE18F21146006D2CD1 /* STKSearchQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchQuery.h; sourceTree = "<group>"; };
+		BE5F68FF18F21146006D2CD1 /* STKSearchQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchQuery.m; sourceTree = "<group>"; };
+		BE5F690118F2131F006D2CD1 /* STKWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKWebViewController.xib; sourceTree = "<group>"; };
+		BE5F690318F214C8006D2CD1 /* STKTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTextView.h; sourceTree = "<group>"; };
+		BE5F690418F214C8006D2CD1 /* STKTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTextView.m; sourceTree = "<group>"; };
 		BE610858183D1588003A182C /* STKTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTableViewCell.h; sourceTree = "<group>"; };
 		BE610859183D1588003A182C /* STKTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTableViewCell.m; sourceTree = "<group>"; };
 		BE61085B183D159E003A182C /* STKActivityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKActivityCell.h; path = Prism/STKActivityCell.h; sourceTree = "<group>"; };
@@ -2332,6 +2340,7 @@
 				BE7AFA7A18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m */,
 				BE0EC57018EDE306007102E1 /* STKSettingsViewController.h */,
 				BE0EC57118EDE306007102E1 /* STKSettingsViewController.m */,
+				BE5F690118F2131F006D2CD1 /* STKWebViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2363,6 +2372,8 @@
 				BE778C4018BBE16300DA5EDD /* STKNavigationButton.m */,
 				BE3D2FDD18C9626500E9F58C /* STKAvatarView.h */,
 				BE3D2FDE18C9626500E9F58C /* STKAvatarView.m */,
+				BE5F690318F214C8006D2CD1 /* STKTextView.h */,
+				BE5F690418F214C8006D2CD1 /* STKTextView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4261,6 +4272,8 @@
 				BE5F68F918F0A522006D2CD1 /* STKResolutionQuery.m */,
 				BE5F68FB18F0A53D006D2CD1 /* STKContainQuery.h */,
 				BE5F68FC18F0A53D006D2CD1 /* STKContainQuery.m */,
+				BE5F68FE18F21146006D2CD1 /* STKSearchQuery.h */,
+				BE5F68FF18F21146006D2CD1 /* STKSearchQuery.m */,
 			);
 			name = STK;
 			sourceTree = "<group>";
@@ -4442,6 +4455,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE5F690218F2131F006D2CD1 /* STKWebViewController.xib in Resources */,
 				BE1E09D61850E58900975652 /* STKVerticalNavigationController.xib in Resources */,
 				BE5767F6187B4DFF004AEE1F /* STKPostViewController.xib in Resources */,
 				BEE8F04818C103AA001A28CD /* STKCommentCell.xib in Resources */,
@@ -4553,6 +4567,7 @@
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
 				BE0EC57618EDE971007102E1 /* STKSettingsShareCell.m in Sources */,
 				BE52B13C18E30EF100C44F30 /* NSManagedObject+STKAdditions.m in Sources */,
+				BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */,
 				BE05502018A404E600F6B534 /* UIERealTimeBlurView.m in Sources */,
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
@@ -4578,6 +4593,7 @@
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
 				BE5F68FD18F0A53D006D2CD1 /* STKContainQuery.m in Sources */,
+				BE5F690518F214C8006D2CD1 /* STKTextView.m in Sources */,
 				BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */,
 				BE654EA5188841A6006DCA5C /* Lookup.xcdatamodeld in Sources */,
 				BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */,

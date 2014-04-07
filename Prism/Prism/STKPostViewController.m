@@ -168,7 +168,8 @@
     if([[URL scheme] isEqualToString:@"http"] || [[URL scheme] isEqualToString:@"https"]) {
         STKWebViewController *wvc = [[STKWebViewController alloc] init];
         [wvc setUrl:URL];
-        [self presentViewController:wvc animated:YES completion:nil];
+        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
+        [self presentViewController:nvc animated:YES completion:nil];
     }
     return NO;
 }

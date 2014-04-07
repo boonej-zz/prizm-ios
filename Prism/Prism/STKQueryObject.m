@@ -32,7 +32,7 @@ NSString * const STKQueryObjectFormatShort = @"short";
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
     
     if([self fields])
-        [d setObject:[self fields] forKey:@"fields"];
+        [d setObject:[[self fields] componentsJoinedByString:@" "] forKey:@"fields"];
     
     if([self filters])
         [d addEntriesFromDictionary:[self filters]];
@@ -56,16 +56,15 @@ NSString * const STKQueryObjectFormatShort = @"short";
         [d setObject:@([self limit]) forKey:@"limit"];
     
     for(STKQueryObject *obj in [self subqueries]) {
-        NSString *parentKey = [obj parentKey];
-        if(!parentKey) {
-            [d addEntriesFromDictionary:[obj dictionaryRepresentation]];
-        } else {
-            NSMutableDictionary *sub = [[d objectForKey:parentKey] mutableCopy];
-            if(!sub) {
-                sub = [NSMutableDictionary dictionary];
+        NSDictionary *dict = [obj dictionaryRepresentation];
+        for(NSString *key in dict) {
+            if([d objectForKey:key]) {
+                NSMutableDictionary *m = [[d objectForKey:key] mutableCopy];
+                [m addEntriesFromDictionary:[dict objectForKey:key]];
+                [d setObject:m forKey:key];
+            } else {
+                [d setObject:[dict objectForKey:key] forKey:key];
             }
-            [sub addEntriesFromDictionary:[obj dictionaryRepresentation]];
-            [d setObject:sub forKey:parentKey];
         }
     }
     

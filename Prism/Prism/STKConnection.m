@@ -202,7 +202,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         [self addQueryValue:val forKey:key];
     }
 }
-- (BOOL)addQueryObject:(id)object
+- (BOOL)addQueryValues:(id)object
            missingKeys:(NSArray **)missingKeysOut
             withKeyMap:(NSDictionary *)keyMap
 {
@@ -256,7 +256,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     if(![[[self request] HTTPMethod] isEqualToString:@"GET"]) {
         requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
     }
-    NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\n", i, requestString, [[self request] HTTPMethod], [self statusCode]);
+    NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\n%d\n%@", i, requestString, [[self request] HTTPMethod], [self statusCode], [error localizedDescription]);
 #endif
 
     [self reportFailureWithError:error];
@@ -275,12 +275,21 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 {
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
-    NSString *requestString = [[self request] description];
-    if(![[[self request] HTTPMethod] isEqualToString:@"GET"] ) {
-        requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
+    NSString *requestString = [[[self request] URL] absoluteString];
+    
+    NSString *dataString = @"";
+    if([[self request] HTTPBody]) {
+        dataString = [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding];
+    }
+    
+    NSString *argHeaders = @"";
+    if([self queryObject]) {
+        argHeaders = [[[self queryObject] dictionaryRepresentation] description];
     }
 
-    NSLog(@"Request Finished (%.3fs) -> \nRequest: %@ - %@\nResponse: %d\nData:%@", i, requestString, [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSLog(@"Request Finished (%.3fs) -> \n%@ %@\n %@ \n %@\nResponse: %d\n%@", i, [[self request] HTTPMethod], requestString,
+          argHeaders, dataString,
+          [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 #endif
 
 
@@ -355,6 +364,12 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
             [self reportFailureWithError:err];
             return;
         }
+    }
+    
+    // Check for any 'resolves'.
+    NSDictionary *resolveData = [jsonObject objectForKey:@"resolve"];
+    if(resolveData) {
+        [self processResolvedDictionary:resolveData];
     }
     
     // Then, pass the root object to the completion block - remember,
@@ -476,6 +491,37 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     return incomingData;
 }
 
+- (NSDictionary *)resolveToEntityMap
+{
+    NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
+    
+    [self parseQueryObject:[self queryObject] addingResolutionMapToDictionary:d];
+    
+    return [d copy];
+}
+
+- (void)parseQueryObject:(STKQueryObject *)obj addingResolutionMapToDictionary:(NSMutableDictionary *)accumulator
+{
+    if([obj isKindOfClass:[STKResolutionQuery class]]) {
+        [accumulator setObject:[(STKResolutionQuery *)obj entityName]
+                        forKey:[(STKResolutionQuery *)obj serverTypeKey]];
+    }
+    for(STKQueryObject *sub in [obj subqueries]) {
+        [self parseQueryObject:sub addingResolutionMapToDictionary:accumulator];
+    }
+}
+     
+- (void)processResolvedDictionary:(NSDictionary *)dict
+{
+    NSDictionary *resolveToEntityMap = [self resolveToEntityMap];
+    for(NSString *key in dict) {
+        NSString *entity = [resolveToEntityMap objectForKey:key];
+        for(NSString *idKey in [dict objectForKey:key]) {
+            NSManagedObject <STKJSONObject> * instance = [[self context] instanceForEntityName:entity object:@{@"_id" : idKey} matchMap:@{@"uniqueID" : @"_id"} alreadyExists:nil];
+            [instance readFromJSONObject:[[dict objectForKey:key] objectForKey:idKey]];
+        }
+    }
+}
 
 
 + (void)cancelAllConnections {

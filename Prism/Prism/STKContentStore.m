@@ -275,9 +275,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
         [c setIdentifiers:@[[user uniqueID], @"posts"]];
-        [c addQueryValue:@"30" forKey:@"limit"];
+        //[c addQueryValue:@"30" forKey:@"limit"];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
-        if(referencePost) {
+        /*if(referencePost) {
             [c addQueryValue:[referencePost referenceTimestamp] forKey:@"feature_identifier"];
             if(fetchDirection == STKContentStoreFetchDirectionOlder) {
                 [c addQueryValue:[referencePost referenceTimestamp] forKey:@"older"];
@@ -286,7 +286,13 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             // Without a reference post, we don't have any posts so we just need to grab off the top of the stack
             [c addQueryValue:@"2000-01-01T00:00:00.000Z" forKey:@"feature_identifier"];
         }
+        */
         
+        STKResolutionQuery *q = [STKResolutionQuery resolutionQueryForEntityName:@"STKUser"
+                                                                   serverTypeKey:@"users"
+                                                                           field:@"creator"];
+        [q setFormat:STKQueryObjectFormatShort];
+        [c setQueryObject:q];
         
         [c setModelGraph:@[@"STKPost"]];
         [c setContext:[[STKUserStore store] context]];

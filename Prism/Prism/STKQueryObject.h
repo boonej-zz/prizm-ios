@@ -39,8 +39,6 @@ extern NSString * const STKQueryObjectFormatShort;
 
 @property (nonatomic, strong) NSMutableArray *subqueries;
 
-@property (nonatomic, readonly) NSString *parentKey;
-
 - (void)addSubquery:(STKQueryObject *)obj;
 
 - (NSDictionary *)dictionaryRepresentation;

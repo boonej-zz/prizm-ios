@@ -181,10 +181,6 @@ const long STKCreateProgressGeocoding = 4;
             }
         }
         
-        _locationManager = [[CLLocationManager alloc] init];
-        [_locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
-        [_locationManager setDelegate:self];
-
     }
     return self;
 }

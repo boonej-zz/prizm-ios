@@ -28,7 +28,7 @@
                             <action selector="editButtonTapped:" destination="TZf-0Y-Lx6" eventType="touchUpInside" id="dMv-iR-0xV"/>
                         </connections>
                     </button>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2L-fa-zU1">
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2L-fa-zU1">
                         <rect key="frame" x="52" y="31" width="234" height="21"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.53798979922279799" green="0.53798979922279799" blue="0.53798979922279799" alpha="0.0" colorSpace="calibratedRGB"/>
@@ -39,6 +39,9 @@
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
+                        <connections>
+                            <outlet property="delegate" destination="TZf-0Y-Lx6" id="UgC-Vh-JTb"/>
+                        </connections>
                     </textView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kwb-YQ-uOI" customClass="STKAvatarView">
                         <rect key="frame" x="14" y="9" width="30" height="30"/>
