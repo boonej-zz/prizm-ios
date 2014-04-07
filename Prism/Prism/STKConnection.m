@@ -252,16 +252,56 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 {
 #ifdef DEBUG
     NSTimeInterval i = [[NSDate date] timeIntervalSinceDate:_beginTime];
-    NSString *requestString = [[self request] description];
-    if(![[[self request] HTTPMethod] isEqualToString:@"GET"]) {
-        requestString = [requestString stringByAppendingString:[[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
+    NSString *requestString = [[[self request] URL] absoluteString];
+    
+    NSString *dataString = @"";
+    if([[self request] HTTPBody]) {
+        dataString = [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding];
     }
-    NSLog(@"Request FAILED (%.3fs) -> \nRequest: %@ - %@\n%d\n%@", i, requestString, [[self request] HTTPMethod], [self statusCode], [error localizedDescription]);
+    
+    NSString *argHeaders = @"";
+    if([self queryObject]) {
+        argHeaders = [[[self queryObject] dictionaryRepresentation] description];
+    }
+    
+    NSLog(@"%@", [self curlRequest]);
+
+    
+    NSLog(@"Request Failed (%.3fs) -> \n%@ %@\n %@ \n %@\nResponse: %d\n%@",
+          i,
+          [[self request] HTTPMethod],
+          requestString,
+          argHeaders,
+          dataString,
+          [self statusCode],
+          [error localizedDescription]);
+
 #endif
 
     [self reportFailureWithError:error];
 }
 
+
+- (NSString *)curlRequest
+{
+    NSMutableString *str = [[NSMutableString alloc] init];
+    [str appendString:@"curl "];
+    [str appendString:@"--insecure "];
+    [str appendFormat:@"-X %@ ", [[self request] HTTPMethod]];
+    
+    NSDictionary *headers = [[self request] allHTTPHeaderFields];
+    for(NSString *key in headers) {
+        [str appendFormat:@"--header \"%@: %@\" ", key, [headers objectForKey:key]];
+    }
+    /*
+    if([[self request] HTTPBody]) {
+        [str appendFormat:@"--data %@", [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]];
+    }*/
+    
+    [str appendString:[[[self request] URL] absoluteString]];
+    
+    return str;
+}
 
 - (void)reportFailureWithError:(NSError *)err
 {
@@ -287,6 +327,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         argHeaders = [[[self queryObject] dictionaryRepresentation] description];
     }
 
+    NSLog(@"%@", [self curlRequest]);
+    
     NSLog(@"Request Finished (%.3fs) -> \n%@ %@\n %@ \n %@\nResponse: %d\n%@", i, [[self request] HTTPMethod], requestString,
           argHeaders, dataString,
           [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
