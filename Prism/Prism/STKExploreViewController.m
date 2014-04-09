@@ -141,14 +141,19 @@ typedef enum {
 
 - (void)refreshSearchTypeControl
 {
-    UIColor *onColor = [UIColor colorWithRed:0.0 green:0.5 blue:0.8 alpha:1];
-    UIColor *offColor = [UIColor colorWithRed:0.8 green:0.95 blue:1 alpha:1];
+    UIColor *onColor = [UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.5];
+    UIColor *offColor = [UIColor colorWithRed:78.0/255.0 green:118.0/255.0 blue:157.0/255.0 alpha:0.4];
+    UIColor *onTextColor = [UIColor colorWithRed:70.0/255.0 green:34.0/255.0 blue:151.0/255.0 alpha:1];
     if([self searchType] == STKSearchTypeHashTag) {
         [[self usersFilterButton] setBackgroundColor:offColor];
         [[self hashTagFilterButton] setBackgroundColor:onColor];
+        [[self hashTagFilterButton] setTitleColor:onTextColor forState:UIControlStateNormal];
+        [[self usersFilterButton] setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     } else {
         [[self usersFilterButton] setBackgroundColor:onColor];
         [[self hashTagFilterButton] setBackgroundColor:offColor];
+        [[self usersFilterButton] setTitleColor:onTextColor forState:UIControlStateNormal];
+        [[self hashTagFilterButton] setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
 }
 

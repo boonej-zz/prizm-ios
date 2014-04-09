@@ -81,7 +81,10 @@ const long STKCreateProgressGeocoding = 4;
 {
     self = [super initWithNibName:nil bundle:nil];
     if(self) {
-        [self setUser:[[[STKUserStore store] context] obtainEditableInstanceOfEntity:@"STKUser"]];
+        if(!user) {
+            user = [NSEntityDescription insertNewObjectForEntityForName:@"STKUser" inManagedObjectContext:[[STKUserStore store] context]];
+        }
+        [self setUser:user];
         
         _items = @[
                    @{@"title" : @"Email", @"key" : @"email",
@@ -698,7 +701,6 @@ const long STKCreateProgressGeocoding = 4;
 
 - (IBAction)finishProfile:(id)sender
 {
-    
     [[self view] endEditing:YES];
     if([self verifyFields:YES]) {
         [STKProcessingView present];
