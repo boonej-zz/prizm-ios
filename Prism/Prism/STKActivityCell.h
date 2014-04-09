@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *activityTypeLabel;
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *imageReferenceView;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 @end

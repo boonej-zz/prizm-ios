@@ -127,21 +127,23 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [self setCurrentUser:u];
     
     // Scan external networks
-    if([u instagramToken]) {
-        [[STKNetworkStore store] transferPostsFromInstagramWithToken:[u instagramToken]
-                                                       lastMinimumID:[u instagramLastMinID]
-                                                          completion:^(NSString *lastID, NSError *err) {
-                                                              if(!err && lastID) {
-                                                                  [u setInstagramLastMinID:lastID];
-                                                                  [self updateUserDetails:u completion:^(STKUser *user, NSError *err) {
-                                                                      
-                                                                  }];
-                                                              }
-                                                          }];
-    }
-
+    [self fetchUserDetails:u additionalFields:@[@"instagram_token", @"instagram_min_id"] completion:^(STKUser *user, NSError *err) {
+        if([user instagramToken]) {
+            [[STKNetworkStore store] transferPostsFromInstagramWithToken:[user instagramToken]
+                                                           lastMinimumID:[user instagramLastMinID]
+                                                              completion:^(NSString *lastID, NSError *err) {
+                                                                  if(!err && lastID) {
+                                                                      [user setInstagramLastMinID:lastID];
+                                                                      [self updateUserDetails:user completion:^(STKUser *user, NSError *err) {
+                                                                          
+                                                                      }];
+                                                                  }
+                                                              }];
+            
+        }
+    }];
 }
-
+     
 
 - (NSString *)cachePathForDatabase
 {
@@ -235,6 +237,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setIdentifiers:@[[user uniqueID]]];
 
         NSDictionary *changedValues = [user changedValues];
+        if([changedValues count] == 0) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                block(user, nil);
+            }];
+            return;
+        }
         NSDictionary *keyMap = [STKUser reverseKeyMap];
         for(NSString *key in changedValues) {            
             NSString *val = [changedValues objectForKey:key];
@@ -273,6 +281,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {
             [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
             [q addSubquery:[STKContainQuery containQueryForField:@"following" key:@"_id" value:[[self currentUser] uniqueID]]];
+            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
         }
         
         [c setQueryObject:q];
@@ -632,8 +641,31 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)fetchActivityForUser:(STKUser *)u completion:(void (^)(NSArray *activities, NSError *err))block
+- (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block
 {
+    NSArray *cached = nil;
+    if(!referenceActivity) {
+        NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+        [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@", u]];
+        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+        [req setFetchLimit:30];
+        cached = [[self context] executeFetchRequest:req error:nil];
+    } else {
+        NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+        [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated > %@", u, [referenceActivity dateCreated]]];
+        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+        [req setFetchLimit:30];
+        cached = [[self context] executeFetchRequest:req error:nil];
+    }
+    
+    STKActivityItem *topItem = referenceActivity;
+    if([cached count] > 0) {
+        topItem = [cached firstObject];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(cached, nil);
+        }];
+    }
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -644,8 +676,18 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setIdentifiers:@[[[self currentUser] uniqueID], @"activites"]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
-//        [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"user"]];
-//        [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"target"]];
+        
+        if(topItem) {
+            [q setPageDirection:STKQueryObjectPageNewer];
+            [q setPageKey:@"date_created"];
+            [q setPageValue:[topItem referenceTimestamp]];
+        }
+        
+        [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
+        STKResolutionQuery *postResolve = [STKResolutionQuery resolutionQueryForField:@"post_id"];
+        [postResolve addSubquery:[STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[self currentUser] uniqueID]]];
+        [q addSubquery:postResolve];
+        [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"comment_id"]];
         
         [c setQueryObject:q];
         
@@ -687,9 +729,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                                   if(granted) {
                                                       [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                                           NSArray *accounts = [[self accountStore] accountsWithAccountType:type];
-                                                          if([accounts count] > 0)
+                                                          if([accounts count] > 0) {
                                                               block([[self accountStore] accountsWithAccountType:type], nil);
-                                                          else
+                                                          } else
                                                               block(nil, [self errorForCode:STKUserStoreErrorCodeNoAccount data:nil]);
                                                       }];
                                                   } else {
@@ -816,6 +858,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
     }];
 }
+
 
 - (void)fetchTwitterDataForAccount:(ACAccount *)acct completion:(void (^)(STKUser *acct, NSError *err))block
 {

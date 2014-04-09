@@ -9,12 +9,6 @@
 #import "STKActivityItem.h"
 #import "STKUser.h"
 
-NSString * const STKActivityItemContextPost = @"post";
-NSString * const STKActivityItemContextUser = @"user";
-NSString * const STKActivityItemContextComment = @"comment";
-
-NSString * const STKActivityItemActionCreate = @"create";
-NSString * const STKActivityItemActionDelete = @"remove";
 
 NSString * const STKActivityItemTypePost = @"post";
 NSString * const STKActivityItemTypeFollow = @"follow";
@@ -28,13 +22,11 @@ NSString * const STKActivityItemTypeComment = @"comment";
 
 @dynamic uniqueID;
 @dynamic action;
-@dynamic context;
-@dynamic type;
 @dynamic dateCreated;
 @dynamic hasBeenViewed;
 @dynamic referenceTimestamp;
-@dynamic targetID;
-@dynamic creator;
+@dynamic post, comment;
+@dynamic creator, notifiedUser;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -46,16 +38,16 @@ NSString * const STKActivityItemTypeComment = @"comment";
     }
 
     [self bindFromDictionary:jsonObject keyMap:@{
-                                                 @"user" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"target" : @"targetID",
+                                                 @"from" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+                                                 @"to" : @{STKJSONBindFieldKey : @"notifiedUser", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+                                                 @"post_id" : @{STKJSONBindFieldKey : @"post", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+                                                 @"comment_id" : @{STKJSONBindFieldKey : @"comment", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"_id" : @"uniqueID",
                                                  @"action" : @"action",
-                                                 @"context" : @"context",
                                                  @"create_date" : ^(id inValue) {
                                                     [self setReferenceTimestamp:inValue];
                                                     [self setDateCreated:[df dateFromString:inValue]];
-                                                 },
-                                                 @"type" : @"type"
+                                                 }
                                                  
                                                  
     }];
@@ -67,18 +59,25 @@ NSString * const STKActivityItemTypeComment = @"comment";
 
 - (NSString *)text
 {
-    if([[self type] isEqualToString:STKActivityItemTypeLike]) {
-        if([[self action] isEqualToString:STKActivityItemActionCreate]) {
-            return [NSString stringWithFormat:@"liked your %@", [self context]];
+    NSMutableString *str = [[NSMutableString alloc] init];
+    if([[self action] isEqualToString:STKActivityItemTypeLike]) {
+        [str appendString:@"liked your "];
+
+        if([self comment]) {
+            [str appendString:@"comment."];
+        } else if([self post]) {
+            [str appendString:@"post."];
         }
-    }
-    if([[self type] isEqualToString:STKActivityItemTypeFollow]) {
-        if([[self action] isEqualToString:STKActivityItemActionCreate]) {
-            return [NSString stringWithFormat:@"started following you"];
-        }
+    } else if([[self action] isEqualToString:STKActivityItemTypeComment]) {
+        [str appendString:@"commented on your post."];
+        
+    } else if([[self action] isEqualToString:STKActivityItemTypeFollow]) {
+        [str appendString:@"started following you."];
     }
     
-    return @"";
+    
+    
+    return [str copy];
 
 }
 

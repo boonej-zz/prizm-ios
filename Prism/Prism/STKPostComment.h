@@ -21,6 +21,8 @@
 @property (nonatomic, strong) NSSet *likes;
 @property (nonatomic, strong) STKPost *post;
 
+@property (nonatomic, strong) NSSet *activities;
+
 - (BOOL)isLikedByUser:(STKUser *)u;
 
 @end

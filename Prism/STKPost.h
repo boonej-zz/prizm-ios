@@ -69,6 +69,7 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, strong) NSSet *comments;
 @property (nonatomic, strong) STKUser *fInverseFeed;
 @property (nonatomic, strong) STKUser *fInverseProfile;
+@property (nonatomic, strong) NSSet *activities;
 
 - (BOOL)isPostLikedByUser:(STKUser *)u;
 

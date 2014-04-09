@@ -53,6 +53,7 @@
                                 <state key="normal" image="btn_info">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="selected" image="action_prism"/>
                                 <connections>
                                     <action selector="toggleInformation:" destination="2" eventType="touchUpInside" id="CP4-qt-scR"/>
                                 </connections>
@@ -107,6 +108,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="action_prism" width="56" height="56"/>
         <image name="btn_info" width="24" height="24"/>
         <image name="location_pin_small" width="8" height="10"/>
     </resources>

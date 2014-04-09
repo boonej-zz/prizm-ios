@@ -32,12 +32,15 @@
 {
     _showPrismImageForToggleButton = showPrismImageForToggleButton;
     
+    [[self toggleButton] setSelected:_showPrismImageForToggleButton];
+    
     if([self showPrismImageForToggleButton]) {
-        [[self toggleButton] setImage:[UIImage imageNamed:@"action_prism"]
-                             forState:UIControlStateNormal];
+//        [[self toggleButton] setSelected:YES];
+//        [[self toggleButton] setImage:[UIImage imageNamed:@"action_prism"]
+//                             forState:UIControlStateNormal];
     } else {
-        [[self toggleButton] setImage:[UIImage imageNamed:@"btn_info"]
-                             forState:UIControlStateNormal];
+//        [[self toggleButton] setImage:[UIImage imageNamed:@"btn_info"]
+//                             forState:UIControlStateNormal];
     }
 
 }

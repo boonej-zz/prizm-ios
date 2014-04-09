@@ -55,6 +55,18 @@
                 [[self navigationController] pushViewController:accChooser animated:YES];
             } else {
                 ACAccount *acct = [accounts objectAtIndex:0];
+                /*
+                
+                SLRequest *req = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
+                                                              URL:[NSURL URLWithString:@"https://api.twitter.com/statuses/user_timeline"]
+                                                       parameters:@{@"screen_name" : [acct username],
+                                                                    @"trim_user" : @"true",
+                                                                    @"include_rts" : @"false"}];
+                [NSURLConnection sendAsynchronousRequest:[req preparedURLRequest] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                    NSLog(@"%@", response);
+                    NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                }];
+                */
                 [[STKUserStore store] connectWithTwitterAccount:acct completion:^(STKUser *existingUser, STKUser *registrationData, NSError *err) {
                     [STKProcessingView dismiss];
                     if(!err) {

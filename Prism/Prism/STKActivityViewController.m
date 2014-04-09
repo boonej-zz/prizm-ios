@@ -18,6 +18,9 @@
 #import "UIERealTimeBlurView.h"
 #import "STKUser.h"
 #import "STKProfileViewController.h"
+#import "STKPost.h"
+#import "STKPostViewController.h"
+#import "STKProfileViewController.h"
 
 typedef enum {
     STKActivityViewControllerTypeActivity,
@@ -125,31 +128,24 @@ typedef enum {
     [self refresh];
 }
 
-- (NSArray *)filterActivities:(NSArray *)activities
-{
-    NSMutableArray *a = [[NSMutableArray alloc] init];
-    
-    // Find all 'follows' that aren't you.
-    [a addObjectsFromArray:[activities filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@ and creator != %@", STKActivityItemTypeFollow, [[STKUserStore store] currentUser]]]];
-    [a addObjectsFromArray:[activities filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@ and creator != %@", STKActivityItemTypeLike, [[STKUserStore store] currentUser]]]];
-    
-    
-    return a;
-}
 
 - (void)refresh
 {
     if([self currentType] == STKActivityViewControllerTypeActivity) {
         
-        [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser] completion:^(NSArray *activities, NSError *err) {
-            [[self activities] addObjectsFromArray:[self filterActivities:activities]];
+        [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser]
+                                 referenceActivity:[[self activities] firstObject]
+                                        completion:^(NSArray *activities, NSError *err) {
+            [[self activities] addObjectsFromArray:activities];
+            [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
             [[self tableView] reloadData];
         }];
         
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
         [[STKUserStore store] fetchRequestsForCurrentUser:^(NSArray *requests, NSError *err) {
             if(!err) {
-                [[self requests] addObjectsFromArray:requests];
+                NSArray *filtered = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"not (uniqueID in %@)", [[self requests] valueForKey:@"uniqueID"]]];
+                [[self requests] addObjectsFromArray:filtered];
                 [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending]];
             }
             [[self tableView] reloadData];
@@ -201,6 +197,26 @@ typedef enum {
         STKProfileViewController *vc = [[STKProfileViewController alloc] init];
         [vc setProfile:u];
         [[self navigationController] pushViewController:vc animated:YES];
+    } else if([self currentType] == STKActivityViewControllerTypeActivity) {
+        STKActivityItem *i = [[self activities] objectAtIndex:[indexPath row]];
+        
+        if([i post]) {
+            STKActivityCell *c = (STKActivityCell *)[tableView cellForRowAtIndexPath:indexPath];
+            [[self menuController] transitionToPost:[i post]
+                                           fromRect:[[self view] convertRect:[[c imageReferenceView] frame] fromView:c]
+                                         usingImage:[[c imageReferenceView] image]
+                                   inViewController:self
+                                           animated:YES];
+            return;
+        }
+        
+        if([i creator]) {
+            STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+            [pvc setProfile:[i creator]];
+            [[self navigationController] pushViewController:pvc animated:YES];
+            return;
+        }
+        
     }
     
 }
@@ -217,7 +233,13 @@ typedef enum {
         [[cell recentIndicatorImageView] setHidden:[i hasBeenViewed]];
         [[cell nameLabel] setText:[u name]];
         [[cell activityTypeLabel] setText:[i text]];
-        //[[cell imageReferenceView] setUrlString:[i referenceImageURLString]];
+        
+        if([i post]) {
+            [[cell imageReferenceView] setUrlString:[[i post] imageURLString]];
+        }
+        
+        [[cell timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];
+        
         return cell;
     } else if ([self currentType] == STKActivityViewControllerTypeRequest) {
         STKRequestCell *cell = [STKRequestCell cellForTableView:tableView target:self];

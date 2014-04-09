@@ -60,7 +60,7 @@ typedef enum {
 - (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
 
-- (void)fetchActivityForUser:(STKUser *)u completion:(void (^)(NSArray *activities, NSError *err))block;
+- (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block;
 
 - (void)logout;
 

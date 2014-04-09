@@ -62,14 +62,6 @@
             [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
                 
             }];
-            [[STKNetworkStore store] transferPostsFromInstagramWithToken:token
-                                                           lastMinimumID:[[[STKUserStore store] currentUser] instagramLastMinID]
-                                                              completion:^(NSString *lastID, NSError *err) {
-                                                                  [[[STKUserStore store] currentUser] setInstagramLastMinID:lastID];
-                                                                  [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
-                                                                      
-                                                                  }];
-                                                              }];
         }
     }];
     [[self navigationController] pushViewController:vc animated:YES];

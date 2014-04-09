@@ -9,14 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class STKUser;
-
-extern NSString * const STKActivityItemContextPost;
-extern NSString * const STKActivityItemContextUser;
-extern NSString * const STKActivityItemContextComment;
-
-extern NSString *const STKActivityItemActionCreate;
-extern NSString *const STKActivityItemActionDelete; //remove
+@class STKUser, STKPost, STKPostComment;
 
 extern NSString *const STKActivityItemTypePost;
 extern NSString *const STKActivityItemTypeFollow;
@@ -29,13 +22,15 @@ extern NSString *const STKActivityItemTypeComment;
 
 @property (nonatomic, retain) NSString * uniqueID;
 @property (nonatomic, retain) NSString * action;
-@property (nonatomic, retain) NSString * context;
-@property (nonatomic, retain) NSString * type;
 @property (nonatomic, retain) NSDate * dateCreated;
-@property (nonatomic) BOOL hasBeenViewed;
 @property (nonatomic, retain) NSString * referenceTimestamp;
-@property (nonatomic, retain) NSString * targetID;
+
+@property (nonatomic) BOOL hasBeenViewed;
+
+@property (nonatomic, retain) STKPost *post;
+@property (nonatomic, strong) STKPostComment *comment;
 @property (nonatomic, retain) STKUser *creator;
+@property (nonatomic, strong) STKUser *notifiedUser;
 
 - (NSString *)text;
 

@@ -11,9 +11,13 @@
 #import "STKUserStore.h"
 
 @implementation STKPostComment
-@dynamic uniqueID, text, date, likeCount, likes, post, creator;
+@dynamic uniqueID, text, date, likeCount, likes, post, creator, activities;
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
+    if([jsonObject isKindOfClass:[NSString class]]) {
+        [self setUniqueID:jsonObject];
+        return nil;
+    }
     static NSDateFormatter *df = nil;
     if(!df) {
         df = [[NSDateFormatter alloc] init];
