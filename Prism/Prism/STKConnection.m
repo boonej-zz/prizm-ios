@@ -533,29 +533,10 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     return incomingData;
 }
 
-- (NSDictionary *)resolveToEntityMap
-{
-    NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
-    
-    [self parseQueryObject:[self queryObject] addingResolutionMapToDictionary:d];
-    
-    return [d copy];
-}
-
-- (void)parseQueryObject:(STKQueryObject *)obj addingResolutionMapToDictionary:(NSMutableDictionary *)accumulator
-{
-    if([obj isKindOfClass:[STKResolutionQuery class]]) {
-        [accumulator setObject:[(STKResolutionQuery *)obj entityName]
-                        forKey:[(STKResolutionQuery *)obj serverTypeKey]];
-    }
-    for(STKQueryObject *sub in [obj subqueries]) {
-        [self parseQueryObject:sub addingResolutionMapToDictionary:accumulator];
-    }
-}
      
 - (void)processResolvedDictionary:(NSDictionary *)dict
 {
-    NSDictionary *resolveToEntityMap = [self resolveToEntityMap];
+    NSDictionary *resolveToEntityMap = [self resolutionMap];
     for(NSString *key in dict) {
         NSString *entity = [resolveToEntityMap objectForKey:key];
         for(NSString *idKey in [dict objectForKey:key]) {

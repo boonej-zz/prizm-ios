@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "STKPost.h"
+#import "STKQueryObject.h"
+
 @import CoreLocation;
 
 @class STKUser, STKPostComment;
@@ -16,12 +18,6 @@ extern NSString * const STKContentStoreErrorDomain;
 typedef enum {
     STKContentStoreErrorCodeMissingArguments, // @[arg0, ...]
 } STKContentStoreErrorCode;
-
-typedef enum {
-    STKContentStoreFetchDirectionNewer,
-    STKContentStoreFetchDirectionOlder,
-    STKContentStoreFetchDirectionNone
-} STKContentStoreFetchDirection;
 
 extern NSString * const STKContentStorePostDeletedNotification;
 extern NSString * const STKContentStorePostDeletedKey;
@@ -42,29 +38,29 @@ extern NSString * const STKContentStorePostDeletedKey;
 
 // Complete - Verify 'Older'
 - (void)fetchFeedForUser:(STKUser *)u
-             inDirection:(STKContentStoreFetchDirection)fetchDirection
+             inDirection:(STKQueryObjectPage)fetchDirection
            referencePost:(STKPost *)referencePost
               completion:(void (^)(NSArray *posts, NSError *err))block;
 
 // Complete - Verify 'Older'
 - (void)fetchProfilePostsForUser:(STKUser *)user
-                     inDirection:(STKContentStoreFetchDirection)fetchDirection
+                     inDirection:(STKQueryObjectPage)fetchDirection
                    referencePost:(STKPost *)referencePost
                       completion:(void (^)(NSArray *posts, NSError *err))block;
 
 // Complete
-- (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
+- (void)fetchExplorePostsInDirection:(STKQueryObjectPage)fetchDirection
                        referencePost:(STKPost *)referencePost
                               filter:(NSDictionary *)filterDict
                           completion:(void (^)(NSArray *posts, NSError *err))block;
 
 // Complete
-- (void)fetchExplorePostsInDirection:(STKContentStoreFetchDirection)fetchDirection
+- (void)fetchExplorePostsInDirection:(STKQueryObjectPage)fetchDirection
                        referencePost:(STKPost *)referencePost
                           completion:(void (^)(NSArray *posts, NSError *err))block;
 // Complete
 - (void)fetchPostsForLocationName:(NSString *)locationName
-                        direction:(STKContentStoreFetchDirection)fetchDirection
+                        direction:(STKQueryObjectPage)fetchDirection
                     referencePost:(STKPost *)referencePost
                        completion:(void (^)(NSArray *posts, NSError *err))block;
 // Complete
@@ -89,7 +85,7 @@ extern NSString * const STKContentStorePostDeletedKey;
 // Complete
 - (void)addComment:(NSString *)comment toPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block;
 // Complete
-- (void)fetchCommentsForPost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
+- (void)fetchCommentsForPost:(STKPost *)post completion:(void (^)(NSArray *comments, NSError *err))block;
 
 // Complete
 - (void)likeComment:(STKPostComment *)comment completion:(void (^)(STKPostComment *p, NSError *err))block;

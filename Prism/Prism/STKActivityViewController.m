@@ -31,8 +31,8 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *activityTypeControl;
 
-@property (nonatomic, strong) NSArray *requests;
-@property (nonatomic, strong) NSArray *activities;
+@property (nonatomic, strong) NSMutableArray *requests;
+@property (nonatomic, strong) NSMutableArray *activities;
 
 @property (nonatomic) STKActivityViewControllerType currentType;
 - (IBAction)typeChanged:(id)sender;
@@ -51,6 +51,8 @@ typedef enum {
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_notification"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_notification_selected"]];
 
+        _activities = [[NSMutableArray alloc] init];
+        _requests = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -123,18 +125,32 @@ typedef enum {
     [self refresh];
 }
 
+- (NSArray *)filterActivities:(NSArray *)activities
+{
+    NSMutableArray *a = [[NSMutableArray alloc] init];
+    
+    // Find all 'follows' that aren't you.
+    [a addObjectsFromArray:[activities filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@ and creator != %@", STKActivityItemTypeFollow, [[STKUserStore store] currentUser]]]];
+    [a addObjectsFromArray:[activities filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@ and creator != %@", STKActivityItemTypeLike, [[STKUserStore store] currentUser]]]];
+    
+    
+    return a;
+}
+
 - (void)refresh
 {
     if([self currentType] == STKActivityViewControllerTypeActivity) {
         
         [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser] completion:^(NSArray *activities, NSError *err) {
-            
+            [[self activities] addObjectsFromArray:[self filterActivities:activities]];
+            [[self tableView] reloadData];
         }];
         
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
         [[STKUserStore store] fetchRequestsForCurrentUser:^(NSArray *requests, NSError *err) {
             if(!err) {
-                _requests = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending]];
+                [[self requests] addObjectsFromArray:requests];
+                [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending]];
             }
             [[self tableView] reloadData];
         }];
@@ -154,7 +170,7 @@ typedef enum {
     [[STKUserStore store] rejectTrustRequest:[[self requests] objectAtIndex:[ip row]] completion:^(STKTrust *requestItem, NSError *err) {
         [[self tableView] reloadData];
     }];
-[[self tableView] reloadData];
+    [[self tableView] reloadData];
 }
 
 - (void)profileTapped:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -193,14 +209,16 @@ typedef enum {
 {
     if([self currentType] == STKActivityViewControllerTypeActivity) {
         STKActivityCell *cell = [STKActivityCell cellForTableView:tableView target:self];
-        STKActivityItem *i = [[self requests] objectAtIndex:[indexPath row]];
-        STKUser *u = [i otherUser];
+        STKActivityItem *i = [[self activities] objectAtIndex:[indexPath row]];
+        STKUser *u = [i creator];
         
         [[cell profileImageView] setUrlString:[u profilePhotoPath]];
-        [[cell recentIndicatorImageView] setHidden:![i recent]];
+        
+        [[cell recentIndicatorImageView] setHidden:[i hasBeenViewed]];
         [[cell nameLabel] setText:[u name]];
-        [[cell activityTypeLabel] setText:[STKActivityItem stringForActivityItemType:[i type]]];
-        [[cell imageReferenceView] setUrlString:[i referenceImageURLString]];
+        [[cell activityTypeLabel] setText:[i text]];
+        //[[cell imageReferenceView] setUrlString:[i referenceImageURLString]];
+        return cell;
     } else if ([self currentType] == STKActivityViewControllerTypeRequest) {
         STKRequestCell *cell = [STKRequestCell cellForTableView:tableView target:self];
 

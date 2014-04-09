@@ -81,6 +81,7 @@
 		BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE778C4018BBE16300DA5EDD /* STKNavigationButton.m */; };
 		BE778C4518BBF82000DA5EDD /* STKFilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE778C4318BBF82000DA5EDD /* STKFilterCell.m */; };
 		BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE778C4418BBF82000DA5EDD /* STKFilterCell.xib */; };
+		BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BE78BC2618F486E600CD50E9 /* STKActivityItem.m */; };
 		BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */; };
 		BE7AFA7B18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7AFA7A18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m */; };
 		BE7AFA7E18ECA32800DA30A7 /* STKNetworkStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7AFA7D18ECA32800DA30A7 /* STKNetworkStore.m */; };
@@ -158,7 +159,6 @@
 		BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */; };
 		BEFAC19F183D512E005E8933 /* STKRequestItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC19E183D512E005E8933 /* STKRequestItem.m */; };
 		BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A1183D512F005E8933 /* STKUser.m */; };
-		BEFAC1A5183D512F005E8933 /* STKActivityItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A4183D512F005E8933 /* STKActivityItem.m */; };
 		BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A7183D512F005E8933 /* STKPost.m */; };
 		BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEDF8182C1EE100648B9F /* STKCreatePostViewController.m */; };
 		BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEFCEDF9182C1EE100648B9F /* STKCreatePostViewController.xib */; };
@@ -2003,6 +2003,8 @@
 		BE778C4218BBF82000DA5EDD /* STKFilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFilterCell.h; sourceTree = "<group>"; };
 		BE778C4318BBF82000DA5EDD /* STKFilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKFilterCell.m; sourceTree = "<group>"; };
 		BE778C4418BBF82000DA5EDD /* STKFilterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKFilterCell.xib; sourceTree = "<group>"; };
+		BE78BC2518F486E600CD50E9 /* STKActivityItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKActivityItem.h; path = ../STKActivityItem.h; sourceTree = "<group>"; };
+		BE78BC2618F486E600CD50E9 /* STKActivityItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKActivityItem.m; path = ../STKActivityItem.m; sourceTree = "<group>"; };
 		BE7A2DF91831877F00CC6EED /* UIViewController+STKControllerItems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+STKControllerItems.h"; sourceTree = "<group>"; };
 		BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+STKControllerItems.m"; sourceTree = "<group>"; };
 		BE7AFA7918EC9FDC00DA30A7 /* STKInstagramAuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInstagramAuthViewController.h; sourceTree = "<group>"; };
@@ -2123,8 +2125,6 @@
 		BEFAC19E183D512E005E8933 /* STKRequestItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKRequestItem.m; path = ../STKRequestItem.m; sourceTree = "<group>"; };
 		BEFAC1A0183D512F005E8933 /* STKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKUser.h; path = ../STKUser.h; sourceTree = "<group>"; };
 		BEFAC1A1183D512F005E8933 /* STKUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKUser.m; path = ../STKUser.m; sourceTree = "<group>"; };
-		BEFAC1A3183D512F005E8933 /* STKActivityItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKActivityItem.h; path = ../STKActivityItem.h; sourceTree = "<group>"; };
-		BEFAC1A4183D512F005E8933 /* STKActivityItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKActivityItem.m; path = ../STKActivityItem.m; sourceTree = "<group>"; };
 		BEFAC1A6183D512F005E8933 /* STKPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKPost.h; path = ../STKPost.h; sourceTree = "<group>"; };
 		BEFAC1A7183D512F005E8933 /* STKPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKPost.m; path = ../STKPost.m; sourceTree = "<group>"; };
 		BEFCEDF7182C1EE100648B9F /* STKCreatePostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreatePostViewController.h; sourceTree = "<group>"; };
@@ -4290,10 +4290,10 @@
 		BEE97D93183A5CD900B7BAC1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BE78BC2518F486E600CD50E9 /* STKActivityItem.h */,
+				BE78BC2618F486E600CD50E9 /* STKActivityItem.m */,
 				BEFAC1A6183D512F005E8933 /* STKPost.h */,
 				BEFAC1A7183D512F005E8933 /* STKPost.m */,
-				BEFAC1A3183D512F005E8933 /* STKActivityItem.h */,
-				BEFAC1A4183D512F005E8933 /* STKActivityItem.m */,
 				BEFAC1A0183D512F005E8933 /* STKUser.h */,
 				BEFAC1A1183D512F005E8933 /* STKUser.m */,
 				BEFAC19D183D512E005E8933 /* STKRequestItem.h */,
@@ -4560,6 +4560,7 @@
 				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
+				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
 				BE5767F5187B4DFF004AEE1F /* STKPostViewController.m in Sources */,
 				BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */,
@@ -4618,7 +4619,6 @@
 				BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */,
 				BEF7A08118439E0800A3AFFB /* STKRegisterViewController.m in Sources */,
 				BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */,
-				BEFAC1A5183D512F005E8933 /* STKActivityItem.m in Sources */,
 				BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */,
 				BE5F68F718F0A4FC006D2CD1 /* STKQueryObject.m in Sources */,
 				BE1A73C918D8ECBB004A3BB3 /* STKPostController.m in Sources */,

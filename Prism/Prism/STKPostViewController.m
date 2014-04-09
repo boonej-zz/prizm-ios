@@ -92,7 +92,6 @@
 {
     [self setComments:[[[[self post] comments] allObjects] mutableCopy]];
     [[self comments] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES]]];
-
 }
 
 - (BOOL)postHasText
@@ -261,7 +260,9 @@
     [[self stretchView] setUrlString:[[self post] imageURLString]];
     
     [[STKContentStore store] fetchCommentsForPost:[self post]
-                                       completion:^(STKPost *p, NSError *err) {
+                                       completion:^(NSArray *comments, NSError *err) {
+                                           [self setComments:[[[[self post] comments] allObjects] mutableCopy]];
+                                           [[self comments] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES]]];
                                            [[self tableView] reloadData];
                                        }];
     

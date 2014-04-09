@@ -74,7 +74,7 @@
     [[self mapView] setRegion:MKCoordinateRegionMakeWithDistance([self coordinate], 50, 50)];
     
     [[STKContentStore store] fetchPostsForLocationName:[self locationName]
-                                             direction:STKContentStoreFetchDirectionNewer
+                                             direction:STKQueryObjectPageNewer
                                          referencePost:[[[self localPosts] posts] firstObject]
                                             completion:^(NSArray *posts, NSError *err) {
                                                 if(!err) {

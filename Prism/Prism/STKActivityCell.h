@@ -8,10 +8,11 @@
 
 #import "STKTableViewCell.h"
 #import "STKResolvingImageView.h"
+#import "STKAvatarView.h"
 
 @interface STKActivityCell : STKTableViewCell
 
-@property (weak, nonatomic) IBOutlet STKResolvingImageView *profileImageView;
+@property (weak, nonatomic) IBOutlet STKAvatarView *profileImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *recentIndicatorImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *activityTypeLabel;

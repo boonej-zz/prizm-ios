@@ -36,6 +36,8 @@ extern NSString * const STKPostTypeKey;
 extern NSString * const STKPostVisibilityKey;
 extern NSString * const STKPostHashTagsKey;
 extern NSString * const STKPostOriginIDKey;
+extern NSString * const STKPostDateCreatedKey;
+
 
 extern NSString * const STKPostStatusDeleted;
 
@@ -66,6 +68,7 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, strong) NSSet *hashTags;
 @property (nonatomic, strong) NSSet *comments;
 @property (nonatomic, strong) STKUser *fInverseFeed;
+@property (nonatomic, strong) STKUser *fInverseProfile;
 
 - (BOOL)isPostLikedByUser:(STKUser *)u;
 

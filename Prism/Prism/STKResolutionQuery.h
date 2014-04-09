@@ -10,13 +10,8 @@
 
 @interface STKResolutionQuery : STKQueryObject
 
-+ (STKResolutionQuery *)resolutionQueryForEntityName:(NSString *)entityName
-                                       serverTypeKey:(NSString *)serverTypeKey
-                                               field:(NSString *)field;
++ (STKResolutionQuery *)resolutionQueryForField:(NSString *)field;
 
-
-@property (nonatomic, strong) NSString *entityName;
-@property (nonatomic, strong) NSString *serverTypeKey;
 @property (nonatomic, strong) NSString *field;
 
 @end

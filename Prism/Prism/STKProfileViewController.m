@@ -132,7 +132,7 @@ typedef enum {
         }];
         
         [[STKContentStore store] fetchProfilePostsForUser:[self profile]
-                                              inDirection:STKContentStoreFetchDirectionNewer
+                                              inDirection:STKQueryObjectPageNewer
                                             referencePost:[[[self postController] posts] firstObject]
                                                completion:^(NSArray *posts, NSError *err) {
                                                    if(!err) {

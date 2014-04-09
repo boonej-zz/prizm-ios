@@ -11,6 +11,8 @@
 #import "STKUserStore.h"
 #import "STKPostComment.h"
 
+
+
 NSString * const STKPostLocationLatitudeKey = @"location_latitude";
 NSString * const STKPostLocationLongitudeKey = @"location_longitude";
 NSString * const STKPostLocationNameKey = @"location_name";
@@ -18,6 +20,7 @@ NSString * const STKPostLocationNameKey = @"location_name";
 NSString * const STKPostVisibilityKey = @"scope";
 NSString * const STKPostHashTagsKey = @"hash_tags";
 
+NSString * const STKPostDateCreatedKey = @"create_date";
 NSString * const STKPostURLKey = @"file_path";
 NSString * const STKPostTextKey = @"text";
 NSString * const STKPostTypeKey = @"category";
@@ -47,6 +50,7 @@ NSString * const STKPostStatusDeleted = @"deleted";
 @dynamic hashTags, imageURLString, uniqueID, datePosted, locationLatitude, locationLongitude, locationName,
 visibility, status, repost, referenceTimestamp, text, comments, commentCount, creator, originalPost, likes, likeCount,
 type, fInverseFeed;
+@dynamic fInverseProfile;
 
 + (NSDictionary *)reverseKeyMap
 {
@@ -68,6 +72,11 @@ type, fInverseFeed;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
+    if([jsonObject isKindOfClass:[NSString class]]) {
+        [self setUniqueID:jsonObject];
+        return nil;
+    }
+    
     static NSDateFormatter *df = nil;
     if(!df) {
         df = [[NSDateFormatter alloc] init];
@@ -97,7 +106,7 @@ type, fInverseFeed;
                                                  @"likes" : @{STKJSONBindFieldKey : @"likes", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"comments" : @{STKJSONBindFieldKey : @"comments", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  
-                                                 @"create_date" : ^(NSString *inValue) {
+                                                 STKPostDateCreatedKey : ^(NSString *inValue) {
                                                     [self setReferenceTimestamp:inValue];
                                                     [self setDatePosted:[df dateFromString:inValue]];
                                                  }

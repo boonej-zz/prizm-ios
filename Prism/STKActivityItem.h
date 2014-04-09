@@ -1,9 +1,9 @@
 //
-//  STKActivityItem.h
+//  STKActivity.h
 //  Prism
 //
-//  Created by Joe Conway on 11/20/13.
-//  Copyright (c) 2013 Higher Altitude. All rights reserved.
+//  Created by Joe Conway on 4/8/14.
+//  Copyright (c) 2014 Higher Altitude. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,25 +11,32 @@
 
 @class STKUser;
 
-typedef enum STKActivityItemEnum : int16_t {
-    STKActivityItemTypeComment,
-    STKActivityItemTypeLike,
-    STKActivityItemTypeFollow,
-    STKActivityItemTypeTrustAccepted
-} STKActivityItemType;
+extern NSString * const STKActivityItemContextPost;
+extern NSString * const STKActivityItemContextUser;
+extern NSString * const STKActivityItemContextComment;
 
-@class STKUser;
+extern NSString *const STKActivityItemActionCreate;
+extern NSString *const STKActivityItemActionDelete; //remove
 
-@interface STKActivityItem : NSManagedObject
+extern NSString *const STKActivityItemTypePost;
+extern NSString *const STKActivityItemTypeFollow;
+extern NSString *const STKActivityItemTypeUnfollow;
+extern NSString *const STKActivityItemTypeLike;
+extern NSString *const STKActivityItemTypeUnlike;
+extern NSString *const STKActivityItemTypeComment;
 
-@property (nonatomic) NSString *uniqueID;
-@property (nonatomic, retain) STKUser *user;
-@property (nonatomic, strong) STKUser *otherUser;
-@property (nonatomic) BOOL recent;
-@property (nonatomic) STKActivityItemType type;
-@property (nonatomic, retain) NSString *referenceImageURLString;
-@property (nonatomic, retain) NSDate *date;
+@interface STKActivityItem : NSManagedObject <STKJSONObject>
 
-+ (NSString *)stringForActivityItemType:(STKActivityItemType)t;
+@property (nonatomic, retain) NSString * uniqueID;
+@property (nonatomic, retain) NSString * action;
+@property (nonatomic, retain) NSString * context;
+@property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSDate * dateCreated;
+@property (nonatomic) BOOL hasBeenViewed;
+@property (nonatomic, retain) NSString * referenceTimestamp;
+@property (nonatomic, retain) NSString * targetID;
+@property (nonatomic, retain) STKUser *creator;
+
+- (NSString *)text;
 
 @end

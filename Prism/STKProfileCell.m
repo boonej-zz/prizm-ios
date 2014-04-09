@@ -33,7 +33,7 @@
     _showPrismImageForToggleButton = showPrismImageForToggleButton;
     
     if([self showPrismImageForToggleButton]) {
-        [[self toggleButton] setImage:[UIImage imageNamed:@"btn_prismbtn"]
+        [[self toggleButton] setImage:[UIImage imageNamed:@"action_prism"]
                              forState:UIControlStateNormal];
     } else {
         [[self toggleButton] setImage:[UIImage imageNamed:@"btn_info"]

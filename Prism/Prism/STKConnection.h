@@ -54,6 +54,8 @@ typedef enum {
 @property (nonatomic) BOOL shouldReturnArray;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, copy) NSString *entityName;
+@property (nonatomic, strong) NSDictionary *resolutionMap;
+
 // { ourName : theirName}
 @property (nonatomic, strong) NSDictionary *existingMatchMap;
 @property (nonatomic, copy) void (^insertionBlock)(NSManagedObject *rootObject);

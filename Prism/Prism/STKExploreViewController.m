@@ -291,7 +291,7 @@ typedef enum {
     }
 
     STKPostController *pc = [self activePostController];
-    [[STKContentStore store] fetchExplorePostsInDirection:STKContentStoreFetchDirectionNewer
+    [[STKContentStore store] fetchExplorePostsInDirection:STKQueryObjectPageNewer
                                             referencePost:[[[self activePostController] posts] firstObject]
                                                    filter:filter
                                                completion:^(NSArray *posts, NSError *err) {

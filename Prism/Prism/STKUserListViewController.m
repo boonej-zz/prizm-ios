@@ -11,6 +11,7 @@
 #import "STKUser.h"
 #import "STKProfileViewController.h"
 #import "UIERealTimeBlurView.h"
+#import "STKUserStore.h"
 
 @interface STKUserListViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -104,6 +105,12 @@
     [[c nameLabel] setTextColor:STKTextColor];
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
+    
+    if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
+        [[c followButton] setSelected:YES];
+    } else {
+        [[c followButton] setSelected:NO];
+    }
     
     return c;
 }

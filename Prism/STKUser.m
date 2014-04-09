@@ -39,6 +39,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken;
+@dynamic fProfilePosts;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 

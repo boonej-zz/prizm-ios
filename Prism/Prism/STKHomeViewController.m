@@ -53,7 +53,7 @@
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         
-        [[self navigationItem] setTitle:@"Prism"];
+        [[self navigationItem] setTitle:@"Prizm"];
         
         _postController = [[STKPostController alloc] initWithViewController:self];
         
@@ -265,7 +265,7 @@
 
     if([[STKUserStore store] currentUser]) {
         [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
-                                      inDirection:STKContentStoreFetchDirectionNewer
+                                      inDirection:STKQueryObjectPageNewer
                                     referencePost:[[[self postController] posts] firstObject]
                                        completion:^(NSArray *posts, NSError *err) {
                                         if(!err) {

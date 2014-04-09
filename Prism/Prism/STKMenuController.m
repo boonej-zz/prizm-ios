@@ -344,7 +344,6 @@
 {
     [self setImageTransitionRect:r];
     
-    NSLog(@"image == %@", image);
     [[self transitionImageView] setImage:image];
     
     STKPostViewController *postVC = [[STKPostViewController alloc] init];

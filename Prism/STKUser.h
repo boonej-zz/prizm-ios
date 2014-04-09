@@ -84,6 +84,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) NSSet *likedComments;
 @property (nonatomic, strong) NSSet *likedPosts;
 @property (nonatomic, strong) NSSet *fFeedPosts;
+@property (nonatomic, strong) NSSet *fProfilePosts;
 
 @property (nonatomic, strong) NSString *accountStoreID;
 

@@ -10,18 +10,24 @@
 
 @implementation STKResolutionQuery
 
-+ (STKResolutionQuery *)resolutionQueryForEntityName:(NSString *)entityName
-                                       serverTypeKey:(NSString *)serverTypeKey
-                                               field:(NSString *)field
++ (STKResolutionQuery *)resolutionQueryForField:(NSString *)field
 {
     STKResolutionQuery *a = [[STKResolutionQuery alloc] init];
 
-    [a setEntityName:entityName];
-    [a setServerTypeKey:serverTypeKey];
     [a setField:field];
     
     return a;
 }
+
+- (id)init
+{
+    self = [super init];
+    if(self) {
+        [self setFormat:STKQueryObjectFormatShort];
+    }
+    return self;
+}
+
 
 - (NSDictionary *)dictionaryRepresentation
 {
