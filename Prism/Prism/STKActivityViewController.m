@@ -53,6 +53,7 @@ typedef enum {
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_notification"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_notification_selected"]];
+        [[self tabBarItem] setTitle:@"Activity"];
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         
         _activities = [[NSMutableArray alloc] init];

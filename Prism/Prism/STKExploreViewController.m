@@ -76,7 +76,8 @@ typedef enum {
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setTitle:@"Explore"];
-        
+        [[self tabBarItem] setTitle:@"Explore"]
+        ;
         STKNavigationButton *view = [[STKNavigationButton alloc] init];
         [view setImage:[UIImage imageNamed:@"btn_search"]];
         [view setHighlightedImage:[UIImage imageNamed:@"btn_search_selected"]];

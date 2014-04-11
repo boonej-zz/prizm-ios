@@ -80,7 +80,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     self = [super init];
     if (self) {
         _accountStore = [[ACAccountStore alloc] init];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLastModifiedDates:) name:NSManagedObjectContextWillSaveNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLastModifiedDates:) name:NSManagedObjectContextWillSaveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(connectionDidFailAuthorization:)
                                                      name:STKConnectionUnauthorizedNotification
@@ -128,11 +128,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     
     [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForUser:u completion:^(STKUser *updatedUser, NSError *err) {
         if(!err) {
-            [self updateUserDetails:updatedUser completion:^(STKUser *u, NSError *err) {
-                if(!err) {
-                    [[self context] save:nil];
-                }
-            }];
+            if(updatedUser) {
+                [updatedUser setLastIntegrationSync:[NSDate date]];
+                [self updateUserDetails:updatedUser completion:^(STKUser *u, NSError *err) {
+                    if(!err) {
+                        [[self context] save:nil];
+                    }
+                }];
+            }
         }
     }];
 
@@ -231,7 +234,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setIdentifiers:@[[user uniqueID], @"trusts", [otherUser uniqueID]]];
 //        [c setQueryObject:[STKContainQuery containQueryForField:@"to" keyValues:@{@"from" : ]]
         
-//        [c setModelGraph:@[t]];
+        [c setModelGraph:@[@"STKTrust"]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setContext:[self context]];
         
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -302,7 +306,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             [q addSubquery:[STKContainQuery containQueryForField:@"following" key:@"_id" value:[[self currentUser] uniqueID]]];
             
             //[q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
-            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" keyValues:@{@"from" : [[self currentUser] uniqueID], @"to" : [[self currentUser] uniqueID]}]];
+//            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" keyValues:@{@"from" : [[self currentUser] uniqueID], @"to" : [[self currentUser] uniqueID]}]];
         }
         
         [c setQueryObject:q];
@@ -643,10 +647,21 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[[self currentUser] uniqueID], @"trusts"]];
 
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+        STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
+        [fq setFields:@[@"create_date"]];
+        STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
+        [tq setFields:@[@"create_date"]];
+        
+        [q addSubquery:fq];
+        [q addSubquery:tq];
+        [c setQueryObject:q];
+        
         [c setModelGraph:@[@"STKTrust"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setShouldReturnArray:YES];
+        [c setResolutionMap:@{@"User" : @"STKUser"}];
         [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
             
             if(!err) {

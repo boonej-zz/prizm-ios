@@ -224,7 +224,6 @@
 }
 - (void)dealloc
 {
-        NSLog(@"POST DEALLOC");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

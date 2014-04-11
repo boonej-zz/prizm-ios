@@ -50,8 +50,10 @@
     if(self) {
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_home"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_home_selected"]];
+        [[self tabBarItem] setTitle:@"Home"];
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        
         
         [[self navigationItem] setTitle:@"Prizm"];
         

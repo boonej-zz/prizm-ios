@@ -73,7 +73,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) NSString *twitterID;
 @property (nonatomic, strong) NSString *twitterLastMinID;
 
-@property (nonatomic, strong) NSString *lastIntegrationSync;
+@property (nonatomic, strong) NSDate *lastIntegrationSync;
 
 @property (nonatomic) int followerCount;
 @property (nonatomic) int followingCount;

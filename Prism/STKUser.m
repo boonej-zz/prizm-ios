@@ -125,25 +125,26 @@ accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
             [df setDateFormat:@"MM-dd-yyyy"];
             [self setBirthday:[df dateFromString:inValue]];
         },
-        @"date_created" : ^(NSString *inValue) {
+        @"create_date" : ^(NSString *inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
             [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
             [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
             [self setDateCreated:[df dateFromString:inValue]];
         }
     }];
-
+// 5335c7c3d6e286c075144533
     return nil;
 }
 
 - (STKTrust *)trustForUser:(STKUser *)u
-{/*
-    for(STKTrust *t in [self ownedTrusts]) {
-        if([[t otherUser] isEqual:u]) {
-            return t;
-        }
-    }*/
-    return nil;
+{
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+    [req setPredicate:[NSPredicate predicateWithFormat:@"(creator == %@ and recepient == %@) or (creator == %@ and recepient == %@)",
+                       self, u, u, self]];
+    
+    NSArray *results = [[self managedObjectContext] executeFetchRequest:req error:nil];
+    
+    return [results firstObject];
 }
 
 - (BOOL)isFollowedByUser:(STKUser *)u

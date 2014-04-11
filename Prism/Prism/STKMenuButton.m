@@ -92,6 +92,15 @@
     [img drawInRect:CGRectMake(b.size.width / 2.0 - sz.width / 2.0,
                                b.size.height / 2.0 - sz.height / 2.0,
                                sz.width, sz.height)];
+    
+    
+    NSString *s = [[self item] title];
+    UIFont *f = STKFont(12);
+    NSDictionary *attrs = @{NSFontAttributeName : f, NSForegroundColorAttributeName : STKTextColor};
+    sz = [s sizeWithAttributes:attrs];
+    
+    CGRect r = CGRectMake(([self bounds].size.width - sz.width) / 2.0, [self bounds].size.height - sz.height - 5, sz.width, sz.height);
+    [s drawInRect:r withAttributes:attrs];
 }
 
 @end

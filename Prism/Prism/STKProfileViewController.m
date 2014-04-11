@@ -64,6 +64,7 @@ typedef enum {
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [[self tabBarItem] setTitle:@"Profile"];
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
@@ -131,7 +132,10 @@ typedef enum {
             } else {
                 [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
                                              completion:^(STKTrust *t, NSError *err) {
-                                                 NSLog(@"OK");
+                                                 [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionHeader]
+                                                                 withRowAnimation:UITableViewRowAnimationNone];
+                                                 
+                                                 [self refreshStatisticsView];
                                              }];
             }
         }];
@@ -308,7 +312,7 @@ typedef enum {
             [self refreshStatisticsView];
         }];
     } else if([t isPending]) {
-        if([[t recepient] isEqual:[self profile]]) {
+        if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
             // Accept
             [[STKUserStore store] acceptTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
                 [self refreshStatisticsView];
@@ -319,7 +323,7 @@ typedef enum {
             }];
         }
     } else if([t isRejected]) {
-        if([[t recepient] isEqual:[self profile]]) {
+        if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
             // Do nothing, is rejected
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
@@ -409,7 +413,7 @@ typedef enum {
             [[c trustButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 95, 0, 0)];
         } else {
             if([t isPending]) {
-                if([[t recepient] isEqual:[self profile]]) {
+                if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
                     [[c trustButton] setTitle:@"Accept" forState:UIControlStateNormal];
                     [[c trustButton] setImage:[UIImage imageNamed:@"activity_accept_trust"] forState:UIControlStateNormal];
                 } else {
@@ -417,7 +421,7 @@ typedef enum {
                     [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
                 }
             } else if([t isRejected]) {
-                if([[t recepient] isEqual:[self profile]]) {
+                if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
                     [[c trustButton] setTitle:@"Rejected" forState:UIControlStateNormal];
                     [[c trustButton] setImage:nil forState:UIControlStateNormal];
                 } else {
@@ -585,8 +589,4 @@ typedef enum {
 }
 
 
-- (void)dealloc
-{
-    NSLog(@"PROILE DEALLOC");
-}
 @end

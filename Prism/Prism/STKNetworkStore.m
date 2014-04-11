@@ -15,6 +15,8 @@
 #import "STKPost.h"
 @import Accounts;
 
+const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
+
 @interface STKNetworkStore ()
 @property (nonatomic, strong) NSURLSession *session;
 @end
@@ -44,15 +46,40 @@
 - (void)checkAndFetchPostsFromOtherNetworksForUser:(STKUser *)user
                                         completion:(void (^)(STKUser *updatedUser, NSError *err))block
 {
-    [[STKUserStore store] fetchUserDetails:user additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token"] completion:^(STKUser *user, NSError *err) {
-/*       [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[user instagramLastMinID] completion:^(NSString *lastID, NSError *err) {
-            [self transferPostsFromTwitterAccount:<#(ACAccount *)#> completion:<#^(NSString *lastID, NSError *err)block#>]
-        }];*/
-        if([user twitterID]) {
-            ACAccount *twitterAccount = [[[STKUserStore store] accountStore] accountWithIdentifier:[user twitterID]];
-            NSLog(@"%@", twitterAccount);
-        }
-    }];
+    float requiredTime = 60 * 10;
+    NSTimeInterval ti = requiredTime + 1;
+    if([user lastIntegrationSync]) {
+        ti = [[NSDate date] timeIntervalSinceDate:[user lastIntegrationSync]];
+    }
+    
+
+    if(ti > requiredTime) {
+        [[STKUserStore store] fetchUserDetails:user additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token"] completion:^(STKUser *user, NSError *err) {
+            [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[user instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
+                [user setInstagramLastMinID:instagramLastID];
+                
+                [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
+                    ACAccount *account = nil;
+                    for(ACAccount *acct in accounts) {
+                        if([[acct username] isEqualToString:[user twitterID]]) {
+                            account = acct;
+                        }
+                    }
+                    [self transferPostsFromTwitterAccount:account lastMinimumID:[user twitterLastMinID] completion:^(NSString *twitterLastID, NSError *twitterError) {
+                        if([twitterError code] == STKNetworkStoreErrorTwitterAccountNoLongerExists) {
+                            [user setTwitterID:nil];
+                        }
+                        [user setTwitterLastMinID:twitterLastID];
+                        block(user, nil);
+                    }];
+                }];
+            }];
+        }];
+    } else {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(nil, nil);
+        }];
+    }
 }
 
 
@@ -60,6 +87,13 @@
                               lastMinimumID:(NSString *)minID
                                  completion:(void (^)(NSString *lastID, NSError *err))block
 {
+    if(!token) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(nil, nil);
+        }];
+        return;
+    }
+    
     NSString *urlString = [NSString stringWithFormat:@"https://api.instagram.com/v1/users/self/media/recent/?access_token=%@&count=20", token];
     if(minID) {
         urlString = [urlString stringByAppendingFormat:@"&min_id=%@", minID];
@@ -74,6 +108,7 @@
                                                                              NSMutableArray *postsToSend = [NSMutableArray array];
                                                                              NSArray *posts = [val objectForKey:@"data"];
                                                                              for(NSDictionary *post in posts) {
+                                                                                 
                                                                                  NSString *postID = [post objectForKey:@"id"];
                                                                                  if([postID isEqualToString:minID])
                                                                                      continue;
@@ -149,16 +184,29 @@
 }
 
 - (void)transferPostsFromTwitterAccount:(ACAccount *)account
+                          lastMinimumID:(NSString *)minID
                              completion:(void (^)(NSString *lastID, NSError *err))block
 {
+    if(!account) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(nil, [NSError errorWithDomain:@"STKNetworkStoreErrorDomain" code:STKNetworkStoreErrorTwitterAccountNoLongerExists userInfo:nil]);
+        }];
+        return;
+    }
+
     [[STKUserStore store] fetchTwitterAccessToken:account completion:^(NSString *token, NSString *tokenSecret, NSError *err) {
         if(err) {
             block(nil, err);
         } else {
+            
+            NSMutableDictionary *params = [@{@"trim_user" : @"true",
+                                            @"include_rts" : @"false"} mutableCopy];
+            if(minID) {
+                [params setObject:minID forKey:@"since_id"];
+            }
             SLRequest *req = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
                                                           URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/user_timeline.json"]
-                                                   parameters:@{@"trim_user" : @"true",
-                                                                @"include_rts" : @"false"}];
+                                                   parameters:params];
             [req setAccount:account];
             
             [NSURLConnection sendAsynchronousRequest:[req preparedURLRequest] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
@@ -167,7 +215,6 @@
                 } else {
                     NSArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 
-                    NSLog(@"%@", json);
                     NSMutableArray *postsToSend = [NSMutableArray array];
                     for(NSDictionary *d in json) {
                         NSDictionary *entities = [d objectForKey:@"entities"];
@@ -181,40 +228,44 @@
                     
                     [self createPostsForTwitter:postsToSend];
                     
-                    // Sync up all that other shit
-                    block(nil, nil);
+                    NSNumber *n = [[[json sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"id" ascending:NO]]] firstObject] objectForKey:@"id"];
+
+                    NSString *lastID = minID;
+                    if(n)
+                        lastID = [NSString stringWithFormat:@"%@",n];
+                    block(lastID, nil);
                 }
             }];
-
+            
         }
     }];
 }
 
 - (void)createPostsForTwitter:(NSArray *)posts
 {
-    for(NSDictionary *post in posts) {
-        NSString *text = [post objectForKey:@"text"];
-        NSString *userID = [[post objectForKey:@"user"] objectForKey:@"id"];
-        NSString *tweetID = [post objectForKey:@"id"];
-        NSString *link = [NSString stringWithFormat:@"http://twitter.com/%@/status/%@", userID, tweetID];
-
-        NSDictionary *postInfo = @{
-                                   STKPostTextKey : text,
-                                   STKPostTypeKey : STKPostTypeExperience,
-                                   @"external_provider" : @"twitter",
-                                   @"external_link" : link
-                                   };
-        
-        [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
-            if(!err) {
-                NSMutableArray *a = [posts mutableCopy];
-                [a removeLastObject];
-                [self createPostsForTwitter:a];
-            }
-        }];
-
-    }
+    NSDictionary *post = [posts lastObject];
+    if(!post)
+        return;
     
+    NSString *text = [post objectForKey:@"text"];
+    NSString *userID = [[post objectForKey:@"user"] objectForKey:@"id"];
+    NSString *tweetID = [post objectForKey:@"id"];
+    NSString *link = [NSString stringWithFormat:@"http://twitter.com/%@/status/%@", userID, tweetID];
+    
+    NSDictionary *postInfo = @{
+                               STKPostTextKey : text,
+                               STKPostTypeKey : STKPostTypeExperience,
+                               @"external_provider" : @"twitter",
+                               @"external_link" : link
+                               };
+    
+    [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
+        if(!err) {
+            NSMutableArray *a = [posts mutableCopy];
+            [a removeLastObject];
+            [self createPostsForTwitter:a];
+        }
+    }];
     
 }
 

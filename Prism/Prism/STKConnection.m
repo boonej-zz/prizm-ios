@@ -168,7 +168,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     if(!value || !key)
         return;
     
-    if([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSArray class]]) {
+    if([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSArray class]] || [value isKindOfClass:[NSNull class]]) {
         [_internalArguments setObject:value forKey:key];
     } else if([value isKindOfClass:[NSDictionary class]]) {
         [self addQueryDictionary:value forKey:key];
