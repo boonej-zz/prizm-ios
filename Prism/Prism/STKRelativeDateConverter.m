@@ -15,16 +15,16 @@
     NSTimeInterval i = -[date timeIntervalSinceNow];
     
     if(i < 60)
-        return @"Just now";
+        return @"Now";
     
     if(i <= 3600) {
         int mins = i / 60;
-        return [NSString stringWithFormat:@"%dmin%@", mins, (mins == 1) ? @"" : @"s"];
+        return [NSString stringWithFormat:@"%dm", mins];
     }
     
     if(i < 60 * 60 * 24) {
         int hours = i / (60 * 60);
-        return [NSString stringWithFormat:@"%dhr%@", hours, (hours == 1) ? @"" : @"s"];
+        return [NSString stringWithFormat:@"%dh", hours];
     }
     
     int days = i / (60 * 60 * 24);
@@ -32,7 +32,7 @@
         return [NSString stringWithFormat:@"%dd", days];
     }
     
-    return [NSString stringWithFormat:@"%dwk%@", days / 7, (days / 7 == 1) ? @"" : @"s"];
+    return [NSString stringWithFormat:@"%dw", days / 7];
 }
 
 @end

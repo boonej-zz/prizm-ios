@@ -22,13 +22,18 @@ extern NSString * const STKRequestStatusCancelled;
 @property (nonatomic, strong) NSString *uniqueID;
 @property (nonatomic, strong) NSString *status;
 @property (nonatomic, strong) NSDate *dateCreated;
+@property (nonatomic, strong) NSDate *dateModified;
+@property (nonatomic, strong) NSString *type;
 
-@property (nonatomic, strong) STKUser *owningUser;
-@property (nonatomic, strong) STKUser *otherUser;
+@property (nonatomic) int creatorPostsCount;
+@property (nonatomic) int creatorCommentsCount;
+@property (nonatomic) int creatorLikesCount;
+@property (nonatomic) int recepientPostsCount;
+@property (nonatomic) int recepientCommentsCount;
+@property (nonatomic) int recepientLikesCount;
 
-@property (nonatomic) BOOL owningUserRequestedTrust;
-
-@property (nonatomic, readonly) STKUser *requestor;
+@property (nonatomic, strong) STKUser *recepient;
+@property (nonatomic, strong) STKUser *creator;
 
 - (BOOL)isPending;
 - (BOOL)isAccepted;

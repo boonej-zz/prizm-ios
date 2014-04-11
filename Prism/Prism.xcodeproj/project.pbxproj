@@ -2182,6 +2182,11 @@
 		BE02EA96182A80A200A5505A = {
 			isa = PBXGroup;
 			children = (
+				BE47756F186DC64C003672A0 /* Amazon */,
+				BE52B14018E3106400C44F30 /* STK */,
+				BEF96ACF186221340016E737 /* OAuthCore */,
+				BED0B1DA185F61FC00564300 /* Google Plus */,
+				BEF7A0831843ACA500A3AFFB /* Utility */,
 				BE02EAA8182A80A200A5505A /* Prism */,
 				BE02EAC1182A80A200A5505A /* PrismTests */,
 				BE02EAA1182A80A200A5505A /* Frameworks */,
@@ -2221,11 +2226,6 @@
 		BE02EAA8182A80A200A5505A /* Prism */ = {
 			isa = PBXGroup;
 			children = (
-				BE52B14018E3106400C44F30 /* STK */,
-				BE47756F186DC64C003672A0 /* Amazon */,
-				BEF96ACF186221340016E737 /* OAuthCore */,
-				BED0B1DA185F61FC00564300 /* Google Plus */,
-				BEF7A0831843ACA500A3AFFB /* Utility */,
 				BEE97D93183A5CD900B7BAC1 /* Model */,
 				BEFCEDFC182C204900648B9F /* Store */,
 				BE1FC3AD186C8131003464E1 /* Cells */,
@@ -2488,6 +2488,7 @@
 				BE477BED186DC66A003672A0 /* STS */,
 			);
 			name = Amazon;
+			path = Prism;
 			sourceTree = "<group>";
 		};
 		BE47758C186DC666003672A0 /* AutoScaling */ = {
@@ -4276,6 +4277,7 @@
 				BE5F68FF18F21146006D2CD1 /* STKSearchQuery.m */,
 			);
 			name = STK;
+			path = Prism;
 			sourceTree = "<group>";
 		};
 		BED0B1DA185F61FC00564300 /* Google Plus */ = {
@@ -4285,6 +4287,7 @@
 				BED0B263185F689100564300 /* GooglePlus.framework */,
 			);
 			name = "Google Plus";
+			path = Prism;
 			sourceTree = "<group>";
 		};
 		BEE97D93183A5CD900B7BAC1 /* Model */ = {
@@ -4336,6 +4339,7 @@
 				BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */,
 			);
 			name = Utility;
+			path = Prism;
 			sourceTree = "<group>";
 		};
 		BEF96ACF186221340016E737 /* OAuthCore */ = {

@@ -12,9 +12,15 @@
 #import "NSError+STKConnection.h"
 
 @import Accounts;
+@import CoreLocation;
 
 NSString * const STKErrorUserDoesNotExist = @"user_does_not_exist";
 NSString * const STKErrorBadPassword = @"invalid_user_credentials";
+
+NSString * const STKErrorInvalidRequest = @"invalid_request";
+NSString * const STKErrorInvalidRegistration = @"invalid_registration";
+NSString * const STKErrorStoreInvalidUserRequest = @"invalid_user_request";
+NSString * const STKErrorStoreServerError = @"server_error";
 
 @implementation STKErrorStore
 
@@ -75,11 +81,18 @@ NSString * const STKErrorBadPassword = @"invalid_user_credentials";
             @(STKConnectionErrorCodeParseFailed) : @"The response from the server didn't make sense.",
             @(STKConnectionErrorCodeRequestFailed) : @"The requested information was not accessed successfully.",
             STKErrorUserDoesNotExist : @"Invalid user or password.",
-            STKErrorBadPassword : @"Invalid user or password."
+            STKErrorBadPassword : @"Invalid user or password.",
+            STKErrorInvalidRequest : @"There was a problem communcating with the server.",
+            STKErrorInvalidRegistration : @"An account with this e-mail address already exists.",
+            STKErrorStoreInvalidUserRequest : @"Invalid user.",
+            STKErrorStoreServerError : @"There was a problem with the server. Please contact customer support."
         } forKey:STKConnectionServiceErrorDomain];
         [errorMap setObject:@{
             @"Any" : @"There was a problem communicating with the server. Ensure you have internet access and try again."
         } forKey:NSURLErrorDomain];
+        [errorMap setObject:@{
+            @(kCLErrorDenied) : @"Prizm doesn't have access to your location. Please change this in the Settings application."
+            } forKey:kCLErrorDomain];
 
     }
     
@@ -115,17 +128,12 @@ NSString * const STKErrorBadPassword = @"invalid_user_credentials";
     if(!text) {
         text = [domainErrors objectForKey:@"Any"];
         if(!text) {
-            text = [[err userInfo] objectForKey:NSLocalizedDescriptionKey];
-            if(!text) {
-                text = @"There was an unexpected error.";
-            } else {
-                userInfo = nil;
-            }
+            text = [[err userInfo] objectForKey:@"error"];
         }
     }
     
     if([userInfo count] > 0)
-        return [NSString stringWithFormat:@"%@ (%@)", text, [[err userInfo] objectForKey:NSLocalizedDescriptionKey]];
+        return [NSString stringWithFormat:@"%@", text];
     
     return text;
 }

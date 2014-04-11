@@ -91,11 +91,8 @@
                 [self setLocations:locations];
                 [[self tableView] reloadData];
             } else {
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Finding Location"
-                                                             message:[err localizedDescription]
-                                                            delegate:nil
-                                                   cancelButtonTitle:@"OK"
-                                                   otherButtonTitles:nil];
+                
+                UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
                 [av show];
             }
         }];

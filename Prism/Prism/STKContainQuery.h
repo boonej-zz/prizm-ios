@@ -11,10 +11,17 @@
 @interface STKContainQuery : STKQueryObject
 
 + (STKContainQuery *)containQueryForField:(NSString *)field
+                                keyValues:(NSDictionary *)dict;
+
++ (STKContainQuery *)containQueryForField:(NSString *)field
                                       key:(NSString *)key
                                     value:(NSString *)value;
 
 @property (nonatomic, strong) NSString *field;
+
+// Using this will replace key/value
+@property (nonatomic, strong) NSDictionary *keyValues;
+
 @property (nonatomic, strong) NSString *key;
 @property (nonatomic, strong) NSString *value;
 

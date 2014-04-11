@@ -10,6 +10,7 @@
 
 extern NSString * const STKErrorUserDoesNotExist;
 extern NSString * const STKErrorBadPassword;
+extern NSString * const STKErrorInvalidRequest;
 
 @interface STKErrorStore : NSObject
 

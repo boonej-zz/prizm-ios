@@ -13,6 +13,7 @@
 #import "STKUser.h"
 #import "STKContentStore.h"
 #import "STKPost.h"
+@import Accounts;
 
 @interface STKNetworkStore ()
 @property (nonatomic, strong) NSURLSession *session;
@@ -40,6 +41,20 @@
     return self;
 }
 
+- (void)checkAndFetchPostsFromOtherNetworksForUser:(STKUser *)user
+                                        completion:(void (^)(STKUser *updatedUser, NSError *err))block
+{
+    [[STKUserStore store] fetchUserDetails:user additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token"] completion:^(STKUser *user, NSError *err) {
+/*       [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[user instagramLastMinID] completion:^(NSString *lastID, NSError *err) {
+            [self transferPostsFromTwitterAccount:<#(ACAccount *)#> completion:<#^(NSString *lastID, NSError *err)block#>]
+        }];*/
+        if([user twitterID]) {
+            ACAccount *twitterAccount = [[[STKUserStore store] accountStore] accountWithIdentifier:[user twitterID]];
+            NSLog(@"%@", twitterAccount);
+        }
+    }];
+}
+
 
 - (void)transferPostsFromInstagramWithToken:(NSString *)token
                               lastMinimumID:(NSString *)minID
@@ -64,7 +79,7 @@
                                                                                      continue;
                                                                                  
                                                                                  if([[post objectForKey:@"type"] isEqualToString:@"image"]) {
-                                                                                     if([[post objectForKey:@"tags"] containsObject:@"prism"]) {
+                                                                                     if([[post objectForKey:@"tags"] containsObject:@"prizm"]) {
                                                                                          [postsToSend addObject:post];
                                                                                      }
                                                                                  }
@@ -96,10 +111,14 @@
     NSString *text = [[post objectForKey:@"caption"] objectForKey:@"text"];
     NSDictionary *images = [post objectForKey:@"images"];
     NSDictionary *normalImage = [images objectForKey:@"standard_resolution"];
-    
+    NSString *link = [post objectForKey:@"link"];
     NSString *urlString = [normalImage objectForKey:@"url"];
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
+    if(!text)
+        text = @"";
+    if(!link)
+        link = @"";
     
     NSURLSessionDataTask *dt = [[[STKBaseStore store] session] dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if(!error) {
@@ -111,6 +130,8 @@
                                                STKPostTextKey : text,
                                                STKPostURLKey : URLString,
                                                STKPostTypeKey : STKPostTypeExperience,
+                                               @"external_provider" : @"instagram",
+                                               @"external_link" : link
                                                };
                     
                     [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
@@ -125,6 +146,75 @@
         }
     }];
     [dt resume];
+}
+
+- (void)transferPostsFromTwitterAccount:(ACAccount *)account
+                             completion:(void (^)(NSString *lastID, NSError *err))block
+{
+    [[STKUserStore store] fetchTwitterAccessToken:account completion:^(NSString *token, NSString *tokenSecret, NSError *err) {
+        if(err) {
+            block(nil, err);
+        } else {
+            SLRequest *req = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
+                                                          URL:[NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/user_timeline.json"]
+                                                   parameters:@{@"trim_user" : @"true",
+                                                                @"include_rts" : @"false"}];
+            [req setAccount:account];
+            
+            [NSURLConnection sendAsynchronousRequest:[req preparedURLRequest] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                if(connectionError) {
+                    block(nil, connectionError);
+                } else {
+                    NSArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+
+                    NSLog(@"%@", json);
+                    NSMutableArray *postsToSend = [NSMutableArray array];
+                    for(NSDictionary *d in json) {
+                        NSDictionary *entities = [d objectForKey:@"entities"];
+                        NSArray *hashTags = [entities objectForKey:@"hashtags"];
+                        for(NSDictionary *hashTag in hashTags) {
+                            if([[hashTag objectForKey:@"text"] isEqualToString:@"prizm"]) {
+                                [postsToSend addObject:d];
+                            }
+                        }
+                    }
+                    
+                    [self createPostsForTwitter:postsToSend];
+                    
+                    // Sync up all that other shit
+                    block(nil, nil);
+                }
+            }];
+
+        }
+    }];
+}
+
+- (void)createPostsForTwitter:(NSArray *)posts
+{
+    for(NSDictionary *post in posts) {
+        NSString *text = [post objectForKey:@"text"];
+        NSString *userID = [[post objectForKey:@"user"] objectForKey:@"id"];
+        NSString *tweetID = [post objectForKey:@"id"];
+        NSString *link = [NSString stringWithFormat:@"http://twitter.com/%@/status/%@", userID, tweetID];
+
+        NSDictionary *postInfo = @{
+                                   STKPostTextKey : text,
+                                   STKPostTypeKey : STKPostTypeExperience,
+                                   @"external_provider" : @"twitter",
+                                   @"external_link" : link
+                                   };
+        
+        [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
+            if(!err) {
+                NSMutableArray *a = [posts mutableCopy];
+                [a removeLastObject];
+                [self createPostsForTwitter:a];
+            }
+        }];
+
+    }
+    
     
 }
 

@@ -97,7 +97,6 @@ type, fInverseFeed, activities;
                                                  @"is_repost" : @"repost",
                                                  STKPostTextKey : @"text",
                                                  
-                                                 
                                                  @"likes_count" : @"likeCount",
                                                  @"comments_count" : @"commentCount",
                                                  @"hash_tags" : @{STKJSONBindFieldKey : @"hashTags", STKJSONBindMatchDictionaryKey : @{@"title" : @"title"}},
@@ -105,6 +104,8 @@ type, fInverseFeed, activities;
                                                  @"creator" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"likes" : @{STKJSONBindFieldKey : @"likes", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"comments" : @{STKJSONBindFieldKey : @"comments", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+                                                 
+                                                 @"origin_post_id" : @{STKJSONBindFieldKey : @"originalPost", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  
                                                  STKPostDateCreatedKey : ^(NSString *inValue) {
                                                     [self setReferenceTimestamp:inValue];

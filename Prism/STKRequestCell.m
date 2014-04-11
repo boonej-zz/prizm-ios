@@ -26,8 +26,8 @@
 - (void)populateWithTrust:(STKTrust *)i
 {
     [[self dateLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];
-    [[self avatarImageView] setUrlString:[[i otherUser] profilePhotoPath]];
-    [[self nameLabel] setText:[[i otherUser] name]];
+    [[self avatarImageView] setUrlString:[[i creator] profilePhotoPath]];
+    [[self nameLabel] setText:[[i creator] name]];
     
     [[self rejectButton] setHidden:YES];
     [[self acceptButton] setHidden:YES];

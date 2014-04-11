@@ -609,7 +609,7 @@ const long STKCreateProgressGeocoding = 4;
 {
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
                                                                         forType:STKImageChooserTypeCover
-                                                                     completion:^(UIImage *img) {
+                                                                     completion:^(UIImage *img, UIImage *originalImage) {
         if(img)
             [self setCoverImage:img];
         [self configureInterface];
@@ -620,7 +620,7 @@ const long STKCreateProgressGeocoding = 4;
 {
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
                                                                         forType:STKImageChooserTypeProfile
-                                                                     completion:^(UIImage *img) {
+                                                                     completion:^(UIImage *img, UIImage *originalImage) {
         if(img)
             [self setProfileImage:img];
         [self configureInterface];

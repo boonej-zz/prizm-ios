@@ -31,6 +31,7 @@
 @interface STKPostViewController ()
     <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, STKPostControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *postButtonRightConstraint;
 @property (weak, nonatomic) IBOutlet STKPostHeaderView *fakeHeaderView;
 @property (weak, nonatomic) IBOutlet UIView *fakeContainerView;
 @property (weak, nonatomic) IBOutlet UIControl *overlayVIew;
@@ -39,12 +40,11 @@
 @property (weak, nonatomic) IBOutlet UITextField *commentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomCommentConstraint;
 @property (nonatomic, strong) UIView *commentHeaderView;
-@property (weak, nonatomic) IBOutlet UIButton *deletePostButton;
-@property (weak, nonatomic) IBOutlet UIButton *deleteCommentButton;
 @property (weak, nonatomic) IBOutlet UIButton *postButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *visibilityControl;
 @property (weak, nonatomic) IBOutlet UIView *editOverlayView;
 @property (weak, nonatomic) IBOutlet UIImageView *editMenuBackgroundImageView;
+@property (weak, nonatomic) IBOutlet UIButton *editPostButton;
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
@@ -62,6 +62,7 @@
 - (IBAction)postComment:(id)sender;
 - (IBAction)changeVisibility:(id)sender;
 - (BOOL)postHasText;
+- (IBAction)editPost:(id)sender;
 
 - (STKPostComment *)commentForIndexPath:(NSIndexPath *)ip;
 
@@ -99,15 +100,16 @@
     return [[[self post] text] length] > 0;
 }
 
+- (IBAction)editPost:(id)sender {
+}
+
 - (void)setEditingPostText:(BOOL)editingPostText
 {
     _editingPostText = editingPostText;
     if([self editingPostText]) {
         [[self postButton] setTitle:@"Edit" forState:UIControlStateNormal];
-        [[self deleteCommentButton] setHidden:YES];
     } else {
         [[self postButton] setTitle:@"Post" forState:UIControlStateNormal];
-        [[self deleteCommentButton] setHidden:NO];
     }
 
 }
@@ -193,33 +195,33 @@
 {
     [super viewDidLoad];
     
+    [[[self editPostButton] imageView] setContentMode:UIViewContentModeCenter];
+    
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
 
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
-    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:1]];
+    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, [[self commentFooterView] bounds].size.height, 0)];
     [[self tableView] setDelaysContentTouches:NO];
-
+//    [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, 36, 0)];
+    
     [[self commentTextField] setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Write a comment..."
                                                                                       attributes:@{NSFontAttributeName : STKFont(12),
                                                                                                    NSForegroundColorAttributeName : [UIColor whiteColor]}]];
-    [[[self commentFooterView] layer] setShadowColor:[[UIColor lightGrayColor] CGColor]];
-    [[[self commentFooterView] layer] setShadowOffset:CGSizeMake(0, -1)];
-    [[[self commentFooterView] layer] setShadowOpacity:0.5];
-    [[[self commentFooterView] layer] setShadowRadius:0];
- 
+
+    [[self postButtonRightConstraint] setConstant:-[[self postButton] bounds].size.width - 3];
+    
     [[[self fakeHeaderView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
     [[self fakeHeaderView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     UIView *internalFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, -1, 320, 300)];
     [footerView addSubview:internalFooterView];
-    [internalFooterView setBackgroundColor:[UIColor colorWithRed:190.0/255.0 green:195.0/255.0 blue:209.0/255.0 alpha:1]];
+    //[internalFooterView setBackgroundColor:[UIColor colorWithRed:190.0/255.0 green:195.0/255.0 blue:209.0/255.0 alpha:1]];
+    [internalFooterView setBackgroundColor:[UIColor clearColor]];
     [footerView setBackgroundColor:[UIColor clearColor]];
     
     [[self tableView] setTableFooterView:footerView];
-    
     
     UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTapped:)];
     [[self editOverlayView] addGestureRecognizer:gr];
@@ -231,7 +233,6 @@
 {
     [super viewWillAppear:animated];
     
-    [[self deletePostButton] setHidden:![[[self post] creator] isEqual:[[STKUserStore store] currentUser]]];
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setDisplayFullBleed:YES];
@@ -326,11 +327,14 @@
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, r.size.height + [[self commentFooterView] bounds].size.height, 0)];
 
     float duration = [[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    int curve = [[[note userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+
     [[self bottomCommentConstraint] setConstant:r.size.height];
+    [[self postButtonRightConstraint] setConstant:9];
+    [[self view] setNeedsUpdateConstraints];
+    
     [UIView animateWithDuration:duration
                           delay:0
-                        options:curve
+                        options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
                          [[self view] layoutIfNeeded];
                      } completion:nil];
@@ -352,11 +356,13 @@
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, [[self commentFooterView] bounds].size.height, 0)];
 
     float duration = [[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    int curve = [[[note userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     [[self bottomCommentConstraint] setConstant:0];
+    [[self postButtonRightConstraint] setConstant:-[[self postButton] bounds].size.width - 3];
+    [[self view] setNeedsUpdateConstraints];
+    
     [UIView animateWithDuration:duration
                           delay:0
-                        options:curve
+                        options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
                          [[self view] layoutIfNeeded];
                      } completion:nil];

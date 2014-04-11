@@ -15,6 +15,7 @@
 #import "STKUser.h"
 #import "STKRenderServer.h"
 #import "STKUserListViewController.h"
+#import "STKProfileViewController.h"
 
 @interface STKTrustViewController () <STKTrustViewDelegate>
 
@@ -66,6 +67,12 @@
 {
     if(idx >= 0 && idx < [[self trusts] count]) {
         STKUser *u = [[[self trusts] valueForKey:@"otherUser"] objectAtIndex:idx];
+        if([[u uniqueID] isEqualToString:[[self selectedUser] uniqueID]]) {
+            STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+            [pvc setProfile:u];
+            [[self navigationController] pushViewController:pvc animated:YES];
+            return;
+        }
         [self setSelectedUser:u];
         
         [[self selectedNameLabel] setText:[u name]];

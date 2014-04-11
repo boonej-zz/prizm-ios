@@ -38,6 +38,7 @@
 @property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
 
+//@property (nonatomic, strong) NSMutableDictionary *transitionMap;
 
 @end
 
@@ -240,6 +241,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
 }
 
 - (void)toggleMenu:(id)sender

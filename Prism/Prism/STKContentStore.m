@@ -151,9 +151,12 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
         [q addSubquery:cq];
         
+        //STKResolutionQuery *originPost = [STKResolutionQuery resolutionQueryForField:@"origin_post_id"];
+        //[q addSubquery:originPost];
+        
         [c setQueryObject:q];
         
-        [c setResolutionMap:@{@"User" : @"STKUser"}];
+        [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost"}];
         [c setModelGraph:@[@"STKPost"]];
         [c setContext:[[STKUserStore store] context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];

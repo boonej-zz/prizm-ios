@@ -21,6 +21,7 @@
 
 @implementation STKPostController
 
+
 // Should know how to filter deleted posts in some way!
 
 - (id)initWithViewController:(UIViewController <STKPostControllerDelegate> *)viewController
@@ -223,6 +224,7 @@
 }
 - (void)dealloc
 {
+        NSLog(@"POST DEALLOC");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

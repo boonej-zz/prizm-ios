@@ -20,7 +20,8 @@ NSString * const STKRequestStatusCancelled = @"cancelled";
 @end
 
 @implementation STKTrust
-@dynamic uniqueID, status, dateCreated, owningUser, otherUser, owningUserRequestedTrust;
+@dynamic uniqueID, status, dateCreated, dateModified, creator, creatorCommentsCount, creatorLikesCount, creatorPostsCount,
+recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, type;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -34,23 +35,24 @@ NSString * const STKRequestStatusCancelled = @"cancelled";
     [self bindFromDictionary:jsonObject keyMap:@{
                                                  @"_id" : @"uniqueID",
                                                  @"status" : @"status",
-                                                 @"is_owner" : @"owningUserRequestedTrust",
-                                                 @"user_id" : @{STKJSONBindFieldKey : @"otherUser", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+                                                 @"type" : @"type",
+                                                 @"to" : @{STKJSONBindFieldKey : @"recepient", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
+                                                 @"from" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"create_date" : ^(NSString *inValue) {
                                                      [self setDateCreated:[df dateFromString:inValue]];
                                                  },
-                                                 
+                                                 @"modify_date" : ^(NSString *inValue) {
+                                                     [self setDateModified:[df dateFromString:inValue]];
+                                                 },
+                                                 @"to_likes_count" : @"recepientLikesCount",
+                                                 @"to_comments_count" : @"recepientCommentsCount",
+                                                 @"to_posts_count" : @"recepientPostsCount",
+                                                 @"from_likes_count" : @"creatorLikesCount",
+                                                 @"from_comments_count" : @"creatorCommentsCount",
+                                                 @"from_posts_count" : @"creatorPostsCount"
     }];
     
     return nil;
-}
-
-- (STKUser *)requestor
-{
-    if([self owningUserRequestedTrust])
-        return [self owningUser];
-    
-    return [self otherUser];
 }
 
 - (BOOL)isPending

@@ -21,28 +21,15 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D5F-uA-SdR" userLabel="Container">
-                    <rect key="frame" x="0.0" y="114" width="320" height="454"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7H2-7Q-gtH">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="454"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="fmY-dO-K07"/>
-                                <outlet property="delegate" destination="-1" id="y83-rd-PsF"/>
-                            </connections>
-                        </tableView>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="bottom" secondItem="7H2-7Q-gtH" secondAttribute="bottom" id="8Sh-nJ-TKN"/>
-                        <constraint firstItem="7H2-7Q-gtH" firstAttribute="top" secondItem="D5F-uA-SdR" secondAttribute="top" id="DOR-vl-xYV"/>
-                        <constraint firstAttribute="trailing" secondItem="7H2-7Q-gtH" secondAttribute="trailing" id="m2U-cS-ada"/>
-                        <constraint firstItem="7H2-7Q-gtH" firstAttribute="leading" secondItem="D5F-uA-SdR" secondAttribute="leading" id="uMi-qe-X6z"/>
-                    </constraints>
-                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7H2-7Q-gtH">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="fmY-dO-K07"/>
+                        <outlet property="delegate" destination="-1" id="y83-rd-PsF"/>
+                    </connections>
+                </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pIz-2f-31L" customClass="UIERealTimeBlurView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -69,14 +56,14 @@
             </subviews>
             <color key="backgroundColor" red="0.79587720788043481" green="0.79587720788043481" blue="0.79587720788043481" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="D5F-uA-SdR" secondAttribute="bottom" id="44Q-vK-Asw"/>
+                <constraint firstAttribute="bottom" secondItem="7H2-7Q-gtH" secondAttribute="bottom" id="3Kb-1R-MTA"/>
                 <constraint firstItem="dpd-dE-8bZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="9jK-94-P4s"/>
+                <constraint firstAttribute="trailing" secondItem="7H2-7Q-gtH" secondAttribute="trailing" id="Baz-Uc-wGu"/>
                 <constraint firstItem="pIz-2f-31L" firstAttribute="top" secondItem="1" secondAttribute="top" id="GVV-A7-XHY"/>
                 <constraint firstItem="dpd-dE-8bZ" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GzN-7S-M26"/>
+                <constraint firstItem="7H2-7Q-gtH" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="QDI-8D-OmU"/>
                 <constraint firstAttribute="trailing" secondItem="dpd-dE-8bZ" secondAttribute="trailing" id="QyW-lM-fT1"/>
-                <constraint firstItem="D5F-uA-SdR" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="RJB-hV-5SU"/>
-                <constraint firstAttribute="trailing" secondItem="D5F-uA-SdR" secondAttribute="trailing" id="YVr-uH-3sY"/>
-                <constraint firstItem="D5F-uA-SdR" firstAttribute="top" secondItem="dpd-dE-8bZ" secondAttribute="bottom" id="l0c-hy-LCE"/>
+                <constraint firstItem="7H2-7Q-gtH" firstAttribute="top" secondItem="1" secondAttribute="top" id="Zjf-Nu-eNx"/>
                 <constraint firstAttribute="trailing" secondItem="pIz-2f-31L" secondAttribute="trailing" id="pYp-1N-blk"/>
                 <constraint firstItem="pIz-2f-31L" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="y5T-us-DZO"/>
             </constraints>

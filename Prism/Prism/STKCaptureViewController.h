@@ -14,7 +14,8 @@
 @protocol STKCaptureViewControllerDelegate <NSObject>
 
 - (void)captureViewController:(STKCaptureViewController *)captureViewController
-                 didPickImage:(UIImage *)image;
+                 didPickImage:(UIImage *)image
+                originalImage:(UIImage *)image;
 
 @end
 
@@ -22,6 +23,7 @@
 
 @property (nonatomic, weak) id <STKCaptureViewControllerDelegate> delegate;
 @property (nonatomic) STKImageChooserType type;
+@property (nonatomic, strong) UIImage *editingImage;
 
 - (IBAction)showLibrary:(id)sender;
 

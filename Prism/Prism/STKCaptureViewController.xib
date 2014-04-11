@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKCaptureViewController">
@@ -13,6 +13,7 @@
                 <outlet property="flashButton" destination="UP4-GZ-dED" id="yhP-oi-7md"/>
                 <outlet property="flashLabel" destination="fjv-fF-T2O" id="CRE-iU-hrz"/>
                 <outlet property="flipCameraButton" destination="pcZ-Bs-Scg" id="l3K-Rk-Yxb"/>
+                <outlet property="libraryButton" destination="k2d-eZ-wde" id="05G-3m-Zqs"/>
                 <outlet property="okayButton" destination="BmC-s9-IRe" id="zOR-6p-uSn"/>
                 <outlet property="overlayView" destination="dBA-ZR-epL" id="kVa-ZL-GYO"/>
                 <outlet property="topBar" destination="fc2-Ze-5bK" id="15N-ta-FV7"/>
@@ -229,6 +230,6 @@
         <image name="btn_flipcamera" width="24" height="18"/>
         <image name="btn_gallery" width="43" height="44"/>
         <image name="camerbtncta" width="69" height="69"/>
-        <image name="img_background" width="309" height="558"/>
+        <image name="img_background" width="320" height="568"/>
     </resources>
 </document>
