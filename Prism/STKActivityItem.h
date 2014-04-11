@@ -17,6 +17,7 @@ extern NSString *const STKActivityItemTypeUnfollow;
 extern NSString *const STKActivityItemTypeLike;
 extern NSString *const STKActivityItemTypeUnlike;
 extern NSString *const STKActivityItemTypeComment;
+extern NSString *const STKActivityItemTypeTrustAccepted;
 
 @interface STKActivityItem : NSManagedObject <STKJSONObject>
 
