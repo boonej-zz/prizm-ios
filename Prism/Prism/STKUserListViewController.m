@@ -60,12 +60,20 @@
 
 - (void)toggleFollow:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Not Implemented"
-                                                 message:@"THis feature has not yet been implemented yet, but we know about it, so there is no reason note it."
-                                                delegate:nil
-                                       cancelButtonTitle:@"OK"
-                                       otherButtonTitles:nil];
-    [av show];
+    STKUser *u = [[self users] objectAtIndex:[ip row]];
+    if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
+        [[STKUserStore store] unfollowUser:u completion:^(id obj, NSError *err) {
+            if(!err) {
+                [[(STKSearchProfileCell *)[[self tableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
+            }
+        }];
+    } else {
+        [[STKUserStore store] followUser:u completion:^(id obj, NSError *err) {
+            if(!err) {
+                [[(STKSearchProfileCell *)[[self tableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
+            }
+        }];
+    }
 }
 
 - (void)viewDidLoad

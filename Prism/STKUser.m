@@ -38,8 +38,8 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 @dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
-accountStoreID, instagramLastMinID, instagramToken;
-@dynamic fProfilePosts, createdActivities, ownedActivities;
+accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
+@dynamic fProfilePosts, createdActivities, ownedActivities, twitterID, twitterLastMinID;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 
@@ -71,7 +71,9 @@ accountStoreID, instagramLastMinID, instagramToken;
                  NSDateFormatter *df = [[NSDateFormatter alloc] init];
                  [df setDateFormat:@"MM-dd-yyyy"];
                  return @{@"birthday" : [df stringFromDate:value]};
-             }
+             },
+             @"twitterID" : @"twitter_token",
+             @"twitterLastMinID" : @"twitter_min_id"
     };
 }
 
@@ -112,7 +114,8 @@ accountStoreID, instagramLastMinID, instagramToken;
 
         @"instagram_token" : @"instagramToken",
         @"instagram_min_id" : @"instagramLastMinID",
-        
+        @"twitter_token" : @"twitterID",
+        @"twitter_min_id" : @"twitterLastMinID",
         @"trusts" : @{STKJSONBindFieldKey : @"ownedTrusts", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"followers" : @{STKJSONBindFieldKey : @"followers", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"following" : @{STKJSONBindFieldKey : @"following", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
@@ -134,12 +137,12 @@ accountStoreID, instagramLastMinID, instagramToken;
 }
 
 - (STKTrust *)trustForUser:(STKUser *)u
-{
+{/*
     for(STKTrust *t in [self ownedTrusts]) {
         if([[t otherUser] isEqual:u]) {
             return t;
         }
-    }
+    }*/
     return nil;
 }
 

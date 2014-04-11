@@ -139,6 +139,24 @@ typedef enum {
     }
 }
 
+- (void)toggleFollow:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKUser *u = [[self profilesFound] objectAtIndex:[ip row]];
+    if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
+        [[STKUserStore store] unfollowUser:u completion:^(id obj, NSError *err) {
+            if(!err) {
+                [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
+            }
+        }];
+    } else {
+        [[STKUserStore store] followUser:u completion:^(id obj, NSError *err) {
+            if(!err) {
+                [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
+            }
+        }];
+    }
+}
+
 - (void)refreshSearchTypeControl
 {
     UIColor *onColor = [UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.5];
@@ -437,6 +455,13 @@ typedef enum {
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
 
+    if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
+        [[c followButton] setSelected:YES];
+    } else {
+        [[c followButton] setSelected:NO];
+    }
+
+    
     return c;
 }
 

@@ -23,7 +23,6 @@
 
 - (void)layoutContent
 {
-    
 }
 
 - (void)populateWithPosts:(NSArray *)posts indexOffset:(NSInteger)arrayIndex

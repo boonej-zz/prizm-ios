@@ -37,10 +37,19 @@
                 [bbi setTintColor:[UIColor lightGrayColor]];
 
         [[self navigationItem] setRightBarButtonItem:bbi];
+        
     
     }
     return self;
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
+}
+
 
 - (void)sharePage:(id)sender
 {
@@ -100,6 +109,8 @@
     if([self isViewLoaded] && _url) {
         [[self webView] loadRequest:[NSURLRequest requestWithURL:[self url]]];
     }
+    
+    [[self navigationItem] setTitle:[url host]];
 }
 
 

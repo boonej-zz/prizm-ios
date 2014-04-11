@@ -23,9 +23,10 @@
 @property (nonatomic, strong) AVCaptureDeviceInput *deviceInput;
 @property (weak, nonatomic) IBOutlet UIImageView *capturedImageView;
 @property (nonatomic, strong) AVCaptureStillImageOutput *imageCaptureOutput;
-@property (nonatomic, strong) UIImage *capturedImage;
 @property (nonatomic, weak) IBOutlet STKCaptureOverlayView *overlayView;
 @property (weak, nonatomic) IBOutlet UIButton *okayButton;
+@property (nonatomic, strong) UIImage *capturedImage;
+@property (weak, nonatomic) IBOutlet UIButton *libraryButton;
 
 @property (weak, nonatomic) IBOutlet UIView *bottomBar;
 @property (weak, nonatomic) IBOutlet UIView *topBar;
@@ -98,7 +99,7 @@
     
     UIGraphicsEndImageContext();
     
-    [[self delegate] captureViewController:self didPickImage:img];
+    [[self delegate] captureViewController:self didPickImage:img originalImage:[self capturedImage]];
 }
 
 - (IBAction)toggleFlashMode:(id)sender
@@ -126,6 +127,9 @@
         [[self flashLabel] setHidden:YES];
         [[self captureButton] setHidden:YES];
         [[self okayButton] setHidden:NO];
+        if([self editingImage]) {
+            [[self libraryButton] setHidden:YES];
+        }
     } else {
         [[self flipCameraButton] setHidden:([[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count] <= 1)];
         
@@ -197,7 +201,9 @@
                                                                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                                                        _capturedImage = croppedImage;
                                                                        [[self capturedImageView] setImage:croppedImage];
-                                                                       [[self delegate] captureViewController:self didPickImage:croppedImage];
+                                                                       [[self delegate] captureViewController:self
+                                                                                                 didPickImage:croppedImage
+                                                                                                originalImage:image];
                                                                    }];
                                                                } else {
                                                                    
@@ -290,6 +296,11 @@
     if([[[self session] inputs] count] > 0 && ![self capturedImage])
         [[self session] startRunning];
 
+    if([self editingImage]) {
+        [self setCapturedImage:[self editingImage]];
+        [self prepareImageForEdit:[self capturedImage]];
+    }
+
     [self configureInterface];
 
     if([self type] == STKImageChooserTypeProfile) {
@@ -302,6 +313,7 @@
     } else {
         [[self overlayView] setCutPath:nil];
     }
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -323,54 +335,60 @@
     
     [_capturedImageView removeFromSuperview];
     
-    UIImageView *newImageView = [[UIImageView alloc] initWithImage:[self capturedImage]];
-
     [self dismissViewControllerAnimated:YES completion:^{
-        CGSize sz = [[self capturedImage] size];
-        
-        float smallSide = sz.width;
-        if(sz.height < smallSide)
-            smallSide = sz.height;
-
-        float scale = [[self editScrollView] bounds].size.width / smallSide;
-        UIEdgeInsets insets = UIEdgeInsetsZero;
-        
-        CGSize imageViewSize = sz;
-        if(imageViewSize.width > imageViewSize.height) {
-            float i = scale * -fabs(imageViewSize.width - imageViewSize.height) / 2.0;
-            insets.top = i;
-            insets.bottom = i;
-            imageViewSize.height = imageViewSize.width;
-        } else if(imageViewSize.height > imageViewSize.width){
-            float i = scale * -fabs(imageViewSize.height - imageViewSize.width) / 2.0;
-            insets.left = i;
-            insets.right = i;
-            imageViewSize.width = imageViewSize.height;
-        }
-        
-        [newImageView setTranslatesAutoresizingMaskIntoConstraints:YES];
-        [[self editScrollView] addSubview:newImageView];
-        [newImageView setContentMode:UIViewContentModeCenter];
-        [newImageView setFrame:CGRectMake(0, 0, imageViewSize.width, imageViewSize.height)];
-        _capturedImageView = newImageView;
-
-        [[self editScrollView] setContentSize:imageViewSize];
-        [[self editScrollView] setMinimumZoomScale:scale];
-        [[self editScrollView] setZoomScale:scale];
-        
-        if([self type] == STKImageChooserTypeCover) {
-            float coverInset = ([[self editScrollView] frame].size.height - STKUserCoverPhotoSize.height) / 2.0;
-            insets.top += coverInset;
-            insets.bottom += coverInset;
-        }
-        [[self editScrollView] setContentInset:insets];
-        
-        float centerDiffX = ceilf((imageViewSize.width * scale - [[self editScrollView] frame].size.width) / 2.0);
-        float centerDiffY = ceilf((imageViewSize.height * scale  - [[self editScrollView] frame].size.height) / 2.0);
-
-        [[self editScrollView] setContentOffset:CGPointMake(centerDiffX, centerDiffY)];
+        [self prepareImageForEdit:[self capturedImage]];
     }];
 }
+
+- (void)prepareImageForEdit:(UIImage *)img
+{
+    UIImageView *newImageView = [[UIImageView alloc] initWithImage:[self capturedImage]];
+    CGSize sz = [[self capturedImage] size];
+    
+    float smallSide = sz.width;
+    if(sz.height < smallSide)
+        smallSide = sz.height;
+    
+    float scale = [[self editScrollView] bounds].size.width / smallSide;
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    
+    CGSize imageViewSize = sz;
+    if(imageViewSize.width > imageViewSize.height) {
+        float i = scale * -fabs(imageViewSize.width - imageViewSize.height) / 2.0;
+        insets.top = i;
+        insets.bottom = i;
+        imageViewSize.height = imageViewSize.width;
+    } else if(imageViewSize.height > imageViewSize.width){
+        float i = scale * -fabs(imageViewSize.height - imageViewSize.width) / 2.0;
+        insets.left = i;
+        insets.right = i;
+        imageViewSize.width = imageViewSize.height;
+    }
+    
+    [newImageView setTranslatesAutoresizingMaskIntoConstraints:YES];
+    [[self editScrollView] addSubview:newImageView];
+    [newImageView setContentMode:UIViewContentModeCenter];
+    [newImageView setFrame:CGRectMake(0, 0, imageViewSize.width, imageViewSize.height)];
+    _capturedImageView = newImageView;
+    
+    [[self editScrollView] setContentSize:imageViewSize];
+    [[self editScrollView] setMinimumZoomScale:scale];
+    [[self editScrollView] setZoomScale:scale];
+    
+    if([self type] == STKImageChooserTypeCover) {
+        float coverInset = ([[self editScrollView] frame].size.height - STKUserCoverPhotoSize.height) / 2.0;
+        insets.top += coverInset;
+        insets.bottom += coverInset;
+    }
+    [[self editScrollView] setContentInset:insets];
+    
+    float centerDiffX = ceilf((imageViewSize.width * scale - [[self editScrollView] frame].size.width) / 2.0);
+    float centerDiffY = ceilf((imageViewSize.height * scale  - [[self editScrollView] frame].size.height) / 2.0);
+    
+    [[self editScrollView] setContentOffset:CGPointMake(centerDiffX, centerDiffY)];
+    
+}
+
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {

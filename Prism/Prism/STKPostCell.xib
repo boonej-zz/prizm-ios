@@ -233,7 +233,7 @@
         <image name="action_heart_like" width="23" height="20"/>
         <image name="action_pin" width="18" height="25"/>
         <image name="action_pin_active" width="18" height="25"/>
-        <image name="action_prism" width="56" height="56"/>
+        <image name="action_prism" width="25" height="25"/>
         <image name="action_prism_active" width="56" height="56"/>
         <image name="action_share" width="24" height="24"/>
         <image name="action_share_selected" width="56" height="56"/>

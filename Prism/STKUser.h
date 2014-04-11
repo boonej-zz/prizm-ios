@@ -70,6 +70,10 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 @property (nonatomic, strong) NSString *instagramToken;
 @property (nonatomic, strong) NSString *instagramLastMinID;
+@property (nonatomic, strong) NSString *twitterID;
+@property (nonatomic, strong) NSString *twitterLastMinID;
+
+@property (nonatomic, strong) NSString *lastIntegrationSync;
 
 @property (nonatomic) int followerCount;
 @property (nonatomic) int followingCount;

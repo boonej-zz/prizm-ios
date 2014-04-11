@@ -13,8 +13,13 @@
 #import "STKUserStore.h"
 #import "STKUser.h"
 #import "STKNetworkStore.h"
+#import "STKProcessingView.h"
+#import "STKAccountChooserViewController.h"
 
-@interface STKSettingsViewController ()
+@import Social;
+@import Accounts;
+
+@interface STKSettingsViewController () <STKAccountChooserDelegate>
 
 @property (nonatomic, strong) NSArray *settings;
 
@@ -44,13 +49,76 @@
 {
     return
     @[
-      @{@"title": @"Instagram", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureInstagram:"}
+      @{@"title": @"Instagram", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureInstagram:"},
+      @{@"title": @"Twitter", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureTwitter:"}
     ];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     return [self initWithItems:nil];
+}
+
+
+
+- (void)accountChooser:(STKAccountChooserViewController *)chooser didChooseAccount:(ACAccount *)account
+{
+    [[[STKUserStore store] currentUser] setTwitterID:[account identifier]];
+
+    [STKProcessingView present];
+    [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+        [STKProcessingView dismiss];
+        if(err) {
+            UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+            [av show];
+        }
+        
+        [[self navigationController] popViewControllerAnimated:YES];
+    }];
+}
+
+- (void)configureTwitter:(id)sender
+{
+    [STKProcessingView present];
+    [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
+        if(err) {
+            [STKProcessingView dismiss];
+            UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+            [av show];
+            return;
+        }
+        
+        if([accounts count] == 0) {
+            [STKProcessingView dismiss];
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"No Twitter Account"
+                                                         message:@"You do not have a Twitter account configured for this device. Use the Settings application to securely enter your Twitter credentials before giving Prizm access."
+                                                        delegate:nil
+                                               cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+            return;
+        }
+        
+        if([accounts count] == 1) {
+            [[[STKUserStore store] currentUser] setTwitterID:[[accounts firstObject] identifier]];
+            
+            [STKProcessingView present];
+            [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+                [STKProcessingView dismiss];
+                if(err) {
+                    UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+                    [av show];
+                }
+                
+                [[self navigationController] popViewControllerAnimated:YES];
+            }];
+        } else {
+            [STKProcessingView dismiss];
+            STKAccountChooserViewController *cvc = [[STKAccountChooserViewController alloc] initWithAccounts:accounts];
+            [cvc setBackgroundImage:[UIImage imageNamed:@"img_background"]];
+            [cvc setDelegate:self];
+            [[self navigationController] pushViewController:cvc animated:YES];
+        }
+    }];
 }
 
 - (void)configureInstagram:(id)sender

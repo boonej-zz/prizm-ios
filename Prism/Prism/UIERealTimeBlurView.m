@@ -185,7 +185,7 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
 {
     if (_ios7) return;
     
-    [self uie_renderLayerWithView:superview];
+   // [self uie_renderLayerWithView:superview];
     
     //static rendering doesn't need the display link
     if (_renderStatic) return;

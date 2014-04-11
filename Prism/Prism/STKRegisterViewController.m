@@ -17,7 +17,7 @@
 @import Accounts;
 @import Social;
 
-@interface STKRegisterViewController ()
+@interface STKRegisterViewController () <STKAccountChooserDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *gapConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *connectLabel;
@@ -44,6 +44,25 @@
     
 }
 
+- (void)accountChooser:(STKAccountChooserViewController *)chooser
+      didChooseAccount:(ACAccount *)account
+{
+    [STKProcessingView present];
+    [[STKUserStore store] connectWithTwitterAccount:account completion:^(STKUser *existingUser, STKUser *registrationData, NSError *err) {
+        [STKProcessingView dismiss];
+        if(!err) {
+            if(registrationData) {
+                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:registrationData];
+                [[self navigationController] pushViewController:pvc animated:YES];
+            } else if(existingUser) {
+                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+            }
+        } else {
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
+        }
+    }];
+}
+
 - (IBAction)connectWithTwitter:(id)sender
 {
     [STKProcessingView present];
@@ -52,21 +71,10 @@
             if([accounts count] > 1) {
                 [STKProcessingView dismiss];
                 STKAccountChooserViewController *accChooser = [[STKAccountChooserViewController alloc] initWithAccounts:accounts];
+                [accChooser setDelegate:self];
                 [[self navigationController] pushViewController:accChooser animated:YES];
             } else {
                 ACAccount *acct = [accounts objectAtIndex:0];
-                /*
-                
-                SLRequest *req = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET
-                                                              URL:[NSURL URLWithString:@"https://api.twitter.com/statuses/user_timeline"]
-                                                       parameters:@{@"screen_name" : [acct username],
-                                                                    @"trim_user" : @"true",
-                                                                    @"include_rts" : @"false"}];
-                [NSURLConnection sendAsynchronousRequest:[req preparedURLRequest] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                    NSLog(@"%@", response);
-                    NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-                }];
-                */
                 [[STKUserStore store] connectWithTwitterAccount:acct completion:^(STKUser *existingUser, STKUser *registrationData, NSError *err) {
                     [STKProcessingView dismiss];
                     if(!err) {

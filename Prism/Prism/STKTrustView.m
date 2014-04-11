@@ -56,13 +56,13 @@
     }
     [self setCircleViews:[a copy]];
     [[[self circleViews] objectAtIndex:0] setFrame:CGRectMake(0, 0, 75, 75)];
-    
+    /*
     _spinLayer = [CALayer layer];
     [[self spinLayer] setBounds:CGRectMake(0, 0, 8, 8)];
     [[self spinLayer] setBackgroundColor:[[UIColor clearColor] CGColor]];
     [[self spinLayer] setContents:(__bridge id)[[UIImage imageNamed:@"explosion.png"] CGImage]];
     [[self layer] addSublayer:[self spinLayer]];
-    [[self spinLayer] setHidden:YES];
+    [[self spinLayer] setHidden:YES];*/
 }
 
 + (float)minorCircleSize

@@ -16,6 +16,7 @@
 @import Accounts;
 
 @interface STKAccountChooserViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *accounts;
@@ -43,6 +44,8 @@
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] registerNib:[UINib nibWithNibName:@"STKLabelCell" bundle:nil]
            forCellReuseIdentifier:@"STKLabelCell"];
+    
+    [[self backgroundImageView] setImage:[self backgroundImage]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -51,23 +54,16 @@
     [[self tableView] reloadData];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ACAccount *acct = [[self accounts] objectAtIndex:[indexPath row]];
-    [STKProcessingView present];
-    [[STKUserStore store] connectWithTwitterAccount:acct completion:^(STKUser *existingUser, STKUser *registrationData, NSError *err) {
-        [STKProcessingView dismiss];
-        if(!err) {
-            if(registrationData) {
-                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:registrationData];
-                [[self navigationController] pushViewController:pvc animated:YES];
-            } else if(existingUser) {
-                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-            }
-        } else {
-            [[STKErrorStore alertViewForError:err delegate:nil] show];
-        }
-    }];
+    [[self delegate] accountChooser:self didChooseAccount:acct];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

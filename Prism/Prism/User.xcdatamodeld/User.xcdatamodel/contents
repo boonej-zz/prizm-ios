@@ -56,13 +56,20 @@
         <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="comments" inverseEntity="STKPost" syncable="YES"/>
     </entity>
     <entity name="STKTrust" representedClassName="STKTrust" syncable="YES">
+        <attribute name="creatorCommentsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorLikesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorPostsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateModified" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="owningUserRequestedTrust" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="recepientCommentsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="recepientLikesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="recepientPostsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="otherUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="receivedTrusts" inverseEntity="STKUser" syncable="YES"/>
-        <relationship name="owningUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedTrusts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedTrusts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="recepient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="receivedTrusts" inverseEntity="STKUser" syncable="YES"/>
     </entity>
     <entity name="STKUser" representedClassName="STKUser" syncable="YES">
         <attribute name="accountStoreID" optional="YES" attributeType="String" syncable="YES"/>
@@ -82,11 +89,14 @@
         <attribute name="instagramLastMinID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="instagramToken" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastIntegrationSync" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="religion" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitterID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitterLastMinID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
@@ -100,15 +110,15 @@
         <relationship name="likedComments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="likes" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="likedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="likes" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="ownedActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="notifiedUser" inverseEntity="STKActivityItem" syncable="YES"/>
-        <relationship name="ownedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="owningUser" inverseEntity="STKTrust" syncable="YES"/>
-        <relationship name="receivedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="otherUser" inverseEntity="STKTrust" syncable="YES"/>
+        <relationship name="ownedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="creator" inverseEntity="STKTrust" syncable="YES"/>
+        <relationship name="receivedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="recepient" inverseEntity="STKTrust" syncable="YES"/>
     </entity>
     <elements>
         <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="180"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="88"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="433"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
-        <element name="STKTrust" positionX="18" positionY="153" width="128" height="150"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="598"/>
+        <element name="STKTrust" positionX="18" positionY="153" width="128" height="255"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="645"/>
     </elements>
 </model>

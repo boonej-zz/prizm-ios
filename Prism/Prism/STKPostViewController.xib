@@ -9,15 +9,15 @@
                 <outlet property="bottomCommentConstraint" destination="Clc-wI-K3j" id="GCk-Nc-pdI"/>
                 <outlet property="commentFooterView" destination="Dln-PT-0fM" id="ful-9b-Qwr"/>
                 <outlet property="commentTextField" destination="6xr-3p-wiV" id="TIs-Gy-bDL"/>
-                <outlet property="deleteCommentButton" destination="3RX-hR-78U" id="Qb9-Zk-rAN"/>
-                <outlet property="deletePostButton" destination="3RX-hR-78U" id="8HX-qJ-86o"/>
                 <outlet property="editMenuBackgroundImageView" destination="JAP-MB-Rh4" id="g21-Em-q1l"/>
                 <outlet property="editOverlayView" destination="fA8-lv-Nlj" id="rTh-es-3u4"/>
+                <outlet property="editPostButton" destination="3RX-hR-78U" id="Mll-nN-Z6A"/>
                 <outlet property="editView" destination="EUn-8F-UMb" id="wS2-pb-jDD"/>
                 <outlet property="fakeContainerView" destination="Qys-Ur-GtV" id="mfm-2t-fYh"/>
                 <outlet property="fakeHeaderView" destination="KfP-Fo-rS2" id="xMr-38-VzX"/>
                 <outlet property="overlayVIew" destination="tVf-Km-kul" id="Nbq-Kg-kOs"/>
                 <outlet property="postButton" destination="ywj-I7-cIa" id="UqV-K9-EEW"/>
+                <outlet property="postButtonRightConstraint" destination="gga-ls-2mF" id="3Td-cG-vc8"/>
                 <outlet property="stretchHeightConstraint" destination="azu-WG-Jyg" id="lnS-o0-M1j"/>
                 <outlet property="stretchView" destination="NL1-hu-ihE" id="Zn3-2k-DfY"/>
                 <outlet property="stretchWidthConstraint" destination="S1K-bu-XGJ" id="nNU-ge-hYU"/>
@@ -53,7 +53,11 @@
                     <rect key="frame" x="0.0" y="532" width="320" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="write_commentnote" translatesAutoresizingMaskIntoConstraints="NO" id="sSO-FA-qQw">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="RPE-rT-7DA">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="36"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_write_comment" translatesAutoresizingMaskIntoConstraints="NO" id="sSO-FA-qQw">
                             <rect key="frame" x="14" y="10" width="16" height="16"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <constraints>
@@ -62,12 +66,13 @@
                             </constraints>
                         </imageView>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Write a comment..." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6xr-3p-wiV">
-                            <rect key="frame" x="39" y="3" width="177" height="30"/>
+                            <rect key="frame" x="39" y="3" width="164" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="foC-7t-PS4"/>
+                                <constraint firstAttribute="width" constant="164" id="nBJ-JS-YVg"/>
                             </constraints>
-                            <color key="textColor" red="1" green="0.98118490609552445" blue="0.97396248674542918" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
@@ -82,7 +87,7 @@
                                 <constraint firstAttribute="width" constant="44" id="jbN-pR-Ws8"/>
                             </constraints>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
-                            <state key="normal" title="Post" backgroundImage="postcta">
+                            <state key="normal" backgroundImage="btn_post">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="titleShadowColor" white="0.5" alpha="0.0" colorSpace="calibratedWhite"/>
                             </state>
@@ -90,24 +95,24 @@
                                 <action selector="postComment:" destination="-1" eventType="touchUpInside" id="Qmf-ta-UHn"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3RX-hR-78U">
-                            <rect key="frame" x="231" y="8" width="17" height="20"/>
+                        <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3RX-hR-78U">
+                            <rect key="frame" x="218" y="0.0" width="30" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="20" id="bSs-td-pxa"/>
-                                <constraint firstAttribute="width" constant="17" id="sgb-IA-ysH"/>
+                                <constraint firstAttribute="height" constant="36" id="bSs-td-pxa"/>
+                                <constraint firstAttribute="width" constant="30" id="sgb-IA-ysH"/>
                             </constraints>
-                            <state key="normal" image="btntrash2">
+                            <state key="normal" image="btn_edit_post">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="deleteMainPost:" destination="-1" eventType="touchUpInside" id="vgF-hm-ufZ"/>
+                                <action selector="editPost:" destination="-1" eventType="touchUpInside" id="mHO-Rl-AgW"/>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.76064664931356707" green="0.79824031353144864" blue="0.85816545050761417" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" white="1" alpha="0.10000000000000001" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="3RX-hR-78U" firstAttribute="leading" secondItem="6xr-3p-wiV" secondAttribute="trailing" constant="15" id="JlT-IM-Z1c"/>
                         <constraint firstAttribute="centerY" secondItem="ywj-I7-cIa" secondAttribute="centerY" id="LWZ-82-95b"/>
                         <constraint firstAttribute="centerY" secondItem="sSO-FA-qQw" secondAttribute="centerY" id="STu-a1-b9e"/>
                         <constraint firstItem="sSO-FA-qQw" firstAttribute="leading" secondItem="Dln-PT-0fM" secondAttribute="leading" constant="14" id="Sld-JS-HDg"/>
@@ -213,10 +218,10 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="Dln-PT-0fM" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="0ZT-YM-Zai"/>
-                <constraint firstAttribute="bottom" secondItem="UWv-rb-JIt" secondAttribute="bottom" id="3bw-CU-oir"/>
                 <constraint firstAttribute="bottom" secondItem="Dln-PT-0fM" secondAttribute="bottom" id="Clc-wI-K3j"/>
                 <constraint firstItem="tVf-Km-kul" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Gpf-Td-mF3"/>
                 <constraint firstItem="Qys-Ur-GtV" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="IES-am-wsu"/>
+                <constraint firstAttribute="bottom" secondItem="UWv-rb-JIt" secondAttribute="bottom" id="IEj-rD-64b"/>
                 <constraint firstAttribute="trailing" secondItem="tVf-Km-kul" secondAttribute="trailing" id="JBW-Gr-Mkn"/>
                 <constraint firstAttribute="centerX" secondItem="NL1-hu-ihE" secondAttribute="centerX" id="LVI-2M-ELG"/>
                 <constraint firstItem="tVf-Km-kul" firstAttribute="top" secondItem="1" secondAttribute="top" id="SMn-LW-ghm"/>
@@ -234,9 +239,9 @@
         </view>
     </objects>
     <resources>
-        <image name="btntrash2" width="22" height="25"/>
+        <image name="btn_edit_post" width="22" height="22"/>
+        <image name="btn_post" width="43" height="24"/>
+        <image name="btn_write_comment" width="16" height="16"/>
         <image name="img_background" width="320" height="568"/>
-        <image name="postcta" width="42" height="23"/>
-        <image name="write_commentnote" width="11" height="11"/>
     </resources>
 </document>

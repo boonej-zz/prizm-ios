@@ -53,7 +53,8 @@ typedef enum {
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_notification"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_notification_selected"]];
-
+        [self setAutomaticallyAdjustsScrollViewInsets:NO];
+        
         _activities = [[NSMutableArray alloc] init];
         _requests = [[NSMutableArray alloc] init];
     }
@@ -64,13 +65,15 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 60, 0, 0)];
-    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:1 alpha:0.5]];
+    [[self tableView] setRowHeight:56];
+    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0.1]];
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
 
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     [v setBackgroundColor:[UIColor clearColor]];
-    [[self tableView] setTableFooterView:v];
+//    [[self tableView] setTableFooterView:v];
 
     // 'On state'
     UIGraphicsBeginImageContext(CGSizeMake(1, 1));
@@ -106,6 +109,8 @@ typedef enum {
                              rightSegmentState:UIControlStateNormal
                                     barMetrics:UIBarMetricsDefault];
     UIGraphicsEndImageContext();
+    
+    [[self tableView] setContentInset:UIEdgeInsetsMake(64 + 50, 0, 0, 0)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -188,12 +193,16 @@ typedef enum {
 {
     [cell setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.1]];
 }
-
-
+/*
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 56;
+}
+*/
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([self currentType] == STKActivityViewControllerTypeRequest) {
-        STKUser *u = [[[self requests] objectAtIndex:[indexPath row]] otherUser];
+        STKUser *u = [[[self requests] objectAtIndex:[indexPath row]] creator];
         STKProfileViewController *vc = [[STKProfileViewController alloc] init];
         [vc setProfile:u];
         [[self navigationController] pushViewController:vc animated:YES];

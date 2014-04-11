@@ -114,7 +114,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     
     NSData *fileData = [[NSData alloc] initWithContentsOfFile:cachePath];
     if(fileData) {
-        img = [UIImage imageWithData:fileData];
+        img = [[UIImage alloc] initWithData:fileData];
         [[self memoryCache] setObject:img forKey:cachePath];
         return img;
     }
@@ -208,7 +208,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
                                                                                                              error:nil];
                                                                      NSData *data = [NSData dataWithContentsOfFile:cachePath];
                                                                      
-                                                                     image = [UIImage imageWithData:data];
+                                                                     image = [[UIImage alloc] initWithData:data];
                                                                      [[self memoryCache] setObject:image forKey:cachePath];
                                                                  } else {
                                                                      [[self failedFetchMap] setObject:[NSDate date] forKey:cachePath];

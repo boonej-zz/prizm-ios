@@ -44,8 +44,10 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 @property (nonatomic, strong) NSMutableDictionary *postInfo;
 @property (nonatomic, strong) UIImage *postImage;
+@property (nonatomic, strong) UIImage *originalPostImage;
 
-- (IBAction)changeImage:(id)sender;
+- (void)changeImage:(id)sender;
+- (IBAction)adjustImage:(id)sender;
 
 @end
 
@@ -64,12 +66,18 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         [[self navigationItem] setTitle:@"Post"];
         
         _categoryItems = @[
-            @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"category_aspirations_selected"]},
-            @{@"title" : @"Passions", STKPostTypeKey : STKPostTypePassion, @"image" : [UIImage imageNamed:@"category_passions_selected"]},
-            @{@"title" : @"Experiences", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"category_experiences_selected"]},
-            @{@"title" : @"Achievements", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"category_achievements_selected"]},
-            @{@"title" : @"Inspirations", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"category_inspiration_selected"]},
-            @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_selected"]}
+            @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"category_aspiration_disabled"],
+              @"selectedImage" : [UIImage imageNamed:@"category_aspirations_selected"]},
+            @{@"title" : @"Passions", STKPostTypeKey : STKPostTypePassion, @"image" : [UIImage imageNamed:@"category_passions_disabled"],
+              @"selectedImage" : [UIImage imageNamed:@"category_passions_selected"]},
+            @{@"title" : @"Experiences", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"category_experiences_disabled"],
+              @"selectedImage" : [UIImage imageNamed:@"category_experiences_selected"]},
+            @{@"title" : @"Achievements", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"category_achievements_disabled"],
+              @"selectedImage" : [UIImage imageNamed:@"category_achievements_selected"]},
+            @{@"title" : @"Inspirations", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
+              @"selectedImage" : [UIImage imageNamed:@"category_inspiration_selected"]},
+            @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
+              @"selectedImage" : [UIImage imageNamed:@"category_personal_selected"]}
         ];
         
         _optionItems = @[
@@ -289,11 +297,15 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         STKTextImageCell *cell = (STKTextImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKTextImageCell"
                                                                                                forIndexPath:indexPath];
         [[cell label] setText:[item objectForKey:@"title"]];
+        [[cell label] setTextColor:STKTextColor];
         [[cell imageView] setImage:[item objectForKey:@"image"]];
         [cell setBackgroundColor:[UIColor clearColor]];
         
+        
+        
         if([[[self postInfo] objectForKey:STKPostTypeKey] isEqual:[item objectForKey:STKPostTypeKey]]) {
-            [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+            [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
+            [[cell label] setTextColor:[UIColor whiteColor]];
         }
         
         return cell;
@@ -437,17 +449,38 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }
 }
 
-- (IBAction)changeImage:(id)sender
+- (void)changeImage:(id)sender
 {
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
                                                                         forType:STKImageChooserTypeImage
-                                                                     completion:^(UIImage *img) {
+                                                                     completion:^(UIImage *img, UIImage *originalImage) {
+                                                                         [self setOriginalPostImage:originalImage];
                                                                          [self setPostImage:img];
                                                                          [[self imageView] setImage:img];
                                                                          if(img) {
                                                                              [[self imageButton] setImage:nil forState:UIControlStateNormal];
                                                                          }
                                                                      }];
+}
+
+- (IBAction)adjustImage:(id)sender
+{
+    if(![self postImage]) {
+        return;
+    }
+    
+    [[STKImageChooser sharedImageChooser] initiateImageEditorForViewController:self
+                                                                       forType:STKImageChooserTypeImage
+                                                                         image:[self originalPostImage]
+                                                                    completion:^(UIImage *img, UIImage *originalImage) {
+                                                                        [self setOriginalPostImage:originalImage];
+                                                                        [self setPostImage:img];
+                                                                        [[self imageView] setImage:img];
+                                                                        if(img) {
+                                                                            [[self imageButton] setImage:nil forState:UIControlStateNormal];
+                                                                        }
+
+                                                                    }];
 }
 
 

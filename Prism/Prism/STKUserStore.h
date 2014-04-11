@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class STKUser, STKPost, STKActivityItem, STKTrust;
-@class ACAccount;
+@class ACAccount, ACAccountStore;
 
 extern NSString * const STKUserStoreErrorDomain;
 typedef enum {
@@ -25,6 +25,7 @@ typedef enum {
 
 + (STKUserStore *)store;
 
+@property (nonatomic, strong) ACAccountStore *accountStore;
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) STKUser *currentUser;
 
@@ -39,10 +40,13 @@ typedef enum {
 
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;
+- (void)fetchTwitterAccessToken:(ACAccount *)acct completion:(void (^)(NSString *token, NSString *tokenSecret, NSError *err))block;
 
 - (void)fetchUserDetails:(STKUser *)user additionalFields:(NSArray *)fields completion:(void (^)(STKUser *u, NSError *err))block;
 
 - (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
+
+- (void)fetchTrustForUser:(STKUser *)user otherUser:(STKUser *)otherUser completion:(void (^)(STKTrust *t, NSError *err))block;
 
 - (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;
 

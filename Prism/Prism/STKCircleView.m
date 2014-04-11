@@ -60,16 +60,6 @@
         
         [[self image] drawInRect:r];
         
-        
-        if([self overlayText]) {
-            UIFont *f = STKFont(32);
-            CGSize textSize = [[self overlayText] sizeWithAttributes:@{NSFontAttributeName : f}];
-            
-            [[self overlayText] drawInRect:CGRectMake((r.size.width - textSize.width) / 2.0,
-                                                      (r.size.height - textSize.height) / 2.0, textSize.width, textSize.height)
-                            withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : [STKTextColor colorWithAlphaComponent:0.8]}];
-        }
-        
     } else {
         CGRect r = [self bounds];
         UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:r];

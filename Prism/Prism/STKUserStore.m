@@ -43,7 +43,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 @interface STKUserStore () <GPPSignInDelegate>
 
-@property (nonatomic, strong) ACAccountStore *accountStore;
+
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
 
 @end
@@ -126,22 +126,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 {
     [self setCurrentUser:u];
     
-    // Scan external networks
-    [self fetchUserDetails:u additionalFields:@[@"instagram_token", @"instagram_min_id"] completion:^(STKUser *user, NSError *err) {
-        if([user instagramToken]) {
-            [[STKNetworkStore store] transferPostsFromInstagramWithToken:[user instagramToken]
-                                                           lastMinimumID:[user instagramLastMinID]
-                                                              completion:^(NSString *lastID, NSError *err) {
-                                                                  if(!err && lastID) {
-                                                                      [user setInstagramLastMinID:lastID];
-                                                                      [self updateUserDetails:user completion:^(STKUser *user, NSError *err) {
-                                                                          
-                                                                      }];
-                                                                  }
-                                                              }];
-            
+    [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForUser:u completion:^(STKUser *updatedUser, NSError *err) {
+        if(!err) {
+            [self updateUserDetails:updatedUser completion:^(STKUser *u, NSError *err) {
+                if(!err) {
+                    [[self context] save:nil];
+                }
+            }];
         }
     }];
+
 }
      
 
@@ -225,6 +219,31 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 }
 
 
+- (void)fetchTrustForUser:(STKUser *)user otherUser:(STKUser *)otherUser completion:(void (^)(STKTrust *t, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/exists"];
+        [c setIdentifiers:@[[user uniqueID], @"trusts", [otherUser uniqueID]]];
+//        [c setQueryObject:[STKContainQuery containQueryForField:@"to" keyValues:@{@"from" : ]]
+        
+//        [c setModelGraph:@[t]];
+        [c setContext:[self context]];
+        
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(err) {
+
+            }
+            block(obj, err);
+        }];
+    }];
+    
+}
+
 - (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
@@ -281,7 +300,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {
             [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
             [q addSubquery:[STKContainQuery containQueryForField:@"following" key:@"_id" value:[[self currentUser] uniqueID]]];
-            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
+            
+            //[q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
+            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" keyValues:@{@"from" : [[self currentUser] uniqueID], @"to" : [[self currentUser] uniqueID]}]];
         }
         
         [c setQueryObject:q];
@@ -460,7 +481,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block
 {
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"otherUser == %@", [self currentUser]];
+/*    NSPredicate *p = [NSPredicate predicateWithFormat:@"creator == %@ or recepient == %@", [self currentUser], [self currentUser]];
     NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
     [req setPredicate:p];
     NSArray *results = [[self context] executeFetchRequest:req error:nil];
@@ -469,15 +490,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     if([results count] > 0) {
         t = [results firstObject];
         [t setStatus:STKRequestStatusPending];
-        [t setOwningUserRequestedTrust:NO];
-    } else {
-        t = [NSEntityDescription insertNewObjectForEntityForName:@"STKTrust"
+    } else {*/
+        STKTrust *t = [NSEntityDescription insertNewObjectForEntityForName:@"STKTrust"
                                                     inManagedObjectContext:[self context]];
         [t setStatus:STKRequestStatusPending];
-        [t setOwningUser:user];
-        [t setOtherUser:[self currentUser]];
-        [t setOwningUserRequestedTrust:NO];
-    }
+    [t setCreator:[self currentUser]];
+    [t setRecepient:user];
+
+    //}
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -511,16 +531,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[[self currentUser] uniqueID], @"trusts"]];
-        [c setModelGraph:@[@{@"trusts" : @[@"STKTrust"]}]];
-        [c setContext:[self context]];
+        [c setQueryObject:[STKResolutionQuery resolutionQueryForField:@"from"]];
         
-        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
-            
-            NSArray *trusts = [obj objectForKey:@"trusts"];
-            for(STKTrust *t in trusts) {
-                [t setOwningUser:[[STKUserStore store] currentUser]];
-            }
-            block(trusts, err);
+        [c setModelGraph:@[@"STKTrust"]];
+        [c setResolutionMap:@{@"User" : @"STKUser"}];
+        [c setContext:[self context]];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
+            NSPredicate *p = [NSPredicate predicateWithFormat:@"recepient == %@", [self currentUser]];
+            NSArray *filtered = [trusts filteredArrayUsingPredicate:p];
+            block(filtered, err);
         }];
     }];
 
@@ -536,11 +556,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(nil, err);
             return;
         }
-        
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[t owningUser] uniqueID], @"trusts", [t uniqueID]]];
+       
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
+        [c setIdentifiers:@[[t uniqueID]]];
         [c addQueryValue:STKRequestStatusAccepted forKey:@"status"];
-        [c addQueryValue:[[t otherUser] uniqueID] forKey:@"creator"];
         
         [c setModelGraph:@[t]];
         [c setContext:[self context]];
@@ -566,9 +585,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[t owningUser] uniqueID], @"trusts", [t uniqueID]]];
-        [c addQueryValue:[[t otherUser] uniqueID] forKey:@"creator"];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
+        [c setIdentifiers:@[[t uniqueID]]];
+
         [c addQueryValue:STKRequestStatusRejected forKey:@"status"];
         
         [c setModelGraph:@[t]];
@@ -595,9 +614,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[t owningUser] uniqueID], @"trusts", [t uniqueID]]];
-        [c addQueryValue:[[t otherUser] uniqueID] forKey:@"creator"];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
+        [c setIdentifiers:@[[t uniqueID]]];
         [c addQueryValue:STKRequestStatusCancelled forKey:@"status"];
 
         
@@ -625,14 +643,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         [c setIdentifiers:@[[[self currentUser] uniqueID], @"trusts"]];
 
-        [c setModelGraph:@[@{@"trusts" : @[@"STKTrust"]}]];
+        [c setModelGraph:@[@"STKTrust"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
             
-            NSArray *trusts = nil;
             if(!err) {
-                trusts = [[obj objectForKey:@"trusts"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusAccepted]];
+                trusts = [trusts filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusAccepted]];
                 [[self context] save:nil];
             }
         

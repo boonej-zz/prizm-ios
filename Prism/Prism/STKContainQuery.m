@@ -11,6 +11,18 @@
 @implementation STKContainQuery
 
 + (STKContainQuery *)containQueryForField:(NSString *)field
+                                keyValues:(NSDictionary *)dict
+{
+    STKContainQuery *c = [[STKContainQuery alloc] init];
+    
+    [c setField:field];
+    [c setKeyValues:dict];
+    
+    return c;
+}
+
+
++ (STKContainQuery *)containQueryForField:(NSString *)field
                                       key:(NSString *)key
                                     value:(NSString *)value
 {
@@ -25,6 +37,10 @@
 
 - (NSDictionary *)dictionaryRepresentation
 {
+    if([self keyValues]) {
+        return @{@"contains" : @{[self field] : [self keyValues]}};
+    }
+    
     return @{@"contains" :@{[self field] : @{[self key] : [self value]}}};
 }
 

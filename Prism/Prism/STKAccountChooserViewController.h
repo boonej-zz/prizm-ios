@@ -8,8 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@class ACAccount, STKAccountChooserViewController;
+
+@protocol STKAccountChooserDelegate <NSObject>
+
+- (void)accountChooser:(STKAccountChooserViewController *)chooser
+      didChooseAccount:(ACAccount *)account;
+
+@end
+
 @interface STKAccountChooserViewController : UIViewController
 
 - (id)initWithAccounts:(NSArray *)accounts;
+
+@property (nonatomic, weak) id <STKAccountChooserDelegate> delegate;
+@property (nonatomic, strong) UIImage *backgroundImage;
 
 @end
