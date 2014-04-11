@@ -16,7 +16,7 @@ NSString * const STKActivityItemTypeUnfollow = @"unfollow";
 NSString * const STKActivityItemTypeLike = @"like";
 NSString * const STKActivityItemTypeUnlike = @"unlike";
 NSString * const STKActivityItemTypeComment = @"comment";
-
+NSString * const STKActivityItemTypeTrustAccepted = @"trust_accepted";
 
 @implementation STKActivityItem
 
@@ -73,6 +73,8 @@ NSString * const STKActivityItemTypeComment = @"comment";
         
     } else if([[self action] isEqualToString:STKActivityItemTypeFollow]) {
         [str appendString:@"started following you."];
+    } else if ([[self action] isEqualToString:STKActivityItemTypeTrustAccepted]) {
+        [str appendString:@"accepted your trust request."];
     }
     
     

@@ -16,6 +16,7 @@
 #import "STKRenderServer.h"
 #import "STKUserListViewController.h"
 #import "STKProfileViewController.h"
+#import "STKTrust.h"
 
 @interface STKTrustViewController () <STKTrustViewDelegate>
 
@@ -66,7 +67,7 @@
 - (void)selectUserAtIndex:(int)idx
 {
     if(idx >= 0 && idx < [[self trusts] count]) {
-        STKUser *u = [[[self trusts] valueForKey:@"otherUser"] objectAtIndex:idx];
+        STKUser *u = [[[self trustView] users] objectAtIndex:idx];
         if([[u uniqueID] isEqualToString:[[self selectedUser] uniqueID]]) {
             STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
             [pvc setProfile:u];
@@ -114,7 +115,15 @@
     
     [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *trusts, NSError *err) {
         [self setTrusts:trusts];
-        [[self trustView] setUsers:[[self trusts] valueForKey:@"otherUser"]];
+        NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
+        for(STKTrust *t in [self trusts]) {
+            if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
+                [otherUsers addObject:[t recepient]];
+            } else {
+                [otherUsers addObject:[t creator]];
+            }
+        }
+        [[self trustView] setUsers:otherUsers];
         [self configureInterface];
     }];
     
