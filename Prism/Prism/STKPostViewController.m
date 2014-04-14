@@ -45,10 +45,12 @@
 @property (weak, nonatomic) IBOutlet UIView *editOverlayView;
 @property (weak, nonatomic) IBOutlet UIImageView *editMenuBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UIButton *editPostButton;
+@property (weak, nonatomic) IBOutlet UIView *editViewAnimationContainer;
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *editMenuContainerBottomConstraint;
 
 @property (nonatomic, strong) STKPostCell *postCell;
 @property (nonatomic) BOOL editingPostText;
@@ -100,7 +102,10 @@
     return [[[self post] text] length] > 0;
 }
 
-- (IBAction)editPost:(id)sender {
+- (IBAction)editPost:(id)sender
+{
+    [[self view] endEditing:YES];
+    [self setEditMenuVisible:YES];
 }
 
 - (void)setEditingPostText:(BOOL)editingPostText
@@ -134,20 +139,42 @@
     _editMenuVisible = editMenuVisible;
     
     if([self editMenuVisible]) {
+        // There is a 'wrapper' view around the editView for purposes of animation
+        //        CGRect r = [[self view] convertRect:[[[self editView] superview] frame]
+        //                                   fromView:[self overlayVIew]];
+        
+        UIImage *img = [[STKRenderServer renderServer] instantBlurredImageForView:[self view]
+                                                                        inSubrect:CGRectMake(0,
+                                                                                             [[self view] bounds].size.height - [[self commentFooterView] bounds].size.height - [[self editView] bounds].size.height,
+                                                                                             [[self editView] bounds].size.width,
+                                                                                             [[self editView] bounds].size.height)];
+        [[self editMenuBackgroundImageView] setImage:img];
+        
+
+        [[self editMenuContainerBottomConstraint] setConstant:0];
+        [UIView animateWithDuration:0.2 animations:^{
+            [[self editOverlayView] layoutIfNeeded];
+            [[self editPostButton] setTransform:CGAffineTransformMakeRotation(M_PI)];
+        }];
+        
         [[self editOverlayView] setHidden:NO];
         int index = [[@{STKPostVisibilityPublic : @0, STKPostVisibilityTrust : @1, STKPostVisibilityPrivate : @2}
                       objectForKey:[[self post] visibility]] intValue];
         [[self visibilityControl] setSelectedSegmentIndex:index];
         
         
-        CGRect r = [[self view] convertRect:[[self editView] frame]
-                                   fromView:[self overlayVIew]];
-        
-        UIImage *img = [[STKRenderServer renderServer] instantBlurredImageForView:[self view] inSubrect:r];
-        [[self editMenuBackgroundImageView] setImage:img];
 
     } else {
-        [[self editOverlayView] setHidden:YES];
+        [[self editMenuContainerBottomConstraint] setConstant:-[[self editView] bounds].size.height];
+        [UIView animateWithDuration:0.2 animations:^{
+            [[self editOverlayView] layoutIfNeeded];
+            [[self editPostButton] setTransform:CGAffineTransformIdentity];
+        } completion:^(BOOL finished) {
+            if(finished) {
+                [[self editOverlayView] setHidden:YES];
+            }
+        }];
+
     }
     
 
@@ -195,6 +222,14 @@
 {
     [super viewDidLoad];
     
+    [[self postButton] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.1]];
+    [[self postButton] setClipsToBounds:YES];
+    [[[self postButton] layer] setCornerRadius:10];
+    
+    [[self editMenuContainerBottomConstraint] setConstant:-[[self editView] bounds].size.height];
+
+    [[self editViewAnimationContainer] setClipsToBounds:YES];
+    
     [[[self editPostButton] imageView] setContentMode:UIViewContentModeCenter];
     
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
@@ -215,10 +250,6 @@
     [[self fakeHeaderView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-    UIView *internalFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, -1, 320, 300)];
-    [footerView addSubview:internalFooterView];
-    //[internalFooterView setBackgroundColor:[UIColor colorWithRed:190.0/255.0 green:195.0/255.0 blue:209.0/255.0 alpha:1]];
-    [internalFooterView setBackgroundColor:[UIColor clearColor]];
     [footerView setBackgroundColor:[UIColor clearColor]];
     
     [[self tableView] setTableFooterView:footerView];
@@ -253,8 +284,6 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [[self overlayVIew] setHidden:YES];
-
-    [self setEditMenuVisible:NO];
     
     [[self tableView] reloadData];
     
@@ -271,6 +300,13 @@
     [[[self fakeHeaderView] posterLabel] setText:[[[self post] creator] name]];
     [[[self fakeHeaderView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[[self post] datePosted]]];
     [[[self fakeHeaderView] postTypeView] setImage:[[self post] typeImage]];
+    
+    if([[[[self post] creator] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
+        [[self editPostButton] setHidden:NO];
+    } else {
+        [[self editPostButton] setHidden:YES];
+    }
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -452,11 +488,6 @@
 
 }
 
-- (void)editButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
-{
-    [[self view] endEditing:YES];
-    [self setEditMenuVisible:YES];
-}
 
 - (void)tableView:(UITableView *)tableView
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
@@ -480,7 +511,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         STKPostComment *pc = [self commentForIndexPath:indexPath];
         if(pc) {
             if([[[self post] creator] isEqual:[[STKUserStore store] currentUser]]
-               || [[pc creator] isEqual:[[STKUserStore store] currentUser]]) {
+            || [[pc creator] isEqual:[[STKUserStore store] currentUser]]) {
                 return YES;
             }
         }
@@ -606,14 +637,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             [[c likeButton] setHidden:YES];
             [[c likeImageView] setHidden:YES];
             [[c likeCountLabel] setHidden:YES];
-            [[c editButton] setHidden:NO];
         } else {
             STKPostComment *comment = [self commentForIndexPath:indexPath];
             
             [[c textView] setText:[comment text]];
             [[c avatarImageView] setUrlString:[[comment creator] profilePhotoPath]];
             [[c nameLabel] setText:[[comment creator] name]];
-            [[c editButton] setHidden:YES];
 
             NSString *likeActionText = @"Like";
             if([comment isLikedByUser:[[STKUserStore store] currentUser]]) {

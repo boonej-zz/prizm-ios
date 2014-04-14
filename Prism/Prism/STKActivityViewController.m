@@ -53,6 +53,7 @@ typedef enum {
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_notification"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_notification_selected"]];
+        [[self tabBarItem] setTitle:@"Activity"];
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         
         _activities = [[NSMutableArray alloc] init];
@@ -75,41 +76,6 @@ typedef enum {
     [v setBackgroundColor:[UIColor clearColor]];
 //    [[self tableView] setTableFooterView:v];
 
-    // 'On state'
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.5] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self activityTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
-                                         forState:UIControlStateSelected
-                                       barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
-    [[self activityTypeControl] setTitleTextAttributes:@{NSFontAttributeName : STKFont(16),
-                                                        NSForegroundColorAttributeName : [UIColor colorWithRed:70.0/255.0 green:34.0/255.0 blue:151.0/255.0 alpha:1]}
-                                             forState:UIControlStateSelected];
-    
-    
-    // 'Off' state
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:78.0/255.0 green:118.0/255.0 blue:157.0/255.0 alpha:0.4] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self activityTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
-                                         forState:UIControlStateNormal
-                                       barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
-    [[self activityTypeControl] setTitleTextAttributes:@{NSFontAttributeName : STKFont(16),
-                                                        NSForegroundColorAttributeName : [UIColor whiteColor]}
-                                             forState:UIControlStateNormal];
-    
-    // Divider
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:74.0/255.0 green:114.0/255.0 blue:153.0/255.0 alpha:0.8] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self activityTypeControl] setDividerImage:UIGraphicsGetImageFromCurrentImageContext()
-                           forLeftSegmentState:UIControlStateNormal
-                             rightSegmentState:UIControlStateNormal
-                                    barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
-    
     [[self tableView] setContentInset:UIEdgeInsetsMake(64 + 50, 0, 0, 0)];
 }
 

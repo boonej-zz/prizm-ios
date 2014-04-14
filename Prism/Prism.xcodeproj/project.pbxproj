@@ -47,6 +47,7 @@
 		BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B51C183A90C8009BC02A /* STKTrustView.m */; };
 		BE24B520183A90D1009BC02A /* STKCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B51F183A90D1009BC02A /* STKCountView.m */; };
 		BE24B523183AA653009BC02A /* STKCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B522183AA653009BC02A /* STKCircleView.m */; };
+		BE2E5FC518FB49E000A53AF6 /* STKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2E5FC418FB49E000A53AF6 /* STKSegmentedControl.m */; };
 		BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */; };
 		BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */; };
 		BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3D2FDE18C9626500E9F58C /* STKAvatarView.m */; };
@@ -247,6 +248,8 @@
 		BE24B51F183A90D1009BC02A /* STKCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCountView.m; sourceTree = "<group>"; };
 		BE24B521183AA653009BC02A /* STKCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCircleView.h; sourceTree = "<group>"; };
 		BE24B522183AA653009BC02A /* STKCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCircleView.m; sourceTree = "<group>"; };
+		BE2E5FC318FB49E000A53AF6 /* STKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSegmentedControl.h; sourceTree = "<group>"; };
+		BE2E5FC418FB49E000A53AF6 /* STKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSegmentedControl.m; sourceTree = "<group>"; };
 		BE300BF4182AB16100CA3FC7 /* STKMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMenuButton.h; sourceTree = "<group>"; };
 		BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMenuButton.m; sourceTree = "<group>"; };
 		BE3014C01891F24F0069F31E /* STKCaptureOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCaptureOverlayView.h; sourceTree = "<group>"; };
@@ -2374,6 +2377,8 @@
 				BE3D2FDE18C9626500E9F58C /* STKAvatarView.m */,
 				BE5F690318F214C8006D2CD1 /* STKTextView.h */,
 				BE5F690418F214C8006D2CD1 /* STKTextView.m */,
+				BE2E5FC318FB49E000A53AF6 /* STKSegmentedControl.h */,
+				BE2E5FC418FB49E000A53AF6 /* STKSegmentedControl.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4552,6 +4557,7 @@
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,
 				BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */,
+				BE2E5FC518FB49E000A53AF6 /* STKSegmentedControl.m in Sources */,
 				BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */,
 				BE1FC3B5186C8C0A003464E1 /* STKImageCollectionViewCell.m in Sources */,
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,

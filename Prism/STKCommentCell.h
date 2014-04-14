@@ -11,6 +11,7 @@
 @class STKAvatarView;
 
 @interface STKCommentCell : STKTableViewCell
+
 @property (weak, nonatomic) IBOutlet STKAvatarView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
@@ -19,10 +20,9 @@
 @property (weak, nonatomic) IBOutlet UIControl *likeButton;
 @property (weak, nonatomic) IBOutlet UIImageView *likeImageView;
 @property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
-@property (weak, nonatomic) IBOutlet UIButton *editButton;
+
 
 - (IBAction)avatarTapped:(id)sender;
 - (IBAction)showLikes:(id)sender;
-- (IBAction)editButtonTapped:(id)sender;
 
 @end

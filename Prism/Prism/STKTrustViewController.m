@@ -47,6 +47,7 @@
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_trust"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_trust_selected"]];
+        [[self tabBarItem] setTitle:@"Trust"];
     }
     return self;
 }

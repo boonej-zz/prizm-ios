@@ -63,7 +63,7 @@
 
 - (void)accountChooser:(STKAccountChooserViewController *)chooser didChooseAccount:(ACAccount *)account
 {
-    [[[STKUserStore store] currentUser] setTwitterID:[account identifier]];
+    [[[STKUserStore store] currentUser] setTwitterID:[account username]];
 
     [STKProcessingView present];
     [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
@@ -99,7 +99,7 @@
         }
         
         if([accounts count] == 1) {
-            [[[STKUserStore store] currentUser] setTwitterID:[[accounts firstObject] identifier]];
+            [[[STKUserStore store] currentUser] setTwitterID:[[accounts firstObject] username]];
             
             [STKProcessingView present];
             [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {

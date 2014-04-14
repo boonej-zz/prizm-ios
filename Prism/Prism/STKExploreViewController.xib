@@ -9,12 +9,11 @@
                 <outlet property="blurView" destination="dEz-1m-5JB" id="T0P-Qw-zwf"/>
                 <outlet property="exploreTypeControl" destination="0h5-TF-yfM" id="apW-80-YBx"/>
                 <outlet property="filterOptionView" destination="muU-x0-2TQ" id="15W-bm-TNS"/>
-                <outlet property="hashTagFilterButton" destination="Xxn-eE-TI9" id="Ipb-oG-UCi"/>
                 <outlet property="searchContainer" destination="DAQ-BH-ukr" id="JFs-NG-53Q"/>
                 <outlet property="searchResultsTableView" destination="jYc-V0-ELL" id="WM7-X1-t2D"/>
                 <outlet property="searchTextField" destination="zdn-HE-VoK" id="NDr-Sw-edl"/>
+                <outlet property="searchTypeControl" destination="HIa-NW-ZcC" id="Xgf-YW-2sP"/>
                 <outlet property="tableView" destination="ule-sa-Sui" id="tUf-FH-UQl"/>
-                <outlet property="usersFilterButton" destination="zDp-47-h6a" id="MlG-LV-Mmt"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -57,7 +56,7 @@
                         <constraint firstAttribute="height" constant="114" id="SfK-yX-z1s"/>
                     </constraints>
                 </view>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0h5-TF-yfM">
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0h5-TF-yfM" customClass="STKSegmentedControl">
                     <rect key="frame" x="0.0" y="64" width="320" height="51"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.35681654308122235" green="0.73109853583388773" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
@@ -133,34 +132,28 @@
                             <rect key="frame" x="0.0" y="50" width="320" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zDp-47-h6a">
-                                    <rect key="frame" x="0.0" y="0.0" width="160" height="50"/>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="HIa-NW-ZcC" customClass="STKSegmentedControl">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                                    <state key="normal" title="Users">
-                                        <color key="titleColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
+                                    <color key="backgroundColor" red="0.35681654309999999" green="0.73109853579999995" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="50" id="HR5-Mr-7yv"/>
+                                    </constraints>
+                                    <segments>
+                                        <segment title="Users"/>
+                                        <segment title="Hashtags"/>
+                                    </segments>
                                     <connections>
-                                        <action selector="showUserResults:" destination="-1" eventType="touchUpInside" id="RmC-sT-7rR"/>
+                                        <action selector="searchTypeChanged:" destination="-1" eventType="valueChanged" id="6lZ-Rw-XO5"/>
                                     </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xxn-eE-TI9">
-                                    <rect key="frame" x="160" y="0.0" width="160" height="50"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                                    <state key="normal" title="Hashtags">
-                                        <color key="titleColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="showHashTagResults:" destination="-1" eventType="touchUpInside" id="rZM-zR-WUX"/>
-                                    </connections>
-                                </button>
+                                </segmentedControl>
                             </subviews>
                             <color key="backgroundColor" red="0.30588235294117649" green="0.46274509803921571" blue="0.61568627450980395" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
                             <constraints>
+                                <constraint firstItem="HIa-NW-ZcC" firstAttribute="top" secondItem="G1V-Gc-t1m" secondAttribute="top" id="YAG-eD-NHp"/>
+                                <constraint firstAttribute="trailing" secondItem="HIa-NW-ZcC" secondAttribute="trailing" id="jX9-j6-Sj6"/>
                                 <constraint firstAttribute="height" constant="50" id="l6Y-Ae-BMb"/>
+                                <constraint firstItem="HIa-NW-ZcC" firstAttribute="leading" secondItem="G1V-Gc-t1m" secondAttribute="leading" id="pRY-J5-klT"/>
                             </constraints>
                         </view>
                         <collectionView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="muU-x0-2TQ">
