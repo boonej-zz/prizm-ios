@@ -19,7 +19,11 @@
     #define STKTextColor [UIColor colorWithRed:192.0/255.0 green:193.0/255.0 blue:213.0/255.0 alpha:1]
     #define STKTextTransparentColor [UIColor colorWithRed:192.0/255.0 green:193.0/255.0 blue:213.0/255.0 alpha:0.4]
     #define STKLightBlueColor [UIColor colorWithRed:26.0 / 255.0 green:114.0 / 255.0 blue:178.0 / 255.0 alpha:1]
-    #define STKFont(x) [UIFont fontWithName:@"HelveticaNeue-Light" size:x]
+    #define STKSelectedColor [UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.5]
+    #define STKUnselectedColor [UIColor colorWithRed:78.0/255.0 green:118.0/255.0 blue:157.0/255.0 alpha:0.4]
+    #define STKSelectedTextColor [UIColor colorWithRed:70.0/255.0 green:34.0/255.0 blue:151.0/255.0 alpha:1]
+
+#define STKFont(x) [UIFont fontWithName:@"HelveticaNeue-Light" size:x]
 
 #define STRINGIFY(x) #x
     #define STRINGIFY_TOKEN(x) @STRINGIFY(x)

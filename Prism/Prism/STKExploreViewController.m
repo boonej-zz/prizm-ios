@@ -24,15 +24,14 @@
 #import "STKPostController.h"
 #import "STKNavigationButton.h"
 
-
 typedef enum {
     STKExploreTypeLatest = 0,
     STKExploreTypePopular = 1
 } STKExploreType;
 
 typedef enum {
-    STKSearchTypeUser,
-    STKSearchTypeHashTag
+    STKSearchTypeUser = 0,
+    STKSearchTypeHashTag = 1
 } STKSearchType;
 
 @interface STKExploreViewController ()
@@ -45,6 +44,7 @@ typedef enum {
 @property (nonatomic, assign) STKPostController *activePostController;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *searchTypeControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *exploreTypeControl;
 @property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
 
@@ -53,8 +53,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UICollectionView *filterOptionView;
 
 @property (weak, nonatomic) IBOutlet UIView *searchContainer;
-@property (weak, nonatomic) IBOutlet UIButton *usersFilterButton;
-@property (weak, nonatomic) IBOutlet UIButton *hashTagFilterButton;
+
 @property (nonatomic) STKSearchType searchType;
 @property (nonatomic, strong) NSArray *postsFound;
 @property (nonatomic, strong) NSArray *profilesFound;
@@ -62,8 +61,6 @@ typedef enum {
 @property (nonatomic, strong) UIBarButtonItem *searchButtonItem;
 
 - (IBAction)exploreTypeChanged:(id)sender;
-- (IBAction)showHashTagResults:(id)sender;
-- (IBAction)showUserResults:(id)sender;
 - (IBAction)toggleFilterView:(id)sender;
 
 @end
@@ -158,21 +155,12 @@ typedef enum {
     }
 }
 
-- (void)refreshSearchTypeControl
+- (IBAction)searchTypeChanged:(UISegmentedControl *)sender
 {
-    UIColor *onColor = [UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.5];
-    UIColor *offColor = [UIColor colorWithRed:78.0/255.0 green:118.0/255.0 blue:157.0/255.0 alpha:0.4];
-    UIColor *onTextColor = [UIColor colorWithRed:70.0/255.0 green:34.0/255.0 blue:151.0/255.0 alpha:1];
-    if([self searchType] == STKSearchTypeHashTag) {
-        [[self usersFilterButton] setBackgroundColor:offColor];
-        [[self hashTagFilterButton] setBackgroundColor:onColor];
-        [[self hashTagFilterButton] setTitleColor:onTextColor forState:UIControlStateNormal];
-        [[self usersFilterButton] setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    if([sender selectedSegmentIndex] == 0) {
+        [self setSearchType:STKSearchTypeUser];
     } else {
-        [[self usersFilterButton] setBackgroundColor:onColor];
-        [[self hashTagFilterButton] setBackgroundColor:offColor];
-        [[self usersFilterButton] setTitleColor:onTextColor forState:UIControlStateNormal];
-        [[self hashTagFilterButton] setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self setSearchType:STKSearchTypeHashTag];
     }
 }
 
@@ -275,12 +263,6 @@ typedef enum {
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
-//    [[[self usersFilterButton] layer] setCornerRadius:5];
-//    [[[self hashTagFilterButton] layer] setCornerRadius:5];
-//    [[self usersFilterButton] setClipsToBounds:YES];
-//    [[self hashTagFilterButton] setClipsToBounds:YES];
-    [self refreshSearchTypeControl];
     
     [[self filterOptionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];
@@ -294,10 +276,6 @@ typedef enum {
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     [v setBackgroundColor:[UIColor clearColor]];
     [[self searchResultsTableView] setTableFooterView:v];
-
-    
-    [self configureSearchArea];
-    [self configureSegmentedControl];
 }
 
 - (STKExploreType)exploreType
@@ -326,48 +304,6 @@ typedef enum {
                                                }];
 }
 
-- (void)configureSearchArea
-{
-}
-
-- (void)configureSegmentedControl
-{
-    // 'On state'
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    //[[UIColor colorWithRed:0.86 green:0.87 blue:.92 alpha:0.3] set];
-    [[UIColor colorWithRed:157.0/255.0 green:176.0/255.0 blue:200.0/255.0 alpha:0.5] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self exploreTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
-                                         forState:UIControlStateSelected
-                                       barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
-    [[self exploreTypeControl] setTitleTextAttributes:@{NSFontAttributeName : STKFont(16),
-                                                        NSForegroundColorAttributeName : [UIColor colorWithRed:70.0/255.0 green:34.0/255.0 blue:151.0/255.0 alpha:1]}
-                                             forState:UIControlStateSelected];
-
-    
-    // 'Off' state
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:78.0/255.0 green:118.0/255.0 blue:157.0/255.0 alpha:0.4] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self exploreTypeControl] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
-                                         forState:UIControlStateNormal
-                                       barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
-    [[self exploreTypeControl] setTitleTextAttributes:@{NSFontAttributeName : STKFont(16),
-                                                        NSForegroundColorAttributeName : [UIColor whiteColor]}
-                                             forState:UIControlStateNormal];
-
-    // Divider
-    UIGraphicsBeginImageContext(CGSizeMake(1, 1));
-    [[UIColor colorWithRed:74.0/255.0 green:114.0/255.0 blue:153.0/255.0 alpha:0.8] set];
-    UIRectFill(CGRectMake(0, 0, 1, 1));
-    [[self exploreTypeControl] setDividerImage:UIGraphicsGetImageFromCurrentImageContext()
-                           forLeftSegmentState:UIControlStateNormal
-                             rightSegmentState:UIControlStateNormal
-                                    barMetrics:UIBarMetricsDefault];
-    UIGraphicsEndImageContext();
-}
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -384,6 +320,11 @@ typedef enum {
     else if([self exploreType] == STKExploreTypePopular)
         [self setActivePostController:[self popularPostsController]];
 
+    if([self searchType] == STKSearchTypeUser)
+        [[self searchTypeControl] setSelectedSegmentIndex:0];
+    else
+        [[self searchTypeControl] setSelectedSegmentIndex:1];
+    
     [[self searchButton] setSelected:[self isSearchBarActive]];
     
     [[[self blurView] displayLink] setPaused:NO];
@@ -539,17 +480,6 @@ typedef enum {
     [self refreshPosts];
 }
 
-- (IBAction)showHashTagResults:(id)sender
-{
-    [self setSearchType:STKSearchTypeHashTag];
-    [self refreshSearchTypeControl];
-}
-
-- (IBAction)showUserResults:(id)sender
-{
-    [self setSearchType:STKSearchTypeUser];
-    [self refreshSearchTypeControl];
-}
 
 - (IBAction)toggleFilterView:(id)sender
 {
