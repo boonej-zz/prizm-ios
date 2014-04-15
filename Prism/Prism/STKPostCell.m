@@ -42,10 +42,16 @@
         [[[self headerView] avatarView] setUrlString:[[p creator] profilePhotoPath]];
         [[[self headerView] posterLabel] setText:[[p creator] name]];
         [[[self headerView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
-        //    if([p externalSystemID])
-        //[[[c headerView] sourceLabel] setText:[p postOrigin]];
+    
         [[[self headerView] postTypeView] setImage:[p typeImage]];
     }
+    
+    //if the post object is a re-post set FROM the original creator name in the headerviews source label
+    if([p originalPost] && [[[p originalPost] creator] name]){
+        NSString * fromUser = [NSString stringWithFormat:@"From %@", [[[p originalPost] creator] name]];
+        [[[self headerView] sourceLabel] setText:fromUser];
+    }
+
     
     if([p commentCount] == 0) {
         [[self commentCountLabel] setText:@""];

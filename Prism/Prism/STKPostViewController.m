@@ -301,6 +301,12 @@
     [[[self fakeHeaderView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[[self post] datePosted]]];
     [[[self fakeHeaderView] postTypeView] setImage:[[self post] typeImage]];
     
+    //set headerview source label with original post creator name if repost
+    if([[self post] originalPost] && [[[[self post] originalPost] creator] name]){
+        NSString * fromUser = [NSString stringWithFormat:@"From %@", [[[[self post] originalPost] creator] name]];
+        [[[self fakeHeaderView] sourceLabel] setText:fromUser];
+    }
+    
     if([[[[self post] creator] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
         [[self editPostButton] setHidden:NO];
     } else {

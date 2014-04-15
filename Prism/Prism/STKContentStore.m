@@ -151,8 +151,10 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
         [q addSubquery:cq];
         
-        //STKResolutionQuery *originPost = [STKResolutionQuery resolutionQueryForField:@"origin_post_id"];
-        //[q addSubquery:originPost];
+        STKResolutionQuery *originPost = [STKResolutionQuery resolutionQueryForField:@"origin_post_id"];
+        STKResolutionQuery *originPostCreator = [STKResolutionQuery resolutionQueryForField:@"creator"];
+        [originPost addSubquery:originPostCreator];
+        [q addSubquery:originPost];
         
         [c setQueryObject:q];
         
@@ -197,6 +199,11 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         
         STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
         [q addSubquery:cq];
+        
+        STKResolutionQuery * originPost = [STKResolutionQuery resolutionQueryForField:@"origin_post_id"];
+        STKResolutionQuery * originPostCreator = [STKResolutionQuery resolutionQueryForField:@"creator"];
+        [originPost addSubquery:originPostCreator];
+        [q addSubquery:originPost];
         
         [c setQueryObject:q];
         
