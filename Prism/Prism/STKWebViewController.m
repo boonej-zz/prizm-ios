@@ -46,8 +46,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor darkGrayColor]}];
+    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor whiteColor]}];
 }
 
 
@@ -117,6 +117,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[self blurView] setOverlayOpacity:0.5];
     if([self url])
         [[self webView] loadRequest:[NSURLRequest requestWithURL:[self url]]];
 }

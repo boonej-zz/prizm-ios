@@ -74,6 +74,7 @@
 		BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE610859183D1588003A182C /* STKTableViewCell.m */; };
 		BE61085E183D159E003A182C /* STKActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE61085C183D159E003A182C /* STKActivityCell.m */; };
 		BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE61085D183D159E003A182C /* STKActivityCell.xib */; };
+		BE63C53918FD89890087585E /* STKActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE63C53818FD89890087585E /* STKActivityIndicatorView.m */; };
 		BE654EA5188841A6006DCA5C /* Lookup.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BE654EA3188841A6006DCA5C /* Lookup.xcdatamodeld */; };
 		BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = BE654EA6188841C5006DCA5C /* lookup.sqlite */; };
 		BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6AEF821857681E00F92DF4 /* STKGenderCell.m */; };
@@ -102,8 +103,8 @@
 		BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE95438E1892FE5C00DCC3B1 /* STKSearchProfileCell.m */; };
 		BE9543911892FE5C00DCC3B1 /* STKSearchProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE95438F1892FE5C00DCC3B1 /* STKSearchProfileCell.xib */; };
 		BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE96C61B185A0D0C005D44BC /* STKWebViewController.m */; };
-		BEAB9766189AD503002A14F5 /* STKProfileInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAB9764189AD503002A14F5 /* STKProfileInformationCell.m */; };
-		BEAB9767189AD503002A14F5 /* STKProfileInformationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAB9765189AD503002A14F5 /* STKProfileInformationCell.xib */; };
+		BE9CC7A618FDFF480097D308 /* STKLuminariesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9CC7A418FDFF480097D308 /* STKLuminariesCell.m */; };
+		BE9CC7A718FDFF480097D308 /* STKLuminariesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE9CC7A518FDFF480097D308 /* STKLuminariesCell.xib */; };
 		BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */; };
 		BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */; };
 		BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A618522D6C00F0B211 /* STKTextFieldCell.m */; };
@@ -1994,6 +1995,8 @@
 		BE61085B183D159E003A182C /* STKActivityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKActivityCell.h; path = Prism/STKActivityCell.h; sourceTree = "<group>"; };
 		BE61085C183D159E003A182C /* STKActivityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKActivityCell.m; path = Prism/STKActivityCell.m; sourceTree = "<group>"; };
 		BE61085D183D159E003A182C /* STKActivityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKActivityCell.xib; path = Prism/STKActivityCell.xib; sourceTree = "<group>"; };
+		BE63C53718FD89890087585E /* STKActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKActivityIndicatorView.h; sourceTree = "<group>"; };
+		BE63C53818FD89890087585E /* STKActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKActivityIndicatorView.m; sourceTree = "<group>"; };
 		BE654EA4188841A6006DCA5C /* Lookup.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Lookup.xcdatamodel; sourceTree = "<group>"; };
 		BE654EA6188841C5006DCA5C /* lookup.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = lookup.sqlite; sourceTree = "<group>"; };
 		BE6AEF811857681E00F92DF4 /* STKGenderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKGenderCell.h; path = Prism/STKGenderCell.h; sourceTree = "<group>"; };
@@ -2041,9 +2044,9 @@
 		BE95438F1892FE5C00DCC3B1 /* STKSearchProfileCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchProfileCell.xib; sourceTree = "<group>"; };
 		BE96C61A185A0D0C005D44BC /* STKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKWebViewController.h; sourceTree = "<group>"; };
 		BE96C61B185A0D0C005D44BC /* STKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKWebViewController.m; sourceTree = "<group>"; };
-		BEAB9763189AD503002A14F5 /* STKProfileInformationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProfileInformationCell.h; sourceTree = "<group>"; };
-		BEAB9764189AD503002A14F5 /* STKProfileInformationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProfileInformationCell.m; sourceTree = "<group>"; };
-		BEAB9765189AD503002A14F5 /* STKProfileInformationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKProfileInformationCell.xib; sourceTree = "<group>"; };
+		BE9CC7A318FDFF480097D308 /* STKLuminariesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLuminariesCell.h; sourceTree = "<group>"; };
+		BE9CC7A418FDFF480097D308 /* STKLuminariesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLuminariesCell.m; sourceTree = "<group>"; };
+		BE9CC7A518FDFF480097D308 /* STKLuminariesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLuminariesCell.xib; sourceTree = "<group>"; };
 		BEAC71A01852285700F0B211 /* STKCreateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreateProfileViewController.h; sourceTree = "<group>"; };
 		BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCreateProfileViewController.m; sourceTree = "<group>"; };
 		BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCreateProfileViewController.xib; sourceTree = "<group>"; };
@@ -2351,6 +2354,8 @@
 		BE02EAD5182A8A5500A5505A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BE63C53718FD89890087585E /* STKActivityIndicatorView.h */,
+				BE63C53818FD89890087585E /* STKActivityIndicatorView.m */,
 				BE05501C18A404E600F6B534 /* UIERealTimeBlurView.h */,
 				BE05501D18A404E600F6B534 /* UIERealTimeBlurView.m */,
 				BE05501E18A404E600F6B534 /* UIImage+BoxBlur.h */,
@@ -2424,9 +2429,6 @@
 				BEF2D7881899818900D3C8D6 /* STKRequestCell.h */,
 				BEF2D7891899818900D3C8D6 /* STKRequestCell.m */,
 				BEF2D78A1899818900D3C8D6 /* STKRequestCell.xib */,
-				BEAB9763189AD503002A14F5 /* STKProfileInformationCell.h */,
-				BEAB9764189AD503002A14F5 /* STKProfileInformationCell.m */,
-				BEAB9765189AD503002A14F5 /* STKProfileInformationCell.xib */,
 				BEC726EA18AC111D009350E8 /* STKLabelCell.h */,
 				BEC726EB18AC111D009350E8 /* STKLabelCell.m */,
 				BEC726EC18AC111D009350E8 /* STKLabelCell.xib */,
@@ -2443,6 +2445,9 @@
 				BE0EC57318EDE971007102E1 /* STKSettingsShareCell.h */,
 				BE0EC57418EDE971007102E1 /* STKSettingsShareCell.m */,
 				BE0EC57518EDE971007102E1 /* STKSettingsShareCell.xib */,
+				BE9CC7A318FDFF480097D308 /* STKLuminariesCell.h */,
+				BE9CC7A418FDFF480097D308 /* STKLuminariesCell.m */,
+				BE9CC7A518FDFF480097D308 /* STKLuminariesCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4477,7 +4482,7 @@
 				BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */,
 				BE1FC3B7186C8C22003464E1 /* STKImageCollectionViewCell.xib in Resources */,
 				BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */,
-				BEAB9767189AD503002A14F5 /* STKProfileInformationCell.xib in Resources */,
+				BE9CC7A718FDFF480097D308 /* STKLuminariesCell.xib in Resources */,
 				BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */,
 				BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */,
 				BEF361CC18B2C3700085A38B /* STKTriImageCell.xib in Resources */,
@@ -4568,6 +4573,7 @@
 				BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */,
 				BE5F68FA18F0A522006D2CD1 /* STKResolutionQuery.m in Sources */,
 				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
+				BE63C53918FD89890087585E /* STKActivityIndicatorView.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
@@ -4577,6 +4583,7 @@
 				BE5767F9187B4E98004AEE1F /* STKPostHeaderView.m in Sources */,
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
 				BE0EC57618EDE971007102E1 /* STKSettingsShareCell.m in Sources */,
+				BE9CC7A618FDFF480097D308 /* STKLuminariesCell.m in Sources */,
 				BE52B13C18E30EF100C44F30 /* NSManagedObject+STKAdditions.m in Sources */,
 				BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */,
 				BE05502018A404E600F6B534 /* UIERealTimeBlurView.m in Sources */,
@@ -4589,7 +4596,6 @@
 				BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */,
 				BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */,
 				BE24B523183AA653009BC02A /* STKCircleView.m in Sources */,
-				BEAB9766189AD503002A14F5 /* STKProfileInformationCell.m in Sources */,
 				BE05502118A404E600F6B534 /* UIImage+BoxBlur.m in Sources */,
 				BE1FC3B0186C817C003464E1 /* STKTextImageCell.m in Sources */,
 				BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */,

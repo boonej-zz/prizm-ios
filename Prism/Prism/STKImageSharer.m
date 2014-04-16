@@ -298,9 +298,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     if(image)
         [a addObject:image];
     if([post text])
-        [a addObject:[NSString stringWithFormat:@"%@ @beprismatic", [post text]]];
+        [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", [post text]]];
     else
-        [a addObject:@"@beprismatic"];
+        [a addObject:@"@beprizmatic"];
 
     if(post)
         [a addObject:post];

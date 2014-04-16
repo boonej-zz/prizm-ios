@@ -21,6 +21,7 @@
 #import "STKBaseStore.h"
 #import "STKTrust.h"
 #import "STKNetworkStore.h"
+#import <Crashlytics/Crashlytics.h>
 
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 
@@ -177,6 +178,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     if(currentUser) {
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser uniqueID]
                                                   forKey:STKUserStoreCurrentUserKey];
+    
+        [Crashlytics setUserIdentifier:[NSString stringWithFormat:@"%@ %@ %@", [currentUser name], [currentUser uniqueID], [[UIDevice currentDevice] name]]];
     } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
         [self setContext:nil];
@@ -623,8 +626,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:STKRequestStatusCancelled forKey:@"status"];
 
         
-        [c setModelGraph:@[t]];
-        [c setContext:[self context]];
+//        [c setModelGraph:@[t]];
+//        [c setContext:[self context]];
 
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
@@ -913,7 +916,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             SLRequest *profReq = [SLRequest requestForServiceType:SLServiceTypeTwitter
                                                     requestMethod:SLRequestMethodGET
                                                               URL:[NSURL URLWithString:@"https://api.twitter.com/1/users/profile_image"]
-                                                       parameters:@{@"screen_name" : [acct username], @"size" : @"bigger"}];
+                                                       parameters:@{@"screen_name" : [acct username], @"size" : @"original"}];
             [self executeSocialRequest:profReq forAccount:acct completion:^(NSData *profData, NSError *profError) {
                 if(!profError) {
                     [pi setProfilePhoto:[UIImage imageWithData:profData]];
@@ -1054,7 +1057,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             SLRequest *profilePicReq = [SLRequest requestForServiceType:SLServiceTypeFacebook
                                                           requestMethod:SLRequestMethodGET
                                                                     URL:[NSURL URLWithString:@"https://graph.facebook.com/me/picture"]
-                                                             parameters:@{@"type" : @"large", @"access_token" : [[acct credential] oauthToken]}];
+                                                             parameters:@{@"width" : @"600", @"height" : @"600", @"access_token" : [[acct credential] oauthToken]}];
             [self executeSocialRequest:profilePicReq forAccount:acct completion:^(NSData *picData, NSError *picError) {
                 if(!picError && picData) {
                     UIImage *image = [UIImage imageWithData:picData];

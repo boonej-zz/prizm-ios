@@ -108,7 +108,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="action_prism" width="56" height="56"/>
+        <image name="action_prism" width="25" height="25"/>
         <image name="btn_info" width="24" height="24"/>
         <image name="location_pin_small" width="8" height="10"/>
     </resources>

@@ -15,6 +15,11 @@
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 
+- (IBAction)profileImageTapped:(id)sender
+{
+    ROUTE(sender);
+}
+
 - (void)layoutContent
 {
     

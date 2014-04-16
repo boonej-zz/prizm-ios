@@ -18,6 +18,8 @@
     _location.latitude = [[loc objectForKey:@"lat"] floatValue];
     _location.longitude = [[loc objectForKey:@"lng"] floatValue];
     
+    _address = [loc objectForKey:@"address"];
+    
     return nil;
 }
 

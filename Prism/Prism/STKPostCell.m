@@ -48,7 +48,7 @@
     
     //if the post object is a re-post set FROM the original creator name in the headerviews source label
     if([p originalPost] && [[[p originalPost] creator] name]){
-        NSString * fromUser = [NSString stringWithFormat:@"From %@", [[[p originalPost] creator] name]];
+        NSString * fromUser = [NSString stringWithFormat:@"Via %@", [[[p originalPost] creator] name]];
         [[[self headerView] sourceLabel] setText:fromUser];
     }
 

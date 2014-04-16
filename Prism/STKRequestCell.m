@@ -15,7 +15,7 @@
 
 - (void)cellDidLoad
 {
-    
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 
 - (void)layoutContent
@@ -39,7 +39,7 @@
     } else if([i isAccepted]) {
         typeString = @"is now in your trust.";
     } else if([i isRejected]) {
-        typeString = @"trust rejected.";
+        typeString = @"trust denied.";
     }
     
     [[self typeLabel] setText:typeString];

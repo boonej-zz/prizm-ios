@@ -55,7 +55,7 @@
     [_timeLabel setTextColor:STKTextColor];
     
     [_sourceLabel setFont:STKFont(10)];
-    [_sourceLabel setTextColor:STKTextTransparentColor];
+    [_sourceLabel setTextColor:STKTextColor];
     [_sourceLabel setTextAlignment:NSTextAlignmentRight];
     
     [_postTypeView setContentMode:UIViewContentModeCenter];
@@ -113,7 +113,7 @@
                                                                  options:NSLayoutFormatAlignAllCenterY metrics:nil views:@{@"tiv" : _timeImageView, @"time" : _timeLabel, @"source" : _sourceLabel}]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
-                                                         toItem:_timeImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
+                                                         toItem:_timeImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:-2]];
 
 //    [_posterLabel addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
 //                                                            multiplier:1 constant:16]];

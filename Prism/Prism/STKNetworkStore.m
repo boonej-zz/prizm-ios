@@ -154,6 +154,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         text = @"";
     if(!link)
         link = @"";
+
     
     NSURLSessionDataTask *dt = [[[STKBaseStore store] session] dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if(!error) {

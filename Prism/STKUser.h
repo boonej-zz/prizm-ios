@@ -29,7 +29,7 @@ extern CGSize STKUserProfilePhotoSize;
 extern NSString * const STKUserTypePersonal;
 extern NSString * const STKUserTypeLuminary;
 extern NSString * const STKUserTypeMilitary;
-extern NSString * const STKUserTypeEducation;
+extern NSString * const STKUserTypeInstitution;
 extern NSString * const STKUserTypeFoundation;
 extern NSString * const STKUserTypeCompany;
 extern NSString * const STKUserTypeCommunity;
@@ -61,7 +61,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 
 @property (nonatomic, strong) NSString *blurb;
 @property (nonatomic, strong) NSString *website;
-
+@property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) NSString *coverPhotoPath;
 @property (nonatomic, strong) NSString *profilePhotoPath;
 
