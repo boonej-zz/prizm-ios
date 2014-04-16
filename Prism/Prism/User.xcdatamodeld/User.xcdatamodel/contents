@@ -97,6 +97,7 @@
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitterID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitterLastMinID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
@@ -119,6 +120,6 @@
         <element name="STKPost" positionX="0" positionY="144" width="128" height="433"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="255"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="645"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="660"/>
     </elements>
 </model>

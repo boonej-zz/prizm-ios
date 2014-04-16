@@ -67,14 +67,14 @@ typedef enum {
     [super viewDidLoad];
     
     [[self tableView] setRowHeight:56];
-    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0.1]];
-    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
+    [[self tableView] setSeparatorColor:STKTextTransparentColor];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
 
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     [v setBackgroundColor:[UIColor clearColor]];
-//    [[self tableView] setTableFooterView:v];
+    [[self tableView] setTableFooterView:v];
 
     [[self tableView] setContentInset:UIEdgeInsetsMake(64 + 50, 0, 0, 0)];
 }
@@ -142,7 +142,20 @@ typedef enum {
 
 - (void)profileTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
+    STKUser *u = [[[self requests] objectAtIndex:[ip row]] creator];
+    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+    [vc setProfile:u];
+    [[self navigationController] pushViewController:vc animated:YES];
 
+}
+- (void)profileImageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKActivityItem *i = [[self activities] objectAtIndex:[ip row]];
+    if([i creator]) {
+        STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+        [pvc setProfile:[i creator]];
+        [[self navigationController] pushViewController:pvc animated:YES];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -168,10 +181,6 @@ typedef enum {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([self currentType] == STKActivityViewControllerTypeRequest) {
-        STKUser *u = [[[self requests] objectAtIndex:[indexPath row]] creator];
-        STKProfileViewController *vc = [[STKProfileViewController alloc] init];
-        [vc setProfile:u];
-        [[self navigationController] pushViewController:vc animated:YES];
     } else if([self currentType] == STKActivityViewControllerTypeActivity) {
         STKActivityItem *i = [[self activities] objectAtIndex:[indexPath row]];
         
@@ -185,12 +194,6 @@ typedef enum {
             return;
         }
         
-        if([i creator]) {
-            STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
-            [pvc setProfile:[i creator]];
-            [[self navigationController] pushViewController:pvc animated:YES];
-            return;
-        }
         
     }
     

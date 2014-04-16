@@ -55,13 +55,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[self tableView] registerClass:[UITableViewCell class]
-             forCellReuseIdentifier:@"UITableViewCell"];
 
     [[[self searchDisplayController] searchResultsTableView] setDataSource:self];
     [[[self searchDisplayController] searchResultsTableView] setDelegate:self];
-    [[[self searchDisplayController] searchResultsTableView] registerClass:[UITableViewCell class]
-                                                    forCellReuseIdentifier:@"UITableViewCell"];
     
     [[self tableView] setTableHeaderView:[[self searchDisplayController] searchBar]];
     
@@ -146,27 +142,38 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // poweredByFoursquare_gray
     if(![self locations]) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+        if(!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
+        }
         [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
         [[cell textLabel] setText:@"Searching nearby..."];
         [[cell textLabel] setFont:STKFont(16)];
         [[cell imageView] setImage:nil];
         return cell;
     }
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+    if(!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
+    }
     [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
     [[cell textLabel] setFont:STKFont(16)];
+    [[cell detailTextLabel] setTextColor:[UIColor darkGrayColor]];
+    [[cell detailTextLabel] setFont:STKFont(14)];
 
     NSString *locationName = nil;
-    
+    NSString *address = nil;
     if(tableView != [self tableView]) {
         locationName = [[[self filteredLocations] objectAtIndex:[indexPath row]] name];
+        address = [(STKFoursquareLocation *)[[self filteredLocations] objectAtIndex:[indexPath row]] address];
     } else {
         locationName = [[[self locations] objectAtIndex:[indexPath row]] name];
+        address = [(STKFoursquareLocation *)[[self locations] objectAtIndex:[indexPath row]] address];
     }
     [[cell textLabel] setText:locationName];
+    [[cell detailTextLabel] setText:address];
     
     return cell;
 }

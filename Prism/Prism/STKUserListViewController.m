@@ -114,10 +114,15 @@
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
     
-    if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
-        [[c followButton] setSelected:YES];
+    if([u isEqual:[[STKUserStore store] currentUser]]) {
+        [[c followButton] setHidden:YES];
     } else {
-        [[c followButton] setSelected:NO];
+        [[c followButton] setHidden:NO];
+        if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
+            [[c followButton] setSelected:YES];
+        } else {
+            [[c followButton] setSelected:NO];
+        }
     }
     
     return c;

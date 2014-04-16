@@ -303,7 +303,7 @@
     
     //set headerview source label with original post creator name if repost
     if([[self post] originalPost] && [[[[self post] originalPost] creator] name]){
-        NSString * fromUser = [NSString stringWithFormat:@"From %@", [[[[self post] originalPost] creator] name]];
+        NSString * fromUser = [NSString stringWithFormat:@"Via %@", [[[[self post] originalPost] creator] name]];
         [[[self fakeHeaderView] sourceLabel] setText:fromUser];
     }
     

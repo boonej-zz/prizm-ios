@@ -18,6 +18,8 @@
 #import "STKProfileViewController.h"
 #import "STKTrust.h"
 
+@import MessageUI;
+
 @interface STKTrustViewController () <STKTrustViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *selectedNameLabel;
@@ -58,6 +60,10 @@
     [[self countView] setCircleTitles:@[@"Likes", @"Comments", @"Posts"]];
     [[self countView] setCircleValues:@[@"0", @"0", @"0"]];
     [[self trustView] setDelegate:self];
+
+    [[self dateLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
+    [[self dateLabel] setClipsToBounds:YES];
+    [[[self dateLabel] layer] setCornerRadius:5];
 }
 
 - (void)trustView:(STKTrustView *)tv didSelectCircleAtIndex:(int)idx
@@ -90,9 +96,9 @@
         
         NSDate *dateCreated = [u dateCreated];
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+        [df setDateFormat:@"MMM yyyy"];
         [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        [[self dateLabel] setText:[NSString stringWithFormat:@"Member Since %@", [df stringFromDate:dateCreated]]];
+        [[self dateLabel] setText:[NSString stringWithFormat:@" Member Since %@ ", [df stringFromDate:dateCreated]]];
     }
     
 }
@@ -170,6 +176,9 @@
 
 - (IBAction)sendEmail:(id)sender
 {
-    
+//    MFMessageComposeViewController *mvc = [[MFMessageComposeViewController alloc] init];
+//    [mvc setRecipients:@[@"4044317161"]];
+//    [self presentViewController:mvc animated:YES completion:nil];
 }
+
 @end

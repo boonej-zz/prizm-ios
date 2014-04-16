@@ -27,7 +27,6 @@
 #import "STKImageSharer.h"
 #import "STKUserListViewController.h"
 #import "STKUserPostListViewController.h"
-#import "STKProfileInformationCell.h"
 #import "STKTrust.h"
 #import "STKPostController.h"
 
@@ -36,23 +35,27 @@
 #import "STKSettingsViewController.h"
 
 typedef enum {
-    STKProfileSectionHeader,
-    STKProfileSectionStatistics,
-    STKProfileSectionPreinformation,
-    STKProfileSectionInformation
+    STKProfileSectionStatic,
+    STKProfileSectionDynamic
 } STKProfileSection;
 
 @interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate, STKPostControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) STKInitialProfileStatisticsCell *statsCell;
+
+@property (nonatomic, strong) STKProfileCell *profileView;
+@property (nonatomic, strong) STKInitialProfileStatisticsCell *statsView;
+@property (nonatomic, strong) STKFilterCell *filterView;
 
 @property (nonatomic, strong) STKPostController *postController;
 
+@property (nonatomic, getter = isShowingLuminaries) BOOL showingLuminaries;
 @property (nonatomic, getter = isShowingInformation) BOOL showingInformation;
 @property (nonatomic) BOOL showPostsInSingleLayout;
 @property (nonatomic) BOOL filterByLocation;
+
+@property (nonatomic, strong) UIButton *luminaryButton;
 
 - (BOOL)isShowingCurrentUserProfile;
 
@@ -119,24 +122,31 @@ typedef enum {
         [[self navigationItem] setLeftBarButtonItem:[self backButtonItem]];
     }
     
-    [self refreshStatisticsView];
+    [self refreshProfileViews];
     if([self profile]) {
-        [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:nil completion:^(STKUser *u, NSError *err) {
-            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionHeader]
-                            withRowAnimation:UITableViewRowAnimationNone];
+        if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
 
-            [self refreshStatisticsView];
+        }
+        
+        [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:nil completion:^(STKUser *u, NSError *err) {
+            [self refreshProfileViews];
 
             if(err) {
                 NSLog(@"Display non-obtrusive error somewhere");
             } else {
-                [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
-                                             completion:^(STKTrust *t, NSError *err) {
-                                                 [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionHeader]
-                                                                 withRowAnimation:UITableViewRowAnimationNone];
-                                                 
-                                                 [self refreshStatisticsView];
-                                             }];
+                if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
+                    [[STKUserStore store] fetchTrustsForUser:[self profile] completion:^(NSArray *trusts, NSError *err) {
+                        
+                    }];
+                } else {
+                    if(![[self profile] isEqual:[[STKUserStore store] currentUser]]) {
+                        [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
+                                                     completion:^(STKTrust *t, NSError *err) {
+                                                         
+                                                         [self refreshProfileViews];
+                                                     }];
+                    }
+                }
             }
         }];
         
@@ -147,7 +157,7 @@ typedef enum {
                                                    if(!err) {
                                                        [[self postController] addPosts:posts];
                                                        
-                                                       [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
+                                                       [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionDynamic]
                                                                        withRowAnimation:UITableViewRowAnimationNone];
                                                    } else {
                                                        // Do nothing?
@@ -190,40 +200,36 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    
-
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
 
-    [self setStatsCell:[STKInitialProfileStatisticsCell cellForTableView:[self tableView] target:self]];
-    //    [[self tableView] setDelaysContentTouches:NO];
+    [self setStatsView:[STKInitialProfileStatisticsCell cellForTableView:[self tableView] target:self]];
+    [self setProfileView:[STKProfileCell cellForTableView:[self tableView] target:self]];
+    [self setFilterView:[STKFilterCell cellForTableView:[self tableView] target:self]];
+    
+    [[[self filterView] gridViewButton] setSelected:YES];
 }
 
 - (void)scrollToPosts
 {
-    if([[[self postController] posts] count] > 0)
-        [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:STKProfileSectionInformation]
+    if([[[self postController] posts] count] > 0) {
+        [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:STKProfileSectionDynamic]
                                 atScrollPosition:UITableViewScrollPositionTop
                                         animated:YES];
+    }
 }
 
 - (IBAction)showSinglePanePosts:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setShowPostsInSingleLayout:YES];
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                    withRowAnimation:UITableViewRowAnimationNone];
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
-                    withRowAnimation:UITableViewRowAnimationNone];
+    [[[self filterView] gridViewButton] setSelected:NO];
+    [[[self filterView] singleViewButton] setSelected:YES];
 }
 
 - (IBAction)showGridPosts:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setShowPostsInSingleLayout:NO];
-
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                    withRowAnimation:UITableViewRowAnimationNone];
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
-                    withRowAnimation:UITableViewRowAnimationNone];
-
+    [[[self filterView] gridViewButton] setSelected:YES];
+    [[[self filterView] singleViewButton] setSelected:NO];
 }
 
 - (IBAction)toggleFilterByUserPost:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -233,10 +239,7 @@ typedef enum {
 - (IBAction)toggleFilterbyLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setFilterByLocation:![self filterByLocation]];
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                    withRowAnimation:UITableViewRowAnimationNone];
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
-                    withRowAnimation:UITableViewRowAnimationNone];
+    [[[self filterView] locationButton] setSelected:[self filterByLocation]];
 }
 
 
@@ -252,14 +255,14 @@ typedef enum {
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {
     if([self showPostsInSingleLayout]) {
-        STKPostCell *c = (STKPostCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:STKProfileSectionInformation]];
+        STKPostCell *c = (STKPostCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:STKProfileSectionDynamic]];
         
         return [[self view] convertRect:[[c contentImageView] frame] fromView:[[c contentImageView] superview]];
     } else {
         int row = idx / 3;
         int offset = idx % 3;
         
-        STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:STKProfileSectionInformation]];
+        STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:STKProfileSectionDynamic]];
         
         CGRect r = CGRectZero;
         if(offset == 0)
@@ -295,12 +298,12 @@ typedef enum {
 - (void)toggleInformation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setShowingInformation:![self isShowingInformation]];
-    [[self tableView] beginUpdates];
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionPreinformation]
-                    withRowAnimation:UITableViewRowAnimationNone];
-    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionInformation]
-                    withRowAnimation:UITableViewRowAnimationNone];
-    [[self tableView] endUpdates];
+    [[self tableView] reloadData];
+}
+
+- (void)luminariesToggled:(id)sender
+{
+    [self setShowingLuminaries:![self isShowingLuminaries]];
 }
 
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -309,17 +312,17 @@ typedef enum {
 
     if(!t || [t isCancelled]) {
         [[STKUserStore store] requestTrustForUser:[self profile] completion:^(STKTrust *requestItem, NSError *err) {
-            [self refreshStatisticsView];
+            [self refreshProfileViews];
         }];
     } else if([t isPending]) {
         if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
             // Accept
             [[STKUserStore store] acceptTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
-                [self refreshStatisticsView];
+                [self refreshProfileViews];
             }];
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
-                [self refreshStatisticsView];
+                [self refreshProfileViews];
             }];
         }
     } else if([t isRejected]) {
@@ -327,15 +330,15 @@ typedef enum {
             // Do nothing, is rejected
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
-                [self refreshStatisticsView];
+                [self refreshProfileViews];
             }];
         }
     } else if([t isAccepted]) {
         [[STKUserStore store] rejectTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
-            [self refreshStatisticsView];
+            [self refreshProfileViews];
         }];
     }
-    [self refreshStatisticsView];
+    [self refreshProfileViews];
 }
 
 - (void)showAccolades:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -347,15 +350,15 @@ typedef enum {
 {
     if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
         [[STKUserStore store] unfollowUser:[self profile] completion:^(id obj, NSError *err) {
-            [self refreshStatisticsView];
+            [self refreshProfileViews];
         }];
         
     } else {
         [[STKUserStore store] followUser:[self profile] completion:^(id obj, NSError *err) {
-            [self refreshStatisticsView];
+            [self refreshProfileViews];
         }];
     }
-    [self refreshStatisticsView];
+    [self refreshProfileViews];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -364,26 +367,23 @@ typedef enum {
 }
 
 
-- (void)populateProfileCell:(STKProfileCell *)c
+- (void)refreshProfileViews
 {
     STKUser *p = [self profile];
-    [[c nameLabel] setText:[p name]];
+    [[[self profileView] nameLabel] setText:[p name]];
     if([p city] && [p state]) {
         NSString *city = [p city];
         NSString *state = [p state];
-        [[c locationLabel] setText:[NSString stringWithFormat:@"%@, %@", city, state]];
+        [[[self profileView] locationLabel] setText:[NSString stringWithFormat:@"%@, %@", city, state]];
     } else
-        [[c locationLabel] setText:@""];
+        [[[self profileView] locationLabel] setText:@""];
     
-    [[c coverPhotoImageView] setUrlString:[p coverPhotoPath]];
-    [[c avatarView] setUrlString:[p profilePhotoPath]];
+    [[[self profileView] coverPhotoImageView] setUrlString:[p coverPhotoPath]];
+    [[[self profileView] avatarView] setUrlString:[p profilePhotoPath]];
     
-    [c setShowPrismImageForToggleButton:[self isShowingInformation]];
-}
-
-- (void)refreshStatisticsView
-{
-    STKInitialProfileStatisticsCell *c = [self statsCell];
+    [[self profileView] setShowPrismImageForToggleButton:[self isShowingInformation]];
+    
+    STKInitialProfileStatisticsCell *c = [self statsView];
     if([self isShowingCurrentUserProfile]) {
         [[c accoladesButton] setHidden:NO];
         [[c followButton] setHidden:YES];
@@ -422,14 +422,14 @@ typedef enum {
                 }
             } else if([t isRejected]) {
                 if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
-                    [[c trustButton] setTitle:@"Rejected" forState:UIControlStateNormal];
+                    [[c trustButton] setTitle:@"Denied" forState:UIControlStateNormal];
                     [[c trustButton] setImage:nil forState:UIControlStateNormal];
                 } else {
                     [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
                     [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
                 }
             } else if([t isAccepted]) {
-                [[c trustButton] setTitle:@"Trusted" forState:UIControlStateNormal];
+                [[c trustButton] setTitle:@"Trust" forState:UIControlStateNormal];
                 [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
             }
         }
@@ -461,19 +461,56 @@ typedef enum {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([indexPath section] == STKProfileSectionHeader) {
-        STKProfileCell *c = [STKProfileCell cellForTableView:tableView target:self];
-        
-        [self populateProfileCell:c];
-        
-        return c;
-    } else if ([indexPath section] == STKProfileSectionStatistics) {
-        return [self statsCell];
-    } else if([indexPath section] == STKProfileSectionInformation) {
+    if([indexPath section] == STKProfileSectionStatic) {
+        if([indexPath row] == 0) {
+            return [self profileView];
+        } else if([indexPath row] == 1) {
+            return [self statsView];
+        } else if([indexPath row] == 2) {
+            if([self isShowingInformation]) {
+                UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell-InfoHeader"];
+                if(!c) {
+                    c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell-InfoHeader"];
+                    [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
+                    [[c textLabel] setFont:STKFont(14)];
+                    [[c textLabel] setTextColor:STKTextColor];
+                    
+                    if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
+                        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                        [btn setImage:[UIImage imageNamed:@"luminaries"] forState:UIControlStateNormal];
+                        [btn setImage:[UIImage imageNamed:@"luminaries_active"] forState:UIControlStateSelected];
+                        [btn addTarget:self action:@selector(luminariesToggled:) forControlEvents:UIControlEventTouchUpInside];
+                        [btn setFrame:CGRectMake(320 - 25 - 12, 5, 25, 25)];
+                        [[c contentView] addSubview:btn];
+                        [self setLuminaryButton:btn];
+                    }
+                }
+                [[c textLabel] setText:@"Information"];
+                
+
+                
+                return c;
+            } else {
+                return [self filterView];
+            }
+        }
+    } else if([indexPath section] == STKProfileSectionDynamic) {
         if([self isShowingInformation]) {
-            STKProfileInformationCell *c = [STKProfileInformationCell cellForTableView:tableView target:self];
-            [[c infoLabel] setText:[[self profile] blurb]];
-            return c;
+            if([self isShowingLuminaries]) {
+                
+            } else {
+                UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell-Info"];
+                if(!c) {
+                    c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell-Info"];
+                    [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
+                    [[c textLabel] setFont:STKFont(12)];
+                    [[c textLabel] setTextColor:STKTextColor];
+                    [[c textLabel] setNumberOfLines:0];
+                }
+                [[c textLabel] setText:[[self profile] blurb]];
+                return c;
+
+            }
         } else {
             if([self showPostsInSingleLayout]) {
                 STKPostCell *c = [STKPostCell cellForTableView:tableView target:[self postController]];
@@ -488,52 +525,25 @@ typedef enum {
                 return c;
             }
         }
-    } else if ([indexPath section] == STKProfileSectionPreinformation) {
-        if(![self isShowingInformation]) {
-            STKFilterCell *c = [STKFilterCell cellForTableView:tableView target:self];
-            [[c gridViewButton] setSelected:![self showPostsInSingleLayout]];
-            [[c singleViewButton] setSelected:[self showPostsInSingleLayout]];
-            [[c locationButton] setSelected:[self filterByLocation]];
-
-            return c;
-        } else {
-            UITableViewCell *c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
-            return c;
-        }
     }
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath section] == STKProfileSectionHeader) {
-        return 246;
-    } else if([indexPath section] == STKProfileSectionStatistics) {
-        return 155;
-    } else if ([indexPath section] == STKProfileSectionPreinformation) {
-        return 50;
-    } else if([indexPath section] == STKProfileSectionInformation) {
-        if([self isShowingInformation]) {
-            return [self heightForInfoCell];
-        }
-        if([self showPostsInSingleLayout]) {
-            return 401;
-        }
-        return 106;
-    }
-    return 44;
-}
-
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([indexPath section] == STKProfileSectionHeader) {
-        return 246;
-    } else if([indexPath section] == STKProfileSectionStatistics) {
-        return 155;
-    } else if ([indexPath section] == STKProfileSectionPreinformation) {
-        return 50;
-    } else if([indexPath section] == STKProfileSectionInformation) {
+    if([indexPath section] == STKProfileSectionStatic) {
+        if([indexPath row] == 0)
+            return 246;
+        if([indexPath row] == 1)
+            return 155;
+        if([indexPath row] == 2) {
+            if([self isShowingInformation]) {
+                return 34;
+            } else {
+                return 50;
+            }
+        }
+    } else if([indexPath section] == STKProfileSectionDynamic) {
         if([self isShowingInformation]) {
             return [self heightForInfoCell];
         }
@@ -555,18 +565,18 @@ typedef enum {
                                          options:NSStringDrawingUsesLineFragmentOrigin
                                       attributes:@{NSFontAttributeName : f} context:nil];
 
-    return r.size.height + 60;
+    return r.size.height + 10;
 }
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(section == STKProfileSectionInformation) {
+    if(section == STKProfileSectionDynamic) {
         if(![self isShowingInformation]) {
             int count = [[[self postController] posts] count];
             if([self showPostsInSingleLayout]) {
@@ -579,13 +589,8 @@ typedef enum {
         } else {
             return 1;
         }
-    } else if(section == STKProfileSectionPreinformation) {
-        if([self isShowingInformation])
-            return 0;
-        return 1;
     }
-    
-    return 1;
+    return 3;
 }
 
 

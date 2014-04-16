@@ -22,11 +22,11 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
-        [[self navigationItem] setTitle:@"Stats"];
+        [[self navigationItem] setTitle:@"Graph"];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_graph"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_graph_selected"]];
-        [[self tabBarItem] setTitle:@"Stats"];
+        [[self tabBarItem] setTitle:@"Graph"];
     }
     return self;
 }

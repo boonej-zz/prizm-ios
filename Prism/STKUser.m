@@ -19,10 +19,10 @@ NSString * const STKUserExternalSystemFacebook = @"facebook";
 NSString * const STKUserExternalSystemTwitter = @"twitter";
 NSString * const STKUserExternalSystemGoogle = @"google";
 
-NSString * const STKUserTypePersonal = @"personal";
+NSString * const STKUserTypePersonal = @"user";
 NSString * const STKUserTypeLuminary = @"luminary";
 NSString * const STKUserTypeMilitary = @"military";
-NSString * const STKUserTypeEducation = @"education";
+NSString * const STKUserTypeInstitution = @"institution";
 NSString * const STKUserTypeFoundation = @"foundation";
 NSString * const STKUserTypeCompany = @"company";
 NSString * const STKUserTypeCommunity = @"community";
@@ -39,7 +39,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
-@dynamic fProfilePosts, createdActivities, ownedActivities, twitterID, twitterLastMinID;
+@dynamic fProfilePosts, createdActivities, ownedActivities, twitterID, twitterLastMinID, type;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 
@@ -63,6 +63,7 @@ accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
              @"website" : @"website",
              @"religion" : @"religion",
              @"ethnicity" : @"ethnicity",
+             @"type" : @"type",
              @"instagramToken" : @"instagram_token",
              @"instagramLastMinID" : @"instagram_min_id",
              @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
@@ -91,7 +92,7 @@ accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
         @"email" : @"email",
         @"first_name" : @"firstName",
         @"last_name" : @"lastName",
-
+        @"type" : @"type",
         @"provider" : @"externalServiceType",
         @"provider_id" : @"externalServiceID",
         

@@ -21,6 +21,7 @@
 #import "STKLocationViewController.h"
 #import "STKImageSharer.h"
 #import "STKPostController.h"
+#import "STKActivityIndicatorView.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
@@ -33,12 +34,15 @@
 @property (nonatomic) float initialCardViewOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cardViewTopOffset;
 
+@property (weak, nonatomic) IBOutlet STKActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, strong) NSMutableArray *reusableCards;
 @property (nonatomic, strong) NSMutableDictionary *cardMap;
 @property (nonatomic, strong) UINib *homeCellNib;
 
 @property (nonatomic, strong) STKBackdropView *backdropView;
+
+@property (nonatomic) BOOL fetchInProgress;
 
 @end
 
@@ -76,7 +80,7 @@
 
     [[self tableView] setDelaysContentTouches:NO];
 
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setRowHeight:401];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
@@ -89,6 +93,8 @@
     [[self cardView] setUserInteractionEnabled:NO];
     [[self cardView] setClipsToBounds:NO];
     
+    
+    [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
 }
 
 - (STKPostCell *)cardCellForIndexPath:(NSIndexPath *)ip
@@ -237,8 +243,57 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self layoutCards];
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < 0) {
+        float t = fabs(offset) / 60.0;
+        [[self activityIndicator] setProgress:t];
+    } else {
+        [[self activityIndicator] setProgress:0];
+    }
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < -60) {
+        [self fetchNewPosts];
+    }
+}
+
+- (void)fetchNewPosts
+{
+    if([self fetchInProgress]) {
+        return;
+    }
+    
+    [self setFetchInProgress:YES];
+    [UIView animateWithDuration:0.2 animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(120, 0, 0, 0)];
+    }];
+
+    [[self activityIndicator] setRefreshing:YES];
+    [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
+                                  inDirection:STKQueryObjectPageNewer
+                                referencePost:[[[self postController] posts] firstObject]
+                                   completion:^(NSArray *posts, NSError *err) {
+
+                                       [self setFetchInProgress:NO];
+                                       [UIView animateWithDuration:0.2 animations:^{
+                                           [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
+                                       }];
+                                       
+                                       
+                                       [[self activityIndicator] setRefreshing:NO];
+                                       if(!err) {
+                                           [[self postController] addPosts:posts];
+                                           [[self tableView] reloadData];
+                                           [self layoutCards];
+                                       } else {
+                                           
+                                       }
+                                   }];
+}
 
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {
@@ -263,18 +318,7 @@
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
 
     if([[STKUserStore store] currentUser]) {
-        [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
-                                      inDirection:STKQueryObjectPageNewer
-                                    referencePost:[[[self postController] posts] firstObject]
-                                       completion:^(NSArray *posts, NSError *err) {
-                                        if(!err) {
-                                            [[self postController] addPosts:posts];
-                                            [[self tableView] reloadData];
-                                            [self layoutCards];
-                                        } else {
-                                            
-                                        }
-                                    }];
+        [self fetchNewPosts];
     }
 
 
