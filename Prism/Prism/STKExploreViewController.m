@@ -27,7 +27,8 @@
 
 typedef enum {
     STKExploreTypeLatest = 0,
-    STKExploreTypePopular = 1
+    STKExploreTypePopular = 1,
+    STKExploreTypeFeatured = 2
 } STKExploreType;
 
 typedef enum {
@@ -242,12 +243,24 @@ typedef enum {
     if([gr state] == UIGestureRecognizerStateEnded) {
         if([gr direction] == UISwipeGestureRecognizerDirectionRight) {
             if([self exploreType] == STKExploreTypePopular) {
+                [[self exploreTypeControl] setSelectedSegmentIndex:2];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            } else if ([self exploreType] == STKExploreTypeFeatured) {
                 [[self exploreTypeControl] setSelectedSegmentIndex:0];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            } else {
+                [[self exploreTypeControl] setSelectedSegmentIndex:1];
                 [self exploreTypeChanged:[self exploreTypeControl]];
             }
         } else {
             if([self exploreType] == STKExploreTypeLatest) {
+                [[self exploreTypeControl] setSelectedSegmentIndex:2];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            } else if([self exploreType] == STKExploreTypeFeatured) {
                 [[self exploreTypeControl] setSelectedSegmentIndex:1];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            } else {
+                [[self exploreTypeControl] setSelectedSegmentIndex:0];
                 [self exploreTypeChanged:[self exploreTypeControl]];
             }
         }
@@ -297,6 +310,8 @@ typedef enum {
     NSDictionary *filter = nil;
     if([self exploreType] == STKExploreTypeLatest) {
         filter = nil;
+    } else if([self exploreType] == STKExploreTypeFeatured){
+        filter = @{@"type" : @"institution"};
     } else {
         filter = @{@"sort_by" : @"likes_count", @"sort" : @"-1"};
     }
@@ -328,6 +343,8 @@ typedef enum {
         [self setActivePostController:[self recentPostsController]];
     else if([self exploreType] == STKExploreTypePopular)
         [self setActivePostController:[self popularPostsController]];
+    else if ([self exploreType] == STKExploreTypeFeatured)
+        [self setActivePostController:[self featuredPostsController]];
 
     if([self searchType] == STKSearchTypeUser)
         [[self searchTypeControl] setSelectedSegmentIndex:0];
@@ -537,6 +554,8 @@ typedef enum {
         [self setActivePostController:[self recentPostsController]];
     else if([self exploreType] == STKExploreTypePopular)
         [self setActivePostController:[self popularPostsController]];
+    else if([self exploreType] == STKExploreTypeFeatured)
+        [self setActivePostController:[self featuredPostsController]];
 
     [[self tableView] reloadData];
     [self refreshPosts];

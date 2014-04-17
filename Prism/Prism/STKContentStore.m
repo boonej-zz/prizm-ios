@@ -188,7 +188,6 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/explore"];
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setLimit:30];
-        
         if(referencePost){
             [q setPageDirection:fetchDirection];
             [q setPageKey:STKPostDateCreatedKey];
