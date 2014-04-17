@@ -6,8 +6,11 @@
 //  Copyright (c) 2014 Higher Altitude. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "STKTableViewCell.h"
 
-@interface STKSearchHashTagsCell : UITableViewCell
+@interface STKSearchHashTagsCell : STKTableViewCell
+
+@property (weak, nonatomic) IBOutlet UILabel *hashTagLabel;
+@property (weak, nonatomic) IBOutlet UILabel *count;
 
 @end

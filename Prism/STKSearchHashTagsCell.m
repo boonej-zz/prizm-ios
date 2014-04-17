@@ -10,9 +10,14 @@
 
 @implementation STKSearchHashTagsCell
 
-- (void)awakeFromNib
+- (void)cellDidLoad
 {
-    // Initialization code
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+}
+
+- (void)layoutContent
+{
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
