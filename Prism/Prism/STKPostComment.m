@@ -18,19 +18,13 @@
         [self setUniqueID:jsonObject];
         return nil;
     }
-    static NSDateFormatter *df = nil;
-    if(!df) {
-        df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-        [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    }
 
     [self bindFromDictionary:jsonObject keyMap:@{
         @"_id" : @"uniqueID",
         @"creator" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"text" : @"text",
         @"create_date" : ^(NSString *inValue) {
-            [self setDate:[df dateFromString:inValue]];
+            [self setDate:[STKTimestampFormatter dateFromString:inValue]];
         },
         // post
         @"likes_count" : @"likeCount",

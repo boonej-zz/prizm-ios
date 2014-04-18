@@ -30,12 +30,6 @@ NSString * const STKActivityItemTypeTrustAccepted = @"trust_accepted";
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
-    static NSDateFormatter *df = nil;
-    if(!df) {
-        df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-        [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    }
 
     [self bindFromDictionary:jsonObject keyMap:@{
                                                  @"from" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
@@ -46,7 +40,7 @@ NSString * const STKActivityItemTypeTrustAccepted = @"trust_accepted";
                                                  @"action" : @"action",
                                                  @"create_date" : ^(id inValue) {
                                                     [self setReferenceTimestamp:inValue];
-                                                    [self setDateCreated:[df dateFromString:inValue]];
+                                                    [self setDateCreated:[STKTimestampFormatter dateFromString:inValue]];
                                                  }
                                                  
                                                  

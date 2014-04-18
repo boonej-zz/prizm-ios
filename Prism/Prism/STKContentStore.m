@@ -12,7 +12,6 @@
 #import "STKUserStore.h"
 #import "STKUser.h"
 #import "STKActivityItem.h"
-#import "STKRequestItem.h"
 #import "STKConnection.h"
 #import "STKFoursquareConnection.h"
 #import "STKFoursquareLocation.h"

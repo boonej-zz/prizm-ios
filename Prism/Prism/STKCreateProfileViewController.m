@@ -138,38 +138,69 @@ const long STKCreateProgressGeocoding = 4;
         [bbi setTitlePositionAdjustment:UIOffsetMake(-3, 0) forBarMetrics:UIBarMetricsDefault];
         [[self navigationItem] setRightBarButtonItem:bbi];
         
-        _items = @[
-                   // Public
-                   @{@"title" : @"First Name", @"key" : @"firstName",
-                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
-                   
-                   @{@"title" : @"Last Name", @"key" : @"lastName",
-                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+        if([[u type] isEqualToString:STKUserTypeInstitution]) {
+            _items = @[
+                       // Public
+                       @{@"title" : @"First Name", @"key" : @"firstName",
+                         @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                       
+                       @{@"title" : @"Last Name", @"key" : @"lastName",
+                         @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                       
+                       @{@"title" : @"Info", @"key" : @"blurb", @"cellType" : @"textView"},
+                       
+                       @{@"title" : @"Website", @"key" : @"website",
+                         @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
+                       
+                       @{@"title" : @"Date Founded", @"key" : @"dateFounded", @"cellType" : @"date"},
+                       @{@"title" : @"Mascot", @"key" : @"mascotName"},
+                       @{@"title" : @"Population", @"key" : @"enrollment", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
 
-                   @{@"title" : @"Info", @"key" : @"blurb", @"cellType" : @"textView"},
-                   
-                   @{@"title" : @"Website", @"key" : @"website",
-                     @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
-                   
-                   
-                   // Private
-                   @{@"title" : @"Private", @"image" : [UIImage imageNamed:@"lockpassword"], @"cellType" : @"lock"},
-                   
-                   @{@"title" : @"Email", @"key" : @"email",
-                     @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
-                   
-                   //@{@"title" : @"Password", @"key" : @"password",
-                //@"options" : @{@"secureTextEntry" : @(YES)}},
-                   
-                   
-                   @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
-                   
-                   @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
-                   
-                   @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
-                   ];
+                       // Private
+                       @{@"title" : @"Private", @"image" : [UIImage imageNamed:@"lockpassword"], @"cellType" : @"lock"},
+                       
+                       @{@"title" : @"Email", @"key" : @"email",
+                         @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
+                       
+                       
+                       @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                       ];
+            _requiredKeys = @[@"email", @"firstName", @"lastName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+        } else {
+            _items = @[
+                       // Public
+                       @{@"title" : @"First Name", @"key" : @"firstName",
+                         @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                       
+                       @{@"title" : @"Last Name", @"key" : @"lastName",
+                         @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+
+                       @{@"title" : @"Info", @"key" : @"blurb", @"cellType" : @"textView"},
+                       
+                       @{@"title" : @"Website", @"key" : @"website",
+                         @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
+                       
+                       
+                       // Private
+                       @{@"title" : @"Private", @"image" : [UIImage imageNamed:@"lockpassword"], @"cellType" : @"lock"},
+                       
+                       @{@"title" : @"Email", @"key" : @"email",
+                         @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
+                       
+                       //@{@"title" : @"Password", @"key" : @"password",
+                    //@"options" : @{@"secureTextEntry" : @(YES)}},
+                       
+                       
+                       @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
+                       
+                       @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
+                       
+                       @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                       ];
+            _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+        }
         
-        _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+        
         
         _previousValues = [[NSMutableDictionary alloc] init];
         for(NSDictionary *d in [self items]) {
@@ -288,7 +319,8 @@ const long STKCreateProgressGeocoding = 4;
 
 - (void)dateChanged:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    [[self user] setBirthday:[sender date]];
+    NSString *key = [[[self items] objectAtIndex:[ip row]] objectForKey:@"key"];
+    [[self user] setValue:[sender date] forKey:key];
 }
 
 - (BOOL)verifyValue:(id)val forKey:(NSString *)key errorMessage:(NSString **)msg
@@ -485,16 +517,24 @@ const long STKCreateProgressGeocoding = 4;
     [[self tableView] reloadData];
     
     if([self isEditingProfile]) {
-        [STKProcessingView present];
-        [[STKUserStore store] fetchUserDetails:[self user] additionalFields:@[@"zip_postal", @"birthday", @"gender"]
-                                    completion:^(STKUser *u, NSError *err) {
-                                        [STKProcessingView dismiss];
-                                        if(err ) {
-                                            [[STKErrorStore alertViewForError:err delegate:nil] show];
-                                            [[self navigationController] popViewControllerAnimated:YES];
-                                        }
-                                        [[self tableView] reloadData];
-                                    }];
+        if([self isMovingToParentViewController]) {
+            [STKProcessingView present];
+            NSArray *additionalFields = nil;
+            if([[[self user] type] isEqualToString:STKUserTypeInstitution]) {
+                additionalFields = @[@"zip_postal", @"dateFounded", @"mascotName", @"enrollment"];
+            } else {
+                additionalFields = @[@"zip_postal", @"birthday", @"gender"];
+            }
+            [[STKUserStore store] fetchUserDetails:[self user] additionalFields:additionalFields
+                                        completion:^(STKUser *u, NSError *err) {
+                                            [STKProcessingView dismiss];
+                                            if(err ) {
+                                                [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                                [[self navigationController] popViewControllerAnimated:YES];
+                                            }
+                                            [[self tableView] reloadData];
+                                        }];
+        }
     }
 }
 
@@ -554,7 +594,8 @@ const long STKCreateProgressGeocoding = 4;
 {
     if([[[[self items] objectAtIndex:[ip row]] objectForKey:@"cellType"] isEqualToString:@"date"]) {
         STKDateCell *c = (STKDateCell *)[[self tableView] cellForRowAtIndexPath:ip];
-        [[self user] setBirthday:[c date]];
+        NSString *key = [[[self items] objectAtIndex:[ip row]] objectForKey:@"key"];
+        [[self user] setValue:[c date] forKey:key];
     }
     [self setEditingIndexPath:ip];
 }
@@ -824,7 +865,9 @@ const long STKCreateProgressGeocoding = 4;
             STKDateCell *c = [STKDateCell cellForTableView:tableView target:self];
             [c setDefaultDate:[NSDate dateWithTimeIntervalSinceNow:-60*60*24*365.25*16]];
             [[c label] setText:[item objectForKey:@"title"]];
-            [c setDate:[[self user] birthday]];
+            
+            NSString *key = [item objectForKey:@"key"];
+            [c setDate:[[self user] valueForKey:key]];
             [[c textField] setInputAccessoryView:[self toolbar]];
             return c;
         } else if([cellType isEqualToString:@"lock"]) {

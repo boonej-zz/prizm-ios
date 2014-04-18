@@ -16,6 +16,12 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) UISearchDisplayController *searchController;
 @property (nonatomic, strong) NSArray *filteredLocations;
+
+@property (nonatomic, strong) UIBarButtonItem *refreshButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *spinningButtonItem;
+
+@property (nonatomic) BOOL fetchingLocations;
+
 @end
 
 @implementation STKLocationListViewController
@@ -28,14 +34,23 @@
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [_locationManager setDelegate:self];
         
+        
+        UIColor *clr = [UIColor colorWithRed:49.0 / 255.0 green:141.0 / 255.0 blue:205.0 / 255.0 alpha:1];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blueColor], NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:16]} forState:UIControlStateNormal];
+        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : clr, NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:16]} forState:UIControlStateNormal];
         [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Locations"];
         
         _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         bbi = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
         [[self navigationItem] setLeftBarButtonItem:bbi];
+        
+        _refreshButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"location"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(refresh:)];
+
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [_activityIndicator setColor:clr];
+        
+        _spinningButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
         
         UISearchBar *sb = [[UISearchBar alloc] init];
 
@@ -45,6 +60,13 @@
         [self setSearchController:sdc];
     }
     return self;
+}
+
+- (void)refresh:(id)sender
+{
+    if(![self fetchingLocations]) {
+        [self fetchLocations];
+    }
 }
 
 - (void)cancel:(id)sender
@@ -70,19 +92,34 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[self locationManager] startUpdatingLocation];
-    [[self activityIndicator] startAnimating];
+    [self fetchLocations];
     [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : STKFont(22)}];
+}
+
+- (void)fetchLocations
+{
+    [[self locationManager] startUpdatingLocation];
+    [[self navigationItem] setLeftBarButtonItem:[self spinningButtonItem]];
+    [[self activityIndicator] startAnimating];
+    [self setFetchingLocations:YES];
+}
+
+- (void)finishFetchingLocations
+{
+    [self setFetchingLocations:NO];
+    [[self activityIndicator] stopAnimating];
+    [[self navigationItem] setLeftBarButtonItem:[self refreshButtonItem]];
+
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     CLLocation *l = [locations lastObject];
     if([[l timestamp] timeIntervalSinceNow] > -60 * 3) {
-        [[self activityIndicator] stopAnimating];
         [[self locationManager] stopUpdatingLocation];
         
         [[STKContentStore store] fetchLocationNamesForCoordinate:[l coordinate] completion:^(NSArray *locations, NSError *err) {
+            [self finishFetchingLocations];
             if(!err) {
                 [self setLocations:locations];
                 [[self tableView] reloadData];
@@ -115,7 +152,7 @@
                                        cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [av show];
     [manager stopUpdatingLocation];
-    [[self activityIndicator] stopAnimating];
+    [self finishFetchingLocations];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

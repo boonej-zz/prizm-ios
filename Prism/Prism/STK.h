@@ -17,3 +17,4 @@
 #import "NSManagedObject+STKAdditions.h"
 #import "NSManagedObjectContext+STKAdditions.h"
 #import "NSCharacterSet+STKURL.h"
+#import "STKTimestampFormatter.h"

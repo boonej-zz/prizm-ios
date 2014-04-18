@@ -118,6 +118,34 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
     NSURLSessionDataTask *dt = [session dataTaskWithRequest:[self request]
                                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+  /*
+                                              NSMutableURLRequest *snapReq = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://localhost:8080/snap"]];
+                                              [snapReq setHTTPMethod:@"POST"];
+                                              
+                                              NSMutableDictionary *snapData = [NSMutableDictionary dictionary];
+                                              [snapData setObject:[[self request] allHTTPHeaderFields] forKey:@"RequestHeaders"];
+                                              [snapData setObject:[[[self request] URL] absoluteString] forKey:@"URL"];
+                                              if([[self request] HTTPBody]) {
+                                                  [snapData setObject:[NSJSONSerialization JSONObjectWithData:[[self request] HTTPBody] options:0 error:nil]
+                                                               forKey:@"RequestBody"];
+                                              }
+                                              [snapData setObject:[[self request] HTTPMethod] forKey:@"Method"];
+                                              
+                                              NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+                                              [snapData setObject:[httpResponse allHeaderFields] forKey:@"ResponseHeaders"];
+                                              [snapData setObject:@([httpResponse statusCode]) forKey:@"ResponseStatus"];
+                                              [snapData setObject:[NSJSONSerialization JSONObjectWithData:data options:0 error:nil] forKey:@"ResponseBody"];
+                                              
+                                              [snapData setObject:@"1" forKey:@"User"];
+                                              
+                                              [snapReq setHTTPBody:[NSJSONSerialization dataWithJSONObject:snapData options:0 error:nil]];
+                                              
+                                              NSURLSessionDataTask *dtSnap = [session dataTaskWithRequest:snapReq completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                  NSLog(@"%@", response);
+                                              }];
+                                              [dtSnap resume];
+                                                                         */
+                                              
                                               if(error) {
                                                   [self handleError:error];
                                               } else {

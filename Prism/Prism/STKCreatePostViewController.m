@@ -362,8 +362,16 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
+
 - (void)createPost
 {
+    
+    if(![[self postInfo] objectForKey:STKPostURLKey]) {
+        // Do a card
+        UIImage *img = [STKPost imageForTextPost:[[self postInfo] objectForKey:STKPostTextKey]];
+        [self setPostImage:img];
+    }
+    
     if([self isUploadingImage]) {
         [STKProcessingView present];
         [self setWaitingForImageToFinish:YES];
@@ -409,6 +417,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     NSArray *tags = [self hashTagsFromText:[[self postInfo] objectForKey:STKPostTextKey]];
     if([tags count] > 0) {
         [[self postInfo] setObject:[tags copy] forKey:STKPostHashTagsKey];
+    }
+    
+    if(![[self postInfo] objectForKey:STKPostTextKey] && ![[self postInfo] objectForKey:STKPostURLKey]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Missing Information" message:@"A post must contain an image, text or both." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
     }
     
     [self createPost];

@@ -73,6 +73,10 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) NSString *twitterID;
 @property (nonatomic, strong) NSString *twitterLastMinID;
 
+@property (nonatomic, strong) NSDate *dateFounded;
+@property (nonatomic, strong) NSString *mascotName;
+@property (nonatomic) NSString *enrollment;
+
 @property (nonatomic, strong) NSDate *lastIntegrationSync;
 
 @property (nonatomic) int followerCount;
@@ -98,6 +102,9 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 - (STKTrust *)trustForUser:(STKUser *)u;
 - (BOOL)isFollowedByUser:(STKUser *)u;
 - (BOOL)isFollowingUser:(STKUser *)u;
+
+- (BOOL)hasTrusts;
+- (NSArray *)trusts;
 
 // For auth/creating - not stored, used only for creating a user.
 @property (nonatomic, strong) UIImage *profilePhoto;
