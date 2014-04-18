@@ -77,13 +77,6 @@ type, fInverseFeed, activities;
         return nil;
     }
     
-    static NSDateFormatter *df = nil;
-    if(!df) {
-        df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-        [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    }
-
     [self bindFromDictionary:jsonObject keyMap:@{
                                                  @"_id" : @"uniqueID",
                                                  STKPostTypeKey : @"type",
@@ -109,7 +102,7 @@ type, fInverseFeed, activities;
                                                  
                                                  STKPostDateCreatedKey : ^(NSString *inValue) {
                                                     [self setReferenceTimestamp:inValue];
-                                                    [self setDatePosted:[df dateFromString:inValue]];
+                                                    [self setDatePosted:[STKTimestampFormatter dateFromString:inValue]];
                                                  }
     }];
     
@@ -119,6 +112,52 @@ type, fInverseFeed, activities;
 - (BOOL)isPostLikedByUser:(STKUser *)u
 {
     return [[self likes] member:u] != nil;
+}
+
++ (UIImage *)imageForTextPost:(NSString *)text
+{
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(640, 640), YES, 1);
+    
+    [[UIImage imageNamed:@"prismcard"] drawInRect:CGRectMake(0, 0, 640, 640)];
+    
+    CGRect textRect = CGRectMake(48, (640 - 416) / 2.0, 640 - 48 * 2, 416);
+    
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setAlignment:NSTextAlignmentCenter];
+    
+    int fontSize = 60;
+    UIFont *f = STKFont(fontSize);
+    
+    CGRect sizeRect = textRect;
+    int iterations = 16;
+    
+    for(int i = 0; i < iterations; i++) {
+        CGRect r = [text boundingRectWithSize:CGSizeMake(textRect.size.width - 10, 10000)
+                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                   attributes:@{NSFontAttributeName : f, NSParagraphStyleAttributeName : style} context:nil];
+        
+        // Does it fit?
+        if(r.size.width < textRect.size.width && r.size.height < textRect.size.height) {
+            sizeRect = r;
+            break;
+        }
+        
+        fontSize -= 2;
+        f = STKFont(fontSize);
+    }
+    
+    float w = ceilf(sizeRect.size.width);
+    float h = ceilf(sizeRect.size.height);
+    
+    CGRect centeredRect = CGRectMake(0, 0, w, h);
+    centeredRect.origin.x = (640 - w) / 2.0;
+    centeredRect.origin.y = (640 - h) / 2.0;
+    
+    [text drawInRect:centeredRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : STKTextColor, NSParagraphStyleAttributeName : style}];
+    
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
 }
 
 - (void)setCoordinate:(CLLocationCoordinate2D)coordinate

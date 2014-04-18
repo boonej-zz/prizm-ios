@@ -77,4 +77,6 @@ extern NSString * const STKPostStatusDeleted;
 
 + (UIImage *)imageForType:(NSString *)t;
 
++ (UIImage *)imageForTextPost:(NSString *)text;
+
 @end

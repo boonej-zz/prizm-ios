@@ -17,10 +17,12 @@
 @property (weak, nonatomic) IBOutlet UIButton *trustButton;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (weak, nonatomic) IBOutlet UIButton *accoladesButton;
+@property (weak, nonatomic) IBOutlet UIButton *messageButton;
 
 - (IBAction)editProfile:(id)sender;
 - (IBAction)requestTrust:(id)sender;
 - (IBAction)follow:(id)sender;
 - (IBAction)showAccolades:(id)sender;
+- (IBAction)sendMessage:(id)sender;
 
 @end

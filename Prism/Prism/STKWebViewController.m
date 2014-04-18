@@ -23,18 +23,18 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_cancel"]
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_cancelb"]
                                                   landscapeImagePhone:nil
                                                                 style:UIBarButtonItemStylePlain
                                                                target:self action:@selector(done:)];
-        [bbi setTintColor:[UIColor lightGrayColor]];
+        [bbi setTintColor:[UIColor whiteColor]];
         [[self navigationItem] setLeftBarButtonItem:bbi];
         
-        bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_shareout"]
+        bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_shareoutb"]
                                  landscapeImagePhone:nil
                                                style:UIBarButtonItemStylePlain
                                               target:self action:@selector(sharePage:)];
-                [bbi setTintColor:[UIColor lightGrayColor]];
+        [bbi setTintColor:[UIColor whiteColor]];
 
         [[self navigationItem] setRightBarButtonItem:bbi];
         

@@ -24,4 +24,8 @@
 
 @property (nonatomic, strong) NSArray *users;
 
+- (IBAction)leftLuminaryTapped:(id)sender;
+- (IBAction)centerLuminaryTapped:(id)sender;
+- (IBAction)rightLuminaryTapped:(id)sender;
+
 @end

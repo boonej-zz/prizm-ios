@@ -17,7 +17,6 @@
 #import "STKTriImageCell.h"
 #import "STKBaseStore.h"
 #import "STKPostViewController.h"
-#import "STKRequestItem.h"
 #import "STKCreateProfileViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "STKPostCell.h"
@@ -29,17 +28,21 @@
 #import "STKUserPostListViewController.h"
 #import "STKTrust.h"
 #import "STKPostController.h"
-
+#import "STKLuminariesCell.h"
 #import "STKInstagramAuthViewController.h"
 #import "STKNetworkStore.h"
 #import "STKSettingsViewController.h"
+#import "STKInstitutionInfoCell.h"
+
+@import MessageUI;
 
 typedef enum {
     STKProfileSectionStatic,
     STKProfileSectionDynamic
 } STKProfileSection;
 
-@interface STKProfileViewController () <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate, STKPostControllerDelegate>
+@interface STKProfileViewController ()
+    <UITableViewDataSource, UITableViewDelegate, STKCountViewDelegate, STKPostControllerDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -48,6 +51,7 @@ typedef enum {
 @property (nonatomic, strong) STKInitialProfileStatisticsCell *statsView;
 @property (nonatomic, strong) STKFilterCell *filterView;
 
+@property (nonatomic, strong) NSArray *luminaries;
 @property (nonatomic, strong) STKPostController *postController;
 
 @property (nonatomic, getter = isShowingLuminaries) BOOL showingLuminaries;
@@ -128,7 +132,11 @@ typedef enum {
 
         }
         
-        [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:nil completion:^(STKUser *u, NSError *err) {
+        NSArray *additionalFields = nil;
+        if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
+            additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email"];
+        }
+        [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:additionalFields completion:^(STKUser *u, NSError *err) {
             [self refreshProfileViews];
 
             if(err) {
@@ -136,7 +144,16 @@ typedef enum {
             } else {
                 if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
                     [[STKUserStore store] fetchTrustsForUser:[self profile] completion:^(NSArray *trusts, NSError *err) {
-                        
+                        NSMutableArray *lums = [NSMutableArray array];
+                        for(STKTrust *t in [[self profile] ownedTrusts]) {
+                            if([[t status] isEqualToString:STKRequestStatusAccepted])
+                                [lums addObject:[t recepient]];
+                        }
+                        for(STKTrust *t in [[self profile] receivedTrusts]) {
+                            if([[t status] isEqualToString:STKRequestStatusAccepted])
+                                [lums addObject:[t creator]];
+                        }
+                        [self setLuminaries:lums];
                     }];
                 } else {
                     if(![[self profile] isEqual:[[STKUserStore store] currentUser]]) {
@@ -163,6 +180,13 @@ typedef enum {
                                                        // Do nothing?
                                                    }
                                                }];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([self isShowingInformation] && ![self isShowingLuminaries]) {
+        
     }
 }
 
@@ -295,6 +319,22 @@ typedef enum {
     [[self navigationController] pushViewController:ep animated:YES];
 }
 
+- (void)sendMessage:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    if([[self profile] email]) {
+        MFMailComposeViewController *mvc = [[MFMailComposeViewController alloc] init];
+        [mvc setMailComposeDelegate:self];
+        [mvc setToRecipients:@[[[self profile] email]]];
+        [mvc setSubject:@"Prizm: Contact Us"];
+        [self presentViewController:mvc animated:YES completion:nil];
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)toggleInformation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setShowingInformation:![self isShowingInformation]];
@@ -304,7 +344,37 @@ typedef enum {
 - (void)luminariesToggled:(id)sender
 {
     [self setShowingLuminaries:![self isShowingLuminaries]];
+    [[self tableView] reloadData];
 }
+
+- (void)showUser:(STKUser *)u
+{
+    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+    [vc setProfile:u];
+    [[self navigationController] pushViewController:vc animated:YES];
+}
+
+- (void)leftLuminaryTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    if([[self luminaries] count] > 0) {
+        [self showUser:[[self luminaries] objectAtIndex:0]];
+    }
+}
+
+- (void)centerLuminaryTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    if([[self luminaries] count] > 1) {
+        [self showUser:[[self luminaries] objectAtIndex:1]];
+    }
+}
+
+- (void)rightLuminaryTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    if([[self luminaries] count] > 2) {
+        [self showUser:[[self luminaries] objectAtIndex:2]];
+    }
+}
+
 
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
 {
@@ -389,22 +459,37 @@ typedef enum {
         [[c followButton] setHidden:YES];
         [[c trustButton] setHidden:YES];
         [[c editButton] setHidden:NO];
+        [[c messageButton] setHidden:YES];
+        
+        if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
+            [[c accoladesButton] setHidden:YES];
+        }
     } else {
         [[c accoladesButton] setHidden:YES];
         [[c followButton] setHidden:NO];
+        
+        [[c editButton] setHidden:YES];
+
+        if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
+            [[c trustButton] setHidden:YES];
+            [[c messageButton] setHidden:![MFMailComposeViewController canSendMail]];
+        } else {
+            [[c trustButton] setHidden:NO];
+            [[c messageButton] setHidden:YES];
+        }
+        
+        
         if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
             [[c followButton] setTitle:@"Following" forState:UIControlStateNormal];
-            [[c followButton] setImage:[UIImage imageNamed:@"reject"]
+            [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
                               forState:UIControlStateNormal];
             [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 66, 0, 0)];
         } else {
             [[c followButton] setTitle:@"Follow" forState:UIControlStateNormal];
-            [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
+            [[c followButton] setImage:[UIImage imageNamed:@"arrowblue.png"]
                               forState:UIControlStateNormal];
             [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 50, 0, 0)];
         }
-        [[c trustButton] setHidden:NO];
-        [[c editButton] setHidden:YES];
     
         STKTrust *t = [[self profile] trustForUser:[[STKUserStore store] currentUser]];
         if(!t || [t isCancelled]) {
@@ -474,20 +559,26 @@ typedef enum {
                     [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
                     [[c textLabel] setFont:STKFont(14)];
                     [[c textLabel] setTextColor:STKTextColor];
-                    
+                    [c setSelectionStyle:UITableViewCellSelectionStyleNone];
                     if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
                         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
                         [btn setImage:[UIImage imageNamed:@"luminaries"] forState:UIControlStateNormal];
                         [btn setImage:[UIImage imageNamed:@"luminaries_active"] forState:UIControlStateSelected];
                         [btn addTarget:self action:@selector(luminariesToggled:) forControlEvents:UIControlEventTouchUpInside];
-                        [btn setFrame:CGRectMake(320 - 25 - 12, 5, 25, 25)];
+                        [btn setFrame:CGRectMake(320 - 25 - 12, 10, 25, 25)];
+                        [[btn imageView] setContentMode:UIViewContentModeCenter];
+                        [[btn imageView] setClipsToBounds:NO];
+                        [btn setClipsToBounds:NO];
                         [[c contentView] addSubview:btn];
                         [self setLuminaryButton:btn];
                     }
                 }
-                [[c textLabel] setText:@"Information"];
-                
+                if([self isShowingLuminaries])
+                    [[c textLabel] setText:@"Luminaries"];
+                else
+                    [[c textLabel] setText:@"Information"];
 
+                [[self luminaryButton] setSelected:[[self profile] hasTrusts]];
                 
                 return c;
             } else {
@@ -497,18 +588,51 @@ typedef enum {
     } else if([indexPath section] == STKProfileSectionDynamic) {
         if([self isShowingInformation]) {
             if([self isShowingLuminaries]) {
-                
-            } else {
-                UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell-Info"];
-                if(!c) {
-                    c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell-Info"];
-                    [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
-                    [[c textLabel] setFont:STKFont(12)];
-                    [[c textLabel] setTextColor:STKTextColor];
-                    [[c textLabel] setNumberOfLines:0];
-                }
-                [[c textLabel] setText:[[self profile] blurb]];
+                STKLuminariesCell *c = [STKLuminariesCell cellForTableView:tableView target:self];
+                [c setUsers:[self luminaries]];
+                [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
                 return c;
+            } else {
+                if([indexPath row] == 0) {
+                    UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell-Info"];
+                    if(!c) {
+                        c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell-Info"];
+                        [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
+                        [[c textLabel] setFont:STKFont(12)];
+                        [[c textLabel] setTextColor:STKTextColor];
+                        [[c textLabel] setNumberOfLines:0];
+                        [c setSelectionStyle:UITableViewCellSelectionStyleNone];
+                    }
+                    [[c textLabel] setText:[[self profile] blurb]];
+                    return c;
+                } else {
+                    STKInstitutionInfoCell *c = [STKInstitutionInfoCell cellForTableView:tableView target:self];
+                    
+                    NSString *label = nil;
+                    NSString *text = nil;
+                    if([indexPath row] == 1) {
+                        label = @"Founded:";
+                        if([[self profile] dateFounded]) {
+                            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                            [df setDateFormat:@"MMMM dd, yyyy"];
+                            text = [df stringFromDate:[[self profile] dateFounded]];
+                        }
+                    } else if([indexPath row] == 2) {
+                        label = @"Mascot:";
+                        text = [[self profile] mascotName];
+                    } else if([indexPath row] == 3) {
+                        label = @"Population:";
+                        text = [[self profile] enrollment];
+                    } else if([indexPath row] == 4) {
+                        label = @"Website:";
+                        text = [[self profile] website];
+                    }
+                    
+                    [[c titleLabel] setText:label];
+                    [[c valueLabel] setText:text];
+                    
+                    return c;
+                }
 
             }
         } else {
@@ -545,7 +669,15 @@ typedef enum {
         }
     } else if([indexPath section] == STKProfileSectionDynamic) {
         if([self isShowingInformation]) {
-            return [self heightForInfoCell];
+            if([self isShowingLuminaries]) {
+                return 163;
+            } else {
+                if([indexPath row] == 0) {
+                    return [self heightForInfoCell];
+                } else {
+                    return 44;
+                }
+            }
         }
         if([self showPostsInSingleLayout]) {
             return 401;
@@ -561,11 +693,11 @@ typedef enum {
     if(!f) {
         f = STKFont(14);
     }
-    CGRect r = [[[self profile] blurb] boundingRectWithSize:CGSizeMake(200, 10000)
+    CGRect r = [[[self profile] blurb] boundingRectWithSize:CGSizeMake(300, 10000)
                                          options:NSStringDrawingUsesLineFragmentOrigin
                                       attributes:@{NSFontAttributeName : f} context:nil];
 
-    return r.size.height + 10;
+    return r.size.height;
 }
 
 
@@ -587,7 +719,11 @@ typedef enum {
                 return count / 3;
             }
         } else {
-            return 1;
+            if([self isShowingLuminaries]) {
+                return 1;
+            } else {
+                return 5;
+            }
         }
     }
     return 3;

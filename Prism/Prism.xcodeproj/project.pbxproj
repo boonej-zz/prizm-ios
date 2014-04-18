@@ -54,6 +54,7 @@
 		BE3FFDF918AE9744005B531E /* STKAuthorizationToken.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3FFDF818AE9744005B531E /* STKAuthorizationToken.m */; };
 		BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE477C1B186E2ED4003672A0 /* STKProfileCell.m */; };
 		BE477C1E186E2ED4003672A0 /* STKProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE477C1C186E2ED4003672A0 /* STKProfileCell.xib */; };
+		BE47C00D18FEDB3100919BCB /* STKTimestampFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE47C00C18FEDB3100919BCB /* STKTimestampFormatter.m */; };
 		BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */; };
 		BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64251896F83A00467E2D /* STKFoursquareLocation.m */; };
 		BE4C64291896FA3800467E2D /* STKLocationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64281896FA3800467E2D /* STKLocationListViewController.m */; };
@@ -79,6 +80,8 @@
 		BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = BE654EA6188841C5006DCA5C /* lookup.sqlite */; };
 		BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6AEF821857681E00F92DF4 /* STKGenderCell.m */; };
 		BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6AEF831857681E00F92DF4 /* STKGenderCell.xib */; };
+		BE6BAE3F18FED70A00B21EE7 /* STKInstitutionInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6BAE3D18FED70A00B21EE7 /* STKInstitutionInfoCell.m */; };
+		BE6BAE4018FED70A00B21EE7 /* STKInstitutionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6BAE3E18FED70A00B21EE7 /* STKInstitutionInfoCell.xib */; };
 		BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6EB880186395F300E8009D /* STKErrorStore.m */; };
 		BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE778C4018BBE16300DA5EDD /* STKNavigationButton.m */; };
 		BE778C4518BBF82000DA5EDD /* STKFilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE778C4318BBF82000DA5EDD /* STKFilterCell.m */; };
@@ -124,6 +127,7 @@
 		BEC0676818E46B1F00B5C5E6 /* STKHashTag.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC0676718E46B1F00B5C5E6 /* STKHashTag.m */; };
 		BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC726EB18AC111D009350E8 /* STKLabelCell.m */; };
 		BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC726EC18AC111D009350E8 /* STKLabelCell.xib */; };
+		BECA36B519004F88000A5851 /* STKGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECA36B419004F88000A5851 /* STKGradientView.m */; };
 		BED0B264185F689100564300 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B261185F689100564300 /* GoogleOpenSource.framework */; };
 		BED0B266185F689100564300 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B263185F689100564300 /* GooglePlus.framework */; };
 		BED0B268185F68C700564300 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B267185F68C700564300 /* AssetsLibrary.framework */; };
@@ -159,7 +163,6 @@
 		BEF96AD9186221340016E737 /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF96AD4186221340016E737 /* OAuth+Additions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BEF96ADA186221340016E737 /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF96AD6186221340016E737 /* OAuthCore.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */; };
-		BEFAC19F183D512E005E8933 /* STKRequestItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC19E183D512E005E8933 /* STKRequestItem.m */; };
 		BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A1183D512F005E8933 /* STKUser.m */; };
 		BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFAC1A7183D512F005E8933 /* STKPost.m */; };
 		BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEDF8182C1EE100648B9F /* STKCreatePostViewController.m */; };
@@ -1960,6 +1963,8 @@
 		BE477C1A186E2ED4003672A0 /* STKProfileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKProfileCell.h; sourceTree = "<group>"; };
 		BE477C1B186E2ED4003672A0 /* STKProfileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKProfileCell.m; sourceTree = "<group>"; };
 		BE477C1C186E2ED4003672A0 /* STKProfileCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKProfileCell.xib; sourceTree = "<group>"; };
+		BE47C00B18FEDB3100919BCB /* STKTimestampFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTimestampFormatter.h; sourceTree = "<group>"; };
+		BE47C00C18FEDB3100919BCB /* STKTimestampFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTimestampFormatter.m; sourceTree = "<group>"; };
 		BE4C64211896F65D00467E2D /* STKFoursquareConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFoursquareConnection.h; sourceTree = "<group>"; };
 		BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKFoursquareConnection.m; sourceTree = "<group>"; };
 		BE4C64241896F83A00467E2D /* STKFoursquareLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFoursquareLocation.h; sourceTree = "<group>"; };
@@ -2004,6 +2009,9 @@
 		BE6AEF811857681E00F92DF4 /* STKGenderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKGenderCell.h; path = Prism/STKGenderCell.h; sourceTree = "<group>"; };
 		BE6AEF821857681E00F92DF4 /* STKGenderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKGenderCell.m; path = Prism/STKGenderCell.m; sourceTree = "<group>"; };
 		BE6AEF831857681E00F92DF4 /* STKGenderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKGenderCell.xib; path = Prism/STKGenderCell.xib; sourceTree = "<group>"; };
+		BE6BAE3C18FED70A00B21EE7 /* STKInstitutionInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInstitutionInfoCell.h; sourceTree = "<group>"; };
+		BE6BAE3D18FED70A00B21EE7 /* STKInstitutionInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInstitutionInfoCell.m; sourceTree = "<group>"; };
+		BE6BAE3E18FED70A00B21EE7 /* STKInstitutionInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInstitutionInfoCell.xib; sourceTree = "<group>"; };
 		BE6EB87F186395F300E8009D /* STKErrorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKErrorStore.h; sourceTree = "<group>"; };
 		BE6EB880186395F300E8009D /* STKErrorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKErrorStore.m; sourceTree = "<group>"; };
 		BE778C3F18BBE16300DA5EDD /* STKNavigationButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKNavigationButton.h; sourceTree = "<group>"; };
@@ -2078,6 +2086,8 @@
 		BEC726EA18AC111D009350E8 /* STKLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKLabelCell.h; path = Prism/STKLabelCell.h; sourceTree = "<group>"; };
 		BEC726EB18AC111D009350E8 /* STKLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKLabelCell.m; path = Prism/STKLabelCell.m; sourceTree = "<group>"; };
 		BEC726EC18AC111D009350E8 /* STKLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKLabelCell.xib; path = Prism/STKLabelCell.xib; sourceTree = "<group>"; };
+		BECA36B319004F88000A5851 /* STKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGradientView.h; sourceTree = "<group>"; };
+		BECA36B419004F88000A5851 /* STKGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGradientView.m; sourceTree = "<group>"; };
 		BED0B261185F689100564300 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
 		BED0B263185F689100564300 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
 		BED0B267185F68C700564300 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -2129,8 +2139,6 @@
 		BEF96AD5186221340016E737 /* OAuthCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthCore.h; sourceTree = "<group>"; };
 		BEF96AD6186221340016E737 /* OAuthCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthCore.m; sourceTree = "<group>"; };
 		BEFAC198183D4DCF005E8933 /* User.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = User.xcdatamodel; sourceTree = "<group>"; };
-		BEFAC19D183D512E005E8933 /* STKRequestItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKRequestItem.h; path = ../STKRequestItem.h; sourceTree = "<group>"; };
-		BEFAC19E183D512E005E8933 /* STKRequestItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKRequestItem.m; path = ../STKRequestItem.m; sourceTree = "<group>"; };
 		BEFAC1A0183D512F005E8933 /* STKUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKUser.h; path = ../STKUser.h; sourceTree = "<group>"; };
 		BEFAC1A1183D512F005E8933 /* STKUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKUser.m; path = ../STKUser.m; sourceTree = "<group>"; };
 		BEFAC1A6183D512F005E8933 /* STKPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKPost.h; path = ../STKPost.h; sourceTree = "<group>"; };
@@ -2389,6 +2397,8 @@
 				BE5F690418F214C8006D2CD1 /* STKTextView.m */,
 				BE2E5FC318FB49E000A53AF6 /* STKSegmentedControl.h */,
 				BE2E5FC418FB49E000A53AF6 /* STKSegmentedControl.m */,
+				BECA36B319004F88000A5851 /* STKGradientView.h */,
+				BECA36B419004F88000A5851 /* STKGradientView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2456,6 +2466,9 @@
 				BE9CC7A318FDFF480097D308 /* STKLuminariesCell.h */,
 				BE9CC7A418FDFF480097D308 /* STKLuminariesCell.m */,
 				BE9CC7A518FDFF480097D308 /* STKLuminariesCell.xib */,
+				BE6BAE3C18FED70A00B21EE7 /* STKInstitutionInfoCell.h */,
+				BE6BAE3D18FED70A00B21EE7 /* STKInstitutionInfoCell.m */,
+				BE6BAE3E18FED70A00B21EE7 /* STKInstitutionInfoCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4317,8 +4330,6 @@
 				BEFAC1A7183D512F005E8933 /* STKPost.m */,
 				BEFAC1A0183D512F005E8933 /* STKUser.h */,
 				BEFAC1A1183D512F005E8933 /* STKUser.m */,
-				BEFAC19D183D512E005E8933 /* STKRequestItem.h */,
-				BEFAC19E183D512E005E8933 /* STKRequestItem.m */,
 				BE4C64241896F83A00467E2D /* STKFoursquareLocation.h */,
 				BE4C64251896F83A00467E2D /* STKFoursquareLocation.m */,
 				BEE8F04418C0F5E6001A28CD /* STKPostComment.h */,
@@ -4355,6 +4366,8 @@
 				BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */,
 				BE8BBF0118C7B1F500D53BF5 /* STKImageSharer.h */,
 				BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */,
+				BE47C00B18FEDB3100919BCB /* STKTimestampFormatter.h */,
+				BE47C00C18FEDB3100919BCB /* STKTimestampFormatter.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -4500,6 +4513,7 @@
 				BEC01A0F182AF42600080601 /* STKTrustViewController.xib in Resources */,
 				BE1E09D01850DF0A00975652 /* STKLoginViewController.xib in Resources */,
 				BE7D5AEA18D382E5005D3893 /* STKTextInputViewController.xib in Resources */,
+				BE6BAE4018FED70A00B21EE7 /* STKInstitutionInfoCell.xib in Resources */,
 				BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */,
 				BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */,
 				BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */,
@@ -4562,6 +4576,7 @@
 				BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */,
 				BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */,
 				BE778C4518BBF82000DA5EDD /* STKFilterCell.m in Sources */,
+				BE47C00D18FEDB3100919BCB /* STKTimestampFormatter.m in Sources */,
 				BE7AFA7E18ECA32800DA30A7 /* STKNetworkStore.m in Sources */,
 				BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
@@ -4570,6 +4585,7 @@
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,
+				BECA36B519004F88000A5851 /* STKGradientView.m in Sources */,
 				BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */,
 				BE2E5FC518FB49E000A53AF6 /* STKSegmentedControl.m in Sources */,
 				BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */,
@@ -4621,12 +4637,12 @@
 				BE5F68FD18F0A53D006D2CD1 /* STKContainQuery.m in Sources */,
 				BE5F690518F214C8006D2CD1 /* STKTextView.m in Sources */,
 				BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */,
+				BE6BAE3F18FED70A00B21EE7 /* STKInstitutionInfoCell.m in Sources */,
 				BE654EA5188841A6006DCA5C /* Lookup.xcdatamodeld in Sources */,
 				BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */,
 				BE7AFA7B18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m in Sources */,
 				BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
-				BEFAC19F183D512E005E8933 /* STKRequestItem.m in Sources */,
 				D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */,
 				BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */,
 				BEC01A0E182AF42600080601 /* STKTrustViewController.m in Sources */,
@@ -4800,7 +4816,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2EC91A02-3E31-453A-8EC0-D587E926A74F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Staging)";
@@ -4830,7 +4846,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2EC91A02-3E31-453A-8EC0-D587E926A74F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -4936,7 +4952,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2EC91A02-3E31-453A-8EC0-D587E926A74F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (Staging)";
@@ -5026,7 +5042,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "2EC91A02-3E31-453A-8EC0-D587E926A74F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Dev)";

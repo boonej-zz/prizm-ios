@@ -32,6 +32,7 @@
 
 - (void)commonInit
 {
+    [self setUserInteractionEnabled:NO];
     [self setOutlineWidth:2];
     [self setBackgroundColor:[UIColor clearColor]];
     [self setOutlineColor:[UIColor colorWithRed:135 / 255.0 green:135 / 255.0 blue:162 / 255.0 alpha:1]];
@@ -88,7 +89,11 @@
 
     UIGraphicsPushContext(UIGraphicsGetCurrentContext());
     [bpInner addClip];
-    [[self image] drawInRect:[self bounds]];
+    if([self image]) {
+        [[self image] drawInRect:[self bounds]];
+    } else {
+        [[UIImage imageNamed:@"trust_user_missing"] drawInRect:[self bounds]];
+    }
     
     if([self overlayColor]) {
         [[self overlayColor] set];

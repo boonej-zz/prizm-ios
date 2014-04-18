@@ -9,7 +9,6 @@
 #import "STKUserStore.h"
 #import "STKUser.h"
 #import "STKActivityItem.h"
-#import "STKRequestItem.h"
 #import "STKPost.h"
 #import "STKConnection.h"
 #import "STKUser.h"
@@ -271,9 +270,20 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         NSDictionary *keyMap = [STKUser reverseKeyMap];
         for(NSString *key in changedValues) {            
-            NSString *val = [changedValues objectForKey:key];
+            id val = [changedValues objectForKey:key];
             NSString *newKey = [keyMap objectForKey:key];
             if(val && newKey) {
+                
+                // Do some conversion
+                if([key isEqualToString:@"birthday"]) {
+                    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                    [df setDateFormat:@"MM-dd-yyyy"];
+                    val = [df stringFromDate:val];
+                } else if([key isEqualToString:@"dateFounded"]) {
+                    val = [STKTimestampFormatter stringFromDate:val];
+                }
+                
+                
                 [c addQueryValue:val
                           forKey:newKey];
             }
@@ -648,7 +658,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[self currentUser] uniqueID], @"trusts"]];
+        [c setIdentifiers:@[[u uniqueID], @"trusts"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
         STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];

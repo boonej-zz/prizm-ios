@@ -13,7 +13,7 @@
 
 - (void)cellDidLoad
 {
-    
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 
 - (void)layoutContent
@@ -53,6 +53,21 @@
         [[self rightNameLabel] setText:[u name]];
     }
 
+}
+
+- (IBAction)leftLuminaryTapped:(id)sender
+{
+    ROUTE(sender);
+}
+
+- (IBAction)centerLuminaryTapped:(id)sender
+{
+    ROUTE(sender);
+}
+
+- (IBAction)rightLuminaryTapped:(id)sender
+{
+    ROUTE(sender);
 }
 
 @end

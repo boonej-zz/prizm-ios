@@ -139,11 +139,6 @@
 {
     _selectedIndex = selectedIndex;
     
-    for(int i = 0; i < [[self buttons] count]; i++) {
-        STKMenuButton *mb = [[self buttons] objectAtIndex:i];
-        //[mb setSelected:i == _selectedIndex];
-    }
-    
 }
 
 - (void)setItems:(NSArray *)items

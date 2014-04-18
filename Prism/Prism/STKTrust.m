@@ -25,12 +25,6 @@ recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, typ
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
-    static NSDateFormatter *df = nil;
-    if(!df) {
-        df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-        [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    }
 
     [self bindFromDictionary:jsonObject keyMap:@{
                                                  @"_id" : @"uniqueID",
@@ -39,10 +33,10 @@ recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, typ
                                                  @"to" : @{STKJSONBindFieldKey : @"recepient", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"from" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"create_date" : ^(NSString *inValue) {
-                                                     [self setDateCreated:[df dateFromString:inValue]];
+                                                     [self setDateCreated:[STKTimestampFormatter dateFromString:inValue]];
                                                  },
                                                  @"modify_date" : ^(NSString *inValue) {
-                                                     [self setDateModified:[df dateFromString:inValue]];
+                                                     [self setDateModified:[STKTimestampFormatter dateFromString:inValue]];
                                                  },
                                                  @"to_likes_count" : @"recepientLikesCount",
                                                  @"to_comments_count" : @"recepientCommentsCount",

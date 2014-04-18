@@ -39,4 +39,9 @@
     ROUTE(sender);
 }
 
+- (IBAction)sendMessage:(id)sender
+{
+    ROUTE(sender);
+}
+
 @end

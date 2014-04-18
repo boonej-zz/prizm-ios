@@ -39,7 +39,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
-@dynamic fProfilePosts, createdActivities, ownedActivities, twitterID, twitterLastMinID, type;
+@dynamic fProfilePosts, createdActivities, ownedActivities, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 
@@ -68,13 +68,12 @@ accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
              @"instagramLastMinID" : @"instagram_min_id",
              @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
              @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
-             @"birthday" : ^(id value) {
-                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                 [df setDateFormat:@"MM-dd-yyyy"];
-                 return @{@"birthday" : [df stringFromDate:value]};
-             },
+             @"birthday" : @"birthday",
              @"twitterID" : @"twitter_token",
-             @"twitterLastMinID" : @"twitter_min_id"
+             @"twitterLastMinID" : @"twitter_min_id",
+             @"enrollment" : @"enrollment",
+             @"dateFounded" : @"date_founded",
+             @"mascotName" : @"mascot"
     };
 }
 
@@ -121,16 +120,22 @@ accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
         @"followers" : @{STKJSONBindFieldKey : @"followers", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"following" : @{STKJSONBindFieldKey : @"following", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         
+        @"mascot" : @"mascotName",
+        @"enrollment" : ^(NSNumber *inValue) {
+            if(inValue)
+                [self setEnrollment:[NSString stringWithFormat:@"%@", inValue]];
+        },
+        @"date_founded" : ^(NSString *inValue) {
+            [self setDateFounded:[STKTimestampFormatter dateFromString:inValue]];
+        },
+        
         @"birthday" : ^(NSString *inValue) {
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
             [df setDateFormat:@"MM-dd-yyyy"];
             [self setBirthday:[df dateFromString:inValue]];
         },
         @"create_date" : ^(NSString *inValue) {
-            NSDateFormatter *df = [[NSDateFormatter alloc] init];
-            [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-            [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-            [self setDateCreated:[df dateFromString:inValue]];
+            [self setDateCreated:[STKTimestampFormatter dateFromString:inValue]];
         }
     }];
 // 5335c7c3d6e286c075144533
@@ -156,6 +161,22 @@ accountStoreID, instagramLastMinID, instagramToken, lastIntegrationSync;
 - (BOOL)isFollowingUser:(STKUser *)u
 {
     return [[self following] member:u] != nil;
+}
+
+- (BOOL)hasTrusts
+{
+    if([[self ownedTrusts] count] > 0 || [[self receivedTrusts] count] > 0)
+        return YES;
+
+    return NO;
+}
+
+- (NSArray *)trusts
+{
+    NSMutableArray *a = [NSMutableArray array];
+    [a addObjectsFromArray:[[self ownedTrusts] allObjects]];
+    [a addObjectsFromArray:[[self receivedTrusts] allObjects]];
+    return [a copy];
 }
 
 /////
