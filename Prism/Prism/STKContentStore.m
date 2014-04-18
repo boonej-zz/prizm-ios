@@ -187,9 +187,11 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/explore"];
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setLimit:30];
-        [q setPageDirection:fetchDirection];
-        [q setPageKey:STKPostDateCreatedKey];
-        [q setPageValue:[referencePost referenceTimestamp]];
+        if(referencePost){
+            [q setPageDirection:fetchDirection];
+            [q setPageKey:STKPostDateCreatedKey];
+            [q setPageValue:[referencePost referenceTimestamp]];
+        }
         
         [q setFilters:filterDict];
         
@@ -207,7 +209,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [c setQueryObject:q];
         
         
-        [c setResolutionMap:@{@"User" : @"STKUser"}];
+        [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost"}];
         [c setModelGraph:@[@"STKPost"]];
         [c setContext:[[STKUserStore store] context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
@@ -241,6 +243,17 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     [self fetchExplorePostsInDirection:fetchDirection referencePost:referencePost filter:nil completion:block];
 }
 
+- (void)fetchExplorePostsForHashTag:(NSString *)hashTag
+                        inDirection:(STKQueryObjectPage)fetchDirection
+                      referencePost:(STKPost *)referencePost
+                         completion:(void (^)(NSArray *posts, NSError *err))block
+{
+    [self fetchExplorePostsInDirection:fetchDirection
+                         referencePost:referencePost
+                                filter:@{@"hash_tags" : hashTag}
+                            completion:block];
+}
+
 - (void)searchPostsForHashtag:(NSString *)hashTag
                    completion:(void (^)(NSArray *posts, NSError *err))block
 {
@@ -249,12 +262,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/explore"];
-        [c addQueryValue:@"30" forKey:@"limit"];
-        [c addQueryValue:hashTag forKey:@"hash_tags"];
         
-        
-        [c setModelGraph:@[@"STKPost"]];
+        NSString *hashEndpoint = [NSString stringWithFormat:@"/search/hashtags/%@", hashTag];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:hashEndpoint];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
@@ -264,7 +274,6 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             }
         }];
     }];
-
 }
 
 - (void)fetchProfilePostsForUser:(STKUser *)user

@@ -174,6 +174,8 @@
 		BEFCEE0B182C211A00648B9F /* STKUserStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEE0A182C211A00648B9F /* STKUserStore.m */; };
 		BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEE0D182C212800648B9F /* STKImageStore.m */; };
 		D097F29518D353B30053F479 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE36BC4618CA14B200694145 /* Crashlytics.framework */; };
+		D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */; };
+		D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2157,6 +2159,9 @@
 		BEFCEE0C182C212800648B9F /* STKImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKImageStore.h; sourceTree = "<group>"; };
 		BEFCEE0D182C212800648B9F /* STKImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKImageStore.m; sourceTree = "<group>"; };
 		D097F29318D3533E0053F479 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Prism/Crashlytics.framework; sourceTree = "<group>"; };
+		D0E3508018FF30A40006B992 /* STKSearchHashTagsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchHashTagsCell.h; sourceTree = "<group>"; };
+		D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchHashTagsCell.m; sourceTree = "<group>"; };
+		D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchHashTagsCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2431,6 +2436,9 @@
 				BEE5F03A187DC03300CB5325 /* STKInitialProfileStatisticsCell.h */,
 				BEE5F03B187DC03300CB5325 /* STKInitialProfileStatisticsCell.m */,
 				BEE5F03C187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib */,
+				D0E3508018FF30A40006B992 /* STKSearchHashTagsCell.h */,
+				D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */,
+				D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */,
 				BE9543881892CD1400DCC3B1 /* STKCommentCell.h */,
 				BE9543891892CD1400DCC3B1 /* STKCommentCell.m */,
 				BE95438D1892FE5C00DCC3B1 /* STKSearchProfileCell.h */,
@@ -4514,6 +4522,7 @@
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
+				D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */,
 				BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */,
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
@@ -4634,6 +4643,7 @@
 				BE7AFA7B18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m in Sources */,
 				BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
+				D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */,
 				BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */,
 				BEC01A0E182AF42600080601 /* STKTrustViewController.m in Sources */,
 				BE09FFEF184E27B30059115B /* STKBackdropView.m in Sources */,
@@ -4785,7 +4795,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Conway III (NBRAUWJ72Y)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4816,7 +4826,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Conway III (NBRAUWJ72Y)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4922,7 +4932,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Conway III (NBRAUWJ72Y)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5011,7 +5021,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Joseph Conway III (NBRAUWJ72Y)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

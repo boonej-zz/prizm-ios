@@ -23,15 +23,18 @@
 #import "STKTextImageCell.h"
 #import "STKPostController.h"
 #import "STKNavigationButton.h"
+#import "STKSearchHashTagsCell.h"
 
 typedef enum {
     STKExploreTypeLatest = 0,
-    STKExploreTypePopular = 1
+    STKExploreTypePopular = 1,
+    STKExploreTypeFeatured = 2
 } STKExploreType;
 
 typedef enum {
     STKSearchTypeUser = 0,
-    STKSearchTypeHashTag = 1
+    STKSearchTypeHashTag = 1,
+    STKSearchTypeHashTagPosts = 2
 } STKSearchType;
 
 @interface STKExploreViewController ()
@@ -41,7 +44,9 @@ typedef enum {
 
 @property (nonatomic, strong) STKPostController *recentPostsController;
 @property (nonatomic, strong) STKPostController *popularPostsController;
+@property (nonatomic, strong) STKPostController *featuredPostsController;
 @property (nonatomic, assign) STKPostController *activePostController;
+@property (nonatomic, strong) STKPostController *hashTagPostsController;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *searchTypeControl;
@@ -55,8 +60,8 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UIView *searchContainer;
 
 @property (nonatomic) STKSearchType searchType;
-@property (nonatomic, strong) NSArray *postsFound;
 @property (nonatomic, strong) NSArray *profilesFound;
+@property (nonatomic, strong) NSArray *hashTagsFound;
 @property (nonatomic, strong) STKNavigationButton *searchButton;
 @property (nonatomic, strong) UIBarButtonItem *searchButtonItem;
 
@@ -94,7 +99,8 @@ typedef enum {
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
         
         _recentPostsController = [[STKPostController alloc] initWithViewController:self];
-        
+        _featuredPostsController = [[STKPostController alloc] initWithViewController:self];
+        _hashTagPostsController = [[STKPostController alloc] initWithViewController:self];
         _popularPostsController = [[STKPostController alloc] initWithViewController:self];
         [_popularPostsController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO],
                                                       [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
@@ -162,6 +168,10 @@ typedef enum {
     } else {
         [self setSearchType:STKSearchTypeHashTag];
     }
+    
+    [self setHashTagsFound:nil];
+    [self setProfilesFound:nil];
+    [self reloadSearchResults];
 }
 
 - (BOOL)isSearchBarActive
@@ -233,12 +243,24 @@ typedef enum {
     if([gr state] == UIGestureRecognizerStateEnded) {
         if([gr direction] == UISwipeGestureRecognizerDirectionRight) {
             if([self exploreType] == STKExploreTypePopular) {
+                [[self exploreTypeControl] setSelectedSegmentIndex:2];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            } else if ([self exploreType] == STKExploreTypeFeatured) {
                 [[self exploreTypeControl] setSelectedSegmentIndex:0];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            } else {
+                [[self exploreTypeControl] setSelectedSegmentIndex:1];
                 [self exploreTypeChanged:[self exploreTypeControl]];
             }
         } else {
             if([self exploreType] == STKExploreTypeLatest) {
+                [[self exploreTypeControl] setSelectedSegmentIndex:2];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            } else if([self exploreType] == STKExploreTypeFeatured) {
                 [[self exploreTypeControl] setSelectedSegmentIndex:1];
+                [self exploreTypeChanged:[self exploreTypeControl]];
+            } else {
+                [[self exploreTypeControl] setSelectedSegmentIndex:0];
                 [self exploreTypeChanged:[self exploreTypeControl]];
             }
         }
@@ -288,8 +310,10 @@ typedef enum {
     NSDictionary *filter = nil;
     if([self exploreType] == STKExploreTypeLatest) {
         filter = nil;
+    } else if([self exploreType] == STKExploreTypeFeatured){
+        filter = @{@"type" : @"institution"};
     } else {
-        filter = @{@"sort_field" : @"likes_count"};
+        filter = @{@"sort_by" : @"likes_count", @"sort" : @"-1"};
     }
 
     STKPostController *pc = [self activePostController];
@@ -319,6 +343,8 @@ typedef enum {
         [self setActivePostController:[self recentPostsController]];
     else if([self exploreType] == STKExploreTypePopular)
         [self setActivePostController:[self popularPostsController]];
+    else if ([self exploreType] == STKExploreTypeFeatured)
+        [self setActivePostController:[self featuredPostsController]];
 
     if([self searchType] == STKSearchTypeUser)
         [[self searchTypeControl] setSelectedSegmentIndex:0];
@@ -341,7 +367,7 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([cell isKindOfClass:[STKSearchProfileCell class]]) {
+    if([cell isKindOfClass:[STKSearchProfileCell class]] || [cell isKindOfClass:[STKSearchHashTagsCell class]]) {
         [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
     } else {
         [cell setBackgroundColor:[UIColor clearColor]];
@@ -353,10 +379,9 @@ typedef enum {
     if(tableView == [self tableView])
         return [[self tableView] rowHeight];
     
-    if([self searchType] == STKSearchTypeHashTag) {
+    if([self searchType] == STKSearchTypeHashTagPosts) {
         return [[self tableView] rowHeight];
     }
-    
     return 44.0;
 }
 
@@ -371,7 +396,10 @@ typedef enum {
     }
     
     if([self searchType] == STKSearchTypeHashTag)
-        return [[self postsFound] count];
+        return [[self hashTagsFound] count];
+    
+    if([self searchType] == STKSearchTypeHashTagPosts)
+        return [[[self hashTagPostsController] posts] count];
     
     return [[self profilesFound] count];
 }
@@ -384,9 +412,18 @@ typedef enum {
         return c;
     }
     
-    if([self searchType] == STKSearchTypeHashTag) {
-        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:self];
-        [c populateWithPosts:[self postsFound] indexOffset:[indexPath row] * 3];
+    if([self searchType] == STKSearchTypeHashTagPosts){
+        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self hashTagPostsController]];
+        [c populateWithPosts:[[self hashTagPostsController] posts] indexOffset:[indexPath row] * 3];
+        
+        return c;
+    }
+
+    if([self searchType] == STKSearchTypeHashTag){
+        STKSearchHashTagsCell *c = [STKSearchHashTagsCell cellForTableView:tableView target:self];
+        NSDictionary *hashtag = [[self hashTagsFound] objectAtIndex:[indexPath row]];
+        [[c hashTagLabel] setText:[NSString stringWithFormat:@"#%@",[hashtag objectForKey:@"hash_tag"]]];
+        [[c count] setText:[NSString stringWithFormat:@"%@",[hashtag objectForKey:@"count"]]];
         
         return c;
     }
@@ -414,24 +451,46 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(tableView == [self searchResultsTableView] && [self searchType] == STKSearchTypeUser) {
-        STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
-        [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
-        [[self navigationController] pushViewController:pvc animated:YES];
+    if(tableView == [self searchResultsTableView]) {
+        if([self searchType] == STKSearchTypeUser){
+            STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+            [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
+            [[self navigationController] pushViewController:pvc animated:YES];
+        }
+        
+        if([self searchType] == STKSearchTypeHashTag) {
+            NSDictionary *hashtag = [[self hashTagsFound] objectAtIndex:[indexPath row]];
+            if([hashtag objectForKey:@"hash_tag"]) {
+                STKPostController *pc = [self hashTagPostsController];
+                [[STKContentStore store] fetchExplorePostsForHashTag:[hashtag objectForKey:@"hash_tag"]
+                                                         inDirection:STKQueryObjectPageNewer
+                                                       referencePost:nil
+                                                          completion:^(NSArray *posts, NSError *err) {
+                                                              if(!err && posts) {
+                                                                  [pc setPosts:(NSMutableArray*)[posts mutableCopy]];
+                                                                  [self setSearchType:STKSearchTypeHashTagPosts];
+                                                                  [self reloadSearchResults];
+                                                              }
+                }];
+            }
+        }
     }
 }
 
 
 - (IBAction)searchFieldDidChange:(UITextField *)sender
 {
+    if([self searchType] == STKSearchTypeHashTagPosts)
+        [self setSearchType:STKSearchTypeHashTag];
+    
     NSString *searchString = [sender text];
     if([searchString length] < 2) {
         [self reloadSearchResults];
         return;
     }
     if([self searchType] == STKSearchTypeHashTag) {
-        [[STKContentStore store] searchPostsForHashtag:searchString completion:^(NSArray *posts, NSError *err) {
-            [self setPostsFound:posts];
+        [[STKContentStore store] searchPostsForHashtag:searchString completion:^(NSArray *hashtags, NSError *err) {
+            [self setHashTagsFound:hashtags];
             [self reloadSearchResults];
         }];
     } else {
@@ -447,6 +506,8 @@ typedef enum {
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
     [self setProfilesFound:nil];
+    [self setHashTagsFound:nil];
+    [[self hashTagPostsController] setPosts:nil];
     [self reloadSearchResults];
     return YES;
 }
@@ -455,14 +516,26 @@ typedef enum {
 {
     if([self searchType] == STKSearchTypeHashTag) {
         
-        [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
 
-        if([[self postsFound] count] == 0) {
+        if([[self hashTagsFound] count] == 0) {
             [[self searchResultsTableView] setHidden:YES];
         } else {
             [[self searchResultsTableView] setHidden:NO];
         }
+        
+    } else if ([self searchType] == STKSearchTypeHashTagPosts) {
+        
+        [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        
+        if([[[self hashTagPostsController] posts] count] == 0){
+            [[self searchResultsTableView] setHidden:YES];
+        }else{
+            [[self searchResultsTableView] setHidden:NO];
+        }
+        
     } else {
+        
         [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
         
         if([[self profilesFound] count] == 0) {
@@ -471,6 +544,7 @@ typedef enum {
             [[self searchResultsTableView] setHidden:NO];
         }
     }
+    
     [[self searchResultsTableView] reloadData];
 }
 
@@ -480,6 +554,8 @@ typedef enum {
         [self setActivePostController:[self recentPostsController]];
     else if([self exploreType] == STKExploreTypePopular)
         [self setActivePostController:[self popularPostsController]];
+    else if([self exploreType] == STKExploreTypeFeatured)
+        [self setActivePostController:[self featuredPostsController]];
 
     [[self tableView] reloadData];
     [self refreshPosts];

@@ -70,6 +70,10 @@ extern NSString * const STKContentStorePostDeletedKey;
 - (void)searchPostsForHashtag:(NSString *)hashTag
                    completion:(void (^)(NSArray *posts, NSError *err))block;
 
+- (void)fetchExplorePostsForHashTag:(NSString *)hashTag
+                        inDirection:(STKQueryObjectPage)fetchDirection
+                      referencePost:(STKPost *)referencePost
+                         completion:(void (^)(NSArray *posts, NSError *err))block;
 
 // Complete - Retest against Cached posts in home feed after reimping followers
 - (void)likePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block;
