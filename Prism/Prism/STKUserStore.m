@@ -104,6 +104,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)logout
 {
     [self setCurrentUser:nil];
+    [[STKBaseStore store] cancelAllQueuedRequests];
     [STKConnection cancelAllConnections];
     [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
                                                         object:nil
@@ -126,21 +127,27 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 {
     [self setCurrentUser:u];
     
-    [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForUser:u completion:^(STKUser *updatedUser, NSError *err) {
-        if(!err) {
-            if(updatedUser) {
-                [updatedUser setLastIntegrationSync:[NSDate date]];
-                [self updateUserDetails:updatedUser completion:^(STKUser *u, NSError *err) {
-                    if(!err) {
-                        [[self context] save:nil];
-                    }
-                }];
-            }
-        }
-    }];
-
+    [self transferPostsFromSocialNetworks];
 }
-     
+
+- (void)transferPostsFromSocialNetworks
+{
+    if([self currentUser]) {
+        [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForUser:[self currentUser] completion:^(STKUser *updatedUser, NSError *err) {
+            if(!err) {
+                if(updatedUser) {
+                    [self updateUserDetails:updatedUser completion:^(STKUser *u, NSError *err) {
+                        if(!err) {
+                            [[self context] save:nil];
+                        }
+                    }];
+                }
+            }
+        }];
+    }
+    
+}
+
 
 - (NSString *)cachePathForDatabase
 {
@@ -1247,32 +1254,41 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         
-        NSArray *missingKeys = nil;
-        BOOL verified = [c addQueryValues:info
-                              missingKeys:&missingKeys
-                               withKeyMap:@{@"firstName" : @"first_name",
-                                            @"lastName" : @"last_name",
-                                            @"email" : @"email",
-                                            @"gender" : @"gender",
-                                            @"zipCode" : @"zip_postal",
-                                            @"city" : @"city",
-                                            @"state" : @"state",
-                                            @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
-                                            @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
-                                            @"birthday" : ^(id value) {
-                                                    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                                                    [df setDateFormat:@"MM-dd-yyyy"];
-                                                    return @{@"birthday" : [df stringFromDate:value]};
-                                                }
-                                            }];
-        
-        if(!verified) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments
-                                         data:missingKeys]);
-            }];
-            return;
+        if([[info type] isEqualToString:STKUserTypeInstitution]) {
+            [c addQueryValues:info
+                  missingKeys:nil
+                   withKeyMap:@{@"firstName" : @"first_name",
+                                @"email" : @"email",
+                                @"zipCode" : @"zip_postal",
+                                @"city" : @"city",
+                                @"state" : @"state",
+                                @"type" : @"type",
+                                @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
+                                @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
+                                }];
+
+        } else {
+            [c addQueryValues:info
+                  missingKeys:nil
+                   withKeyMap:@{@"firstName" : @"first_name",
+                                @"lastName" : @"last_name",
+                                @"email" : @"email",
+                                @"gender" : @"gender",
+                                @"zipCode" : @"zip_postal",
+                                @"city" : @"city",
+                                @"state" : @"state",
+                                @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
+                                @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
+                                @"birthday" : ^(id value) {
+                                        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                                        [df setDateFormat:@"MM-dd-yyyy"];
+                                        return @{@"birthday" : [df stringFromDate:value]};
+                                    }
+                                }];
+
         }
+        
+        
         
         if([info externalServiceType] && [info externalServiceID]) {
             [c addQueryValues:info missingKeys:nil withKeyMap:@{@"externalServiceID" : @"provider_id",

@@ -66,6 +66,7 @@ typedef enum {
 
 - (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block;
 
+- (void)transferPostsFromSocialNetworks;
 - (void)logout;
 
 @end

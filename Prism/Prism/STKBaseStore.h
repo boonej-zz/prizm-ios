@@ -40,4 +40,6 @@ typedef enum {
 
 - (void)executeAuthorizedRequest:(void (^)(NSError *err))request;
 
+- (void)cancelAllQueuedRequests;
+
 @end

@@ -82,6 +82,11 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
     return self;
 }
 
+- (void)cancelAllQueuedRequests
+{
+    [[self authorizedRequestQueue] removeAllObjects];
+}
+
 - (void)executeAuthorizedRequest:(void (^)(NSError *))request
 {
     if([self authorizationToken] && [[[self authorizationToken] expiration] timeIntervalSinceNow] > 10) {

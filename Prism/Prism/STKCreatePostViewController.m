@@ -81,14 +81,14 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         ];
         
         _optionItems = @[
-                         @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"btn_camera"], @"action" : @"changeImage:"},
-            @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"action" : @"findLocation:"},
-            @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"]},
-                         @{@"key" : @"visibility", @"image" : [UIImage imageNamed:@"btn_globe"], @"action" : @"toggleTrust:"},
-            @{@"key" : @"facebook", @"image" : [UIImage imageNamed:@"btn_facebook"]},
-            @{@"key" : @"twitter", @"image" : [UIImage imageNamed:@"btn_tweeter"]},
-            @{@"key" : @"tumblr", @"image" : [UIImage imageNamed:@"btn_tumblr"]},
-            @{@"key" : @"personal", @"image" : [UIImage imageNamed:@"btn_foursquare"]}
+                         @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"btn_camera"], @"selectedImage" : [UIImage imageNamed:@"btn_camera_selected"], @"action" : @"changeImage:"},
+                         @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"selectedImage" : [UIImage imageNamed:@"btn_pin_selected"], @"action" : @"findLocation:"},
+                         @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"], @"selectedImage" : [UIImage imageNamed:@"btn_usertag_selected"]},
+                         @{@"key" : @"visibility", @"image" : [UIImage imageNamed:@"btn_globe"], @"selectedImage" : [UIImage imageNamed:@"btn_globe_selected"], @"action" : @"toggleTrust:"},
+                         @{@"key" : @"facebook", @"image" : [UIImage imageNamed:@"btn_facebook"], @"selectedImage" : [UIImage imageNamed:@"btn_facebook_selected"]},
+                         @{@"key" : @"twitter", @"image" : [UIImage imageNamed:@"btn_twitter"], @"selectedImage" : [UIImage imageNamed:@"btn_twitter_selected"]},
+                         @{@"key" : @"tumblr", @"image" : [UIImage imageNamed:@"btn_tumblr"], @"selectedImage" : [UIImage imageNamed:@"btn_tumblr_selected"]},
+                         @{@"key" : @"personal", @"image" : [UIImage imageNamed:@"btn_foursquare"], @"selectedImage" : [UIImage imageNamed:@"btn_foursquare_selected"]}
         ];
     }
     return self;
@@ -109,6 +109,10 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                           NSFontAttributeName : STKFont(22)}];
     [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
 
+    if([[[[STKUserStore store] currentUser] type] isEqualToString:STKUserTypeInstitution]) {
+        [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
+    }
+    
     if([self originalPost]) {
         [[self navigationItem] setTitle:@"Repost"];
         [[self postInfo] setObject:[[self originalPost] imageURLString] forKey:STKPostURLKey];
@@ -127,6 +131,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 {
     _postImage = postImage;
     [self setUploadingImage:YES];
+    [[self optionCollectionView] reloadData];
     
     [[STKImageStore store] uploadImage:_postImage thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
         if(postImage == [self postImage]) {
@@ -320,12 +325,18 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
         if([[item objectForKey:@"key"] isEqualToString:@"visibility"]) {
             if([[[self postInfo] objectForKey:STKPostVisibilityKey] isEqualToString:STKPostVisibilityPublic]) {
-                [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+                [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
             }
         }
         if([[item objectForKey:@"key"] isEqualToString:@"location"]) {
             if([[self postInfo] objectForKey:STKPostLocationNameKey]) {
-                [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+                [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
+            }
+        }
+        
+        if([[item objectForKey:@"key"] isEqualToString:@"camera"]) {
+            if([self postImage]) {
+                [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
             }
         }
         

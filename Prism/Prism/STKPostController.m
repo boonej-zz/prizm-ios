@@ -67,18 +67,23 @@
     
     UIImage *img = [[STKImageStore store] bestCachedImageForURLString:[p imageURLString]];
     
+    UIViewController *vc = [self viewController];
+    if([[self delegate] respondsToSelector:@selector(viewControllerForPresentingPostInPostController:)]) {
+        vc = [[self delegate] viewControllerForPresentingPostInPostController:self];
+    }
+    
     if([[self delegate] respondsToSelector:@selector(postController:rectForPostAtIndex:)]) {
         CGRect r = [[self delegate] postController:self rectForPostAtIndex:idx];
         [[[self viewController] menuController] transitionToPost:p
                                                         fromRect:r
                                                       usingImage:img
-                                                inViewController:[self viewController]
+                                                inViewController:vc
                                                         animated:YES];
     } else {
         [[[self viewController] menuController] transitionToPost:p
                                                         fromRect:CGRectZero
                                                       usingImage:img
-                                                inViewController:[self viewController]
+                                                inViewController:vc
                                                         animated:NO];
     }
 }

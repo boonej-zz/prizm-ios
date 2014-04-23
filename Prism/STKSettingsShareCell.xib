@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -24,19 +24,20 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="On" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKj-gd-otg">
-                        <rect key="frame" x="247" y="11" width="53" height="21"/>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="egm-3h-tGe">
+                        <rect key="frame" x="251" y="6" width="51" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                        <color key="onTintColor" red="0.19215686274509802" green="0.55294117647058827" blue="0.80392156862745101" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <action selector="toggleNetwork:" destination="xyQ-lm-cED" eventType="valueChanged" id="iWg-an-Lgh"/>
+                        </connections>
+                    </switch>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="networkImageView" destination="GNF-5B-nTH" id="ygq-5y-zFS"/>
                 <outlet property="networkTitleLabel" destination="u5L-lt-6AO" id="TLp-aM-TY5"/>
-                <outlet property="stateLabe" destination="GKj-gd-otg" id="u6h-Xu-3C0"/>
+                <outlet property="toggleSwitch" destination="egm-3h-tGe" id="oSK-8g-zIP"/>
             </connections>
         </tableViewCell>
     </objects>

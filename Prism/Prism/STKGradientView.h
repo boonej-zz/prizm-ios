@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface STKGradientView : UIView
-
+@property (nonatomic, strong) NSArray *colors;
 @end

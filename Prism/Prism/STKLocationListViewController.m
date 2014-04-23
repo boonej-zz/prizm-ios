@@ -37,7 +37,7 @@
         
         UIColor *clr = [UIColor colorWithRed:49.0 / 255.0 green:141.0 / 255.0 blue:205.0 / 255.0 alpha:1];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : clr, NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Bold" size:16]} forState:UIControlStateNormal];
+        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : clr, NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
         [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Locations"];
         

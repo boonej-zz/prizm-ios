@@ -16,7 +16,7 @@
 
 - (void)cellDidLoad
 {
-    [[self nameLabel] setFont:STKFont(20)];
+    [[self nameLabel] setFont:STKFont(18)];
     [[self locationLabel] setFont:STKFont(12)];
     [[self nameLabel] setTextColor:STKTextColor];
     [[self locationLabel] setTextColor:STKTextTransparentColor];

@@ -38,9 +38,18 @@
     CAGradientLayer *l = (CAGradientLayer *)[self layer];
     [l setStartPoint:CGPointMake(0.5, 1)];
     [l setEndPoint:CGPointMake(0.5, 0)];
-    NSArray *colors = @[(__bridge id)[[UIColor colorWithWhite:0 alpha:0.5] CGColor], (__bridge id)[[UIColor colorWithWhite:0 alpha:0.1] CGColor]];
-    [l setColors:colors];
+    _colors = @[(__bridge id)[[UIColor colorWithWhite:0 alpha:0.5] CGColor], (__bridge id)[[UIColor colorWithWhite:0 alpha:0.1] CGColor]];
+    [l setColors:_colors];
+}
 
+- (void)setColors:(NSArray *)colors
+{
+    NSMutableArray *a = [NSMutableArray array];
+    for(UIColor *c in colors) {
+        [a addObject:(__bridge id)[c CGColor]];
+    }
+    _colors = [a copy];
+    [(CAGradientLayer *)[self layer] setColors:_colors];
 }
 
 

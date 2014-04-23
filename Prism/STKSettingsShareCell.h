@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *networkImageView;
 @property (weak, nonatomic) IBOutlet UILabel *networkTitleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *stateLabe;
+@property (weak, nonatomic) IBOutlet UISwitch *toggleSwitch;
+- (IBAction)toggleNetwork:(id)sender;
 
 @end

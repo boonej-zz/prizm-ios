@@ -87,14 +87,23 @@
                               otherButtonTitles:nil];
     }
     
+    [self recreateAllViewControllers];
     
-    STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
-    STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
-    [self presentViewController:nvc animated:YES
-                     completion:^{
-                         [self recreateAllViewControllers];
-                         [av show];
-                     }];
+    void (^presentRegistration)(void) = ^{
+        STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
+        STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
+        [self presentViewController:nvc animated:YES
+                         completion:^{
+                             
+                             [av show];
+                         }];
+    };
+    
+    if([self presentedViewController]) {
+        [self dismissViewControllerAnimated:YES completion:presentRegistration];
+    } else {
+        presentRegistration();
+    }
     
 }
 

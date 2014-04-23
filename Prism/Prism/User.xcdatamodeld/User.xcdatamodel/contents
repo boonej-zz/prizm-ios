@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5063" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="STKActivityItem" representedClassName="STKActivityItem" syncable="YES">
         <attribute name="action" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
@@ -91,7 +91,6 @@
         <attribute name="instagramLastMinID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="instagramToken" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="lastIntegrationSync" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mascotName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -123,6 +122,6 @@
         <element name="STKPost" positionX="0" positionY="144" width="128" height="433"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="255"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="705"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="690"/>
     </elements>
 </model>

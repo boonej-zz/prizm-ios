@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKHashtagPostsViewController">
+            <connections>
+                <outlet property="barLabel" destination="D4W-fP-zdH" id="Dl7-V2-Y4j"/>
+                <outlet property="blurView" destination="aM1-8p-acJ" id="g4I-yY-Qfn"/>
+                <outlet property="tableView" destination="ehB-fC-XpV" id="8Rd-bg-VrE"/>
+                <outlet property="view" destination="iN0-l3-epB" id="ZaN-sc-FVR"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="Eot-zf-Qub">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ehB-fC-XpV">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Yfz-l2-lo2"/>
+                        <outlet property="delegate" destination="-1" id="72q-uk-vGU"/>
+                    </connections>
+                </tableView>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aM1-8p-acJ" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="109"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mc1-oc-wVj" customClass="UIControl">
+                    <rect key="frame" x="0.0" y="65" width="320" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="btn_back" translatesAutoresizingMaskIntoConstraints="NO" id="W1g-rk-mRd">
+                            <rect key="frame" x="15" y="10" width="24" height="24"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4W-fP-zdH">
+                            <rect key="frame" x="47" y="11" width="253" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                            <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="5JQ-fG-4X5"/>
+                    </constraints>
+                    <connections>
+                        <action selector="backBarTapped:" destination="-1" eventType="touchUpInside" id="LwV-nk-6Nv"/>
+                    </connections>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="mc1-oc-wVj" secondAttribute="trailing" id="Bhv-qj-lby"/>
+                <constraint firstItem="Eot-zf-Qub" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="DRd-dd-s1B"/>
+                <constraint firstItem="Eot-zf-Qub" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="DvO-jf-PhJ"/>
+                <constraint firstAttribute="bottom" secondItem="Eot-zf-Qub" secondAttribute="bottom" id="GCl-b3-X7c"/>
+                <constraint firstItem="mc1-oc-wVj" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Nfo-Y9-sPD"/>
+                <constraint firstAttribute="trailing" secondItem="Eot-zf-Qub" secondAttribute="trailing" id="XzV-D6-QPP"/>
+                <constraint firstItem="mc1-oc-wVj" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="65" id="ksF-TK-9uZ"/>
+            </constraints>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="btn_back" width="24" height="24"/>
+        <image name="img_background" width="320" height="568"/>
+    </resources>
+</document>

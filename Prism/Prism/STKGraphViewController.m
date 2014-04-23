@@ -31,10 +31,6 @@
     return self;
 }
 
-- (IBAction)tempLogout:(id)sender
-{
-    [[STKUserStore store] logout];
-}
 
 - (void)menuWillAppear:(BOOL)animated
 {

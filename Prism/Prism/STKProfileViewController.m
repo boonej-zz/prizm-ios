@@ -247,6 +247,7 @@ typedef enum {
     [self setShowPostsInSingleLayout:YES];
     [[[self filterView] gridViewButton] setSelected:NO];
     [[[self filterView] singleViewButton] setSelected:YES];
+    [[self tableView] reloadData];
 }
 
 - (IBAction)showGridPosts:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -254,6 +255,7 @@ typedef enum {
     [self setShowPostsInSingleLayout:NO];
     [[[self filterView] gridViewButton] setSelected:YES];
     [[[self filterView] singleViewButton] setSelected:NO];
+    [[self tableView] reloadData];
 }
 
 - (IBAction)toggleFilterByUserPost:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -722,7 +724,11 @@ typedef enum {
             if([self isShowingLuminaries]) {
                 return 1;
             } else {
-                return 5;
+                if([[[self profile] type] isEqualToString:STKUserTypeInstitution]) {
+                    return 5;
+                }
+            
+                return 1;
             }
         }
     }

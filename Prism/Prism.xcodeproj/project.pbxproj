@@ -83,6 +83,10 @@
 		BE6BAE3F18FED70A00B21EE7 /* STKInstitutionInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6BAE3D18FED70A00B21EE7 /* STKInstitutionInfoCell.m */; };
 		BE6BAE4018FED70A00B21EE7 /* STKInstitutionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6BAE3E18FED70A00B21EE7 /* STKInstitutionInfoCell.xib */; };
 		BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6EB880186395F300E8009D /* STKErrorStore.m */; };
+		BE7391C3190193AB00AD81AB /* STKSearchResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7391C1190193AB00AD81AB /* STKSearchResultsViewController.m */; };
+		BE7391C4190193AB00AD81AB /* STKSearchResultsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7391C2190193AB00AD81AB /* STKSearchResultsViewController.xib */; };
+		BE7391C719019AB600AD81AB /* STKHashtagPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7391C619019AB600AD81AB /* STKHashtagPostsViewController.m */; };
+		BE7391C91901A58200AD81AB /* STKHashtagPostsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7391C81901A58200AD81AB /* STKHashtagPostsViewController.xib */; };
 		BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE778C4018BBE16300DA5EDD /* STKNavigationButton.m */; };
 		BE778C4518BBF82000DA5EDD /* STKFilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE778C4318BBF82000DA5EDD /* STKFilterCell.m */; };
 		BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE778C4418BBF82000DA5EDD /* STKFilterCell.xib */; };
@@ -112,6 +116,8 @@
 		BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */; };
 		BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A618522D6C00F0B211 /* STKTextFieldCell.m */; };
 		BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAC71A718522D6C00F0B211 /* STKTextFieldCell.xib */; };
+		BEB1687C190700F900CED5F7 /* STKSegmentedControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB1687A190700F900CED5F7 /* STKSegmentedControlCell.m */; };
+		BEB1687D190700F900CED5F7 /* STKSegmentedControlCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEB1687B190700F900CED5F7 /* STKSegmentedControlCell.xib */; };
 		BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A02182AF40800080601 /* STKHomeViewController.m */; };
 		BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A03182AF40800080601 /* STKHomeViewController.xib */; };
 		BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A07182AF41C00080601 /* STKExploreViewController.m */; };
@@ -2014,6 +2020,12 @@
 		BE6BAE3E18FED70A00B21EE7 /* STKInstitutionInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInstitutionInfoCell.xib; sourceTree = "<group>"; };
 		BE6EB87F186395F300E8009D /* STKErrorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKErrorStore.h; sourceTree = "<group>"; };
 		BE6EB880186395F300E8009D /* STKErrorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKErrorStore.m; sourceTree = "<group>"; };
+		BE7391C0190193AB00AD81AB /* STKSearchResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchResultsViewController.h; sourceTree = "<group>"; };
+		BE7391C1190193AB00AD81AB /* STKSearchResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchResultsViewController.m; sourceTree = "<group>"; };
+		BE7391C2190193AB00AD81AB /* STKSearchResultsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchResultsViewController.xib; sourceTree = "<group>"; };
+		BE7391C519019AB600AD81AB /* STKHashtagPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHashtagPostsViewController.h; sourceTree = "<group>"; };
+		BE7391C619019AB600AD81AB /* STKHashtagPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagPostsViewController.m; sourceTree = "<group>"; };
+		BE7391C81901A58200AD81AB /* STKHashtagPostsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHashtagPostsViewController.xib; sourceTree = "<group>"; };
 		BE778C3F18BBE16300DA5EDD /* STKNavigationButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKNavigationButton.h; sourceTree = "<group>"; };
 		BE778C4018BBE16300DA5EDD /* STKNavigationButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKNavigationButton.m; sourceTree = "<group>"; };
 		BE778C4218BBF82000DA5EDD /* STKFilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFilterCell.h; sourceTree = "<group>"; };
@@ -2063,6 +2075,9 @@
 		BEAC71A518522D6C00F0B211 /* STKTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKTextFieldCell.h; path = Prism/STKTextFieldCell.h; sourceTree = "<group>"; };
 		BEAC71A618522D6C00F0B211 /* STKTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKTextFieldCell.m; path = Prism/STKTextFieldCell.m; sourceTree = "<group>"; };
 		BEAC71A718522D6C00F0B211 /* STKTextFieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKTextFieldCell.xib; path = Prism/STKTextFieldCell.xib; sourceTree = "<group>"; };
+		BEB16879190700F900CED5F7 /* STKSegmentedControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSegmentedControlCell.h; sourceTree = "<group>"; };
+		BEB1687A190700F900CED5F7 /* STKSegmentedControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSegmentedControlCell.m; sourceTree = "<group>"; };
+		BEB1687B190700F900CED5F7 /* STKSegmentedControlCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSegmentedControlCell.xib; sourceTree = "<group>"; };
 		BEC01A01182AF40800080601 /* STKHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHomeViewController.h; sourceTree = "<group>"; };
 		BEC01A02182AF40800080601 /* STKHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHomeViewController.m; sourceTree = "<group>"; };
 		BEC01A03182AF40800080601 /* STKHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeViewController.xib; sourceTree = "<group>"; };
@@ -2360,6 +2375,12 @@
 				BE0EC57018EDE306007102E1 /* STKSettingsViewController.h */,
 				BE0EC57118EDE306007102E1 /* STKSettingsViewController.m */,
 				BE5F690118F2131F006D2CD1 /* STKWebViewController.xib */,
+				BE7391C0190193AB00AD81AB /* STKSearchResultsViewController.h */,
+				BE7391C1190193AB00AD81AB /* STKSearchResultsViewController.m */,
+				BE7391C2190193AB00AD81AB /* STKSearchResultsViewController.xib */,
+				BE7391C519019AB600AD81AB /* STKHashtagPostsViewController.h */,
+				BE7391C619019AB600AD81AB /* STKHashtagPostsViewController.m */,
+				BE7391C81901A58200AD81AB /* STKHashtagPostsViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2469,6 +2490,9 @@
 				BE6BAE3C18FED70A00B21EE7 /* STKInstitutionInfoCell.h */,
 				BE6BAE3D18FED70A00B21EE7 /* STKInstitutionInfoCell.m */,
 				BE6BAE3E18FED70A00B21EE7 /* STKInstitutionInfoCell.xib */,
+				BEB16879190700F900CED5F7 /* STKSegmentedControlCell.h */,
+				BEB1687A190700F900CED5F7 /* STKSegmentedControlCell.m */,
+				BEB1687B190700F900CED5F7 /* STKSegmentedControlCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4492,6 +4516,7 @@
 			files = (
 				BE5F690218F2131F006D2CD1 /* STKWebViewController.xib in Resources */,
 				BE1E09D61850E58900975652 /* STKVerticalNavigationController.xib in Resources */,
+				BEB1687D190700F900CED5F7 /* STKSegmentedControlCell.xib in Resources */,
 				BE5767F6187B4DFF004AEE1F /* STKPostViewController.xib in Resources */,
 				BEE8F04818C103AA001A28CD /* STKCommentCell.xib in Resources */,
 				BEF2D78C1899818900D3C8D6 /* STKRequestCell.xib in Resources */,
@@ -4515,12 +4540,14 @@
 				BE7D5AEA18D382E5005D3893 /* STKTextInputViewController.xib in Resources */,
 				BE6BAE4018FED70A00B21EE7 /* STKInstitutionInfoCell.xib in Resources */,
 				BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */,
+				BE7391C4190193AB00AD81AB /* STKSearchResultsViewController.xib in Resources */,
 				BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */,
 				BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */,
 				BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */,
 				BE1A73C618D8BFB8004A3BB3 /* STKLockCell.xib in Resources */,
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
+				BE7391C91901A58200AD81AB /* STKHashtagPostsViewController.xib in Resources */,
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
 				D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */,
 				BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */,
@@ -4604,6 +4631,7 @@
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
 				BE5767F5187B4DFF004AEE1F /* STKPostViewController.m in Sources */,
+				BE7391C3190193AB00AD81AB /* STKSearchResultsViewController.m in Sources */,
 				BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */,
 				BE5767F9187B4E98004AEE1F /* STKPostHeaderView.m in Sources */,
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
@@ -4626,7 +4654,9 @@
 				BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
 				BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */,
+				BEB1687C190700F900CED5F7 /* STKSegmentedControlCell.m in Sources */,
 				BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */,
+				BE7391C719019AB600AD81AB /* STKHashtagPostsViewController.m in Sources */,
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				BEC0676818E46B1F00B5C5E6 /* STKHashTag.m in Sources */,
 				BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */,

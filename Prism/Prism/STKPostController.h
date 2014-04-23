@@ -16,6 +16,8 @@
 
 @optional
 
+- (UIViewController *)viewControllerForPresentingPostInPostController:(STKPostController *)pc;
+
 - (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingImageAtIndex:(int)idx;
 - (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingCommentsAtIndex:(int)idx;
 - (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingAvatarAtIndex:(int)idx;

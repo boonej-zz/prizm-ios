@@ -12,11 +12,13 @@
 #import "STKAvatarView.h"
 #import "STKUserStore.h"
 #import "STKHashTag.h"
+#import "STKGradientView.h"
+
 @interface STKPostCell ()
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *hashTagTopOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerHeightConstraint;
-@property (weak, nonatomic) IBOutlet UIView *hashTagContainer;
+@property (weak, nonatomic) IBOutlet STKGradientView *hashTagContainer;
 @property (weak, nonatomic) IBOutlet UIView *buttonContainer;
 @property (nonatomic, weak) STKPost *post;
 @end
@@ -100,7 +102,8 @@
         [[self rightInset] setConstant:0];
         [[self hashTagTopOffset] setConstant:300];
         [[self headerHeightConstraint] setConstant:64];
-        [[self hashTagContainer] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+//        [[self hashTagContainer] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
+        [[self hashTagContainer] setColors:@[[UIColor colorWithWhite:1 alpha:0.3], [UIColor colorWithWhite:1 alpha:0.3]]];
         [[self buttonContainer] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
 
         UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(0, 19, 320, 1)];

@@ -19,7 +19,6 @@
 #import "STKUserStore.h"
 #import "STKBaseStore.h"
 
-
 #import <GooglePlus/GooglePlus.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -81,6 +80,11 @@
     return YES;
 }
 
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    [[STKUserStore store] transferPostsFromSocialNetworks];
+}
 
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

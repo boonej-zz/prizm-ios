@@ -263,8 +263,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
         
-        NSString *hashEndpoint = [NSString stringWithFormat:@"/search/hashtags/%@", hashTag];
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:hashEndpoint];
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/search"];
+        [c setIdentifiers:@[@"hashtags", hashTag]];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
@@ -689,6 +689,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         if([[info objectForKey:STKPostTypeKey] isEqualToString:STKPostTypePersonal]) {
             [c addQueryValue:STKPostVisibilityPrivate forKey:STKPostVisibilityKey];
         }
+        
         
         [c setContext:[[STKUserStore store] context]];
         [c setModelGraph:@[@"STKPost"]];

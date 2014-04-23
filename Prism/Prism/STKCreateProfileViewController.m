@@ -22,6 +22,8 @@
 #import "STKAvatarView.h"
 #import "STKLockCell.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKSegmentedControl.h"
+#import "STKSegmentedControlCell.h"
 
 @import AddressBook;
 @import Social;
@@ -85,8 +87,40 @@ const long STKCreateProgressGeocoding = 4;
             user = [NSEntityDescription insertNewObjectForEntityForName:@"STKUser" inManagedObjectContext:[[STKUserStore store] context]];
         }
         [self setUser:user];
+        [user setType:@"user"];
         
+        [self configureItemsForCreation];
+        
+        _locationManager = [[CLLocationManager alloc] init];
+        [_locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
+        [_locationManager setDelegate:self];
+        
+    }
+    return self;
+}
+
+- (void)configureItemsForCreation
+{
+    if([[[self user] type] isEqualToString:STKUserTypeInstitution]) {
         _items = @[
+                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"User"]},
+                   
+                   @{@"title" : @"Email", @"key" : @"email",
+                     @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
+                   
+                   @{@"title" : @"Password", @"key" : @"password",
+                     @"options" : @{@"secureTextEntry" : @(YES)}},
+                   
+                   @{@"title" : @"Name", @"key" : @"firstName",
+                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                   
+                   @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                   ];
+        
+        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+    } else {
+        _items = @[
+                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"User"]},
                    @{@"title" : @"Email", @"key" : @"email",
                      @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                    
@@ -105,23 +139,17 @@ const long STKCreateProgressGeocoding = 4;
                    
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                    ];
-
+        
         _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
-
-        if([[self user] externalServiceType]) {
-            _items = [[self items] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"key != %@", @"password"]];
-            _requiredKeys = [[self requiredKeys] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", @"password"]];
-        }
-        
-        
-        _locationManager = [[CLLocationManager alloc] init];
-        [_locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
-        [_locationManager setDelegate:self];
-        
+   
     }
-    return self;
+    if([[self user] externalServiceType]) {
+        _items = [[self items] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"key != %@", @"password"]];
+        _requiredKeys = [[self requiredKeys] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", @"password"]];
+    }
 
 }
+
 
 - (id)initWithProfileForEditing:(STKUser *)user
 {
@@ -729,7 +757,20 @@ const long STKCreateProgressGeocoding = 4;
     [self configureInterface];
 }
 
-
+- (void)controlChanged:(UISegmentedControl *)sender atIndexPath:(NSIndexPath *)ip
+{
+    NSDictionary *item = [[self items] objectAtIndex:[ip row]];
+    if([[item objectForKey:@"key"] isEqualToString:@"type"]) {
+        NSString *t = nil;
+        if([sender selectedSegmentIndex] == 0)
+            t = @"user";
+        else
+            t = @"institution";
+        [[self user] setType:t];
+        [self configureItemsForCreation];
+        [[self tableView] reloadData];
+    }
+}
 
 - (IBAction)showTOS:(id)sender
 {
@@ -873,6 +914,16 @@ const long STKCreateProgressGeocoding = 4;
         } else if([cellType isEqualToString:@"lock"]) {
             STKLockCell *c = [STKLockCell cellForTableView:tableView target:self];
 
+            return c;
+        } else if([cellType isEqualToString:@"segmented"]) {
+            STKSegmentedControlCell *c = [STKSegmentedControlCell cellForTableView:tableView target:self];
+            NSInteger selected = [[c control] selectedSegmentIndex];
+            [[c control] removeAllSegments];
+            for(NSString *n in [item objectForKey:@"values"]) {
+                [[c control] insertSegmentWithTitle:n atIndex:0 animated:NO];
+            }
+            [[c control] setSelectedSegmentIndex:selected];
+            
             return c;
         }
     }
