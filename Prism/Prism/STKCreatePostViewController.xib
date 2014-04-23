@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -8,6 +8,8 @@
             <connections>
                 <outlet property="categoryCollectionView" destination="y5v-O0-9uB" id="Xn4-wJ-dmL"/>
                 <outlet property="imageView" destination="QXR-Ft-Vam" id="T4M-GD-tJw"/>
+                <outlet property="locationField" destination="UmD-zJ-ssx" id="8Is-OY-0D1"/>
+                <outlet property="locationIndicator" destination="wPG-cH-6q0" id="Pmd-fB-GdV"/>
                 <outlet property="optionCollectionView" destination="BVv-6Z-JvL" id="FEo-Y6-wvF"/>
                 <outlet property="optionHeightConstraint" destination="wKo-uX-3X4" id="eY2-BL-pLk"/>
                 <outlet property="postTextView" destination="1Dz-r9-03S" id="eag-cP-jY7"/>
@@ -29,7 +31,7 @@
                     <color key="backgroundColor" white="1" alpha="0.10000000000000001" colorSpace="calibratedWhite"/>
                 </view>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Caption your post..." translatesAutoresizingMaskIntoConstraints="NO" id="1Dz-r9-03S">
-                    <rect key="frame" x="105" y="108" width="198" height="154"/>
+                    <rect key="frame" x="105" y="108" width="198" height="134"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -39,6 +41,25 @@
                         <outlet property="delegate" destination="-1" id="qW8-zM-YfG"/>
                     </connections>
                 </textView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="location" translatesAutoresizingMaskIntoConstraints="NO" id="wPG-cH-6q0">
+                    <rect key="frame" x="20" y="245" width="16" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="2el-gi-MjA"/>
+                        <constraint firstAttribute="height" constant="16" id="KFb-a8-lJb"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="258" translatesAutoresizingMaskIntoConstraints="NO" id="UmD-zJ-ssx">
+                    <rect key="frame" x="42" y="243" width="258" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="blZ-Fo-GCw"/>
+                        <constraint firstAttribute="width" constant="258" id="iBL-tk-cYn"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
+                    <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QXR-Ft-Vam">
                     <rect key="frame" x="17" y="108" width="80" height="80"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -116,15 +137,18 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="wPG-cH-6q0" firstAttribute="centerY" secondItem="UmD-zJ-ssx" secondAttribute="centerY" id="0Cz-8p-s3b"/>
                 <constraint firstItem="LOr-M2-ePT" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="5Yq-Dh-0GG"/>
                 <constraint firstItem="QXR-Ft-Vam" firstAttribute="centerX" secondItem="1jD-K5-R81" secondAttribute="centerX" id="5oM-vv-SZX"/>
                 <constraint firstAttribute="trailing" secondItem="y5v-O0-9uB" secondAttribute="trailing" id="9bc-ve-mTQ"/>
                 <constraint firstItem="BVv-6Z-JvL" firstAttribute="top" secondItem="LOr-M2-ePT" secondAttribute="bottom" id="BdU-Ns-ugJ"/>
+                <constraint firstItem="LOr-M2-ePT" firstAttribute="top" secondItem="wPG-cH-6q0" secondAttribute="bottom" constant="11" id="CvH-BB-o9g"/>
                 <constraint firstItem="QXR-Ft-Vam" firstAttribute="width" secondItem="1jD-K5-R81" secondAttribute="width" id="Eed-RQ-6LS"/>
                 <constraint firstAttribute="trailing" secondItem="1Dz-r9-03S" secondAttribute="trailing" constant="17" id="FEj-Xh-Zaq"/>
+                <constraint firstItem="wPG-cH-6q0" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" id="I5k-94-M6g"/>
                 <constraint firstAttribute="bottom" secondItem="y5v-O0-9uB" secondAttribute="bottom" id="Lr5-lS-j2E"/>
                 <constraint firstItem="y5v-O0-9uB" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="OI2-8v-0zv"/>
-                <constraint firstItem="LOr-M2-ePT" firstAttribute="top" secondItem="1Dz-r9-03S" secondAttribute="bottom" constant="10" id="QEZ-RP-jSb"/>
+                <constraint firstItem="LOr-M2-ePT" firstAttribute="top" secondItem="1Dz-r9-03S" secondAttribute="bottom" constant="30" id="QEZ-RP-jSb"/>
                 <constraint firstItem="5QL-8Y-45m" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="SGC-UH-AYI"/>
                 <constraint firstItem="5QL-8Y-45m" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="W49-vs-zzv"/>
                 <constraint firstItem="LOr-M2-ePT" firstAttribute="top" secondItem="5QL-8Y-45m" secondAttribute="bottom" constant="0.5" id="WmD-9C-mQK"/>
@@ -135,6 +159,7 @@
                 <constraint firstAttribute="trailing" secondItem="LOr-M2-ePT" secondAttribute="trailing" id="d33-UG-z9j"/>
                 <constraint firstItem="BVv-6Z-JvL" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="hH0-zX-nYy"/>
                 <constraint firstItem="QXR-Ft-Vam" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="17" id="iQE-IF-8NE"/>
+                <constraint firstItem="UmD-zJ-ssx" firstAttribute="leading" secondItem="wPG-cH-6q0" secondAttribute="trailing" constant="6" id="jbv-0u-e5T"/>
                 <constraint firstAttribute="trailing" secondItem="BVv-6Z-JvL" secondAttribute="trailing" id="l31-wO-0Gt"/>
                 <constraint firstItem="0Dx-6c-DLI" firstAttribute="top" secondItem="BVv-6Z-JvL" secondAttribute="bottom" id="pC4-XR-Aad"/>
                 <constraint firstItem="0Dx-6c-DLI" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="pbz-fp-2E1"/>
@@ -150,5 +175,6 @@
     </objects>
     <resources>
         <image name="img_background" width="320" height="568"/>
+        <image name="location" width="20" height="20"/>
     </resources>
 </document>

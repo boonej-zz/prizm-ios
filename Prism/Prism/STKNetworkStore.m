@@ -58,6 +58,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     [self setUpdating:YES];
     
     [[STKUserStore store] fetchUserDetails:user additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token"] completion:^(STKUser *user, NSError *err) {
+        NSLog(@"Will check Instagram %@", [user instagramToken]);
         [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[user instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
             [ws setInstagramLastMinID:instagramLastID];
             
@@ -68,6 +69,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                         account = acct;
                     }
                 }
+                NSLog(@"Will check Twitter %@", [account username]);
                 [self transferPostsFromTwitterAccount:account lastMinimumID:[user twitterLastMinID] completion:^(NSString *twitterLastID, NSError *twitterError) {
                     if([twitterError code] == STKNetworkStoreErrorTwitterAccountNoLongerExists) {
                         [ws setTwitterID:nil];
@@ -106,6 +108,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                                                                              NSMutableArray *postsToSend = [NSMutableArray array];
                                                                              NSArray *posts = [val objectForKey:@"data"];
+                                                                             NSLog(@"Instagram yielded %d total posts", [posts count]);
                                                                              for(NSDictionary *post in posts) {
                                                                                  
                                                                                  NSString *postID = [post objectForKey:@"id"];
@@ -214,7 +217,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                     block(nil, connectionError);
                 } else {
                     NSArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-
+                    NSLog(@"Twitter got %d total posts", [json count]);
                     NSMutableArray *postsToSend = [NSMutableArray array];
                     for(NSDictionary *d in json) {
                         NSDictionary *entities = [d objectForKey:@"entities"];

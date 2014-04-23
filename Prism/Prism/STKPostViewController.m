@@ -724,13 +724,12 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *visibilityString = [@{@0 : STKPostVisibilityPublic, @1 : STKPostVisibilityTrust, @2: STKPostVisibilityPrivate}
                                    objectForKey:@([sender selectedSegmentIndex])];
-    [STKProcessingView present];
+
     STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
     [p setVisibility:visibilityString];
     [[STKContentStore store] editPost:p
                            completion:^(STKPost *result, NSError *err) {
                                [[[self post] managedObjectContext] discardChangesToEditableObject:p];
-                               [STKProcessingView dismiss];
                                [[self tableView] reloadData];
                            }];
 }

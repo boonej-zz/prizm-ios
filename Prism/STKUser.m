@@ -38,7 +38,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 @dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
-accountStoreID, instagramLastMinID, instagramToken;
+accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
 @dynamic fProfilePosts, createdActivities, ownedActivities, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
@@ -73,7 +73,8 @@ accountStoreID, instagramLastMinID, instagramToken;
              @"twitterLastMinID" : @"twitter_min_id",
              @"enrollment" : @"enrollment",
              @"dateFounded" : @"date_founded",
-             @"mascotName" : @"mascot"
+             @"mascotName" : @"mascot",
+             @"phoneNumber" : @"phone_number"
     };
 }
 
@@ -119,7 +120,7 @@ accountStoreID, instagramLastMinID, instagramToken;
         @"trusts" : @{STKJSONBindFieldKey : @"ownedTrusts", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"followers" : @{STKJSONBindFieldKey : @"followers", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
         @"following" : @{STKJSONBindFieldKey : @"following", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-        
+        @"phone_number" : @"phoneNumber",
         @"mascot" : @"mascotName",
         @"enrollment" : ^(NSNumber *inValue) {
             if(inValue)

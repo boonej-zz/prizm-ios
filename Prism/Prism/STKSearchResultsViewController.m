@@ -179,21 +179,9 @@ typedef enum {
         
         [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
         
-        if([[self hashTagsFound] count] == 0) {
-            [[self searchResultsTableView] setHidden:YES];
-        } else {
-            [[self searchResultsTableView] setHidden:NO];
-        }
-        
     } else {
         
         [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
-        
-        if([[self profilesFound] count] == 0) {
-            [[self searchResultsTableView] setHidden:YES];
-        } else {
-            [[self searchResultsTableView] setHidden:NO];
-        }
     }
     
     [[self searchResultsTableView] reloadData];
@@ -232,22 +220,57 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if([self searchType] == STKSearchTypeHashTag)
+    if([self searchType] == STKSearchTypeHashTag) {
+        if([[self hashTagsFound] count] == 0) {
+            if([[[self searchTextField] text] length] >= 2)
+                return 1;
+            return 0;
+        }
         return [[self hashTagsFound] count];
+    }
+    
+    if([[self profilesFound] count] == 0) {
+        if([[[self searchTextField] text] length] >= 2)
+            return 1;
+        return 0;
+    }
     
     return [[self profilesFound] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     if([self searchType] == STKSearchTypeHashTag){
-        STKSearchHashTagsCell *c = [STKSearchHashTagsCell cellForTableView:tableView target:self];
-        NSDictionary *hashtag = [[self hashTagsFound] objectAtIndex:[indexPath row]];
-        [[c hashTagLabel] setText:[NSString stringWithFormat:@"#%@",[hashtag objectForKey:@"hash_tag"]]];
-        [[c count] setText:[NSString stringWithFormat:@"%@",[hashtag objectForKey:@"count"]]];
-        [c setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+        
+        if([[self hashTagsFound] count] == 0) {
+            UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+            if(!c) {
+                c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+                [[c textLabel] setTextColor:STKTextColor];
+                [[c textLabel] setFont:STKFont(16)];
+            }
+            [[c textLabel] setText:@"No results found."];
+            return c;
+        } else {
+            STKSearchHashTagsCell *c = [STKSearchHashTagsCell cellForTableView:tableView target:self];
+            NSDictionary *hashtag = [[self hashTagsFound] objectAtIndex:[indexPath row]];
+            [[c hashTagLabel] setText:[NSString stringWithFormat:@"#%@",[hashtag objectForKey:@"hash_tag"]]];
+            [[c count] setText:[NSString stringWithFormat:@"%@",[hashtag objectForKey:@"count"]]];
+            [c setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+            return c;
+        }
+    }
+    
+    if([[self profilesFound] count] == 0) {
+        UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+        if(!c) {
+            c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+            [[c textLabel] setTextColor:STKTextColor];
+            [[c textLabel] setFont:STKFont(16)];
+        }
+        [[c textLabel] setText:@"No results found."];
         return c;
+
     }
     
     STKSearchProfileCell *c = [STKSearchProfileCell cellForTableView:tableView target:self];

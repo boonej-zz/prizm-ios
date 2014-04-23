@@ -39,6 +39,8 @@ const long STKCreateProgressGeocoding = 4;
 @property (nonatomic, strong) STKUser *user;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 
+@property (nonatomic, strong) NSString *confirmedPassword;
+
 @property (nonatomic) long progressMask;
 @property (nonatomic) BOOL retrySyncOnProgressMaskClear;
 
@@ -111,13 +113,18 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Password", @"key" : @"password",
                      @"options" : @{@"secureTextEntry" : @(YES)}},
                    
+  @{@"title" : @"Confirm Password", @"key" : @"confirmPassword",
+                     @"options" : @{@"secureTextEntry" : @(YES)}},
+
                    @{@"title" : @"Name", @"key" : @"firstName",
                      @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
                    
-                   @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                   @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
+                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
+                   @{@"title" : @"Website", @"key" : @"website", @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
                    ];
         
-        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"phoneNumber", @"website"];
     } else {
         _items = @[
                    @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"User"]},
@@ -125,6 +132,9 @@ const long STKCreateProgressGeocoding = 4;
                      @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                    
                    @{@"title" : @"Password", @"key" : @"password",
+                     @"options" : @{@"secureTextEntry" : @(YES)}},
+                   
+                   @{@"title" : @"Confirm Password", @"key" : @"confirmPassword",
                      @"options" : @{@"secureTextEntry" : @(YES)}},
                    
                    @{@"title" : @"First Name", @"key" : @"firstName",
@@ -144,7 +154,7 @@ const long STKCreateProgressGeocoding = 4;
    
     }
     if([[self user] externalServiceType]) {
-        _items = [[self items] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"key != %@", @"password"]];
+        _items = [[self items] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"key != %@ and key != %@", @"password", @"confirmPassword"]];
         _requiredKeys = [[self requiredKeys] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self != %@", @"password"]];
     }
 
@@ -435,13 +445,16 @@ const long STKCreateProgressGeocoding = 4;
                                                    cancelButtonTitle:@"OK"
                                                    otherButtonTitles:nil];
                 [av show];
-/*                NSIndexPath *ip = [NSIndexPath indexPathForRow:idx inSection:0];
-                [[self tableView] scrollToRowAtIndexPath:ip
-                                        atScrollPosition:UITableViewScrollPositionNone
-                                                animated:NO];*/
-
             }
             
+            return NO;
+        }
+    }
+    
+    if([[self requiredKeys] containsObject:@"password"]) {
+        if(![[[self user] password] isEqualToString:[self confirmedPassword]]) {
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Confirm Password" message:@"The password and confirmation password don't match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
             return NO;
         }
     }
@@ -612,8 +625,14 @@ const long STKCreateProgressGeocoding = 4;
 
 - (void)textFieldDidChange:(UITextField *)sender atIndexPath:(NSIndexPath *)ip
 {
-    NSDictionary *item = [[self items] objectAtIndex:[ip row]];
     NSString *text = [sender text];
+    NSDictionary *item = [[self items] objectAtIndex:[ip row]];
+
+    if([[item objectForKey:@"key"] isEqualToString:@"confirmPassword"]) {
+        [self setConfirmedPassword:text];
+        return;
+    }
+    
     [[self user] setValue:text forKey:[item objectForKey:@"key"]];
 }
 
@@ -819,7 +838,8 @@ const long STKCreateProgressGeocoding = 4;
                                            }];
             };
         }
-        if(![[self user] city]) {
+        
+        if(![[self user] city] || [[[self user] changedValues] objectForKey:@"zipCode"]) {
             CLGeocoder *gc = [[CLGeocoder alloc] init];
             [gc geocodeAddressDictionary:@{(__bridge NSString *)kABPersonAddressZIPKey : [[self user] zipCode]}
                        completionHandler:^(NSArray *placemarks, NSError *error) {
@@ -937,7 +957,12 @@ const long STKCreateProgressGeocoding = 4;
     }
     
     [[c label] setText:[item objectForKey:@"title"]];
-    NSString *value = [[self user] valueForKey:[item objectForKey:@"key"]];
+    NSString *value = nil;
+    if([[item objectForKey:@"key"] isEqualToString:@"confirmPassword"])
+        value = [self confirmedPassword];
+    else
+        value = [[self user] valueForKey:[item objectForKey:@"key"]];
+    
     if(value) {
         [[c textField] setText:value];
     } else {

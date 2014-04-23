@@ -76,7 +76,7 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 @property (nonatomic, strong) NSDate *dateFounded;
 @property (nonatomic, strong) NSString *mascotName;
 @property (nonatomic) NSString *enrollment;
-
+@property (nonatomic, strong) NSString *phoneNumber;
 
 @property (nonatomic) int followerCount;
 @property (nonatomic) int followingCount;

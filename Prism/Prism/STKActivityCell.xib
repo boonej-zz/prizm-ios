@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -49,7 +49,7 @@
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_clock" translatesAutoresizingMaskIntoConstraints="NO" id="KrN-3j-DXO">
-                        <rect key="frame" x="219" y="30" width="16" height="16"/>
+                        <rect key="frame" x="217" y="30" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="CGH-Rl-E7f"/>
@@ -64,7 +64,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KrW-jy-2R5">
-                        <rect key="frame" x="56" y="29" width="161" height="17"/>
+                        <rect key="frame" x="56" y="29" width="159" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="Vfa-bo-u0e"/>
@@ -94,7 +94,7 @@
                     <constraint firstAttribute="trailing" secondItem="pkP-J2-fFc" secondAttribute="trailing" id="CuW-d9-FXd"/>
                     <constraint firstItem="pkP-J2-fFc" firstAttribute="top" secondItem="Vpp-Kg-Pxp" secondAttribute="top" id="E60-dp-K8G"/>
                     <constraint firstItem="VfA-Yc-Efg" firstAttribute="leading" secondItem="gFK-5G-pZ1" secondAttribute="trailing" constant="-12" id="NFo-Wp-vJB"/>
-                    <constraint firstItem="m2s-jy-YQI" firstAttribute="leading" secondItem="KrN-3j-DXO" secondAttribute="trailing" constant="-1" id="Tay-bl-aVC"/>
+                    <constraint firstItem="m2s-jy-YQI" firstAttribute="leading" secondItem="KrN-3j-DXO" secondAttribute="trailing" constant="1" id="Tay-bl-aVC"/>
                     <constraint firstAttribute="centerY" secondItem="gFK-5G-pZ1" secondAttribute="centerY" constant="5" id="WGB-FT-zHd"/>
                     <constraint firstItem="LrZ-kv-omJ" firstAttribute="leading" secondItem="KrW-jy-2R5" secondAttribute="leading" id="dLn-K6-cN7"/>
                     <constraint firstItem="Ozo-8o-OxR" firstAttribute="leading" secondItem="Vpp-Kg-Pxp" secondAttribute="leading" id="ejE-FZ-sI1"/>
@@ -118,6 +118,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="btn_clock" width="10" height="10"/>
+        <image name="btn_clock" width="11" height="11"/>
     </resources>
 </document>

@@ -93,6 +93,7 @@
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mascotName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="religion" optional="YES" attributeType="String" syncable="YES"/>
@@ -122,6 +123,6 @@
         <element name="STKPost" positionX="0" positionY="144" width="128" height="433"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="255"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="690"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="705"/>
     </elements>
 </model>

@@ -15,6 +15,7 @@
 #import "STKNetworkStore.h"
 #import "STKProcessingView.h"
 #import "STKAccountChooserViewController.h"
+#import "STKWebViewController.h"
 
 @import Social;
 @import Accounts;
@@ -23,7 +24,7 @@
 
 @property (nonatomic, strong) NSArray *settings;
 @property (nonatomic, weak) UIButton *logoutButton;
-
+@property (nonatomic, strong) UILabel *versionLabel;
 @end
 
 @implementation STKSettingsViewController
@@ -45,7 +46,10 @@
         if(![self settings]) {
             _settings = @[
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
-                          @{@"title" : @"Notifications", @"type" : @"STKLabelCell", @"next" : [self notificationSettings]}
+                          @{@"title" : @"Notifications", @"type" : @"STKLabelCell", @"next" : [self notificationSettings]},
+                          @{@"title" : @"Terms of Use", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/terms.html"},
+                          @{@"title" : @"Privacy Policy", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/privacy.html"},
+                          @{@"title" : @"Support", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/support.html"}
                           ];
         }
     }
@@ -62,10 +66,10 @@
     
     return
     @[
-      @{@"title": @"Instagram", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureInstagram:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
+      @{@"title": @"Instagram", @"image" : @"logo_instagram", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureInstagram:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u instagramToken] != nil)];
       }},
-      @{@"title": @"Twitter", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureTwitter:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
+      @{@"title": @"Twitter", @"image" : @"logo_facebook", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureTwitter:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u twitterID] != nil)];
       }}
     ];
@@ -138,7 +142,11 @@
             }
         }];
     } else {
-        
+        [[[STKUserStore store] currentUser] setTwitterLastMinID:nil];
+        [[[STKUserStore store] currentUser] setTwitterID:nil];
+        [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+            
+        }];
     }
 }
 
@@ -154,16 +162,24 @@
 
 - (void)configureInstagram:(NSNumber *)activating
 {
-    STKInstagramAuthViewController *vc = [[STKInstagramAuthViewController alloc] init];
-    [vc setTokenFound:^(NSString *token) {
-        if(token) {
-            [[[STKUserStore store] currentUser] setInstagramToken:token];
-            [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
-                
-            }];
-        }
-    }];
-    [[self navigationController] pushViewController:vc animated:YES];
+    if([activating boolValue]) {
+        STKInstagramAuthViewController *vc = [[STKInstagramAuthViewController alloc] init];
+        [vc setTokenFound:^(NSString *token) {
+            if(token) {
+                [[[STKUserStore store] currentUser] setInstagramToken:token];
+                [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+                    
+                }];
+            }
+        }];
+        [[self navigationController] pushViewController:vc animated:YES];
+    } else {
+        [[[STKUserStore store] currentUser] setInstagramLastMinID:nil];
+        [[[STKUserStore store] currentUser] setInstagramToken:nil];
+        [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+            
+        }];
+    }
 }
 
 - (void)done:(id)sender
@@ -177,9 +193,9 @@
     
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
-    [[self tableView] setSeparatorColor:STKTextTransparentColor];
+    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:1 alpha:0.1]];
 
-    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 70)];
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)];
     UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
     [[b titleLabel] setFont:STKFont(18)];
     [[b titleLabel] setTextColor:STKTextColor];
@@ -189,6 +205,17 @@
     [b setFrame:CGRectMake(10, 10, 300, 51)];
     [v addSubview:b];
     [v setBackgroundColor:[UIColor clearColor]];
+    
+    UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake(10, 72, 300, 30)];
+    [lbl setTextColor:STKTextColor];
+    [lbl setFont:STKFont(12)];
+    [lbl setNumberOfLines:0];
+    [lbl setTextAlignment:NSTextAlignmentCenter];
+    [lbl setText:[NSString stringWithFormat:@"Prizm\n%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge id)kCFBundleVersionKey]]];
+    [v addSubview:lbl];
+    
+    [self setVersionLabel:lbl];
+    
     [[self tableView] setTableFooterView:v];
     [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
     
@@ -209,6 +236,7 @@
     
     if([[[self navigationController] viewControllers] indexOfObject:self] != 0) {
         [[self logoutButton] setHidden:YES];
+        [[self versionLabel] setHidden:YES];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
                                                   landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                                target:self action:@selector(back:)];
@@ -237,6 +265,11 @@
     return [[self settingsItemAtIndexPath:ip] objectForKey:@"type"];
 }
 
+- (UIImage *)imageForIndexPath:(NSIndexPath *)ip
+{
+    return [UIImage imageNamed:[[self settingsItemAtIndexPath:ip] objectForKey:@"image"]];
+}
+
 - (NSString *)titleForIndexPath:(NSIndexPath *)ip
 {
     return [[self settingsItemAtIndexPath:ip] objectForKey:@"title"];
@@ -262,6 +295,11 @@
     return [[self settingsItemAtIndexPath:ip] objectForKey:@"selectionSelector"];
 }
 
+- (NSString *)urlForIndexPath:(NSIndexPath *)ip
+{
+    return [[self settingsItemAtIndexPath:ip] objectForKey:@"url"];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *nextItems = [self nextItemsForIndexPath:indexPath];
@@ -270,6 +308,17 @@
         [[self navigationController] pushViewController:svc animated:YES];
         return;
     }
+    
+    NSString *url = [self urlForIndexPath:indexPath];
+    if(url) {
+        STKWebViewController *wvc = [[STKWebViewController alloc] init];
+        [wvc setUrl:[NSURL URLWithString:url]];
+        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
+
+        [self presentViewController:nvc animated:YES completion:nil];
+        return;
+    }
+    
     
     Class cls = [self viewControllerClassForIndexPath:indexPath];
     if(cls) {
@@ -309,6 +358,7 @@
         STKSettingsShareCell *cell = [STKSettingsShareCell cellForTableView:tableView target:self];
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         [[cell networkTitleLabel] setText:[self titleForIndexPath:indexPath]];
+        [[cell networkImageView] setImage:[self imageForIndexPath:indexPath]];
         returnCell = cell;
     }
     

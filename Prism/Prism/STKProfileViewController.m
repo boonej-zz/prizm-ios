@@ -467,8 +467,6 @@ typedef enum {
             [[c accoladesButton] setHidden:YES];
         }
     } else {
-        [[c accoladesButton] setHidden:YES];
-        [[c followButton] setHidden:NO];
         
         [[c editButton] setHidden:YES];
 
@@ -479,24 +477,35 @@ typedef enum {
             [[c trustButton] setHidden:NO];
             [[c messageButton] setHidden:YES];
         }
-        
-        
-        if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
-            [[c followButton] setTitle:@"Following" forState:UIControlStateNormal];
-            [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
-                              forState:UIControlStateNormal];
-            [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 66, 0, 0)];
+
+        STKTrust *t = [[self profile] trustForUser:[[STKUserStore store] currentUser]];
+
+        if([t isAccepted]) {
+            [[c followButton] setHidden:YES];
+            [[c accoladesButton] setHidden:NO];
+            
         } else {
-            [[c followButton] setTitle:@"Follow" forState:UIControlStateNormal];
-            [[c followButton] setImage:[UIImage imageNamed:@"arrowblue.png"]
-                              forState:UIControlStateNormal];
-            [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 50, 0, 0)];
+            [[c followButton] setHidden:NO];
+            [[c accoladesButton] setHidden:YES];
+            
+            
+            if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
+                [[c followButton] setTitle:@"Following" forState:UIControlStateNormal];
+                [[c followButton] setImage:[UIImage imageNamed:@"following.png"]
+                                  forState:UIControlStateNormal];
+                [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 66, 0, 0)];
+            } else {
+                [[c followButton] setTitle:@"Follow" forState:UIControlStateNormal];
+                [[c followButton] setImage:[UIImage imageNamed:@"arrowblue.png"]
+                                  forState:UIControlStateNormal];
+                [[c followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 50, 0, 0)];
+            }
         }
     
-        STKTrust *t = [[self profile] trustForUser:[[STKUserStore store] currentUser]];
         if(!t || [t isCancelled]) {
             [[c trustButton] setTitle:@"Request Trust" forState:UIControlStateNormal];
             [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
+            [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -60, 0, 0)];
             [[c trustButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 95, 0, 0)];
         } else {
             if([t isPending]) {
@@ -505,19 +514,20 @@ typedef enum {
                     [[c trustButton] setImage:[UIImage imageNamed:@"activity_accept_trust"] forState:UIControlStateNormal];
                 } else {
                     [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
-                    [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+                    [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
                 }
             } else if([t isRejected]) {
                 if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
                     [[c trustButton] setTitle:@"Denied" forState:UIControlStateNormal];
-                    [[c trustButton] setImage:nil forState:UIControlStateNormal];
+                    [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
                 } else {
                     [[c trustButton] setTitle:@"Pending" forState:UIControlStateNormal];
-                    [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+                    [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
                 }
             } else if([t isAccepted]) {
-                [[c trustButton] setTitle:@"Trust" forState:UIControlStateNormal];
-                [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
+                [[c trustButton] setTitle:@"Trusted" forState:UIControlStateNormal];
+                [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -30, 0, 0)];
+                [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
             }
         }
     }

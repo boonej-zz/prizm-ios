@@ -25,7 +25,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [self setAutomaticallyAdjustsScrollViewInsets:NO];
     }
     return self;
 }
@@ -82,7 +82,7 @@
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
     [[self tableView] setSeparatorColor:STKTextTransparentColor];
-    
+    [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     [v setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setTableFooterView:v];

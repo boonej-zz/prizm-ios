@@ -27,14 +27,15 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 @interface STKCreatePostViewController ()
     <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKHashtagToolbarDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UIImageView *locationIndicator;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *optionHeightConstraint;
 @property (weak, nonatomic) IBOutlet UITextView *postTextView;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *optionCollectionView;
-@property (weak, nonatomic) IBOutlet UIButton *imageButton;
 @property (nonatomic, strong) STKHashtagToolbar *hashtagToolbar;
 @property (nonatomic) NSRange hashtagRange;
+@property (weak, nonatomic) IBOutlet UILabel *locationField;
 
 @property (nonatomic, getter = isUploadingImage) BOOL uploadingImage;
 @property (nonatomic) BOOL waitingForImageToFinish;
@@ -113,6 +114,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
     }
     
+    [[self locationIndicator] setHidden:[[self postInfo] objectForKey:STKPostLocationNameKey] == nil];
+    
     if([self originalPost]) {
         [[self navigationItem] setTitle:@"Repost"];
         [[self postInfo] setObject:[[self originalPost] imageURLString] forKey:STKPostURLKey];
@@ -147,8 +150,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                 [self setWaitingForImageToFinish:NO];
                 
                 [[self imageView] setImage:nil];
-                [[self imageButton] setImage:[UIImage imageNamed:@"upload_camera"]
-                                    forState:UIControlStateNormal];
                 
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Uploading Image"
                                                              message:@"The image you selected failed to upload. Make sure you have an internet connection and try again."
@@ -175,7 +176,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[self postInfo] setObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:[loc location].longitude]] forKey:STKPostLocationLongitudeKey];
     if([loc name]) {
         [[self postInfo] setObject:[loc name] forKey:STKPostLocationNameKey];
+        [[self locationField] setText:[loc name]];
     }
+    [[self locationIndicator] setHidden:[[self postInfo] objectForKey:STKPostLocationNameKey] == nil];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -481,9 +484,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                          [self setOriginalPostImage:originalImage];
                                                                          [self setPostImage:img];
                                                                          [[self imageView] setImage:img];
-                                                                         if(img) {
-                                                                             [[self imageButton] setImage:nil forState:UIControlStateNormal];
-                                                                         }
                                                                      }];
 }
 
@@ -500,9 +500,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                         [self setOriginalPostImage:originalImage];
                                                                         [self setPostImage:img];
                                                                         [[self imageView] setImage:img];
-                                                                        if(img) {
-                                                                            [[self imageButton] setImage:nil forState:UIControlStateNormal];
-                                                                        }
 
                                                                     }];
 }

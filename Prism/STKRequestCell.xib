@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -41,7 +41,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_clock" translatesAutoresizingMaskIntoConstraints="NO" id="fGJ-lc-BAB">
-                        <rect key="frame" x="9" y="38" width="16" height="16"/>
+                        <rect key="frame" x="201" y="31" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="DgF-Lo-WVf"/>
@@ -49,7 +49,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2hrs" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4oo-ni-g3S">
-                        <rect key="frame" x="25" y="37" width="24" height="17"/>
+                        <rect key="frame" x="218" y="29" width="24" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="4Dh-VC-UrD"/>
@@ -60,20 +60,21 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="requested to join your trust" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VRx-24-fLv">
-                        <rect key="frame" x="56" y="30" width="182" height="17"/>
+                        <rect key="frame" x="56" y="30" width="143" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="1Kn-fQ-oD3"/>
+                            <constraint firstAttribute="width" constant="143" id="bwI-HD-bhl"/>
                         </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                         <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNS-VJ-bJH">
-                        <rect key="frame" x="234" y="0.0" width="40" height="56"/>
+                        <rect key="frame" x="242" y="0.0" width="32" height="56"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="40" id="OYB-6f-kqy"/>
+                            <constraint firstAttribute="width" constant="32" id="OYB-6f-kqy"/>
                             <constraint firstAttribute="height" constant="56" id="kSh-g3-gE2"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -110,21 +111,19 @@
                 </subviews>
                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
-                    <constraint firstItem="VRx-24-fLv" firstAttribute="trailing" secondItem="1Cu-Uz-HHT" secondAttribute="trailing" id="0D4-je-hoX"/>
-                    <constraint firstItem="fGJ-lc-BAB" firstAttribute="leading" secondItem="QgB-CC-xg6" secondAttribute="leading" constant="-4" id="1yr-We-giv"/>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="leading" secondItem="WVF-hR-STv" secondAttribute="leading" constant="13" id="2Bs-yT-J1o"/>
-                    <constraint firstItem="VRx-24-fLv" firstAttribute="leading" secondItem="1Cu-Uz-HHT" secondAttribute="leading" id="36z-Vj-owK"/>
-                    <constraint firstItem="4oo-ni-g3S" firstAttribute="leading" secondItem="fGJ-lc-BAB" secondAttribute="leading" constant="16" id="6Wa-nP-dvy"/>
-                    <constraint firstItem="fGJ-lc-BAB" firstAttribute="top" secondItem="QgB-CC-xg6" secondAttribute="bottom" id="9Fx-0h-aWf"/>
-                    <constraint firstItem="4oo-ni-g3S" firstAttribute="leading" secondItem="fGJ-lc-BAB" secondAttribute="trailing" id="FB6-G2-Ljg"/>
+                    <constraint firstItem="fGJ-lc-BAB" firstAttribute="centerY" secondItem="4oo-ni-g3S" secondAttribute="centerY" constant="1" id="8LO-Y7-JCl"/>
+                    <constraint firstItem="4oo-ni-g3S" firstAttribute="leading" secondItem="fGJ-lc-BAB" secondAttribute="trailing" constant="1" id="FB6-G2-Ljg"/>
                     <constraint firstAttribute="trailing" secondItem="fVl-2d-H2N" secondAttribute="trailing" constant="6" id="FoV-Dl-qqU"/>
                     <constraint firstItem="1Cu-Uz-HHT" firstAttribute="leading" secondItem="QgB-CC-xg6" secondAttribute="trailing" constant="13" id="IE5-cy-Xx2"/>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="top" secondItem="jmk-zf-GjI" secondAttribute="top" id="QXH-W1-F89"/>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="top" secondItem="1Cu-Uz-HHT" secondAttribute="top" constant="-1" id="SeV-9D-I9H"/>
                     <constraint firstItem="VRx-24-fLv" firstAttribute="top" secondItem="1Cu-Uz-HHT" secondAttribute="bottom" constant="3" id="Z8j-oO-lXQ"/>
-                    <constraint firstItem="4oo-ni-g3S" firstAttribute="centerY" secondItem="QgB-CC-xg6" secondAttribute="centerY" constant="22.5" id="fmK-M3-2tl"/>
+                    <constraint firstItem="VRx-24-fLv" firstAttribute="centerY" secondItem="fGJ-lc-BAB" secondAttribute="centerY" id="aXJ-wI-S0Y"/>
+                    <constraint firstItem="1Cu-Uz-HHT" firstAttribute="leading" secondItem="VRx-24-fLv" secondAttribute="leading" id="dov-jh-S8d"/>
                     <constraint firstAttribute="centerY" secondItem="fNS-VJ-bJH" secondAttribute="centerY" id="gcM-HN-beb"/>
                     <constraint firstItem="fVl-2d-H2N" firstAttribute="leading" secondItem="fNS-VJ-bJH" secondAttribute="trailing" id="jHl-fa-Z6k"/>
+                    <constraint firstItem="fGJ-lc-BAB" firstAttribute="leading" secondItem="VRx-24-fLv" secondAttribute="trailing" constant="2" id="jjz-VV-AQd"/>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="top" secondItem="WVF-hR-STv" secondAttribute="top" constant="8" id="snN-2a-Qlj"/>
                     <constraint firstAttribute="centerY" secondItem="fVl-2d-H2N" secondAttribute="centerY" id="vqn-bu-3lU"/>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="trailing" secondItem="jmk-zf-GjI" secondAttribute="trailing" id="yQP-jc-Qjh"/>
@@ -144,7 +143,7 @@
     <resources>
         <image name="activity_accept_trust" width="24" height="24"/>
         <image name="activity_check_blue" width="19" height="19"/>
-        <image name="btn_clock" width="10" height="10"/>
+        <image name="btn_clock" width="11" height="11"/>
         <image name="reject" width="24" height="24"/>
     </resources>
 </document>

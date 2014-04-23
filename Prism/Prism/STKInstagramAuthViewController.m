@@ -7,8 +7,9 @@
 //
 
 #import "STKInstagramAuthViewController.h"
+#import "STKProcessingView.h"
 
-@interface STKInstagramAuthViewController () <UIWebViewDelegate>
+@interface STKInstagramAuthViewController () <UIWebViewDelegate, UIAlertViewDelegate>
 @property (nonatomic, readonly) UIWebView *webView;
 @end
 
@@ -26,9 +27,21 @@
 
 - (void)loadView
 {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]];
+    [iv setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    [view addSubview:iv];
+    
     UIWebView *wv = [[UIWebView alloc] initWithFrame:CGRectZero];
+    [wv setOpaque:NO];
+    [wv setBackgroundColor:[UIColor clearColor]];
+    [wv setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    _webView = wv;
     [wv setDelegate:self];
-    [self setView:wv];
+    [view addSubview:wv];
+    
+    [self setView:view];
 }
 
 
@@ -43,7 +56,11 @@
         NSString *accessToken = [string substringWithRange:[result rangeAtIndex:1]];
         if([self tokenFound]) {
             [self tokenFound](accessToken);
-            [[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/accounts/manage_access"]]];
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Your Instagram account is now connected to your Prizm account. Use #prizm in your Instagram posts and they will automatically be added to your Prizm profile."
+                                                        delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+
+//            [[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/accounts/manage_access"]]];
             return NO;
         }
     }
@@ -51,14 +68,14 @@
     return YES;
 }
 
-- (UIWebView *)webView
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    return (UIWebView *)[self view];
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     [[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/oauth/authorize/?client_id=9fd051f75f184a95a1a4e934e6353ae7&response_type=token&redirect_uri=http://prismoauth.com"]]];
 }
 
