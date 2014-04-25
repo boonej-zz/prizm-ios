@@ -46,8 +46,6 @@ NSString * const STKActivityItemTypeTrustAccepted = @"trust_accepted";
                                                  
     }];
     
-    [self setHasBeenViewed:NO];
-    
     return nil;
 }
 

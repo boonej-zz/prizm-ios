@@ -21,7 +21,7 @@ NSString * const STKRequestStatusCancelled = @"cancelled";
 
 @implementation STKTrust
 @dynamic uniqueID, status, dateCreated, dateModified, creator, creatorCommentsCount, creatorLikesCount, creatorPostsCount,
-recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, type;
+recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, type, hasBeenViewed;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {

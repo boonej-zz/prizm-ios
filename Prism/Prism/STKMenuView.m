@@ -119,7 +119,6 @@
         [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual
                                                                             toItem:b4 attribute:NSLayoutAttributeCenterY multiplier:1 constant:-15]];
         
-        [self setNotificationCount:10];
     }
     return self;
 }

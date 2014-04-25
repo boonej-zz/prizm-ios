@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -13,6 +13,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="activity_check_green" translatesAutoresizingMaskIntoConstraints="NO" id="Eef-S0-nBT">
+                        <rect key="frame" x="286" y="18" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="wSS-c3-9pi"/>
+                            <constraint firstAttribute="height" constant="20" id="zKa-iv-R8F"/>
+                        </constraints>
+                    </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgB-CC-xg6" customClass="STKAvatarView">
                         <rect key="frame" x="13" y="8" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -113,6 +121,7 @@
                 <constraints>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="leading" secondItem="WVF-hR-STv" secondAttribute="leading" constant="13" id="2Bs-yT-J1o"/>
                     <constraint firstItem="fGJ-lc-BAB" firstAttribute="centerY" secondItem="4oo-ni-g3S" secondAttribute="centerY" constant="1" id="8LO-Y7-JCl"/>
+                    <constraint firstAttribute="trailing" secondItem="Eef-S0-nBT" secondAttribute="trailing" constant="14" id="9D9-Df-9gW"/>
                     <constraint firstItem="4oo-ni-g3S" firstAttribute="leading" secondItem="fGJ-lc-BAB" secondAttribute="trailing" constant="1" id="FB6-G2-Ljg"/>
                     <constraint firstAttribute="trailing" secondItem="fVl-2d-H2N" secondAttribute="trailing" constant="6" id="FoV-Dl-qqU"/>
                     <constraint firstItem="1Cu-Uz-HHT" firstAttribute="leading" secondItem="QgB-CC-xg6" secondAttribute="trailing" constant="13" id="IE5-cy-Xx2"/>
@@ -126,11 +135,13 @@
                     <constraint firstItem="fGJ-lc-BAB" firstAttribute="leading" secondItem="VRx-24-fLv" secondAttribute="trailing" constant="2" id="jjz-VV-AQd"/>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="top" secondItem="WVF-hR-STv" secondAttribute="top" constant="8" id="snN-2a-Qlj"/>
                     <constraint firstAttribute="centerY" secondItem="fVl-2d-H2N" secondAttribute="centerY" id="vqn-bu-3lU"/>
+                    <constraint firstAttribute="centerY" secondItem="Eef-S0-nBT" secondAttribute="centerY" id="w3W-m0-SZu"/>
                     <constraint firstItem="QgB-CC-xg6" firstAttribute="trailing" secondItem="jmk-zf-GjI" secondAttribute="trailing" id="yQP-jc-Qjh"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="acceptButton" destination="fVl-2d-H2N" id="3Te-e7-5Ob"/>
+                <outlet property="acceptIndicator" destination="Eef-S0-nBT" id="pqy-JD-BdM"/>
                 <outlet property="avatarImageView" destination="QgB-CC-xg6" id="gxB-Tv-FfR"/>
                 <outlet property="dateLabel" destination="4oo-ni-g3S" id="2Pc-MT-hQq"/>
                 <outlet property="nameLabel" destination="1Cu-Uz-HHT" id="dD3-hu-qMi"/>
@@ -143,6 +154,7 @@
     <resources>
         <image name="activity_accept_trust" width="24" height="24"/>
         <image name="activity_check_blue" width="19" height="19"/>
+        <image name="activity_check_green" width="19" height="19"/>
         <image name="btn_clock" width="11" height="11"/>
         <image name="reject" width="24" height="24"/>
     </resources>

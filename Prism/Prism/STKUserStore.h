@@ -12,7 +12,7 @@
 @class ACAccount, ACAccountStore;
 
 extern NSString * const STKUserStoreActivityUpdateNotification;
-extern NSString * const STKUSerStoreActivityUpdateCountKey;
+extern NSString * const STKUserStoreActivityUpdateCountKey;
 
 extern NSString * const STKUserStoreErrorDomain;
 typedef enum {
@@ -61,13 +61,15 @@ typedef enum {
 - (void)fetchUsersFollowingOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
 
 - (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block;
-- (void)fetchRequestsForCurrentUser:(void (^)(NSArray *requests, NSError *err))block;
+- (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKTrust *)request completion:(void (^)(NSArray *requests, NSError *err))block;
 - (void)acceptTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)rejectTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
 
 - (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block;
+
+- (void)markItemsAsViewed:(NSArray *)itemIDs;
 
 - (void)transferPostsFromSocialNetworks;
 - (void)logout;

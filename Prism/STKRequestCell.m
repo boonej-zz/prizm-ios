@@ -35,15 +35,17 @@
     if([i isPending]) {
         [[self rejectButton] setHidden:NO];
         [[self acceptButton] setHidden:NO];
-        typeString = @"requested to join your trust.";
+        typeString = @"wants to enter into a Trust with you.";
     } else if([i isAccepted]) {
-        typeString = @"is now in your trust.";
+        typeString = [NSString stringWithFormat:@"You and %@ are now in a trust.", [[i creator] firstName]];
     } else if([i isRejected]) {
         typeString = @"trust denied.";
     }
     
     [[self typeLabel] setText:typeString];
+    [[self unreadIndicatorView] setHidden:[i hasBeenViewed]];
 
+    [[self acceptIndicator] setHidden:![i isAccepted]];
 }
 
 - (IBAction)acceptRequest:(id)sender

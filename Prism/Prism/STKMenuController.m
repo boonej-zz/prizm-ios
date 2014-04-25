@@ -258,7 +258,7 @@
 
 - (void)notificationUpdate:(NSNotification *)note
 {
-    int count = [[[note userInfo] objectForKey:STKUSerStoreActivityUpdateCountKey] intValue];
+    int count = [[[note userInfo] objectForKey:STKUserStoreActivityUpdateCountKey] intValue];
     [[self menuView] setNotificationCount:count];
 }
 

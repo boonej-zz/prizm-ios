@@ -219,6 +219,7 @@
     MFMailComposeViewController *mvc = [[MFMailComposeViewController alloc] init];
     [mvc setMailComposeDelegate:self];
     [mvc setToRecipients:@[[[self selectedUser] email]]];
+    [mvc setSubject:@"Prizm Contact"];
     [self presentViewController:mvc animated:YES completion:nil];
 }
 

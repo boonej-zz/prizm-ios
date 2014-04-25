@@ -150,7 +150,7 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
                        self, u, u, self]];
     
     NSArray *results = [[self managedObjectContext] executeFetchRequest:req error:nil];
-    
+    NSLog(@"%@", [results valueForKey:@"uniqueID"]);
     return [results firstObject];
 }
 

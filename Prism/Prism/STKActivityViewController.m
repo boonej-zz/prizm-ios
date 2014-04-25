@@ -36,6 +36,7 @@ typedef enum {
 
 @property (nonatomic, strong) NSMutableArray *requests;
 @property (nonatomic, strong) NSMutableArray *activities;
+@property (nonatomic, strong) NSMutableDictionary *itemsViewed;
 
 @property (nonatomic) STKActivityViewControllerType currentType;
 - (IBAction)typeChanged:(id)sender;
@@ -86,11 +87,21 @@ typedef enum {
     [self refresh];
 }
 
+- (void)premarkItemAsViewed:(id)item
+{
+    if(![self itemsViewed]) {
+        _itemsViewed = [[NSMutableDictionary alloc] init];
+    }
+    [[self itemsViewed] setObject:@(YES) forKey:[item uniqueID]];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [[[self blurView] displayLink] setPaused:YES];
 
+    [[STKUserStore store] markItemsAsViewed:[[self itemsViewed] allKeys]];
+    [self setItemsViewed:nil];
 }
 
 - (void)setCurrentType:(STKActivityViewControllerType)currentType
@@ -107,17 +118,20 @@ typedef enum {
         [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser]
                                  referenceActivity:[[self activities] firstObject]
                                         completion:^(NSArray *activities, NSError *err) {
-            [[self activities] addObjectsFromArray:activities];
-            [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
-            [[self tableView] reloadData];
-        }];
+                                            [[self activities] addObjectsFromArray:activities];
+                                            
+                                            [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+                                            [[self tableView] reloadData];
+                                        }];
         
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
-        [[STKUserStore store] fetchRequestsForCurrentUser:^(NSArray *requests, NSError *err) {
+        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:[[self requests] firstObject] completion:^(NSArray *requests, NSError *err) {
             if(!err) {
-                NSArray *filtered = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"not (uniqueID in %@)", [[self requests] valueForKey:@"uniqueID"]]];
-                [[self requests] addObjectsFromArray:filtered];
-                [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending]];
+                requests = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"not (uniqueID in %@)", [[self requests] valueForKey:@"uniqueID"]]];
+                
+                [[self requests] addObjectsFromArray:requests];
+                [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
+                [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
             }
             [[self tableView] reloadData];
         }];
@@ -217,14 +231,15 @@ typedef enum {
         }
         
         [[cell timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];
-        
+        [self premarkItemAsViewed:i];
         return cell;
     } else if ([self currentType] == STKActivityViewControllerTypeRequest) {
         STKRequestCell *cell = [STKRequestCell cellForTableView:tableView target:self];
 
         STKTrust *i = [[self requests] objectAtIndex:[indexPath row]];
         [cell populateWithTrust:i];
-        
+        [self premarkItemAsViewed:i];
+
         return cell;
     }
     

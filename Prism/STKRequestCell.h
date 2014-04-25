@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *acceptButton;
 @property (weak, nonatomic) IBOutlet UIButton *rejectButton;
 @property (weak, nonatomic) IBOutlet UIImageView *unreadIndicatorView;
+@property (weak, nonatomic) IBOutlet UIImageView *acceptIndicator;
 
 - (void)populateWithTrust:(STKTrust *)t;
 - (IBAction)acceptRequest:(id)sender;

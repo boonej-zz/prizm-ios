@@ -37,6 +37,7 @@
     return self;
 }
 - (IBAction)togglePassions:(UIButton *)sender {
+    
     [sender setSelected:![sender isSelected]];
 }
 - (IBAction)toggleAspirations:(UIButton *)sender {

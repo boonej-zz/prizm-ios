@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -40,12 +40,12 @@
                             <constraint firstAttribute="width" constant="56" id="Yq0-n2-Cch"/>
                         </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VfA-Yc-Efg">
-                        <rect key="frame" x="31" y="3" width="20" height="20"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="activity_check_blue" translatesAutoresizingMaskIntoConstraints="NO" id="VfA-Yc-Efg">
+                        <rect key="frame" x="27" y="8" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="20" id="JP2-DY-btG"/>
-                            <constraint firstAttribute="height" constant="20" id="RkI-XT-1pZ"/>
+                            <constraint firstAttribute="width" constant="16" id="JP2-DY-btG"/>
+                            <constraint firstAttribute="height" constant="16" id="RkI-XT-1pZ"/>
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_clock" translatesAutoresizingMaskIntoConstraints="NO" id="KrN-3j-DXO">
@@ -90,19 +90,19 @@
                     <constraint firstItem="KrW-jy-2R5" firstAttribute="top" secondItem="LrZ-kv-omJ" secondAttribute="bottom" constant="3" id="5H1-Td-Zyc"/>
                     <constraint firstItem="LrZ-kv-omJ" firstAttribute="leading" secondItem="gFK-5G-pZ1" secondAttribute="trailing" constant="13" id="5iR-dF-0Wv"/>
                     <constraint firstItem="KrN-3j-DXO" firstAttribute="leading" secondItem="KrW-jy-2R5" secondAttribute="trailing" constant="2" id="8EP-ov-LBj"/>
+                    <constraint firstItem="VfA-Yc-Efg" firstAttribute="top" secondItem="gFK-5G-pZ1" secondAttribute="top" id="AFz-Te-WGv"/>
                     <constraint firstItem="gFK-5G-pZ1" firstAttribute="leading" secondItem="Vpp-Kg-Pxp" secondAttribute="leading" constant="13" id="AGM-SF-L4u"/>
                     <constraint firstAttribute="trailing" secondItem="pkP-J2-fFc" secondAttribute="trailing" id="CuW-d9-FXd"/>
                     <constraint firstItem="pkP-J2-fFc" firstAttribute="top" secondItem="Vpp-Kg-Pxp" secondAttribute="top" id="E60-dp-K8G"/>
-                    <constraint firstItem="VfA-Yc-Efg" firstAttribute="leading" secondItem="gFK-5G-pZ1" secondAttribute="trailing" constant="-12" id="NFo-Wp-vJB"/>
                     <constraint firstItem="m2s-jy-YQI" firstAttribute="leading" secondItem="KrN-3j-DXO" secondAttribute="trailing" constant="1" id="Tay-bl-aVC"/>
                     <constraint firstAttribute="centerY" secondItem="gFK-5G-pZ1" secondAttribute="centerY" constant="5" id="WGB-FT-zHd"/>
+                    <constraint firstItem="VfA-Yc-Efg" firstAttribute="trailing" secondItem="gFK-5G-pZ1" secondAttribute="trailing" id="cKe-yf-2p0"/>
                     <constraint firstItem="LrZ-kv-omJ" firstAttribute="leading" secondItem="KrW-jy-2R5" secondAttribute="leading" id="dLn-K6-cN7"/>
                     <constraint firstItem="Ozo-8o-OxR" firstAttribute="leading" secondItem="Vpp-Kg-Pxp" secondAttribute="leading" id="ejE-FZ-sI1"/>
                     <constraint firstAttribute="bottom" secondItem="Ozo-8o-OxR" secondAttribute="bottom" id="m6Y-nJ-kA1"/>
                     <constraint firstItem="gFK-5G-pZ1" firstAttribute="top" secondItem="LrZ-kv-omJ" secondAttribute="top" id="oSe-ZG-BtV"/>
                     <constraint firstItem="KrN-3j-DXO" firstAttribute="centerY" secondItem="KrW-jy-2R5" secondAttribute="centerY" constant="0.5" id="pXs-hC-7SQ"/>
                     <constraint firstItem="Ozo-8o-OxR" firstAttribute="top" secondItem="Vpp-Kg-Pxp" secondAttribute="top" id="qCM-wl-Dji"/>
-                    <constraint firstItem="gFK-5G-pZ1" firstAttribute="top" secondItem="VfA-Yc-Efg" secondAttribute="bottom" constant="-15" id="rlC-d5-Wx9"/>
                     <constraint firstAttribute="bottom" secondItem="pkP-J2-fFc" secondAttribute="bottom" id="t03-5G-fim"/>
                     <constraint firstItem="pkP-J2-fFc" firstAttribute="leading" secondItem="m2s-jy-YQI" secondAttribute="trailing" constant="6" id="yqk-mP-2d9"/>
                 </constraints>
@@ -118,6 +118,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="activity_check_blue" width="19" height="19"/>
         <image name="btn_clock" width="11" height="11"/>
     </resources>
 </document>
