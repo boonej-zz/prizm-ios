@@ -44,8 +44,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     return self;
 }
 
-- (void)checkAndFetchPostsFromOtherNetworksForUser:(STKUser *)user
-                                        completion:(void (^)(STKUser *updatedUser, NSError *err))block
+- (void)checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:(void (^)(STKUser *updatedUser, NSError *err))block
 {
     if([self updating]) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -53,30 +52,29 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         }];
         return;
     }
-    __weak STKUser *ws = user;
     
     [self setUpdating:YES];
     
-    [[STKUserStore store] fetchUserDetails:user additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token"] completion:^(STKUser *user, NSError *err) {
+    [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token"] completion:^(STKUser *user, NSError *err) {
         NSLog(@"Will check Instagram %@", [user instagramToken]);
-        [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[user instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
-            [ws setInstagramLastMinID:instagramLastID];
+        [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[[[STKUserStore store] currentUser] instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
+            [[[STKUserStore store] currentUser] setInstagramLastMinID:instagramLastID];
             
             [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
                 ACAccount *account = nil;
                 for(ACAccount *acct in accounts) {
-                    if([[acct username] isEqualToString:[ws twitterID]]) {
+                    if([[acct username] isEqualToString:[[[STKUserStore store] currentUser] twitterID]]) {
                         account = acct;
                     }
                 }
                 NSLog(@"Will check Twitter %@", [account username]);
-                [self transferPostsFromTwitterAccount:account lastMinimumID:[user twitterLastMinID] completion:^(NSString *twitterLastID, NSError *twitterError) {
+                [self transferPostsFromTwitterAccount:account lastMinimumID:[[[STKUserStore store] currentUser] twitterLastMinID] completion:^(NSString *twitterLastID, NSError *twitterError) {
                     if([twitterError code] == STKNetworkStoreErrorTwitterAccountNoLongerExists) {
-                        [ws setTwitterID:nil];
+                        [[[STKUserStore store] currentUser] setTwitterID:nil];
                     }
-                    [ws setTwitterLastMinID:twitterLastID];
+                    [[[STKUserStore store] currentUser] setTwitterLastMinID:twitterLastID];
                     [self setUpdating:NO];
-                    block(user, nil);
+                    block([[STKUserStore store] currentUser], nil);
                 }];
             }];
         }];

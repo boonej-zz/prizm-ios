@@ -16,6 +16,5 @@
 
 + (STKNetworkStore *)store;
 
-- (void)checkAndFetchPostsFromOtherNetworksForUser:(STKUser *)user
-                                        completion:(void (^)(STKUser *updatedUser, NSError *err))block;
+- (void)checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:(void (^)(STKUser *updatedUser, NSError *err))block;
 @end

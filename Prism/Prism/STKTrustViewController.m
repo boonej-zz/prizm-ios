@@ -20,7 +20,7 @@
 
 @import MessageUI;
 
-@interface STKTrustViewController () <STKTrustViewDelegate>
+@interface STKTrustViewController () <STKTrustViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *selectedNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
@@ -68,7 +68,7 @@
 
 - (void)trustView:(STKTrustView *)tv didSelectCircleAtIndex:(int)idx
 {
-    [self selectUserAtIndex:idx - 1];
+    [self selectUserAtIndex:idx];
 }
 
 - (void)selectUserAtIndex:(int)idx
@@ -82,31 +82,44 @@
             return;
         }
         [self setSelectedUser:u];
-        
-        [[self selectedNameLabel] setText:[u name]];
+        [self configureInterface];
+    }
+}
+
+- (void)configureInterface
+{
+    if([self selectedUser]) {
+        NSInteger idx = [[[self trustView] users] indexOfObject:[self selectedUser]];
+        [[self selectedNameLabel] setText:[[self selectedUser] name]];
+
         [[self trustView] setSelectedIndex:idx + 1];
         
-        NSDictionary *lookup = @{@(1) : @"trust_one",
-                                 @(2) : @"trust_two",
-                                 @(3) : @"trust_three",
-                                 @(4) : @"trust_four",
-                                 @(5) : @"trust_five"};
-        UIImage *img = [UIImage imageNamed:[lookup objectForKey:@(idx + 1)]];
+        NSDictionary *lookup = @{@(0) : @"trust_one",
+                                 @(1) : @"trust_two",
+                                 @(2) : @"trust_three",
+                                 @(3) : @"trust_four",
+                                 @(4) : @"trust_five"};
+        UIImage *img = [UIImage imageNamed:[lookup objectForKey:@(idx)]];
         [[self numberImageView] setImage:img];
         
-        NSDate *dateCreated = [u dateCreated];
+        NSDate *dateCreated = [[self selectedUser] dateCreated];
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"MMM yyyy"];
         [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
         [[self dateLabel] setText:[NSString stringWithFormat:@" Member Since %@ ", [df stringFromDate:dateCreated]]];
+    } else {
+        [[self selectedNameLabel] setText:nil];
+        [[self trustView] setSelectedIndex:0];
+        [[self dateLabel] setText:nil];
+        [[self numberImageView] setImage:nil];
     }
-    
+
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     
     [[self trustView] setUser:[[STKUserStore store] currentUser]];
     
@@ -134,12 +147,9 @@
         [self configureInterface];
     }];
     
+    [self configureInterface];
 }
 
-- (void)configureInterface
-{
-    
-}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -171,14 +181,54 @@
 
 - (IBAction)showList:(id)sender
 {
-    
+    STKUserListViewController *lvc = [[STKUserListViewController alloc] init];
+    NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
+    for(STKTrust *t in [self trusts]) {
+        if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
+            [otherUsers addObject:[t recepient]];
+        } else {
+            [otherUsers addObject:[t creator]];
+        }
+    }
+    [lvc setUsers:otherUsers];
+    [[self navigationController] pushViewController:lvc animated:YES];
 }
 
 - (IBAction)sendEmail:(id)sender
 {
-//    MFMessageComposeViewController *mvc = [[MFMessageComposeViewController alloc] init];
-//    [mvc setRecipients:@[@"4044317161"]];
-//    [self presentViewController:mvc animated:YES completion:nil];
+    if(![self selectedUser]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Select a User" message:@"Select a user from your trust to send them a message." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        return;
+    }
+    
+    if(![MFMailComposeViewController canSendMail]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Configure Mail"
+                                                     message:[NSString stringWithFormat:@"To send an e-mail to %@, configure a mail account in your device's settings.", [[self selectedUser] name]]
+                                                    delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        return;
+    }
+
+    if(![[self selectedUser] email]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"No E-mail" message:@"This user doesn't have an e-mail account available in Prizm." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        return;
+    }
+    
+    MFMailComposeViewController *mvc = [[MFMailComposeViewController alloc] init];
+    [mvc setMailComposeDelegate:self];
+    [mvc setToRecipients:@[[[self selectedUser] email]]];
+    [self presentViewController:mvc animated:YES completion:nil];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if(error) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+    }
 }
 
 @end

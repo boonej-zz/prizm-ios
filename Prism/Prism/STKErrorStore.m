@@ -132,8 +132,9 @@ NSString * const STKErrorStoreServerError = @"server_error";
         }
     }
     
-    if([userInfo count] > 0)
-        return [NSString stringWithFormat:@"%@", text];
+    if(!text) {
+        return [err localizedDescription];
+    }
     
     return text;
 }

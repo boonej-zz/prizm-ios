@@ -250,6 +250,16 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notificationUpdate:)
+                                                 name:STKUserStoreActivityUpdateNotification
+                                               object:nil];
+}
+
+- (void)notificationUpdate:(NSNotification *)note
+{
+    int count = [[[note userInfo] objectForKey:STKUSerStoreActivityUpdateCountKey] intValue];
+    [[self menuView] setNotificationCount:count];
 }
 
 - (void)viewDidAppear:(BOOL)animated

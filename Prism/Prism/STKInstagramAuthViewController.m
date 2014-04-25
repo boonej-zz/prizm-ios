@@ -24,16 +24,36 @@
     return self;
 }
 
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    [STKProcessingView present];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [STKProcessingView dismiss];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [STKProcessingView dismiss];
+}
 
 - (void)loadView
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 568)];
     
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]];
     [iv setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [view addSubview:iv];
     
-    UIWebView *wv = [[UIWebView alloc] initWithFrame:CGRectZero];
+    UIActivityIndicatorView *av = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [av setFrame:CGRectMake(160 - 15, 100, 30, 30)];
+    [view addSubview:av];
+    [av startAnimating];
+    
+    UIWebView *wv = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 320, 568)];
+    [[wv scrollView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
     [wv setOpaque:NO];
     [wv setBackgroundColor:[UIColor clearColor]];
     [wv setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
@@ -61,7 +81,6 @@
             [av show];
 
 //            [[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/accounts/manage_access"]]];
-            return NO;
         }
     }
     

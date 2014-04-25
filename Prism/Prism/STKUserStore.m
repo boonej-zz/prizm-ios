@@ -23,7 +23,8 @@
 #import <Crashlytics/Crashlytics.h>
 
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
-
+NSString * const STKUserStoreActivityUpdateNotification = @"STKUserStoreActivityUpdateNotification";
+NSString * const STKUSerStoreActivityUpdateCountKey = @"STKUSerStoreActivityUpdateCountKey";
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 
 NSString * const STKUserStoreExternalCredentialGoogleClientID = @"945478453792.apps.googleusercontent.com";
@@ -43,7 +44,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 @interface STKUserStore () <GPPSignInDelegate>
 
-
+@property (nonatomic, strong) NSTimer *activityUpdateTimer;
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
 
 @end
@@ -79,6 +80,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 {
     self = [super init];
     if (self) {
+        _activityUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(activityUpdateCheck:) userInfo:nil repeats:YES];
         _accountStore = [[ACAccountStore alloc] init];
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLastModifiedDates:) name:NSManagedObjectContextWillSaveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -88,6 +90,22 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [self establishDatabaseAndCurrentUser];
     }
     return self;
+}
+
+- (void)activityUpdateCheck:(NSTimer *)timer
+{
+    if([self currentUser]) {
+        [self fetchActivityForUser:[self currentUser] referenceActivity:nil completion:^(NSArray *activities, NSError *err) {
+            
+            int count = 0;
+            for(STKActivityItem *i in activities) {
+                if(![i hasBeenViewed])
+                    count++;
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUSerStoreActivityUpdateCountKey : @(count)}];
+        }];
+    }
 }
 
 - (void)updateLastModifiedDates:(NSNotification *)note
@@ -133,7 +151,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)transferPostsFromSocialNetworks
 {
     if([self currentUser]) {
-        [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForUser:[self currentUser] completion:^(STKUser *updatedUser, NSError *err) {
+        [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:^(STKUser *updatedUser, NSError *err) {
             if(!err) {
                 if(updatedUser) {
                     [self updateUserDetails:updatedUser completion:^(STKUser *u, NSError *err) {
@@ -669,9 +687,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
         STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
-        [fq setFields:@[@"create_date"]];
+        [fq setFields:@[@"create_date", @"email"]];
         STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
-        [tq setFields:@[@"create_date"]];
+        [tq setFields:@[@"create_date", @"email"]];
         
         [q addSubquery:fq];
         [q addSubquery:tq];
@@ -1265,6 +1283,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                 @"type" : @"type",
                                 @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
                                 @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
+                                @"phoneNumber" : @"phone_number",
+                                @"website" : @"website"
                                 }];
 
         } else {

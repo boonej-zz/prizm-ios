@@ -16,14 +16,16 @@
 #import "STKProcessingView.h"
 #import "STKAccountChooserViewController.h"
 #import "STKWebViewController.h"
+#import "UIERealTimeBlurView.h"
 
 @import Social;
 @import Accounts;
 
 @interface STKSettingsViewController () <STKAccountChooserDelegate>
-
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *settings;
 @property (nonatomic, weak) UIButton *logoutButton;
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (nonatomic, strong) UILabel *versionLabel;
 @end
 
@@ -32,28 +34,46 @@
 
 - (id)initWithItems:(NSArray *)items
 {
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super initWithNibName:nil bundle:nil];
     if(self) {
-        
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
-        
-        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor, NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                               target:self action:@selector(back:)];
+        [[self navigationItem] setLeftBarButtonItem:bbi];
 
-        [[self navigationItem] setRightBarButtonItem:bbi];
+//        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+        
+//        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor, NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+
+//        [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Settings"];
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         [self setSettings:items];
         if(![self settings]) {
             _settings = @[
+                          @{@"title" : @"Friends", @"type" : @"STKLabelCell", @"next" : [self friendsSettings]},
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
                           @{@"title" : @"Notifications", @"type" : @"STKLabelCell", @"next" : [self notificationSettings]},
-                          @{@"title" : @"Terms of Use", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/terms.html"},
-                          @{@"title" : @"Privacy Policy", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/privacy.html"},
-                          @{@"title" : @"Support", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/support.html"}
-                          ];
+                          @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]}
+                        ];
         }
     }
     return self;
+}
+
+- (NSArray *)supportSettings
+{
+    return @[@{@"title" : @"Terms of Use", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/terms.html"},
+             @{@"title" : @"Privacy Policy", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/privacy.html"},
+             @{@"title" : @"Support Questions", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/support.html"},
+             @{@"title" : @"Version", @"type" : @"STKDetailCell", @"value" : [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge id)kCFBundleVersionKey]},
+             @{@"title" : @"Disable Account", @"type" : @"STKLabelCell"}
+             ];
+}
+
+- (NSArray *)friendsSettings
+{
+    return @[];
 }
 
 - (NSArray *)notificationSettings
@@ -66,16 +86,16 @@
     
     return
     @[
-      @{@"title": @"Instagram", @"image" : @"logo_instagram", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureInstagram:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
+      @{@"title": @"Instagram", @"image" : @"sharing_instagram", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureInstagram:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u instagramToken] != nil)];
       }},
-      @{@"title": @"Twitter", @"image" : @"logo_facebook", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureTwitter:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
+      @{@"title": @"Twitter", @"image" : @"sharing_twitter", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureTwitter:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u twitterID] != nil)];
       }}
     ];
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     return [self initWithItems:nil];
 }
@@ -192,35 +212,24 @@
     [super viewDidLoad];
     
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
-    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
-    [[self tableView] setSeparatorColor:[UIColor colorWithWhite:1 alpha:0.1]];
+    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 20, 0, 0)];
+    [[self tableView] setSeparatorColor:STKTextTransparentColor];
 
-    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 90)];
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 200)];
     UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
     [[b titleLabel] setFont:STKFont(18)];
     [[b titleLabel] setTextColor:STKTextColor];
     [b addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
     [b setBackgroundImage:[UIImage imageNamed:@"btn_lg"] forState:UIControlStateNormal];
     [b setTitle:@"Logout" forState:UIControlStateNormal];
-    [b setFrame:CGRectMake(10, 10, 300, 51)];
+    [b setFrame:CGRectMake(10, 50, 300, 51)];
     [v addSubview:b];
     [v setBackgroundColor:[UIColor clearColor]];
     
-    UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake(10, 72, 300, 30)];
-    [lbl setTextColor:STKTextColor];
-    [lbl setFont:STKFont(12)];
-    [lbl setNumberOfLines:0];
-    [lbl setTextAlignment:NSTextAlignmentCenter];
-    [lbl setText:[NSString stringWithFormat:@"Prizm\n%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge id)kCFBundleVersionKey]]];
-    [v addSubview:lbl];
-    
-    [self setVersionLabel:lbl];
+    [self setLogoutButton:b];
     
     [[self tableView] setTableFooterView:v];
     [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
-    
-    [self setLogoutButton:b];
-
 }
 
 - (void)logout:(id)sender
@@ -228,13 +237,19 @@
     [[STKUserStore store] logout];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[[self blurView] displayLink] setPaused:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSFontAttributeName : STKFont(18), NSForegroundColorAttributeName : STKTextColor}];
-    [[[self navigationController] navigationBar] setTintColor:STKTextColor];
+    [[self tableView] reloadData];
+    [[[self blurView] displayLink] setPaused:NO];
     
-    if([[[self navigationController] viewControllers] indexOfObject:self] != 0) {
+    if([[[self navigationController] viewControllers] indexOfObject:self] != 1) {
         [[self logoutButton] setHidden:YES];
         [[self versionLabel] setHidden:YES];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
@@ -268,6 +283,11 @@
 - (UIImage *)imageForIndexPath:(NSIndexPath *)ip
 {
     return [UIImage imageNamed:[[self settingsItemAtIndexPath:ip] objectForKey:@"image"]];
+}
+
+- (NSString *)valueForIndexPath:(NSIndexPath *)ip
+{
+    return [[self settingsItemAtIndexPath:ip] objectForKey:@"value"];
 }
 
 - (NSString *)titleForIndexPath:(NSIndexPath *)ip
@@ -359,7 +379,25 @@
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         [[cell networkTitleLabel] setText:[self titleForIndexPath:indexPath]];
         [[cell networkImageView] setImage:[self imageForIndexPath:indexPath]];
+        [cell setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
         returnCell = cell;
+    }
+    if([cellType isEqualToString:@"STKDetailCell"]) {
+        UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell-Detail"];
+        if(!c) {
+            c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UITableViewCell-Detail"];
+            [c setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [[c textLabel] setFont:STKFont(16)];
+            [[c textLabel] setTextColor:[UIColor whiteColor]];
+            
+            [[c detailTextLabel] setFont:STKFont(16)];
+            [[c detailTextLabel] setTextColor:[UIColor whiteColor]];
+        }
+        
+        [[c textLabel] setText:[self titleForIndexPath:indexPath]];
+        [[c detailTextLabel] setText:[self valueForIndexPath:indexPath]];
+        
+        return c;
     }
     
     void (^configureBlock)(STKUser *u, UITableViewCell *c) = [self configureBlockForIndexPath:indexPath];
@@ -367,7 +405,7 @@
         configureBlock([[STKUserStore store] currentUser], returnCell);
     }
     
-    if([self nextItemsForIndexPath:indexPath]) {
+    if([self nextItemsForIndexPath:indexPath] || [self urlForIndexPath:indexPath]) {
         [returnCell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     } else {
         [returnCell setAccessoryType:UITableViewCellAccessoryNone];

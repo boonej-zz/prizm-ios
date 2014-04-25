@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface STKSettingsViewController : UITableViewController
+@interface STKSettingsViewController : UIViewController
 
 - (id)initWithItems:(NSArray *)items;
 

@@ -22,6 +22,7 @@
 @property (nonatomic, weak) id <STKMenuViewDelegate> delegate;
 @property (nonatomic) int selectedIndex;
 @property (nonatomic, strong) UIImage *backgroundImage;
+@property (nonatomic) int notificationCount;
 
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated;
 

@@ -88,8 +88,7 @@ typedef enum {
 - (void)showSettings:(id)sender
 {
     STKSettingsViewController *svc = [[STKSettingsViewController alloc] initWithItems:nil];
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:svc];
-    [self presentViewController:nvc animated:YES completion:nil];
+    [[self navigationController] pushViewController:svc animated:YES];
 }
 
 - (BOOL)isShowingCurrentUserProfile
@@ -623,21 +622,23 @@ typedef enum {
                     NSString *label = nil;
                     NSString *text = nil;
                     if([indexPath row] == 1) {
+                        label = @"Website:";
+                        text = [[self profile] website];
+                        
+                    } else if([indexPath row] == 2) {
                         label = @"Founded:";
                         if([[self profile] dateFounded]) {
                             NSDateFormatter *df = [[NSDateFormatter alloc] init];
                             [df setDateFormat:@"MMMM dd, yyyy"];
                             text = [df stringFromDate:[[self profile] dateFounded]];
                         }
-                    } else if([indexPath row] == 2) {
-                        label = @"Mascot:";
-                        text = [[self profile] mascotName];
+                        
                     } else if([indexPath row] == 3) {
                         label = @"Population:";
                         text = [[self profile] enrollment];
                     } else if([indexPath row] == 4) {
-                        label = @"Website:";
-                        text = [[self profile] website];
+                        label = @"Mascot:";
+                        text = [[self profile] mascotName];
                     }
                     
                     [[c titleLabel] setText:label];

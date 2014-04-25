@@ -105,7 +105,7 @@ const long STKCreateProgressGeocoding = 4;
 {
     if([[[self user] type] isEqualToString:STKUserTypeInstitution]) {
         _items = @[
-                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"User"]},
+                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"Individual"]},
                    
                    @{@"title" : @"Email", @"key" : @"email",
                      @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
@@ -113,7 +113,7 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Password", @"key" : @"password",
                      @"options" : @{@"secureTextEntry" : @(YES)}},
                    
-  @{@"title" : @"Confirm Password", @"key" : @"confirmPassword",
+                   @{@"title" : @"Confirm Password", @"key" : @"confirmPassword",
                      @"options" : @{@"secureTextEntry" : @(YES)}},
 
                    @{@"title" : @"Name", @"key" : @"firstName",
@@ -124,10 +124,10 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Website", @"key" : @"website", @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
                    ];
         
-        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"phoneNumber", @"website"];
+        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"website"];
     } else {
         _items = @[
-                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"User"]},
+                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"Individual"]},
                    @{@"title" : @"Email", @"key" : @"email",
                      @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                    
@@ -179,10 +179,7 @@ const long STKCreateProgressGeocoding = 4;
         if([[u type] isEqualToString:STKUserTypeInstitution]) {
             _items = @[
                        // Public
-                       @{@"title" : @"First Name", @"key" : @"firstName",
-                         @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
-                       
-                       @{@"title" : @"Last Name", @"key" : @"lastName",
+                       @{@"title" : @"Name", @"key" : @"firstName",
                          @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
                        
                        @{@"title" : @"Info", @"key" : @"blurb", @"cellType" : @"textView"},
@@ -201,7 +198,8 @@ const long STKCreateProgressGeocoding = 4;
                          @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                        
                        
-                       @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                       @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
+                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"lastName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
         } else {
@@ -562,7 +560,7 @@ const long STKCreateProgressGeocoding = 4;
             [STKProcessingView present];
             NSArray *additionalFields = nil;
             if([[[self user] type] isEqualToString:STKUserTypeInstitution]) {
-                additionalFields = @[@"zip_postal", @"dateFounded", @"mascotName", @"enrollment"];
+                additionalFields = @[@"zip_postal", @"date_founded", @"mascot", @"enrollment", @"phone_number"];
             } else {
                 additionalFields = @[@"zip_postal", @"birthday", @"gender"];
             }
@@ -649,7 +647,7 @@ const long STKCreateProgressGeocoding = 4;
 
 - (void)textFieldShouldReturn:(UITextField *)textField
                   atIndexPath:(NSIndexPath *)ip
-{
+{/*
     NSArray *allKeys = [[self items] valueForKey:@"key"];
     for(NSString *k in allKeys) {
         if(![k isKindOfClass:[NSNull class]]) {
@@ -659,7 +657,7 @@ const long STKCreateProgressGeocoding = 4;
                 NSLog(@"not ok %@", k);
             }
         }
-    }
+    }*/
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations

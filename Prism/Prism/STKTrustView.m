@@ -45,7 +45,8 @@
     NSMutableArray *a = [NSMutableArray array];
     for(int i = 0; i < 6; i++) {
         STKCircleView *sv = [[STKCircleView alloc] initWithFrame:CGRectMake(0, 0, [[self class] minorCircleSize], [[self class] minorCircleSize])];
-        [sv addTarget:self action:@selector(circleTapped:)
+        [sv addTarget:self
+               action:@selector(circleTapped:)
      forControlEvents:UIControlEventTouchUpInside];
         [a addObject:sv];
         [self addSubview:sv];
@@ -73,7 +74,10 @@
 - (void)circleTapped:(id)sender
 {
     NSInteger idx = [[self circleViews] indexOfObject:sender];
-    [[self delegate] trustView:self didSelectCircleAtIndex:(int)idx];
+    if(idx == 0)
+        return;
+    
+    [[self delegate] trustView:self didSelectCircleAtIndex:(int)idx - 1];
 }
 
 - (void)setUser:(STKUser *)user
@@ -112,13 +116,14 @@
         [[self spinLayer] setHidden:YES];
     } else {
         [[self spinLayer] setHidden:NO];
+            [(STKCircleView *)[[self circleViews] objectAtIndex:selectedIndex] setBorderColor:STKLightBlueColor];
         
         if(prev != _selectedIndex) {
             CAKeyframeAnimation *kf = [CAKeyframeAnimation animationWithKeyPath:@"position"];
             CGRect r = [[[self circleViews] objectAtIndex:selectedIndex] frame];
             
             CGPoint center = [[[self circleViews] objectAtIndex:selectedIndex] center];
-            [(STKCircleView *)[[self circleViews] objectAtIndex:selectedIndex] setBorderColor:STKLightBlueColor];
+
             float radius = r.size.width / 2.0 - 1;
             NSMutableArray *points = [NSMutableArray array];
             for(float angle = 0; angle <= 2 * M_PI; angle += M_PI / 32) {

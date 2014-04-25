@@ -22,4 +22,5 @@
 @property (nonatomic, strong) STKUser *user;
 @property (nonatomic, weak) id <STKTrustViewDelegate> delegate;
 @property (nonatomic) NSInteger selectedIndex;
+
 @end

@@ -60,6 +60,7 @@
 		BE4C64291896FA3800467E2D /* STKLocationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64281896FA3800467E2D /* STKLocationListViewController.m */; };
 		BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C642B18970BE500467E2D /* STKLocationViewController.m */; };
 		BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE4C642C18970BE500467E2D /* STKLocationViewController.xib */; };
+		BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C735F190AAA1F003A4109 /* STKNotificationBadge.m */; };
 		BE52B13C18E30EF100C44F30 /* NSManagedObject+STKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BE52B13B18E30EF100C44F30 /* NSManagedObject+STKAdditions.m */; };
 		BE52B13F18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BE52B13E18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.m */; };
 		BE5324CB189075F4004AAC5C /* STKRelativeDateConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5324CA189075F4004AAC5C /* STKRelativeDateConverter.m */; };
@@ -156,6 +157,7 @@
 		BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */; };
 		BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE8F04518C0F5E6001A28CD /* STKPostComment.m */; };
 		BEE8F04818C103AA001A28CD /* STKCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE8F04718C103AA001A28CD /* STKCommentCell.xib */; };
+		BEED1FF6190944B100D0BFFF /* STKSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEED1FF5190944B100D0BFFF /* STKSettingsViewController.xib */; };
 		BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF2D7891899818900D3C8D6 /* STKRequestCell.m */; };
 		BEF2D78C1899818900D3C8D6 /* STKRequestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF2D78A1899818900D3C8D6 /* STKRequestCell.xib */; };
 		BEF361CB18B2C3700085A38B /* STKTriImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF361C918B2C3700085A38B /* STKTriImageCell.m */; };
@@ -1980,6 +1982,8 @@
 		BE4C642A18970BE500467E2D /* STKLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLocationViewController.h; sourceTree = "<group>"; };
 		BE4C642B18970BE500467E2D /* STKLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLocationViewController.m; sourceTree = "<group>"; };
 		BE4C642C18970BE500467E2D /* STKLocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLocationViewController.xib; sourceTree = "<group>"; };
+		BE4C735E190AAA1F003A4109 /* STKNotificationBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKNotificationBadge.h; sourceTree = "<group>"; };
+		BE4C735F190AAA1F003A4109 /* STKNotificationBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKNotificationBadge.m; sourceTree = "<group>"; };
 		BE52B13A18E30EF100C44F30 /* NSManagedObject+STKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+STKAdditions.h"; sourceTree = "<group>"; };
 		BE52B13B18E30EF100C44F30 /* NSManagedObject+STKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+STKAdditions.m"; sourceTree = "<group>"; };
 		BE52B13D18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+STKAdditions.h"; sourceTree = "<group>"; };
@@ -2133,6 +2137,7 @@
 		BEE8F04418C0F5E6001A28CD /* STKPostComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPostComment.h; sourceTree = "<group>"; };
 		BEE8F04518C0F5E6001A28CD /* STKPostComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKPostComment.m; sourceTree = "<group>"; };
 		BEE8F04718C103AA001A28CD /* STKCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCommentCell.xib; sourceTree = "<group>"; };
+		BEED1FF5190944B100D0BFFF /* STKSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSettingsViewController.xib; sourceTree = "<group>"; };
 		BEF2D7881899818900D3C8D6 /* STKRequestCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKRequestCell.h; sourceTree = "<group>"; };
 		BEF2D7891899818900D3C8D6 /* STKRequestCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKRequestCell.m; sourceTree = "<group>"; };
 		BEF2D78A1899818900D3C8D6 /* STKRequestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKRequestCell.xib; sourceTree = "<group>"; };
@@ -2374,6 +2379,7 @@
 				BE7AFA7A18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m */,
 				BE0EC57018EDE306007102E1 /* STKSettingsViewController.h */,
 				BE0EC57118EDE306007102E1 /* STKSettingsViewController.m */,
+				BEED1FF5190944B100D0BFFF /* STKSettingsViewController.xib */,
 				BE5F690118F2131F006D2CD1 /* STKWebViewController.xib */,
 				BE7391C0190193AB00AD81AB /* STKSearchResultsViewController.h */,
 				BE7391C1190193AB00AD81AB /* STKSearchResultsViewController.m */,
@@ -2420,6 +2426,8 @@
 				BE2E5FC418FB49E000A53AF6 /* STKSegmentedControl.m */,
 				BECA36B319004F88000A5851 /* STKGradientView.h */,
 				BECA36B419004F88000A5851 /* STKGradientView.m */,
+				BE4C735E190AAA1F003A4109 /* STKNotificationBadge.h */,
+				BE4C735F190AAA1F003A4109 /* STKNotificationBadge.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4530,6 +4538,7 @@
 				BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */,
 				BE9CC7A718FDFF480097D308 /* STKLuminariesCell.xib in Resources */,
 				BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */,
+				BEED1FF6190944B100D0BFFF /* STKSettingsViewController.xib in Resources */,
 				BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */,
 				BEF361CC18B2C3700085A38B /* STKTriImageCell.xib in Resources */,
 				BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */,
@@ -4609,6 +4618,7 @@
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE1A73C518D8BFB8004A3BB3 /* STKLockCell.m in Sources */,
+				BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,

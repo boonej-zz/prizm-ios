@@ -11,6 +11,9 @@
 @class STKUser, STKPost, STKActivityItem, STKTrust;
 @class ACAccount, ACAccountStore;
 
+extern NSString * const STKUserStoreActivityUpdateNotification;
+extern NSString * const STKUSerStoreActivityUpdateCountKey;
+
 extern NSString * const STKUserStoreErrorDomain;
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]

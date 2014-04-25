@@ -8,6 +8,7 @@
 
 #import "STKMenuView.h"
 #import "STKMenuButton.h"
+#import "STKNotificationBadge.h"
 
 @interface STKMenuView () <UIDynamicAnimatorDelegate>
 @property (nonatomic, strong) UIView *buttonContainerView;
@@ -15,7 +16,7 @@
 @property (nonatomic, strong) UIDynamicAnimator *animator;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSLayoutConstraint *blurHeightConstraint;
-
+@property (nonatomic, strong) STKNotificationBadge *badgeView;
 @property (nonatomic, strong) CALayer *underlayLayer;
 @end
 
@@ -106,6 +107,19 @@
         [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b1, @"v1" : b4}]];
         [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b2, @"v1" : b5}]];
 
+        
+        _badgeView = [[STKNotificationBadge alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
+        [_badgeView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [_buttonContainerView addSubview:_badgeView];
+        
+        [_badgeView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:20]];
+        [_badgeView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
+        [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual
+                                                                            toItem:b4 attribute:NSLayoutAttributeCenterX multiplier:1 constant:20]];
+        [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual
+                                                                            toItem:b4 attribute:NSLayoutAttributeCenterY multiplier:1 constant:-15]];
+        
+        [self setNotificationCount:10];
     }
     return self;
 }
@@ -139,6 +153,11 @@
 {
     _selectedIndex = selectedIndex;
     
+}
+
+- (void)setNotificationCount:(int)notificationCount
+{
+    [[self badgeView] setCount:notificationCount];
 }
 
 - (void)setItems:(NSArray *)items
