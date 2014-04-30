@@ -12,11 +12,12 @@
 #import "STKProfileViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "STKUserStore.h"
+#import "STKErrorStore.h"
 
-@interface STKUserListViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface STKUserListViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
-
+@property (nonatomic, strong) STKUser *deletingUser;
 @end
 
 @implementation STKUserListViewController
@@ -76,6 +77,38 @@
     }
 }
 
+- (void)cancelTrust:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKUser *u = [[self users] objectAtIndex:[ip row]];
+    [self setDeletingUser:u];
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Are you sure?"
+                                                 message:[NSString stringWithFormat:@"Confirming this action will remove %@ from your trust.", [u name]]
+                                                delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
+    [av show];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 0) {
+        [self setDeletingUser:nil];
+    } else {
+        
+        NSArray *prevUsers = [self users];
+        [self setUsers:[[self users] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uniqueID != %@", [[self deletingUser] uniqueID]]]];
+        
+        STKTrust *t = [[[STKUserStore store] currentUser] trustForUser:[self deletingUser]];
+        [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+            if(err) {
+                UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+                [av show];
+                [self setUsers:prevUsers];
+            }
+            [[self tableView] reloadData];
+        }];
+        [[self tableView] reloadData];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -114,15 +147,20 @@
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
     
-    if([u isEqual:[[STKUserStore store] currentUser]]) {
-        [[c followButton] setHidden:YES];
-    } else {
-        [[c followButton] setHidden:NO];
-        if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
-            [[c followButton] setSelected:YES];
+    if([self type] == STKUserListTypeFollow) {
+        if([u isEqual:[[STKUserStore store] currentUser]]) {
+            [[c followButton] setHidden:YES];
         } else {
-            [[c followButton] setSelected:NO];
+            [[c followButton] setHidden:NO];
+            if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
+                [[c followButton] setSelected:YES];
+            } else {
+                [[c followButton] setSelected:NO];
+            }
         }
+    } else {
+        [[c followButton] setHidden:YES];
+        [[c cancelTrustButton] setHidden:NO];
     }
     
     return c;

@@ -151,6 +151,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [q addSubquery:cq];
         
         STKResolutionQuery *originPost = [STKResolutionQuery resolutionQueryForField:@"origin_post_id"];
+        
         STKResolutionQuery *originPostCreator = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [originPost addSubquery:originPostCreator];
         [q addSubquery:originPost];
@@ -701,6 +702,32 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             }
 
             block(post, err);
+        }];
+    }];
+}
+
+- (void)fetchPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
+        [c setIdentifiers:@[[p uniqueID]]];
+        
+        [c setContext:[p managedObjectContext]];
+        [c setModelGraph:@[p]];
+        
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(!err) {
+                [[p managedObjectContext] save:nil];
+            } else {
+                
+            }
+            
+            block(obj, err);
         }];
     }];
 }

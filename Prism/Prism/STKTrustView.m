@@ -116,7 +116,7 @@
         [[self spinLayer] setHidden:YES];
     } else {
         [[self spinLayer] setHidden:NO];
-            [(STKCircleView *)[[self circleViews] objectAtIndex:selectedIndex] setBorderColor:STKLightBlueColor];
+        [(STKCircleView *)[[self circleViews] objectAtIndex:selectedIndex] setBorderColor:STKLightBlueColor];
         
         if(prev != _selectedIndex) {
             CAKeyframeAnimation *kf = [CAKeyframeAnimation animationWithKeyPath:@"position"];
@@ -145,13 +145,18 @@
 {
     _users = users;
     
-    for(int i = 0; i < [users count] && i + 1 < [[self circleViews] count]; i++) {
-        STKCircleView *cv = [[self circleViews] objectAtIndex:i + 1];
-        STKUser *u = [[self users] objectAtIndex:i];
-        
-        [[STKImageStore store] fetchImageForURLString:[u profilePhotoPath] preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
-            [cv setImage:img];
-        }];
+    for(int i = 1; i < [[self circleViews] count]; i++) {
+        STKCircleView *cv = [[self circleViews] objectAtIndex:i];
+        if(i - 1 < [[self users] count] && i - 1 >= 0) {
+            
+            STKUser *u = [[self users] objectAtIndex:i - 1];
+            
+            [[STKImageStore store] fetchImageForURLString:[u profilePhotoPath] preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
+                [cv setImage:img];
+            }];
+        } else {
+            [cv setImage:nil];
+        }
     }
     [self setNeedsDisplay];
 }

@@ -19,5 +19,6 @@
 @property (nonatomic, strong) UIImageView *postTypeView;
 @property (nonatomic, strong) UIImageView *backdropFadeView;
 @property (nonatomic, strong) UIControl *avatarButton;
+@property (nonatomic, strong) UIControl *sourceButton;
 
 @end

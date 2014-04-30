@@ -63,6 +63,7 @@ extern NSString * const STKPostStatusDeleted;
 
 @property (nonatomic, strong) STKUser *creator;
 @property (nonatomic, strong) STKPost *originalPost;
+@property (nonatomic, strong) NSSet *derivativePosts;
 
 @property (nonatomic, strong) NSSet *likes;
 @property (nonatomic, strong) NSSet *hashTags;

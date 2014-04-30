@@ -136,6 +136,7 @@ typedef enum {
             [[self tableView] reloadData];
         }];
     }
+    [[self tableView] reloadData];
 }
 
 - (void)acceptRequest:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -228,6 +229,8 @@ typedef enum {
         
         if([i post]) {
             [[cell imageReferenceView] setUrlString:[[i post] imageURLString]];
+        } else {
+            [[cell imageReferenceView] setUrlString:nil];
         }
         
         [[cell timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];

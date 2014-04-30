@@ -17,10 +17,11 @@
 #import "STKUserListViewController.h"
 #import "STKProfileViewController.h"
 #import "STKTrust.h"
+#import "STKUserPostListViewController.h"
 
 @import MessageUI;
 
-@interface STKTrustViewController () <STKTrustViewDelegate, MFMailComposeViewControllerDelegate>
+@interface STKTrustViewController () <STKTrustViewDelegate, MFMailComposeViewControllerDelegate, STKCountViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *selectedNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
@@ -50,6 +51,8 @@
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_trust"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_trust_selected"]];
         [[self tabBarItem] setTitle:@"Trust"];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentUserChanged:) name:STKUserStoreCurrentUserChangedNotification object:nil];
     }
     return self;
 }
@@ -59,11 +62,53 @@
     [super viewDidLoad];
     [[self countView] setCircleTitles:@[@"Likes", @"Comments", @"Posts"]];
     [[self countView] setCircleValues:@[@"0", @"0", @"0"]];
+    [[self countView] setDelegate:self];
+    
     [[self trustView] setDelegate:self];
 
     [[self dateLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     [[self dateLabel] setClipsToBounds:YES];
     [[[self dateLabel] layer] setCornerRadius:5];
+
+}
+
+- (void)currentUserChanged:(NSNotification *)note
+{
+    if([[[STKUserStore store] currentUser] isInstitution]) {
+        [[self tabBarItem] setTitle:@"Luminary"];
+        [[self navigationItem] setTitle:@"Luminary"];
+    } else {
+        [[self tabBarItem] setTitle:@"Trust"];
+        [[self navigationItem] setTitle:@"Trust"];
+    }
+}
+
+- (void)countView:(STKCountView *)countView didSelectCircleAtIndex:(int)index
+{
+    STKTrust *t = [[self trusts] objectAtIndex:[[[self trustView] users] indexOfObject:[self selectedUser]]];
+    NSString *otherName = [[t otherUser] name];
+    
+    if(index == 0) {
+        [[STKUserStore store] fetchTrustPostsForTrust:t type:STKTrustPostTypeLikes completion:^(NSArray *posts, NSError *err) {
+            STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] init];
+            [pvc setShowsFilterBar:NO];
+            [pvc setTitle:otherName];
+            [pvc setPosts:posts];
+            [pvc setAllowPersonalFilter:NO];
+            [[self navigationController] pushViewController:pvc animated:YES];
+
+        }];
+    } else if(index == 1) {
+        [[STKUserStore store] fetchTrustPostsForTrust:t type:STKTrustPostTypeComments completion:^(NSArray *posts, NSError *err) {
+            STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] init];
+            [pvc setTitle:otherName];
+            [pvc setPosts:posts];
+            [pvc setAllowPersonalFilter:NO];
+            [pvc setShowsFilterBar:NO];
+            [[self navigationController] pushViewController:pvc animated:YES];
+            
+        }];
+    }
 }
 
 - (void)trustView:(STKTrustView *)tv didSelectCircleAtIndex:(int)idx
@@ -89,29 +134,57 @@
 - (void)configureInterface
 {
     if([self selectedUser]) {
-        NSInteger idx = [[[self trustView] users] indexOfObject:[self selectedUser]];
-        [[self selectedNameLabel] setText:[[self selectedUser] name]];
+        NSUInteger idx = [[[self trustView] users] indexOfObject:[self selectedUser]];
+        if(idx == NSNotFound) {
+            [self setSelectedUser:nil];
+        } else {
+            [[self selectedNameLabel] setText:[[self selectedUser] name]];
 
-        [[self trustView] setSelectedIndex:idx + 1];
+            [[self trustView] setSelectedIndex:idx + 1];
+            
+            NSDictionary *lookup = @{@(0) : @"trust_one",
+                                     @(1) : @"trust_two",
+                                     @(2) : @"trust_three",
+                                     @(3) : @"trust_four",
+                                     @(4) : @"trust_five"};
+            UIImage *img = [UIImage imageNamed:[lookup objectForKey:@(idx)]];
+            [[self numberImageView] setImage:img];
+            
+            NSDate *dateCreated = [[self selectedUser] dateCreated];
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            [df setDateFormat:@"MMM yyyy"];
+            [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+            [[self dateLabel] setText:[NSString stringWithFormat:@" Member Since %@ ", [df stringFromDate:dateCreated]]];
+            
+            STKTrust *t = [[self trusts] objectAtIndex:idx];
+            
+            int lCount = 0, cCount, pCount = 0;
+            if([[[t creator] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
+                lCount = [t recepientLikesCount];
+                cCount = [t recepientCommentsCount];
+                pCount = [t recepientPostsCount];
+            } else {
+                lCount = [t creatorLikesCount];
+                cCount = [t creatorCommentsCount];
+                pCount = [t creatorPostsCount];
+                
+            }
+            [[self countView] setCircleValues:@[
+                [NSString stringWithFormat:@"%d", lCount],
+                [NSString stringWithFormat:@"%d", cCount],
+                [NSString stringWithFormat:@"%d", pCount]
+            ]];
+        }
         
-        NSDictionary *lookup = @{@(0) : @"trust_one",
-                                 @(1) : @"trust_two",
-                                 @(2) : @"trust_three",
-                                 @(3) : @"trust_four",
-                                 @(4) : @"trust_five"};
-        UIImage *img = [UIImage imageNamed:[lookup objectForKey:@(idx)]];
-        [[self numberImageView] setImage:img];
-        
-        NSDate *dateCreated = [[self selectedUser] dateCreated];
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"MMM yyyy"];
-        [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        [[self dateLabel] setText:[NSString stringWithFormat:@" Member Since %@ ", [df stringFromDate:dateCreated]]];
-    } else {
+    }
+    
+    if(![self selectedUser]) {
         [[self selectedNameLabel] setText:nil];
         [[self trustView] setSelectedIndex:0];
         [[self dateLabel] setText:nil];
         [[self numberImageView] setImage:nil];
+
+        [[self countView] setCircleValues:@[@"0", @"0", @"0"]];
     }
 
 }
@@ -149,6 +222,12 @@
     
     [self configureInterface];
 }
+- (IBAction)promptTitleChange:(id)sender
+{
+    if([self selectedUser]) {
+
+    }
+}
 
 
 - (void)viewDidAppear:(BOOL)animated
@@ -182,6 +261,7 @@
 - (IBAction)showList:(id)sender
 {
     STKUserListViewController *lvc = [[STKUserListViewController alloc] init];
+    [lvc setType:STKUserListTypeTrust];
     NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
     for(STKTrust *t in [self trusts]) {
         if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
@@ -230,6 +310,11 @@
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
     }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

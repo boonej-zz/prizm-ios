@@ -109,7 +109,8 @@
 
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:STKFont(14)];
     
-    
+    [[UITextField appearance] setTintColor:[UIColor whiteColor]];
+    [[UITextView appearance] setTintColor:[UIColor whiteColor]];
 }
 
 @end

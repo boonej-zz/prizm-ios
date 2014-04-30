@@ -162,6 +162,7 @@
 		BEF2D78C1899818900D3C8D6 /* STKRequestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF2D78A1899818900D3C8D6 /* STKRequestCell.xib */; };
 		BEF361CB18B2C3700085A38B /* STKTriImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF361C918B2C3700085A38B /* STKTriImageCell.m */; };
 		BEF361CC18B2C3700085A38B /* STKTriImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF361CA18B2C3700085A38B /* STKTriImageCell.xib */; };
+		BEF6E201190EC21300D60BE0 /* STKButtonRow.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF6E200190EC21300D60BE0 /* STKButtonRow.m */; };
 		BEF7A08118439E0800A3AFFB /* STKRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A07F18439E0800A3AFFB /* STKRegisterViewController.m */; };
 		BEF7A08218439E0800A3AFFB /* STKRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEF7A08018439E0800A3AFFB /* STKRegisterViewController.xib */; };
 		BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */ = {isa = PBXBuildFile; fileRef = BEF7A0851843ACB100A3AFFB /* STKRenderServer.m */; };
@@ -2144,6 +2145,8 @@
 		BEF361C818B2C3700085A38B /* STKTriImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKTriImageCell.h; path = Prism/STKTriImageCell.h; sourceTree = "<group>"; };
 		BEF361C918B2C3700085A38B /* STKTriImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKTriImageCell.m; path = Prism/STKTriImageCell.m; sourceTree = "<group>"; };
 		BEF361CA18B2C3700085A38B /* STKTriImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKTriImageCell.xib; path = Prism/STKTriImageCell.xib; sourceTree = "<group>"; };
+		BEF6E1FF190EC21300D60BE0 /* STKButtonRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKButtonRow.h; sourceTree = "<group>"; };
+		BEF6E200190EC21300D60BE0 /* STKButtonRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKButtonRow.m; sourceTree = "<group>"; };
 		BEF7A07E18439E0800A3AFFB /* STKRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKRegisterViewController.h; sourceTree = "<group>"; };
 		BEF7A07F18439E0800A3AFFB /* STKRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKRegisterViewController.m; sourceTree = "<group>"; };
 		BEF7A08018439E0800A3AFFB /* STKRegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKRegisterViewController.xib; sourceTree = "<group>"; };
@@ -2428,6 +2431,8 @@
 				BECA36B419004F88000A5851 /* STKGradientView.m */,
 				BE4C735E190AAA1F003A4109 /* STKNotificationBadge.h */,
 				BE4C735F190AAA1F003A4109 /* STKNotificationBadge.m */,
+				BEF6E1FF190EC21300D60BE0 /* STKButtonRow.h */,
+				BEF6E200190EC21300D60BE0 /* STKButtonRow.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4699,6 +4704,7 @@
 				BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */,
 				BEF7A08D1843AEAB00A3AFFB /* STKPanelViewController.m in Sources */,
 				BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */,
+				BEF6E201190EC21300D60BE0 /* STKButtonRow.m in Sources */,
 				BEF7A08118439E0800A3AFFB /* STKRegisterViewController.m in Sources */,
 				BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */,
 				BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */,

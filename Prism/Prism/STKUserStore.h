@@ -7,12 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "STKTrust.h"
 
-@class STKUser, STKPost, STKActivityItem, STKTrust;
+@class STKUser, STKPost, STKActivityItem;
 @class ACAccount, ACAccountStore;
 
 extern NSString * const STKUserStoreActivityUpdateNotification;
 extern NSString * const STKUserStoreActivityUpdateCountKey;
+
+extern NSString * const STKUserStoreCurrentUserChangedNotification;
 
 extern NSString * const STKUserStoreErrorDomain;
 typedef enum {
@@ -66,7 +69,7 @@ typedef enum {
 - (void)rejectTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
-
+- (void)fetchTrustPostsForTrust:(STKTrust *)t type:(STKTrustPostType)type completion:(void (^)(NSArray *posts, NSError *err))block;
 - (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block;
 
 - (void)markItemsAsViewed:(NSArray *)itemIDs;

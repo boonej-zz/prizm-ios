@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -7,8 +7,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKUserPostListViewController">
             <connections>
                 <outlet property="blurView" destination="Xc3-2h-k1Z" id="PvX-rM-kyl"/>
+                <outlet property="blurViewHeightConstraint" destination="Il0-7U-xDb" id="gxW-5k-lN7"/>
                 <outlet property="filterBar" destination="JUn-fv-37I" id="EVL-q0-Oin"/>
+                <outlet property="leftConstraint" destination="sPM-mg-Kqk" id="9Uc-TT-Z09"/>
                 <outlet property="personalButton" destination="THA-mD-uDP" id="th9-CI-2LW"/>
+                <outlet property="rightConstraint" destination="Lnh-Mu-oJW" id="v7W-bg-xm5"/>
                 <outlet property="tableView" destination="TCM-Ns-ZEc" id="fZB-8U-GXi"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -35,13 +38,17 @@
                         <constraint firstAttribute="height" constant="115" id="Il0-7U-xDb"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JUn-fv-37I">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JUn-fv-37I">
                     <rect key="frame" x="0.0" y="65" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQx-zI-aQv">
-                            <rect key="frame" x="3" y="0.0" width="48" height="48"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQx-zI-aQv">
+                            <rect key="frame" x="6" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="48" id="NYd-o0-Rwb"/>
+                                <constraint firstAttribute="height" constant="48" id="die-pM-19r"/>
+                            </constraints>
                             <state key="normal" image="category_passions_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -50,9 +57,13 @@
                                 <action selector="togglePassions:" destination="-1" eventType="touchUpInside" id="lPc-Nc-evU"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u3g-QQ-nyU">
-                            <rect key="frame" x="53" y="0.0" width="48" height="48"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u3g-QQ-nyU">
+                            <rect key="frame" x="58" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="22c-w9-QB4"/>
+                                <constraint firstAttribute="width" constant="48" id="oQ9-Lr-xvX"/>
+                            </constraints>
                             <state key="normal" image="category_aspiration_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -61,9 +72,13 @@
                                 <action selector="toggleAspirations:" destination="-1" eventType="touchUpInside" id="1hR-iu-7Mk"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGT-3s-4Nk">
-                            <rect key="frame" x="122" y="12" width="23" height="23"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGT-3s-4Nk">
+                            <rect key="frame" x="110" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="251-Cl-VGm"/>
+                                <constraint firstAttribute="width" constant="48" id="hcW-1t-ba0"/>
+                            </constraints>
                             <state key="normal" image="category_experiences_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -72,9 +87,13 @@
                                 <action selector="toggleExperiences:" destination="-1" eventType="touchUpInside" id="dDl-lQ-pxW"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAP-Qu-4Rj">
-                            <rect key="frame" x="161" y="0.0" width="48" height="48"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAP-Qu-4Rj">
+                            <rect key="frame" x="162" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="48" id="Bu6-nW-zaF"/>
+                                <constraint firstAttribute="height" constant="48" id="KbW-pZ-iRL"/>
+                            </constraints>
                             <state key="normal" image="category_achievements_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -83,9 +102,13 @@
                                 <action selector="toggleAchievements:" destination="-1" eventType="touchUpInside" id="Am4-b8-kVY"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H5K-Hv-SNX">
-                            <rect key="frame" x="217" y="1" width="48" height="48"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H5K-Hv-SNX">
+                            <rect key="frame" x="214" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="JtI-Da-XgD"/>
+                                <constraint firstAttribute="width" constant="48" id="Uiq-1y-G1g"/>
+                            </constraints>
                             <state key="normal" image="category_inspiration_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -94,9 +117,13 @@
                                 <action selector="toggleInspirations:" destination="-1" eventType="touchUpInside" id="DSR-mI-h0l"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="THA-mD-uDP">
-                            <rect key="frame" x="269" y="0.0" width="48" height="48"/>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="THA-mD-uDP">
+                            <rect key="frame" x="266" y="0.0" width="48" height="48"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="Lqw-eF-6yH"/>
+                                <constraint firstAttribute="width" constant="48" id="S9X-rm-Wt7"/>
+                            </constraints>
                             <state key="normal" image="category_personal_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -107,12 +134,31 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="9sc-rQ-9iz"/>
+                        <constraint firstAttribute="centerY" secondItem="DGT-3s-4Nk" secondAttribute="centerY" id="Erd-JB-KOB"/>
+                        <constraint firstAttribute="trailing" secondItem="THA-mD-uDP" secondAttribute="trailing" constant="6" id="Lnh-Mu-oJW"/>
+                        <constraint firstItem="DGT-3s-4Nk" firstAttribute="leading" secondItem="u3g-QQ-nyU" secondAttribute="trailing" constant="4" id="PP3-ER-Ooi"/>
+                        <constraint firstItem="THA-mD-uDP" firstAttribute="leading" secondItem="H5K-Hv-SNX" secondAttribute="trailing" constant="4" id="SOp-6D-TDI"/>
+                        <constraint firstAttribute="centerY" secondItem="H5K-Hv-SNX" secondAttribute="centerY" id="Sx5-Ds-5jD"/>
+                        <constraint firstAttribute="centerY" secondItem="MQx-zI-aQv" secondAttribute="centerY" id="dsi-Lz-2bF"/>
+                        <constraint firstAttribute="centerY" secondItem="u3g-QQ-nyU" secondAttribute="centerY" id="fGs-KE-fSj"/>
+                        <constraint firstAttribute="centerY" secondItem="qAP-Qu-4Rj" secondAttribute="centerY" id="kX3-Qv-P76"/>
+                        <constraint firstItem="H5K-Hv-SNX" firstAttribute="leading" secondItem="qAP-Qu-4Rj" secondAttribute="trailing" constant="4" id="nQW-zX-4Uh"/>
+                        <constraint firstAttribute="centerY" secondItem="THA-mD-uDP" secondAttribute="centerY" id="odd-di-gwA"/>
+                        <constraint firstItem="u3g-QQ-nyU" firstAttribute="leading" secondItem="MQx-zI-aQv" secondAttribute="trailing" constant="4" id="ovs-Ux-9Mr"/>
+                        <constraint firstItem="MQx-zI-aQv" firstAttribute="leading" secondItem="JUn-fv-37I" secondAttribute="leading" constant="6" id="sPM-mg-Kqk"/>
+                        <constraint firstItem="qAP-Qu-4Rj" firstAttribute="leading" secondItem="DGT-3s-4Nk" secondAttribute="trailing" constant="4" id="v9w-8D-orp"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="JUn-fv-37I" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="65" id="1sy-Ut-FHn"/>
                 <constraint firstItem="Xc3-2h-k1Z" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="54d-AK-krL"/>
+                <constraint firstItem="JUn-fv-37I" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="80H-8z-tTw"/>
                 <constraint firstAttribute="trailing" secondItem="Xc3-2h-k1Z" secondAttribute="trailing" id="AVZ-Hn-bMS"/>
+                <constraint firstAttribute="trailing" secondItem="JUn-fv-37I" secondAttribute="trailing" id="EzE-5I-pol"/>
                 <constraint firstItem="Xc3-2h-k1Z" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="sTs-RL-78b"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

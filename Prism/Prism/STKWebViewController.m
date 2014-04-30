@@ -48,6 +48,7 @@
     [super viewWillAppear:animated];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
     [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    [[[self navigationController] navigationBar] setTintColor:[UIColor whiteColor]];
 }
 
 

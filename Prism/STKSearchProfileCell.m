@@ -24,4 +24,10 @@
 {
     ROUTE(sender);
 }
+
+- (IBAction)cancelTrust:(id)sender
+{
+    ROUTE(sender);
+}
+
 @end

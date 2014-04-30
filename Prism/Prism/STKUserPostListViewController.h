@@ -12,5 +12,6 @@
 
 @property (nonatomic, strong) NSArray *posts;
 @property (nonatomic) BOOL allowPersonalFilter;
+@property (nonatomic) BOOL showsFilterBar;
 
 @end

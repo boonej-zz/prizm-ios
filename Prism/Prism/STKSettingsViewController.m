@@ -101,37 +101,23 @@
 }
 
 
-
 - (void)accountChooser:(STKAccountChooserViewController *)chooser didChooseAccount:(ACAccount *)account
 {
-    [[[STKUserStore store] currentUser] setTwitterID:[account username]];
-
-    [STKProcessingView present];
-    [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
-        [STKProcessingView dismiss];
-        if(err) {
-            UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-            [av show];
-        }
-        
-        [[self navigationController] popViewControllerAnimated:YES];
-    }];
+    [self connectTwitterAccount:account];
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)configureTwitter:(NSNumber *)activating
 {
     if([activating boolValue]) {
-        [STKProcessingView present];
         [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
             if(err) {
-                [STKProcessingView dismiss];
                 UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
                 [av show];
                 return;
             }
             
             if([accounts count] == 0) {
-                [STKProcessingView dismiss];
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"No Twitter Account"
                                                              message:@"You do not have a Twitter account configured for this device. Use the Settings application to securely enter your Twitter credentials before giving Prizm access."
                                                             delegate:nil
@@ -141,20 +127,8 @@
             }
             
             if([accounts count] == 1) {
-                [[[STKUserStore store] currentUser] setTwitterID:[[accounts firstObject] username]];
-                
-                [STKProcessingView present];
-                [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
-                    [STKProcessingView dismiss];
-                    if(err) {
-                        UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-                        [av show];
-                    }
-                    
-                    [[self navigationController] popViewControllerAnimated:YES];
-                }];
+                [self connectTwitterAccount:[accounts firstObject]];
             } else {
-                [STKProcessingView dismiss];
                 STKAccountChooserViewController *cvc = [[STKAccountChooserViewController alloc] initWithAccounts:accounts];
                 [cvc setBackgroundImage:[UIImage imageNamed:@"img_background"]];
                 [cvc setDelegate:self];
@@ -168,6 +142,25 @@
             
         }];
     }
+}
+
+- (void)connectTwitterAccount:(ACAccount *)acct
+{
+    [[[STKUserStore store] currentUser] setTwitterID:[acct username]];
+    
+    [STKProcessingView present];
+    [[STKNetworkStore store] establishMinimumIDForUser:[[STKUserStore store] currentUser] networkType:STKNetworkTypeTwitter completion:^(NSString *minID, NSError *err) {
+        [[[STKUserStore store] currentUser] setTwitterLastMinID:minID];
+        [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+            [STKProcessingView dismiss];
+            if(err) {
+                UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+                [av show];
+            } else {
+                NSLog(@"Twitter: %@ %@", [acct username], minID);
+            }
+        }];
+    }];
 }
 
 - (void)toggleNetwork:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -187,8 +180,11 @@
         [vc setTokenFound:^(NSString *token) {
             if(token) {
                 [[[STKUserStore store] currentUser] setInstagramToken:token];
-                [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
-                    
+                [[STKNetworkStore store] establishMinimumIDForUser:[[STKUserStore store] currentUser] networkType:STKNetworkTypeInstagram completion:^(NSString *minID, NSError *err) {
+                    [[[STKUserStore store] currentUser] setInstagramLastMinID:minID];
+                    [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+                        
+                    }];
                 }];
             }
         }];
@@ -229,7 +225,7 @@
     [self setLogoutButton:b];
     
     [[self tableView] setTableFooterView:v];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(104, 0, 0, 0)];
 }
 
 - (void)logout:(id)sender

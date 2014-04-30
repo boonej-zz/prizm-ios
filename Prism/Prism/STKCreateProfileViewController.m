@@ -103,7 +103,7 @@ const long STKCreateProgressGeocoding = 4;
 
 - (void)configureItemsForCreation
 {
-    if([[[self user] type] isEqualToString:STKUserTypeInstitution]) {
+    if([[self user] isInstitution]) {
         _items = @[
                    @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"Individual"]},
                    
@@ -176,7 +176,7 @@ const long STKCreateProgressGeocoding = 4;
         [bbi setTitlePositionAdjustment:UIOffsetMake(-3, 0) forBarMetrics:UIBarMetricsDefault];
         [[self navigationItem] setRightBarButtonItem:bbi];
         
-        if([[u type] isEqualToString:STKUserTypeInstitution]) {
+        if([u isInstitution]) {
             _items = @[
                        // Public
                        @{@"title" : @"Name", @"key" : @"firstName",
@@ -559,7 +559,7 @@ const long STKCreateProgressGeocoding = 4;
         if([self isMovingToParentViewController]) {
             [STKProcessingView present];
             NSArray *additionalFields = nil;
-            if([[[self user] type] isEqualToString:STKUserTypeInstitution]) {
+            if([[self user] isInstitution]) {
                 additionalFields = @[@"zip_postal", @"date_founded", @"mascot", @"enrollment", @"phone_number"];
             } else {
                 additionalFields = @[@"zip_postal", @"birthday", @"gender"];
@@ -986,6 +986,8 @@ const long STKCreateProgressGeocoding = 4;
     }
 
     [[c textField] setInputAccessoryView:[self toolbar]];
+
+    [[c textField] setAutocorrectionType:UITextAutocorrectionTypeNo];
     
     return c;
 }

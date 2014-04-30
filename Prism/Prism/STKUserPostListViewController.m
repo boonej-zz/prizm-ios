@@ -15,7 +15,10 @@
 #import "STKPostController.h"
 
 @interface STKUserPostListViewController () <UITableViewDelegate, UITableViewDataSource, STKPostControllerDelegate>
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *blurViewHeightConstraint;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *filterBar;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
@@ -33,6 +36,7 @@
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         _postController = [[STKPostController alloc] initWithViewController:self];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        [self setShowsFilterBar:YES];
     }
     return self;
 }
@@ -88,9 +92,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [[self personalButton] setHidden:![self allowPersonalFilter]];
 
+    if([self allowPersonalFilter]) {
+        [[self personalButton] setHidden:NO];
+        [[self leftConstraint] setConstant:6];
+        [[self rightConstraint] setConstant:6];
+    } else {
+        [[self personalButton] setHidden:YES];
+        [[self leftConstraint] setConstant:32];
+        [[self rightConstraint] setConstant:-20];
+    }
+
+    [[self filterBar] setHidden:![self showsFilterBar]];
+    if(![self showsFilterBar]) {
+        [[self blurViewHeightConstraint] setConstant:[[self blurViewHeightConstraint] constant] - [[self filterBar] bounds].size.height];
+    }
     
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
@@ -101,7 +117,11 @@
 {
     [super viewWillAppear:animated];
     [[[self blurView] displayLink] setPaused:NO];
-    [[self tableView] setContentInset:UIEdgeInsetsMake([[self filterBar] bounds].size.height + [[self filterBar] frame].origin.y, 0, 0, 0)];
+    if([self showsFilterBar]) {
+        [[self tableView] setContentInset:UIEdgeInsetsMake([[self filterBar] bounds].size.height + [[self filterBar] frame].origin.y, 0, 0, 0)];
+    } else {
+        [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
+    }
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
                                               landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                            target:self action:@selector(back:)];

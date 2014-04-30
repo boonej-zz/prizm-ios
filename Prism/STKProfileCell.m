@@ -14,6 +14,11 @@
 
 @implementation STKProfileCell
 
+- (IBAction)profileStateChanged:(id)sender
+{
+    ROUTE(sender);
+}
+
 - (void)cellDidLoad
 {
     [[self nameLabel] setFont:STKFont(18)];
@@ -22,35 +27,9 @@
     [[self locationLabel] setTextColor:STKTextTransparentColor];
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
-
+// btn_info, action_prism, 
 - (void)layoutContent
 {
     
 }
-
-- (void)setShowPrismImageForToggleButton:(BOOL)showPrismImageForToggleButton
-{
-    _showPrismImageForToggleButton = showPrismImageForToggleButton;
-    
-    [[self toggleButton] setSelected:_showPrismImageForToggleButton];
-    
-    if([self showPrismImageForToggleButton]) {
-//        [[self toggleButton] setSelected:YES];
-//        [[self toggleButton] setImage:[UIImage imageNamed:@"action_prism"]
-//                             forState:UIControlStateNormal];
-    } else {
-//        [[self toggleButton] setImage:[UIImage imageNamed:@"btn_info"]
-//                             forState:UIControlStateNormal];
-    }
-
-}
-
-- (IBAction)toggleInformation:(id)sender
-{
-    [self setShowPrismImageForToggleButton:![self showPrismImageForToggleButton]];
-
-    
-    ROUTE(sender);
-}
-
 @end

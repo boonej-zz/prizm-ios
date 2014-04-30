@@ -27,6 +27,8 @@ NSString * const STKUserStoreActivityUpdateNotification = @"STKUserStoreActivity
 NSString * const STKUserStoreActivityUpdateCountKey = @"STKUSerStoreActivityUpdateCountKey";
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 
+NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurrentUserChangedNotification";
+
 NSString * const STKUserStoreExternalCredentialGoogleClientID = @"945478453792.apps.googleusercontent.com";
 NSString * const STKUserStoreExternalCredentialFacebookAppID = @"744512878911220";
 NSString * const STKUserStoreExternalCredentialTwitterTokenSecret = @"tYnRjsX7toPoFAmRQnFOen8W3BsyJ2irnfmNYAIZwFAxd";
@@ -245,12 +247,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                                   forKey:STKUserStoreCurrentUserKey];
     
         [Crashlytics setUserIdentifier:[NSString stringWithFormat:@"%@ %@ %@", [currentUser name], [currentUser uniqueID], [[UIDevice currentDevice] name]]];
+        
+        
     } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
         [self setContext:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[self cachePathForDatabase] error:nil];
         [self establishDatabaseAndCurrentUser];
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserChangedNotification object:self];
 }
 
 - (void)pruneDatabase
@@ -289,6 +295,53 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [self setContext:ctx];
 }
 
+- (void)fetchTrustPostsForTrust:(STKTrust *)t type:(STKTrustPostType)type completion:(void (^)(NSArray *posts, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
+        [c setIdentifiers:@[[t uniqueID]]];
+        
+        NSString *diveKey = nil;
+        STKQueryObject *obj = [[STKQueryObject alloc] init];
+        if(type == STKTrustPostTypeLikes) {
+            if([[[self currentUser] uniqueID] isEqualToString:[[t creator] uniqueID]]) {
+                diveKey = @"to_post_likes";
+            } else {
+                diveKey = @"from_post_likes";
+            }
+        } else if(type == STKTrustPostTypeComments) {
+            if([[[self currentUser] uniqueID] isEqualToString:[[t creator] uniqueID]]) {
+                diveKey = @"to_comments";
+            } else {
+                diveKey = @"from_comments";
+            }
+        }
+        
+        [obj setFields:@[diveKey]];
+        [obj addSubquery:[STKResolutionQuery resolutionQueryForField:diveKey]];
+
+        [c setQueryObject:obj];
+        
+        [c setModelGraph:@[@{diveKey : @[@"STKPost"]}]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c setContext:[self context]];
+//        [c setShouldReturnArray:YES];
+        [c setResolutionMap:@{@"Post" : @"STKPost"}];
+        
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *posts, NSError *err) {
+            if(err) {
+                block(nil, err);
+            } else {
+                block([posts objectForKey:diveKey], err);
+            }
+        }];
+    }];
+}
 
 - (void)fetchTrustForUser:(STKUser *)user otherUser:(STKUser *)otherUser completion:(void (^)(STKTrust *t, NSError *err))block
 {
@@ -575,6 +628,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     if([results count] > 0) {
         t = [results firstObject];
         [t setStatus:STKRequestStatusPending];
+        if(![[[t creator] uniqueID] isEqualToString:[[self currentUser] uniqueID]]) {
+            STKUser *oldCreator = [t creator];
+            [t setRecepient:oldCreator];
+            [t setCreator:[self currentUser]];
+        }
     } else {
         wasInserted = YES;
         t = [NSEntityDescription insertNewObjectForEntityForName:@"STKTrust"
@@ -763,6 +821,17 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block
 {
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"status == %@ and (creator == %@ or recepient == %@)",
+                      STKRequestStatusAccepted, u, u];
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+    [req setPredicate:p];
+    NSArray *cachedTrusts = [[self context] executeFetchRequest:req error:nil];
+    if([cachedTrusts count] > 0) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(cachedTrusts, nil);
+        }];
+    }
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -1336,7 +1405,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
-        [c addQueryValue:email forKey:@"email"];
+        [c addQueryValue:[email lowercaseString] forKey:@"email"];
         [c addQueryValue:password forKey:@"password"];
         
         if([self currentUser])
@@ -1359,9 +1428,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(nil, err);
             return;
         }
+        
+        [info setEmail:[[info email] lowercaseString]];
+        
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         
-        if([[info type] isEqualToString:STKUserTypeInstitution]) {
+        if([info isInstitution]) {
             [c addQueryValues:info
                   missingKeys:nil
                    withKeyMap:@{@"firstName" : @"first_name",

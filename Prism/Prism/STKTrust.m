@@ -49,6 +49,15 @@ recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, typ
     return nil;
 }
 
+- (STKUser *)otherUser
+{
+    if([[[self creator] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
+        return [self recepient];
+    }
+    
+    return [self creator];
+}
+
 - (BOOL)isPending
 {
     return [[self status] isEqualToString:STKRequestStatusPending];

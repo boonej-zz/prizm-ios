@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    STKUserListTypeFollow,
+    STKUserListTypeTrust
+} STKUserListType;
+
 @interface STKUserListViewController : UIViewController
 
 @property (nonatomic, strong) NSArray *users;
+@property (nonatomic) STKUserListType type;
 
 @end

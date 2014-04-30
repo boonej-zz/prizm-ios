@@ -167,6 +167,11 @@
     ROUTE(sender);
 }
 
+- (void)sourceTapped:(id)sender
+{
+    ROUTE(sender);
+}
+
 - (void)cellDidLoad
 {
     static UIImage *fadeImage = nil;
@@ -181,6 +186,8 @@
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     [[self headerView] setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.2]];
     [[[self headerView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[[self headerView] sourceButton] addTarget:self action:@selector(sourceTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     [[self contentImageView] setPreferredSize:STKImageStoreThumbnailLarge];
 }

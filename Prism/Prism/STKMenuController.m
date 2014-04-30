@@ -140,6 +140,8 @@
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated
 {
     if(menuVisible) {
+        [[self menuView] setItems:[[self viewControllers] valueForKey:@"tabBarItem"]];
+        
         [[self view] bringSubviewToFront:[self menuView]];
 
         CGRect blurRect = [[self view] bounds];
@@ -304,10 +306,6 @@
         
     }
     [self setSelectedViewController:[viewControllers objectAtIndex:0]];
-    
-    if(_menuView) {
-        [[self menuView] setItems:[viewControllers valueForKey:@"tabBarItem"]];
-    }
 }
 
 

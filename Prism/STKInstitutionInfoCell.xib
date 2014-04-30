@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -13,18 +13,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xOR-jm-bV8">
+                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xOR-jm-bV8">
                         <rect key="frame" x="0.0" y="1" width="320" height="43"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FIj-1d-jeb">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FIj-1d-jeb">
                                 <rect key="frame" x="17" y="11" width="119" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LLp-DU-7zj">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LLp-DU-7zj">
                                 <rect key="frame" x="138" y="11" width="162" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
@@ -33,8 +33,23 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="LLp-DU-7zj" secondAttribute="bottom" constant="11" id="1cc-3W-quD"/>
+                            <constraint firstAttribute="bottom" secondItem="FIj-1d-jeb" secondAttribute="bottom" constant="11" id="9yG-tJ-oAV"/>
+                            <constraint firstItem="FIj-1d-jeb" firstAttribute="leading" secondItem="xOR-jm-bV8" secondAttribute="leading" constant="17" id="Bax-Mo-mgi"/>
+                            <constraint firstItem="LLp-DU-7zj" firstAttribute="leading" secondItem="FIj-1d-jeb" secondAttribute="trailing" constant="2" id="E1u-nw-fb4"/>
+                            <constraint firstAttribute="trailing" secondItem="LLp-DU-7zj" secondAttribute="trailing" constant="20" id="bja-Z4-vA0"/>
+                            <constraint firstItem="FIj-1d-jeb" firstAttribute="top" secondItem="xOR-jm-bV8" secondAttribute="top" constant="11" id="cjE-XG-9yl"/>
+                            <constraint firstItem="LLp-DU-7zj" firstAttribute="top" secondItem="xOR-jm-bV8" secondAttribute="top" constant="11" id="ve7-8c-7k3"/>
+                        </constraints>
                     </view>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="xOR-jm-bV8" secondAttribute="trailing" id="7C8-l6-ZmE"/>
+                    <constraint firstItem="xOR-jm-bV8" firstAttribute="top" secondItem="ssb-0x-p1M" secondAttribute="top" constant="1" id="Fp3-Cd-Gr4"/>
+                    <constraint firstAttribute="bottom" secondItem="xOR-jm-bV8" secondAttribute="bottom" id="KcZ-Ni-olU"/>
+                    <constraint firstItem="xOR-jm-bV8" firstAttribute="leading" secondItem="ssb-0x-p1M" secondAttribute="leading" id="YS6-Zz-4sC"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="titleLabel" destination="FIj-1d-jeb" id="hZp-SE-Tgk"/>

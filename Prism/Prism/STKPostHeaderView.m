@@ -45,7 +45,8 @@
     _sourceLabel = [[UILabel alloc] init];
     _postTypeView = [[UIImageView alloc] init];
     _timeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_clock"]];
-    
+    _sourceButton = [[UIControl alloc] init];
+
     
     [_backdropFadeView setAlpha:0.0];
     [_posterLabel setFont:STKFont(16)];
@@ -61,6 +62,7 @@
     [_postTypeView setContentMode:UIViewContentModeCenter];
     
     [_avatarButton setBackgroundColor:[UIColor clearColor]];
+    [_sourceButton setBackgroundColor:[UIColor clearColor]];
     
     [self addSubview:_backdropFadeView];
     [self addSubview:_avatarView];
@@ -70,6 +72,7 @@
     [self addSubview:_sourceLabel];
     [self addSubview:_postTypeView];
     [self addSubview:_timeImageView];
+    [self addSubview:_sourceButton];
     
     for(UIView *v in [self subviews]) {
         [v setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -115,9 +118,10 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
                                                          toItem:_timeImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:-2]];
 
-//    [_posterLabel addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute
-//                                                            multiplier:1 constant:16]];
-
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_sourceLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_sourceButton attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_sourceLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_sourceButton attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : _sourceButton}]];
+    
     [_timeImageView addConstraint:[NSLayoutConstraint constraintWithItem:_timeImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
                                                                toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:10.5]];
 

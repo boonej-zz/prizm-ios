@@ -35,10 +35,14 @@
     if([i isPending]) {
         [[self rejectButton] setHidden:NO];
         [[self acceptButton] setHidden:NO];
-        typeString = @"wants to enter into a Trust with you.";
+        if([[i creator] isInstitution]) {
+            typeString = @"wants you to be a luminary.";
+        } else {
+            typeString = @"invited you into a trust.";
+        }
     } else if([i isAccepted]) {
-        typeString = [NSString stringWithFormat:@"You and %@ are now in a trust.", [[i creator] firstName]];
-    } else if([i isRejected]) {
+        typeString = @"request accepted.";
+    } else if([i isCancelled]) {
         typeString = @"trust denied.";
     }
     

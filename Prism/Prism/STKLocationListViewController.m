@@ -9,6 +9,8 @@
 #import "STKLocationListViewController.h"
 #import "STKFoursquareLocation.h"
 #import "STKContentStore.h"
+#import "STKErrorStore.h"
+
 @import CoreLocation;
 
 @interface STKLocationListViewController () <CLLocationManagerDelegate, UISearchDisplayDelegate>
@@ -146,10 +148,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Finding Location"
-                                                 message:[error localizedDescription]
-                                                delegate:nil
-                                       cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *av = [STKErrorStore alertViewForError:error delegate:nil];
     [av show];
     [manager stopUpdatingLocation];
     [self finishFetchingLocations];

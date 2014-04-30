@@ -242,7 +242,7 @@
     
     [[self commentTextField] setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Write a comment..."
                                                                                       attributes:@{NSFontAttributeName : STKFont(12),
-                                                                                                   NSForegroundColorAttributeName : [UIColor whiteColor]}]];
+                                                                                                   NSForegroundColorAttributeName : STKTextColor}]];
 
     [[self postButtonRightConstraint] setConstant:-[[self postButton] bounds].size.width - 3];
     
@@ -258,12 +258,9 @@
     [[self editOverlayView] addGestureRecognizer:gr];
 }
 
-
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setDisplayFullBleed:YES];
@@ -313,6 +310,9 @@
         [[self editPostButton] setHidden:YES];
     }
     
+    [[STKContentStore store] fetchPost:[self post] completion:^(STKPost *p, NSError *err) {
+        [[self tableView] reloadData];
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -634,6 +634,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         [[c textView] setDelegate:self];
         
         if([self postHasText] && [indexPath row] == 0) {
+            [[c textView] setText:nil];
             [[c textView] setText:[[self post] text]];
             [[c nameLabel] setText:[[[self post] creator] name]];
             [[c avatarImageView] setUrlString:[[[self post] creator] profilePhotoPath]];

@@ -22,10 +22,12 @@ NSString * const STKUserExternalSystemGoogle = @"google";
 NSString * const STKUserTypePersonal = @"user";
 NSString * const STKUserTypeLuminary = @"luminary";
 NSString * const STKUserTypeMilitary = @"military";
-NSString * const STKUserTypeInstitution = @"institution";
+NSString * const STKUserTypeInstitution = @"institution_verified";
 NSString * const STKUserTypeFoundation = @"foundation";
 NSString * const STKUserTypeCompany = @"company";
 NSString * const STKUserTypeCommunity = @"community";
+
+NSString * const STKUserTypeInstitutionPending = @"institution";
 
 NSString * const STKUserCoverPhotoURLStringKey = @"cover_photo_url";
 NSString * const STKUserProfilePhotoURLStringKey = @"profile_photo_url";
@@ -180,6 +182,11 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
     return [a copy];
 }
 
+- (BOOL)isInstitution
+{
+    return [[self type] isEqualToString:STKUserTypeInstitution] || [[self type] isEqualToString:STKUserTypeInstitutionPending];
+}
+
 /////
 
 - (void)setValuesFromFacebook:(NSDictionary *)d
@@ -242,6 +249,7 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
         }
     }
 }
+
 
 - (void)setValuesFromGooglePlus:(GTLPlusPerson *)vals
 {

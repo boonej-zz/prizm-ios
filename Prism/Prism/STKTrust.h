@@ -16,6 +16,11 @@ extern NSString * const STKRequestStatusAccepted;
 extern NSString * const STKRequestStatusRejected;
 extern NSString * const STKRequestStatusCancelled;
 
+typedef enum {
+    STKTrustPostTypeLikes,
+    STKTrustPostTypeComments,
+    STKTrustPostTypeTags
+} STKTrustPostType;
 
 @interface STKTrust : NSManagedObject <STKJSONObject>
 
@@ -41,5 +46,7 @@ extern NSString * const STKRequestStatusCancelled;
 - (BOOL)isAccepted;
 - (BOOL)isRejected;
 - (BOOL)isCancelled;
+
+- (STKUser *)otherUser;
 
 @end

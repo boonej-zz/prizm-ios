@@ -49,7 +49,7 @@ NSString * const STKPostStatusDeleted = @"deleted";
 @dynamic coordinate;
 @dynamic hashTags, imageURLString, uniqueID, datePosted, locationLatitude, locationLongitude, locationName,
 visibility, status, repost, referenceTimestamp, text, comments, commentCount, creator, originalPost, likes, likeCount,
-type, fInverseFeed, activities;
+type, fInverseFeed, activities, derivativePosts;
 @dynamic fInverseProfile;
 
 + (NSDictionary *)reverseKeyMap

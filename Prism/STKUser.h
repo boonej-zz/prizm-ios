@@ -34,6 +34,7 @@ extern NSString * const STKUserTypeFoundation;
 extern NSString * const STKUserTypeCompany;
 extern NSString * const STKUserTypeCommunity;
 
+extern NSString * const STKUserTypeInstitutionPending;
 
 extern NSString * const STKUserCoverPhotoURLStringKey;
 extern NSString * const STKUserProfilePhotoURLStringKey;
@@ -101,6 +102,8 @@ extern NSString * const STKUserProfilePhotoURLStringKey;
 - (STKTrust *)trustForUser:(STKUser *)u;
 - (BOOL)isFollowedByUser:(STKUser *)u;
 - (BOOL)isFollowingUser:(STKUser *)u;
+
+- (BOOL)isInstitution;
 
 - (BOOL)hasTrusts;
 - (NSArray *)trusts;

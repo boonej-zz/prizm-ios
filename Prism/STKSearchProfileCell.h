@@ -15,6 +15,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet STKAvatarView *avatarView;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelTrustButton;
+
 - (IBAction)toggleFollow:(id)sender;
+- (IBAction)cancelTrust:(id)sender;
 
 @end

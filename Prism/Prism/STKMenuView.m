@@ -115,7 +115,7 @@
         [_badgeView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:20]];
         [_badgeView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
         [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual
-                                                                            toItem:b4 attribute:NSLayoutAttributeCenterX multiplier:1 constant:20]];
+                                                                            toItem:b4 attribute:NSLayoutAttributeCenterX multiplier:1 constant:15]];
         [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual
                                                                             toItem:b4 attribute:NSLayoutAttributeCenterY multiplier:1 constant:-15]];
         

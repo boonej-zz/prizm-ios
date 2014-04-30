@@ -110,7 +110,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                           NSFontAttributeName : STKFont(22)}];
     [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
 
-    if([[[[STKUserStore store] currentUser] type] isEqualToString:STKUserTypeInstitution]) {
+    if([[[STKUserStore store] currentUser] isInstitution]) {
         [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
     }
     
