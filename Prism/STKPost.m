@@ -49,7 +49,7 @@ NSString * const STKPostStatusDeleted = @"deleted";
 @dynamic coordinate;
 @dynamic hashTags, imageURLString, uniqueID, datePosted, locationLatitude, locationLongitude, locationName,
 visibility, status, repost, referenceTimestamp, text, comments, commentCount, creator, originalPost, likes, likeCount,
-type, fInverseFeed, activities, derivativePosts;
+type, fInverseFeed, activities, derivativePosts, tags;
 @dynamic fInverseProfile;
 
 + (NSDictionary *)reverseKeyMap
@@ -93,6 +93,7 @@ type, fInverseFeed, activities, derivativePosts;
                                                  @"likes_count" : @"likeCount",
                                                  @"comments_count" : @"commentCount",
                                                  @"hash_tags" : @{STKJSONBindFieldKey : @"hashTags", STKJSONBindMatchDictionaryKey : @{@"title" : @"title"}},
+                                                 @"tags" : @{STKJSONBindFieldKey : @"tags", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  
                                                  @"creator" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"likes" : @{STKJSONBindFieldKey : @"likes", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
@@ -107,6 +108,32 @@ type, fInverseFeed, activities, derivativePosts;
     }];
     
     return nil;
+}
+
+- (NSString *)renderText
+{
+    // ensure text property is set
+    if([[self text] length]> 0){
+        
+        //check that tags array is avaialbe, if not just return regular text
+        if(![[self tags] count] >0){
+            return [self text];
+            
+        }else{
+            NSString *renderedText = [[self text] copy];
+            NSMutableArray *tags = [[NSMutableArray alloc] initWithArray:[[self tags] allObjects]];
+            for(STKUser *user in tags){
+                NSString *findId = [NSString stringWithFormat:@"@%@", [user uniqueID]];
+                NSString *formatName = [[[user name] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                NSString *replaceUsername = [NSString stringWithFormat:@"@%@", formatName];
+                renderedText = [renderedText stringByReplacingOccurrencesOfString:findId withString:replaceUsername];
+            }
+            
+            return renderedText;
+        }
+    }
+    
+    return [self text];
 }
 
 - (BOOL)isPostLikedByUser:(STKUser *)u
@@ -196,7 +223,7 @@ type, fInverseFeed, activities, derivativePosts;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"0x%x %@ %@", (int)self, [self uniqueID], [self text]];
+    return [NSString stringWithFormat:@"0x%x %@ %@", (int)self, [self uniqueID], [self renderText]];
 }
 
 @end

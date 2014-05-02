@@ -653,7 +653,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         
         if([self postHasText] && [indexPath row] == 0) {
             [[c textView] setText:nil];
-            [[c textView] setText:[[self post] text]];
+            [[c textView] setText:[[self post] renderText]];
             [[c nameLabel] setText:[[[self post] creator] name]];
             [[c avatarImageView] setUrlString:[[[self post] creator] profilePhotoPath]];
             

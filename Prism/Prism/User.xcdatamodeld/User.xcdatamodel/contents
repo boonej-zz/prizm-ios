@@ -43,6 +43,7 @@
         <relationship name="hashTags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKHashTag" inverseName="posts" inverseEntity="STKHashTag" syncable="YES"/>
         <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedPosts" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="originalPost" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="derivativePosts" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="postsTaggedIn" inverseEntity="STKUser" syncable="YES"/>
     </entity>
     <entity name="STKPostComment" representedClassName="STKPostComment" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
@@ -115,14 +116,15 @@
         <relationship name="likedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="likes" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="ownedActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="notifiedUser" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="ownedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="creator" inverseEntity="STKTrust" syncable="YES"/>
+        <relationship name="postsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="tags" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="receivedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="recepient" inverseEntity="STKTrust" syncable="YES"/>
     </entity>
     <elements>
         <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="180"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="88"/>
-        <element name="STKPost" positionX="0" positionY="144" width="128" height="433"/>
+        <element name="STKPost" positionX="0" positionY="144" width="128" height="448"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
-        <element name="STKTrust" positionX="18" positionY="153" width="128" height="255"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="705"/>
+        <element name="STKTrust" positionX="18" positionY="153" width="128" height="270"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="718"/>
     </elements>
 </model>
