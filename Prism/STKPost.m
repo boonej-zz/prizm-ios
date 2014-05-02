@@ -118,15 +118,12 @@ type, fInverseFeed, activities, derivativePosts, tags;
         //check that tags array is avaialbe, if not just return regular text
         if(![[self tags] count] >0){
             return [self text];
-            
         }else{
-            NSString *renderedText = [[self text] copy];
-            NSMutableArray *tags = [[NSMutableArray alloc] initWithArray:[[self tags] allObjects]];
-            for(STKUser *user in tags){
-                NSString *findId = [NSString stringWithFormat:@"@%@", [user uniqueID]];
-                NSString *formatName = [[[user name] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-                NSString *replaceUsername = [NSString stringWithFormat:@"@%@", formatName];
-                renderedText = [renderedText stringByReplacingOccurrencesOfString:findId withString:replaceUsername];
+            NSMutableString *renderedText = [[self text] mutableCopy];
+            for(STKUser *user in [[self tags] allObjects]) {
+                NSString *replaceToken = [NSString stringWithFormat:@"@%@", [user uniqueID]];
+                NSString *replaceString = [NSString stringWithFormat:@"@%@", [user name]];
+                [renderedText replaceOccurrencesOfString:replaceToken withString:replaceString options:0 range:NSMakeRange(0, [renderedText length])];
             }
             
             return renderedText;
@@ -141,8 +138,30 @@ type, fInverseFeed, activities, derivativePosts, tags;
     return [[self likes] member:u] != nil;
 }
 
+
 + (UIImage *)imageForTextPost:(NSString *)text
 {
+    NSMutableDictionary *found = [NSMutableDictionary dictionary];
+    NSRegularExpression *tagFinder = [[NSRegularExpression alloc] initWithPattern:@"@([A-Za-z0-9]*)" options:0 error:nil];
+    [tagFinder enumerateMatchesInString:text options:0 range:NSMakeRange(0, [text length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        if([result range].location != NSNotFound) {
+            NSRange idRange = [result rangeAtIndex:1];
+            if(idRange.location != NSNotFound) {
+                NSString *idNum = [text substringWithRange:idRange];
+                STKUser *u = [[STKUserStore store] userForID:idNum];
+                if(u) {
+                    [found setObject:u forKey:idNum];
+                }
+            }
+        }
+    }];
+    
+    NSMutableString *mStr = [[NSMutableString alloc] initWithString:text];
+    for(NSString *idNum in found) {
+        [mStr replaceOccurrencesOfString:idNum withString:[[found objectForKey:idNum] name] options:0 range:NSMakeRange(0, [mStr length])];
+    }
+    text = [mStr copy];
+    
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(640, 640), YES, 1);
     
     [[UIImage imageNamed:@"prismcard"] drawInRect:CGRectMake(0, 0, 640, 640)];

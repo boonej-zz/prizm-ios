@@ -75,6 +75,8 @@ typedef enum {
 
 - (void)markActivitiesAsRead;
 
+- (STKUser *)userForID:(NSString *)userID;
+
 - (void)transferPostsFromSocialNetworks;
 - (void)logout;
 

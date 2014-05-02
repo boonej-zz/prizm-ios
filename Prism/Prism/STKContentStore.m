@@ -147,6 +147,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
         
+        STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
+        [q addSubquery:tagQ];
+        
         STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
         [q addSubquery:cq];
         
@@ -199,6 +202,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
         
+        STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
+        [q addSubquery:tagQ];
+
         STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
         [q addSubquery:cq];
         
@@ -311,6 +317,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [q setPageKey:STKPostDateCreatedKey];
         [q setPageValue:[referencePost referenceTimestamp]];
         
+        STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
+        [q addSubquery:tagQ];
+
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
         

@@ -21,12 +21,13 @@
 #import "STKUser.h"
 #import "STKLocationListViewController.h"
 #import "STKFoursquareLocation.h"
-#import "STKSearchTrustUserCell.h"
+
+#import "STKMarkupController.h"
 
 NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 @interface STKCreatePostViewController ()
-    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKHashtagToolbarDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate, UITableViewDataSource, UITableViewDataSource>
+    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKMarkupControllerDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *locationIndicator;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *optionHeightConstraint;
@@ -34,14 +35,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *optionCollectionView;
-@property (nonatomic, strong) STKHashtagToolbar *hashtagToolbar;
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic) NSRange hashtagRange;
-@property (nonatomic) NSRange userTagRange;
-@property (nonatomic, strong) NSArray *userTagsSearchResult;
-@property (nonatomic, strong) NSMutableArray *userTags;
-@property (nonatomic, strong) NSString *tempPostTextWithUserTags;
 @property (weak, nonatomic) IBOutlet UILabel *locationField;
+@property (nonatomic, strong) STKMarkupController *markupController;
+
 
 @property (nonatomic, getter = isUploadingImage) BOOL uploadingImage;
 @property (nonatomic) BOOL waitingForImageToFinish;
@@ -203,72 +199,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    __block NSString *stringBasis = nil;
-    NSRange cursorRange = [textView selectedRange];
-    if(cursorRange.length == 0) {
-        // Then we are in 'cursor mode'
-        NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#([A-Za-z0-9]*)"
-                                                                        options:0
-                                                                          error:nil];
-        [exp enumerateMatchesInString:textView.text options:0 range:NSMakeRange(0, textView.text.length) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-            NSRange r = [result range];
-            if(r.location != NSNotFound) {
-                if(cursorRange.location >= r.location && cursorRange.location <= r.location + r.length) {
-                    NSRange hashtagRange = [result rangeAtIndex:1];
-                    stringBasis = [textView.text substringWithRange:hashtagRange];
-                    [self setHashtagRange:hashtagRange];
-                    *stop = YES;
-                }
-            }
-        }];
-        
-        NSRegularExpression *tagRegex = [[NSRegularExpression alloc] initWithPattern:@"@([A-Za-z0-9]*)" options:0 error:nil];
-        
-        [tagRegex enumerateMatchesInString:textView.text
-                                   options:0
-                                     range:NSMakeRange(0, textView.text.length)
-                                usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                                    NSRange range = [result range];
-                                    if(range.location != NSNotFound){
-                                        if(cursorRange.location >= range.location && cursorRange.location <= range.location + range.length){
-                                            NSRange userTagRange = [result rangeAtIndex:1];
-                                            NSString *tag = [textView.text substringWithRange:userTagRange];
-                                            [self setUserTagRange:userTagRange];
-                                            
-                                            if(tag.length >= 2){
-                                                [[STKUserStore store] searchUserTrustsWithName:tag
-                                                                                    completion:^(NSArray *users, NSError *error) {
-                                                                                        if(!error && users.count > 0){
-                                                                                            CGRect frame = CGRectMake(0, textView.font.lineHeight + 120, 320, 140);
-                                                                                            [self setUserTagsSearchResult:users];
-                                                                                            [[self tableView] setHidden:NO];
-                                                                                            [[self tableView] setFrame:frame];
-                                                                                            [[self tableView] reloadData];
-                                                                                            *stop = YES;
-                                                                                        }
-                                                                                    }];
-                                            }
-                                            
-                                            if(tag.length == 0 && ![[self tableView] isHidden]){
-                                                [[self tableView] setHidden:YES];
-                                                [self setUserTagsSearchResult:nil];
-                                            }
-                                        }
-                                    }
-                                }];
-    }
+    [[self markupController] textView:textView updatedWithText:[textView text]];
 
-    if (stringBasis)    {
-        [[STKContentStore store] fetchRecommendedHashtags:stringBasis completion:^(NSArray *hashtags) {
-            if ([hashtags count] > 0) {
-                [[self hashtagToolbar] setHashtags:hashtags];
-            } else {
-                [[self hashtagToolbar] setHashtags:@[stringBasis]];
-            }
-        }];
-    } else {
-        [[self hashtagToolbar] setHashtags:nil];
-    }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
@@ -306,20 +238,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 {
     [super viewDidLoad];
     
-    _hashtagToolbar = [[STKHashtagToolbar alloc] init];
-    [[self hashtagToolbar] setDelegate:self];
+    _markupController = [[STKMarkupController alloc] initWithDelegate:self];
     
-    _userTags = [[NSMutableArray alloc] init];
-    
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStylePlain];
-    [[self tableView] setDelegate:(id)self];
-    [[self tableView] setDataSource:self];
-    [[self tableView] setScrollEnabled:YES];
-    [[self tableView] setHidden:YES];
-    [[self view] addSubview:_tableView];
     
     [[self postTextView] setText:STKCreatePostPlaceholderText];
-    [[self postTextView] setInputAccessoryView:[self hashtagToolbar]];
+    [[self postTextView] setInputAccessoryView:[[self markupController] view]];
     
     [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];
@@ -431,13 +354,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     
     if(![[self postInfo] objectForKey:STKPostURLKey]) {
         // Do a card
-        NSString *postText;
-        if([self userTags] > 0 && [[self tempPostTextWithUserTags] length] > 0){
-            postText = [self tempPostTextWithUserTags];
-        }else{
-            postText = [[self postInfo] objectForKey:STKPostTextKey];
-        }
-//        UIImage *img = [STKPost imageForTextPost:[[self postInfo] objectForKey:STKPostTextKey]];
+        
+        NSString *postText = [[self postInfo] objectForKey:STKPostTextKey];
+        NSLog(@"%@", postText);
         UIImage *img = [STKPost imageForTextPost:postText];
         [self setPostImage:img];
     }
@@ -479,7 +398,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }
     
     if([[[self postTextView] text] length] > 0 && ![[[self postTextView] text] isEqualToString:STKCreatePostPlaceholderText]) {
-        [self formatPostViewTextTags];
         [[self postInfo] setObject:[[self postTextView] text]
                             forKey:STKPostTextKey];
     }
@@ -496,35 +414,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }
     
     [self createPost];
-}
-
-- (void)formatPostViewTextTags
-{
-    if([[self userTags] count] != 0){
-        NSString *postText = [[self postTextView] text];
-        __block NSString *updatePostText = [postText copy];
-        __block NSInteger index = 0;
-        NSRegularExpression *tagRegex = [[NSRegularExpression alloc] initWithPattern:@"@([A-Za-z0-9_]*)" options:0 error:nil];
-        [tagRegex enumerateMatchesInString:postText
-                                   options:0
-                                     range:NSMakeRange(0, [postText length])
-                                usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                                    
-                                    if([[self userTags] objectAtIndex:index]){
-                                        NSRange range = [result rangeAtIndex:1];
-                                        NSString *textToReplace = [postText substringWithRange:range];
-                                        NSString *newValue = [[[self userTags] objectAtIndex:index] uniqueID];
-                                        updatePostText = [updatePostText stringByReplacingOccurrencesOfString:textToReplace withString:newValue];
-                                        index++;
-                                    }
-                                    
-                                }];
-        
-        if(![updatePostText isEqualToString:postText]){
-            [self setTempPostTextWithUserTags:[[self postTextView] text]];
-            [[self postTextView] setText:updatePostText];
-        }
-    }
 }
 
 - (NSArray *)hashTagsFromText:(NSString *)text
@@ -544,23 +433,35 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     return [tags copy];
 }
 
-- (void)hashtagToolbarClickedDone:(STKHashtagToolbar *)tb
+- (void)markupController:(STKMarkupController *)markupController
+           didSelectUser:(STKUser *)user
+        forMarkerAtRange:(NSRange)range
 {
-    [[self view] endEditing:YES];
+    NSString *tag = [user uniqueID];
+    [[[self postTextView] textStorage] replaceCharactersInRange:range
+                                                     withString:[NSString stringWithFormat:@"%@ ", tag]];
+    
+    NSInteger newIndex = range.location + [tag length] + 1;
+    [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
+
 }
 
-- (void)hashtagToolbar:(STKHashtagToolbar *)tb didPickHashtag:(NSString *)hashtag
+- (void)markupController:(STKMarkupController *)markupController
+        didSelectHashTag:(NSString *)hashTag
+        forMarkerAtRange:(NSRange)range
 {
-    if([self hashtagRange].location != NSNotFound) {
-        NSString *replacementString = [NSString stringWithFormat:@"%@ ", hashtag];
-        [[[self postTextView] textStorage] replaceCharactersInRange:[self hashtagRange]
-                                                         withString:replacementString];
-        NSRange newRange = NSMakeRange([self hashtagRange].location + [replacementString length], 0);
-        [[self postTextView] setSelectedRange:newRange];
-        
-        [self setHashtagRange:NSMakeRange(NSNotFound, 0)];
-    }
+    [[[self postTextView] textStorage] replaceCharactersInRange:range
+                                                     withString:[NSString stringWithFormat:@"%@ ", hashTag]];
+    
+    NSInteger newIndex = range.location + [hashTag length] + 1;
+    [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
 }
+
+- (void)markupControllerDidFinish:(STKMarkupController *)markupController
+{
+    [[self postTextView] resignFirstResponder];
+}
+
 
 - (void)changeImage:(id)sender
 {
@@ -590,42 +491,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                     }];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [[self userTagsSearchResult] count];
-}
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    STKSearchTrustUserCell *cell = [STKSearchTrustUserCell cellForTableView:tableView target:[self tableView]];
-    STKUser *user = [[self userTagsSearchResult] objectAtIndex:indexPath.row];
-    [cell populateWithUser:user];
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    STKUser *user = [[self userTagsSearchResult] objectAtIndex:indexPath.row];
-    [self didSelectUserTag:user];
-    [[self tableView] setHidden:YES];
-    [self setUserTagsSearchResult:nil];
-}
-
-- (void)didSelectUserTag:(STKUser *)user
-{
-    if([self userTagRange].location != NSNotFound){
-        [[self userTags] addObject:user];
-        
-        NSString *nameFormatted = [[[user name] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-        NSString *replaceWithName = [NSString stringWithFormat:@"%@", nameFormatted];
-        [[[self postTextView] textStorage] replaceCharactersInRange:[self userTagRange] withString:replaceWithName];
-        NSRange replNameRange = NSMakeRange([self userTagRange].location + [replaceWithName length], 0);
-        [[self postTextView] setSelectedRange:replNameRange];
-        
-        [self setUserTagRange:NSMakeRange(NSNotFound, 0)];
-        [[self tableView] reloadData];
-    }
-}
 
 
 @end
