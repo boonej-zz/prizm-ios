@@ -37,8 +37,6 @@ typedef enum {
 @property (nonatomic) int recepientCommentsCount;
 @property (nonatomic) int recepientLikesCount;
 
-@property (nonatomic) BOOL hasBeenViewed;
-
 @property (nonatomic, strong) STKUser *recepient;
 @property (nonatomic, strong) STKUser *creator;
 

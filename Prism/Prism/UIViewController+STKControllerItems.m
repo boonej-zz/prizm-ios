@@ -86,6 +86,7 @@
     [view setImage:[UIImage imageNamed:@"btn_menu"]];
     [view setHighlightedImage:[UIImage imageNamed:@"btn_menu_active"]];
     [view setOffset:-11];
+    [view setBadgeable:YES];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     
     

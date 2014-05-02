@@ -39,6 +39,7 @@ NSString * const STKActivityItemTypeRepost = @"repost";
                                                  @"comment_id" : @{STKJSONBindFieldKey : @"comment", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
                                                  @"_id" : @"uniqueID",
                                                  @"action" : @"action",
+                                                 @"has_been_viewed" : @"hasBeenViewed",
                                                  @"create_date" : ^(id inValue) {
                                                     [self setReferenceTimestamp:inValue];
                                                     [self setDateCreated:[STKTimestampFormatter dateFromString:inValue]];

@@ -47,7 +47,7 @@
     }
     
     [[self typeLabel] setText:typeString];
-    [[self unreadIndicatorView] setHidden:[i hasBeenViewed]];
+    [[self unreadIndicatorView] setHidden:![i isPending]];
 
     [[self acceptIndicator] setHidden:![i isAccepted]];
 }

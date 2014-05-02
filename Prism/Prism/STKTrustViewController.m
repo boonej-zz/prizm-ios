@@ -261,6 +261,12 @@
 - (IBAction)showList:(id)sender
 {
     STKUserListViewController *lvc = [[STKUserListViewController alloc] init];
+    if([[[STKUserStore store] currentUser] isInstitution]) {
+        [lvc setTitle:@"Luminary"];
+    } else {
+        [lvc setTitle:@"Trusts"];
+    }
+    
     [lvc setType:STKUserListTypeTrust];
     NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
     for(STKTrust *t in [self trusts]) {

@@ -61,7 +61,6 @@
         <attribute name="creatorPostsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="dateModified" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="hasBeenViewed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="recepientCommentsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="recepientLikesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -123,7 +122,7 @@
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="88"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="433"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
-        <element name="STKTrust" positionX="18" positionY="153" width="128" height="270"/>
+        <element name="STKTrust" positionX="18" positionY="153" width="128" height="255"/>
         <element name="STKUser" positionX="0" positionY="0" width="128" height="705"/>
     </elements>
 </model>

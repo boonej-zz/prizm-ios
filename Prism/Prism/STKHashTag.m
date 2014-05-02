@@ -17,7 +17,7 @@
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
-    [self setTitle:jsonObject];
+    [self setTitle:[jsonObject lowercaseString]];
     
     return nil;
 }

@@ -14,7 +14,9 @@
 #import "STKUserStore.h"
 #import "STKErrorStore.h"
 
-@interface STKUserListViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@import MessageUI;
+
+@interface STKUserListViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (nonatomic, strong) STKUser *deletingUser;
@@ -87,6 +89,16 @@
     [av show];
 }
 
+- (void)sendMessage:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKUser *u = [[self users] objectAtIndex:[ip row]];
+    MFMailComposeViewController *mvc = [[MFMailComposeViewController alloc] init];
+    [mvc setMailComposeDelegate:self];
+    [mvc setToRecipients:@[[u email]]];
+    [mvc setSubject:@"Prizm Contact"];
+    [self presentViewController:mvc animated:YES completion:nil];
+}
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if(buttonIndex == 0) {
@@ -138,6 +150,16 @@
     return [[self users] count];
 }
 
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if(error) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+    }
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     STKUser *u = [[self users] objectAtIndex:[indexPath row]];
@@ -161,6 +183,11 @@
     } else {
         [[c followButton] setHidden:YES];
         [[c cancelTrustButton] setHidden:NO];
+        if([u email] && [MFMailComposeViewController canSendMail]) {
+            [[c mailButton] setHidden:NO];
+        } else {
+            [[c mailButton] setHidden:YES];
+        }
     }
     
     return c;

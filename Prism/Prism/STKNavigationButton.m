@@ -7,13 +7,15 @@
 //
 
 #import "STKNavigationButton.h"
+#import "STKNotifiedBadgeView.h"
 
 @interface STKNavigationButton ()
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, readonly, strong) STKNotifiedBadgeView *badgeView;
 @end
 
 @implementation STKNavigationButton
-
+@synthesize badgeView = _badgeView;
 - (id)init
 {
     self = [super initWithFrame:CGRectMake(0, 0, 38, 38)];
@@ -25,10 +27,35 @@
         [_imageView setClipsToBounds:NO];
         [self setClipsToBounds:NO];
         [self addSubview:_imageView];
+        
     }
     return self;
 
 }
+
+- (void)setBadgeable:(BOOL)badgeable
+{
+    _badgeable = badgeable;
+    if(_badgeable) {
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(6, 6), NO, [[UIScreen mainScreen] scale]);
+        
+        UIBezierPath *p = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 6, 6)];
+        [[UIColor colorWithRed:0.3 green:0.4 blue:.7 alpha:1] set];
+        [p fill];
+        
+        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        _badgeView = [[STKNotifiedBadgeView alloc] initWithImage:img];
+        [self addSubview:_badgeView];
+        [_badgeView setFrame:CGRectMake(19, 9, 6, 6)];
+        [_badgeView setHidden:YES];
+    } else {
+        [_badgeView removeFromSuperview];
+        _badgeView = nil;
+    }
+}
+
 
 - (void)setImage:(UIImage *)image
 {
