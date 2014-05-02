@@ -185,6 +185,8 @@
 		D097F29518D353B30053F479 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE36BC4618CA14B200694145 /* Crashlytics.framework */; };
 		D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */; };
 		D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */; };
+		D0E507601913ADC10011DB63 /* STKSearchTrustUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E5075E1913ADC10011DB63 /* STKSearchTrustUserCell.m */; };
+		D0E507611913ADC10011DB63 /* STKSearchTrustUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E5075F1913ADC10011DB63 /* STKSearchTrustUserCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2185,6 +2187,9 @@
 		D0E3508018FF30A40006B992 /* STKSearchHashTagsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchHashTagsCell.h; sourceTree = "<group>"; };
 		D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchHashTagsCell.m; sourceTree = "<group>"; };
 		D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchHashTagsCell.xib; sourceTree = "<group>"; };
+		D0E5075D1913ADC10011DB63 /* STKSearchTrustUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchTrustUserCell.h; sourceTree = "<group>"; };
+		D0E5075E1913ADC10011DB63 /* STKSearchTrustUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchTrustUserCell.m; sourceTree = "<group>"; };
+		D0E5075F1913ADC10011DB63 /* STKSearchTrustUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchTrustUserCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2506,6 +2511,9 @@
 				BEB16879190700F900CED5F7 /* STKSegmentedControlCell.h */,
 				BEB1687A190700F900CED5F7 /* STKSegmentedControlCell.m */,
 				BEB1687B190700F900CED5F7 /* STKSegmentedControlCell.xib */,
+				D0E5075D1913ADC10011DB63 /* STKSearchTrustUserCell.h */,
+				D0E5075E1913ADC10011DB63 /* STKSearchTrustUserCell.m */,
+				D0E5075F1913ADC10011DB63 /* STKSearchTrustUserCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4538,6 +4546,7 @@
 				BE477C1E186E2ED4003672A0 /* STKProfileCell.xib in Resources */,
 				BE0EC57718EDE971007102E1 /* STKSettingsShareCell.xib in Resources */,
 				BED773FF1890A5BB008770F0 /* STKCaptureViewController.xib in Resources */,
+				D0E507611913ADC10011DB63 /* STKSearchTrustUserCell.xib in Resources */,
 				BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */,
 				BE1FC3B7186C8C22003464E1 /* STKImageCollectionViewCell.xib in Resources */,
 				BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */,
@@ -4711,6 +4720,7 @@
 				BE5F68F718F0A4FC006D2CD1 /* STKQueryObject.m in Sources */,
 				BE1A73C918D8ECBB004A3BB3 /* STKPostController.m in Sources */,
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
+				D0E507601913ADC10011DB63 /* STKSearchTrustUserCell.m in Sources */,
 				BE1FC3BD186CC966003464E1 /* STKBaseStore.m in Sources */,
 				BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */,
 				BE0EC57218EDE306007102E1 /* STKSettingsViewController.m in Sources */,
