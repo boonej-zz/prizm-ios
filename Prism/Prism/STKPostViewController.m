@@ -27,10 +27,12 @@
 #import "STKUserListViewController.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKRenderServer.h"
+#import "STKTextImageCell.h"
 
 @interface STKPostViewController ()
-    <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, STKPostControllerDelegate>
+    <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, STKPostControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *postButtonRightConstraint;
 @property (weak, nonatomic) IBOutlet STKPostHeaderView *fakeHeaderView;
 @property (weak, nonatomic) IBOutlet UIView *fakeContainerView;
@@ -46,6 +48,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *editMenuBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UIButton *editPostButton;
 @property (weak, nonatomic) IBOutlet UIView *editViewAnimationContainer;
+@property (nonatomic, strong) NSArray *categoryItems;
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
@@ -79,6 +82,20 @@
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         [self setComments:[[NSMutableArray alloc] init]];
         _postController = [[STKPostController alloc] initWithViewController:self];
+        _categoryItems = @[
+                           @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"category_aspiration_disabled"],
+                             @"selectedImage" : [UIImage imageNamed:@"category_aspirations_selected"]},
+                           @{@"title" : @"Passions", STKPostTypeKey : STKPostTypePassion, @"image" : [UIImage imageNamed:@"category_passions_disabled"],
+                             @"selectedImage" : [UIImage imageNamed:@"category_passions_selected"]},
+                           @{@"title" : @"Experiences", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"category_experiences_disabled"],
+                             @"selectedImage" : [UIImage imageNamed:@"category_experiences_selected"]},
+                           @{@"title" : @"Achievements", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"category_achievements_disabled"],
+                             @"selectedImage" : [UIImage imageNamed:@"category_achievements_selected"]},
+                           @{@"title" : @"Inspirations", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
+                             @"selectedImage" : [UIImage imageNamed:@"category_inspiration_selected"]},
+                           @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
+                             @"selectedImage" : [UIImage imageNamed:@"category_personal_selected"]}
+                           ];
 
     }
     return self;
@@ -222,6 +239,12 @@
 {
     [super viewDidLoad];
     
+    [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
+                    forCellWithReuseIdentifier:@"STKTextImageCell"];
+    [[self categoryCollectionView] setBackgroundColor:[UIColor clearColor]];
+    [[self categoryCollectionView] setScrollEnabled:NO];
+
+    
     [[self postButton] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.1]];
     [[self postButton] setClipsToBounds:YES];
     [[[self postButton] layer] setCornerRadius:10];
@@ -253,9 +276,6 @@
     [footerView setBackgroundColor:[UIColor clearColor]];
     
     [[self tableView] setTableFooterView:footerView];
-    
-    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTapped:)];
-    [[self editOverlayView] addGestureRecognizer:gr];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -322,11 +342,9 @@
 
 }
 
-- (void)overlayTapped:(UITapGestureRecognizer *)gr
+- (IBAction)overlayTapped:(id)sender
 {
-    if([gr state] == UIGestureRecognizerStateEnded) {
-        [self setEditMenuVisible:NO];
-    }
+    [self setEditMenuVisible:NO];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -728,12 +746,78 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
     STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
     [p setVisibility:visibilityString];
+    
+    if([visibilityString isEqualToString:STKPostVisibilityPrivate]) {
+        [p setType:STKPostTypePersonal];
+        [[self categoryCollectionView] reloadData];
+    }
+    
     [[STKContentStore store] editPost:p
                            completion:^(STKPost *result, NSError *err) {
                                [[[self post] managedObjectContext] discardChangesToEditableObject:p];
                                [[self tableView] reloadData];
                            }];
 }
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return [[self categoryItems] count];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [[self categoryItems] objectAtIndex:[indexPath row]];
+    STKTextImageCell *cell = (STKTextImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKTextImageCell"
+                                                                                           forIndexPath:indexPath];
+    [[cell label] setText:[item objectForKey:@"title"]];
+    [[cell label] setTextColor:STKTextColor];
+    [[cell imageView] setImage:[item objectForKey:@"image"]];
+    [cell setBackgroundColor:[UIColor clearColor]];
+    
+    if([[[self post] type] isEqualToString:[item objectForKey:STKPostTypeKey]]) {
+        [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
+        [[cell label] setTextColor:[UIColor whiteColor]];
+    }
+    
+    return cell;
+    
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *category = [[[self categoryItems] objectAtIndex:[indexPath row]] objectForKey:STKPostTypeKey];
+    
+    NSString *prevType = [[self post] type];
+    [[self post] setType:category];
+    
+    if([[[self post] type] isEqualToString:STKPostTypePersonal]) {
+        [[self post] setVisibility:STKPostVisibilityPrivate];
+    } else {
+        if([prevType isEqualToString:STKPostTypePersonal]) {
+            [[self post] setVisibility:STKPostVisibilityTrust];
+        }
+    }
+    if([[[self post] visibility] isEqualToString:STKPostVisibilityTrust])
+        [[self visibilityControl] setSelectedSegmentIndex:1];
+    else if([[[self post] visibility] isEqualToString:STKPostVisibilityPublic]) {
+        [[self visibilityControl] setSelectedSegmentIndex:0];
+    } else {
+        [[self visibilityControl] setSelectedSegmentIndex:2];
+    }
+    
+    [collectionView reloadData];
+    
+    [[STKContentStore store] editPost:[self post] completion:^(STKPost *p, NSError *err) {
+        [[[self fakeHeaderView] postTypeView] setImage:[[self post] typeImage]];
+
+    }];
+}
+
 
 
 @end

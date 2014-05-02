@@ -13,11 +13,17 @@
 - (void)cellDidLoad
 {
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+
 }
 
 - (void)layoutContent
 {
     
+}
+
+- (IBAction)sendMessage:(id)sender
+{
+    ROUTE(sender);
 }
 
 - (IBAction)toggleFollow:(id)sender

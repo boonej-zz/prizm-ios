@@ -11,10 +11,12 @@
 #import "STKUserStore.h"
 
 @interface STKHashtagToolbar ()
-    <UITextViewDelegate>
-@property (nonatomic, strong) UIBarButtonItem *doneButton;
-@property (nonatomic, weak) UITextView *textView;
-@property (nonatomic, strong) UIBarButtonItem *promptButton;
+
+@property (nonatomic, strong) UIButton *doneButton;
+@property (nonatomic, strong) UILabel *promptLabel;
+
+@property (nonatomic, strong) UIToolbar *toolbar;
+
 @end
 
 
@@ -27,17 +29,40 @@
 {
     self = [super initWithFrame:CGRectMake(0, 0, 320, 44)];
     if (self) {
-        _doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
-        UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
-        [label setFont:[UIFont systemFontOfSize:12]];
-        [label setNumberOfLines:2];
-        label.text = @"Use # to add a tag and @ to add a person";
-        [label sizeToFit];
+        [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         
-        UIBarButtonItem *labelItem = [[UIBarButtonItem alloc] initWithCustomView:label];
-        [self setItems:@[labelItem, flexibleItem, _doneButton]];
-        [self setPromptButton:labelItem];
+        [self setBackgroundColor:[STKUnselectedColor colorWithAlphaComponent:1]];
+        _doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_doneButton setTitle:@"Done" forState:UIControlStateNormal];
+        [_doneButton addTarget:self action:@selector(done:) forControlEvents:UIControlEventTouchUpInside];
+        [_doneButton setFrame:CGRectMake(270, 0, 50, 44)];
+        [_doneButton setTintColor:[UIColor whiteColor]];
+        [self addSubview:_doneButton];
+
+        _toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 270, 44)];
+        [_toolbar setShadowImage:[[UIImage alloc] init] forToolbarPosition:UIBarPositionAny];
+        [_toolbar setTintColor:[UIColor whiteColor]];
+        [_toolbar setBackgroundColor:[UIColor clearColor]];
+        [_toolbar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+        [_toolbar setClipsToBounds:YES];
+        [self addSubview:_toolbar];
+        
+        _promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 260, 44)];
+        [_promptLabel setFont:[UIFont systemFontOfSize:12]];
+        [_promptLabel setNumberOfLines:2];
+        [_promptLabel setTextColor:[UIColor whiteColor]];
+        [_promptLabel setText:@"Use # to add a tag and @ to add a person"];
+        [self addSubview:_promptLabel];
+        
+        [_toolbar setHidden:YES];
+        
+        
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[tb(==270)][done]|" options:0 metrics:nil views:@{@"tb" : _toolbar, @"done" : _doneButton}]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[lbl(==260)]" options:0 metrics:nil views:@{@"lbl" : _promptLabel}]];
+        
+        for(UIView *v in [self subviews]) {
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : v}]];
+        }
     }
     return self;
 }
@@ -53,11 +78,14 @@
 - (void)setHashtags:(NSArray *)hashtags
 {
     _hashtags = hashtags;
-    if (hashtags == nil)    {
-        UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        [self setItems:@[self.promptButton,flexibleItem,self.doneButton]];
+    if ([hashtags count] == 0)    {
+        [[self toolbar] setHidden:YES];
+        [[self promptLabel] setHidden:NO];
     } else {
+        [[self toolbar] setHidden:NO];
+        [[self promptLabel] setHidden:YES];
         NSMutableArray *items = [NSMutableArray array];
+
         int idx = 0;
         for (NSString *hashtag in hashtags) {
             NSString *title = [NSString stringWithFormat:@"#%@",hashtag];
@@ -65,13 +93,13 @@
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                              action:@selector(insertHashtag:)];
+            [hashtagButton setTitleTextAttributes:@{NSFontAttributeName : STKFont(12), NSForegroundColorAttributeName : [UIColor whiteColor]}
+                                         forState:UIControlStateNormal];
             [hashtagButton setTag:idx];
             [items addObject:hashtagButton];
             idx ++;
         }
-        UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        [items addObjectsFromArray:@[flexibleItem,self.doneButton]];
-        [self setItems:items];
+        [[self toolbar] setItems:items];
     }
 }
 

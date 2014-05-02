@@ -36,7 +36,6 @@ typedef enum {
 
 @property (nonatomic, strong) NSMutableArray *requests;
 @property (nonatomic, strong) NSMutableArray *activities;
-@property (nonatomic, strong) NSMutableDictionary *itemsViewed;
 
 @property (nonatomic) STKActivityViewControllerType currentType;
 - (IBAction)typeChanged:(id)sender;
@@ -87,21 +86,12 @@ typedef enum {
     [self refresh];
 }
 
-- (void)premarkItemAsViewed:(id)item
-{
-    if(![self itemsViewed]) {
-        _itemsViewed = [[NSMutableDictionary alloc] init];
-    }
-    [[self itemsViewed] setObject:@(YES) forKey:[item uniqueID]];
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [[[self blurView] displayLink] setPaused:YES];
 
-    [[STKUserStore store] markItemsAsViewed:[[self itemsViewed] allKeys]];
-    [self setItemsViewed:nil];
+    [[STKUserStore store] markActivitiesAsRead];
 }
 
 - (void)setCurrentType:(STKActivityViewControllerType)currentType
@@ -234,14 +224,13 @@ typedef enum {
         }
         
         [[cell timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];
-        [self premarkItemAsViewed:i];
+
         return cell;
     } else if ([self currentType] == STKActivityViewControllerTypeRequest) {
         STKRequestCell *cell = [STKRequestCell cellForTableView:tableView target:self];
 
         STKTrust *i = [[self requests] objectAtIndex:[indexPath row]];
         [cell populateWithTrust:i];
-        [self premarkItemAsViewed:i];
 
         return cell;
     }

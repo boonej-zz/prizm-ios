@@ -107,6 +107,7 @@
 		BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */; };
 		BE8F35E61833D48300C4ED03 /* STKPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE8F35E51833D48300C4ED03 /* STKPostCell.xib */; };
 		BE8F35E91833D48D00C4ED03 /* STKPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8F35E81833D48D00C4ED03 /* STKPostCell.m */; };
+		BE937C9E191175E000C24A58 /* STKNotifiedBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE937C9D191175E000C24A58 /* STKNotifiedBadgeView.m */; };
 		BE95438B1892CD1400DCC3B1 /* STKCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9543891892CD1400DCC3B1 /* STKCommentCell.m */; };
 		BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE95438E1892FE5C00DCC3B1 /* STKSearchProfileCell.m */; };
 		BE9543911892FE5C00DCC3B1 /* STKSearchProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE95438F1892FE5C00DCC3B1 /* STKSearchProfileCell.xib */; };
@@ -2066,6 +2067,8 @@
 		BE8F35E51833D48300C4ED03 /* STKPostCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKPostCell.xib; path = Prism/STKPostCell.xib; sourceTree = "<group>"; };
 		BE8F35E71833D48D00C4ED03 /* STKPostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKPostCell.h; path = Prism/STKPostCell.h; sourceTree = "<group>"; };
 		BE8F35E81833D48D00C4ED03 /* STKPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKPostCell.m; path = Prism/STKPostCell.m; sourceTree = "<group>"; };
+		BE937C9C191175E000C24A58 /* STKNotifiedBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKNotifiedBadgeView.h; sourceTree = "<group>"; };
+		BE937C9D191175E000C24A58 /* STKNotifiedBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKNotifiedBadgeView.m; sourceTree = "<group>"; };
 		BE9543881892CD1400DCC3B1 /* STKCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCommentCell.h; sourceTree = "<group>"; };
 		BE9543891892CD1400DCC3B1 /* STKCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCommentCell.m; sourceTree = "<group>"; };
 		BE95438D1892FE5C00DCC3B1 /* STKSearchProfileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchProfileCell.h; sourceTree = "<group>"; };
@@ -2438,6 +2441,8 @@
 				BE4C735F190AAA1F003A4109 /* STKNotificationBadge.m */,
 				BEF6E1FF190EC21300D60BE0 /* STKButtonRow.h */,
 				BEF6E200190EC21300D60BE0 /* STKButtonRow.m */,
+				BE937C9C191175E000C24A58 /* STKNotifiedBadgeView.h */,
+				BE937C9D191175E000C24A58 /* STKNotifiedBadgeView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4719,6 +4724,7 @@
 				BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */,
 				BE5F68F718F0A4FC006D2CD1 /* STKQueryObject.m in Sources */,
 				BE1A73C918D8ECBB004A3BB3 /* STKPostController.m in Sources */,
+				BE937C9E191175E000C24A58 /* STKNotifiedBadgeView.m in Sources */,
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
 				D0E507601913ADC10011DB63 /* STKSearchTrustUserCell.m in Sources */,
 				BE1FC3BD186CC966003464E1 /* STKBaseStore.m in Sources */,

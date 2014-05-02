@@ -225,7 +225,7 @@
     [self setLogoutButton:b];
     
     [[self tableView] setTableFooterView:v];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(104, 0, 0, 0)];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
 }
 
 - (void)logout:(id)sender

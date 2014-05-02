@@ -73,7 +73,7 @@ typedef enum {
 - (void)searchUserTrustsWithName:(NSString *)name completion:(void (^)(id data, NSError *error))block;
 - (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block;
 
-- (void)markItemsAsViewed:(NSArray *)itemIDs;
+- (void)markActivitiesAsRead;
 
 - (void)transferPostsFromSocialNetworks;
 - (void)logout;

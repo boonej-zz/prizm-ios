@@ -20,7 +20,7 @@
 @end
 
 
-@interface STKHashtagToolbar : UIToolbar
+@interface STKHashtagToolbar : UIView
 
 @property (nonatomic, weak) id <STKHashtagToolbarDelegate> delegate;
 @property (nonatomic, strong) NSArray *hashtags;

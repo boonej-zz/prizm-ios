@@ -82,7 +82,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 {
     self = [super init];
     if (self) {
-        _activityUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(activityUpdateCheck:) userInfo:nil repeats:YES];
+        _activityUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:120 target:self selector:@selector(activityUpdateCheck:) userInfo:nil repeats:YES];
         _accountStore = [[ACAccountStore alloc] init];
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLastModifiedDates:) name:NSManagedObjectContextWillSaveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -104,10 +104,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         NSArray *cachedActivities = [[self context] executeFetchRequest:req error:nil];
 
         req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+        [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@", [self currentUser]]];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
         [req setFetchLimit:1];
         NSArray *cachedRequests = [[self context] executeFetchRequest:req error:nil];
 
+        
         [self fetchActivityForUser:[self currentUser] referenceActivity:[cachedActivities firstObject] completion:^(NSArray *activities, NSError *err) {
             [self fetchRequestsForCurrentUserWithReferenceRequest:[cachedRequests firstObject] completion:^(NSArray *requests, NSError *err) {
                 [self notifyNotificationCount];
@@ -123,31 +125,23 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     int actCount = [[self context] countForFetchRequest:aReq error:nil];
     
     aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-    [aReq setPredicate:[NSPredicate predicateWithFormat:@"hasBeenViewed == NO"]];
+    [aReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending]];
     int trustCount = [[self context] countForFetchRequest:aReq error:nil];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount)}];
 }
 
-- (void)markItemsAsViewed:(NSArray *)itemIDs
+- (void)markActivitiesAsRead
 {
-    if([itemIDs count] > 0) {
-        NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"uniqueID in %@", itemIDs]];
-        NSArray *results = [[self context] executeFetchRequest:req error:nil];
-        for(STKTrust *t in results) {
-            [t setHasBeenViewed:YES];
-        }
-
-        req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"uniqueID in %@", itemIDs]];
-        results = [[self context] executeFetchRequest:req error:nil];
-        for(STKActivityItem *i in results) {
-            [i setHasBeenViewed:YES];
-        }
-
-        [[self context] save:nil];
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    [req setPredicate:[NSPredicate predicateWithFormat:@"hasBeenViewed == %@", @(NO)]];
+    NSArray *results = [[self context] executeFetchRequest:req error:nil];
+    for(STKActivityItem *i in results) {
+        [i setHasBeenViewed:YES];
     }
+    
+    [[self context] save:nil];
+    
     [self notifyNotificationCount];
 }
 
@@ -669,21 +663,30 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKTrust *)referenceRequest completion:(void (^)(NSArray *requests, NSError *err))block
 {
+    if(![self currentUser]) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(nil, nil);
+        }];
+        return;
+    }
+    
     NSArray *cached = nil;
     if(!referenceRequest) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and status == %@", [self currentUser], STKRequestStatusPending]];
-        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+        [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@", [self currentUser]]];
+        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
         [req setFetchLimit:30];
         cached = [[self context] executeFetchRequest:req error:nil];
     } else {
+        // Get anything newer than what we have that has made its way to the cache.
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and dateModified > %@", [self currentUser], [referenceRequest dateCreated]]];
-        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+        [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and dateModified > %@", [self currentUser], [referenceRequest dateModified]]];
+        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
         [req setFetchLimit:30];
         cached = [[self context] executeFetchRequest:req error:nil];
     }
     
+
     STKTrust *topItem = referenceRequest;
     if([cached count] > 0) {
         topItem = [cached firstObject];
@@ -709,6 +712,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             [q setPageValue:[STKTimestampFormatter stringFromDate:[topItem dateModified]]];
         }
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
+        [q setFilters:@{@"to" : [[self currentUser] uniqueID]}];
         [c setQueryObject:q];
         
         [c setModelGraph:@[@"STKTrust"]];
@@ -1162,29 +1166,35 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 {
     [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
         if(!err) {
-            [self validateWithFacebook:[[acct credential] oauthToken]
-                            completion:^(STKUser *user, NSError *valError) {
-                if(!valError) {
-                    [user setExternalServiceType:STKUserExternalSystemFacebook];
-                    [user setAccountStoreID:[acct identifier]];
-
-                    [self authenticateUser:user];
-                    
-                    block(user, nil, nil);
+            [[self accountStore] renewCredentialsForAccount:acct completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
+                if(!error) {
+                    [self validateWithFacebook:[[acct credential] oauthToken]
+                                    completion:^(STKUser *user, NSError *valError) {
+                                        if(!valError) {
+                                            [user setExternalServiceType:STKUserExternalSystemFacebook];
+                                            [user setAccountStoreID:[acct identifier]];
+                                            
+                                            [self authenticateUser:user];
+                                            
+                                            block(user, nil, nil);
+                                        } else {
+                                            if(![[[valError userInfo] objectForKey:@"error"] isEqualToString:STKErrorUserDoesNotExist]) {
+                                                block(nil, nil, valError);
+                                            } else {
+                                                // Fallback to registration
+                                                [self fetchFacebookDataForAccount:acct completion:^(STKUser *profInfo, NSError *dataErr) {
+                                                    if([dataErr isConnectionError]) {
+                                                        block(nil, nil, dataErr);
+                                                    } else {
+                                                        [profInfo setToken:[[acct credential] oauthToken]];
+                                                        block(nil, profInfo, dataErr);
+                                                    }
+                                                }];
+                                            }
+                                        }
+                                    }];
                 } else {
-                    if(![[[valError userInfo] objectForKey:@"error"] isEqualToString:STKErrorUserDoesNotExist]) {
-                        block(nil, nil, valError);
-                    } else {
-                        // Fallback to registration
-                        [self fetchFacebookDataForAccount:acct completion:^(STKUser *profInfo, NSError *dataErr) {
-                            if([dataErr isConnectionError]) {
-                                block(nil, nil, dataErr);
-                            } else {
-                                [profInfo setToken:[[acct credential] oauthToken]];
-                                block(nil, profInfo, dataErr);
-                            }
-                        }];
-                    }
+                    block(nil, nil, error);
                 }
             }];
         } else {
@@ -1575,12 +1585,23 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     NSString *serviceType = [u externalServiceType];
     if([serviceType isEqualToString:STKUserExternalSystemFacebook]) {
         [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
-            if([[acct identifier] isEqualToString:[u accountStoreID]]) {
-                [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *u, NSError *err) {
-                    validationBlock(u, err);
+            if(!err) {
+                [[self accountStore] renewCredentialsForAccount:acct completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
+                    if(!error) {
+                        if([[acct identifier] isEqualToString:[u accountStoreID]]) {
+                            [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *u, NSError *err) {
+                                validationBlock(u, err);
+                            }];
+                        } else {
+                            validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
+                        }
+                    } else {
+                        validationBlock(nil, error);
+                    }
+                    
                 }];
             } else {
-                validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
+                validationBlock(nil, err);
             }
         }];
     } else if([serviceType isEqualToString:STKUserExternalSystemGoogle]) {

@@ -14,7 +14,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DLx-wG-Oym">
-                        <rect key="frame" x="54" y="11" width="216" height="21"/>
+                        <rect key="frame" x="54" y="11" width="180" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
                         <color key="textColor" red="0.23344397668393779" green="0.23344397668393779" blue="0.23344397668393779" alpha="1" colorSpace="calibratedRGB"/>
@@ -46,6 +46,16 @@
                             <action selector="cancelTrust:" destination="2" eventType="touchUpInside" id="gsz-qf-N8l"/>
                         </connections>
                     </button>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="p2G-E8-bZk">
+                        <rect key="frame" x="236" y="1" width="40" height="42"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" image="btn_email">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="sendMessage:" destination="2" eventType="touchUpInside" id="4tO-50-uLw"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
             </tableViewCellContentView>
@@ -53,12 +63,14 @@
                 <outlet property="avatarView" destination="7et-gZ-jKt" id="yxQ-5Z-ULP"/>
                 <outlet property="cancelTrustButton" destination="3O9-v3-wx7" id="RqH-Wl-iLm"/>
                 <outlet property="followButton" destination="wSu-8r-2na" id="2BT-5u-M4a"/>
+                <outlet property="mailButton" destination="p2G-E8-bZk" id="0gn-eT-vIp"/>
                 <outlet property="nameLabel" destination="DLx-wG-Oym" id="Foy-jc-eOV"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
         <image name="arrowblue" width="24" height="24"/>
+        <image name="btn_email" width="24" height="17"/>
         <image name="following" width="24" height="24"/>
         <image name="reject" width="24" height="24"/>
     </resources>

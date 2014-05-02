@@ -14,4 +14,7 @@
 @property (nonatomic, strong) UIImage *selectedImage;
 
 @property (nonatomic) float offset;
+
+@property (nonatomic) BOOL badgeable;
+
 @end
