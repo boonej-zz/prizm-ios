@@ -188,8 +188,6 @@
 		D097F29518D353B30053F479 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE36BC4618CA14B200694145 /* Crashlytics.framework */; };
 		D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */; };
 		D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */; };
-		D0E507601913ADC10011DB63 /* STKSearchTrustUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E5075E1913ADC10011DB63 /* STKSearchTrustUserCell.m */; };
-		D0E507611913ADC10011DB63 /* STKSearchTrustUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E5075F1913ADC10011DB63 /* STKSearchTrustUserCell.xib */; };
 		D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E5076A1914251A0011DB63 /* STKLoginResetViewController.m */; };
 		D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E5076B1914251A0011DB63 /* STKLoginResetViewController.xib */; };
 /* End PBXBuildFile section */
@@ -2198,9 +2196,6 @@
 		D0E3508018FF30A40006B992 /* STKSearchHashTagsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchHashTagsCell.h; sourceTree = "<group>"; };
 		D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchHashTagsCell.m; sourceTree = "<group>"; };
 		D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchHashTagsCell.xib; sourceTree = "<group>"; };
-		D0E5075D1913ADC10011DB63 /* STKSearchTrustUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchTrustUserCell.h; sourceTree = "<group>"; };
-		D0E5075E1913ADC10011DB63 /* STKSearchTrustUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchTrustUserCell.m; sourceTree = "<group>"; };
-		D0E5075F1913ADC10011DB63 /* STKSearchTrustUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchTrustUserCell.xib; sourceTree = "<group>"; };
 		D0E507691914251A0011DB63 /* STKLoginResetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLoginResetViewController.h; sourceTree = "<group>"; };
 		D0E5076A1914251A0011DB63 /* STKLoginResetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLoginResetViewController.m; sourceTree = "<group>"; };
 		D0E5076B1914251A0011DB63 /* STKLoginResetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLoginResetViewController.xib; sourceTree = "<group>"; };
@@ -4895,7 +4890,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2EC91A02-3E31-453A-8EC0-D587E926A74F";
+				PROVISIONING_PROFILE = "7B70F93A-6530-440D-99D4-8136520D47CA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Staging)";
@@ -4925,7 +4920,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2EC91A02-3E31-453A-8EC0-D587E926A74F";
+				PROVISIONING_PROFILE = "7B70F93A-6530-440D-99D4-8136520D47CA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -5031,7 +5026,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2EC91A02-3E31-453A-8EC0-D587E926A74F";
+				PROVISIONING_PROFILE = "7B70F93A-6530-440D-99D4-8136520D47CA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (Staging)";
@@ -5121,7 +5116,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2EC91A02-3E31-453A-8EC0-D587E926A74F";
+				PROVISIONING_PROFILE = "7B70F93A-6530-440D-99D4-8136520D47CA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Dev)";

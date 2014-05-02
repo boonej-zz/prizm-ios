@@ -262,7 +262,7 @@ typedef enum {
     if([self exploreType] == STKExploreTypeLatest) {
         filter = nil;
     } else if([self exploreType] == STKExploreTypeFeatured){
-        filter = @{@"type" : @"institution"};
+        filter = @{@"type" : STKUserTypeInstitution};
     } else {
         filter = @{@"sort_by" : @"likes_count", @"sort" : @"-1"};
     }

@@ -36,6 +36,7 @@ typedef enum {
 @property (nonatomic, strong) STKUser *currentUser;
 
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
+- (void)resetPasswordForEmail:(NSString *)email password:(NSString *)password completion:(void (^)(NSError *err))block;
 
 - (void)registerAccount:(STKUser *)info completion:(void (^)(STKUser *user, NSError *err))block;
 

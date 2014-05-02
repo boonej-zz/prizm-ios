@@ -1419,6 +1419,24 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 #pragma mark Standard
 
+- (void)resetPasswordForEmail:(NSString *)email password:(NSString *)password completion:(void (^)(NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
+        [c setIdentifiers:@[email, @"passwordreset"]];
+        [c addQueryValue:password forKey:@"password"];
+        
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(err);
+        }];
+    }];
+}
+
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block
 {
     [self validateWithEmail:email password:password completion:^(STKUser *user, NSError *err) {
