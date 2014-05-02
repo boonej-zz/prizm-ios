@@ -9,6 +9,7 @@
 #import "STKLoginViewController.h"
 #import "STKUserStore.h"
 #import "STKProcessingView.h"
+#import "STKLoginResetViewController.h"
 
 @interface STKLoginViewController () <UITextFieldDelegate>
 
@@ -83,7 +84,8 @@
 
 - (IBAction)forgotPassword:(id)sender
 {
-
+    STKLoginResetViewController *rvc = [[STKLoginResetViewController alloc] init];
+    [[self navigationController] pushViewController:rvc animated:YES];
 }
 
 @end
