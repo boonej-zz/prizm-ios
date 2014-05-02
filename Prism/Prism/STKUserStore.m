@@ -94,6 +94,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     return self;
 }
 
+- (STKUser *)userForID:(NSString *)userID
+{
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
+    [req setPredicate:[NSPredicate predicateWithFormat:@"uniqueID == %@", userID]];
+    
+    return [[[self context] executeFetchRequest:req error:nil] firstObject];
+}
+
 - (void)activityUpdateCheck:(NSTimer *)timer
 {
     if([self currentUser]) {

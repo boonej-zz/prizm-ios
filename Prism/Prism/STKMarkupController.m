@@ -28,8 +28,6 @@ typedef enum {
 @property (nonatomic) NSRange markupRange;
 @property (nonatomic) STKMarkupType markupType;
 
-@property (nonatomic, strong) NSString *tempPostTextWithUserTags;
-
 @property (nonatomic, strong) NSArray *userTags;
 @property (nonatomic, strong) NSArray *hashTags;
 

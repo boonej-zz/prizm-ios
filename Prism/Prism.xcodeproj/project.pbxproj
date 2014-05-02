@@ -97,6 +97,7 @@
 		BE7AFA7E18ECA32800DA30A7 /* STKNetworkStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7AFA7D18ECA32800DA30A7 /* STKNetworkStore.m */; };
 		BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */; };
 		BE7D396B19141B32003B333F /* STKMarkupController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D396A19141B32003B333F /* STKMarkupController.m */; };
+		BE7D396E19142D58003B333F /* STKMarkupTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D396D19142D58003B333F /* STKMarkupTextView.m */; };
 		BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5ADD18D36050005D3893 /* STKUserListViewController.m */; };
 		BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5ADE18D36050005D3893 /* STKUserListViewController.xib */; };
 		BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5AE218D37327005D3893 /* STKUserPostListViewController.m */; };
@@ -2050,6 +2051,8 @@
 		BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKResolvingImageView.m; sourceTree = "<group>"; };
 		BE7D396919141B32003B333F /* STKMarkupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMarkupController.h; sourceTree = "<group>"; };
 		BE7D396A19141B32003B333F /* STKMarkupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMarkupController.m; sourceTree = "<group>"; };
+		BE7D396C19142D58003B333F /* STKMarkupTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMarkupTextView.h; sourceTree = "<group>"; };
+		BE7D396D19142D58003B333F /* STKMarkupTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMarkupTextView.m; sourceTree = "<group>"; };
 		BE7D5ADC18D36050005D3893 /* STKUserListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKUserListViewController.h; sourceTree = "<group>"; };
 		BE7D5ADD18D36050005D3893 /* STKUserListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUserListViewController.m; sourceTree = "<group>"; };
 		BE7D5ADE18D36050005D3893 /* STKUserListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKUserListViewController.xib; sourceTree = "<group>"; };
@@ -2443,6 +2446,8 @@
 				BEF6E200190EC21300D60BE0 /* STKButtonRow.m */,
 				BE937C9C191175E000C24A58 /* STKNotifiedBadgeView.h */,
 				BE937C9D191175E000C24A58 /* STKNotifiedBadgeView.m */,
+				BE7D396C19142D58003B333F /* STKMarkupTextView.h */,
+				BE7D396D19142D58003B333F /* STKMarkupTextView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4692,6 +4697,7 @@
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
 				BE5F68FD18F0A53D006D2CD1 /* STKContainQuery.m in Sources */,
 				BE5F690518F214C8006D2CD1 /* STKTextView.m in Sources */,
+				BE7D396E19142D58003B333F /* STKMarkupTextView.m in Sources */,
 				BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */,
 				BE6BAE3F18FED70A00B21EE7 /* STKInstitutionInfoCell.m in Sources */,
 				BE654EA5188841A6006DCA5C /* Lookup.xcdatamodeld in Sources */,

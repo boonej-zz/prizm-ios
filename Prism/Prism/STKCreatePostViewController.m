@@ -354,15 +354,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     
     if(![[self postInfo] objectForKey:STKPostURLKey]) {
         // Do a card
-#warning XXXX
         
-        NSString *postText;
-        /*if([self userTags] > 0 && [[self tempPostTextWithUserTags] length] > 0){
-            postText = [self tempPostTextWithUserTags];
-        }else{*/
-            postText = [[self postInfo] objectForKey:STKPostTextKey];
-        //}
-//        UIImage *img = [STKPost imageForTextPost:[[self postInfo] objectForKey:STKPostTextKey]];
+        NSString *postText = [[self postInfo] objectForKey:STKPostTextKey];
+        NSLog(@"%@", postText);
         UIImage *img = [STKPost imageForTextPost:postText];
         [self setPostImage:img];
     }
