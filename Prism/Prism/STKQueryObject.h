@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
+    STKQueryObjectPageReload = -1,
     STKQueryObjectPageNewer = 0,
     STKQueryObjectPageOlder = 1
 } STKQueryObjectPage;

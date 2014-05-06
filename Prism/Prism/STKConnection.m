@@ -198,28 +198,12 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     
     if([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSArray class]] || [value isKindOfClass:[NSNull class]]) {
         [_internalArguments setObject:value forKey:key];
-    } else if([value isKindOfClass:[NSDictionary class]]) {
-        [self addQueryDictionary:value forKey:key];
     }
 }
 
-- (void)addQueryDictionary:(NSDictionary *)dict forKey:(NSString *)key
+- (void)addQueryValues:(NSDictionary *)dict
 {
-    if(!key || !dict) {
-        return;
-    }
-    
-    NSMutableString *str = [[NSMutableString alloc] init];
-    for(NSString *key in dict) {
-        NSString *val = [dict objectForKey:key];
-        [str appendFormat:@"%@:\"%@\",", key, [val stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLArgumentAllowedCharacterSet]]];
-    }
-    if([str length] > 0) {
-        [str deleteCharactersInRange:NSMakeRange([str length] - 1, 1)];
-    }
-    
-    NSString *formatted = [NSString stringWithFormat:@"{%@}", str];
-    [self addQueryValue:formatted forKey:key];
+    [_internalArguments addEntriesFromDictionary:dict];
 }
 
 - (void)setParameters:(NSDictionary *)parameters

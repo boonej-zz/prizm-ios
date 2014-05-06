@@ -10,9 +10,9 @@
 
 @class STKPost;
 @class STKPostController;
+@class STKFetchDescription;
 
 @protocol STKPostControllerDelegate <NSObject>
-
 
 @optional
 
@@ -29,13 +29,18 @@
 
 - (id)initWithViewController:(UIViewController <STKPostControllerDelegate> *)viewController;
 
-@property (nonatomic, strong) NSMutableArray *posts;
 @property (nonatomic, weak) UIViewController *viewController;
+
+@property (nonatomic, strong) NSMutableArray *posts;
 @property (nonatomic, strong) NSArray *sortDescriptors;
-
-
+@property (nonatomic, strong) NSDictionary *filterMap;
+@property (nonatomic, strong) void (^fetchMechanism)(STKFetchDescription *desc, void (^completion)(NSArray *posts, NSError *err));
 @property (nonatomic, weak) id <STKPostControllerDelegate> delegate;
 
 - (void)addPosts:(NSArray *)posts;
+
+- (void)reloadWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion;
+- (void)fetchNewerPostsWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion;
+- (void)fetchOlderPostsWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion;
 
 @end

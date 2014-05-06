@@ -17,6 +17,7 @@
 #import "STKFoursquareLocation.h"
 #import "STKPostComment.h"
 #import "STKPostComment.h"
+#import "STKFetchDescription.h"
 
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 
@@ -81,9 +82,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 }
 
 - (NSArray *)cachedPostsForPredicate:(NSPredicate *)predicate
-                         inDirection:(STKQueryObjectPage)fetchDirection
-                       referencePost:(STKPost *)referencePost
+                    fetchDescription:(STKFetchDescription *)desc
 {
+    STKPost *referencePost = [desc referenceObject];
     if(!referencePost) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
         [req setPredicate:predicate];
@@ -96,10 +97,10 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
         [req setFetchLimit:30];
         
-        if(fetchDirection == STKQueryObjectPageNewer) {
+        if([desc direction] == STKQueryObjectPageNewer) {
             [req setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:@[predicate,
                                                                                    [NSPredicate predicateWithFormat:@"datePosted > %@", [referencePost datePosted]]]]];
-        } else {
+        } else if([desc direction] == STKQueryObjectPageOlder) {
             [req setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:@[predicate,
                                                                                    [NSPredicate predicateWithFormat:@"datePosted < %@", [referencePost datePosted]]]]];
         }
@@ -110,20 +111,20 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 }
 
 - (void)fetchFeedForUser:(STKUser *)u
-             inDirection:(STKQueryObjectPage)fetchDirection
-           referencePost:(STKPost *)referencePost
+        fetchDescription:(STKFetchDescription *)desc
               completion:(void (^)(NSArray *posts, NSError *err))block;
 {
     NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
-                                        inDirection:fetchDirection
-                                      referencePost:referencePost];
+                                   fetchDescription:desc];
 
-    
+    STKPost *referencePost = [desc referenceObject];
     if([cached count] > 0) {
-        if(fetchDirection == STKQueryObjectPageNewer)
+        if([desc direction] == STKQueryObjectPageNewer) {
             referencePost = [cached firstObject];
-        else
+        } else if ([desc direction] == STKQueryObjectPageOlder) {
             referencePost = [cached lastObject];
+        }
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
@@ -140,9 +141,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setLimit:30];
-        [q setPageDirection:fetchDirection];
+        [q setPageDirection:[desc direction]];
         [q setPageKey:STKPostDateCreatedKey];
-        [q setPageValue:[referencePost referenceTimestamp]];
+        [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
         
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
@@ -178,10 +179,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     }];
 }
 
-- (void)fetchExplorePostsInDirection:(STKQueryObjectPage)fetchDirection
-                       referencePost:(STKPost *)referencePost
-                              filter:(NSDictionary *)filterDict
-                          completion:(void (^)(NSArray *posts, NSError *err))block
+- (void)fetchExplorePostsWithFetchDescription:(STKFetchDescription *)desc
+                                   completion:(void (^)(NSArray *posts, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -191,13 +190,24 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/explore"];
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setLimit:30];
-        if(referencePost){
-            [q setPageDirection:fetchDirection];
+        if([desc referenceObject]) {
+            [q setPageDirection:[desc direction]];
             [q setPageKey:STKPostDateCreatedKey];
-            [q setPageValue:[referencePost referenceTimestamp]];
+            [q setPageValue:[STKTimestampFormatter stringFromDate:[(STKPost *)[desc referenceObject] datePosted]]];
         }
         
-        [q setFilters:filterDict];
+        NSMutableDictionary *filters = [NSMutableDictionary dictionary];
+        for(NSString *key in [desc filterDictionary]) {
+            NSString *remoteKey = [STKPost remoteKeyForLocalKey:key];
+            if(remoteKey) {
+                [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:remoteKey];
+            } else {
+                // Tjhis is for explore by like count
+                [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:key];
+            }
+        }
+        
+        [q setFilters:filters];
         
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
@@ -215,7 +225,6 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         
         [c setQueryObject:q];
         
-        
         [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost"}];
         [c setModelGraph:@[@"STKPost"]];
         [c setContext:[[STKUserStore store] context]];
@@ -232,34 +241,6 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     }];
 }
 
-- (void)fetchPostsForLocationName:(NSString *)locationName
-                        direction:(STKQueryObjectPage)fetchDirection
-                    referencePost:(STKPost *)referencePost
-                       completion:(void (^)(NSArray *posts, NSError *err))block
-{
-    [self fetchExplorePostsInDirection:fetchDirection
-                         referencePost:referencePost
-                                filter:@{@"location_name" : locationName}
-                            completion:block];
-}
-
-- (void)fetchExplorePostsInDirection:(STKQueryObjectPage)fetchDirection
-                       referencePost:(STKPost *)referencePost
-                          completion:(void (^)(NSArray *posts, NSError *err))block
-{
-    [self fetchExplorePostsInDirection:fetchDirection referencePost:referencePost filter:nil completion:block];
-}
-
-- (void)fetchExplorePostsForHashTag:(NSString *)hashTag
-                        inDirection:(STKQueryObjectPage)fetchDirection
-                      referencePost:(STKPost *)referencePost
-                         completion:(void (^)(NSArray *posts, NSError *err))block
-{
-    [self fetchExplorePostsInDirection:fetchDirection
-                         referencePost:referencePost
-                                filter:@{@"hash_tags" : hashTag}
-                            completion:block];
-}
 
 - (void)searchPostsForHashtag:(NSString *)hashTag
                    completion:(void (^)(NSArray *posts, NSError *err))block
@@ -284,25 +265,25 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 }
 
 - (void)fetchProfilePostsForUser:(STKUser *)user
-                     inDirection:(STKQueryObjectPage)fetchDirection
-                   referencePost:(STKPost *)referencePost
+                fetchDescription:(STKFetchDescription *)desc
                       completion:(void (^)(NSArray *posts, NSError *err))block
 {
     NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseProfile == %@", user]
-                                        inDirection:fetchDirection
-                                      referencePost:referencePost];
+                                   fetchDescription:desc];
     
-    
+    STKPost *referencePost = [desc referenceObject];
     if([cached count] > 0) {
-        if(fetchDirection == STKQueryObjectPageNewer)
+        if([desc direction] == STKQueryObjectPageNewer) {
             referencePost = [cached firstObject];
-        else
+        } else if ([desc direction] == STKQueryObjectPageOlder) {
             referencePost = [cached lastObject];
+        }
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
     }
-
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -313,13 +294,18 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setLimit:30];
-        [q setPageDirection:fetchDirection];
+        [q setPageDirection:[desc direction]];
         [q setPageKey:STKPostDateCreatedKey];
-        [q setPageValue:[referencePost referenceTimestamp]];
+        [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
+        NSMutableDictionary *filters = [NSMutableDictionary dictionary];
+        for(NSString *key in [desc filterDictionary]) {
+            [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:[STKPost remoteKeyForLocalKey:key]];
+        }
+        [q setFilters:filters];
         
         STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
         [q addSubquery:tagQ];
-
+        
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
         
@@ -349,6 +335,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         }];
     }];
 }
+
 
 - (void)likePost:(STKPost *)post completion:(void (^)(STKPost *p, NSError *err))block
 {
@@ -755,12 +742,11 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         
         NSDictionary *changedValues = [p changedValues];
-        NSDictionary *keyMap = [STKPost reverseKeyMap];
         for(NSString *key in changedValues) {
             NSString *val = [changedValues objectForKey:key];
-            NSString *newKey = [keyMap objectForKey:key];
+            NSString *newKey = [STKPost remoteKeyForLocalKey:key];
             if(val && newKey) {
-                [c addQueryValue:val
+                [c addQueryValue:[p remoteValueForLocalKey:key]
                           forKey:newKey];
             }
         }

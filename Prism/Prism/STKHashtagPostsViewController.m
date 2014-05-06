@@ -33,6 +33,11 @@
     if(self) {
         [self setHashTag:hashTag];
         _hashTagPostsController = [[STKPostController alloc] initWithViewController:self];
+        
+        [[self hashTagPostsController] setFilterMap:@{@"hash_tags" : hashTag}];
+        [[self hashTagPostsController] setFetchMechanism:^(STKFetchDescription *fd, void (^comp)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchExplorePostsWithFetchDescription:fd completion:comp];
+        }];
     }
     return self;
 }
@@ -74,15 +79,9 @@
     [super viewWillAppear:animated];
     [[[self blurView] displayLink] setPaused:NO];
     
-    [[STKContentStore store] fetchExplorePostsForHashTag:[self hashTag]
-                                             inDirection:STKQueryObjectPageNewer
-                                           referencePost:nil
-                                              completion:^(NSArray *posts, NSError *err) {
-                                                  if(!err && posts) {
-                                                      [[self hashTagPostsController] addPosts:posts];
-                                                      [[self tableView] reloadData];
-                                                  }
-                                              }];
+    [[self hashTagPostsController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

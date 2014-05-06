@@ -7,11 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "STKTrust.h"
+
+@class STKUser;
+
 
 @interface STKUserPostListViewController : UIViewController
 
-@property (nonatomic, strong) NSArray *posts;
-@property (nonatomic) BOOL allowPersonalFilter;
+- (id)initWithUser:(STKUser *)user;
+- (id)initWithTrust:(STKTrust *)t;
+
+@property (nonatomic) STKTrustPostType trustType;
+@property (nonatomic, strong) STKUser *user;
+@property (nonatomic, strong) STKTrust *trust;
 @property (nonatomic) BOOL showsFilterBar;
 
 @end

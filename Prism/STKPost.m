@@ -48,26 +48,39 @@ NSString * const STKPostStatusDeleted = @"deleted";
 @implementation STKPost
 @dynamic coordinate;
 @dynamic hashTags, imageURLString, uniqueID, datePosted, locationLatitude, locationLongitude, locationName,
-visibility, status, repost, referenceTimestamp, text, comments, commentCount, creator, originalPost, likes, likeCount,
+visibility, status, repost, text, comments, commentCount, creator, originalPost, likes, likeCount,
 type, fInverseFeed, activities, derivativePosts, tags;
 @dynamic fInverseProfile;
 
-+ (NSDictionary *)reverseKeyMap
+
++ (NSDictionary *)remoteToLocalKeyMap
 {
     return @{
+             @"_id" : @"uniqueID",
+             STKPostTypeKey : @"type",
              
-             @"uniqueID": @"_id" ,
-             @"type" : STKPostTypeKey,
-             
-             @"imageURLString" : STKPostURLKey,
-             @"locationName" : STKPostLocationNameKey,
-             @"locationLatitude": STKPostLocationLatitudeKey,
-             @"locationLongitude" : STKPostLocationLongitudeKey,
-             @"visibility": STKPostVisibilityKey,
+             STKPostURLKey : @"imageURLString",
+             STKPostLocationNameKey : @"locationName",
+             STKPostLocationLatitudeKey : @"locationLatitude",
+             STKPostLocationLongitudeKey : @"locationLongitude",
+             STKPostVisibilityKey : @"visibility",
              @"status" : @"status",
-             @"text" : STKPostTextKey
+             @"is_repost" : @"repost",
+             STKPostTextKey : @"text",
              
-             };
+             @"likes_count" : @"likeCount",
+             @"comments_count" : @"commentCount",
+             @"hash_tags" : [STKBind bindMapForKey:@"hashTags" matchMap:@{@"title" : @"title"}],
+             @"tags" : [STKBind bindMapForKey:@"tags" matchMap:@{@"uniqueID" : @"_id"}],
+             
+             @"creator" : [STKBind bindMapForKey:@"creator" matchMap:@{@"uniqueID" : @"_id"}],
+             @"likes" : [STKBind bindMapForKey:@"likes" matchMap:@{@"uniqueID" : @"_id"}],
+             @"comments" : [STKBind bindMapForKey:@"comments" matchMap:@{@"uniqueID" : @"_id"}],
+             
+             @"origin_post_id" : [STKBind bindMapForKey:@"originalPost" matchMap:@{@"uniqueID" : @"_id"}],
+             
+             STKPostDateCreatedKey : [STKBind bindMapForKey:@"datePosted" transform:STKBindTransformDateTimestamp]
+    };
 }
 
 - (NSError *)readFromJSONObject:(id)jsonObject
@@ -77,35 +90,7 @@ type, fInverseFeed, activities, derivativePosts, tags;
         return nil;
     }
     
-    [self bindFromDictionary:jsonObject keyMap:@{
-                                                 @"_id" : @"uniqueID",
-                                                 STKPostTypeKey : @"type",
-
-                                                 STKPostURLKey : @"imageURLString",
-                                                 STKPostLocationNameKey : @"locationName",
-                                                 STKPostLocationLatitudeKey : @"locationLatitude",
-                                                 STKPostLocationLongitudeKey : @"locationLongitude",
-                                                 STKPostVisibilityKey : @"visibility",
-                                                 @"status" : @"status",
-                                                 @"is_repost" : @"repost",
-                                                 STKPostTextKey : @"text",
-                                                 
-                                                 @"likes_count" : @"likeCount",
-                                                 @"comments_count" : @"commentCount",
-                                                 @"hash_tags" : @{STKJSONBindFieldKey : @"hashTags", STKJSONBindMatchDictionaryKey : @{@"title" : @"title"}},
-                                                 @"tags" : @{STKJSONBindFieldKey : @"tags", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 
-                                                 @"creator" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"likes" : @{STKJSONBindFieldKey : @"likes", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"comments" : @{STKJSONBindFieldKey : @"comments", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 
-                                                 @"origin_post_id" : @{STKJSONBindFieldKey : @"originalPost", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 
-                                                 STKPostDateCreatedKey : ^(NSString *inValue) {
-                                                    [self setReferenceTimestamp:inValue];
-                                                    [self setDatePosted:[STKTimestampFormatter dateFromString:inValue]];
-                                                 }
-    }];
+    [self bindFromDictionary:jsonObject keyMap:[[self class] remoteToLocalKeyMap]];
     
     return nil;
 }

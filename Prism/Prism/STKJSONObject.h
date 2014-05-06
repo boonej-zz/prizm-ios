@@ -7,8 +7,12 @@
 
 #import <Foundation/Foundation.h>
 
+#import "STKBindTransforms.h"
+
+
 extern NSString * const STKJSONBindFieldKey;
 extern NSString * const STKJSONBindMatchDictionaryKey;
+extern NSString * const STKJSONBindTransformKey;
 extern NSString * const STKJSONBindFunctionKey;
     extern NSString * const STKJSONBindFunctionReplace; // Default
     extern NSString * const STKJSONBindFunctionAdd;
@@ -25,15 +29,30 @@ extern NSString * const STKJSONBindFunctionKey;
                  sourceKey:(NSString *)sourceKey
             destinationKey:(NSString *)destKey
                   matchMap:(NSDictionary *)matchMap;
-
+/*
 - (void)bindFromDictionary:(NSDictionary *)d
                  sourceKey:(NSString *)sourceKey
           destinationBlock:(void (^)(id inVal))block;
-
+*/
 - (void)bindFromDictionary:(NSDictionary *)dataDictionary
                     keyMap:(NSDictionary *)keyMap;
 
-+ (NSDictionary *)inboundKeyMap;
-+ (NSDictionary *)outboundKeyMap;
+
++ (NSDictionary *)remoteToLocalKeyMap;
+
++ (NSString *)remoteKeyForLocalKey:(NSString *)localKey;
++ (NSString *)localKeyForRemoteKey:(NSString *)remoteKey;
+
+- (id)remoteValueForLocalKey:(NSString *)localKey;
+- (NSDictionary *)remoteValueMapForLocalKeys:(NSArray *)localKeys;
+
+@end
+
+
+@interface STKBind : NSObject
+
++ (NSDictionary *)bindMapForKey:(NSString *)fieldKey matchMap:(NSDictionary *)matchMap;
++ (NSDictionary *)bindMapForKey:(NSString *)fieldKey
+                      transform:(STKTransformBlock)transform;
 
 @end

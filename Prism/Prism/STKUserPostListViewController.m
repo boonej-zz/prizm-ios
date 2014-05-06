@@ -13,6 +13,9 @@
 #import "STKPost.h"
 #import "UIERealTimeBlurView.h"
 #import "STKPostController.h"
+#import "STKUser.h"
+#import "STKContentStore.h"
+#import "STKUserStore.h"
 
 @interface STKUserPostListViewController () <UITableViewDelegate, UITableViewDataSource, STKPostControllerDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *blurViewHeightConstraint;
@@ -22,17 +25,35 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *filterBar;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
-@property (weak, nonatomic) IBOutlet UIButton *personalButton;
 @property (nonatomic, strong) STKPostController *postController;
+@property (nonatomic) BOOL allowPersonalFilter;
+@property (weak, nonatomic) IBOutlet UIButton *passionButton;
+@property (weak, nonatomic) IBOutlet UIButton *aspirationButton;
+@property (weak, nonatomic) IBOutlet UIButton *experienceButton;
+@property (weak, nonatomic) IBOutlet UIButton *achivementButton;
+@property (weak, nonatomic) IBOutlet UIButton *inspirationButton;
+@property (weak, nonatomic) IBOutlet UIButton *personalButton;
+
 @end
 
 @implementation STKUserPostListViewController
-@dynamic posts;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithTrust:(STKTrust *)t
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [self initWithUser:nil];
+    if(self) {
+        [self setTrust:t];
+        [self setShowsFilterBar:NO];
+    }
+    return self;
+}
+
+- (id)initWithUser:(STKUser *)user
+{
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
+        
+        [self setUser:user];
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         _postController = [[STKPostController alloc] initWithViewController:self];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
@@ -40,35 +61,55 @@
     }
     return self;
 }
-- (IBAction)togglePassions:(UIButton *)sender {
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    return [self initWithUser:nil];
+}
+
+
+- (void)setUser:(STKUser *)user
+{
+    _user = user;
+    if([[[self user] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
+        [self setAllowPersonalFilter:YES];
+    } else {
+        [self setAllowPersonalFilter:NO];
+    }
+}
+
+- (void)deselectAllFilters
+{
+}
+
+- (void)selectFilter:(UIButton *)sender
+{
+    BOOL currentlySelected = [sender isSelected];
+    for(UIControl *ctl in [[self filterBar] subviews]) {
+        [ctl setSelected:NO];
+    }
+    [sender setSelected:!currentlySelected];
     
-    [sender setSelected:![sender isSelected]];
+    [self reloadPosts];
+}
+
+- (IBAction)togglePassions:(UIButton *)sender {
+    [self selectFilter:sender];
 }
 - (IBAction)toggleAspirations:(UIButton *)sender {
-    [sender setSelected:![sender isSelected]];
+    [self selectFilter:sender];
 }
 - (IBAction)toggleExperiences:(UIButton *)sender {
-    [sender setSelected:![sender isSelected]];
+    [self selectFilter:sender];
 }
 - (IBAction)toggleAchievements:(UIButton *)sender {
-    [sender setSelected:![sender isSelected]];
+    [self selectFilter:sender];
 }
 - (IBAction)toggleInspirations:(UIButton *)sender {
-    [sender setSelected:![sender isSelected]];
+    [self selectFilter:sender];
 }
 - (IBAction)togglePersonal:(UIButton *)sender {
-    [sender setSelected:![sender isSelected]];
-}
-
-- (void)setPosts:(NSArray *)posts
-{
-    [[self postController] addPosts:posts];
-    [[self tableView] reloadData];
-}
-
-- (NSArray *)posts
-{
-    return [[self postController] posts];
+    [self selectFilter:sender];
 }
 
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
@@ -127,13 +168,64 @@
                                                            target:self action:@selector(back:)];
     [[self navigationItem] setLeftBarButtonItem:bbi];
 
+    
+    [self configurePostController];
+    
+    [self reloadPosts];
+}
+
+- (void)configurePostController
+{
+    __weak STKUserPostListViewController *ws = self;
+    if([self user]) {
+        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchProfilePostsForUser:[ws user] fetchDescription:fs completion:completion];
+        }];
+    } else if([self trust]) {
+        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKUserStore store] fetchTrustPostsForTrust:[ws trust] type:[ws trustType] completion:completion];
+        }];
+    }
+    [[self postController] setFilterMap:[self filterDictionary]];
+
+    NSString *typeValue = [[[self postController] filterMap] objectForKey:STKPostTypeKey];
+    if(typeValue)
+        [[[self postController] posts] filterUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@", typeValue]];
+}
+
+- (void)reloadPosts
+{
+    [self configurePostController];
+    [[self tableView] reloadData];
+    [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
+}
+
+- (NSDictionary *)filterDictionary
+{
+    NSMutableDictionary *d = [NSMutableDictionary dictionary];
+    if([[self passionButton] isSelected]) {
+        [d setObject:STKPostTypePassion forKey:STKPostTypeKey];
+    } else if([[self aspirationButton] isSelected]) {
+        [d setObject:STKPostTypeAspiration forKey:STKPostTypeKey];
+    }  else if([[self experienceButton] isSelected]) {
+        [d setObject:STKPostTypeExperience forKey:STKPostTypeKey];
+    } else if([[self achivementButton] isSelected]) {
+        [d setObject:STKPostTypeAchievement forKey:STKPostTypeKey];
+    } else if([[self inspirationButton] isSelected]) {
+        [d setObject:STKPostTypeInspiration forKey:STKPostTypeKey];
+    } else if([[self personalButton] isSelected]) {
+        [d setObject:STKPostTypePersonal forKey:STKPostTypeKey];
+    }
+    
+    return d;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [[[self blurView] displayLink] setPaused:YES];
-
 }
 
 - (void)back:(id)sender

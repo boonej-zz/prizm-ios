@@ -38,6 +38,10 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _localPosts = [[STKPostController alloc] initWithViewController:self];
+        
+        [[self localPosts] setFetchMechanism:^(STKFetchDescription *fd, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchExplorePostsWithFetchDescription:fd completion:completion];
+        }];
     }
     return self;
 }
@@ -45,8 +49,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
     
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -73,15 +75,10 @@
     
     [[self mapView] setRegion:MKCoordinateRegionMakeWithDistance([self coordinate], 50, 50)];
     
-    [[STKContentStore store] fetchPostsForLocationName:[self locationName]
-                                             direction:STKQueryObjectPageNewer
-                                         referencePost:[[[self localPosts] posts] firstObject]
-                                            completion:^(NSArray *posts, NSError *err) {
-                                                if(!err) {
-                                                    [[self localPosts] addPosts:posts];
-                                                }
-                                                [[self tableView] reloadData];
-                                            }];
+    [[self localPosts] setFilterMap:@{@"location_name" : [self locationName]}];
+    [[self localPosts] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
 }
 
 

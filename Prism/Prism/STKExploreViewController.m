@@ -85,10 +85,23 @@ typedef enum {
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
         
         _recentPostsController = [[STKPostController alloc] initWithViewController:self];
+        [[self recentPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
+        }];
+        
         _featuredPostsController = [[STKPostController alloc] initWithViewController:self];
+        [[self featuredPostsController] setFilterMap:@{@"type" : STKUserTypeInstitution}];
+        [[self featuredPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
+        }];
+        
         _popularPostsController = [[STKPostController alloc] initWithViewController:self];
-        [_popularPostsController setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO],
-                                                      [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+        [[self popularPostsController] setFilterMap:@{@"sort_by" : @"likes_count", @"sort" : [NSString stringWithFormat:@"%d", STKQueryObjectSortAscending]}];
+        [[self popularPostsController] setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO],
+                                                            [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+        [[self popularPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
+        }];
 
         
     }
@@ -253,31 +266,9 @@ typedef enum {
 
 - (STKExploreType)exploreType
 {
-    return [[self exploreTypeControl] selectedSegmentIndex];
+    return (STKExploreType)[[self exploreTypeControl] selectedSegmentIndex];
 }
 
-- (void)refreshPosts
-{
-    NSDictionary *filter = nil;
-    if([self exploreType] == STKExploreTypeLatest) {
-        filter = nil;
-    } else if([self exploreType] == STKExploreTypeFeatured){
-        filter = @{@"type" : STKUserTypeInstitution};
-    } else {
-        filter = @{@"sort_by" : @"likes_count", @"sort" : @"-1"};
-    }
-
-    STKPostController *pc = [self activePostController];
-    [[STKContentStore store] fetchExplorePostsInDirection:STKQueryObjectPageNewer
-                                            referencePost:[[[self activePostController] posts] firstObject]
-                                                   filter:filter
-                                               completion:^(NSArray *posts, NSError *err) {
-                                                   if(!err)
-                                                       [pc addPosts:posts];
-                                                   
-                                                   [[self tableView] reloadData];
-                                               }];
-}
 
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -304,7 +295,10 @@ typedef enum {
 
     [[self tableView] setContentInset:UIEdgeInsetsMake([[self exploreTypeControl] frame].origin.y + [[self exploreTypeControl] frame].size.height, 0, 0, 0)];
 
-    [self refreshPosts];
+    STKPostController *pc = [self activePostController];
+    [pc fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -330,8 +324,6 @@ typedef enum {
     STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self activePostController]];
     [c populateWithPosts:[[self activePostController] posts] indexOffset:[indexPath row] * 3];
     return c;
-    
-    
 }
 
 
@@ -345,7 +337,10 @@ typedef enum {
         [self setActivePostController:[self featuredPostsController]];
 
     [[self tableView] reloadData];
-    [self refreshPosts];
+    STKPostController *pc = [self activePostController];
+    [pc reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
 }
 
 

@@ -43,8 +43,6 @@ extern NSString * const STKPostStatusDeleted;
 
 @interface STKPost : NSManagedObject <STKJSONObject>
 
-+ (NSDictionary *)reverseKeyMap;
-
 @property (nonatomic, strong) NSString *uniqueID;
 @property (nonatomic) NSString *type;
 @property (nonatomic, strong) NSDate *datePosted;
@@ -55,7 +53,6 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, strong) NSString *status;
 @property (nonatomic, getter = isRepost) BOOL repost;
 @property (nonatomic, strong) NSString *text;
-@property (nonatomic, strong) NSString *referenceTimestamp;
 //@property (nonatomic, strong) NSString *targetID;
 
 @property (nonatomic) int commentCount;

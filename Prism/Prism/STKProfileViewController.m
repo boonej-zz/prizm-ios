@@ -161,19 +161,15 @@ typedef enum {
             [self refreshProfileViews];
         }];
         
-        [[STKContentStore store] fetchProfilePostsForUser:[self profile]
-                                              inDirection:STKQueryObjectPageNewer
-                                            referencePost:[[[self postController] posts] firstObject]
-                                               completion:^(NSArray *posts, NSError *err) {
-                                                   if(!err) {
-                                                       [[self postController] addPosts:posts];
-                                                       
-                                                       [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionDynamic]
-                                                                       withRowAnimation:UITableViewRowAnimationNone];
-                                                   } else {
-                                                       // Do nothing?
-                                                   }
-                                               }];
+        __weak STKProfileViewController *ws = self;
+        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchProfilePostsForUser:[ws profile] fetchDescription:fs completion:completion];
+        }];
+
+        [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+            [[ws tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionDynamic]
+                            withRowAnimation:UITableViewRowAnimationNone];
+        }];
     }
     
     [self determineAdditionalInfoFields];
@@ -260,10 +256,8 @@ typedef enum {
             }];
         } break;
         case 2: {
-            STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] init];
+            STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] initWithUser:[self profile]];
             [pvc setTitle:[[self profile] name]];
-            [pvc setPosts:[[self postController] posts]];
-            [pvc setAllowPersonalFilter:[[self profile] isEqual:[[STKUserStore store] currentUser]]];
             [[self navigationController] pushViewController:pvc animated:YES];
         } break;
     }

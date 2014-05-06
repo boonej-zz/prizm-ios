@@ -389,26 +389,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             }];
             return;
         }
-        NSDictionary *keyMap = [STKUser reverseKeyMap];
-        for(NSString *key in changedValues) {            
-            id val = [changedValues objectForKey:key];
-            NSString *newKey = [keyMap objectForKey:key];
-            if(val && newKey) {
-                
-                // Do some conversion
-                if([key isEqualToString:@"birthday"]) {
-                    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                    [df setDateFormat:@"MM-dd-yyyy"];
-                    val = [df stringFromDate:val];
-                } else if([key isEqualToString:@"dateFounded"]) {
-                    val = [STKTimestampFormatter stringFromDate:val];
-                }
-                
-                
-                [c addQueryValue:val
-                          forKey:newKey];
-            }
-        }
+        
+        NSDictionary *dataDict = [self remoteValueMapForLocalKeys:[changedValues allKeys]];
+        [c addQueryValues:dataDict];
         
         [c setModelGraph:@[user]];
         [c setContext:[user managedObjectContext]];
@@ -939,7 +922,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(topItem) {
             [q setPageDirection:STKQueryObjectPageNewer];
             [q setPageKey:@"create_date"];
-            [q setPageValue:[topItem referenceTimestamp]];
+            [q setPageValue:[STKTimestampFormatter stringFromDate:[topItem dateCreated]]];
         }
         
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
@@ -1490,38 +1473,35 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
         
         if([info isInstitution]) {
-            [c addQueryValues:info
-                  missingKeys:nil
-                   withKeyMap:@{@"firstName" : @"first_name",
-                                @"email" : @"email",
-                                @"zipCode" : @"zip_postal",
-                                @"city" : @"city",
-                                @"state" : @"state",
-                                @"type" : @"type",
-                                @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
-                                @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
-                                @"phoneNumber" : @"phone_number",
-                                @"website" : @"website"
-                                }];
+            NSDictionary *values = [info remoteValueMapForLocalKeys:@[
+                                                                      @"firstName",
+                                                                      @"email",
+                                                                      @"zipCode",
+                                                                      @"city",
+                                                                      @"state",
+                                                                      @"type",
+                                                                      @"coverPhotoPath",
+                                                                      @"profilePhotoPath",
+                                                                      @"phoneNumber",
+                                                                      @"website"
+                                                                      ]];
+            [c addQueryValues:values];
 
         } else {
-            [c addQueryValues:info
-                  missingKeys:nil
-                   withKeyMap:@{@"firstName" : @"first_name",
-                                @"lastName" : @"last_name",
-                                @"email" : @"email",
-                                @"gender" : @"gender",
-                                @"zipCode" : @"zip_postal",
-                                @"city" : @"city",
-                                @"state" : @"state",
-                                @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
-                                @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
-                                @"birthday" : ^(id value) {
-                                        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-                                        [df setDateFormat:@"MM-dd-yyyy"];
-                                        return @{@"birthday" : [df stringFromDate:value]};
-                                    }
-                                }];
+            NSDictionary *values = [info remoteValueMapForLocalKeys:@[
+                                                                      @"firstName",
+                                                                      @"lastName",
+                                                                      @"email",
+                                                                      @"gender",
+                                                                      @"zipCode",
+                                                                      @"city",
+                                                                      @"state",
+                                                                      @"coverPhotoPath",
+                                                                      @"profilePhotoPath",
+                                                                      @"birthday"
+                                                                      ]];
+
+            [c addQueryValues:values];
 
         }
         
@@ -1535,7 +1515,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 [c addQueryValue:[info secret] forKey:@"provider_token_secret"];
             }
         } else if([info password]) {
-            [c addQueryValues:info missingKeys:nil withKeyMap:@{@"password" : @"password"}];
+            [c addQueryValue:[info password] forKey:@"password"];
+
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 block(nil, [self errorForCode:STKUserStoreErrorCodeMissingArguments

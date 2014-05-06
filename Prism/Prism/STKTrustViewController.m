@@ -88,27 +88,18 @@
     STKTrust *t = [[self trusts] objectAtIndex:[[[self trustView] users] indexOfObject:[self selectedUser]]];
     NSString *otherName = [[t otherUser] name];
     
+    STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] initWithTrust:t];
+    [pvc setShowsFilterBar:NO];
+    [pvc setTitle:otherName];
     if(index == 0) {
-        [[STKUserStore store] fetchTrustPostsForTrust:t type:STKTrustPostTypeLikes completion:^(NSArray *posts, NSError *err) {
-            STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] init];
-            [pvc setShowsFilterBar:NO];
-            [pvc setTitle:otherName];
-            [pvc setPosts:posts];
-            [pvc setAllowPersonalFilter:NO];
-            [[self navigationController] pushViewController:pvc animated:YES];
-
-        }];
+        [pvc setTrustType:STKTrustPostTypeLikes];
     } else if(index == 1) {
-        [[STKUserStore store] fetchTrustPostsForTrust:t type:STKTrustPostTypeComments completion:^(NSArray *posts, NSError *err) {
-            STKUserPostListViewController *pvc = [[STKUserPostListViewController alloc] init];
-            [pvc setTitle:otherName];
-            [pvc setPosts:posts];
-            [pvc setAllowPersonalFilter:NO];
-            [pvc setShowsFilterBar:NO];
-            [[self navigationController] pushViewController:pvc animated:YES];
-            
-        }];
+        [pvc setTrustType:STKTrustPostTypeComments];
+    } else if(index == 2) {
+        [pvc setTrustType:STKTrustPostTypeTags];
     }
+    
+    [[self navigationController] pushViewController:pvc animated:YES];
 }
 
 - (void)trustView:(STKTrustView *)tv didSelectCircleAtIndex:(int)idx

@@ -55,12 +55,14 @@
 		BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE477C1B186E2ED4003672A0 /* STKProfileCell.m */; };
 		BE477C1E186E2ED4003672A0 /* STKProfileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE477C1C186E2ED4003672A0 /* STKProfileCell.xib */; };
 		BE47C00D18FEDB3100919BCB /* STKTimestampFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE47C00C18FEDB3100919BCB /* STKTimestampFormatter.m */; };
+		BE4C48001917E4A40091F40B /* STKFetchDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C47FF1917E4A40091F40B /* STKFetchDescription.m */; };
 		BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */; };
 		BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64251896F83A00467E2D /* STKFoursquareLocation.m */; };
 		BE4C64291896FA3800467E2D /* STKLocationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C64281896FA3800467E2D /* STKLocationListViewController.m */; };
 		BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C642B18970BE500467E2D /* STKLocationViewController.m */; };
 		BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE4C642C18970BE500467E2D /* STKLocationViewController.xib */; };
 		BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4C735F190AAA1F003A4109 /* STKNotificationBadge.m */; };
+		BE4F81D4191981FF00CF5628 /* STKBindTransforms.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4F81D3191981FF00CF5628 /* STKBindTransforms.m */; };
 		BE52B13C18E30EF100C44F30 /* NSManagedObject+STKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BE52B13B18E30EF100C44F30 /* NSManagedObject+STKAdditions.m */; };
 		BE52B13F18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BE52B13E18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.m */; };
 		BE5324CB189075F4004AAC5C /* STKRelativeDateConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE5324CA189075F4004AAC5C /* STKRelativeDateConverter.m */; };
@@ -1979,6 +1981,8 @@
 		BE477C1C186E2ED4003672A0 /* STKProfileCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKProfileCell.xib; sourceTree = "<group>"; };
 		BE47C00B18FEDB3100919BCB /* STKTimestampFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTimestampFormatter.h; sourceTree = "<group>"; };
 		BE47C00C18FEDB3100919BCB /* STKTimestampFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTimestampFormatter.m; sourceTree = "<group>"; };
+		BE4C47FE1917E4A40091F40B /* STKFetchDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFetchDescription.h; sourceTree = "<group>"; };
+		BE4C47FF1917E4A40091F40B /* STKFetchDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKFetchDescription.m; sourceTree = "<group>"; };
 		BE4C64211896F65D00467E2D /* STKFoursquareConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFoursquareConnection.h; sourceTree = "<group>"; };
 		BE4C64221896F65D00467E2D /* STKFoursquareConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKFoursquareConnection.m; sourceTree = "<group>"; };
 		BE4C64241896F83A00467E2D /* STKFoursquareLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKFoursquareLocation.h; sourceTree = "<group>"; };
@@ -1990,6 +1994,8 @@
 		BE4C642C18970BE500467E2D /* STKLocationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLocationViewController.xib; sourceTree = "<group>"; };
 		BE4C735E190AAA1F003A4109 /* STKNotificationBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKNotificationBadge.h; sourceTree = "<group>"; };
 		BE4C735F190AAA1F003A4109 /* STKNotificationBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKNotificationBadge.m; sourceTree = "<group>"; };
+		BE4F81D2191981FF00CF5628 /* STKBindTransforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKBindTransforms.h; sourceTree = "<group>"; };
+		BE4F81D3191981FF00CF5628 /* STKBindTransforms.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKBindTransforms.m; sourceTree = "<group>"; };
 		BE52B13A18E30EF100C44F30 /* NSManagedObject+STKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+STKAdditions.h"; sourceTree = "<group>"; };
 		BE52B13B18E30EF100C44F30 /* NSManagedObject+STKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+STKAdditions.m"; sourceTree = "<group>"; };
 		BE52B13D18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+STKAdditions.h"; sourceTree = "<group>"; };
@@ -4366,6 +4372,12 @@
 				BE5F68FC18F0A53D006D2CD1 /* STKContainQuery.m */,
 				BE5F68FE18F21146006D2CD1 /* STKSearchQuery.h */,
 				BE5F68FF18F21146006D2CD1 /* STKSearchQuery.m */,
+				BE4F81D2191981FF00CF5628 /* STKBindTransforms.h */,
+				BE4F81D3191981FF00CF5628 /* STKBindTransforms.m */,
+				BE4C47FE1917E4A40091F40B /* STKFetchDescription.h */,
+				BE4C47FF1917E4A40091F40B /* STKFetchDescription.m */,
+				BE47C00B18FEDB3100919BCB /* STKTimestampFormatter.h */,
+				BE47C00C18FEDB3100919BCB /* STKTimestampFormatter.m */,
 			);
 			name = STK;
 			path = Prism;
@@ -4426,8 +4438,6 @@
 				BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */,
 				BE8BBF0118C7B1F500D53BF5 /* STKImageSharer.h */,
 				BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */,
-				BE47C00B18FEDB3100919BCB /* STKTimestampFormatter.h */,
-				BE47C00C18FEDB3100919BCB /* STKTimestampFormatter.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -4695,6 +4705,7 @@
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
 				BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */,
 				BE7D396B19141B32003B333F /* STKMarkupController.m in Sources */,
+				BE4F81D4191981FF00CF5628 /* STKBindTransforms.m in Sources */,
 				BEB1687C190700F900CED5F7 /* STKSegmentedControlCell.m in Sources */,
 				BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */,
 				BE7391C719019AB600AD81AB /* STKHashtagPostsViewController.m in Sources */,
@@ -4726,6 +4737,7 @@
 				BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */,
 				BE52B13F18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.m in Sources */,
 				BE13648E18689F39003D9D5C /* STKAccountChooserViewController.m in Sources */,
+				BE4C48001917E4A40091F40B /* STKFetchDescription.m in Sources */,
 				BE5324CB189075F4004AAC5C /* STKRelativeDateConverter.m in Sources */,
 				BEFCEE0B182C211A00648B9F /* STKUserStore.m in Sources */,
 				BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */,

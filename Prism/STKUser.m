@@ -29,9 +29,6 @@ NSString * const STKUserTypeCommunity = @"community";
 
 NSString * const STKUserTypeInstitutionPending = @"institution";
 
-NSString * const STKUserCoverPhotoURLStringKey = @"cover_photo_url";
-NSString * const STKUserProfilePhotoURLStringKey = @"profile_photo_url";
-
 CGSize STKUserCoverPhotoSize = {.width = 320, .height = 188};
 CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 
@@ -50,35 +47,67 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
     return [NSString stringWithFormat:@"%@ %@", [self firstName], [self lastName]];
 }
 
-+ (NSDictionary *)reverseKeyMap
++ (NSDictionary *)remoteToLocalKeyMap
 {
     return @{
+             @"_id" : @"uniqueID",
              @"city" : @"city",
-             @"uniqueID" : @"_id",
              @"email" : @"email",
-             @"firstName" : @"first_name",
-             @"lastName" : @"last_name",
+             @"first_name" : @"firstName",
+             @"last_name" : @"lastName",
+             @"type" : @"type",
+             @"provider" : @"externalServiceType",
+             @"provider_id" : @"externalServiceID",
+             
              @"state" : @"state",
-             @"zipCode" : @"zip_postal",
+             @"zip_postal" : @"zipCode",
              @"gender" : @"gender",
-             @"blurb" : @"info",
+             
+             @"info" : @"blurb",
              @"website" : @"website",
+             
+             @"profile_photo_url" : @"profilePhotoPath",
+             @"cover_photo_url" : @"coverPhotoPath",
+             
              @"religion" : @"religion",
              @"ethnicity" : @"ethnicity",
-             @"type" : @"type",
-             @"instagramToken" : @"instagram_token",
-             @"instagramLastMinID" : @"instagram_min_id",
-             @"coverPhotoPath" : STKUserCoverPhotoURLStringKey,
-             @"profilePhotoPath" : STKUserProfilePhotoURLStringKey,
-             @"birthday" : @"birthday",
-             @"twitterID" : @"twitter_token",
-             @"twitterLastMinID" : @"twitter_min_id",
-             @"enrollment" : @"enrollment",
-             @"dateFounded" : @"date_founded",
-             @"mascotName" : @"mascot",
-             @"phoneNumber" : @"phone_number"
+             
+             @"followers_count" : @"followerCount",
+             @"following_count" : @"followingCount",
+             @"posts_count" : @"postCount",
+             
+             @"instagram_token" : @"instagramToken",
+             @"instagram_min_id" : @"instagramLastMinID",
+             @"twitter_token" : @"twitterID",
+             @"twitter_min_id" : @"twitterLastMinID",
+             @"trusts" : [STKBind bindMapForKey:@"ownedTrusts" matchMap:@{@"uniqueID" : @"_id"}],
+
+             @"followers" : [STKBind bindMapForKey:@"followers" matchMap:@{@"uniqueID" : @"_id"}],
+             @"following" : [STKBind bindMapForKey:@"following" matchMap:@{@"uniqueID" : @"_id"}],
+             @"phone_number" : @"phoneNumber",
+             @"mascot" : @"mascotName",
+             @"enrollment" : [STKBind bindMapForKey:@"enrollment" transform:^id(id inValue, STKTransformDirection direction) {
+                 if(direction == STKTransformDirectionLocalToRemote) {
+                     return @([inValue intValue]);
+                 } else {
+                     return [NSString stringWithFormat:@"%@", inValue];
+                 }
+             }],
+             @"date_founded" : [STKBind bindMapForKey:@"dateFounded" transform:STKBindTransformDateTimestamp],
+             
+             @"birthday" : [STKBind bindMapForKey:@"birthday" transform:^id(id inValue, STKTransformDirection direction) {
+                 NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                 [df setDateFormat:@"MM-dd-yyyy"];
+                 if(direction == STKTransformDirectionLocalToRemote) {
+                     return [df stringFromDate:inValue];
+                 } else {
+                     return [df dateFromString:inValue];
+                 }
+             }],
+             @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp]
     };
 }
+
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -87,61 +116,8 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
         return nil;
     }
     
-    [self bindFromDictionary:jsonObject keyMap:
-    @{
-        @"_id" : @"uniqueID",
-        @"city" : @"city",
-        @"email" : @"email",
-        @"first_name" : @"firstName",
-        @"last_name" : @"lastName",
-        @"type" : @"type",
-        @"provider" : @"externalServiceType",
-        @"provider_id" : @"externalServiceID",
-        
-        @"state" : @"state",
-        @"zip_postal" : @"zipCode",
-        @"gender" : @"gender",
-        
-        @"info" : @"blurb",
-        @"website" : @"website",
-
-        STKUserProfilePhotoURLStringKey : @"profilePhotoPath",
-        STKUserCoverPhotoURLStringKey : @"coverPhotoPath",
-
-        @"religion" : @"religion",
-        @"ethnicity" : @"ethnicity",
-        
-        @"followers_count" : @"followerCount",
-        @"following_count" : @"followingCount",
-        @"posts_count" : @"postCount",
-
-        @"instagram_token" : @"instagramToken",
-        @"instagram_min_id" : @"instagramLastMinID",
-        @"twitter_token" : @"twitterID",
-        @"twitter_min_id" : @"twitterLastMinID",
-        @"trusts" : @{STKJSONBindFieldKey : @"ownedTrusts", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-        @"followers" : @{STKJSONBindFieldKey : @"followers", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-        @"following" : @{STKJSONBindFieldKey : @"following", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-        @"phone_number" : @"phoneNumber",
-        @"mascot" : @"mascotName",
-        @"enrollment" : ^(NSNumber *inValue) {
-            if(inValue)
-                [self setEnrollment:[NSString stringWithFormat:@"%@", inValue]];
-        },
-        @"date_founded" : ^(NSString *inValue) {
-            [self setDateFounded:[STKTimestampFormatter dateFromString:inValue]];
-        },
-        
-        @"birthday" : ^(NSString *inValue) {
-            NSDateFormatter *df = [[NSDateFormatter alloc] init];
-            [df setDateFormat:@"MM-dd-yyyy"];
-            [self setBirthday:[df dateFromString:inValue]];
-        },
-        @"create_date" : ^(NSString *inValue) {
-            [self setDateCreated:[STKTimestampFormatter dateFromString:inValue]];
-        }
-    }];
-// 5335c7c3d6e286c075144533
+    [self bindFromDictionary:jsonObject keyMap:[[self class] remoteToLocalKeyMap]];
+    
     return nil;
 }
 

@@ -19,11 +19,9 @@
 #import "STKUserListViewController.h"
 #import "STKImageStore.h"
 #import "STKPostViewController.h"
+#import "STKFetchDescription.h"
 
 @implementation STKPostController
-
-
-// Should know how to filter deleted posts in some way!
 
 - (id)initWithViewController:(UIViewController <STKPostControllerDelegate> *)viewController
 {
@@ -47,6 +45,33 @@
 {
     STKPost *deletedPost = [[note userInfo] objectForKey:STKContentStorePostDeletedKey];
     [[self posts] removeObject:deletedPost];
+}
+
+- (void)reloadWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion
+{
+    STKFetchDescription *desc = [[STKFetchDescription alloc] init];
+    [desc setDirection:STKQueryObjectPageReload];
+    [desc setFilterDictionary:[self filterMap]];
+    [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
+        [self addPosts:posts];
+        completion(posts, err);
+    });
+}
+- (void)fetchNewerPostsWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion
+{
+    STKFetchDescription *desc = [[STKFetchDescription alloc] init];
+    [desc setReferenceObject:[[self posts] firstObject]];
+    [desc setDirection:STKQueryObjectPageNewer];
+    [desc setFilterDictionary:[self filterMap]];
+    [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
+        [self addPosts:posts];
+        completion(posts, err);
+    });
+    
+}
+- (void)fetchOlderPostsWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion
+{
+    
 }
 
 - (void)addPosts:(NSArray *)posts

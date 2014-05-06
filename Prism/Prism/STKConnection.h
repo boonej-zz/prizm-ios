@@ -90,6 +90,7 @@ typedef enum {
             withKeyMap:(NSDictionary *)keyMap;
 
 - (void)addQueryValue:(id)value forKey:(NSString *)key;
+- (void)addQueryValues:(NSDictionary *)dict;
 
 + (NSMutableArray *)activeConnections;
 - (void)reportFailureWithError:(NSError *)err;

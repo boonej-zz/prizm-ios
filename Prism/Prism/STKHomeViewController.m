@@ -62,6 +62,10 @@
         [[self navigationItem] setTitle:@"Prizm"];
         
         _postController = [[STKPostController alloc] initWithViewController:self];
+        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser] fetchDescription:fs completion:completion];
+        }];
+
         
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
@@ -273,26 +277,16 @@
     }];
 
     [[self activityIndicator] setRefreshing:YES];
-    [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser]
-                                  inDirection:STKQueryObjectPageNewer
-                                referencePost:[[[self postController] posts] firstObject]
-                                   completion:^(NSArray *posts, NSError *err) {
+    [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [self setFetchInProgress:NO];
+        [UIView animateWithDuration:0.2 animations:^{
+            [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
+        }];
 
-                                       [self setFetchInProgress:NO];
-                                       [UIView animateWithDuration:0.2 animations:^{
-                                           [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
-                                       }];
-                                       
-                                       
-                                       [[self activityIndicator] setRefreshing:NO];
-                                       if(!err) {
-                                           [[self postController] addPosts:posts];
-                                           [[self tableView] reloadData];
-                                           [self layoutCards];
-                                       } else {
-                                           
-                                       }
-                                   }];
+        [[self activityIndicator] setRefreshing:NO];
+        [[self tableView] reloadData];
+        [self layoutCards];
+    }];
 }
 
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx

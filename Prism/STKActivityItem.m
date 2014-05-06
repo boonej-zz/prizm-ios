@@ -25,28 +25,27 @@ NSString * const STKActivityItemTypeRepost = @"repost";
 @dynamic action;
 @dynamic dateCreated;
 @dynamic hasBeenViewed;
-@dynamic referenceTimestamp;
 @dynamic post, comment;
 @dynamic creator, notifiedUser;
+
++ (NSDictionary*)remoteToLocalKeyMap
+{
+    return @{
+        @"_id" : @"uniqueID",
+        @"from" : [STKBind bindMapForKey:@"creator" matchMap:@{@"uniqueID" : @"_id"}],
+        @"to" : [STKBind bindMapForKey:@"notifiedUser" matchMap:@{@"uniqueID" : @"_id"}],
+        @"post_id" : [STKBind bindMapForKey:@"post" matchMap:@{@"uniqueID" : @"_id"}],
+        @"comment_id" : [STKBind bindMapForKey:@"comment" matchMap:@{@"uniqueID" : @"_id"}],
+        @"action" : @"action",
+        @"has_been_viewed" : @"hasBeenViewed",
+        @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp]
+        };
+}
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
 
-    [self bindFromDictionary:jsonObject keyMap:@{
-                                                 @"from" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"to" : @{STKJSONBindFieldKey : @"notifiedUser", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"post_id" : @{STKJSONBindFieldKey : @"post", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"comment_id" : @{STKJSONBindFieldKey : @"comment", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"_id" : @"uniqueID",
-                                                 @"action" : @"action",
-                                                 @"has_been_viewed" : @"hasBeenViewed",
-                                                 @"create_date" : ^(id inValue) {
-                                                    [self setReferenceTimestamp:inValue];
-                                                    [self setDateCreated:[STKTimestampFormatter dateFromString:inValue]];
-                                                 }
-                                                 
-                                                 
-    }];
+    [self bindFromDictionary:jsonObject keyMap:[[self class] remoteToLocalKeyMap]];
     
     return nil;
 }

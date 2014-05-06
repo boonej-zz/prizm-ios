@@ -24,7 +24,6 @@ extern NSString *const STKActivityItemTypeTrustAccepted;
 @property (nonatomic, retain) NSString * uniqueID;
 @property (nonatomic, retain) NSString * action;
 @property (nonatomic, retain) NSDate * dateCreated;
-@property (nonatomic, retain) NSString * referenceTimestamp;
 
 @property (nonatomic) BOOL hasBeenViewed;
 

@@ -29,28 +29,30 @@ recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, typ
             [self uniqueID], [[self creator] name], [[self recepient] name], [self status], [self dateModified]];
 }
 
+
++ (NSDictionary *)remoteToLocalKeyMap
+{
+    return @{
+             @"_id" : @"uniqueID",
+             @"status" : @"status",
+             @"type" : @"type",
+             @"to" : [STKBind bindMapForKey:@"recepient" matchMap:@{@"uniqueID" : @"_id"}],
+             @"from" : [STKBind bindMapForKey:@"creator" matchMap:@{@"uniqueID" : @"_id"}],
+             @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp],
+             @"modify_date" : [STKBind bindMapForKey:@"dateModified" transform:STKBindTransformDateTimestamp],
+             @"to_likes_count" : @"recepientLikesCount",
+             @"to_comments_count" : @"recepientCommentsCount",
+             @"to_posts_count" : @"recepientPostsCount",
+             @"from_likes_count" : @"creatorLikesCount",
+             @"from_comments_count" : @"creatorCommentsCount",
+             @"from_posts_count" : @"creatorPostsCount"
+             };
+}
+
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
 
-    [self bindFromDictionary:jsonObject keyMap:@{
-                                                 @"_id" : @"uniqueID",
-                                                 @"status" : @"status",
-                                                 @"type" : @"type",
-                                                 @"to" : @{STKJSONBindFieldKey : @"recepient", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"from" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-                                                 @"create_date" : ^(NSString *inValue) {
-                                                     [self setDateCreated:[STKTimestampFormatter dateFromString:inValue]];
-                                                 },
-                                                 @"modify_date" : ^(NSString *inValue) {
-                                                     [self setDateModified:[STKTimestampFormatter dateFromString:inValue]];
-                                                 },
-                                                 @"to_likes_count" : @"recepientLikesCount",
-                                                 @"to_comments_count" : @"recepientCommentsCount",
-                                                 @"to_posts_count" : @"recepientPostsCount",
-                                                 @"from_likes_count" : @"creatorLikesCount",
-                                                 @"from_comments_count" : @"creatorCommentsCount",
-                                                 @"from_posts_count" : @"creatorPostsCount"
-    }];
+    [self bindFromDictionary:jsonObject keyMap:[[self class] remoteToLocalKeyMap]];
     
     return nil;
 }

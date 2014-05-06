@@ -36,13 +36,8 @@ extern NSString * const STKUserTypeCommunity;
 
 extern NSString * const STKUserTypeInstitutionPending;
 
-extern NSString * const STKUserCoverPhotoURLStringKey;
-extern NSString * const STKUserProfilePhotoURLStringKey;
-
 
 @interface STKUser : NSManagedObject <STKJSONObject>
-
-+ (NSDictionary *)reverseKeyMap;
 
 @property (nonatomic) NSString *uniqueID;
 

@@ -12,6 +12,20 @@
 
 @implementation STKPostComment
 @dynamic uniqueID, text, date, likeCount, likes, post, creator, activities;
+
++ (NSDictionary *)remoteToLocalKeyMap
+{
+    return @{
+             @"_id" : @"uniqueID",
+             @"creator" : [STKBind bindMapForKey:@"creator" matchMap:@{@"uniqueID" : @"_id"}],
+             @"text" : @"text",
+             @"create_date" : [STKBind bindMapForKey:@"date" transform:STKBindTransformDateTimestamp],
+             // post
+             @"likes_count" : @"likeCount",
+             @"likes" : [STKBind bindMapForKey:@"likes" matchMap:@{@"uniqueID" : @"_id"}]
+             };
+}
+
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
     if([jsonObject isKindOfClass:[NSString class]]) {
@@ -19,17 +33,8 @@
         return nil;
     }
 
-    [self bindFromDictionary:jsonObject keyMap:@{
-        @"_id" : @"uniqueID",
-        @"creator" : @{STKJSONBindFieldKey : @"creator", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-        @"text" : @"text",
-        @"create_date" : ^(NSString *inValue) {
-            [self setDate:[STKTimestampFormatter dateFromString:inValue]];
-        },
-        // post
-        @"likes_count" : @"likeCount",
-        @"likes" : @{STKJSONBindFieldKey : @"likes", STKJSONBindMatchDictionaryKey : @{@"uniqueID" : @"_id"}},
-    }];
+    [self bindFromDictionary:jsonObject keyMap:[[self class] remoteToLocalKeyMap]];
+    
     return nil;
 }
 
