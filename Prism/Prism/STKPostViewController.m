@@ -28,6 +28,7 @@
 #import "UIViewController+STKControllerItems.h"
 #import "STKRenderServer.h"
 #import "STKTextImageCell.h"
+#import "STKHashtagPostsViewController.h"
 
 @interface STKPostViewController ()
     <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITextViewDelegate, STKPostControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
@@ -215,6 +216,13 @@
         [wvc setUrl:URL];
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
         [self presentViewController:nvc animated:YES completion:nil];
+    } else if([[URL scheme] isEqualToString:STKPostHashTagURLScheme]) {
+        STKHashtagPostsViewController *pvc = [[STKHashtagPostsViewController alloc] initWithHashTag:[URL host]];
+        [[self navigationController] pushViewController:pvc animated:YES];
+    } else if([[URL scheme] isEqualToString:STKPostUserURLScheme]) {
+        [self showProfileForUser:[[STKUserStore store] userForID:[URL host]]];
+
+
     }
     return NO;
 }
@@ -459,9 +467,7 @@
 
 - (void)avatarTapped:(id)sender
 {
-    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
-    [vc setProfile:[[self post] creator]];
-    [[self navigationController] pushViewController:vc animated:YES];
+    [self showProfileForUser:[[self post] creator]];
 }
 
 
@@ -476,6 +482,11 @@
         u = [[self post] creator];
     }
     
+    [self showProfileForUser:u];
+}
+
+- (void)showProfileForUser:(STKUser *)u
+{
     STKProfileViewController *vc = [[STKProfileViewController alloc] init];
     [vc setProfile:u];
     [[self navigationController] pushViewController:vc animated:YES];
@@ -652,8 +663,9 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         [[c textView] setDelegate:self];
         
         if([self postHasText] && [indexPath row] == 0) {
+            NSDictionary *attributes = @{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor};
             [[c textView] setText:nil];
-            [[c textView] setText:[[self post] renderText]];
+            [[c textView] setAttributedText:[[self post] renderTextForAttributes:attributes]];
             [[c nameLabel] setText:[[[self post] creator] name]];
             [[c avatarImageView] setUrlString:[[[self post] creator] profilePhotoPath]];
             

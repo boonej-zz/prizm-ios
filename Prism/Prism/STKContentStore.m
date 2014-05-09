@@ -84,6 +84,16 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 - (NSArray *)cachedPostsForPredicate:(NSPredicate *)predicate
                     fetchDescription:(STKFetchDescription *)desc
 {
+    NSMutableArray *preds = [NSMutableArray array];
+    for(NSString *key in [desc filterDictionary]) {
+        [preds addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, [[desc filterDictionary] objectForKey:key]]];
+    }
+    
+    if([preds count] > 0) {
+        [preds addObject:predicate];
+        predicate = [NSCompoundPredicate andPredicateWithSubpredicates:preds];
+    }
+    
     STKPost *referencePost = [desc referenceObject];
     if(!referencePost) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
@@ -119,15 +129,25 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 
     STKPost *referencePost = [desc referenceObject];
     if([cached count] > 0) {
+        BOOL returnAfter = NO;
+        
         if([desc direction] == STKQueryObjectPageNewer) {
             referencePost = [cached firstObject];
         } else if ([desc direction] == STKQueryObjectPageOlder) {
-            referencePost = [cached lastObject];
+            // If we have 30 posts, then just skip pulling these from the server
+            if([cached count] == 30) {
+                referencePost = nil;
+                returnAfter = YES;
+            } else {
+                referencePost = [cached lastObject];
+            }
         }
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
+        if(returnAfter)
+            return;
     }
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
@@ -299,7 +319,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
         NSMutableDictionary *filters = [NSMutableDictionary dictionary];
         for(NSString *key in [desc filterDictionary]) {
-            [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:[STKPost remoteKeyForLocalKey:key]];
+            NSString *remoteKey = [STKPost remoteKeyForLocalKey:key];
+            [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:remoteKey];
         }
         [q setFilters:filters];
         

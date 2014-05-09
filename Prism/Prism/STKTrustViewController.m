@@ -197,7 +197,7 @@
         }];
     }
     
-    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *trusts, NSError *err) {
+    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *trusts, NSError *err) {
         [self setTrusts:trusts];
         NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
         for(STKTrust *t in [self trusts]) {

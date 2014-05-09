@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "STKTrust.h"
 
-@class STKUser, STKPost, STKActivityItem;
+@class STKUser, STKPost, STKActivityItem, STKFetchDescription;
 @class ACAccount, ACAccountStore;
 
 extern NSString * const STKUserStoreActivityUpdateNotification;
@@ -63,13 +63,14 @@ typedef enum {
 
 - (void)fetchFollowersOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
 - (void)fetchUsersFollowingOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
+- (void)fetchTrustsForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block;
+
 
 - (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKTrust *)request completion:(void (^)(NSArray *requests, NSError *err))block;
 - (void)acceptTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)rejectTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
-- (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
 - (void)fetchTrustPostsForTrust:(STKTrust *)t type:(STKTrustPostType)type completion:(void (^)(NSArray *posts, NSError *err))block;
 - (void)searchUserTrustsWithName:(NSString *)name completion:(void (^)(id data, NSError *error))block;
 - (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block;

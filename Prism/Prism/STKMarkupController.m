@@ -27,6 +27,7 @@ typedef enum {
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic) NSRange markupRange;
 @property (nonatomic) STKMarkupType markupType;
+@property (nonatomic) NSRange replacementRange;
 
 @property (nonatomic, strong) NSArray *userTags;
 @property (nonatomic, strong) NSArray *hashTags;
@@ -51,6 +52,8 @@ typedef enum {
 - (void)loadView
 {
     _view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    //[[self view] setBackgroundColor:[STKUnselectedColor colorWithAlphaComponent:1]];
+    //[[self view] setBackgroundColor:[UIColor colorWithRed:0.55 green:0.6 blue:0.7 alpha:1]];
     [[self view] setBackgroundColor:[STKUnselectedColor colorWithAlphaComponent:1]];
     
     _doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -63,7 +66,7 @@ typedef enum {
     _promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 260, 44)];
     [[self promptLabel] setFont:[UIFont systemFontOfSize:12]];
     [[self promptLabel] setNumberOfLines:2];
-    [[self promptLabel] setTextColor:STKTextColor];
+    [[self promptLabel] setTextColor:[UIColor whiteColor]];
     [[self promptLabel] setText:@"Use # to add a tag and @ to add a person"];
     [[self view] addSubview:[self promptLabel]];
     
@@ -75,6 +78,7 @@ typedef enum {
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setRowHeight:44];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self view] addSubview:[self tableView]];
 
     for(UIView *subview in [[self view] subviews]) {
@@ -88,9 +92,29 @@ typedef enum {
     [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : [self tableView]}]];
 }
 
+- (void)reset
+{
+    [self setUserTags:nil];
+    [self setHashTags:nil];
+    [self setMarkupRange:NSMakeRange(NSNotFound, 0)];
+    [self setReplacementRange:NSMakeRange(NSNotFound, 0)];
+}
+
 - (void)done:(id)sender
 {
+    [self reset];
     [[self delegate] markupControllerDidFinish:self];
+}
+
+- (void)displayAllUserResults
+{
+    [self setMarkupType:STKMarkupTypeUser];
+    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *trusts, NSError *err) {
+        [self setUserTags:[trusts valueForKey:@"otherUser"]];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self updateView];
+        }];
+    }];
 }
 
 - (void)updateView
@@ -115,6 +139,7 @@ typedef enum {
         
         if(count > 3)
             count = 3;
+        
         [[self view] setFrame:CGRectMake(0, 0, 320, [[self tableView] rowHeight] * count)];
         [[self tableView] setHidden:NO];
         [[self promptLabel] setHidden:YES];
@@ -146,6 +171,7 @@ typedef enum {
                         [self setMarkupType:STKMarkupTypeHashtag];
                     }
                     [self setMarkupRange:[result rangeAtIndex:2]];
+                    [self setReplacementRange:[result range]];
                     *stop = YES;
                 }
             }
@@ -197,7 +223,7 @@ typedef enum {
     if([self markupType] == STKMarkupTypeUser) {
         
         STKSearchProfileCell *cell = [STKSearchProfileCell cellForTableView:tableView target:[self tableView]];
-        [[cell nameLabel] setTextColor:STKTextColor];
+        [[cell nameLabel] setTextColor:[UIColor whiteColor]];
         [[cell nameLabel] setFont:STKFont(14)];
         [[cell followButton] setHidden:YES];
         STKUser *user = [[self userTags] objectAtIndex:indexPath.row];
@@ -209,9 +235,10 @@ typedef enum {
         
         STKSearchHashTagsCell *c = [STKSearchHashTagsCell cellForTableView:tableView target:self];
         NSString *hashTag = [[self hashTags] objectAtIndex:[indexPath row]];
+        [[c hashTagLabel] setTextColor:[UIColor whiteColor]];
         [[c hashTagLabel] setText:[NSString stringWithFormat:@"#%@", hashTag]];
         [[c count] setText:@""];
-
+        [[c contentView] setBackgroundColor:[UIColor clearColor]];
         return c;
     }
     return nil;
@@ -233,53 +260,18 @@ typedef enum {
 
 - (void)didSelectHashTag:(NSString *)hashTag
 {
-    [[self delegate] markupController:self didSelectHashTag:hashTag forMarkerAtRange:[self markupRange]];
+    [[self delegate] markupController:self
+                     didSelectHashTag:hashTag
+                     forMarkerAtRange:[self replacementRange]];
+    [self reset];
 }
 
 - (void)didSelectUserTag:(STKUser *)user
 {
-    [[self delegate] markupController:self didSelectUser:user forMarkerAtRange:[self markupRange]];
-    //if([self userTagRange].location != NSNotFound){
-//        [[self userTags] addObject:user];
-        /*
-        NSString *nameFormatted = [[[user name] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-        NSString *replaceWithName = [NSString stringWithFormat:@"%@", nameFormatted];
-        [[[self postTextView] textStorage] replaceCharactersInRange:[self userTagRange] withString:replaceWithName];
-        NSRange replNameRange = NSMakeRange([self userTagRange].location + [replaceWithName length], 0);
-        [[self postTextView] setSelectedRange:replNameRange];
-        
-        [self setUserTagRange:NSMakeRange(NSNotFound, 0)];
-        [[self tableView] reloadData];*/
-//    }
-}
-
-- (void)formatPostViewTextTags
-{
-    if([[self userTags] count] != 0){/*
-        NSString *postText = [[self postTextView] text];
-        __block NSString *updatePostText = [postText copy];
-        __block NSInteger index = 0;
-        NSRegularExpression *tagRegex = [[NSRegularExpression alloc] initWithPattern:@"@([A-Za-z0-9_]*)" options:0 error:nil];
-        [tagRegex enumerateMatchesInString:postText
-                                   options:0
-                                     range:NSMakeRange(0, [postText length])
-                                usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                                    
-                                    if([[self userTags] objectAtIndex:index]){
-                                        NSRange range = [result rangeAtIndex:1];
-                                        NSString *textToReplace = [postText substringWithRange:range];
-                                        NSString *newValue = [[[self userTags] objectAtIndex:index] uniqueID];
-                                        updatePostText = [updatePostText stringByReplacingOccurrencesOfString:textToReplace withString:newValue];
-                                        index++;
-                                    }
-                                    
-                                }];
-        
-        if(![updatePostText isEqualToString:postText]){
-            [self setTempPostTextWithUserTags:[[self postTextView] text]];
-            [[self postTextView] setText:updatePostText];
-        }*/
-    }
+    [[self delegate] markupController:self
+                        didSelectUser:user
+                     forMarkerAtRange:[self replacementRange]];
+    [self reset];
 }
 
 

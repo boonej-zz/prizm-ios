@@ -15,6 +15,7 @@
 
 @interface STKHashtagPostsViewController () <STKPostControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UIImageView *backButtonImageView;
 @property (nonatomic, strong) NSString *hashTag;
 @property (nonatomic, strong) STKPostController *hashTagPostsController;
 @property (nonatomic, weak) IBOutlet UIERealTimeBlurView *blurView;
@@ -68,6 +69,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     [[self barLabel] setText:[NSString stringWithFormat:@"#%@", [self hashTag]]];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -82,6 +84,7 @@
     [[self hashTagPostsController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self tableView] reloadData];
     }];
+    [[self backButtonImageView] setHidden:![self showsOwnBackButton]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -122,6 +125,7 @@
 
 - (IBAction)backBarTapped:(id)sender
 {
-    [[self navigationController] popViewControllerAnimated:YES];
+    if([self showsOwnBackButton])
+        [[self navigationController] popViewControllerAnimated:YES];
 }
 @end

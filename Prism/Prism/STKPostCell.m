@@ -15,6 +15,7 @@
 #import "STKGradientView.h"
 
 @interface STKPostCell ()
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *hashTagHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *hashTagTopOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerHeightConstraint;
@@ -101,6 +102,7 @@
         [[self leftInset] setConstant:0];
         [[self rightInset] setConstant:0];
         [[self hashTagTopOffset] setConstant:300];
+        [[self hashTagHeightConstraint] setConstant:21];
         [[self headerHeightConstraint] setConstant:64];
 //        [[self hashTagContainer] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
         [[self hashTagContainer] setColors:@[[UIColor colorWithWhite:1 alpha:0.3], [UIColor colorWithWhite:1 alpha:0.3]]];

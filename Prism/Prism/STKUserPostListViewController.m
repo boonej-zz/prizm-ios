@@ -188,7 +188,7 @@
     }
     [[self postController] setFilterMap:[self filterDictionary]];
 
-    NSString *typeValue = [[[self postController] filterMap] objectForKey:STKPostTypeKey];
+    NSString *typeValue = [[[self postController] filterMap] objectForKey:@"type"];
     if(typeValue)
         [[[self postController] posts] filterUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@", typeValue]];
 }
@@ -206,17 +206,17 @@
 {
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
     if([[self passionButton] isSelected]) {
-        [d setObject:STKPostTypePassion forKey:STKPostTypeKey];
+        [d setObject:STKPostTypePassion forKey:@"type"];
     } else if([[self aspirationButton] isSelected]) {
-        [d setObject:STKPostTypeAspiration forKey:STKPostTypeKey];
+        [d setObject:STKPostTypeAspiration forKey:@"type"];
     }  else if([[self experienceButton] isSelected]) {
-        [d setObject:STKPostTypeExperience forKey:STKPostTypeKey];
+        [d setObject:STKPostTypeExperience forKey:@"type"];
     } else if([[self achivementButton] isSelected]) {
-        [d setObject:STKPostTypeAchievement forKey:STKPostTypeKey];
+        [d setObject:STKPostTypeAchievement forKey:@"type"];
     } else if([[self inspirationButton] isSelected]) {
-        [d setObject:STKPostTypeInspiration forKey:STKPostTypeKey];
+        [d setObject:STKPostTypeInspiration forKey:@"type"];
     } else if([[self personalButton] isSelected]) {
-        [d setObject:STKPostTypePersonal forKey:STKPostTypeKey];
+        [d setObject:STKPostTypePersonal forKey:@"type"];
     }
     
     return d;
@@ -251,7 +251,7 @@
 {
     STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self postController]];
     [c populateWithPosts:[[self postController] posts] indexOffset:[indexPath row] * 3];
-    
+    [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     return c;
 }
 

@@ -21,6 +21,7 @@
 #import "STKTrust.h"
 #import "STKNetworkStore.h"
 #import <Crashlytics/Crashlytics.h>
+#import "STKFetchDescription.h"
 
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 NSString * const STKUserStoreActivityUpdateNotification = @"STKUserStoreActivityUpdateNotification";
@@ -82,7 +83,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 {
     self = [super init];
     if (self) {
-        _activityUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:120 target:self selector:@selector(activityUpdateCheck:) userInfo:nil repeats:YES];
+        
         _accountStore = [[ACAccountStore alloc] init];
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateLastModifiedDates:) name:NSManagedObjectContextWillSaveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -189,7 +190,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)authenticateUser:(STKUser *)u
 {
     [self setCurrentUser:u];
-    
+    [[self activityUpdateTimer] invalidate];
+    _activityUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(activityUpdateCheck:) userInfo:nil repeats:YES];
+    [self activityUpdateCheck:nil];
     [self transferPostsFromSocialNetworks];
 }
 
@@ -390,7 +393,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        NSDictionary *dataDict = [self remoteValueMapForLocalKeys:[changedValues allKeys]];
+        NSDictionary *dataDict = [user remoteValueMapForLocalKeys:[changedValues allKeys]];
         [c addQueryValues:dataDict];
         
         [c setModelGraph:@[user]];
@@ -814,20 +817,23 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 }
 
-- (void)fetchTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block
+- (void)fetchTrustsForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block
 {
+    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+    NSArray *allCachedTrusts = [[self context] executeFetchRequest:req error:nil];
+    
     NSPredicate *p = [NSPredicate predicateWithFormat:@"status == %@ and (creator == %@ or recepient == %@)",
                       STKRequestStatusAccepted, u, u];
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-    [req setPredicate:p];
-    NSArray *cachedTrusts = [[self context] executeFetchRequest:req error:nil];
-    if([cachedTrusts count] > 0) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            block(cachedTrusts, nil);
-        }];
+    NSArray *cachedResults = [allCachedTrusts filteredArrayUsingPredicate:p];
+    if([cachedResults count] > 0) {
+        if([cachedResults count] > 0) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                block(cachedResults, nil);
+            }];
+        }
     }
     
-    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
             block(nil, err);
             return;
@@ -837,6 +843,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setIdentifiers:@[[u uniqueID], @"trusts"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
+        
+        if([allCachedTrusts count] > 0) {
+            STKTrust *latest = [[allCachedTrusts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]] firstObject];
+            [q setPageDirection:STKQueryObjectPageNewer];
+            [q setPageKey:[STKTrust remoteKeyForLocalKey:@"dateModified"]];
+            [q setPageValue:[STKTimestampFormatter stringFromDate:[latest dateModified]]];
+        }
+        
         STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
         [fq setFields:@[@"create_date", @"email"]];
         STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
@@ -852,13 +866,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setShouldReturnArray:YES];
         [c setResolutionMap:@{@"User" : @"STKUser"}];
         [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
-            
             if(!err) {
-                trusts = [trusts filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusAccepted]];
                 [[self context] save:nil];
             }
-        
-            block(trusts, err);
+            
+            NSFetchRequest *reReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+            [req setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and (creator == %@ or recepient == %@)",
+                               STKRequestStatusAccepted, u, u]];
+            
+            block([[self context] executeFetchRequest:reReq error:nil], err);
         }];
     }];
 }

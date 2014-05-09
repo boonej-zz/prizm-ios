@@ -33,7 +33,7 @@
 - (void)commonInit
 {
     [self setUserInteractionEnabled:NO];
-    [self setOutlineWidth:2];
+    [self setOutlineWidth:1];
     [self setBackgroundColor:[UIColor clearColor]];
     [self setOutlineColor:[UIColor colorWithRed:135 / 255.0 green:135 / 255.0 blue:162 / 255.0 alpha:1]];
 }
@@ -85,25 +85,29 @@
 - (void)drawRect:(CGRect)rect
 {
 //    UIBezierPath *bpOuter = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 1, 1)];
-    UIBezierPath *bpInner = [UIBezierPath bezierPathWithOvalInRect:[self bounds]];
-
-    UIGraphicsPushContext(UIGraphicsGetCurrentContext());
+    
+    CGContextSaveGState(UIGraphicsGetCurrentContext());
+    UIBezierPath *bpInner = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 2, 2)];
+    
     [bpInner addClip];
     if([self image]) {
-        [[self image] drawInRect:[self bounds]];
+        [[self image] drawInRect:CGRectInset([self bounds], 2, 2)];
     } else {
         [[UIImage imageNamed:@"trust_user_missing"] drawInRect:[self bounds]];
     }
-    
+   
     if([self overlayColor]) {
         [[self overlayColor] set];
         [bpInner fill];
     }
-    UIGraphicsPopContext();
-    
+    CGContextRestoreGState(UIGraphicsGetCurrentContext());
+
+    UIBezierPath *bpInnerStroke = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([self bounds], 2, 2)];
     [[self outlineColor] set];
-    [bpInner setLineWidth:[self outlineWidth]];
-    [bpInner stroke];
+    [bpInnerStroke setFlatness:1];
+    [bpInnerStroke setLineJoinStyle:kCGLineJoinRound];
+    [bpInnerStroke setLineWidth:[self outlineWidth]];
+    [bpInnerStroke stroke];
 }
 
 @end

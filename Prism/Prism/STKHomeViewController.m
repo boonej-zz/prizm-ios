@@ -256,13 +256,34 @@
     }
 }
 
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if(velocity.y > 0 && [scrollView contentSize].height - [scrollView frame].size.height - 20 < targetContentOffset->y) {
+        [self fetchOlderPosts];
+    }
+
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    
     float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
     if(offset < -60) {
         [self fetchNewPosts];
     }
+}
+
+- (void)fetchOlderPosts
+{
+    if([self fetchInProgress]) {
+        return;
+    }
+    [self setFetchInProgress:YES];
+    
+    [[self postController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [self setFetchInProgress:NO];
+        [[self tableView] reloadData];
+        [self layoutCards];
+    }];
 }
 
 - (void)fetchNewPosts

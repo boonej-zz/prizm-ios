@@ -71,7 +71,14 @@
 }
 - (void)fetchOlderPostsWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion
 {
-    
+    STKFetchDescription *desc = [[STKFetchDescription alloc] init];
+    [desc setReferenceObject:[[self posts] lastObject]];
+    [desc setDirection:STKQueryObjectPageOlder];
+    [desc setFilterDictionary:[self filterMap]];
+    [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
+        [self addPosts:posts];
+        completion(posts, err);
+    });
 }
 
 - (void)addPosts:(NSArray *)posts

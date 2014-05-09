@@ -15,13 +15,14 @@
     [self bindFromDictionary:jsonObject
                       keyMap:
     @{
-    @"access_token" : @"accessToken",
-    @"refresh_token": @"refreshToken",
-    @"token_type" : @"tokenType",
-    @"expires_in" : ^(NSNumber *inValue) {
-        float timeDelta = [inValue floatValue];
-        [self setExpiration:[NSDate dateWithTimeIntervalSinceNow:timeDelta]];
-    }}];
+        @"access_token" : @"accessToken",
+        @"refresh_token": @"refreshToken",
+        @"token_type" : @"tokenType",
+        @"expires_in" : [STKBind bindMapForKey:@"expiration" transform:^id(id inValue, STKTransformDirection direction) {
+            float timeDelta = [inValue floatValue];
+            return [NSDate dateWithTimeIntervalSinceNow:timeDelta];
+        }]
+    }];
     return nil;
 }
 

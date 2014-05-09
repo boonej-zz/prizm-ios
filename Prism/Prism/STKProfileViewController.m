@@ -145,7 +145,7 @@ typedef enum {
         [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:additionalFields completion:^(STKUser *u, NSError *err) {
             if(!err) {
                 if([[self profile] isInstitution]) {
-                    [[STKUserStore store] fetchTrustsForUser:[self profile] completion:^(NSArray *trusts, NSError *err) {
+                    [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:nil completion:^(NSArray *trusts, NSError *err) {
                         [self determineLuminariesFromTrusts:trusts];
                     }];
                 } else {

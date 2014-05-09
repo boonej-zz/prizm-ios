@@ -38,6 +38,8 @@ extern NSString * const STKPostHashTagsKey;
 extern NSString * const STKPostOriginIDKey;
 extern NSString * const STKPostDateCreatedKey;
 
+extern NSString * const STKPostHashTagURLScheme;
+extern NSString * const STKPostUserURLScheme;
 
 extern NSString * const STKPostStatusDeleted;
 
@@ -69,7 +71,8 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, strong) STKUser *fInverseProfile;
 @property (nonatomic, strong) NSSet *activities;
 @property (nonatomic, strong) NSSet *tags;
-@property (nonatomic, strong, readonly) NSString *renderText;
+
+- (NSAttributedString *)renderTextForAttributes:(NSDictionary *)attributes;
 
 - (BOOL)isPostLikedByUser:(STKUser *)u;
 
@@ -78,5 +81,7 @@ extern NSString * const STKPostStatusDeleted;
 + (UIImage *)imageForType:(NSString *)t;
 
 + (UIImage *)imageForTextPost:(NSString *)text;
++ (UIImage *)imageForUserTag:(NSString *)name attributes:(NSDictionary *)attributes;
++ (NSAttributedString *)userTagForUser:(STKUser *)user attributes:(NSDictionary *)attributes;
 
 @end

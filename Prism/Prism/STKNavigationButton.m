@@ -37,9 +37,12 @@
 {
     _badgeable = badgeable;
     if(_badgeable) {
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(6, 6), NO, [[UIScreen mainScreen] scale]);
         
-        UIBezierPath *p = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 6, 6)];
+        float size = 8;
+        
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(size, size), NO, [[UIScreen mainScreen] scale]);
+        
+        UIBezierPath *p = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, size, size)];
         [[UIColor colorWithRed:0.3 green:0.4 blue:.7 alpha:1] set];
         [p fill];
         
@@ -48,7 +51,7 @@
         
         _badgeView = [[STKNotifiedBadgeView alloc] initWithImage:img];
         [self addSubview:_badgeView];
-        [_badgeView setFrame:CGRectMake(19, 9, 6, 6)];
+        [_badgeView setFrame:CGRectMake(13, 8, size, size)];
         [_badgeView setHidden:YES];
     } else {
         [_badgeView removeFromSuperview];

@@ -24,10 +24,10 @@ NSString * const STKJSONBindTransformKey = @"transform";
         id value = [map objectForKey:remoteKey];
         if([value isKindOfClass:[NSString class]]) {
             if([value isEqualToString:localKey])
-                return value;
+                return remoteKey;
         } else if ([value isKindOfClass:[NSDictionary class]]) {
             if([[value objectForKey:STKJSONBindFieldKey] isEqualToString:localKey]) {
-                return [value objectForKey:STKJSONBindFieldKey];
+                return remoteKey;
             }
         }
     }
@@ -57,9 +57,9 @@ NSString * const STKJSONBindTransformKey = @"transform";
             return [self valueForKeyPath:localKey];
         } else if ([value isKindOfClass:[NSDictionary class]]) {
             STKTransformBlock transform = [value objectForKey:STKJSONBindTransformKey];
-            if(transform)
+            if(transform) {
                 return transform([self valueForKeyPath:localKey], STKTransformDirectionLocalToRemote);
-            else {
+            } else {
                 return [self valueForKeyPath:localKey];
             }
         }
@@ -90,6 +90,9 @@ NSString * const STKJSONBindTransformKey = @"transform";
                 if(transform) {
                     outputValue = transform(outputValue, STKTransformDirectionLocalToRemote);
                 }
+            }
+            if(!outputValue) {
+                outputValue = [NSNull null];
             }
             [output setObject:outputValue forKey:remoteKey];
         }

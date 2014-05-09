@@ -167,8 +167,7 @@
 {
     NSString *selName = [self selectionSelectorForIndexPath:ip];
     if(selName) {
-        [self
-         performSelector:NSSelectorFromString(selName) withObject:@([sender isOn])];
+        [self performSelector:NSSelectorFromString(selName) withObject:@([sender isOn])];
         return;
     }
 }

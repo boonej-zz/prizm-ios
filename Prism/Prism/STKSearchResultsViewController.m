@@ -248,6 +248,8 @@ typedef enum {
                 c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
                 [[c textLabel] setTextColor:STKTextColor];
                 [[c textLabel] setFont:STKFont(16)];
+                [c setSelectionStyle:UITableViewCellSelectionStyleNone];
+
             }
             [[c textLabel] setText:@"No results found."];
             return c;
@@ -267,6 +269,7 @@ typedef enum {
             c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
             [[c textLabel] setTextColor:STKTextColor];
             [[c textLabel] setFont:STKFont(16)];
+            [c setSelectionStyle:UITableViewCellSelectionStyleNone];
         }
         [[c textLabel] setText:@"No results found."];
         return c;
@@ -304,17 +307,22 @@ typedef enum {
 {
     if(tableView == [self searchResultsTableView]) {
         if([self searchType] == STKSearchTypeUser){
-            STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
-            [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
-            [[[self parentViewController] navigationController] pushViewController:pvc animated:YES];
+            if([indexPath row] < [[self profilesFound] count]) {
+                STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+                [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
+                [[[self parentViewController] navigationController] pushViewController:pvc animated:YES];
+            }
         }
         
         if([self searchType] == STKSearchTypeHashTag) {
-            NSDictionary *hashtag = [[self hashTagsFound] objectAtIndex:[indexPath row]];
-            NSString *tag = [hashtag objectForKey:@"hash_tag"];
-            if(tag) {
-                STKHashtagPostsViewController *vc = [[STKHashtagPostsViewController alloc] initWithHashTag:tag];
-                [[self navigationController] pushViewController:vc animated:YES];
+            if([indexPath row] < [[self hashTagsFound] count]) {
+                NSDictionary *hashtag = [[self hashTagsFound] objectAtIndex:[indexPath row]];
+                NSString *tag = [hashtag objectForKey:@"hash_tag"];
+                if(tag) {
+                    STKHashtagPostsViewController *vc = [[STKHashtagPostsViewController alloc] initWithHashTag:tag];
+                    [vc setShowsOwnBackButton:YES];
+                    [[self navigationController] pushViewController:vc animated:YES];
+                }
             }
         }
     }

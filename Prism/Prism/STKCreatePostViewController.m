@@ -86,7 +86,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         _optionItems = @[
                          @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"btn_camera"], @"selectedImage" : [UIImage imageNamed:@"btn_camera_selected"], @"action" : @"changeImage:"},
                          @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"selectedImage" : [UIImage imageNamed:@"btn_pin_selected"], @"action" : @"findLocation:"},
-                         @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"], @"selectedImage" : [UIImage imageNamed:@"btn_usertag_selected"]},
+                         @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"], @"selectedImage" : [UIImage imageNamed:@"btn_usertag_selected"], @"action" : @"addUserTags:"},
                          @{@"key" : @"visibility", @"image" : [UIImage imageNamed:@"btn_globe"], @"selectedImage" : [UIImage imageNamed:@"btn_globe_selected"], @"action" : @"toggleTrust:"},
                          @{@"key" : @"facebook", @"image" : [UIImage imageNamed:@"btn_facebook"], @"selectedImage" : [UIImage imageNamed:@"btn_facebook_selected"]},
                          @{@"key" : @"twitter", @"image" : [UIImage imageNamed:@"btn_twitter"], @"selectedImage" : [UIImage imageNamed:@"btn_twitter_selected"]},
@@ -126,8 +126,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                            completion:^(UIImage *img) {
                                                [[self imageView] setImage:img];
                                            }];
-        [[self optionHeightConstraint] setConstant:47];
+        //[[self optionHeightConstraint] setConstant:47];
     }
+    
+    // This will temporarily hide the four share options, which should always be hidden if this is a repost
+    [[self optionHeightConstraint] setConstant:47];
     
     [[self optionCollectionView] reloadData];
 }
@@ -161,6 +164,13 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
             }
         }
     }];
+}
+
+- (void)addUserTags:(id)sender
+{
+    [[self postTextView] becomeFirstResponder];
+    [[self markupController] displayAllUserResults];
+    
 }
 
 - (void)findLocation:(id)sender
@@ -237,6 +247,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    [[[self imageView] layer] setBorderColor:[STKTextColor CGColor]];
+//    [[[self imageView] layer] setBorderWidth:2];
     
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
     
@@ -354,9 +367,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     
     if(![[self postInfo] objectForKey:STKPostURLKey]) {
         // Do a card
-        
         NSString *postText = [[self postInfo] objectForKey:STKPostTextKey];
-        NSLog(@"%@", postText);
         UIImage *img = [STKPost imageForTextPost:postText];
         [self setPostImage:img];
     }
@@ -398,14 +409,20 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }
     
     if([[[self postTextView] text] length] > 0 && ![[[self postTextView] text] isEqualToString:STKCreatePostPlaceholderText]) {
-        [[self postInfo] setObject:[[self postTextView] text]
+        NSMutableAttributedString *text = [[[self postTextView] attributedText] mutableCopy];
+        
+        [text enumerateAttributesInRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
+            NSTextAttachment *attachment = [attrs objectForKey:NSAttachmentAttributeName];
+            if(attachment) {
+                NSURL *userURL = [attrs objectForKey:NSLinkAttributeName];
+                if(userURL) {
+                    NSString *uniqueID = [userURL host];
+                    [text replaceCharactersInRange:range withString:[NSString stringWithFormat:@"@%@", uniqueID]];
+                }
+            }
+        }];
+        [[self postInfo] setObject:[text string]
                             forKey:STKPostTextKey];
-    }
-    
-
-    NSArray *tags = [self hashTagsFromText:[[self postInfo] objectForKey:STKPostTextKey]];
-    if([tags count] > 0) {
-        [[self postInfo] setObject:[tags copy] forKey:STKPostHashTagsKey];
     }
     
     if(![[self postInfo] objectForKey:STKPostTextKey] && ![[self postInfo] objectForKey:STKPostURLKey]) {
@@ -437,11 +454,19 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
            didSelectUser:(STKUser *)user
         forMarkerAtRange:(NSRange)range
 {
-    NSString *tag = [user uniqueID];
-    [[[self postTextView] textStorage] replaceCharactersInRange:range
-                                                     withString:[NSString stringWithFormat:@"%@ ", tag]];
+    NSAttributedString *str = [STKPost userTagForUser:user
+                                           attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
+
+    if(range.location == NSNotFound) {
+        range = NSMakeRange([[[self postTextView] textStorage] length], 0);
+    }
     
-    NSInteger newIndex = range.location + [tag length] + 1;
+    [[[self postTextView] textStorage] replaceCharactersInRange:range
+                                           withAttributedString:str];
+    [[[self postTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
+                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+    
+    NSInteger newIndex = range.location + [str length] + 2;
     [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
 
 }
@@ -450,10 +475,16 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         didSelectHashTag:(NSString *)hashTag
         forMarkerAtRange:(NSRange)range
 {
+    if(range.location == NSNotFound) {
+        range = NSMakeRange([[[self postTextView] textStorage] length], 0);
+    }
+
     [[[self postTextView] textStorage] replaceCharactersInRange:range
-                                                     withString:[NSString stringWithFormat:@"%@ ", hashTag]];
+                                                     withString:[NSString stringWithFormat:@"#%@ ", hashTag]];
+    [[[self postTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
+                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
     
-    NSInteger newIndex = range.location + [hashTag length] + 1;
+    NSInteger newIndex = range.location + [hashTag length] + 2;
     [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
 }
 

@@ -22,6 +22,7 @@ typedef enum {
 extern NSString * const STKContentStorePostDeletedNotification;
 extern NSString * const STKContentStorePostDeletedKey;
 
+
 @interface STKContentStore : NSObject
 
 + (STKContentStore *)store;

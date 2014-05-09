@@ -47,6 +47,11 @@
 		BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B51C183A90C8009BC02A /* STKTrustView.m */; };
 		BE24B520183A90D1009BC02A /* STKCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B51F183A90D1009BC02A /* STKCountView.m */; };
 		BE24B523183AA653009BC02A /* STKCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24B522183AA653009BC02A /* STKCircleView.m */; };
+		BE2B7E82191AB3E300E6F408 /* STKGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2B7E81191AB3E300E6F408 /* STKGraphView.m */; };
+		BE2B7E85191AB3EC00E6F408 /* STKDateBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2B7E84191AB3EC00E6F408 /* STKDateBar.m */; };
+		BE2B7E88191AB40600E6F408 /* STKPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2B7E87191AB40600E6F408 /* STKPieChartView.m */; };
+		BE2B7E8C191AB96700E6F408 /* STKGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2B7E8A191AB96700E6F408 /* STKGraphCell.m */; };
+		BE2B7E8D191AB96700E6F408 /* STKGraphCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE2B7E8B191AB96700E6F408 /* STKGraphCell.xib */; };
 		BE2E5FC518FB49E000A53AF6 /* STKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2E5FC418FB49E000A53AF6 /* STKSegmentedControl.m */; };
 		BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BE300BF5182AB16100CA3FC7 /* STKMenuButton.m */; };
 		BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */; };
@@ -270,6 +275,15 @@
 		BE24B51F183A90D1009BC02A /* STKCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCountView.m; sourceTree = "<group>"; };
 		BE24B521183AA653009BC02A /* STKCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCircleView.h; sourceTree = "<group>"; };
 		BE24B522183AA653009BC02A /* STKCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCircleView.m; sourceTree = "<group>"; };
+		BE2B7E80191AB3E300E6F408 /* STKGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGraphView.h; sourceTree = "<group>"; };
+		BE2B7E81191AB3E300E6F408 /* STKGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGraphView.m; sourceTree = "<group>"; };
+		BE2B7E83191AB3EC00E6F408 /* STKDateBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKDateBar.h; sourceTree = "<group>"; };
+		BE2B7E84191AB3EC00E6F408 /* STKDateBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKDateBar.m; sourceTree = "<group>"; };
+		BE2B7E86191AB40600E6F408 /* STKPieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPieChartView.h; sourceTree = "<group>"; };
+		BE2B7E87191AB40600E6F408 /* STKPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKPieChartView.m; sourceTree = "<group>"; };
+		BE2B7E89191AB96700E6F408 /* STKGraphCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGraphCell.h; sourceTree = "<group>"; };
+		BE2B7E8A191AB96700E6F408 /* STKGraphCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGraphCell.m; sourceTree = "<group>"; };
+		BE2B7E8B191AB96700E6F408 /* STKGraphCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKGraphCell.xib; sourceTree = "<group>"; };
 		BE2E5FC318FB49E000A53AF6 /* STKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSegmentedControl.h; sourceTree = "<group>"; };
 		BE2E5FC418FB49E000A53AF6 /* STKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSegmentedControl.m; sourceTree = "<group>"; };
 		BE300BF4182AB16100CA3FC7 /* STKMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMenuButton.h; sourceTree = "<group>"; };
@@ -2462,6 +2476,12 @@
 				BE937C9D191175E000C24A58 /* STKNotifiedBadgeView.m */,
 				BE7D396C19142D58003B333F /* STKMarkupTextView.h */,
 				BE7D396D19142D58003B333F /* STKMarkupTextView.m */,
+				BE2B7E80191AB3E300E6F408 /* STKGraphView.h */,
+				BE2B7E81191AB3E300E6F408 /* STKGraphView.m */,
+				BE2B7E83191AB3EC00E6F408 /* STKDateBar.h */,
+				BE2B7E84191AB3EC00E6F408 /* STKDateBar.m */,
+				BE2B7E86191AB40600E6F408 /* STKPieChartView.h */,
+				BE2B7E87191AB40600E6F408 /* STKPieChartView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2535,6 +2555,9 @@
 				BEB16879190700F900CED5F7 /* STKSegmentedControlCell.h */,
 				BEB1687A190700F900CED5F7 /* STKSegmentedControlCell.m */,
 				BEB1687B190700F900CED5F7 /* STKSegmentedControlCell.xib */,
+				BE2B7E89191AB96700E6F408 /* STKGraphCell.h */,
+				BE2B7E8A191AB96700E6F408 /* STKGraphCell.m */,
+				BE2B7E8B191AB96700E6F408 /* STKGraphCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4591,6 +4614,7 @@
 				BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */,
 				BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */,
 				BEFCEDFB182C1EE100648B9F /* STKCreatePostViewController.xib in Resources */,
+				BE2B7E8D191AB96700E6F408 /* STKGraphCell.xib in Resources */,
 				BE1A73C618D8BFB8004A3BB3 /* STKLockCell.xib in Resources */,
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
@@ -4687,6 +4711,7 @@
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
 				BE0EC57618EDE971007102E1 /* STKSettingsShareCell.m in Sources */,
 				BE9CC7A618FDFF480097D308 /* STKLuminariesCell.m in Sources */,
+				BE2B7E85191AB3EC00E6F408 /* STKDateBar.m in Sources */,
 				BE52B13C18E30EF100C44F30 /* NSManagedObject+STKAdditions.m in Sources */,
 				BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */,
 				BE05502018A404E600F6B534 /* UIERealTimeBlurView.m in Sources */,
@@ -4703,6 +4728,7 @@
 				BE1FC3B0186C817C003464E1 /* STKTextImageCell.m in Sources */,
 				BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
+				BE2B7E8C191AB96700E6F408 /* STKGraphCell.m in Sources */,
 				BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */,
 				BE7D396B19141B32003B333F /* STKMarkupController.m in Sources */,
 				BE4F81D4191981FF00CF5628 /* STKBindTransforms.m in Sources */,
@@ -4724,6 +4750,7 @@
 				BE654EA5188841A6006DCA5C /* Lookup.xcdatamodeld in Sources */,
 				BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */,
 				BE7AFA7B18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m in Sources */,
+				BE2B7E82191AB3E300E6F408 /* STKGraphView.m in Sources */,
 				BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
 				D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */,
@@ -4747,6 +4774,7 @@
 				BEF7A08118439E0800A3AFFB /* STKRegisterViewController.m in Sources */,
 				BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */,
 				BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */,
+				BE2B7E88191AB40600E6F408 /* STKPieChartView.m in Sources */,
 				BE5F68F718F0A4FC006D2CD1 /* STKQueryObject.m in Sources */,
 				BE1A73C918D8ECBB004A3BB3 /* STKPostController.m in Sources */,
 				BE937C9E191175E000C24A58 /* STKNotifiedBadgeView.m in Sources */,

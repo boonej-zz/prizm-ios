@@ -40,6 +40,10 @@ NSString * const STKPostTypeAccolade = @"accolade";
 
 NSString * const STKPostStatusDeleted = @"deleted";
 
+NSString * const STKPostHashTagURLScheme = @"hashtag";
+NSString * const STKPostUserURLScheme = @"user";
+
+
 @interface STKPost ()
 @property (nonatomic) double locationLatitude;
 @property (nonatomic) double locationLongitude;
@@ -95,28 +99,74 @@ type, fInverseFeed, activities, derivativePosts, tags;
     return nil;
 }
 
-- (NSString *)renderText
+- (NSAttributedString *)renderTextForAttributes:(NSDictionary *)attributes
 {
-    // ensure text property is set
-    if([[self text] length]> 0){
-        
-        //check that tags array is avaialbe, if not just return regular text
-        if(![[self tags] count] >0){
-            return [self text];
-        }else{
-            NSMutableString *renderedText = [[self text] mutableCopy];
-            for(STKUser *user in [[self tags] allObjects]) {
-                NSString *replaceToken = [NSString stringWithFormat:@"@%@", [user uniqueID]];
-                NSString *replaceString = [NSString stringWithFormat:@"@%@", [user name]];
-                [renderedText replaceOccurrencesOfString:replaceToken withString:replaceString options:0 range:NSMakeRange(0, [renderedText length])];
-            }
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[self text]
+                                                                            attributes:attributes];
+    NSRegularExpression *hashTagExpression = [[NSRegularExpression alloc] initWithPattern:@"#(\\S*)" options:0 error:nil];
+    
+    NSArray *matches = [hashTagExpression matchesInString:[str string] options:0 range:NSMakeRange(0, [[str string] length])];
+    for(int i = [matches count] - 1; i >= 0; i--) {
+        NSTextCheckingResult *result = [matches objectAtIndex:i];
+        if([result numberOfRanges] == 2) {
+            NSRange fullRange = [result range];
+            NSRange nameRange = [result rangeAtIndex:1];
             
-            return renderedText;
+            NSString *hashTagName = [[str string] substringWithRange:nameRange];
+            [str addAttribute:NSLinkAttributeName value:[NSURL URLWithString:[NSString stringWithFormat:@"%@://%@", STKPostHashTagURLScheme, hashTagName]] range:fullRange];
         }
     }
     
-    return [self text];
+    NSRegularExpression *userTagExpression = [[NSRegularExpression alloc] initWithPattern:@"@(\\S*)" options:0 error:nil];
+    matches = [userTagExpression matchesInString:[str string] options:0 range:NSMakeRange(0, [[str string] length])];
+    for(int i = [matches count] - 1; i >= 0; i--) {
+        NSTextCheckingResult *result = [matches objectAtIndex:i];
+        if([result numberOfRanges] == 2) {
+            NSRange fullRange = [result range];
+            NSRange nameRange = [result rangeAtIndex:1];
+            
+            NSString *userID = [[str string] substringWithRange:nameRange];
+            STKUser *u = [[STKUserStore store] userForID:userID];
+            
+            NSAttributedString *userTag = [[self class] userTagForUser:u attributes:attributes];
+
+            [str replaceCharactersInRange:fullRange withAttributedString:userTag];
+        }
+    }
+    
+    return str;
 }
+
++ (NSAttributedString *)userTagForUser:(STKUser *)user attributes:(NSDictionary *)attributes
+{
+    NSTextAttachment *attach = [[NSTextAttachment alloc] init];
+    UIImage *img = [[self class] imageForUserTag:[NSString stringWithFormat:@"@%@", [user name]]
+                                      attributes:attributes];
+    [attach setImage:img];
+    [attach setBounds:CGRectMake(0, -3, [img size].width, [img size].height)];
+    NSMutableAttributedString *replacement = [[NSAttributedString attributedStringWithAttachment:attach] mutableCopy];
+    [replacement addAttribute:NSLinkAttributeName value:[NSURL URLWithString:[NSString stringWithFormat:@"%@://%@", STKPostUserURLScheme, [user uniqueID]]]
+                        range:NSMakeRange(0, [replacement length])];
+    
+    return replacement;
+}
+
++ (UIImage *)imageForUserTag:(NSString *)name attributes:(NSDictionary *)attributes
+{
+    NSMutableDictionary *d = [attributes mutableCopy];
+    [d setObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    
+    CGSize sz = [name sizeWithAttributes:d];
+    UIGraphicsBeginImageContextWithOptions(sz, NO, [[UIScreen mainScreen] scale]);
+    
+    [name drawInRect:CGRectMake(0, 0, sz.width, sz.height) withAttributes:d];
+
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return img;
+}
+
 
 - (BOOL)isPostLikedByUser:(STKUser *)u
 {
@@ -146,6 +196,7 @@ type, fInverseFeed, activities, derivativePosts, tags;
         [mStr replaceOccurrencesOfString:idNum withString:[[found objectForKey:idNum] name] options:0 range:NSMakeRange(0, [mStr length])];
     }
     text = [mStr copy];
+    
     
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(640, 640), YES, 1);
     
@@ -227,7 +278,7 @@ type, fInverseFeed, activities, derivativePosts, tags;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"0x%x %@ %@", (int)self, [self uniqueID], [self renderText]];
+    return [NSString stringWithFormat:@"0x%x %@ %@", (int)self, [self uniqueID], [self text]];
 }
 
 @end

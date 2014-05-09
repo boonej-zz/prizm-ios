@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKHashtagPostsViewController">
             <connections>
+                <outlet property="backButtonImageView" destination="W1g-rk-mRd" id="F7u-ni-GiL"/>
                 <outlet property="barLabel" destination="D4W-fP-zdH" id="Dl7-V2-Y4j"/>
                 <outlet property="blurView" destination="aM1-8p-acJ" id="g4I-yY-Qfn"/>
                 <outlet property="tableView" destination="ehB-fC-XpV" id="8Rd-bg-VrE"/>
