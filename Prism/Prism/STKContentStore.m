@@ -86,7 +86,12 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 {
     NSMutableArray *preds = [NSMutableArray array];
     for(NSString *key in [desc filterDictionary]) {
-        [preds addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, [[desc filterDictionary] objectForKey:key]]];
+        NSString *value = [[desc filterDictionary] objectForKey:key];
+        if([value isEqualToString:STKQueryObjectFilterExists]) {
+            [preds addObject:[NSPredicate predicateWithFormat:@"%K != nil", key]];
+        } else {
+            [preds addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, [[desc filterDictionary] objectForKey:key]]];
+        }
     }
     
     if([preds count] > 0) {
@@ -215,7 +220,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             [q setPageKey:STKPostDateCreatedKey];
             [q setPageValue:[STKTimestampFormatter stringFromDate:[(STKPost *)[desc referenceObject] datePosted]]];
         }
-        
+        /*
         NSMutableDictionary *filters = [NSMutableDictionary dictionary];
         for(NSString *key in [desc filterDictionary]) {
             NSString *remoteKey = [STKPost remoteKeyForLocalKey:key];
@@ -226,8 +231,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
                 [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:key];
             }
         }
-        
-        [q setFilters:filters];
+        */
+        [q setFilters:[self serverFilterMapFromLocalFilterMap:[desc filterDictionary]]];
         
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
@@ -284,6 +289,20 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     }];
 }
 
+- (NSDictionary *)serverFilterMapFromLocalFilterMap:(NSDictionary *)filterMap
+{
+    NSMutableDictionary *filters = [NSMutableDictionary dictionary];
+    for(NSString *key in filterMap) {
+        NSString *remoteKey = [STKPost remoteKeyForLocalKey:key];
+        [filters setObject:[filterMap objectForKey:key] forKey:remoteKey];
+    }
+
+    if([filters count] == 0)
+        return nil;
+    
+    return filters;
+}
+
 - (void)fetchProfilePostsForUser:(STKUser *)user
                 fetchDescription:(STKFetchDescription *)desc
                       completion:(void (^)(NSArray *posts, NSError *err))block
@@ -317,12 +336,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [q setPageDirection:[desc direction]];
         [q setPageKey:STKPostDateCreatedKey];
         [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
-        NSMutableDictionary *filters = [NSMutableDictionary dictionary];
-        for(NSString *key in [desc filterDictionary]) {
-            NSString *remoteKey = [STKPost remoteKeyForLocalKey:key];
-            [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:remoteKey];
-        }
-        [q setFilters:filters];
+        
+        [q setFilters:[self serverFilterMapFromLocalFilterMap:[desc filterDictionary]]];
         
         STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
         [q addSubquery:tagQ];

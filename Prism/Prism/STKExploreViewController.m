@@ -90,15 +90,14 @@ typedef enum {
         }];
         
         _featuredPostsController = [[STKPostController alloc] initWithViewController:self];
-        [[self featuredPostsController] setFilterMap:@{@"type" : STKUserTypeInstitution}];
+        [[self featuredPostsController] setFilterMap:@{@"creatorType" : STKUserTypeInstitution}];
         [[self featuredPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
         }];
         
         _popularPostsController = [[STKPostController alloc] initWithViewController:self];
         [[self popularPostsController] setFilterMap:@{@"sort_by" : @"likes_count", @"sort" : [NSString stringWithFormat:@"%d", STKQueryObjectSortAscending]}];
-        [[self popularPostsController] setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO],
-                                                            [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
+        [[self popularPostsController] setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO]]];
         [[self popularPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
         }];

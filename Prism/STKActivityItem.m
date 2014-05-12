@@ -18,6 +18,7 @@ NSString * const STKActivityItemTypeUnlike = @"unlike";
 NSString * const STKActivityItemTypeComment = @"comment";
 NSString * const STKActivityItemTypeTrustAccepted = @"trust_accepted";
 NSString * const STKActivityItemTypeRepost = @"repost";
+NSString * const STKActivityItemTypeTag = @"tag";
 
 @implementation STKActivityItem
 
@@ -70,6 +71,8 @@ NSString * const STKActivityItemTypeRepost = @"repost";
         [str appendString:@"accepted your trust request."];
     } else if ([[self action] isEqualToString:STKActivityItemTypeRepost]) {
         [str appendString:@"reposted your post."];
+    } else if ([[self action] isEqualToString:STKActivityItemTypeTag]) {
+        [str appendString:@"tagged you in a post."];
     }
     
     

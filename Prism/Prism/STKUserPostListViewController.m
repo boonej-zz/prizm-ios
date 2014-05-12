@@ -187,10 +187,6 @@
         }];
     }
     [[self postController] setFilterMap:[self filterDictionary]];
-
-    NSString *typeValue = [[[self postController] filterMap] objectForKey:@"type"];
-    if(typeValue)
-        [[[self postController] posts] filterUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@", typeValue]];
 }
 
 - (void)reloadPosts

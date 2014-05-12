@@ -134,7 +134,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     int actCount = [[self context] countForFetchRequest:aReq error:nil];
     
     aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-    [aReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending]];
+    [aReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
     int trustCount = [[self context] countForFetchRequest:aReq error:nil];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount)}];
@@ -243,11 +243,38 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     return ctx;
 }
 
+- (void)updateDeviceTokenForCurrentUser:(NSData *)deviceToken
+{
+    if([self currentUser]) {
+        [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+            if(err) {
+                return;
+            }
+            STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
+            [c setIdentifiers:@[[[self currentUser] uniqueID], @"devices"]];
+            
+            NSString *deviceString = [deviceToken description];
+            deviceString = [deviceString stringByReplacingOccurrencesOfString:@"<" withString:@""];
+            deviceString = [deviceString stringByReplacingOccurrencesOfString:@">" withString:@""];
+            
+            
+            [c addQueryValue:deviceString forKey:@"device"];
+            [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+
+            }];
+        }];
+    }
+}
+
+
+
 - (void)setCurrentUser:(STKUser *)currentUser
 {
     _currentUser = currentUser;
     
     if(currentUser) {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert];
+        
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser uniqueID]
                                                   forKey:STKUserStoreCurrentUserKey];
     

@@ -84,15 +84,15 @@
         [self setComments:[[NSMutableArray alloc] init]];
         _postController = [[STKPostController alloc] initWithViewController:self];
         _categoryItems = @[
-                           @{@"title" : @"Aspirations", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"category_aspiration_disabled"],
+                           @{@"title" : @"Aspiration", STKPostTypeKey : STKPostTypeAspiration, @"image" : [UIImage imageNamed:@"category_aspiration_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_aspirations_selected"]},
-                           @{@"title" : @"Passions", STKPostTypeKey : STKPostTypePassion, @"image" : [UIImage imageNamed:@"category_passions_disabled"],
+                           @{@"title" : @"Passion", STKPostTypeKey : STKPostTypePassion, @"image" : [UIImage imageNamed:@"category_passions_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_passions_selected"]},
-                           @{@"title" : @"Experiences", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"category_experiences_disabled"],
+                           @{@"title" : @"Experience", STKPostTypeKey : STKPostTypeExperience, @"image" : [UIImage imageNamed:@"category_experiences_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_experiences_selected"]},
-                           @{@"title" : @"Achievements", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"category_achievements_disabled"],
+                           @{@"title" : @"Achievement", STKPostTypeKey : STKPostTypeAchievement, @"image" : [UIImage imageNamed:@"category_achievements_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_achievements_selected"]},
-                           @{@"title" : @"Inspirations", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
+                           @{@"title" : @"Inspiration", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_inspiration_selected"]},
                            @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_personal_selected"]}

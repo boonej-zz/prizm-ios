@@ -30,6 +30,11 @@
 
 @implementation STKAppDelegate 
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    [[STKUserStore store] updateDeviceTokenForCurrentUser:deviceToken];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -77,13 +82,18 @@
         [nvc presentViewController:registerNVC animated:NO completion:nil];
     }
     
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+
+    
     return YES;
 }
+
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     [[STKUserStore store] transferPostsFromSocialNetworks];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 

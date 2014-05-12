@@ -35,6 +35,8 @@ typedef enum {
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) STKUser *currentUser;
 
+- (void)updateDeviceTokenForCurrentUser:(NSData *)deviceToken;
+
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
 - (void)resetPasswordForEmail:(NSString *)email password:(NSString *)password completion:(void (^)(NSError *err))block;
 

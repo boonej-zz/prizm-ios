@@ -53,7 +53,7 @@ NSString * const STKPostUserURLScheme = @"user";
 @dynamic coordinate;
 @dynamic hashTags, imageURLString, uniqueID, datePosted, locationLatitude, locationLongitude, locationName,
 visibility, status, repost, text, comments, commentCount, creator, originalPost, likes, likeCount,
-type, fInverseFeed, activities, derivativePosts, tags;
+type, fInverseFeed, activities, derivativePosts, tags, creatorType;
 @dynamic fInverseProfile;
 
 
@@ -61,6 +61,7 @@ type, fInverseFeed, activities, derivativePosts, tags;
 {
     return @{
              @"_id" : @"uniqueID",
+             @"type" : @"creatorType",
              STKPostTypeKey : @"type",
              
              STKPostURLKey : @"imageURLString",

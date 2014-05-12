@@ -311,6 +311,17 @@ typedef enum {
 {
     [self setFilterByLocation:![self filterByLocation]];
     [[[self filterView] locationButton] setSelected:[self filterByLocation]];
+    if([self filterByLocation]) {
+        [[self postController] setFilterMap:@{@"locationName" : STKQueryObjectFilterExists}];
+    } else {
+        NSMutableDictionary *d = [[[self postController] filterMap] mutableCopy];
+        [d removeObjectForKey:@"locationName"];
+        [[self postController] setFilterMap:[d copy]];
+    }
+    [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
+    [[self tableView] reloadData];
 }
 
 

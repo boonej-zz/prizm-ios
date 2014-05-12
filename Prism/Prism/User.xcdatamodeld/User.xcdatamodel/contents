@@ -19,6 +19,7 @@
         <attribute name="commentCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="coordinateLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="coordinateLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="creatorType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="datePosted" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="imageURLString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
@@ -120,7 +121,7 @@
     <elements>
         <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="165"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="88"/>
-        <element name="STKPost" positionX="0" positionY="144" width="128" height="435"/>
+        <element name="STKPost" positionX="0" positionY="144" width="128" height="450"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="270"/>
         <element name="STKUser" positionX="0" positionY="0" width="128" height="718"/>

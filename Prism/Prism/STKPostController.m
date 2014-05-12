@@ -49,6 +49,21 @@
 
 - (void)reloadWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion
 {
+    NSMutableArray *preds = [NSMutableArray array];
+    for(NSString *key in [self filterMap]) {
+        NSString *value = [[self filterMap] objectForKey:key];
+        if([value isEqualToString:STKQueryObjectFilterExists]) {
+            [preds addObject:[NSPredicate predicateWithFormat:@"%K != nil", key]];
+        } else {
+            [preds addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, [[self filterMap] objectForKey:key]]];
+        }
+    }
+    
+    if([preds count] > 0) {
+        NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:preds];
+        [[self posts] filterUsingPredicate:predicate];
+    }
+
     STKFetchDescription *desc = [[STKFetchDescription alloc] init];
     [desc setDirection:STKQueryObjectPageReload];
     [desc setFilterDictionary:[self filterMap]];

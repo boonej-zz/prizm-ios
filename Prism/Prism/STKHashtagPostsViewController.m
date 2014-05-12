@@ -35,7 +35,7 @@
         [self setHashTag:hashTag];
         _hashTagPostsController = [[STKPostController alloc] initWithViewController:self];
         
-        [[self hashTagPostsController] setFilterMap:@{@"hash_tags" : hashTag}];
+        [[self hashTagPostsController] setFilterMap:@{@"hashTags": hashTag}];
         [[self hashTagPostsController] setFetchMechanism:^(STKFetchDescription *fd, void (^comp)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fd completion:comp];
         }];

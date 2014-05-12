@@ -51,11 +51,11 @@
                               STKPostTypePersonal : [UIColor orangeColor]}];
         [self setOrderArray:@[STKPostTypePassion, STKPostTypeAspiration, STKPostTypeExperience, STKPostTypeAchievement, STKPostTypeInspiration, STKPostTypePersonal]];
     
-        [self setTypeNames:@{STKPostTypePassion : @"Passions",
-                              STKPostTypeAspiration : @"Aspirations",
-                              STKPostTypeExperience : @"Experiences",
-                              STKPostTypeAchievement : @"Achievements",
-                              STKPostTypeInspiration : @"Inspirations",
+        [self setTypeNames:@{STKPostTypePassion : @"Passion",
+                              STKPostTypeAspiration : @"Aspiration",
+                              STKPostTypeExperience : @"Experience",
+                              STKPostTypeAchievement : @"Achievement",
+                              STKPostTypeInspiration : @"Inspiration",
                               STKPostTypePersonal : @"Personal"}];
     
     }

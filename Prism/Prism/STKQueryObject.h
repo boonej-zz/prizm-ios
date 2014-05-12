@@ -22,6 +22,8 @@ typedef enum {
 extern NSString * const STKQueryObjectFormatBasic;
 extern NSString * const STKQueryObjectFormatShort;
 
+extern NSString * const STKQueryObjectFilterExists;
+
 @interface STKQueryObject : NSObject
 
 @property (nonatomic, strong) NSString *format;

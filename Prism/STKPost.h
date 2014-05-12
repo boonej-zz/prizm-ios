@@ -55,7 +55,7 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, strong) NSString *status;
 @property (nonatomic, getter = isRepost) BOOL repost;
 @property (nonatomic, strong) NSString *text;
-//@property (nonatomic, strong) NSString *targetID;
+@property (nonatomic, strong) NSString *creatorType;
 
 @property (nonatomic) int commentCount;
 @property (nonatomic) int likeCount;

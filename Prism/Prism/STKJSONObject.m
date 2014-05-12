@@ -31,7 +31,7 @@ NSString * const STKJSONBindTransformKey = @"transform";
             }
         }
     }
-    return nil;
+    return localKey;
 }
 
 + (NSString *)localKeyForRemoteKey:(NSString *)remoteKey

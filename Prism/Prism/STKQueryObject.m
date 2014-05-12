@@ -10,7 +10,7 @@
 
 NSString * const STKQueryObjectFormatBasic = @"basic";
 NSString * const STKQueryObjectFormatShort = @"short";
-
+NSString * const STKQueryObjectFilterExists = @"*";
 
 @implementation STKQueryObject
 
