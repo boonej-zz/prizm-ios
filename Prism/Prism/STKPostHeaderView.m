@@ -99,16 +99,23 @@
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual
                                                         toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:4]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[ava(==30)]-8-[poster(==224)]-8-[type(==22)]"
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[ava(==35)]-8-[poster(==224)]-8-[type(==22)]"
                                                                  options:NSLayoutFormatAlignAllTop metrics:nil
                                                                    views:@{@"ava" : _avatarView, @"poster" : _posterLabel, @"type" : _postTypeView}]];
+    
     [_avatarView addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
-                                                               toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:30]];
+                                                               toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:35]];
+    
+    [_avatarView addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual
+                                                               toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:35]];
+    
     [_postTypeView addConstraint:[NSLayoutConstraint constraintWithItem:_postTypeView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
                                                                toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:22]];
 
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
-                                                        toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-10]];
+                                                        toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-5]];
+    
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
                                                         toItem:_timeImageView attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
     
@@ -116,10 +123,12 @@
                                                                  options:NSLayoutFormatAlignAllCenterY metrics:nil views:@{@"tiv" : _timeImageView, @"time" : _timeLabel, @"source" : _sourceLabel}]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
-                                                         toItem:_timeImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:-2]];
+                                                         toItem:_timeImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:3]];
 
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_sourceLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_sourceButton attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_sourceLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_sourceButton attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : _sourceButton}]];
     
     [_timeImageView addConstraint:[NSLayoutConstraint constraintWithItem:_timeImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual
