@@ -19,7 +19,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.10000000000000001" colorSpace="deviceRGB"/>
                     </view>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2L-fa-zU1">
-                        <rect key="frame" x="52" y="31" width="234" height="21"/>
+                        <rect key="frame" x="57" y="31" width="234" height="21"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.53798979922279799" green="0.53798979922279799" blue="0.53798979922279799" alpha="0.0" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -35,16 +35,16 @@
                         </connections>
                     </textView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kwb-YQ-uOI" customClass="STKAvatarView">
-                        <rect key="frame" x="14" y="9" width="30" height="30"/>
+                        <rect key="frame" x="14" y="9" width="35" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="30" id="HHS-rv-DLT"/>
-                            <constraint firstAttribute="width" constant="30" id="SV8-Kl-iP7"/>
+                            <constraint firstAttribute="height" constant="35" id="HHS-rv-DLT"/>
+                            <constraint firstAttribute="width" constant="35" id="SV8-Kl-iP7"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ze-Ak-mfw" userLabel="Avatar Button" customClass="UIControl" colorLabel="IBBuiltInLabel-Yellow">
-                        <rect key="frame" x="0.0" y="0.0" width="44" height="82"/>
+                        <rect key="frame" x="0.0" y="0.0" width="49" height="82"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <connections>
@@ -52,7 +52,7 @@
                         </connections>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="clC-ZP-ojw">
-                        <rect key="frame" x="52" y="11" width="234" height="20"/>
+                        <rect key="frame" x="57" y="11" width="234" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="234" id="3fW-IL-ySW"/>
@@ -63,7 +63,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_clock" translatesAutoresizingMaskIntoConstraints="NO" id="ge7-HD-XRM">
-                        <rect key="frame" x="52" y="56" width="12" height="12"/>
+                        <rect key="frame" x="57" y="56" width="12" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="12" id="6Z2-YA-IZA"/>
@@ -71,21 +71,21 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label - Like" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbA-GE-iNM">
-                        <rect key="frame" x="70" y="55" width="61" height="15"/>
+                        <rect key="frame" x="75" y="55" width="61" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                         <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wCh-kh-FbI">
-                        <rect key="frame" x="152" y="55" width="7" height="15"/>
+                        <rect key="frame" x="157" y="55" width="7" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                         <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="action_heart_like" translatesAutoresizingMaskIntoConstraints="NO" id="xrs-5s-4lK">
-                        <rect key="frame" x="136" y="58" width="12" height="10"/>
+                        <rect key="frame" x="141" y="58" width="12" height="10"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="12" id="aW8-gV-GE1"/>
@@ -93,7 +93,7 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YOL-96-fKX" userLabel="Like Control" customClass="UIControl">
-                        <rect key="frame" x="52" y="52" width="79" height="28"/>
+                        <rect key="frame" x="57" y="52" width="79" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -104,7 +104,7 @@
                         </connections>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jfN-Pg-A51" userLabel="Show Likes Control" customClass="UIControl">
-                        <rect key="frame" x="135" y="53" width="80" height="25"/>
+                        <rect key="frame" x="140" y="53" width="80" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>

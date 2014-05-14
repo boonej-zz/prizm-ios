@@ -47,7 +47,7 @@
     if(_urlString) {
         __weak STKAvatarView *iv = self;
         [[STKImageStore store] fetchImageForURLString:_urlString
-                                        preferredSize:STKImageStoreThumbnailSmall
+                                        preferredSize:STKImageStoreThumbnailMedium
                                            completion:^(UIImage *img) {
                                                if([urlString isEqualToString:[iv urlString]]) {
                                                    [iv setImage:img];
