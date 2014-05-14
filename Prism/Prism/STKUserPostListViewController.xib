@@ -6,14 +6,19 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKUserPostListViewController">
             <connections>
+                <outlet property="achievementInspirationConstraint" destination="nQW-zX-4Uh" id="Rs9-K9-KgF"/>
                 <outlet property="achivementButton" destination="qAP-Qu-4Rj" id="XKk-hu-GY4"/>
                 <outlet property="aspirationButton" destination="u3g-QQ-nyU" id="kHA-bX-S3O"/>
+                <outlet property="aspirationExperienceConstraint" destination="PP3-ER-Ooi" id="nsH-2W-GDk"/>
                 <outlet property="blurView" destination="Xc3-2h-k1Z" id="PvX-rM-kyl"/>
                 <outlet property="blurViewHeightConstraint" destination="Il0-7U-xDb" id="gxW-5k-lN7"/>
+                <outlet property="experienceAchievementConstraint" destination="v9w-8D-orp" id="jk2-rA-Y4X"/>
                 <outlet property="experienceButton" destination="DGT-3s-4Nk" id="UFU-vd-0T7"/>
                 <outlet property="filterBar" destination="JUn-fv-37I" id="EVL-q0-Oin"/>
                 <outlet property="inspirationButton" destination="H5K-Hv-SNX" id="xLt-Ww-jOU"/>
+                <outlet property="inspirationPersonalConstraint" destination="SOp-6D-TDI" id="Elb-pu-gHU"/>
                 <outlet property="leftConstraint" destination="sPM-mg-Kqk" id="9Uc-TT-Z09"/>
+                <outlet property="passionAspirationConstraint" destination="ovs-Ux-9Mr" id="4kO-vD-aJ3"/>
                 <outlet property="passionButton" destination="MQx-zI-aQv" id="ChZ-qj-OBh"/>
                 <outlet property="personalButton" destination="THA-mD-uDP" id="gpg-L3-D3J"/>
                 <outlet property="rightConstraint" destination="Lnh-Mu-oJW" id="v7W-bg-xm5"/>
