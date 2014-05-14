@@ -67,6 +67,7 @@
     STKFetchDescription *desc = [[STKFetchDescription alloc] init];
     [desc setDirection:STKQueryObjectPageReload];
     [desc setFilterDictionary:[self filterMap]];
+    [desc setSortDescriptors:[self sortDescriptors]];
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
         [self addPosts:posts];
         completion(posts, err);
@@ -78,6 +79,8 @@
     [desc setReferenceObject:[[self posts] firstObject]];
     [desc setDirection:STKQueryObjectPageNewer];
     [desc setFilterDictionary:[self filterMap]];
+    [desc setSortDescriptors:[self sortDescriptors]];
+
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
         [self addPosts:posts];
         completion(posts, err);
@@ -90,6 +93,8 @@
     [desc setReferenceObject:[[self posts] lastObject]];
     [desc setDirection:STKQueryObjectPageOlder];
     [desc setFilterDictionary:[self filterMap]];
+    [desc setSortDescriptors:[self sortDescriptors]];
+
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
         [self addPosts:posts];
         completion(posts, err);

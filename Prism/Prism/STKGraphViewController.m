@@ -27,7 +27,7 @@
 @property (nonatomic, strong) NSDictionary *typePercentages;
 @property (nonatomic, strong) NSDictionary *typeColors;
 @property (nonatomic, strong) NSDictionary *typeNames;
-
+@property (nonatomic, strong) NSArray *graphValues;
 @end
 
 @implementation STKGraphViewController
@@ -57,6 +57,8 @@
                               STKPostTypeAchievement : @"Achievement",
                               STKPostTypeInspiration : @"Inspiration",
                               STKPostTypePersonal : @"Personal"}];
+        
+        [self setGraphValues:[self temporaryValues]];
     
     }
     return self;
@@ -96,6 +98,7 @@
                                STKPostTypeInspiration : @(0.1),
                                STKPostTypePersonal : @(0.1)}];
     [self configureChartArea];
+    [self configureGraphArea];
     
     [[self percentTableView] reloadData];
 
@@ -107,7 +110,37 @@
     [[self percentTableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self percentTableView] setScrollEnabled:NO];
     [[self percentTableView] setBackgroundColor:[UIColor clearColor]];
+    
+    [[self graphView] setXLabels:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7"]];
+    [[self graphView] setYLabels:@[@"0", @"10", @"20", @"30", @"40"]];
+}
 
+- (NSArray *)temporaryValues
+{
+    srand(time(NULL));
+
+    return @[
+             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypePassion]},
+             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeAspiration]},
+             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeExperience]},
+             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeAchievement]},
+             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeInspiration]},
+             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypePersonal]}
+    ];
+}
+
+- (NSArray *)randomNumbersToMax:(int)max count:(int)count
+{
+    NSMutableArray *a = [NSMutableArray array];
+    for(int i = 0; i < count; i++) {
+        [a addObject:@((rand() % max) / (float)max)];
+    }
+    return a;
+}
+
+- (void)configureGraphArea
+{
+    [[self graphView] setValues:[self graphValues]];
 }
 
 - (void)configureChartArea

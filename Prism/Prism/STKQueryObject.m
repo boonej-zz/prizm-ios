@@ -43,10 +43,11 @@ NSString * const STKQueryObjectFilterExists = @"*";
     }
     
     if([self pageKey] && [self pageValue]) {
-        [d setObject:[self pageValue] forKey:@"page"];
-        [d setObject:[self pageKey] forKey:@"page_by"];
-        if([self pageDirection] != STKQueryObjectPageReload)
+        if([self pageDirection] != STKQueryObjectPageReload) {
+            [d setObject:[self pageValue] forKey:@"page"];
+            [d setObject:[self pageKey] forKey:@"page_by"];
             [d setObject:@([self pageDirection]) forKey:@"page_direction"];
+        }
     }
     
     if([self format]) {

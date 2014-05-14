@@ -247,7 +247,7 @@
 {
     STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self postController]];
     [c populateWithPosts:[[self postController] posts] indexOffset:[indexPath row] * 3];
-    [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
+//    [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     return c;
 }
 

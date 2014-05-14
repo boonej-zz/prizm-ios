@@ -10,4 +10,11 @@
 
 @interface STKGraphView : UIView
 
+@property (nonatomic, strong) NSArray *yLabels;
+@property (nonatomic, strong) NSArray *xLabels;
+
+// @{@"y" : [y], @"color" : c}
+// count of [y] must be equal to xLabel count
+@property (nonatomic, strong) NSArray *values;
+
 @end

@@ -222,6 +222,22 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
             urlString = [normalImage objectForKey:@"url"];
         }
     }
+    
+    NSString *postType = STKPostTypeExperience;
+    NSString *lowercaseSearchString = [text lowercaseString];
+    if([lowercaseSearchString rangeOfString:@"#aspiration"].location != NSNotFound) {
+        postType = STKPostTypeAspiration;
+    } else if([lowercaseSearchString rangeOfString:@"#inspiration"].location != NSNotFound) {
+        postType = STKPostTypeInspiration;
+    } else if([lowercaseSearchString rangeOfString:@"#experience"].location != NSNotFound) {
+        postType = STKPostTypeExperience;
+    } else if([lowercaseSearchString rangeOfString:@"#achievement"].location != NSNotFound) {
+        postType = STKPostTypeAchievement;
+    } else if([lowercaseSearchString rangeOfString:@"#passion"].location != NSNotFound) {
+        postType = STKPostTypePassion;
+    }
+    
+    
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
     if(!text)
@@ -239,7 +255,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                     NSDictionary *postInfo = @{
                                                STKPostTextKey : text,
                                                STKPostURLKey : URLString,
-                                               STKPostTypeKey : STKPostTypeExperience,
+                                               STKPostTypeKey : postType,
                                                @"external_provider" : @"instagram",
                                                @"external_link" : link
                                                };
@@ -334,6 +350,20 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         imageURL = [firstObject objectForKey:@"media_url"];
     }
     
+    NSString *postType = STKPostTypeExperience;
+    NSString *lowercaseSearchString = [text lowercaseString];
+    if([lowercaseSearchString rangeOfString:@"#aspiration"].location != NSNotFound) {
+        postType = STKPostTypeAspiration;
+    } else if([lowercaseSearchString rangeOfString:@"#inspiration"].location != NSNotFound) {
+        postType = STKPostTypeInspiration;
+    } else if([lowercaseSearchString rangeOfString:@"#experience"].location != NSNotFound) {
+        postType = STKPostTypeExperience;
+    } else if([lowercaseSearchString rangeOfString:@"#achievement"].location != NSNotFound) {
+        postType = STKPostTypeAchievement;
+    } else if([lowercaseSearchString rangeOfString:@"#passion"].location != NSNotFound) {
+        postType = STKPostTypePassion;
+    }
+
     
     if(imageURL) {
         NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:imageURL]];
@@ -345,7 +375,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                         if(!err) {
                             NSDictionary *postInfo = @{
                                                        STKPostTextKey : text,
-                                                       STKPostTypeKey : STKPostTypeExperience,
+                                                       STKPostTypeKey : postType,
                                                        @"external_provider" : @"twitter",
                                                        @"external_link" : link,
                                                        STKPostURLKey : URLString
@@ -371,7 +401,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
             if(!err) {
                 NSDictionary *postInfo = @{
                                            STKPostTextKey : text,
-                                           STKPostTypeKey : STKPostTypeExperience,
+                                           STKPostTypeKey : postType,
                                            @"external_provider" : @"twitter",
                                            @"external_link" : link,
                                            STKPostURLKey : URLString

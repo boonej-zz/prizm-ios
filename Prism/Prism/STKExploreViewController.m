@@ -17,13 +17,11 @@
 #import "STKContentStore.h"
 #import "STKPostViewController.h"
 #import "STKUserStore.h"
-#import "STKSearchProfileCell.h"
 #import "STKProfileViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "STKTextImageCell.h"
 #import "STKPostController.h"
 #import "STKNavigationButton.h"
-#import "STKSearchHashTagsCell.h"
 #import "STKSearchResultsViewController.h"
 
 
@@ -96,7 +94,7 @@ typedef enum {
         }];
         
         _popularPostsController = [[STKPostController alloc] initWithViewController:self];
-        [[self popularPostsController] setFilterMap:@{@"sort_by" : @"likes_count", @"sort" : [NSString stringWithFormat:@"%d", STKQueryObjectSortAscending]}];
+//        [[self popularPostsController] setFilterMap:@{@"sort_by" : @"likes_count", @"sort" : [NSString stringWithFormat:@"%d", STKQueryObjectSortAscending]}];
         [[self popularPostsController] setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"likeCount" ascending:NO]]];
         [[self popularPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];

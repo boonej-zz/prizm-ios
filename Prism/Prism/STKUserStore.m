@@ -852,12 +852,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     NSPredicate *p = [NSPredicate predicateWithFormat:@"status == %@ and (creator == %@ or recepient == %@)",
                       STKRequestStatusAccepted, u, u];
     NSArray *cachedResults = [allCachedTrusts filteredArrayUsingPredicate:p];
+    STKTrust *referenceTrust = [fetchDescription referenceObject];
     if([cachedResults count] > 0) {
-        if([cachedResults count] > 0) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                block(cachedResults, nil);
-            }];
-        }
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(cachedResults, nil);
+        }];
     }
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
@@ -870,12 +869,23 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setIdentifiers:@[[u uniqueID], @"trusts"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
-        
-        if([allCachedTrusts count] > 0) {
-            STKTrust *latest = [[allCachedTrusts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]] firstObject];
-            [q setPageDirection:STKQueryObjectPageNewer];
-            [q setPageKey:[STKTrust remoteKeyForLocalKey:@"dateModified"]];
-            [q setPageValue:[STKTimestampFormatter stringFromDate:[latest dateModified]]];
+        if(!fetchDescription) {
+            if([allCachedTrusts count] > 0) {
+                STKTrust *latest = [[allCachedTrusts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]] firstObject];
+                [q setPageDirection:STKQueryObjectPageNewer];
+                [q setPageKey:[STKTrust remoteKeyForLocalKey:@"dateModified"]];
+                [q setPageValue:[STKTimestampFormatter stringFromDate:[latest dateModified]]];
+            }
+
+        } else {
+            if([fetchDescription direction] != STKQueryObjectPageReload) {
+                if([allCachedTrusts count] > 0) {
+                    STKTrust *latest = [[allCachedTrusts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]] firstObject];
+                    [q setPageDirection:[fetchDescription direction]];
+                    [q setPageKey:[STKTrust remoteKeyForLocalKey:@"dateModified"]];
+                    [q setPageValue:[STKTimestampFormatter stringFromDate:[latest dateModified]]];
+                }
+            }
         }
         
         STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];

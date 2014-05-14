@@ -127,7 +127,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 
 - (void)fetchFeedForUser:(STKUser *)u
         fetchDescription:(STKFetchDescription *)desc
-              completion:(void (^)(NSArray *posts, NSError *err))block;
+              completion:(void (^)(NSArray *posts, NSError *err))block
 {
     NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
                                    fetchDescription:desc];
@@ -220,19 +220,18 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             [q setPageKey:STKPostDateCreatedKey];
             [q setPageValue:[STKTimestampFormatter stringFromDate:[(STKPost *)[desc referenceObject] datePosted]]];
         }
-        /*
-        NSMutableDictionary *filters = [NSMutableDictionary dictionary];
-        for(NSString *key in [desc filterDictionary]) {
-            NSString *remoteKey = [STKPost remoteKeyForLocalKey:key];
-            if(remoteKey) {
-                [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:remoteKey];
+
+        [q setFilters:[self serverFilterMapFromLocalFilterMap:[desc filterDictionary]]];
+        
+        if([[desc sortDescriptors] count] > 0) {
+            NSSortDescriptor *sd = [[desc sortDescriptors] firstObject];
+            [q setSortKey:[STKPost remoteKeyForLocalKey:[sd key]]];
+            if([sd ascending]) {
+                [q setSortOrder:STKQueryObjectSortAscending];
             } else {
-                // Tjhis is for explore by like count
-                [filters setObject:[[desc filterDictionary] objectForKey:key] forKey:key];
+                [q setSortOrder:STKQueryObjectSortDescending];
             }
         }
-        */
-        [q setFilters:[self serverFilterMapFromLocalFilterMap:[desc filterDictionary]]];
         
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];

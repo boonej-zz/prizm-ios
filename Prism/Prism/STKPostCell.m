@@ -79,11 +79,9 @@
     [[self likeButton] setSelected:[p isPostLikedByUser:[[STKUserStore store] currentUser]]];
     
     if([p locationName]) {
-        [[self locationButton] setImage:[UIImage imageNamed:@"action_pin_selected"]
-                               forState:UIControlStateNormal];
+        [[self locationButton] setSelected:YES];
     } else {
-        [[self locationButton] setImage:[UIImage imageNamed:@"action_pin"]
-                               forState:UIControlStateNormal];
+        [[self locationButton] setSelected:NO];
     }
     
     NSMutableString *tags = [[NSMutableString alloc] init];

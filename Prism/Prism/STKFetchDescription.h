@@ -14,5 +14,6 @@
 @property (nonatomic, weak) id referenceObject;
 @property (nonatomic) STKQueryObjectPage direction;
 @property (nonatomic, strong) NSDictionary *filterDictionary;
+@property (nonatomic, strong) NSArray *sortDescriptors;
 
 @end

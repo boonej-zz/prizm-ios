@@ -62,6 +62,7 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     [[self filterOptionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
               forCellWithReuseIdentifier:@"STKTextImageCell"];
     [[self filterOptionView] setBackgroundColor:[UIColor clearColor]];

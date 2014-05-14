@@ -64,6 +64,7 @@
 @property (nonatomic, strong) NSMutableArray *comments;
 
 @property (strong, nonatomic) IBOutlet UIView *editView;
+@property (weak, nonatomic) IBOutlet UIImageView *dismissButtonImageView;
 
 - (IBAction)postComment:(id)sender;
 - (IBAction)changeVisibility:(id)sender;
@@ -247,6 +248,10 @@
 {
     [super viewDidLoad];
     
+    [[self dismissButtonImageView] setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.2]];
+    [[[self dismissButtonImageView] layer] setCornerRadius:10];
+    [[self dismissButtonImageView] setClipsToBounds:YES];
+    
     [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];
     [[self categoryCollectionView] setBackgroundColor:[UIColor clearColor]];
@@ -289,6 +294,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [[self dismissButtonImageView] setHidden:YES];
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setDisplayFullBleed:YES];
@@ -347,7 +354,7 @@
 {
     [super viewDidAppear:animated];
     [[[self postCell] contentImageView] setHidden:NO];
-
+    [[self dismissButtonImageView] setHidden:NO];
 }
 
 - (IBAction)overlayTapped:(id)sender
@@ -363,13 +370,8 @@
         [[self stretchHeightConstraint] setConstant:300 + y];
         [[self stretchWidthConstraint] setConstant:320 + y];
         
-        if([scrollView contentOffset].y < -100) {
-            if([self editingPostText]) {
-                [self setEditingPostText:NO];
-                [[self commentTextField] setText:nil];
-            }
-            [[self view] endEditing:YES];
-        }
+//        if([scrollView contentOffset].y < -100) {
+//        }
     } else {
         [[self stretchView] setHidden:YES];
     }
@@ -379,6 +381,8 @@
 {
     [super viewWillDisappear:animated];
 
+    [[self dismissButtonImageView] setHidden:YES];
+    
     [[self navigationController] setNavigationBarHidden:NO];
     
     [[self overlayVIew] setHidden:YES];
@@ -388,9 +392,20 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (IBAction)commentOverlayTapped:(id)sender
+{
+    if([self editingPostText]) {
+        [self setEditingPostText:NO];
+        [[self commentTextField] setText:nil];
+    }
+    [[self view] endEditing:YES];
+
+}
 
 - (void)keyboardWillAppear:(NSNotification *)note
 {
+    [[self dismissButtonImageView] setHidden:YES];
+    
     CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, r.size.height + [[self commentFooterView] bounds].size.height, 0)];
 
@@ -418,6 +433,8 @@
 
 - (void)keyboardWillDisappear:(NSNotification *)note
 {
+    [[self dismissButtonImageView] setHidden:NO];
+
     [self setEditingPostText:NO];
 
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];

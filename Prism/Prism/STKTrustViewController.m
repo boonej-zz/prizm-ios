@@ -18,6 +18,7 @@
 #import "STKProfileViewController.h"
 #import "STKTrust.h"
 #import "STKUserPostListViewController.h"
+#import "STKFetchDescription.h"
 
 @import MessageUI;
 
@@ -197,7 +198,10 @@
         }];
     }
     
-    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *trusts, NSError *err) {
+    STKFetchDescription *desc = [[STKFetchDescription alloc] init];
+    [desc setReferenceObject:nil];
+    [desc setDirection:STKQueryObjectPageReload];
+    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:desc completion:^(NSArray *trusts, NSError *err) {
         [self setTrusts:trusts];
         NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
         for(STKTrust *t in [self trusts]) {

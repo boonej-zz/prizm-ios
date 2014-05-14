@@ -50,17 +50,24 @@ NSString * const STKJSONBindTransformKey = @"transform";
     NSDictionary *map = [[self class] remoteToLocalKeyMap];
     for(NSString *remoteKey in map) {
         id value = [map objectForKey:remoteKey];
-        if(!value || [value isKindOfClass:[NSNull class]])
-            return [NSNull null];
         
+        NSString *keyCheck = nil;
         if([value isKindOfClass:[NSString class]]) {
-            return [self valueForKeyPath:localKey];
-        } else if ([value isKindOfClass:[NSDictionary class]]) {
-            STKTransformBlock transform = [value objectForKey:STKJSONBindTransformKey];
-            if(transform) {
-                return transform([self valueForKeyPath:localKey], STKTransformDirectionLocalToRemote);
-            } else {
+            keyCheck = value;
+        } else {
+            keyCheck = [value objectForKey:STKJSONBindFieldKey];
+        }
+        
+        if([keyCheck isEqualToString:localKey]) {
+            if([value isKindOfClass:[NSString class]]) {
                 return [self valueForKeyPath:localKey];
+            } else if ([value isKindOfClass:[NSDictionary class]]) {
+                STKTransformBlock transform = [value objectForKey:STKJSONBindTransformKey];
+                if(transform) {
+                    return transform([self valueForKeyPath:localKey], STKTransformDirectionLocalToRemote);
+                } else {
+                    return [self valueForKeyPath:localKey];
+                }
             }
         }
     }
