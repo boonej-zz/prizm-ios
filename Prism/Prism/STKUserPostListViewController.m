@@ -140,8 +140,8 @@
         [[self rightConstraint] setConstant:6];
     } else {
         [[self personalButton] setHidden:YES];
-        [[self leftConstraint] setConstant:32];
-        [[self rightConstraint] setConstant:-20];
+        [[self leftConstraint] setConstant:6];
+        [[self rightConstraint] setConstant:6];
     }
 
     [[self filterBar] setHidden:![self showsFilterBar]];
