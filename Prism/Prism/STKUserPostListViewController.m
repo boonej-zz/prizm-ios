@@ -22,6 +22,11 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *passionAspirationConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *aspirationExperienceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *experienceAchievementConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *achievementInspirationConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *inspirationPersonalConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *filterBar;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
@@ -141,7 +146,12 @@
     } else {
         [[self personalButton] setHidden:YES];
         [[self leftConstraint] setConstant:6];
-        [[self rightConstraint] setConstant:6];
+        [[self passionAspirationConstraint] setConstant:18];
+        [[self aspirationExperienceConstraint] setConstant:18];
+        [[self experienceAchievementConstraint] setConstant:18];
+        [[self achievementInspirationConstraint] setConstant:18];
+        [[self inspirationPersonalConstraint] setConstant:18];
+        [[self rightConstraint] setConstant:-64];
     }
 
     [[self filterBar] setHidden:![self showsFilterBar]];
