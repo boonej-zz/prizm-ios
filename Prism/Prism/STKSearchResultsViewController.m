@@ -18,6 +18,7 @@
 #import "STKProfileViewController.h"
 #import "STKHashtagPostsViewController.h"
 #import "UIERealTimeBlurView.h"
+#import "UIViewController+STKControllerItems.h"
 
 typedef enum {
     STKSearchTypeUser = 0,
@@ -88,20 +89,22 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [[[self blurView] displayLink] setPaused:NO];
     [self reloadSearchResults];
     if([self searchType] == STKSearchTypeUser)
         [[self searchTypeControl] setSelectedSegmentIndex:0];
     else
         [[self searchTypeControl] setSelectedSegmentIndex:1];
-
+    
+    //force Search title & menuBarButton to ensure they are set from any previous vc
+    [[[[self parentViewController] parentViewController] navigationItem] setTitle:@"Search"];
+    [[[[self parentViewController] parentViewController] navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-//    [[self searchTextField] becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -321,7 +324,7 @@ typedef enum {
                 NSString *tag = [hashtag objectForKey:@"hash_tag"];
                 if(tag) {
                     STKHashtagPostsViewController *vc = [[STKHashtagPostsViewController alloc] initWithHashTag:tag];
-                    [vc setShowsOwnBackButton:YES];
+                    [vc setHashTagCount:[NSString stringWithFormat:@"%i", [[self hashTagsFound] count]]];
                     [[self navigationController] pushViewController:vc animated:YES];
                 }
             }

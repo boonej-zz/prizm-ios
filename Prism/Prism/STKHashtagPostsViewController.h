@@ -10,6 +10,6 @@
 
 @interface STKHashtagPostsViewController : UIViewController
 
+@property (nonatomic, strong) NSString *hashTagCount;
 - (id)initWithHashTag:(NSString *)hashTag;
-@property (nonatomic) BOOL showsOwnBackButton;
 @end
