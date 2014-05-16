@@ -2051,7 +2051,7 @@
 		BE6EB87F186395F300E8009D /* STKErrorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKErrorStore.h; sourceTree = "<group>"; };
 		BE6EB880186395F300E8009D /* STKErrorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKErrorStore.m; sourceTree = "<group>"; };
 		BE7391C0190193AB00AD81AB /* STKSearchResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchResultsViewController.h; sourceTree = "<group>"; };
-		BE7391C1190193AB00AD81AB /* STKSearchResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchResultsViewController.m; sourceTree = "<group>"; };
+		BE7391C1190193AB00AD81AB /* STKSearchResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchResultsViewController.m; sourceTree = "<group>"; wrapsLines = 0; };
 		BE7391C2190193AB00AD81AB /* STKSearchResultsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchResultsViewController.xib; sourceTree = "<group>"; };
 		BE7391C519019AB600AD81AB /* STKHashtagPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHashtagPostsViewController.h; sourceTree = "<group>"; };
 		BE7391C619019AB600AD81AB /* STKHashtagPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagPostsViewController.m; sourceTree = "<group>"; };

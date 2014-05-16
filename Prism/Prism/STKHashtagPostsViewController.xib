@@ -6,7 +6,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKHashtagPostsViewController">
             <connections>
-                <outlet property="backButtonImageView" destination="W1g-rk-mRd" id="F7u-ni-GiL"/>
                 <outlet property="barLabel" destination="D4W-fP-zdH" id="Dl7-V2-Y4j"/>
                 <outlet property="blurView" destination="aM1-8p-acJ" id="g4I-yY-Qfn"/>
                 <outlet property="tableView" destination="ehB-fC-XpV" id="8Rd-bg-VrE"/>
@@ -37,13 +36,36 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mc1-oc-wVj" customClass="UIControl">
-                    <rect key="frame" x="0.0" y="65" width="320" height="44"/>
+                    <rect key="frame" x="0.0" y="65" width="320" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="btn_back" translatesAutoresizingMaskIntoConstraints="NO" id="W1g-rk-mRd">
-                            <rect key="frame" x="15" y="10" width="24" height="24"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uAF-aJ-ZF8" userLabel="cardview">
+                            <rect key="frame" x="75" y="10" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="profile_cardview_off">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="selected" image="profile_cardview_on"/>
+                            <connections>
+                                <action selector="cardViewButtonTapped:" destination="-1" eventType="touchUpInside" id="e6l-J5-1ya"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z8Z-U8-Ti2">
+                            <rect key="frame" x="56" y="18" width="1" height="14"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eJZ-Z7-tYX" userLabel="gridview">
+                            <rect key="frame" x="8" y="10" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="profile_gridview_off">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="selected" image="profile_gridview_on"/>
+                            <connections>
+                                <action selector="gridViewButtonTapped:" destination="-1" eventType="touchUpInside" id="oO8-Tu-hdn"/>
+                            </connections>
+                        </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4W-fP-zdH">
                             <rect key="frame" x="47" y="11" width="253" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -54,11 +76,8 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="44" id="5JQ-fG-4X5"/>
+                        <constraint firstAttribute="height" constant="45" id="5JQ-fG-4X5"/>
                     </constraints>
-                    <connections>
-                        <action selector="backBarTapped:" destination="-1" eventType="touchUpInside" id="LwV-nk-6Nv"/>
-                    </connections>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -77,7 +96,10 @@
         </view>
     </objects>
     <resources>
-        <image name="btn_back" width="24" height="24"/>
         <image name="img_background" width="320" height="568"/>
+        <image name="profile_cardview_off" width="15" height="14"/>
+        <image name="profile_cardview_on" width="15" height="14"/>
+        <image name="profile_gridview_off" width="14" height="14"/>
+        <image name="profile_gridview_on" width="14" height="14"/>
     </resources>
 </document>
