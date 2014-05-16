@@ -6,9 +6,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKGraphViewController">
             <connections>
+                <outlet property="achievementButton" destination="cDI-nk-uIi" id="eOv-7J-dOX"/>
+                <outlet property="aspirationButton" destination="i4Q-pq-q0X" id="xMw-wo-gff"/>
                 <outlet property="dateBar" destination="KmK-bA-jTu" id="nRK-82-11k"/>
+                <outlet property="experienceButton" destination="leg-3c-G8b" id="jLa-Yd-KS4"/>
                 <outlet property="graphView" destination="lb5-pg-axI" id="IRu-ez-n8E"/>
+                <outlet property="inspirationButton" destination="8GX-AC-QCw" id="sNL-rI-Ly5"/>
+                <outlet property="passionButton" destination="3kD-xS-BfU" id="sBc-bP-WyK"/>
                 <outlet property="percentTableView" destination="k7u-Cp-1Um" id="DcB-yq-kf2"/>
+                <outlet property="personalButton" destination="z6p-OR-5Ld" id="Z2d-Fy-GAg"/>
                 <outlet property="pieChartView" destination="bbw-nr-E7X" id="jQP-JU-Geb"/>
                 <outlet property="underlayView" destination="eyr-wJ-YQY" id="5MB-rd-HY1"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -77,75 +83,93 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="qkz-Eq-ZIz"/>
                     </constraints>
+                    <connections>
+                        <action selector="dateBarDidChange:" destination="-1" eventType="valueChanged" id="B5N-Da-JJ2"/>
+                    </connections>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9dF-5u-Y3r" userLabel="Toggle Container">
                     <rect key="frame" x="0.0" y="518" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i4Q-pq-q0X">
-                            <rect key="frame" x="0.0" y="0.0" width="52" height="50"/>
+                            <rect key="frame" x="0.0" y="0.0" width="53" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="Ntk-qH-sp7"/>
-                                <constraint firstAttribute="width" constant="52" id="cXI-bn-W0w"/>
+                                <constraint firstAttribute="width" constant="53" id="cXI-bn-W0w"/>
                             </constraints>
-                            <state key="normal" image="category_passions_disabled">
+                            <state key="normal" image="category_aspiration_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <state key="selected" image="category_passions_selected"/>
+                            <state key="selected" image="category_aspirations_selected"/>
+                            <connections>
+                                <action selector="toggleItem:" destination="-1" eventType="touchUpInside" id="8x6-fI-g6F"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="leg-3c-G8b">
-                            <rect key="frame" x="106" y="0.0" width="52" height="50"/>
+                            <rect key="frame" x="106" y="0.0" width="53" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="52" id="FQj-Ij-F19"/>
+                                <constraint firstAttribute="width" constant="53" id="FQj-Ij-F19"/>
                                 <constraint firstAttribute="height" constant="50" id="swA-FE-021"/>
                             </constraints>
                             <state key="normal" image="category_experiences_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <state key="selected" image="category_experiences_selected"/>
+                            <connections>
+                                <action selector="toggleItem:" destination="-1" eventType="touchUpInside" id="pOH-Ex-8dQ"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDI-nk-uIi">
-                            <rect key="frame" x="159" y="0.0" width="52" height="50"/>
+                            <rect key="frame" x="159" y="0.0" width="53" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="8fx-xe-1ZE"/>
-                                <constraint firstAttribute="width" constant="52" id="a3V-Tg-hAW"/>
+                                <constraint firstAttribute="width" constant="53" id="a3V-Tg-hAW"/>
                             </constraints>
                             <state key="normal" image="category_achievements_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <state key="selected" image="category_achievements_selected"/>
+                            <connections>
+                                <action selector="toggleItem:" destination="-1" eventType="touchUpInside" id="ue3-um-e48"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8GX-AC-QCw">
-                            <rect key="frame" x="212" y="0.0" width="52" height="50"/>
+                            <rect key="frame" x="212" y="0.0" width="53" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="52" id="6qd-DV-Eb4"/>
+                                <constraint firstAttribute="width" constant="53" id="6qd-DV-Eb4"/>
                                 <constraint firstAttribute="height" constant="50" id="Mtg-OA-uSx"/>
                             </constraints>
                             <state key="normal" image="category_inspiration_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <state key="selected" image="category_inspiration_selected"/>
+                            <connections>
+                                <action selector="toggleItem:" destination="-1" eventType="touchUpInside" id="pkz-a8-5JV"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kD-xS-BfU">
-                            <rect key="frame" x="53" y="0.0" width="52" height="50"/>
+                            <rect key="frame" x="53" y="0.0" width="53" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="01T-Fb-8cY"/>
-                                <constraint firstAttribute="width" constant="52" id="1fH-Y6-LGU"/>
+                                <constraint firstAttribute="width" constant="53" id="1fH-Y6-LGU"/>
                             </constraints>
-                            <state key="normal" image="category_aspiration_disabled">
+                            <state key="normal" image="category_passions_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <state key="selected" image="category_aspirations_selected"/>
+                            <state key="selected" image="category_passions_selected"/>
+                            <connections>
+                                <action selector="toggleItem:" destination="-1" eventType="touchUpInside" id="NB1-ZE-l42"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z6p-OR-5Ld">
                             <rect key="frame" x="265" y="0.0" width="55" height="50"/>
@@ -158,19 +182,22 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <state key="selected" image="category_personal_selected"/>
+                            <connections>
+                                <action selector="toggleItem:" destination="-1" eventType="touchUpInside" id="fw2-2q-ypF"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="leg-3c-G8b" firstAttribute="leading" secondItem="3kD-xS-BfU" secondAttribute="trailing" constant="1" id="BFc-VL-DNB"/>
-                        <constraint firstItem="z6p-OR-5Ld" firstAttribute="leading" secondItem="8GX-AC-QCw" secondAttribute="trailing" constant="1" id="CTc-X4-Auq"/>
+                        <constraint firstItem="leg-3c-G8b" firstAttribute="leading" secondItem="3kD-xS-BfU" secondAttribute="trailing" id="BFc-VL-DNB"/>
+                        <constraint firstItem="z6p-OR-5Ld" firstAttribute="leading" secondItem="8GX-AC-QCw" secondAttribute="trailing" id="CTc-X4-Auq"/>
                         <constraint firstItem="i4Q-pq-q0X" firstAttribute="leading" secondItem="9dF-5u-Y3r" secondAttribute="leading" id="IdT-9H-ZBV"/>
                         <constraint firstAttribute="centerY" secondItem="cDI-nk-uIi" secondAttribute="centerY" id="RSn-D2-F9F"/>
-                        <constraint firstItem="cDI-nk-uIi" firstAttribute="leading" secondItem="leg-3c-G8b" secondAttribute="trailing" constant="1" id="U3e-OX-SNw"/>
+                        <constraint firstItem="cDI-nk-uIi" firstAttribute="leading" secondItem="leg-3c-G8b" secondAttribute="trailing" id="U3e-OX-SNw"/>
                         <constraint firstAttribute="centerY" secondItem="3kD-xS-BfU" secondAttribute="centerY" id="b7X-e0-PZh"/>
-                        <constraint firstItem="3kD-xS-BfU" firstAttribute="leading" secondItem="i4Q-pq-q0X" secondAttribute="trailing" constant="1" id="dd2-Tz-Sfr"/>
+                        <constraint firstItem="3kD-xS-BfU" firstAttribute="leading" secondItem="i4Q-pq-q0X" secondAttribute="trailing" id="dd2-Tz-Sfr"/>
                         <constraint firstAttribute="centerY" secondItem="leg-3c-G8b" secondAttribute="centerY" id="edE-h7-WGI"/>
-                        <constraint firstItem="8GX-AC-QCw" firstAttribute="leading" secondItem="cDI-nk-uIi" secondAttribute="trailing" constant="1" id="iPM-PG-P9L"/>
+                        <constraint firstItem="8GX-AC-QCw" firstAttribute="leading" secondItem="cDI-nk-uIi" secondAttribute="trailing" id="iPM-PG-P9L"/>
                         <constraint firstAttribute="centerY" secondItem="z6p-OR-5Ld" secondAttribute="centerY" id="icB-S6-kOk"/>
                         <constraint firstAttribute="centerY" secondItem="i4Q-pq-q0X" secondAttribute="centerY" id="qUE-FF-DSg"/>
                         <constraint firstAttribute="height" constant="50" id="r05-aC-l3q"/>

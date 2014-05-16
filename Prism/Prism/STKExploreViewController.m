@@ -169,7 +169,6 @@ typedef enum {
     [[self navigationItem] setRightBarButtonItem:[self searchButtonItem]];
 }
 
-
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {
     int row = idx / 3;

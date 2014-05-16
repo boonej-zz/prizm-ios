@@ -20,6 +20,7 @@
 #import "STKImageStore.h"
 #import "STKPostViewController.h"
 #import "STKFetchDescription.h"
+#import "STKPostCell.h"
 
 @implementation STKPostController
 
@@ -296,22 +297,27 @@
                                          }];
         [[[self viewController] navigationController] pushViewController:vc animated:YES];
     } else {
+        
+        STKPostCell *c = nil;
+        if([[self delegate] respondsToSelector:@selector(postController:cellForPostAtIndexPath:)]) {
+            c = (STKPostCell *)[[self delegate] postController:self cellForPostAtIndexPath:ip];
+        }
+
         if([post isPostLikedByUser:[[STKUserStore store] currentUser]]) {
             [[STKContentStore store] unlikePost:post
-                                     completion:^(STKPost *p, NSError *err) {/*
-                                         [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                                                 withRowAnimation:UITableViewRowAnimationNone];*/
+                                     completion:^(STKPost *p, NSError *err) {
                                      }];
+            [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
+            [[c likeButton] setSelected:NO];
+
         } else {
             [[STKContentStore store] likePost:post
                                    completion:^(STKPost *p, NSError *err) {
-                                       /*[[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                                               withRowAnimation:UITableViewRowAnimationNone];*/
+
                                    }];
+            [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
+            [[c likeButton] setSelected:YES];
         }
-        /*
-        [[self tableView] reloadRowsAtIndexPaths:@[ip]
-                                withRowAnimation:UITableViewRowAnimationNone];*/
         
     }
 }

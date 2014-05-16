@@ -14,7 +14,7 @@
 {
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     [[self colorWell] setClipsToBounds:YES];
-    [[[self colorWell] layer] setCornerRadius:4];
+    [[[self colorWell] layer] setCornerRadius:2];
 }
 
 - (void)layoutContent

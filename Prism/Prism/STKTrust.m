@@ -22,11 +22,12 @@ NSString * const STKRequestStatusCancelled = @"cancelled";
 @implementation STKTrust
 @dynamic uniqueID, status, dateCreated, dateModified, creator, creatorCommentsCount, creatorLikesCount, creatorPostsCount,
 recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, type;
+@dynamic creatorScore, recepientScore;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"STKTrust (%@) from %@ to %@ Status: %@ ModifiedDate: %@",
-            [self uniqueID], [[self creator] name], [[self recepient] name], [self status], [self dateModified]];
+    return [NSString stringWithFormat:@"STKTrust (%@) from %@ (%f) to %@ (%f) Status: %@ ModifiedDate: %@",
+            [self uniqueID], [[self creator] name], [self creatorScore], [[self recepient] name], [self recepientScore], [self status], [self dateModified]];
 }
 
 
@@ -43,9 +44,11 @@ recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, typ
              @"to_likes_count" : @"recepientLikesCount",
              @"to_comments_count" : @"recepientCommentsCount",
              @"to_posts_count" : @"recepientPostsCount",
+             @"to_score" : @"recepientScore",
              @"from_likes_count" : @"creatorLikesCount",
              @"from_comments_count" : @"creatorCommentsCount",
-             @"from_posts_count" : @"creatorPostsCount"
+             @"from_posts_count" : @"creatorPostsCount",
+             @"from_score" : @"creatorScore"
              };
 }
 
@@ -55,6 +58,15 @@ recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, typ
     [self bindFromDictionary:jsonObject keyMap:[[self class] remoteToLocalKeyMap]];
     
     return nil;
+}
+
+- (float)otherScore
+{
+    if([[[self creator] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
+        return [self recepientScore];
+    }
+    
+    return [self creatorScore];
 }
 
 - (STKUser *)otherUser

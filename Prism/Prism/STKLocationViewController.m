@@ -106,6 +106,12 @@
     [[self tableView] reloadData];
 }
 
+- (UITableViewCell *)postController:(STKPostController *)pc cellForPostAtIndexPath:(NSIndexPath *)ip
+{
+    return [[self tableView] cellForRowAtIndexPath:ip];
+}
+
+
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {
     if([self showPostsInSingleLayout]) {

@@ -131,6 +131,11 @@
     return c;
 }
 
+- (UITableViewCell *)postController:(STKPostController *)pc cellForPostAtIndexPath:(NSIndexPath *)ip
+{
+    return [[self tableView] cellForRowAtIndexPath:ip];
+}
+
 
 - (void)removeCardAndRecycleForIndexPath:(NSIndexPath *)ip
 {

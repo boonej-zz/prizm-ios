@@ -15,5 +15,6 @@
 @property (nonatomic) STKQueryObjectPage direction;
 @property (nonatomic, strong) NSDictionary *filterDictionary;
 @property (nonatomic, strong) NSArray *sortDescriptors;
+@property (nonatomic) int limit;
 
 @end

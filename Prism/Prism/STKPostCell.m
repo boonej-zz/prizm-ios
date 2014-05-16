@@ -16,7 +16,6 @@
 
 @interface STKPostCell ()
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *hashTagHeightConstraint;
-@property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *hashTagTopOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerHeightConstraint;
 @property (weak, nonatomic) IBOutlet STKGradientView *hashTagContainer;
@@ -118,7 +117,7 @@
 }
 
 - (IBAction)toggleLike:(id)sender
-{
+{/*
     if([[self likeButton] isSelected]) {
         [[self likeButton] setSelected:NO];
         int count = [[self post] likeCount] - 1;
@@ -133,7 +132,7 @@
         int count = [[self post] likeCount] + 1;
         [[self likeCountLabel] setHidden:NO];
         [[self likeCountLabel] setText:[NSString stringWithFormat:@"%d", count]];
-    }
+    }*/
     ROUTE(sender);
 }
 

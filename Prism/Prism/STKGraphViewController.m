@@ -17,6 +17,13 @@
 
 @interface STKGraphViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *aspirationButton;
+@property (weak, nonatomic) IBOutlet UIButton *passionButton;
+@property (weak, nonatomic) IBOutlet UIButton *experienceButton;
+@property (weak, nonatomic) IBOutlet UIButton *achievementButton;
+@property (weak, nonatomic) IBOutlet UIButton *inspirationButton;
+@property (weak, nonatomic) IBOutlet UIButton *personalButton;
+
 @property (weak, nonatomic) IBOutlet STKGraphView *graphView;
 @property (weak, nonatomic) IBOutlet STKPieChartView *pieChartView;
 @property (weak, nonatomic) IBOutlet UITableView *percentTableView;
@@ -27,7 +34,11 @@
 @property (nonatomic, strong) NSDictionary *typePercentages;
 @property (nonatomic, strong) NSDictionary *typeColors;
 @property (nonatomic, strong) NSDictionary *typeNames;
-@property (nonatomic, strong) NSArray *graphValues;
+@property (nonatomic, strong) NSDictionary *graphValues;
+
+@property (nonatomic, strong) NSArray *filteredHashTags;
+@property (nonatomic, strong) NSString *currentFilter;
+
 @end
 
 @implementation STKGraphViewController
@@ -42,14 +53,15 @@
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_graph"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_graph_selected"]];
         [[self tabBarItem] setTitle:@"Graph"];
-
-        [self setTypeColors:@{STKPostTypePassion : [UIColor redColor],
-                              STKPostTypeAspiration : [UIColor blueColor],
-                              STKPostTypeExperience : [UIColor greenColor],
-                              STKPostTypeAchievement : [UIColor grayColor],
-                              STKPostTypeInspiration : [UIColor yellowColor],
-                              STKPostTypePersonal : [UIColor orangeColor]}];
-        [self setOrderArray:@[STKPostTypePassion, STKPostTypeAspiration, STKPostTypeExperience, STKPostTypeAchievement, STKPostTypeInspiration, STKPostTypePersonal]];
+        
+        [self setTypeColors:@{STKPostTypePassion : [UIColor colorWithRed:242./255.0 green:66./255.0 blue:0 alpha:1],
+                              STKPostTypeAspiration : [UIColor colorWithRed:58./255.0 green:164./255.0 blue:246./255.0 alpha:1],
+                              STKPostTypeExperience : [UIColor colorWithRed:103./255.0 green:189./255.0 blue:9./255.0 alpha:1],
+                              STKPostTypeAchievement : [UIColor colorWithRed:254./255.0 green:121./255.0 blue:0 alpha:1],
+                              STKPostTypeInspiration : [UIColor colorWithRed:217./255.0 green:186./255.0 blue:100./255.0 alpha:1],
+                              STKPostTypePersonal : [UIColor colorWithRed:185./255.0 green:194./255.0 blue:213./255.0 alpha:1]
+                              }];
+        [self setOrderArray:@[STKPostTypeAspiration, STKPostTypePassion, STKPostTypeExperience, STKPostTypeAchievement, STKPostTypeInspiration, STKPostTypePersonal]];
     
         [self setTypeNames:@{STKPostTypePassion : @"Passion",
                               STKPostTypeAspiration : @"Aspiration",
@@ -64,6 +76,65 @@
     return self;
 }
 
+- (IBAction)dateBarDidChange:(id)sender
+{
+    [self setGraphValues:[self temporaryValues]];
+    [self configureGraphArea];
+
+}
+
+- (IBAction)toggleItem:(id)sender
+{
+    if([sender isSelected]) {
+        [sender setSelected:NO];
+        [self setCurrentFilter:nil];
+        return;
+    }
+    [[self aspirationButton] setSelected:NO];
+    [[self passionButton] setSelected:NO];
+    [[self experienceButton] setSelected:NO];
+    [[self achievementButton] setSelected:NO];
+    [[self inspirationButton] setSelected:NO];
+    [[self personalButton] setSelected:NO];
+    
+    [sender setSelected:YES];
+    
+    if(sender == [self aspirationButton]) {
+        [self setCurrentFilter:STKPostTypeAspiration];
+    } else if(sender == [self passionButton]) {
+        [self setCurrentFilter:STKPostTypePassion];
+    } else if(sender == [self experienceButton]) {
+        [self setCurrentFilter:STKPostTypeExperience];
+    } else if(sender == [self achievementButton]) {
+        [self setCurrentFilter:STKPostTypeAchievement];
+    } else if(sender == [self inspirationButton]) {
+        [self setCurrentFilter:STKPostTypeInspiration];
+    } else if(sender == [self personalButton]) {
+        [self setCurrentFilter:STKPostTypePersonal];
+    }
+}
+
+
+- (void)setCurrentFilter:(NSString *)currentFilter
+{
+    [self setFilteredHashTags:nil];
+    
+    _currentFilter = currentFilter;
+    
+    [self configureGraphArea];
+    [self configureChartArea];
+    
+    [[STKUserStore store] fetchHashtagsForPostType:currentFilter completion:^(NSArray *hashTags, NSError *err) {
+
+        [self setFilteredHashTags:hashTags];
+        
+        [self setFilteredHashTags:@[@"foobar", @"boom", @"bar", @"college"]];
+        
+        [[self percentTableView] reloadData];
+        
+    }];
+    [[self percentTableView] reloadData];
+}
 
 - (void)menuWillAppear:(BOOL)animated
 {
@@ -112,21 +183,22 @@
     [[self percentTableView] setBackgroundColor:[UIColor clearColor]];
     
     [[self graphView] setXLabels:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7"]];
-    [[self graphView] setYLabels:@[@"0", @"10", @"20", @"30", @"40"]];
+    [[self graphView] setYLabels:@[@"", @"25%", @"50%", @"75%", @"100%"]];
 }
 
-- (NSArray *)temporaryValues
+- (NSDictionary *)temporaryValues
 {
     srand(time(NULL));
 
-    return @[
-             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypePassion]},
-             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeAspiration]},
-             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeExperience]},
-             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeAchievement]},
-             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeInspiration]},
-             @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypePersonal]}
-    ];
+    return @{
+             STKPostTypePersonal : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypePersonal]},
+             STKPostTypeInspiration : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeInspiration]},
+             STKPostTypeAchievement : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeAchievement]},
+             STKPostTypeExperience : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeExperience]},
+             STKPostTypePassion : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypePassion]},
+             STKPostTypeAspiration : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeAspiration]}
+
+    };
 }
 
 - (NSArray *)randomNumbersToMax:(int)max count:(int)count
@@ -140,16 +212,33 @@
 
 - (void)configureGraphArea
 {
-    [[self graphView] setValues:[self graphValues]];
+    NSMutableArray *orderedValues = [NSMutableArray array];
+    if([self currentFilter]) {
+        [orderedValues addObject:[[self graphValues] objectForKey:[self currentFilter]]];
+    } else {
+        for(NSString *key in [[self orderArray] reverseObjectEnumerator]) {
+            [orderedValues addObject:[[self graphValues] objectForKey:key]];
+        }
+    }
+    [[self graphView] setValues:orderedValues];
 }
 
 - (void)configureChartArea
 {
     NSMutableArray *orderedColors = [NSMutableArray array];
     NSMutableArray *orderedValues = [NSMutableArray array];
-    for(NSString *key in [self orderArray]) {
-        [orderedColors addObject:[[self typeColors] objectForKey:key]];
-        [orderedValues addObject:[[self typePercentages] objectForKey:key]];
+    if([self currentFilter]) {
+        [orderedColors addObject:[[self typeColors] objectForKey:[self currentFilter]]];
+        float v = [[[self typePercentages] objectForKey:[self currentFilter]] floatValue];
+        [orderedValues addObject:@(v)];
+        
+        [orderedValues addObject:@(1.0 - v)];
+        [orderedColors addObject:[UIColor colorWithRed:.29 green:.35 blue:.54 alpha:1]];
+    } else {
+        for(NSString *key in [self orderArray]) {
+            [orderedColors addObject:[[self typeColors] objectForKey:key]];
+            [orderedValues addObject:[[self typePercentages] objectForKey:key]];
+        }
     }
     [[self pieChartView] setColors:orderedColors];
     [[self pieChartView] setValues:orderedValues];
@@ -160,16 +249,38 @@
 {
     [cell setBackgroundColor:[UIColor clearColor]];
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if([self currentFilter]) {
+        return 1 + [[self filteredHashTags] count];
+    }
     return [[self orderArray] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    int row = [indexPath row];
+    if([self currentFilter]) {
+        if([indexPath row] > 0) {
+            UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+            if(!c) {
+                c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+                [[c textLabel] setFont:STKFont(12)];
+                [[c textLabel] setTextColor:[UIColor whiteColor]];
+            }
+            
+            [[c textLabel] setText:[NSString stringWithFormat:@"#%@", [[self filteredHashTags] objectAtIndex:row - 1]]];
+            
+            return c;
+        } else {
+            row = [[self orderArray] indexOfObject:[self currentFilter]];
+        }
+    }
+    
     STKGraphCell *c = [STKGraphCell cellForTableView:tableView target:self];
     
-    NSString *key = [[self orderArray] objectAtIndex:[indexPath row]];
+    NSString *key = [[self orderArray] objectAtIndex:row];
     [[c nameLabel] setText:[[self typeNames] objectForKey:key]];
     
     float percent = [[[self typePercentages] objectForKey:key] floatValue];

@@ -201,7 +201,7 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                        ];
-            _requiredKeys = @[@"email", @"firstName", @"lastName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+            _requiredKeys = @[@"email", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
         } else {
             _items = @[
                        // Public
@@ -579,6 +579,7 @@ const long STKCreateProgressGeocoding = 4;
 
 - (void)keyboardWillAppear:(NSNotification *)note
 {
+    
     CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, r.size.height, 0)];
     

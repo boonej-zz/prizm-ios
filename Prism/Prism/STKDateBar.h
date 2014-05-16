@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface STKDateBar : UIView
+@interface STKDateBar : UIControl
+
+@property (nonatomic) int lastWeekInYear;
+@property (nonatomic) int year;
 
 @end

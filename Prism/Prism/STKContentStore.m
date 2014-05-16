@@ -686,7 +686,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 - (void)fetchRecommendedHashtags:(NSString *)baseString
                       completion:(void (^)(NSArray *suggestions))block
 {
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"title beginswith %@", baseString];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"title beginswith[cd] %@", baseString];
     NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKHashTag"];
     [req setPredicate:p];
     [req setFetchLimit:5];

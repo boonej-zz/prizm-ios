@@ -23,6 +23,7 @@
 #import "STKFoursquareLocation.h"
 
 #import "STKMarkupController.h"
+#import "STKMarkupUtilities.h"
 
 NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
@@ -368,7 +369,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     if(![[self postInfo] objectForKey:STKPostURLKey]) {
         // Do a card
         NSString *postText = [[self postInfo] objectForKey:STKPostTextKey];
-        UIImage *img = [STKPost imageForTextPost:postText];
+        UIImage *img = [STKMarkupUtilities imageForText:postText];
         [self setPostImage:img];
     }
     
@@ -433,30 +434,13 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [self createPost];
 }
 
-- (NSArray *)hashTagsFromText:(NSString *)text
-{
-    if(!text)
-        return nil;
-    
-    NSMutableArray *tags = [NSMutableArray array];
-    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#([^\\s]*)" options:0 error:nil];
-    [exp enumerateMatchesInString:text options:0 range:NSMakeRange(0, [text length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-        if([result numberOfRanges] == 2) {
-            NSString *tag = [text substringWithRange:[result rangeAtIndex:1]];
-            [tags addObject:tag];
-        }
-    }];
-    
-    return [tags copy];
-}
 
 - (void)markupController:(STKMarkupController *)markupController
            didSelectUser:(STKUser *)user
         forMarkerAtRange:(NSRange)range
 {
-    NSAttributedString *str = [STKPost userTagForUser:user
-                                           attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
-
+    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
+    
     if(range.location == NSNotFound) {
         range = NSMakeRange([[[self postTextView] textStorage] length], 0);
     }

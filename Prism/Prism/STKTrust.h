@@ -33,9 +33,13 @@ typedef enum {
 @property (nonatomic) int creatorPostsCount;
 @property (nonatomic) int creatorCommentsCount;
 @property (nonatomic) int creatorLikesCount;
+@property (nonatomic) float creatorScore;
+
 @property (nonatomic) int recepientPostsCount;
 @property (nonatomic) int recepientCommentsCount;
 @property (nonatomic) int recepientLikesCount;
+@property (nonatomic) float recepientScore;
+
 
 @property (nonatomic, strong) STKUser *recepient;
 @property (nonatomic, strong) STKUser *creator;
@@ -45,6 +49,7 @@ typedef enum {
 - (BOOL)isRejected;
 - (BOOL)isCancelled;
 
+- (float)otherScore;
 - (STKUser *)otherUser;
 
 @end

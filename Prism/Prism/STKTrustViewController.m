@@ -198,13 +198,11 @@
         }];
     }
     
-    STKFetchDescription *desc = [[STKFetchDescription alloc] init];
-    [desc setReferenceObject:nil];
-    [desc setDirection:STKQueryObjectPageReload];
-    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:desc completion:^(NSArray *trusts, NSError *err) {
+    [[STKUserStore store] fetchTopTrustsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *trusts, NSError *err) {
         [self setTrusts:trusts];
         NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
         for(STKTrust *t in [self trusts]) {
+            
             if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
                 [otherUsers addObject:[t recepient]];
             } else {
@@ -263,16 +261,26 @@
     }
     
     [lvc setType:STKUserListTypeTrust];
-    NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
-    for(STKTrust *t in [self trusts]) {
-        if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
-            [otherUsers addObject:[t recepient]];
-        } else {
-            [otherUsers addObject:[t creator]];
-        }
-    }
-    [lvc setUsers:otherUsers];
+    
     [[self navigationController] pushViewController:lvc animated:YES];
+    
+    
+    STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+    [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
+    [fd setDirection:STKQueryObjectPageNewer];
+
+    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+        NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
+        for(STKTrust *t in trusts) {
+            if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
+                [otherUsers addObject:[t recepient]];
+            } else {
+                [otherUsers addObject:[t creator]];
+            }
+        }
+        [lvc setUsers:otherUsers];
+    }];
+
 }
 
 - (IBAction)sendEmail:(id)sender

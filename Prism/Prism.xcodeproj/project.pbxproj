@@ -111,6 +111,7 @@
 		BE7D5AE518D37327005D3893 /* STKUserPostListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5AE318D37327005D3893 /* STKUserPostListViewController.xib */; };
 		BE7D5AE918D382E5005D3893 /* STKTextInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */; };
 		BE7D5AEA18D382E5005D3893 /* STKTextInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */; };
+		BE8076061923F48F00D558E0 /* STKMarkupUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8076051923F48F00D558E0 /* STKMarkupUtilities.m */; };
 		BE8368FB18DA186300526637 /* STKTrust.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8368FA18DA186300526637 /* STKTrust.m */; };
 		BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE893600186CD05E00FE8263 /* STKContentStore.m */; };
 		BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */; };
@@ -2084,6 +2085,8 @@
 		BE7D5AE618D382E5005D3893 /* STKTextInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTextInputViewController.h; sourceTree = "<group>"; };
 		BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTextInputViewController.m; sourceTree = "<group>"; };
 		BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKTextInputViewController.xib; sourceTree = "<group>"; };
+		BE8076041923F48F00D558E0 /* STKMarkupUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMarkupUtilities.h; sourceTree = "<group>"; };
+		BE8076051923F48F00D558E0 /* STKMarkupUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMarkupUtilities.m; sourceTree = "<group>"; };
 		BE8368F918DA186300526637 /* STKTrust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTrust.h; sourceTree = "<group>"; };
 		BE8368FA18DA186300526637 /* STKTrust.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTrust.m; sourceTree = "<group>"; };
 		BE8935FF186CD05E00FE8263 /* STKContentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKContentStore.h; sourceTree = "<group>"; };
@@ -4461,6 +4464,8 @@
 				BE3014C11891F24F0069F31E /* STKCaptureOverlayView.m */,
 				BE8BBF0118C7B1F500D53BF5 /* STKImageSharer.h */,
 				BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */,
+				BE8076041923F48F00D558E0 /* STKMarkupUtilities.h */,
+				BE8076051923F48F00D558E0 /* STKMarkupUtilities.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -4780,6 +4785,7 @@
 				BE937C9E191175E000C24A58 /* STKNotifiedBadgeView.m in Sources */,
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
 				BE1FC3BD186CC966003464E1 /* STKBaseStore.m in Sources */,
+				BE8076061923F48F00D558E0 /* STKMarkupUtilities.m in Sources */,
 				BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */,
 				BE0EC57218EDE306007102E1 /* STKSettingsViewController.m in Sources */,
 				BE8368FB18DA186300526637 /* STKTrust.m in Sources */,

@@ -35,6 +35,7 @@
 #import "STKInstitutionInfoCell.h"
 #import "STKButtonRow.h"
 #import "STKWebViewController.h"
+#import "STKFetchDescription.h"
 
 @import MessageUI;
 
@@ -145,7 +146,9 @@ typedef enum {
         [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:additionalFields completion:^(STKUser *u, NSError *err) {
             if(!err) {
                 if([[self profile] isInstitution]) {
-                    [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:nil completion:^(NSArray *trusts, NSError *err) {
+                    STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+                    [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
+                    [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
                         [self determineLuminariesFromTrusts:trusts];
                     }];
                 } else {
@@ -207,12 +210,10 @@ typedef enum {
 {
     NSMutableArray *lums = [NSMutableArray array];
     for(STKTrust *t in [[self profile] ownedTrusts]) {
-        if([[t status] isEqualToString:STKRequestStatusAccepted])
-            [lums addObject:[t recepient]];
+        [lums addObject:[t recepient]];
     }
     for(STKTrust *t in [[self profile] receivedTrusts]) {
-        if([[t status] isEqualToString:STKRequestStatusAccepted])
-            [lums addObject:[t creator]];
+        [lums addObject:[t creator]];
     }
     [self setLuminaries:lums];
 }
@@ -333,6 +334,12 @@ typedef enum {
     }
     return YES;
 }
+
+- (UITableViewCell *)postController:(STKPostController *)pc cellForPostAtIndexPath:(NSIndexPath *)ip
+{
+    return [[self tableView] cellForRowAtIndexPath:ip];
+}
+
 
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {

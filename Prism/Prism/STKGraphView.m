@@ -55,20 +55,20 @@
 
         UIBezierPath *bp = [UIBezierPath bezierPath];
         [bp moveToPoint:CGPointMake(x, 8)];
-        [bp addLineToPoint:CGPointMake(x, [self bounds].size.height - 20)];
+        [bp addLineToPoint:CGPointMake(x, [self bounds].size.height)];
         [bp stroke];
         
-        NSString *xLabel = [[self xLabels] objectAtIndex:i];
+      /*  NSString *xLabel = [[self xLabels] objectAtIndex:i];
         CGSize sz = [xLabel sizeWithAttributes:@{NSFontAttributeName : f}];
         [xLabel drawInRect:CGRectMake(x - sz.width / 2.0, [self bounds].size.height - sz.height - 2,
                                       sz.width, sz.height)
             withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : STKTextTransparentColor}];
-        
+        */
         x += xPer;
     }
 
     float yBegin = 40;
-    float yEnd = [self bounds].size.height - 20;
+    float yEnd = [self bounds].size.height;
     float yPer = (yEnd - yBegin) / (yLines - 1);
 
     float y = yBegin;
@@ -92,7 +92,7 @@
     
     for(NSDictionary *d in [self values]) {
         UIColor *c = [d objectForKey:@"color"];
-        [[c colorWithAlphaComponent:0.5] set];
+        [[c colorWithAlphaComponent:0.65] set];
         
         UIBezierPath *bp = [UIBezierPath bezierPath];
         NSArray *ys = [d objectForKey:@"y"];

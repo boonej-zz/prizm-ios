@@ -30,6 +30,7 @@
 
 @property (nonatomic, weak) id <STKMarkupControllerDelegate> delegate;
 @property (nonatomic, strong, readonly) UIView *view;
+@property (nonatomic) BOOL hidesDoneButton;
 
 - (void)textView:(UITextView *)textView updatedWithText:(NSString *)text;
 

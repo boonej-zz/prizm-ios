@@ -8,7 +8,7 @@
             <connections>
                 <outlet property="achievementInspirationConstraint" destination="nQW-zX-4Uh" id="Rs9-K9-KgF"/>
                 <outlet property="achivementButton" destination="qAP-Qu-4Rj" id="XKk-hu-GY4"/>
-                <outlet property="aspirationButton" destination="u3g-QQ-nyU" id="kHA-bX-S3O"/>
+                <outlet property="aspirationButton" destination="MQx-zI-aQv" id="Tyb-ka-TD2"/>
                 <outlet property="aspirationExperienceConstraint" destination="PP3-ER-Ooi" id="nsH-2W-GDk"/>
                 <outlet property="blurView" destination="Xc3-2h-k1Z" id="PvX-rM-kyl"/>
                 <outlet property="blurViewHeightConstraint" destination="Il0-7U-xDb" id="gxW-5k-lN7"/>
@@ -19,7 +19,7 @@
                 <outlet property="inspirationPersonalConstraint" destination="SOp-6D-TDI" id="Elb-pu-gHU"/>
                 <outlet property="leftConstraint" destination="sPM-mg-Kqk" id="9Uc-TT-Z09"/>
                 <outlet property="passionAspirationConstraint" destination="ovs-Ux-9Mr" id="4kO-vD-aJ3"/>
-                <outlet property="passionButton" destination="MQx-zI-aQv" id="ChZ-qj-OBh"/>
+                <outlet property="passionButton" destination="u3g-QQ-nyU" id="zrd-SF-Lsf"/>
                 <outlet property="personalButton" destination="THA-mD-uDP" id="gpg-L3-D3J"/>
                 <outlet property="rightConstraint" destination="Lnh-Mu-oJW" id="v7W-bg-xm5"/>
                 <outlet property="tableView" destination="TCM-Ns-ZEc" id="fZB-8U-GXi"/>
@@ -59,12 +59,12 @@
                                 <constraint firstAttribute="width" constant="48" id="NYd-o0-Rwb"/>
                                 <constraint firstAttribute="height" constant="48" id="die-pM-19r"/>
                             </constraints>
-                            <state key="normal" image="category_passions_disabled">
+                            <state key="normal" image="category_aspiration_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <state key="selected" image="category_passions_selected"/>
+                            <state key="selected" image="category_aspirations_selected"/>
                             <connections>
-                                <action selector="togglePassions:" destination="-1" eventType="touchUpInside" id="lPc-Nc-evU"/>
+                                <action selector="toggleAspirations:" destination="-1" eventType="touchUpInside" id="7bW-Ow-z7V"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u3g-QQ-nyU">
@@ -74,12 +74,12 @@
                                 <constraint firstAttribute="height" constant="48" id="22c-w9-QB4"/>
                                 <constraint firstAttribute="width" constant="48" id="oQ9-Lr-xvX"/>
                             </constraints>
-                            <state key="normal" image="category_aspiration_disabled">
+                            <state key="normal" image="category_passions_disabled">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <state key="selected" image="category_aspirations_selected"/>
+                            <state key="selected" image="category_passions_selected"/>
                             <connections>
-                                <action selector="toggleAspirations:" destination="-1" eventType="touchUpInside" id="1hR-iu-7Mk"/>
+                                <action selector="togglePassions:" destination="-1" eventType="touchUpInside" id="R7D-AB-Rp8"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGT-3s-4Nk">

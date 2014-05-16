@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet STKPostHeaderView *headerView;
 @property (weak, nonatomic) IBOutlet UIButton *locationButton;
 @property (weak, nonatomic) IBOutlet UIButton *commentButton;
+@property (weak, nonatomic) IBOutlet UIButton *likeButton;
 
 @property (nonatomic) BOOL displayFullBleed;
 

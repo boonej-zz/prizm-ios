@@ -72,16 +72,10 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, strong) NSSet *activities;
 @property (nonatomic, strong) NSSet *tags;
 
-- (NSAttributedString *)renderTextForAttributes:(NSDictionary *)attributes;
-
 - (BOOL)isPostLikedByUser:(STKUser *)u;
 
 - (UIImage *)typeImage;
 
 + (UIImage *)imageForType:(NSString *)t;
-
-+ (UIImage *)imageForTextPost:(NSString *)text;
-+ (UIImage *)imageForUserTag:(NSString *)name attributes:(NSDictionary *)attributes;
-+ (NSAttributedString *)userTagForUser:(STKUser *)user attributes:(NSDictionary *)attributes;
 
 @end

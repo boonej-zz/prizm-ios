@@ -23,6 +23,8 @@
 - (BOOL)postController:(STKPostController *)pc shouldContinueAfterTappingAvatarAtIndex:(int)idx;
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx;
 
+- (UITableViewCell *)postController:(STKPostController *)pc cellForPostAtIndexPath:(NSIndexPath *)ip;
+
 @end
 
 @interface STKPostController : NSObject

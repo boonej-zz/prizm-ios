@@ -13,6 +13,8 @@
 #import "STKUser.h"
 #import "STKContentStore.h"
 #import "STKPost.h"
+#import "STKMarkupUtilities.h"
+
 @import Accounts;
 
 const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
@@ -396,7 +398,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         }];
         [dt resume];
     } else {
-        UIImage *img = [STKPost imageForTextPost:text];
+        UIImage *img = [STKMarkupUtilities imageForText:text];
         [[STKImageStore store] uploadImage:img thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
             if(!err) {
                 NSDictionary *postInfo = @{

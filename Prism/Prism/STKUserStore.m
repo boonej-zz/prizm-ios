@@ -23,6 +23,9 @@
 #import <Crashlytics/Crashlytics.h>
 #import "STKFetchDescription.h"
 
+//ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
+//ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
+
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 NSString * const STKUserStoreActivityUpdateNotification = @"STKUserStoreActivityUpdateNotification";
 NSString * const STKUserStoreActivityUpdateCountKey = @"STKUSerStoreActivityUpdateCountKey";
@@ -844,21 +847,33 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 }
 
+- (void)fetchTopTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block
+{
+    STKFetchDescription *fdFrom = [[STKFetchDescription alloc] init];
+    [fdFrom setLimit:5];
+    [fdFrom setFilterDictionary:@{@"recepient" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
+    [fdFrom setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"to_score" ascending:NO]]];
+    [self fetchTrustsForUser:u fetchDescription:fdFrom completion:^(NSArray *fromTrusts, NSError *fromErr) {
+        STKFetchDescription *fdTo = [[STKFetchDescription alloc] init];
+        [fdTo setLimit:5];
+        [fdTo setFilterDictionary:@{@"creator" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
+        [fdTo setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"from_score" ascending:NO]]];
+        
+        [self fetchTrustsForUser:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
+            NSMutableArray *all = [[NSMutableArray alloc] init];
+            [all addObjectsFromArray:fromTrusts];
+            [all addObjectsFromArray:toTrusts];
+            [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
+            
+            block(all, nil);
+        }];
+        
+    }];
+    
+}
+
 - (void)fetchTrustsForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block
 {
-    NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-    NSArray *allCachedTrusts = [[self context] executeFetchRequest:req error:nil];
-    
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"status == %@ and (creator == %@ or recepient == %@)",
-                      STKRequestStatusAccepted, u, u];
-    NSArray *cachedResults = [allCachedTrusts filteredArrayUsingPredicate:p];
-    STKTrust *referenceTrust = [fetchDescription referenceObject];
-    if([cachedResults count] > 0) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            block(cachedResults, nil);
-        }];
-    }
-    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
             block(nil, err);
@@ -869,23 +884,18 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setIdentifiers:@[[u uniqueID], @"trusts"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
-        if(!fetchDescription) {
-            if([allCachedTrusts count] > 0) {
-                STKTrust *latest = [[allCachedTrusts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]] firstObject];
-                [q setPageDirection:STKQueryObjectPageNewer];
-                [q setPageKey:[STKTrust remoteKeyForLocalKey:@"dateModified"]];
-                [q setPageValue:[STKTimestampFormatter stringFromDate:[latest dateModified]]];
-            }
-
-        } else {
-            if([fetchDescription direction] != STKQueryObjectPageReload) {
-                if([allCachedTrusts count] > 0) {
-                    STKTrust *latest = [[allCachedTrusts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]] firstObject];
-                    [q setPageDirection:[fetchDescription direction]];
-                    [q setPageKey:[STKTrust remoteKeyForLocalKey:@"dateModified"]];
-                    [q setPageValue:[STKTimestampFormatter stringFromDate:[latest dateModified]]];
-                }
-            }
+        NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
+        for(NSString *key in [fetchDescription filterDictionary]) {
+            [filters setObject:[[fetchDescription filterDictionary] objectForKey:key] forKey:[STKTrust remoteKeyForLocalKey:key]];
+        }
+        [q setFilters:filters];
+        
+        if([fetchDescription limit])
+            [q setLimit:[fetchDescription limit]];
+        
+        if([[fetchDescription sortDescriptors] count] > 0) {
+            [q setSortKey:[[[fetchDescription sortDescriptors] firstObject] key]];
+            [q setSortOrder:([[[fetchDescription sortDescriptors] firstObject] ascending] ? STKQueryObjectSortAscending : STKQueryObjectSortDescending)];
         }
         
         STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
@@ -906,12 +916,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(!err) {
                 [[self context] save:nil];
             }
-            
-            NSFetchRequest *reReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-            [req setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and (creator == %@ or recepient == %@)",
-                               STKRequestStatusAccepted, u, u]];
-            
-            block([[self context] executeFetchRequest:reReq error:nil], err);
+            block(trusts, err);
         }];
     }];
 }
@@ -1000,6 +1005,21 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
     }];
 }
+
+- (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSArray *weeks, NSError *err))block
+{
+    block(nil, nil);
+}
+- (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSArray *data, NSError *err))block
+{
+    block(nil, nil);
+}
+- (void)fetchHashtagsForPostType:(NSString *)postType completion:(void (^)(NSArray *hashTags, NSError *err))block
+{
+    block(nil, nil);
+}
+
+
 
 #pragma mark Authentication Nonsense
 
