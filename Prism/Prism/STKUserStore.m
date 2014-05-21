@@ -1006,13 +1006,50 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSArray *weeks, NSError *err))block
+- (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSDictionary *weeks, NSError *err))block
 {
-    block(nil, nil);
+    if(week <= 0) {
+        week = 52 + week;
+        year --;
+    }
+
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[self currentUser] uniqueID], @"stats", @"category"]];
+        
+        
+        STKQueryObject *obj = [[STKQueryObject alloc] init];
+        [obj setFilters:@{@"year" : @(year),
+                          @"week" : @(week),
+                          @"offset" : @(count)}];
+        [c setQueryObject:obj];        
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            
+            block(obj, err);
+        }];
+    }];
 }
-- (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSArray *data, NSError *err))block
+- (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSDictionary *data, NSError *err))block
 {
-    block(nil, nil);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[self currentUser] uniqueID], @"stats", @"category"]];
+        
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+
+            block(obj, err);
+        }];
+    }];
 }
 - (void)fetchHashtagsForPostType:(NSString *)postType completion:(void (^)(NSArray *hashTags, NSError *err))block
 {
@@ -1556,7 +1593,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                                                       @"coverPhotoPath",
                                                                       @"profilePhotoPath",
                                                                       @"phoneNumber",
-                                                                      @"website"
+                                                                      @"website",
+                                                                      @"subtype"
                                                                       ]];
             [c addQueryValues:values];
 
@@ -1571,7 +1609,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                                                       @"state",
                                                                       @"coverPhotoPath",
                                                                       @"profilePhotoPath",
-                                                                      @"birthday"
+                                                                      @"birthday",
+                                                                      @"phoneNumber"
                                                                       ]];
 
             [c addQueryValues:values];

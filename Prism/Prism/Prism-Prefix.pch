@@ -24,6 +24,7 @@
     #define STKSelectedTextColor [UIColor colorWithRed:70.0/255.0 green:34.0/255.0 blue:151.0/255.0 alpha:1]
 
 #define STKFont(x) [UIFont fontWithName:@"HelveticaNeue-Light" size:x]
+#define STKBoldFont(x) [UIFont fontWithName:@"HelveticaNeue-Bold" size:x]
 
 #define STRINGIFY(x) #x
     #define STRINGIFY_TOKEN(x) @STRINGIFY(x)

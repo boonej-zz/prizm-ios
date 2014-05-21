@@ -21,6 +21,8 @@
     [[self toggleSwitch] setOffImage:UIGraphicsGetImageFromCurrentImageContext()];
 
     UIGraphicsEndImageContext();
+    
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 
 - (void)layoutContent

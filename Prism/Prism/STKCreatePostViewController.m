@@ -62,6 +62,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _postInfo = [[NSMutableDictionary alloc] init];
+        [_postInfo setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
         UIBarButtonItem *bbiCancel = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
         UIBarButtonItem *bbiPost = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(post:)];
         

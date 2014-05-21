@@ -46,6 +46,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentFooterView;
 @property (weak, nonatomic) IBOutlet UITextView *commentTextView;
+@property (weak, nonatomic) IBOutlet UILabel *commentBarPlaceholder;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomCommentConstraint;
 @property (nonatomic, strong) UIView *commentHeaderView;
@@ -417,6 +418,7 @@
 
 - (void)keyboardWillAppear:(NSNotification *)note
 {
+    [[self commentBarPlaceholder] setHidden:YES];
     [[self dismissButtonImageView] setHidden:YES];
     
     CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -458,6 +460,8 @@
 
 - (void)keyboardWillDisappear:(NSNotification *)note
 {
+    [[self commentBarPlaceholder] setHidden:NO];
+
     [[self dismissButtonImageView] setHidden:NO];
 
     [[self editPostButton] setHidden:NO];

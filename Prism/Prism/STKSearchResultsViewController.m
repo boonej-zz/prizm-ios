@@ -99,7 +99,7 @@ typedef enum {
     
     //force Search title & menuBarButton to ensure they are set from any previous vc
     [[[[self parentViewController] parentViewController] navigationItem] setTitle:@"Search"];
-    [[[[self parentViewController] parentViewController] navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
+    [[[[self parentViewController] parentViewController] navigationItem] setLeftBarButtonItem:[[[self parentViewController] parentViewController] menuBarButtonItem]];
 }
 
 - (void)viewDidAppear:(BOOL)animated

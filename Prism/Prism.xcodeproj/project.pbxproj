@@ -102,6 +102,9 @@
 		BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7A2DFA1831877F00CC6EED /* UIViewController+STKControllerItems.m */; };
 		BE7AFA7B18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7AFA7A18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m */; };
 		BE7AFA7E18ECA32800DA30A7 /* STKNetworkStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7AFA7D18ECA32800DA30A7 /* STKNetworkStore.m */; };
+		BE7B4858192B99AD00BDCE15 /* STKItemListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7B4857192B99AD00BDCE15 /* STKItemListViewController.m */; };
+		BE7B485A192B9E4500BDCE15 /* STKItemListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7B4859192B9E4500BDCE15 /* STKItemListViewController.xib */; };
+		BE7B485D192BA02E00BDCE15 /* STKSegmentedPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7B485C192BA02E00BDCE15 /* STKSegmentedPanel.m */; };
 		BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */; };
 		BE7D396B19141B32003B333F /* STKMarkupController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D396A19141B32003B333F /* STKMarkupController.m */; };
 		BE7D396E19142D58003B333F /* STKMarkupTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D396D19142D58003B333F /* STKMarkupTextView.m */; };
@@ -166,6 +169,7 @@
 		BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE5F040187DD01C00CB5325 /* NSCharacterSet+STKURL.m */; };
 		BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */; };
 		BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */; };
+		BEE84F5D192BFB2200820A19 /* STKLuminatingBar.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE84F5C192BFB2200820A19 /* STKLuminatingBar.m */; };
 		BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE8F04518C0F5E6001A28CD /* STKPostComment.m */; };
 		BEE8F04818C103AA001A28CD /* STKCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEE8F04718C103AA001A28CD /* STKCommentCell.xib */; };
 		BEED1FF6190944B100D0BFFF /* STKSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEED1FF5190944B100D0BFFF /* STKSettingsViewController.xib */; };
@@ -2070,6 +2074,11 @@
 		BE7AFA7A18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInstagramAuthViewController.m; sourceTree = "<group>"; };
 		BE7AFA7C18ECA32800DA30A7 /* STKNetworkStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKNetworkStore.h; sourceTree = "<group>"; };
 		BE7AFA7D18ECA32800DA30A7 /* STKNetworkStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKNetworkStore.m; sourceTree = "<group>"; };
+		BE7B4856192B99AD00BDCE15 /* STKItemListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKItemListViewController.h; sourceTree = "<group>"; };
+		BE7B4857192B99AD00BDCE15 /* STKItemListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKItemListViewController.m; sourceTree = "<group>"; };
+		BE7B4859192B9E4500BDCE15 /* STKItemListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKItemListViewController.xib; sourceTree = "<group>"; };
+		BE7B485B192BA02E00BDCE15 /* STKSegmentedPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSegmentedPanel.h; sourceTree = "<group>"; };
+		BE7B485C192BA02E00BDCE15 /* STKSegmentedPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSegmentedPanel.m; sourceTree = "<group>"; };
 		BE7C47FF183EBBAC00C30995 /* STKResolvingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKResolvingImageView.h; sourceTree = "<group>"; };
 		BE7C4800183EBBAC00C30995 /* STKResolvingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKResolvingImageView.m; sourceTree = "<group>"; };
 		BE7D396919141B32003B333F /* STKMarkupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMarkupController.h; sourceTree = "<group>"; };
@@ -2169,6 +2178,8 @@
 		BEE6CBBC1832DCB500BC72F4 /* STKExploreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STKExploreCell.h; path = Prism/STKExploreCell.h; sourceTree = "<group>"; };
 		BEE6CBBD1832DCB500BC72F4 /* STKExploreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STKExploreCell.m; path = Prism/STKExploreCell.m; sourceTree = "<group>"; };
 		BEE6CBBF1832DCC300BC72F4 /* STKExploreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKExploreCell.xib; path = Prism/STKExploreCell.xib; sourceTree = "<group>"; };
+		BEE84F5B192BFB2200820A19 /* STKLuminatingBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLuminatingBar.h; sourceTree = "<group>"; };
+		BEE84F5C192BFB2200820A19 /* STKLuminatingBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLuminatingBar.m; sourceTree = "<group>"; };
 		BEE8F04418C0F5E6001A28CD /* STKPostComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPostComment.h; sourceTree = "<group>"; };
 		BEE8F04518C0F5E6001A28CD /* STKPostComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKPostComment.m; sourceTree = "<group>"; };
 		BEE8F04718C103AA001A28CD /* STKCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCommentCell.xib; sourceTree = "<group>"; };
@@ -2432,6 +2443,9 @@
 				D0E5076B1914251A0011DB63 /* STKLoginResetViewController.xib */,
 				BE7D396919141B32003B333F /* STKMarkupController.h */,
 				BE7D396A19141B32003B333F /* STKMarkupController.m */,
+				BE7B4856192B99AD00BDCE15 /* STKItemListViewController.h */,
+				BE7B4857192B99AD00BDCE15 /* STKItemListViewController.m */,
+				BE7B4859192B9E4500BDCE15 /* STKItemListViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2485,6 +2499,10 @@
 				BE2B7E84191AB3EC00E6F408 /* STKDateBar.m */,
 				BE2B7E86191AB40600E6F408 /* STKPieChartView.h */,
 				BE2B7E87191AB40600E6F408 /* STKPieChartView.m */,
+				BE7B485B192BA02E00BDCE15 /* STKSegmentedPanel.h */,
+				BE7B485C192BA02E00BDCE15 /* STKSegmentedPanel.m */,
+				BEE84F5B192BFB2200820A19 /* STKLuminatingBar.h */,
+				BEE84F5C192BFB2200820A19 /* STKLuminatingBar.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4593,6 +4611,7 @@
 				BEB1687D190700F900CED5F7 /* STKSegmentedControlCell.xib in Resources */,
 				BE5767F6187B4DFF004AEE1F /* STKPostViewController.xib in Resources */,
 				BEE8F04818C103AA001A28CD /* STKCommentCell.xib in Resources */,
+				BE7B485A192B9E4500BDCE15 /* STKItemListViewController.xib in Resources */,
 				BEF2D78C1899818900D3C8D6 /* STKRequestCell.xib in Resources */,
 				BE9543911892FE5C00DCC3B1 /* STKSearchProfileCell.xib in Resources */,
 				BE1FC3B2186C81A4003464E1 /* STKTextImageCell.xib in Resources */,
@@ -4682,6 +4701,7 @@
 				BE778C4518BBF82000DA5EDD /* STKFilterCell.m in Sources */,
 				BE47C00D18FEDB3100919BCB /* STKTimestampFormatter.m in Sources */,
 				BE7AFA7E18ECA32800DA30A7 /* STKNetworkStore.m in Sources */,
+				BEE84F5D192BFB2200820A19 /* STKLuminatingBar.m in Sources */,
 				BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
@@ -4698,6 +4718,7 @@
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
 				BE02EAAF182A80A200A5505A /* main.m in Sources */,
 				BE3FFDF918AE9744005B531E /* STKAuthorizationToken.m in Sources */,
+				BE7B485D192BA02E00BDCE15 /* STKSegmentedPanel.m in Sources */,
 				BEFCEE05182C210600648B9F /* STKConnection.m in Sources */,
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
 				BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */,
@@ -4718,6 +4739,7 @@
 				BE9CC7A618FDFF480097D308 /* STKLuminariesCell.m in Sources */,
 				BE2B7E85191AB3EC00E6F408 /* STKDateBar.m in Sources */,
 				BE52B13C18E30EF100C44F30 /* NSManagedObject+STKAdditions.m in Sources */,
+				BE7B4858192B99AD00BDCE15 /* STKItemListViewController.m in Sources */,
 				BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */,
 				BE05502018A404E600F6B534 /* UIERealTimeBlurView.m in Sources */,
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
@@ -4936,7 +4958,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7B70F93A-6530-440D-99D4-8136520D47CA";
+				PROVISIONING_PROFILE = "70AA948F-FA96-4934-8533-B3987F15768E";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Staging)";
@@ -4966,7 +4988,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7B70F93A-6530-440D-99D4-8136520D47CA";
+				PROVISIONING_PROFILE = "70AA948F-FA96-4934-8533-B3987F15768E";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -5072,7 +5094,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7B70F93A-6530-440D-99D4-8136520D47CA";
+				PROVISIONING_PROFILE = "70AA948F-FA96-4934-8533-B3987F15768E";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (Staging)";
@@ -5162,7 +5184,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7B70F93A-6530-440D-99D4-8136520D47CA";
+				PROVISIONING_PROFILE = "70AA948F-FA96-4934-8533-B3987F15768E";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Dev)";

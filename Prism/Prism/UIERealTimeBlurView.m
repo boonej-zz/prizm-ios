@@ -34,7 +34,7 @@ NSUInteger UIEDeviceSystemMajorVersion();
 
 //tweak this value to have a smoother or a more perfomant rendering
 //Default is 30FPS
-const CGFloat UIERealTimeBlurViewFPS = 20;
+const CGFloat UIERealTimeBlurViewFPS = 10;
 const CGFloat UIERealTimeBlurViewDefaultBlurRadius = 1;
 const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
 

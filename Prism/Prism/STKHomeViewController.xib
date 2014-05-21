@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKHomeViewController">
             <connections>
-                <outlet property="activityIndicator" destination="4Ib-Uz-2pX" id="KDh-5D-5IK"/>
                 <outlet property="blurView" destination="nSw-v7-q76" id="mJE-cZ-AYE"/>
                 <outlet property="cardView" destination="zG8-p2-yL4" id="Mud-bI-fhi"/>
                 <outlet property="cardViewTopOffset" destination="1oo-KL-GCl" id="XeP-hY-33H"/>
+                <outlet property="luminatingBar" destination="Wsg-NP-6jI" id="Nw4-qU-QLi"/>
                 <outlet property="tableView" destination="yEA-J2-5KI" id="Ra0-Xn-o5O"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -23,15 +23,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Ib-Uz-2pX" customClass="STKActivityIndicatorView">
-                    <rect key="frame" x="150" y="72" width="20" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="20" id="oaa-UL-l6I"/>
-                        <constraint firstAttribute="width" constant="20" id="vGG-Do-dWW"/>
-                    </constraints>
-                </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yEA-J2-5KI">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -41,6 +32,14 @@
                         <outlet property="delegate" destination="-1" id="aUD-tc-25x"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wsg-NP-6jI" customClass="STKLuminatingBar">
+                    <rect key="frame" x="0.0" y="64" width="320" height="4"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="4" id="qNl-nI-GZh"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zG8-p2-yL4">
                     <rect key="frame" x="10" y="470" width="300" height="98"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -61,16 +60,17 @@
             <color key="backgroundColor" red="0.75959578804347827" green="0.75959578804347827" blue="0.75959578804347827" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="zG8-p2-yL4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="470" id="1oo-KL-GCl"/>
+                <constraint firstItem="Wsg-NP-6jI" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="I16-fe-wAr"/>
                 <constraint firstAttribute="trailing" secondItem="yEA-J2-5KI" secondAttribute="trailing" id="INH-YB-alM"/>
+                <constraint firstItem="Wsg-NP-6jI" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="N9b-bN-bon"/>
                 <constraint firstItem="Mbq-bp-RoN" firstAttribute="top" secondItem="1" secondAttribute="top" id="U9M-p7-tZu"/>
                 <constraint firstItem="yEA-J2-5KI" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="UTS-MK-4XN"/>
                 <constraint firstAttribute="trailing" secondItem="zG8-p2-yL4" secondAttribute="trailing" constant="10" id="VwV-My-DFI"/>
                 <constraint firstItem="nSw-v7-q76" firstAttribute="top" secondItem="1" secondAttribute="top" id="WNq-vA-s3E"/>
                 <constraint firstAttribute="trailing" secondItem="nSw-v7-q76" secondAttribute="trailing" id="Z8S-Hh-m6y"/>
-                <constraint firstItem="4Ib-Uz-2pX" firstAttribute="top" secondItem="1" secondAttribute="top" constant="72" id="ero-ER-Bgw"/>
                 <constraint firstItem="nSw-v7-q76" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="exS-f0-IDB"/>
-                <constraint firstAttribute="centerX" secondItem="4Ib-Uz-2pX" secondAttribute="centerX" id="j54-vr-n5m"/>
                 <constraint firstAttribute="bottom" secondItem="Mbq-bp-RoN" secondAttribute="bottom" id="lSe-zX-iaq"/>
+                <constraint firstAttribute="trailing" secondItem="Wsg-NP-6jI" secondAttribute="trailing" id="lbF-Uk-qf9"/>
                 <constraint firstItem="yEA-J2-5KI" firstAttribute="top" secondItem="1" secondAttribute="top" id="lyr-Di-eWR"/>
                 <constraint firstItem="Mbq-bp-RoN" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="tDH-cE-CbV"/>
                 <constraint firstAttribute="trailing" secondItem="Mbq-bp-RoN" secondAttribute="trailing" id="vje-C0-00o"/>

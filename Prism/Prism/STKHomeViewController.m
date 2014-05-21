@@ -21,11 +21,12 @@
 #import "STKLocationViewController.h"
 #import "STKImageSharer.h"
 #import "STKPostController.h"
-#import "STKActivityIndicatorView.h"
+#import "STKLuminatingBar.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
 @property (nonatomic, strong) STKPostController *postController;
+@property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -34,7 +35,6 @@
 @property (nonatomic) float initialCardViewOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cardViewTopOffset;
 
-@property (weak, nonatomic) IBOutlet STKActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, strong) NSMutableArray *reusableCards;
 @property (nonatomic, strong) NSMutableDictionary *cardMap;
@@ -255,9 +255,12 @@
     float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
     if(offset < 0) {
         float t = fabs(offset) / 60.0;
-        [[self activityIndicator] setProgress:t];
+        if(t > 1)
+            t = 1;
+        [[self luminatingBar] setProgress:t];
+
     } else {
-        [[self activityIndicator] setProgress:0];
+        [[self luminatingBar] setProgress:0];
     }
 }
 
@@ -298,18 +301,15 @@
     }
     
     [self setFetchInProgress:YES];
-    [UIView animateWithDuration:0.2 animations:^{
-        [[self tableView] setContentInset:UIEdgeInsetsMake(120, 0, 0, 0)];
-    }];
 
-    [[self activityIndicator] setRefreshing:YES];
+    [[self luminatingBar] setLuminating:YES];
     [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
         [self setFetchInProgress:NO];
-        [UIView animateWithDuration:0.2 animations:^{
-            [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
-        }];
 
-        [[self activityIndicator] setRefreshing:NO];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[self luminatingBar] setLuminating:NO];
+        });
+//        [[self luminatingBar] setLuminating:NO];
         [[self tableView] reloadData];
         [self layoutCards];
     }];

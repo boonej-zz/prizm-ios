@@ -128,10 +128,14 @@
 {
     int postCount = [[[self hashTagPostsController] posts] count];
 
-    if(postCount % 3 > 0)
-        return postCount / 3 + 1;
-    
-    return postCount / 3;
+    if([self showPostsInSingleLayout]) {
+        return postCount;
+    } else {
+        if(postCount % 3 > 0)
+            return postCount / 3 + 1;
+        
+        return postCount / 3;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -24,6 +24,8 @@
 #import "UIViewController+STKControllerItems.h"
 #import "STKSegmentedControl.h"
 #import "STKSegmentedControlCell.h"
+#import "STKSegmentedPanel.h"
+#import "STKItemListViewController.h"
 
 @import AddressBook;
 @import Social;
@@ -64,6 +66,7 @@ const long STKCreateProgressGeocoding = 4;
 @property (weak, nonatomic) IBOutlet UIButton *coverPhotoButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *tosButton;
+@property (nonatomic, strong) NSDictionary *subtypeFormatters;
 
 @property (weak, nonatomic) IBOutlet UIView *coverOverlayView;
 @property (nonatomic, getter = isEditingProfile) BOOL editingProfile;
@@ -97,6 +100,14 @@ const long STKCreateProgressGeocoding = 4;
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyKilometer];
         [_locationManager setDelegate:self];
         
+        _subtypeFormatters = @{
+                               STKUserSubTypeEducation : @"Education",
+                               STKUserSubTypeMilitary : @"Military",
+                               STKUserSubTypeCommunity : @"Community",
+                               STKUserSubTypeFoundation : @"Foundation",
+                               STKUserSubTypeCompany : @"Corporate"
+                               };
+        
     }
     return self;
 }
@@ -105,7 +116,15 @@ const long STKCreateProgressGeocoding = 4;
 {
     if([[self user] isInstitution]) {
         _items = @[
-                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"Individual"]},
+                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Partner", @"Individual"]},
+
+                   @{@"title" : @"Name", @"key" : @"firstName",
+                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                   @{@"title" : @"Type", @"key" : @"subtype", @"cellType" : @"list",
+                     @"values" :
+                         @[STKUserSubTypeEducation, STKUserSubTypeMilitary, STKUserSubTypeCommunity,
+                           STKUserSubTypeFoundation, STKUserSubTypeCompany]},
+                         
                    
                    @{@"title" : @"Email", @"key" : @"email",
                      @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
@@ -116,18 +135,16 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Confirm Password", @"key" : @"confirmPassword",
                      @"options" : @{@"secureTextEntry" : @(YES)}},
 
-                   @{@"title" : @"Name", @"key" : @"firstName",
-                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
                    
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                    @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                    @{@"title" : @"Website", @"key" : @"website", @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
                    ];
         
-        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"website"];
+        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"website", @"subtype", @"phoneNumber", @"zipCode"];
     } else {
         _items = @[
-                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Institution", @"Individual"]},
+                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Partner", @"Individual"]},
                    @{@"title" : @"Email", @"key" : @"email",
                      @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                    
@@ -146,7 +163,7 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
                    
                    @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
-                   
+                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                    ];
         
@@ -201,7 +218,7 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                        ];
-            _requiredKeys = @[@"email", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+            _requiredKeys = @[@"email", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"subtype", @"phoneNumber", @"zipCode"];
         } else {
             _items = @[
                        // Public
@@ -231,7 +248,8 @@ const long STKCreateProgressGeocoding = 4;
                        
                        @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                        
-                       @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                       @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
+                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
         }
@@ -890,6 +908,20 @@ const long STKCreateProgressGeocoding = 4;
             [[wivc navigationController] popViewControllerAnimated:YES];
         }];
         [[self navigationController] pushViewController:ivc animated:YES];
+    } else if ([[item objectForKey:@"cellType"] isEqualToString:@"list"]) {
+        STKItemListViewController *lvc = [[STKItemListViewController alloc] init];
+        
+        NSMutableArray *orderedTitles = [[NSMutableArray alloc] init];
+        for(NSString *key in [item objectForKey:@"values"]) {
+            [orderedTitles addObject:[[self subtypeFormatters] objectForKey:key]];
+        }
+        [lvc setItems:orderedTitles];
+        [[self navigationController] pushViewController:lvc animated:YES];
+        
+        [lvc setSelectionBlock:^(int idx) {
+            [[self user] setSubtype:[[item objectForKey:@"values"] objectAtIndex:idx]];
+            [[self navigationController] popViewControllerAnimated:YES];
+        }];
     }
     
 }
@@ -949,7 +981,8 @@ const long STKCreateProgressGeocoding = 4;
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
     
-    if([cellType isEqual:@"textView"]) {
+    
+    if([cellType isEqual:@"textView"] || [cellType isEqualToString:@"list"]) {
         [[c textField] setEnabled:NO];
     } else {
         [[c textField] setEnabled:YES];
@@ -959,31 +992,39 @@ const long STKCreateProgressGeocoding = 4;
     NSString *value = nil;
     if([[item objectForKey:@"key"] isEqualToString:@"confirmPassword"])
         value = [self confirmedPassword];
-    else
+    else if ([[item objectForKey:@"key"] isEqualToString:@"subtype"]) {
+        value = [[self subtypeFormatters] objectForKey:[[self user] valueForKey:@"subtype"]];
+    } else
         value = [[self user] valueForKey:[item objectForKey:@"key"]];
     
-    if(value) {
-        [[c textField] setText:value];
-    } else {
-        [[c textField] setText:nil];
+    [[c textField] setText:value];
+    
+    [[c textField] setAttributedPlaceholder:nil];
+    
+    if(![[item objectForKey:@"key"] isEqualToString:@"confirmPassword"]) {
+        if(![[self requiredKeys] containsObject:[item objectForKey:@"key"]]) {
+            NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:@"optional"
+                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
+            [[c textField] setAttributedPlaceholder:placeholder];
+        }
     }
     
     NSDictionary *textOptions = [item objectForKey:@"options"];
+    [[c textField] setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [[c textField] setSecureTextEntry:NO];
+    [[c textField] setKeyboardType:UIKeyboardTypeDefault];
+    
     for(NSString *optKey in textOptions) {
         if([optKey isEqualToString:@"autocapitalizationType"])
             [[c textField] setAutocapitalizationType:[[textOptions objectForKey:optKey] intValue]];
-        else
-            [[c textField] setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        
         
         if([optKey isEqualToString:@"secureTextEntry"])
             [[c textField] setSecureTextEntry:[[textOptions objectForKey:optKey] boolValue]];
-        else
-            [[c textField] setSecureTextEntry:NO];
         
         if([optKey isEqualToString:@"keyboardType"])
             [[c textField] setKeyboardType:[[textOptions objectForKey:optKey] intValue]];
-        else
-            [[c textField] setKeyboardType:UIKeyboardTypeDefault];
+
     }
 
     [[c textField] setInputAccessoryView:[self toolbar]];

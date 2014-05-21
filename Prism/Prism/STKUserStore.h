@@ -85,8 +85,8 @@ typedef enum {
 - (void)searchUserTrustsWithName:(NSString *)name completion:(void (^)(id data, NSError *error))block;
 - (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block;
 
-- (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSArray *weeks, NSError *err))block;
-- (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSArray *data, NSError *err))block;
+- (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSDictionary *weeks, NSError *err))block;
+- (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSDictionary *data, NSError *err))block;
 - (void)fetchHashtagsForPostType:(NSString *)postType completion:(void (^)(NSArray *hashTags, NSError *err))block;
 
 

@@ -188,7 +188,7 @@
     
     [[[self headerView] sourceButton] addTarget:self action:@selector(sourceTapped:) forControlEvents:UIControlEventTouchUpInside];
     
-    [[self contentImageView] setPreferredSize:STKImageStoreThumbnailLarge];
+    [[self contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
 }
 
 @end

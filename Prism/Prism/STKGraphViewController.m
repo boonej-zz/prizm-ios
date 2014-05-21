@@ -29,12 +29,15 @@
 @property (weak, nonatomic) IBOutlet UITableView *percentTableView;
 @property (weak, nonatomic) IBOutlet STKDateBar *dateBar;
 @property (weak, nonatomic) IBOutlet UIView *underlayView;
+@property (weak, nonatomic) IBOutlet UILabel *lifetimeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *leftDateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *rightDateLabel;
 
 @property (nonatomic, strong) NSArray *orderArray;
 @property (nonatomic, strong) NSDictionary *typePercentages;
 @property (nonatomic, strong) NSDictionary *typeColors;
 @property (nonatomic, strong) NSDictionary *typeNames;
-@property (nonatomic, strong) NSDictionary *graphValues;
+@property (nonatomic, strong) NSMutableDictionary *graphValues;
 
 @property (nonatomic, strong) NSArray *filteredHashTags;
 @property (nonatomic, strong) NSString *currentFilter;
@@ -70,7 +73,6 @@
                               STKPostTypeInspiration : @"Inspiration",
                               STKPostTypePersonal : @"Personal"}];
         
-        [self setGraphValues:[self temporaryValues]];
     
     }
     return self;
@@ -78,7 +80,14 @@
 
 - (IBAction)dateBarDidChange:(id)sender
 {
-    [self setGraphValues:[self temporaryValues]];
+    [[STKUserStore store] fetchGraphDataForWeek:[[self dateBar] lastWeekInYear] - 7
+                                         inYear:[[self dateBar] year]
+                              previousWeekCount:7
+                                     completion:^(NSDictionary *weeks, NSError *err) {
+                                         [self addWeeklyEntries:weeks];
+                                         [self configureGraphArea];
+                                     }];
+        
     [self configureGraphArea];
 
 }
@@ -162,22 +171,67 @@
 {
     [super viewWillAppear:animated];
     
-    [self setTypePercentages:@{STKPostTypePassion : @(0.2),
-                               STKPostTypeAspiration : @(0.1),
-                               STKPostTypeExperience : @(0.3),
-                               STKPostTypeAchievement : @(0.2),
-                               STKPostTypeInspiration : @(0.1),
-                               STKPostTypePersonal : @(0.1)}];
-    [self configureChartArea];
-    [self configureGraphArea];
+    [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
+        if(!err) {
+            int total = 0;
+            for(NSString *key in vals) {
+                NSNumber *v = [vals objectForKey:key];
+                total += [v intValue];
+            }
+            
+            NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
+            for(NSString *key in vals) {
+                [results setObject:@([[vals objectForKey:key] floatValue] / (float)total) forKey:key];
+            }
+            [self setTypePercentages:results];
+        }
+        [self configureChartArea];
+        [[self percentTableView] reloadData];
+    }];
     
+    [[STKUserStore store] fetchGraphDataForWeek:[[self dateBar] lastWeekInYear] - 7
+                                         inYear:[[self dateBar] year]
+                              previousWeekCount:7
+                                     completion:^(NSDictionary *weeks, NSError *err) {
+                                         [self addWeeklyEntries:weeks];
+                                         [self configureGraphArea];
+    }];
+    
+    [self configureChartArea];
+
+    [self configureGraphArea];
     [[self percentTableView] reloadData];
 
+}
+
+- (void)addWeeklyEntries:(NSDictionary *)weeklyEntries
+{
+    if(![self graphValues]) {
+        _graphValues = [[NSMutableDictionary alloc] init];
+    }
+    
+    for(NSString *yearKey in weeklyEntries) {
+        NSMutableDictionary *existingYearValues = [[self graphValues] objectForKey:yearKey];
+        if(!existingYearValues) {
+            existingYearValues = [[NSMutableDictionary alloc] init];
+            [[self graphValues] setObject:existingYearValues forKey:yearKey];
+        }
+        
+        NSDictionary *weekValues = [weeklyEntries objectForKey:yearKey];
+        for(NSString *weekKey in weekValues) {
+            [existingYearValues setObject:[weekValues objectForKey:weekKey] forKey:weekKey];
+        }
+    }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[self lifetimeLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
+    [[[self lifetimeLabel] layer] setCornerRadius:2];
+    [[self lifetimeLabel] setClipsToBounds:YES];
+    
     [[self percentTableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self percentTableView] setScrollEnabled:NO];
     [[self percentTableView] setBackgroundColor:[UIColor clearColor]];
@@ -186,41 +240,96 @@
     [[self graphView] setYLabels:@[@"", @"25%", @"50%", @"75%", @"100%"]];
 }
 
-- (NSDictionary *)temporaryValues
+
+- (NSArray *)valuesForType:(NSString *)type weekEnd:(int)count yearEnd:(int)year
 {
-    srand(time(NULL));
-
-    return @{
-             STKPostTypePersonal : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypePersonal]},
-             STKPostTypeInspiration : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeInspiration]},
-             STKPostTypeAchievement : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeAchievement]},
-             STKPostTypeExperience : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeExperience]},
-             STKPostTypePassion : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypePassion]},
-             STKPostTypeAspiration : @{@"y" : [self randomNumbersToMax:40 count:7], @"color" : [[self typeColors] objectForKey:STKPostTypeAspiration]}
-
-    };
+    NSMutableArray *values = [[NSMutableArray alloc] init];
+    for(int i = 0; i < 7; i++) {
+        
+        NSDictionary *yearDict = [[self graphValues] objectForKey:[NSString stringWithFormat:@"%d", year]];
+        NSDictionary *weekDict = [yearDict objectForKey:[NSString stringWithFormat:@"%d", count]];
+        NSNumber *val = [weekDict objectForKey:type];
+        if(!val) {
+            [values insertObject:@(0) atIndex:0];
+        } else {
+            [values insertObject:val atIndex:0];
+        }
+        
+        count --;
+        if(count == 0) {
+            year --;
+            count = 52;
+        }
+    }
+    return values;
 }
 
-- (NSArray *)randomNumbersToMax:(int)max count:(int)count
+- (void)convertGraphValuesToPercentages:(NSArray *)values
 {
-    NSMutableArray *a = [NSMutableArray array];
-    for(int i = 0; i < count; i++) {
-        [a addObject:@((rand() % max) / (float)max)];
+    NSMutableDictionary *totals = [NSMutableDictionary dictionary];
+    for(NSDictionary *v in values) {
+        NSArray *ys = [v objectForKey:@"y"];
+        for(int i = 0; i < [ys count]; i++) {
+            int count = [[ys objectAtIndex:i] intValue];
+            
+            NSNumber *currentCount = [totals objectForKey:@(i)];
+            if(!currentCount) {
+                [totals setObject:@(count) forKey:@(i)];
+            } else {
+                [totals setObject:@(count + [currentCount intValue]) forKey:@(i)];
+            }
+        }
     }
-    return a;
+    
+    for(NSMutableDictionary *v in values) {
+        NSMutableArray *a = [[NSMutableArray alloc] init];
+        NSArray *ys = [v objectForKey:@"y"];
+        for(int i = 0; i < [ys count]; i++) {
+            float total = [[totals objectForKey:@(i)] floatValue];
+            if(total == 0.0) {
+                [a addObject:@(0)];
+            } else {
+                int count = [[ys objectAtIndex:i] intValue];
+                [a addObject:@((float)count / total)];
+            }
+        }
+        [v setObject:a forKey:@"y"];
+    }
 }
 
 - (void)configureGraphArea
 {
+    int weekEnd = [[self dateBar] lastWeekInYear];
+    int yearEnd = [[self dateBar] year];
+    
     NSMutableArray *orderedValues = [NSMutableArray array];
     if([self currentFilter]) {
-        [orderedValues addObject:[[self graphValues] objectForKey:[self currentFilter]]];
+        [orderedValues addObject:[@{@"y" : [self valuesForType:[self currentFilter] weekEnd:weekEnd yearEnd:yearEnd], @"color" : [[self typeColors] objectForKey:[self currentFilter]]} mutableCopy]];
     } else {
         for(NSString *key in [[self orderArray] reverseObjectEnumerator]) {
-            [orderedValues addObject:[[self graphValues] objectForKey:key]];
+            [orderedValues addObject:[@{@"y" : [self valuesForType:key weekEnd:weekEnd yearEnd:yearEnd], @"color" : [[self typeColors] objectForKey:key]} mutableCopy]];
         }
     }
+    
+    [self convertGraphValuesToPercentages:orderedValues];
+    
     [[self graphView] setValues:orderedValues];
+    
+    NSCalendar *greg = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+
+    NSDateComponents *dc = [[NSDateComponents alloc] init];
+    [dc setWeekOfYear:weekEnd];
+    [dc setYearForWeekOfYear:yearEnd];
+    [dc setWeekday:7];
+    
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"M-d-yyyy"];
+    
+    [[self rightDateLabel] setText:[df stringFromDate:[greg dateFromComponents:dc]]];
+
+    [dc setWeekOfYear:[dc weekOfYear] - 7];
+    [dc setWeekday:1];
+    [[self leftDateLabel] setText:[df stringFromDate:[greg dateFromComponents:dc]]];
 }
 
 - (void)configureChartArea
@@ -237,7 +346,11 @@
     } else {
         for(NSString *key in [self orderArray]) {
             [orderedColors addObject:[[self typeColors] objectForKey:key]];
-            [orderedValues addObject:[[self typePercentages] objectForKey:key]];
+            
+            NSNumber *percent = [[self typePercentages] objectForKey:key];
+            if(!percent)
+                percent = @0;
+            [orderedValues addObject:percent];
         }
     }
     [[self pieChartView] setColors:orderedColors];

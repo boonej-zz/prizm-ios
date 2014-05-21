@@ -86,10 +86,10 @@
     
     return
     @[
-      @{@"title": @"Instagram", @"image" : @"sharing_instagram", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureInstagram:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
+      @{@"title": @"Instagram", @"image" : @"sharing_instagram", @"type" : @"STKSettingsShareCell", @"actionSelector" : @"configureInstagram:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u instagramToken] != nil)];
       }},
-      @{@"title": @"Twitter", @"image" : @"sharing_twitter", @"type" : @"STKSettingsShareCell", @"selectionSelector" : @"configureTwitter:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
+      @{@"title": @"Twitter", @"image" : @"sharing_twitter", @"type" : @"STKSettingsShareCell", @"actionSelector" : @"configureTwitter:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u twitterID] != nil)];
       }}
     ];
@@ -165,7 +165,7 @@
 
 - (void)toggleNetwork:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    NSString *selName = [self selectionSelectorForIndexPath:ip];
+    NSString *selName = [self actionSelectorForIndexPath:ip];
     if(selName) {
         [self performSelector:NSSelectorFromString(selName) withObject:@([sender isOn])];
         return;
@@ -309,6 +309,11 @@
 - (NSString *)selectionSelectorForIndexPath:(NSIndexPath *)ip
 {
     return [[self settingsItemAtIndexPath:ip] objectForKey:@"selectionSelector"];
+}
+
+- (NSString *)actionSelectorForIndexPath:(NSIndexPath *)ip
+{
+    return [[self settingsItemAtIndexPath:ip] objectForKey:@"actionSelector"];
 }
 
 - (NSString *)urlForIndexPath:(NSIndexPath *)ip

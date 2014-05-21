@@ -27,14 +27,15 @@ extern CGSize STKUserCoverPhotoSize;
 extern CGSize STKUserProfilePhotoSize;
 
 extern NSString * const STKUserTypePersonal;
-extern NSString * const STKUserTypeLuminary;
-extern NSString * const STKUserTypeMilitary;
 extern NSString * const STKUserTypeInstitution;
-extern NSString * const STKUserTypeFoundation;
-extern NSString * const STKUserTypeCompany;
-extern NSString * const STKUserTypeCommunity;
-
 extern NSString * const STKUserTypeInstitutionPending;
+
+extern NSString * const STKUserSubTypeMilitary;
+extern NSString * const STKUserSubTypeFoundation;
+extern NSString * const STKUserSubTypeCompany;
+extern NSString * const STKUserSubTypeCommunity;
+extern NSString * const STKUserSubTypeEducation;
+extern NSString * const STKUserSubTypeLuminary;
 
 
 @interface STKUser : NSManagedObject <STKJSONObject>
@@ -58,6 +59,7 @@ extern NSString * const STKUserTypeInstitutionPending;
 @property (nonatomic, strong) NSString *blurb;
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) NSString *subtype;
 @property (nonatomic, strong) NSString *coverPhotoPath;
 @property (nonatomic, strong) NSString *profilePhotoPath;
 

@@ -14,12 +14,12 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gFK-5G-pZ1" customClass="STKAvatarView">
-                        <rect key="frame" x="13" y="8" width="30" height="30"/>
+                        <rect key="frame" x="13" y="5" width="35" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="30" id="Beg-ke-Wbn"/>
-                            <constraint firstAttribute="width" constant="30" id="f3k-h0-TzN"/>
+                            <constraint firstAttribute="height" constant="35" id="Beg-ke-Wbn"/>
+                            <constraint firstAttribute="width" constant="35" id="f3k-h0-TzN"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ozo-8o-OxR" customClass="UIControl">
@@ -41,7 +41,7 @@
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="activity_check_blue" translatesAutoresizingMaskIntoConstraints="NO" id="VfA-Yc-Efg">
-                        <rect key="frame" x="27" y="8" width="16" height="16"/>
+                        <rect key="frame" x="32" y="5" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="JP2-DY-btG"/>
@@ -49,7 +49,7 @@
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_clock" translatesAutoresizingMaskIntoConstraints="NO" id="KrN-3j-DXO">
-                        <rect key="frame" x="217" y="30" width="16" height="16"/>
+                        <rect key="frame" x="217" y="27" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="CGH-Rl-E7f"/>
@@ -64,7 +64,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KrW-jy-2R5">
-                        <rect key="frame" x="56" y="29" width="159" height="17"/>
+                        <rect key="frame" x="61" y="26" width="154" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="Vfa-bo-u0e"/>
@@ -74,7 +74,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="54m" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m2s-jy-YQI">
-                        <rect key="frame" x="234" y="29" width="24" height="17"/>
+                        <rect key="frame" x="234" y="26" width="24" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="0sf-m6-Ojv"/>

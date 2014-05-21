@@ -69,7 +69,7 @@
 
     [[self dateLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     [[self dateLabel] setClipsToBounds:YES];
-    [[[self dateLabel] layer] setCornerRadius:5];
+    [[[self dateLabel] layer] setCornerRadius:2];
 
 }
 

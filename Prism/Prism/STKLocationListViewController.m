@@ -195,7 +195,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"UITableViewCell"];
     }
     [[cell textLabel] setTextColor:[UIColor darkGrayColor]];
-    [[cell textLabel] setFont:STKFont(16)];
+    [[cell textLabel] setFont:STKBoldFont(16)];
     [[cell detailTextLabel] setTextColor:[UIColor darkGrayColor]];
     [[cell detailTextLabel] setFont:STKFont(14)];
 

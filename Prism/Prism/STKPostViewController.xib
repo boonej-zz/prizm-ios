@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="bottomCommentConstraint" destination="fYT-Li-F5G" id="e2A-D8-OsN"/>
                 <outlet property="categoryCollectionView" destination="btj-gk-C8i" id="84D-Gu-8s9"/>
+                <outlet property="commentBarPlaceholder" destination="lXE-2H-qgp" id="4fD-nq-aSJ"/>
                 <outlet property="commentFooterView" destination="Dln-PT-0fM" id="ful-9b-Qwr"/>
                 <outlet property="commentTextView" destination="Ufz-ig-UNY" id="2tJ-9e-1Dx"/>
                 <outlet property="dismissButtonImageView" destination="ffu-8M-aFq" id="e3R-yg-DCk"/>
@@ -92,6 +93,13 @@
                                 <outlet property="delegate" destination="-1" id="2da-CQ-efN"/>
                             </connections>
                         </textView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write a comment..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lXE-2H-qgp">
+                            <rect key="frame" x="38" y="3" width="172" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                            <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_write_comment" translatesAutoresizingMaskIntoConstraints="NO" id="sSO-FA-qQw">
                             <rect key="frame" x="14" y="10" width="16" height="16"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -133,6 +141,8 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.10000000000000001" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="Ufz-ig-UNY" firstAttribute="top" secondItem="lXE-2H-qgp" secondAttribute="top" id="02m-Dj-ZHT"/>
+                        <constraint firstItem="Ufz-ig-UNY" firstAttribute="bottom" secondItem="lXE-2H-qgp" secondAttribute="bottom" id="3mO-SH-OAq"/>
                         <constraint firstItem="Ac4-pl-Epb" firstAttribute="leading" secondItem="Dln-PT-0fM" secondAttribute="leading" id="44F-L6-qvC"/>
                         <constraint firstItem="Ac4-pl-Epb" firstAttribute="top" secondItem="Dln-PT-0fM" secondAttribute="top" id="9ho-9V-USf"/>
                         <constraint firstAttribute="centerY" secondItem="ywj-I7-cIa" secondAttribute="centerY" id="LWZ-82-95b"/>
@@ -147,8 +157,10 @@
                         <constraint firstAttribute="trailing" secondItem="ywj-I7-cIa" secondAttribute="trailing" constant="14" id="gga-ls-2mF"/>
                         <constraint firstAttribute="trailing" secondItem="Ac4-pl-Epb" secondAttribute="trailing" id="h4x-KM-Tgw"/>
                         <constraint firstItem="RPE-rT-7DA" firstAttribute="leading" secondItem="Dln-PT-0fM" secondAttribute="leading" id="khD-re-sDM"/>
+                        <constraint firstItem="Ufz-ig-UNY" firstAttribute="leading" secondItem="lXE-2H-qgp" secondAttribute="leading" id="mDU-A9-3o7"/>
                         <constraint firstAttribute="centerY" secondItem="3RX-hR-78U" secondAttribute="centerY" id="r0K-U9-pWB"/>
                         <constraint firstItem="ywj-I7-cIa" firstAttribute="leading" secondItem="3RX-hR-78U" secondAttribute="trailing" constant="14" id="x81-Fb-3LV"/>
+                        <constraint firstItem="Ufz-ig-UNY" firstAttribute="trailing" secondItem="lXE-2H-qgp" secondAttribute="trailing" id="yw6-PF-aol"/>
                         <constraint firstAttribute="bottom" secondItem="RPE-rT-7DA" secondAttribute="bottom" id="zyh-Kr-ovo"/>
                     </constraints>
                 </view>

@@ -20,14 +20,15 @@ NSString * const STKUserExternalSystemTwitter = @"twitter";
 NSString * const STKUserExternalSystemGoogle = @"google";
 
 NSString * const STKUserTypePersonal = @"user";
-NSString * const STKUserTypeLuminary = @"luminary";
-NSString * const STKUserTypeMilitary = @"military";
 NSString * const STKUserTypeInstitution = @"institution_verified";
-NSString * const STKUserTypeFoundation = @"foundation";
-NSString * const STKUserTypeCompany = @"company";
-NSString * const STKUserTypeCommunity = @"community";
-
 NSString * const STKUserTypeInstitutionPending = @"institution";
+
+NSString * const STKUserSubTypeFoundation = @"foundation";
+NSString * const STKUserSubTypeMilitary = @"military";
+NSString * const STKUserSubTypeCompany = @"company";
+NSString * const STKUserSubTypeCommunity = @"community";
+NSString * const STKUserSubTypeEducation = @"education";
+NSString * const STKUserSubTypeLuminary = @"luminary";
 
 CGSize STKUserCoverPhotoSize = {.width = 320, .height = 188};
 CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
@@ -38,7 +39,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
-@dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName;
+@dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 
@@ -59,6 +60,7 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
              @"provider" : @"externalServiceType",
              @"provider_id" : @"externalServiceID",
              
+             @"subtype" : @"subtype",
              @"state" : @"state",
              @"zip_postal" : @"zipCode",
              @"gender" : @"gender",

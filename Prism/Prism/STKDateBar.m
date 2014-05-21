@@ -169,9 +169,13 @@
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[v(==30)]|" options:0 metrics:nil views:@{@"v" : _rightButton}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:0 views:@{@"v" : _leftButton}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:0 views:@{@"v" : _rightButton}]];
+
+    NSDate *today = [NSDate date];
+    NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *dc = [cal components:NSYearForWeekOfYearCalendarUnit | NSWeekOfYearCalendarUnit fromDate:today];
     
-    [self setLastWeekInYear:42];
-    [self setYear:2014];
+    [self setLastWeekInYear:[dc weekOfYear]];
+    [self setYear:[dc yearForWeekOfYear]];
     [self setLabels:[self labelsForCurrentRange]];
 
 }

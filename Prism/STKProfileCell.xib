@@ -18,14 +18,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="JWM-kX-NVe">
-                                <rect key="frame" x="57" y="11" width="176" height="20"/>
+                                <rect key="frame" x="62" y="16.5" width="171" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JLZ-VJ-Paa">
-                                <rect key="frame" x="69" y="31" width="26" height="21"/>
+                                <rect key="frame" x="74" y="33.5" width="26" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="qem-Bw-iy3"/>
@@ -35,15 +35,15 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0P3-2W-oQp" customClass="STKAvatarView">
-                                <rect key="frame" x="14" y="15" width="35" height="35"/>
+                                <rect key="frame" x="14" y="12.5" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="35" id="Htx-Qq-kkx"/>
-                                    <constraint firstAttribute="height" constant="35" id="eaW-DM-JFC"/>
+                                    <constraint firstAttribute="width" constant="40" id="Htx-Qq-kkx"/>
+                                    <constraint firstAttribute="height" constant="40" id="eaW-DM-JFC"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="location_pin_small" translatesAutoresizingMaskIntoConstraints="NO" id="Ha7-BY-Yvl">
-                                <rect key="frame" x="53" y="33" width="16" height="16"/>
+                                <rect key="frame" x="58" y="35.5" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="Mgs-fk-xlC"/>
@@ -65,7 +65,7 @@
                         <color key="backgroundColor" white="1" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerY" secondItem="0P3-2W-oQp" secondAttribute="centerY" id="41Z-Re-szr"/>
-                            <constraint firstItem="JWM-kX-NVe" firstAttribute="top" secondItem="0P3-2W-oQp" secondAttribute="top" constant="-4" id="4B0-TD-Nsx"/>
+                            <constraint firstItem="JWM-kX-NVe" firstAttribute="top" secondItem="0P3-2W-oQp" secondAttribute="top" constant="4" id="4B0-TD-Nsx"/>
                             <constraint firstItem="JLZ-VJ-Paa" firstAttribute="leading" secondItem="Ha7-BY-Yvl" secondAttribute="trailing" id="7E7-WG-HK2"/>
                             <constraint firstItem="JWM-kX-NVe" firstAttribute="leading" secondItem="0P3-2W-oQp" secondAttribute="trailing" constant="8" id="9bg-P9-PF7"/>
                             <constraint firstItem="0P3-2W-oQp" firstAttribute="leading" secondItem="xYR-5B-dsn" secondAttribute="leading" constant="14" id="A69-7C-S5g"/>

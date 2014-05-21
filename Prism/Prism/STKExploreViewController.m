@@ -145,6 +145,7 @@ typedef enum {
         [[self searchNavController] removeFromParentViewController];
         [[[self searchNavController] view] removeFromSuperview];
         [self setSearchNavController:nil];
+        
         [[self navigationItem] setTitle:@"Explore"];
     }
 }

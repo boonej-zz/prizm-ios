@@ -22,11 +22,11 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgB-CC-xg6" customClass="STKAvatarView">
-                        <rect key="frame" x="13" y="8" width="30" height="30"/>
+                        <rect key="frame" x="13" y="8" width="35" height="35"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="30" id="8Si-Ed-8bR"/>
-                            <constraint firstAttribute="height" constant="30" id="KiY-MO-4K7"/>
+                            <constraint firstAttribute="width" constant="35" id="8Si-Ed-8bR"/>
+                            <constraint firstAttribute="height" constant="35" id="KiY-MO-4K7"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Oh-E9-guI" customClass="UIControl">
@@ -38,7 +38,7 @@
                         </connections>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Cu-Uz-HHT">
-                        <rect key="frame" x="56" y="9" width="182" height="18"/>
+                        <rect key="frame" x="61" y="9" width="182" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="182" id="lYz-Q6-7kP"/>
@@ -49,7 +49,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_clock" translatesAutoresizingMaskIntoConstraints="NO" id="fGJ-lc-BAB">
-                        <rect key="frame" x="201" y="31" width="16" height="16"/>
+                        <rect key="frame" x="206" y="31" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="DgF-Lo-WVf"/>
@@ -57,7 +57,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2hrs" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4oo-ni-g3S">
-                        <rect key="frame" x="218" y="29" width="24" height="17"/>
+                        <rect key="frame" x="223" y="29" width="24" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="4Dh-VC-UrD"/>
@@ -68,7 +68,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="requested to join your trust" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VRx-24-fLv">
-                        <rect key="frame" x="56" y="30" width="143" height="17"/>
+                        <rect key="frame" x="61" y="30" width="143" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="1Kn-fQ-oD3"/>
@@ -109,7 +109,7 @@
                         </connections>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="activity_check_blue" translatesAutoresizingMaskIntoConstraints="NO" id="jmk-zf-GjI">
-                        <rect key="frame" x="27" y="8" width="16" height="16"/>
+                        <rect key="frame" x="32" y="8" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="RtY-Ce-WZZ"/>

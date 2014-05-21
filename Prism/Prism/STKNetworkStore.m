@@ -171,8 +171,10 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                              for(NSDictionary *post in posts) {
                                                                                  
                                                                                  if([[post objectForKey:@"type"] isEqualToString:@"image"]) {
-                                                                                     if([[post objectForKey:@"tags"] containsObject:@"prizm"]) {
-                                                                                         [postsToSend addObject:post];
+                                                                                     for(NSString *tag in [post objectForKey:@"tags"]) {
+                                                                                         if([[tag lowercaseString] isEqualToString:@"prizm"]) {
+                                                                                             [postsToSend addObject:post];
+                                                                                         }
                                                                                      }
                                                                                  }
                                                                              }
@@ -313,7 +315,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                         NSDictionary *entities = [d objectForKey:@"entities"];
                         NSArray *hashTags = [entities objectForKey:@"hashtags"];
                         for(NSDictionary *hashTag in hashTags) {
-                            if([[hashTag objectForKey:@"text"] isEqualToString:@"prizm"]) {
+                            if([[[hashTag objectForKey:@"text"] lowercaseString] isEqualToString:@"prizm"]) {
                                 [postsToSend addObject:d];
                             }
                         }
@@ -323,7 +325,11 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                     
                     if([json count] > 0) {
                         NSString *n = [[[json sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"id_str" ascending:NO]]] firstObject] objectForKey:@"id_str"];
-                        block(n, nil);
+                        if(n && ![n isKindOfClass:[NSNull class]]) {
+                            block(n, nil);
+                        } else {
+                            block(minID, nil);
+                        }
                     } else {
                         block(minID, nil);
                     }

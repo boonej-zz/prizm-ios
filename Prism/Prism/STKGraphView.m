@@ -105,7 +105,7 @@
             x += xPer;
         }
         
-        UIBezierPath *clip = [UIBezierPath bezierPathWithRect:CGRectMake(xBegin, yEnd, xEnd - xBegin, yBegin - yEnd)];
+        UIBezierPath *clip = [UIBezierPath bezierPathWithRect:CGRectMake(xBegin, 0, xEnd - xBegin, yEnd)];
         [clip addClip];
         
         if([points count] > 1) {
