@@ -21,6 +21,8 @@
 #import "STKPost.h"
 #import "STKPostViewController.h"
 #import "STKProfileViewController.h"
+#import "STKLuminatingBar.h"
+#import "STKFetchDescription.h"
 
 typedef enum {
     STKActivityViewControllerTypeActivity,
@@ -33,6 +35,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *activityTypeControl;
+@property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 
 @property (nonatomic, strong) NSMutableArray *requests;
 @property (nonatomic, strong) NSMutableArray *activities;
@@ -83,7 +86,7 @@ typedef enum {
 {
     [super viewWillAppear:animated];
     [[[self blurView] displayLink] setPaused:NO];
-    [self refresh];
+    [self fetchNewItems];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -97,16 +100,18 @@ typedef enum {
 - (void)setCurrentType:(STKActivityViewControllerType)currentType
 {
     _currentType = currentType;
-    [self refresh];
+    [self fetchNewItems];
 }
 
-
-- (void)refresh
+- (void)fetchOlderItems
 {
+    STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+    [fd setDirection:STKQueryObjectPageOlder];
+
     if([self currentType] == STKActivityViewControllerTypeActivity) {
-        
+        [fd setReferenceObject:[[self activities] lastObject]];
         [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser]
-                                 referenceActivity:[[self activities] firstObject]
+                                 fetchDescription:fd
                                         completion:^(NSArray *activities, NSError *err) {
                                             [[self activities] addObjectsFromArray:activities];
                                             
@@ -115,7 +120,34 @@ typedef enum {
                                         }];
         
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
+       // No older reqeusts
+    }
+    [[self tableView] reloadData];
+}
+
+
+- (void)fetchNewItems
+{
+    [[self luminatingBar] setLuminating:YES];
+
+    STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+    [fd setDirection:STKQueryObjectPageNewer];
+    
+    if([self currentType] == STKActivityViewControllerTypeActivity) {
+        [fd setReferenceObject:[[self activities] firstObject]];
+        [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser]
+                                  fetchDescription:fd
+                                        completion:^(NSArray *activities, NSError *err) {
+                                            [[self luminatingBar] setLuminating:NO];
+                                            [[self activities] addObjectsFromArray:activities];
+                                            
+                                            [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+                                            [[self tableView] reloadData];
+                                        }];
+        
+    } else if([self currentType] == STKActivityViewControllerTypeRequest) {
         [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:[[self requests] firstObject] completion:^(NSArray *requests, NSError *err) {
+            [[self luminatingBar] setLuminating:NO];
             if(!err) {
                 requests = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"not (uniqueID in %@)", [[self requests] valueForKey:@"uniqueID"]]];
                 
@@ -248,11 +280,40 @@ typedef enum {
     [[self blurView] setOverlayOpacity:0.0];
 }
 
-
 - (IBAction)typeChanged:(id)sender
 {
     [self setCurrentType:[sender selectedSegmentIndex]];
     [[self tableView] reloadData];
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < 0) {
+        float t = fabs(offset) / 60.0;
+        if(t > 1)
+            t = 1;
+        [[self luminatingBar] setProgress:t];
+    } else {
+        [[self luminatingBar] setProgress:0];
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if(velocity.y > 0 && [scrollView contentSize].height - [scrollView frame].size.height - 20 < targetContentOffset->y) {
+        [self fetchOlderItems];
+    }
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < -60) {
+        [self fetchNewItems];
+    }
+}
+
 
 @end

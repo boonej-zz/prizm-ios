@@ -12,4 +12,5 @@
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic) BOOL luminating;
 @property (nonatomic) float progress;
+@property (nonatomic) float luminationOpacity;
 @end

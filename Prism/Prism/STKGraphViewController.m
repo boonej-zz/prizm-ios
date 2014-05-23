@@ -32,14 +32,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *lifetimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *leftDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *rightDateLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *lifetimeActivityIndicator;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *graphActivityIndicator;
 
 @property (nonatomic, strong) NSArray *orderArray;
 @property (nonatomic, strong) NSDictionary *typePercentages;
 @property (nonatomic, strong) NSDictionary *typeColors;
 @property (nonatomic, strong) NSDictionary *typeNames;
 @property (nonatomic, strong) NSMutableDictionary *graphValues;
+@property (nonatomic, strong) NSDictionary *typeHashTags;
 
-@property (nonatomic, strong) NSArray *filteredHashTags;
 @property (nonatomic, strong) NSString *currentFilter;
 
 @end
@@ -80,16 +82,27 @@
 
 - (IBAction)dateBarDidChange:(id)sender
 {
-    [[STKUserStore store] fetchGraphDataForWeek:[[self dateBar] lastWeekInYear] - 7
-                                         inYear:[[self dateBar] year]
+    [self updateGraph];
+}
+
+- (void)updateGraph
+{
+    int askingWeek = [[self dateBar] lastWeekInYear];
+    int askingYear = [[self dateBar] year];
+    [[self graphActivityIndicator] startAnimating];
+    [[STKUserStore store] fetchGraphDataForWeek:askingWeek - 7
+                                         inYear:askingYear
                               previousWeekCount:7
                                      completion:^(NSDictionary *weeks, NSError *err) {
+                                         if(askingWeek == [[self dateBar] lastWeekInYear] && askingYear == [[self dateBar] year]) {
+                                             [[self graphActivityIndicator] stopAnimating];
+                                         }
                                          [self addWeeklyEntries:weeks];
                                          [self configureGraphArea];
                                      }];
-        
+    
     [self configureGraphArea];
-
+    
 }
 
 - (IBAction)toggleItem:(id)sender
@@ -126,22 +139,11 @@
 
 - (void)setCurrentFilter:(NSString *)currentFilter
 {
-    [self setFilteredHashTags:nil];
-    
     _currentFilter = currentFilter;
     
     [self configureGraphArea];
     [self configureChartArea];
     
-    [[STKUserStore store] fetchHashtagsForPostType:currentFilter completion:^(NSArray *hashTags, NSError *err) {
-
-        [self setFilteredHashTags:hashTags];
-        
-        [self setFilteredHashTags:@[@"foobar", @"boom", @"bar", @"college"]];
-        
-        [[self percentTableView] reloadData];
-        
-    }];
     [[self percentTableView] reloadData];
 }
 
@@ -171,7 +173,9 @@
 {
     [super viewWillAppear:animated];
     
+    [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
+        [[self lifetimeActivityIndicator] stopAnimating];
         if(!err) {
             int total = 0;
             for(NSString *key in vals) {
@@ -189,12 +193,13 @@
         [[self percentTableView] reloadData];
     }];
     
-    [[STKUserStore store] fetchGraphDataForWeek:[[self dateBar] lastWeekInYear] - 7
-                                         inYear:[[self dateBar] year]
-                              previousWeekCount:7
-                                     completion:^(NSDictionary *weeks, NSError *err) {
-                                         [self addWeeklyEntries:weeks];
-                                         [self configureGraphArea];
+    [self updateGraph];
+    
+    [[STKUserStore store] fetchHashtagsForPostTypesWithCompletion:^(NSDictionary *hashTags, NSError *err) {
+        if(!err) {
+            [self setTypeHashTags:hashTags];
+        }
+        [[self percentTableView] reloadData];
     }];
     
     [self configureChartArea];
@@ -303,15 +308,20 @@
     int yearEnd = [[self dateBar] year];
     
     NSMutableArray *orderedValues = [NSMutableArray array];
-    if([self currentFilter]) {
-        [orderedValues addObject:[@{@"y" : [self valuesForType:[self currentFilter] weekEnd:weekEnd yearEnd:yearEnd], @"color" : [[self typeColors] objectForKey:[self currentFilter]]} mutableCopy]];
-    } else {
-        for(NSString *key in [[self orderArray] reverseObjectEnumerator]) {
-            [orderedValues addObject:[@{@"y" : [self valuesForType:key weekEnd:weekEnd yearEnd:yearEnd], @"color" : [[self typeColors] objectForKey:key]} mutableCopy]];
+    NSMutableDictionary *filteredValue = nil;
+    for(NSString *key in [[self orderArray] reverseObjectEnumerator]) {
+        NSMutableDictionary *data = [@{@"y" : [self valuesForType:key weekEnd:weekEnd yearEnd:yearEnd], @"color" : [[self typeColors] objectForKey:key]} mutableCopy];
+        [orderedValues addObject:data];
+        if([[self currentFilter] isEqualToString:key]) {
+            filteredValue = data;
         }
     }
     
     [self convertGraphValuesToPercentages:orderedValues];
+    
+    if(filteredValue) {
+        orderedValues = [@[filteredValue] mutableCopy];
+    }
     
     [[self graphView] setValues:orderedValues];
     
@@ -366,7 +376,12 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if([self currentFilter]) {
-        return 1 + [[self filteredHashTags] count];
+        NSArray *hashTags = [[self typeHashTags] objectForKey:[self currentFilter]];
+        if([hashTags count] > 5) {
+            return 1 + 5;
+        } else {
+            return 1 + [hashTags count];
+        }
     }
     return [[self orderArray] count];
 }
@@ -381,9 +396,13 @@
                 c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
                 [[c textLabel] setFont:STKFont(12)];
                 [[c textLabel] setTextColor:[UIColor whiteColor]];
+                [c setSelectionStyle:UITableViewCellSelectionStyleNone];
             }
             
-            [[c textLabel] setText:[NSString stringWithFormat:@"#%@", [[self filteredHashTags] objectAtIndex:row - 1]]];
+            NSArray *hashTags = [[self typeHashTags] objectForKey:[self currentFilter]];
+            NSDictionary *hashTagRecord = [hashTags objectAtIndex:row - 1];
+            
+            [[c textLabel] setText:[NSString stringWithFormat:@"#%@", [hashTagRecord objectForKey:@"hash_tag"]]];
             
             return c;
         } else {

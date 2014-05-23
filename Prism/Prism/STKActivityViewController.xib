@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="activityTypeControl" destination="dpd-dE-8bZ" id="YoI-jb-Qa7"/>
                 <outlet property="blurView" destination="pIz-2f-31L" id="DBC-cL-wW9"/>
+                <outlet property="luminatingBar" destination="7BG-c7-vsB" id="wax-iC-nwr"/>
                 <outlet property="tableView" destination="7H2-7Q-gtH" id="Ufk-b7-bHN"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -17,10 +18,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="VBc-AJ-ttb">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7H2-7Q-gtH">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -30,6 +27,14 @@
                         <outlet property="delegate" destination="-1" id="y83-rd-PsF"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7BG-c7-vsB" customClass="STKLuminatingBar">
+                    <rect key="frame" x="0.0" y="114" width="320" height="4"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="4" id="h2W-jh-MGM"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pIz-2f-31L" customClass="UIERealTimeBlurView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -56,6 +61,8 @@
             </subviews>
             <color key="backgroundColor" red="0.79587720788043481" green="0.79587720788043481" blue="0.79587720788043481" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="7BG-c7-vsB" secondAttribute="trailing" id="1Fn-RG-UAO"/>
+                <constraint firstItem="7BG-c7-vsB" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="2c3-Vx-Stl"/>
                 <constraint firstAttribute="bottom" secondItem="7H2-7Q-gtH" secondAttribute="bottom" id="3Kb-1R-MTA"/>
                 <constraint firstItem="dpd-dE-8bZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="9jK-94-P4s"/>
                 <constraint firstAttribute="trailing" secondItem="7H2-7Q-gtH" secondAttribute="trailing" id="Baz-Uc-wGu"/>
@@ -65,6 +72,7 @@
                 <constraint firstAttribute="trailing" secondItem="dpd-dE-8bZ" secondAttribute="trailing" id="QyW-lM-fT1"/>
                 <constraint firstItem="7H2-7Q-gtH" firstAttribute="top" secondItem="1" secondAttribute="top" id="Zjf-Nu-eNx"/>
                 <constraint firstAttribute="trailing" secondItem="pIz-2f-31L" secondAttribute="trailing" id="pYp-1N-blk"/>
+                <constraint firstItem="7BG-c7-vsB" firstAttribute="top" secondItem="dpd-dE-8bZ" secondAttribute="bottom" id="r7Z-Oo-50B"/>
                 <constraint firstItem="pIz-2f-31L" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="y5T-us-DZO"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -72,7 +80,4 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
-    <resources>
-        <image name="img_background" width="320" height="568"/>
-    </resources>
 </document>

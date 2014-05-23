@@ -129,7 +129,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         fetchDescription:(STKFetchDescription *)desc
               completion:(void (^)(NSArray *posts, NSError *err))block
 {
-    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
+/*    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
                                    fetchDescription:desc];
 
     STKPost *referencePost = [desc referenceObject];
@@ -153,7 +153,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         }];
         if(returnAfter)
             return;
-    }
+    }*/
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -168,7 +168,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [q setLimit:30];
         [q setPageDirection:[desc direction]];
         [q setPageKey:STKPostDateCreatedKey];
-        [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
+        [q setPageValue:[STKTimestampFormatter stringFromDate:[[desc referenceObject] datePosted]]];
         
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
@@ -194,7 +194,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *posts, NSError *err) {
             if(!err) {
-                [[[[STKUserStore store] currentUser] mutableSetValueForKeyPath:@"fFeedPosts"] addObjectsFromArray:posts];
+                //[[[[STKUserStore store] currentUser] mutableSetValueForKeyPath:@"fFeedPosts"] addObjectsFromArray:posts];
                 [[[STKUserStore store] context] save:nil];
                 block(posts, nil);
             } else {
@@ -747,6 +747,23 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         
         STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
         [c setIdentifiers:@[[p uniqueID]]];
+        
+        
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+        
+        STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
+        [q addSubquery:tagQ];
+        
+        STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
+        [q addSubquery:rq];
+        
+        STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
+        [q addSubquery:cq];
+        
+        [c setQueryObject:q];
+
+        [c setResolutionMap:@{@"User" : @"STKUser"}];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         
         [c setContext:[p managedObjectContext]];
         [c setModelGraph:@[p]];

@@ -327,8 +327,6 @@
                                                object:nil];
     [[self overlayVIew] setHidden:YES];
     
-    [[self tableView] reloadData];
-    
     [[self stretchView] setUrlString:[[self post] imageURLString]];
     
     [[STKContentStore store] fetchCommentsForPost:[self post]
@@ -337,13 +335,22 @@
                                            [[self comments] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES]]];
                                            [[self tableView] reloadData];
                                        }];
+    [[STKContentStore store] fetchPost:[self post] completion:^(STKPost *p, NSError *err) {
+        [self configureItems];
+    }];
+    
+    [self configureItems];
+}
+
+- (void)configureItems
+{
+    [[self postCell] populateWithPost:[self post]];
     
     [[[self fakeHeaderView] avatarView] setUrlString:[[[self post] creator] profilePhotoPath]];
     [[[self fakeHeaderView] posterLabel] setText:[[[self post] creator] name]];
     [[[self fakeHeaderView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[[self post] datePosted]]];
     [[[self fakeHeaderView] postTypeView] setImage:[[self post] typeImage]];
     
-    //set headerview source label with original post creator name if repost
     if([[self post] originalPost] && [[[[self post] originalPost] creator] name]){
         NSString * fromUser = [NSString stringWithFormat:@"Via %@", [[[[self post] originalPost] creator] name]];
         [[[self fakeHeaderView] sourceLabel] setText:fromUser];
@@ -354,10 +361,8 @@
     } else {
         [[self editPostButton] setHidden:YES];
     }
-    
-    [[STKContentStore store] fetchPost:[self post] completion:^(STKPost *p, NSError *err) {
-        [[self tableView] reloadData];
-    }];
+
+    [[self tableView] reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated

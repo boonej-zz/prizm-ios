@@ -19,10 +19,12 @@
 #import "STKTrust.h"
 #import "STKUserPostListViewController.h"
 #import "STKFetchDescription.h"
+#import "STKOptionCell.h"
 
 @import MessageUI;
 
-@interface STKTrustViewController () <STKTrustViewDelegate, MFMailComposeViewControllerDelegate, STKCountViewDelegate>
+@interface STKTrustViewController ()
+    <STKTrustViewDelegate, MFMailComposeViewControllerDelegate, STKCountViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *selectedNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
@@ -33,7 +35,15 @@
 @property (nonatomic, strong) NSArray *trusts;
 @property (weak, nonatomic) IBOutlet UIImageView *numberImageView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UICollectionView *trustTypeCollectionView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *optionConstraint;
+@property (nonatomic, strong) UIControl *overlayView;
+@property (weak, nonatomic) IBOutlet UIView *trustTypeContainer;
+@property (weak, nonatomic) IBOutlet UIImageView *trustTypeBackgroundImageView;
+@property (weak, nonatomic) IBOutlet UILabel *trustTypeLabel;
+
 @property (nonatomic, weak) STKUser *selectedUser;
+@property (nonatomic, strong) NSArray *trustTypes;
 
 - (IBAction)showList:(id)sender;
 - (IBAction)sendEmail:(id)sender;
@@ -54,6 +64,8 @@
         [[self tabBarItem] setTitle:@"Trust"];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentUserChanged:) name:STKUserStoreCurrentUserChangedNotification object:nil];
+        [self setTrustTypes:@[STKTrustTypeMentor, STKTrustTypeParent, STKTrustTypeFriend,
+                              STKTrustTypeCoach, STKTrustTypeTeacher, STKTrustTypeFamily]];
     }
     return self;
 }
@@ -70,7 +82,11 @@
     [[self dateLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     [[self dateLabel] setClipsToBounds:YES];
     [[[self dateLabel] layer] setCornerRadius:2];
-
+    
+    [[self trustTypeCollectionView] registerNib:[UINib nibWithNibName:@"STKOptionCell" bundle:nil]
+                     forCellWithReuseIdentifier:@"STKOptionCell"];
+    [[self trustTypeCollectionView] setBackgroundColor:[UIColor clearColor]];
+    
 }
 
 - (void)currentUserChanged:(NSNotification *)note
@@ -131,7 +147,7 @@
             [self setSelectedUser:nil];
         } else {
             [[self selectedNameLabel] setText:[[self selectedUser] name]];
-
+            [[self trustTypeLabel] setText:[STKTrust titleForTrustType:[[self selectedTrust] type]]];
             [[self trustView] setSelectedIndex:idx + 1];
             
             NSDictionary *lookup = @{@(0) : @"trust_one",
@@ -215,13 +231,57 @@
     
     [self configureInterface];
 }
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self dismissTrustMenu:nil];
+}
+
+- (STKTrust *)selectedTrust
+{
+    for(STKTrust *t in [self trusts]) {
+        if([[[t otherUser] uniqueID] isEqualToString:[[self selectedUser] uniqueID]]) {
+            return t;
+        }
+    }
+    return nil;
+}
+
 - (IBAction)promptTitleChange:(id)sender
 {
     if([self selectedUser]) {
+        UIImage *img = [[STKRenderServer renderServer] instantBlurredImageForView:[self view]
+                                                                        inSubrect:CGRectMake(0, [[self view] bounds].size.height - 100, 320, 100)];
+        [[self trustTypeBackgroundImageView] setImage:img];
+        
+        [[self trustTypeCollectionView] reloadData];
+        [[self trustTypeCollectionView] setBackgroundColor:[UIColor clearColor]];
+        
+        _overlayView = [[UIControl alloc] initWithFrame:[[self view] bounds]];
+        [[self overlayView] addTarget:self action:@selector(dismissTrustMenu:) forControlEvents:UIControlEventTouchUpInside];
+        [[self overlayView] setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.2]];
+        [[self view] insertSubview:[self overlayView] belowSubview:[self trustTypeContainer]];
+        
+        [[self optionConstraint] setConstant:0];
+        [UIView animateWithDuration:0.2 animations:^{
+            [[self view] layoutIfNeeded];
+        }];
 
     }
 }
 
+- (void)dismissTrustMenu:(id)sender
+{
+    [[self optionConstraint] setConstant:-[[self trustTypeCollectionView] bounds].size.height];
+    [[self overlayView] removeFromSuperview];
+    [self setOverlayView:nil];
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        [[self view] layoutIfNeeded];
+    }];
+
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -320,6 +380,45 @@
         [av show];
     }
 }
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *type = [[self trustTypes] objectAtIndex:[indexPath row]];
+    [[self selectedTrust] setType:type];
+    [[self trustTypeCollectionView] reloadData];
+    [self configureInterface];
+    [[STKUserStore store] updateTrust:[self selectedTrust] toType:type completion:^(STKTrust *requestItem, NSError *err) {
+        
+    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self dismissTrustMenu:nil];
+    });
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return [[self trustTypes] count];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    STKOptionCell *c = (STKOptionCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKOptionCell"
+                                                                 forIndexPath:indexPath];
+    [c setBackgroundColor:[UIColor clearColor]];
+    [[c contentView] setBackgroundColor:STKUnselectedColor];
+    [[c textLabel] setTextColor:[UIColor whiteColor]];
+    
+    if([[[self selectedTrust] type] isEqualToString:[[self trustTypes] objectAtIndex:[indexPath row]]]) {
+        [[c contentView] setBackgroundColor:STKSelectedColor];
+        [[c textLabel] setTextColor:STKSelectedTextColor];
+    }
+    
+    NSString *title = [STKTrust titleForTrustType:[[self trustTypes] objectAtIndex:[indexPath item]]];
+    [[c textLabel] setText:title];
+
+    return c;
+}
+
 
 - (void)dealloc
 {

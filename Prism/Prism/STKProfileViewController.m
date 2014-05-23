@@ -36,6 +36,8 @@
 #import "STKButtonRow.h"
 #import "STKWebViewController.h"
 #import "STKFetchDescription.h"
+#import "STKLuminatingBar.h"
+#import "STKAccoladeViewController.h"
 
 @import MessageUI;
 
@@ -49,6 +51,7 @@ typedef enum {
 
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 
 @property (nonatomic, strong) STKProfileCell *profileView;
 @property (nonatomic, strong) STKInitialProfileStatisticsCell *statsView;
@@ -73,6 +76,7 @@ typedef enum {
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [self setAutomaticallyAdjustsScrollViewInsets:NO];
         [[self tabBarItem] setTitle:@"Profile"];
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
@@ -275,18 +279,10 @@ typedef enum {
     [self setProfileView:[STKProfileCell cellForTableView:[self tableView] target:self]];
     [self setFilterView:[STKFilterCell cellForTableView:[self tableView] target:self]];
     
-    
+    [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
     [[[self filterView] gridViewButton] setSelected:YES];
 }
 
-- (void)scrollToPosts
-{
-    if([[[self postController] posts] count] > 0) {
-        [[self tableView] scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:STKProfileSectionDynamic]
-                                atScrollPosition:UITableViewScrollPositionTop
-                                        animated:YES];
-    }
-}
 
 - (IBAction)showSinglePanePosts:(id)sender atIndexPath:(NSIndexPath *)ip
 {
@@ -323,6 +319,22 @@ typedef enum {
         [[self tableView] reloadData];
     }];
     [[self tableView] reloadData];
+}
+
+- (void)fetchNewPosts
+{
+    [[self luminatingBar] setLuminating:YES];
+    [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self luminatingBar] setLuminating:NO];
+        [[self tableView] reloadData];
+    }];
+}
+
+- (void)fetchOlderPosts
+{
+    [[self postController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
 }
 
 
@@ -464,7 +476,8 @@ typedef enum {
 
 - (void)showAccolades:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    
+    STKAccoladeViewController *avc = [[STKAccoladeViewController alloc] init];
+    [[self navigationController] pushViewController:avc animated:YES];
 }
 
 - (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -789,6 +802,35 @@ typedef enum {
         }
     }
     return 3;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < 0) {
+        float t = fabs(offset) / 60.0;
+        if(t > 1)
+            t = 1;
+        [[self luminatingBar] setProgress:t];
+    } else {
+        [[self luminatingBar] setProgress:0];
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if(velocity.y > 0 && [scrollView contentSize].height - [scrollView frame].size.height - 20 < targetContentOffset->y) {
+        [self fetchOlderPosts];
+    }
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < -60) {
+        [self fetchNewPosts];
+    }
 }
 
 

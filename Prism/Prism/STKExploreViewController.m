@@ -23,7 +23,7 @@
 #import "STKPostController.h"
 #import "STKNavigationButton.h"
 #import "STKSearchResultsViewController.h"
-
+#import "STKLuminatingBar.h"
 
 typedef enum {
     STKExploreTypeLatest = 0,
@@ -42,6 +42,7 @@ typedef enum {
 @property (nonatomic, strong) STKPostController *featuredPostsController;
 @property (nonatomic, assign) STKPostController *activePostController;
 
+@property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *exploreTypeControl;
 @property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
@@ -151,8 +152,6 @@ typedef enum {
 }
 
 
-
-
 - (BOOL)isSearchBarActive
 {
     return [self searchNavController] != nil;
@@ -188,24 +187,6 @@ typedef enum {
     return [[self view] convertRect:r fromView:c];
 }
 
-- (void)showPostAtIndex:(int)idx
-{
-    [[self view] endEditing:YES];
-   /*
-    NSArray *posts = [self posts];
-    UITableView *tv = [self tableView];
-    if([self isSearchBarActive] && [self searchType] == STKSearchTypeHashTag) {
-        posts = [self postsFound];
-        tv = [self searchResultsTableView];
-    }
-    if(idx < [posts count]) {
-        STKPost *p = [posts objectAtIndex:idx];
-        [[self menuController] transitionToPost:p
-                                       fromRect:[self rectForPostAtIndex:idx inTableView:tv]
-                               inViewController:self
-                                       animated:YES];
-    }*/
-}
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
@@ -243,6 +224,8 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[self luminatingBar] setLuminationOpacity:1];
     
     UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
     [leftSwipe setDirection:UISwipeGestureRecognizerDirectionLeft];
@@ -292,10 +275,18 @@ typedef enum {
 
     [[self tableView] setContentInset:UIEdgeInsetsMake([[self exploreTypeControl] frame].origin.y + [[self exploreTypeControl] frame].size.height, 0, 0, 0)];
 
+    [self reloadPosts];
+}
+
+- (void)reloadPosts
+{
     STKPostController *pc = [self activePostController];
+    [[self luminatingBar] setLuminating:YES];
     [pc fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self luminatingBar] setLuminating:NO];
         [[self tableView] reloadData];
     }];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -334,10 +325,28 @@ typedef enum {
         [self setActivePostController:[self featuredPostsController]];
 
     [[self tableView] reloadData];
-    STKPostController *pc = [self activePostController];
-    [pc reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
-        [[self tableView] reloadData];
-    }];
+    [self reloadPosts];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < 0) {
+        float t = fabs(offset) / 60.0;
+        if(t > 1)
+            t = 1;
+        [[self luminatingBar] setProgress:t];
+    } else {
+        [[self luminatingBar] setProgress:0];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < -60) {
+        [self reloadPosts];
+    }
 }
 
 

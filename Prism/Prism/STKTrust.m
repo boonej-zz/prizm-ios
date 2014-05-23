@@ -15,6 +15,14 @@ NSString * const STKRequestStatusAccepted = @"accepted";
 NSString * const STKRequestStatusRejected = @"rejected";
 NSString * const STKRequestStatusCancelled = @"cancelled";
 
+NSString * const STKTrustTypeMentor = @"mentor";
+NSString * const STKTrustTypeParent = @"parent";
+NSString * const STKTrustTypeFriend = @"friend";
+NSString * const STKTrustTypeCoach = @"coach";
+NSString * const STKTrustTypeTeacher = @"teacher";
+NSString * const STKTrustTypeFamily = @"family";
+
+
 @interface STKTrust ()
 
 @end
@@ -93,6 +101,16 @@ recepient, recepientCommentsCount, recepientLikesCount, recepientPostsCount, typ
 - (BOOL)isCancelled
 {
     return [[self status] isEqualToString:STKRequestStatusCancelled];
+}
+
++ (NSString *)titleForTrustType:(NSString *)trustType
+{
+    return @{STKTrustTypeCoach : @"Coach",
+             STKTrustTypeFamily : @"Family",
+             STKTrustTypeMentor : @"Mentor",
+             STKTrustTypeParent : @"Parent",
+             STKTrustTypeTeacher : @"Teacher",
+             STKTrustTypeFriend : @"Friend"}[trustType];
 }
 
 @end

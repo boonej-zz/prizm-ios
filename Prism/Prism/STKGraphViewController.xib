@@ -10,9 +10,11 @@
                 <outlet property="aspirationButton" destination="i4Q-pq-q0X" id="xMw-wo-gff"/>
                 <outlet property="dateBar" destination="KmK-bA-jTu" id="nRK-82-11k"/>
                 <outlet property="experienceButton" destination="leg-3c-G8b" id="jLa-Yd-KS4"/>
+                <outlet property="graphActivityIndicator" destination="8oh-Ql-GTd" id="3al-cQ-lNJ"/>
                 <outlet property="graphView" destination="lb5-pg-axI" id="IRu-ez-n8E"/>
                 <outlet property="inspirationButton" destination="8GX-AC-QCw" id="sNL-rI-Ly5"/>
                 <outlet property="leftDateLabel" destination="J0X-hG-6hC" id="agD-XW-Wmo"/>
+                <outlet property="lifetimeActivityIndicator" destination="4p7-9Z-b8g" id="kFq-ZR-QrL"/>
                 <outlet property="lifetimeLabel" destination="v2G-FQ-bL3" id="5U3-Ag-luf"/>
                 <outlet property="passionButton" destination="3kD-xS-BfU" id="sBc-bP-WyK"/>
                 <outlet property="percentTableView" destination="k7u-Cp-1Um" id="DcB-yq-kf2"/>
@@ -44,6 +46,14 @@
                         <constraint firstAttribute="height" constant="164" id="c3U-FX-W3T"/>
                     </constraints>
                 </view>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="8oh-Ql-GTd">
+                    <rect key="frame" x="150.5" y="136" width="20" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="Q79-3x-Po3"/>
+                        <constraint firstAttribute="width" constant="20" id="i1U-aG-cq6"/>
+                    </constraints>
+                </activityIndicatorView>
                 <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Z4-iv-qi4" userLabel="Stat Container">
                     <rect key="frame" x="0.0" y="294" width="320" height="224"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -69,6 +79,14 @@
                                 <outlet property="delegate" destination="-1" id="fdx-NE-uhy"/>
                             </connections>
                         </tableView>
+                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="4p7-9Z-b8g">
+                            <rect key="frame" x="70" y="104" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="20" id="AN7-X5-WVB"/>
+                                <constraint firstAttribute="width" constant="20" id="IV0-eB-7hn"/>
+                            </constraints>
+                        </activityIndicatorView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lifetime" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v2G-FQ-bL3">
                             <rect key="frame" x="20" y="18" width="65" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -84,10 +102,12 @@
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="bbw-nr-E7X" firstAttribute="bottom" secondItem="k7u-Cp-1Um" secondAttribute="bottom" constant="-18" id="8ku-cD-6Do"/>
+                        <constraint firstItem="4p7-9Z-b8g" firstAttribute="centerY" secondItem="bbw-nr-E7X" secondAttribute="centerY" id="S12-dL-Ux0"/>
                         <constraint firstAttribute="trailing" secondItem="k7u-Cp-1Um" secondAttribute="trailing" constant="8" id="VWF-T7-UN6"/>
                         <constraint firstAttribute="centerY" secondItem="bbw-nr-E7X" secondAttribute="centerY" id="ZX3-xa-lOX"/>
                         <constraint firstItem="bbw-nr-E7X" firstAttribute="leading" secondItem="1Z4-iv-qi4" secondAttribute="leading" constant="20" id="gwX-uE-gby"/>
                         <constraint firstItem="v2G-FQ-bL3" firstAttribute="top" secondItem="1Z4-iv-qi4" secondAttribute="top" constant="18" id="lzt-fU-jVi"/>
+                        <constraint firstItem="4p7-9Z-b8g" firstAttribute="centerX" secondItem="bbw-nr-E7X" secondAttribute="centerX" id="o5s-RO-jZt"/>
                         <constraint firstItem="v2G-FQ-bL3" firstAttribute="leading" secondItem="1Z4-iv-qi4" secondAttribute="leading" constant="20" id="uPq-mi-Fwh"/>
                         <constraint firstItem="bbw-nr-E7X" firstAttribute="top" secondItem="k7u-Cp-1Um" secondAttribute="top" constant="4" id="xuc-AE-ZDi"/>
                     </constraints>
@@ -260,11 +280,13 @@
                 <constraint firstItem="1Z4-iv-qi4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Gty-Fs-uoe"/>
                 <constraint firstItem="KmK-bA-jTu" firstAttribute="top" secondItem="J0X-hG-6hC" secondAttribute="bottom" id="Isx-8O-Td4"/>
                 <constraint firstItem="KmK-bA-jTu" firstAttribute="top" secondItem="W53-H2-bAG" secondAttribute="bottom" id="IvW-l2-MVt"/>
+                <constraint firstItem="lb5-pg-axI" firstAttribute="centerY" secondItem="8oh-Ql-GTd" secondAttribute="centerY" id="LUV-jL-91X"/>
                 <constraint firstItem="KmK-bA-jTu" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Me0-Xg-lTz"/>
                 <constraint firstItem="J0X-hG-6hC" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="Shp-M4-1vb"/>
                 <constraint firstItem="9dF-5u-Y3r" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Soa-yd-E6K"/>
                 <constraint firstItem="9dF-5u-Y3r" firstAttribute="top" secondItem="1Z4-iv-qi4" secondAttribute="bottom" id="YYf-hb-Vw8"/>
                 <constraint firstItem="1Z4-iv-qi4" firstAttribute="top" secondItem="KmK-bA-jTu" secondAttribute="bottom" id="cYN-Ju-eTN"/>
+                <constraint firstItem="lb5-pg-axI" firstAttribute="centerX" secondItem="8oh-Ql-GTd" secondAttribute="centerX" constant="-0.5" id="eHG-0p-mSf"/>
                 <constraint firstItem="W53-H2-bAG" firstAttribute="top" secondItem="lb5-pg-axI" secondAttribute="bottom" id="ePq-u3-qhB"/>
                 <constraint firstAttribute="trailing" secondItem="KmK-bA-jTu" secondAttribute="trailing" id="eYU-RN-dJc"/>
                 <constraint firstAttribute="trailing" secondItem="eyr-wJ-YQY" secondAttribute="trailing" id="iW5-ai-hNv"/>

@@ -699,8 +699,10 @@ const long STKCreateProgressGeocoding = 4;
 
                                     
                                     UITableViewCell *c = [self visibleCellForKey:@"zipCode"];
-                                    [[self tableView] reloadRowsAtIndexPaths:@[[[self tableView] indexPathForCell:c]]
-                                                            withRowAnimation:UITableViewRowAnimationAutomatic];
+                                    if(c) {
+                                        [[self tableView] reloadRowsAtIndexPaths:@[[[self tableView] indexPathForCell:c]]
+                                                                withRowAnimation:UITableViewRowAnimationAutomatic];
+                                    }
                                 }
                             }
                             _geocoder = nil;

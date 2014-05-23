@@ -53,6 +53,7 @@
                                 <state key="normal" image="action_comment">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="selected" image="action_comment_active"/>
                                 <state key="highlighted" image="action_comment_active"/>
                                 <connections>
                                     <action selector="showComments:" destination="J9J-bF-ztf" eventType="touchUpInside" id="MUW-qz-d0V"/>

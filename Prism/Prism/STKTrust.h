@@ -16,6 +16,13 @@ extern NSString * const STKRequestStatusAccepted;
 extern NSString * const STKRequestStatusRejected;
 extern NSString * const STKRequestStatusCancelled;
 
+extern NSString * const STKTrustTypeMentor;
+extern NSString * const STKTrustTypeParent;
+extern NSString * const STKTrustTypeFriend;
+extern NSString * const STKTrustTypeCoach;
+extern NSString * const STKTrustTypeTeacher;
+extern NSString * const STKTrustTypeFamily;
+
 typedef enum {
     STKTrustPostTypeLikes,
     STKTrustPostTypeComments,
@@ -51,5 +58,7 @@ typedef enum {
 
 - (float)otherScore;
 - (STKUser *)otherUser;
+
++ (NSString *)titleForTrustType:(NSString *)trustType;
 
 @end

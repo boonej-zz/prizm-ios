@@ -52,22 +52,20 @@
     if([p originalPost] && [[[p originalPost] creator] name]){
         NSString * fromUser = [NSString stringWithFormat:@"Via %@", [[[p originalPost] creator] name]];
         [[[self headerView] sourceLabel] setText:fromUser];
+    } else {
+        [[[self headerView] sourceLabel] setText:nil];
     }
-
+    
     
     if([p commentCount] == 0) {
         [[self commentCountLabel] setText:@""];
-        [[self commentButton] setImage:[UIImage imageNamed:@"action_comment"]
-                              forState:UIControlStateNormal];
     } else {
         [[self commentCountLabel] setText:[NSString stringWithFormat:@"%d", [p commentCount]]];
-        [[self commentButton] setImage:[UIImage imageNamed:@"action_comment_active"]
-                              forState:UIControlStateNormal];
     }
     
-    if([p text]) {
-        [[self commentButton] setImage:[UIImage imageNamed:@"action_comment_active"]
-                              forState:UIControlStateNormal];
+    [[self commentButton] setSelected:NO];
+    if([p text] || [p commentCount] > 0) {
+        [[self commentButton] setSelected:YES];
     }
     
     if([p likeCount] == 0)

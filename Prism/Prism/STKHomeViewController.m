@@ -305,11 +305,7 @@
     [[self luminatingBar] setLuminating:YES];
     [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
         [self setFetchInProgress:NO];
-
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [[self luminatingBar] setLuminating:NO];
-        });
-//        [[self luminatingBar] setLuminating:NO];
+        [[self luminatingBar] setLuminating:NO];
         [[self tableView] reloadData];
         [self layoutCards];
     }];

@@ -74,8 +74,9 @@ typedef enum {
 - (void)fetchUsersFollowingOfUser:(STKUser *)user completion:(void (^)(NSArray *followers, NSError *err))block;
 - (void)fetchTrustsForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block;
 
-- (void)fetchTopTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
+- (void)fetchActivityForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *activities, NSError *err))block;
 
+- (void)fetchTopTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
 - (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKTrust *)request completion:(void (^)(NSArray *requests, NSError *err))block;
 - (void)acceptTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
@@ -83,11 +84,11 @@ typedef enum {
 - (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)fetchTrustPostsForTrust:(STKTrust *)t type:(STKTrustPostType)type completion:(void (^)(NSArray *posts, NSError *err))block;
 - (void)searchUserTrustsWithName:(NSString *)name completion:(void (^)(id data, NSError *error))block;
-- (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block;
+- (void)updateTrust:(STKTrust *)t toType:(NSString *)type completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 
 - (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSDictionary *weeks, NSError *err))block;
 - (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSDictionary *data, NSError *err))block;
-- (void)fetchHashtagsForPostType:(NSString *)postType completion:(void (^)(NSArray *hashTags, NSError *err))block;
+- (void)fetchHashtagsForPostTypesWithCompletion:(void (^)(NSDictionary *hashTags, NSError *err))block;
 
 
 @end

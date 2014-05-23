@@ -16,9 +16,11 @@
 #import "STKUser.h"
 #import "STKContentStore.h"
 #import "STKUserStore.h"
+#import "STKLuminatingBar.h"
 
 @interface STKUserPostListViewController () <UITableViewDelegate, UITableViewDataSource, STKPostControllerDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *blurViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftConstraint;
@@ -138,7 +140,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    [[self luminatingBar] setLuminationOpacity:1];
+    
     if([self allowPersonalFilter]) {
         [[self personalButton] setHidden:NO];
         [[self leftConstraint] setConstant:6];
@@ -199,11 +202,35 @@
     [[self postController] setFilterMap:[self filterDictionary]];
 }
 
-- (void)reloadPosts
+- (void)fetchNewPosts
+{
+    [[self luminatingBar] setLuminating:YES];
+    [self configurePostController];
+    [[self tableView] reloadData];
+    [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self luminatingBar] setLuminating:NO];
+        [[self tableView] reloadData];
+    }];
+
+}
+
+- (void)fetchOlderPosts
 {
     [self configurePostController];
     [[self tableView] reloadData];
+    [[self postController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
+
+}
+
+- (void)reloadPosts
+{
+    [[self luminatingBar] setLuminating:YES];
+    [self configurePostController];
+    [[self tableView] reloadData];
     [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self luminatingBar] setLuminating:NO];
         [[self tableView] reloadData];
     }];
 }
@@ -259,6 +286,36 @@
     [c populateWithPosts:[[self postController] posts] indexOffset:[indexPath row] * 3];
 //    [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     return c;
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < 0) {
+        float t = fabs(offset) / 60.0;
+        if(t > 1)
+            t = 1;
+        [[self luminatingBar] setProgress:t];
+    } else {
+        [[self luminatingBar] setProgress:0];
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if(velocity.y > 0 && [scrollView contentSize].height - [scrollView frame].size.height - 20 < targetContentOffset->y) {
+        [self fetchOlderPosts];
+    }
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < -60) {
+        [self fetchNewPosts];
+    }
 }
 
 @end

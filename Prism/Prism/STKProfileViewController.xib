@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -7,6 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKProfileViewController">
             <connections>
                 <outlet property="blurView" destination="Xxc-HM-7qT" id="dAB-Xm-9bx"/>
+                <outlet property="luminatingBar" destination="I98-XS-S6S" id="WXO-sh-fGF"/>
                 <outlet property="tableView" destination="rRt-hT-A27" id="Uad-dm-g6j"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -16,7 +17,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="rRt-hT-A27">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="rRt-hT-A27">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -25,13 +26,36 @@
                         <outlet property="delegate" destination="-1" id="veQ-dl-7LR"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xxc-HM-7qT" customClass="UIERealTimeBlurView">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I98-XS-S6S" customClass="STKLuminatingBar">
+                    <rect key="frame" x="0.0" y="64" width="320" height="4"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="4" id="cvu-Hg-Kgi"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xxc-HM-7qT" customClass="UIERealTimeBlurView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="cYu-gE-Iql"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.77970023777173914" green="0.77970023777173914" blue="0.77970023777173914" alpha="0.0" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="rRt-hT-A27" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="4uz-wy-rNa"/>
+                <constraint firstItem="Xxc-HM-7qT" firstAttribute="top" secondItem="1" secondAttribute="top" id="6IK-de-lNi"/>
+                <constraint firstItem="Xxc-HM-7qT" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="7NX-WT-3dG"/>
+                <constraint firstAttribute="trailing" secondItem="rRt-hT-A27" secondAttribute="trailing" id="EPV-9t-ohX"/>
+                <constraint firstItem="I98-XS-S6S" firstAttribute="top" secondItem="Xxc-HM-7qT" secondAttribute="bottom" id="FOt-5h-Nuq"/>
+                <constraint firstAttribute="bottom" secondItem="rRt-hT-A27" secondAttribute="bottom" id="Fhy-vb-PeS"/>
+                <constraint firstItem="rRt-hT-A27" firstAttribute="top" secondItem="1" secondAttribute="top" id="lmC-tC-pRm"/>
+                <constraint firstItem="I98-XS-S6S" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="n90-Hu-hg3"/>
+                <constraint firstAttribute="trailing" secondItem="Xxc-HM-7qT" secondAttribute="trailing" id="yxb-IK-ehc"/>
+                <constraint firstAttribute="trailing" secondItem="I98-XS-S6S" secondAttribute="trailing" id="zqj-ar-7dm"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

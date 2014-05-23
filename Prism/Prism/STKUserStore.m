@@ -121,8 +121,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [req setFetchLimit:1];
         NSArray *cachedRequests = [[self context] executeFetchRequest:req error:nil];
 
+        STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+        [fd setReferenceObject:[cachedActivities firstObject]];
+        [fd setDirection:STKQueryObjectPageNewer];
         
-        [self fetchActivityForUser:[self currentUser] referenceActivity:[cachedActivities firstObject] completion:^(NSArray *activities, NSError *err) {
+        [self fetchActivityForUser:[self currentUser] fetchDescription:fd completion:^(NSArray *activities, NSError *err) {
             [self fetchRequestsForCurrentUserWithReferenceRequest:[cachedRequests firstObject] completion:^(NSArray *requests, NSError *err) {
                 [self notifyNotificationCount];
             }];
@@ -693,7 +696,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
         return;
     }
-    
+    /*
     NSArray *cached = nil;
     if(!referenceRequest) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
@@ -718,7 +721,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(cached, nil);
         }];
     }
-
+*/
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -730,10 +733,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setIdentifiers:@[[[self currentUser] uniqueID], @"trusts"]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
-        if(topItem) {
+        if(referenceRequest) {
             [q setPageDirection:STKQueryObjectPageNewer];
             [q setPageKey:@"modify_date"];
-            [q setPageValue:[STKTimestampFormatter stringFromDate:[topItem dateModified]]];
+            [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceRequest dateModified]]];
         }
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
         [q setFilters:@{@"to" : [[self currentUser] uniqueID]}];
@@ -847,6 +850,28 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 }
 
+- (void)updateTrust:(STKTrust *)t toType:(NSString *)type completion:(void (^)(STKTrust *requestItem, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
+        [c setIdentifiers:@[[t uniqueID]]];
+        [c addQueryValue:type forKey:@"type"];
+        
+        [c setModelGraph:@[t]];
+        [c setContext:[self context]];
+        
+        [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+    
+}
+
 - (void)fetchTopTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block
 {
     STKFetchDescription *fdFrom = [[STKFetchDescription alloc] init];
@@ -941,8 +966,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)fetchActivityForUser:(STKUser *)u referenceActivity:(STKActivityItem *)referenceActivity completion:(void (^)(NSArray *activities, NSError *err))block
-{
+- (void)fetchActivityForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *activities, NSError *err))block
+{/*
     NSArray *cached = nil;
     if(!referenceActivity) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
@@ -965,7 +990,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(cached, nil);
         }];
     }
-    
+    */
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -977,10 +1002,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         
-        if(topItem) {
-            [q setPageDirection:STKQueryObjectPageNewer];
+        if([fetchDescription referenceObject]) {
+            [q setPageDirection:[fetchDescription direction]];
             [q setPageKey:@"create_date"];
-            [q setPageValue:[STKTimestampFormatter stringFromDate:[topItem dateCreated]]];
+            [q setPageValue:[STKTimestampFormatter stringFromDate:[[fetchDescription referenceObject] dateCreated]]];
         }
         
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
@@ -1051,9 +1076,24 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
     }];
 }
-- (void)fetchHashtagsForPostType:(NSString *)postType completion:(void (^)(NSArray *hashTags, NSError *err))block
+
+- (void)fetchHashtagsForPostTypesWithCompletion:(void (^)(NSDictionary *hashTags, NSError *err))block
 {
-    block(nil, nil);
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        [c setIdentifiers:@[[[self currentUser] uniqueID], @"stats", @"hashtags"]];
+        
+        [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
+            
+            block(obj, err);
+        }];
+    }];
+
 }
 
 
