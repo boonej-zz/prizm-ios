@@ -59,11 +59,13 @@ typedef enum {
 
 @property (nonatomic, strong) NSArray *luminaries;
 @property (nonatomic, strong) STKPostController *postController;
+@property (nonatomic, strong) STKPostController *tagsPostController;
 
 @property (nonatomic, getter = isShowingLuminaries) BOOL showingLuminaries;
 @property (nonatomic, getter = isShowingInformation) BOOL showingInformation;
 @property (nonatomic) BOOL showPostsInSingleLayout;
 @property (nonatomic) BOOL filterByLocation;
+@property (nonatomic) BOOL filterByUserTags;
 @property (nonatomic) NSArray *additionalInformationKeys;
 
 - (BOOL)isShowingCurrentUserProfile;
@@ -81,6 +83,7 @@ typedef enum {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_user"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_user_selected"]];
+        [self setFilterByUserTags:NO];
         _postController = [[STKPostController alloc] initWithViewController:self];
     }
     return self;
@@ -302,6 +305,25 @@ typedef enum {
 
 - (IBAction)toggleFilterByUserPost:(id)sender atIndexPath:(NSIndexPath *)ip
 {
+    NSString * currentUser = [[[STKUserStore store] currentUser] uniqueID];
+    NSString * profileUser = [[self profile] uniqueID];
+    if(![profileUser isEqualToString:currentUser]){
+        if(![self filterByUserTags]){
+            [[self postController] setFilterMap:@{@"tags.uniqueId" : currentUser}];
+            [self setFilterByUserTags:YES];
+        
+        }else {
+            NSMutableDictionary *filter = [[[self postController] filterMap] mutableCopy];
+            [filter removeObjectForKey:@"tags.uniqueId"];
+            [[self postController] setFilterMap:[filter copy]];
+        }
+        
+        [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+            [[self tableView] reloadData];
+        }];
+        
+        [[self tableView] reloadData];
+    }
 }
 
 - (IBAction)toggleFilterbyLocation:(id)sender atIndexPath:(NSIndexPath *)ip

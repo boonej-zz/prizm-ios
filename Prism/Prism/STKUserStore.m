@@ -358,6 +358,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             } else {
                 diveKey = @"from_comments";
             }
+        } else if(type == STKTrustPostTypeTags) {
+            if([[[self currentUser] uniqueID] isEqualToString:[[t creator] uniqueID]]) {
+                diveKey = @"to_posts";
+            } else {
+                diveKey = @"from_posts";
+            }
         }
         
         [obj setFields:@[diveKey]];
@@ -368,7 +374,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setModelGraph:@[@{diveKey : @[@"STKPost"]}]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setContext:[self context]];
-//        [c setShouldReturnArray:YES];
         [c setResolutionMap:@{@"Post" : @"STKPost"}];
         
         [c getWithSession:[self session] completionBlock:^(NSDictionary *posts, NSError *err) {
