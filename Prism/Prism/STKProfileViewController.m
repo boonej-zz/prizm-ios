@@ -303,40 +303,37 @@ typedef enum {
     [[self tableView] reloadData];
 }
 
+- (NSDictionary *)filterDictionary
+{
+    NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
+    if([self filterByLocation]) {
+        [d setObject:STKQueryObjectFilterExists forKey:@"locationName"];
+    }
+    if([self filterByUserTags]) {
+        [d setObject:[[self profile] uniqueID] forKey:@"tags.uniqueID"];
+    }
+    
+    return d;
+}
+
 - (IBAction)toggleFilterByUserPost:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    NSString * currentUser = [[[STKUserStore store] currentUser] uniqueID];
-    NSString * profileUser = [[self profile] uniqueID];
-    if(![profileUser isEqualToString:currentUser]){
-        if(![self filterByUserTags]){
-            [[self postController] setFilterMap:@{@"tags.uniqueId" : currentUser}];
-            [self setFilterByUserTags:YES];
-        
-        }else {
-            NSMutableDictionary *filter = [[[self postController] filterMap] mutableCopy];
-            [filter removeObjectForKey:@"tags.uniqueId"];
-            [[self postController] setFilterMap:[filter copy]];
-        }
-        
-        [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
-            [[self tableView] reloadData];
-        }];
-        
+    [self setFilterByUserTags:![self filterByUserTags]];
+    [sender setSelected:[self filterByUserTags]];
+    [[self postController] setFilterMap:[self filterDictionary]];
+    [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self tableView] reloadData];
-    }
+    }];
+    
+    [[self tableView] reloadData];
+    
 }
 
 - (IBAction)toggleFilterbyLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setFilterByLocation:![self filterByLocation]];
     [[[self filterView] locationButton] setSelected:[self filterByLocation]];
-    if([self filterByLocation]) {
-        [[self postController] setFilterMap:@{@"locationName" : STKQueryObjectFilterExists}];
-    } else {
-        NSMutableDictionary *d = [[[self postController] filterMap] mutableCopy];
-        [d removeObjectForKey:@"locationName"];
-        [[self postController] setFilterMap:[d copy]];
-    }
+    [[self postController] setFilterMap:[self filterDictionary]];
     [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self tableView] reloadData];
     }];

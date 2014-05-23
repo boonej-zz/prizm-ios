@@ -57,7 +57,7 @@
         NSArray *dot = [key componentsSeparatedByString:@"."];
         if([dot count] > 1) {
             // tags._id = "id"
-          //  [preds addObject:[NSPredicate predicateWithFormat:@"%@ in %@", value, key]];
+            [preds addObject:[NSPredicate predicateWithFormat:@"%@ in %@", value, key]];
         } else {
             if([value isEqualToString:STKQueryObjectFilterExists]) {
                 [preds addObject:[NSPredicate predicateWithFormat:@"%K != nil", key]];

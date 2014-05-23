@@ -292,8 +292,14 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 {
     NSMutableDictionary *filters = [NSMutableDictionary dictionary];
     for(NSString *key in filterMap) {
-        NSString *remoteKey = [STKPost remoteKeyForLocalKey:key];
-        [filters setObject:[filterMap objectForKey:key] forKey:remoteKey];
+        
+        if([key isEqualToString:@"tags.uniqueID"]) {
+            [filters setObject:[filterMap objectForKey:key] forKey:@"tags._id"];
+
+        } else {
+            NSString *remoteKey = [STKPost remoteKeyForLocalKey:key];
+            [filters setObject:[filterMap objectForKey:key] forKey:remoteKey];
+        }
     }
 
     if([filters count] == 0)

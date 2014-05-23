@@ -14,23 +14,29 @@
 #import "STKCreateAccoladeViewController.h"
 #import "STKUserStore.h"
 #import "STKUser.h"
+#import "STKPostController.h"
+#import "STKContentStore.h"
+#import "STKRelativeDateConverter.h"
+#import "STKProfileViewController.h"
+#import "UIViewController+STKControllerItems.h"
 
 typedef enum {
     STKAccoladeTypeReceived,
     STKAccoladeTypeSent
 } STKAccoladeType;
 
-@interface STKAccoladeViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface STKAccoladeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 @property (weak, nonatomic) IBOutlet STKSegmentedControl *typeControl;
 
-@property (nonatomic, strong) NSArray *accoladesReceived;
-@property (nonatomic, strong) NSArray *accoladesSent;
 
 @property (nonatomic) STKAccoladeType type;
+
+@property (nonatomic, strong) STKPostController *receivedPostController;
+@property (nonatomic, strong) STKPostController *sentPostController;
 
 @end
 
@@ -46,6 +52,19 @@ typedef enum {
                                                                target:self action:@selector(postAccolade:)];
         [bbi setBackgroundVerticalPositionAdjustment:1 forBarMetrics:UIBarMetricsDefault];
         [[self navigationItem] setRightBarButtonItem:bbi];
+
+        __weak STKAccoladeViewController *ws = self;
+
+        _receivedPostController = [[STKPostController alloc] initWithViewController:self];
+        [[self receivedPostController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchProfilePostsForUser:[ws user] fetchDescription:fs completion:completion];
+        }];
+
+        _sentPostController = [[STKPostController alloc] initWithViewController:self];
+        [[self sentPostController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchProfilePostsForUser:[ws user] fetchDescription:fs completion:completion];
+        }];
+
     }
     return self;
 }
@@ -78,6 +97,16 @@ typedef enum {
 
 - (void)reloadAccolades
 {
+    if([self type] == STKAccoladeTypeSent) {
+        [[self sentPostController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+            [[self tableView] reloadData];
+        }];
+    } else {
+        [[self receivedPostController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+            [[self tableView] reloadData];
+        }];
+    }
+
     [[self tableView] reloadData];
 }
 
@@ -95,8 +124,23 @@ typedef enum {
     [[self navigationItem] setLeftBarButtonItem:bbi];
 
     [[[self blurView] displayLink] setPaused:NO];
+
+    [[self receivedPostController] setFilterMap:@{@"tags.uniqueID" : [[self user] uniqueID], @"type" : STKPostTypeAccolade}];
+    [[self sentPostController] setFilterMap:@{@"creator" : [[self user] uniqueID], @"type" : STKPostTypeAccolade}];
+
+    [self reloadAccolades];
+    
 }
 
+- (void)profileImageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKPost *p = [self postForIndexPath:ip];
+    if([p creator]) {
+        STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+        [pvc setProfile:[p creator]];
+        [[self navigationController] pushViewController:pvc animated:YES];
+    }
+}
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -119,19 +163,46 @@ typedef enum {
     [self reloadAccolades];
 }
 
+- (STKPost *)postForIndexPath:(NSIndexPath *)ip
+{
+    if([self type] == STKAccoladeTypeSent) {
+        return [[[self sentPostController] posts] objectAtIndex:[ip row]];
+    } else {
+        return [[[self receivedPostController] posts] objectAtIndex:[ip row]];
+    }
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    STKPost *p = [self postForIndexPath:indexPath];
+    STKActivityCell *c = (STKActivityCell *)[tableView cellForRowAtIndexPath:indexPath];
+    [[self menuController] transitionToPost:p
+                                   fromRect:[[self view] convertRect:[[c imageReferenceView] frame] fromView:c]
+                                 usingImage:[[c imageReferenceView] image]
+                           inViewController:self
+                                   animated:YES];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if([self type] == STKAccoladeTypeSent)
-        return [[self accoladesSent] count];
+        return [[[self sentPostController] posts] count];
     
-    return [[self accoladesReceived] count];
+    return [[[self receivedPostController] posts] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     STKActivityCell *c = [STKActivityCell cellForTableView:tableView target:self];
     
+    STKPost *p = [self postForIndexPath:indexPath];
     
+    [[c profileImageView] setUrlString:[[p creator] profilePhotoPath]];
+    [[c nameLabel] setText:[[p creator] name]];
+    [[c activityTypeLabel] setText:@"sent an accolade"];
+    [[c imageReferenceView] setUrlString:[p imageURLString]];
+    [[c timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
     return c;
 }
 
@@ -162,6 +233,11 @@ typedef enum {
     if(offset < -60) {
 //        [self fetchNewItems];
     }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [cell setBackgroundColor:[UIColor clearColor]];
 }
 
 
