@@ -53,10 +53,17 @@
     NSMutableArray *preds = [NSMutableArray array];
     for(NSString *key in [self filterMap]) {
         NSString *value = [[self filterMap] objectForKey:key];
-        if([value isEqualToString:STKQueryObjectFilterExists]) {
-            [preds addObject:[NSPredicate predicateWithFormat:@"%K != nil", key]];
+        
+        NSArray *dot = [key componentsSeparatedByString:@"."];
+        if([dot count] > 1) {
+            // tags._id = "id"
+            [preds addObject:[NSPredicate predicateWithFormat:@"%@ in %@", value, key]];
         } else {
-            [preds addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, [[self filterMap] objectForKey:key]]];
+            if([value isEqualToString:STKQueryObjectFilterExists]) {
+                [preds addObject:[NSPredicate predicateWithFormat:@"%K != nil", key]];
+            } else {
+                [preds addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, value]];
+            }
         }
     }
     
