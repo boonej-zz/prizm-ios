@@ -36,7 +36,7 @@
                     </connections>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dm0-5L-vwj" customClass="STKLuminatingBar">
-                    <rect key="frame" x="0.0" y="115" width="320" height="4"/>
+                    <rect key="frame" x="0.0" y="114" width="320" height="4"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
@@ -44,7 +44,7 @@
                     </constraints>
                 </view>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ue1-S4-Lyq" customClass="STKSegmentedControl">
-                    <rect key="frame" x="0.0" y="65" width="320" height="51"/>
+                    <rect key="frame" x="0.0" y="64" width="320" height="51"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -67,7 +67,7 @@
                 <constraint firstAttribute="trailing" secondItem="OR1-sM-vYL" secondAttribute="trailing" id="Ouk-Zi-V7w"/>
                 <constraint firstItem="OR1-sM-vYL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="PSR-F4-ZcK"/>
                 <constraint firstItem="OR1-sM-vYL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Tkx-ge-tVN"/>
-                <constraint firstItem="ue1-S4-Lyq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="65" id="XRM-y6-t61"/>
+                <constraint firstItem="ue1-S4-Lyq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="XRM-y6-t61"/>
                 <constraint firstItem="1UT-aV-m4C" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cMz-c6-7lh"/>
                 <constraint firstItem="Dm0-5L-vwj" firstAttribute="top" secondItem="ue1-S4-Lyq" secondAttribute="bottom" id="gNZ-4K-8es"/>
                 <constraint firstAttribute="trailing" secondItem="Dm0-5L-vwj" secondAttribute="trailing" id="nB5-dV-76c"/>

@@ -93,6 +93,8 @@
 		BE6BAE3F18FED70A00B21EE7 /* STKInstitutionInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6BAE3D18FED70A00B21EE7 /* STKInstitutionInfoCell.m */; };
 		BE6BAE4018FED70A00B21EE7 /* STKInstitutionInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6BAE3E18FED70A00B21EE7 /* STKInstitutionInfoCell.xib */; };
 		BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6EB880186395F300E8009D /* STKErrorStore.m */; };
+		BE72B74C192FA880002349E3 /* STKCreateAccoladeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE72B74A192FA880002349E3 /* STKCreateAccoladeViewController.m */; };
+		BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE72B74B192FA880002349E3 /* STKCreateAccoladeViewController.xib */; };
 		BE7391C3190193AB00AD81AB /* STKSearchResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7391C1190193AB00AD81AB /* STKSearchResultsViewController.m */; };
 		BE7391C4190193AB00AD81AB /* STKSearchResultsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7391C2190193AB00AD81AB /* STKSearchResultsViewController.xib */; };
 		BE7391C719019AB600AD81AB /* STKHashtagPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7391C619019AB600AD81AB /* STKHashtagPostsViewController.m */; };
@@ -2062,6 +2064,9 @@
 		BE6BAE3E18FED70A00B21EE7 /* STKInstitutionInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInstitutionInfoCell.xib; sourceTree = "<group>"; };
 		BE6EB87F186395F300E8009D /* STKErrorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKErrorStore.h; sourceTree = "<group>"; };
 		BE6EB880186395F300E8009D /* STKErrorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKErrorStore.m; sourceTree = "<group>"; };
+		BE72B749192FA880002349E3 /* STKCreateAccoladeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreateAccoladeViewController.h; sourceTree = "<group>"; };
+		BE72B74A192FA880002349E3 /* STKCreateAccoladeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCreateAccoladeViewController.m; sourceTree = "<group>"; };
+		BE72B74B192FA880002349E3 /* STKCreateAccoladeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCreateAccoladeViewController.xib; sourceTree = "<group>"; };
 		BE7391C0190193AB00AD81AB /* STKSearchResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchResultsViewController.h; sourceTree = "<group>"; };
 		BE7391C1190193AB00AD81AB /* STKSearchResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchResultsViewController.m; sourceTree = "<group>"; wrapsLines = 0; };
 		BE7391C2190193AB00AD81AB /* STKSearchResultsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchResultsViewController.xib; sourceTree = "<group>"; };
@@ -2459,6 +2464,9 @@
 				BE1C707F192F8E7400223BDC /* STKAccoladeViewController.h */,
 				BE1C7080192F8E7400223BDC /* STKAccoladeViewController.m */,
 				BE1C7081192F8E7400223BDC /* STKAccoladeViewController.xib */,
+				BE72B749192FA880002349E3 /* STKCreateAccoladeViewController.h */,
+				BE72B74A192FA880002349E3 /* STKCreateAccoladeViewController.m */,
+				BE72B74B192FA880002349E3 /* STKCreateAccoladeViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4667,6 +4675,7 @@
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
 				BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */,
+				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
 				BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */,
 				BE1C7083192F8E7400223BDC /* STKAccoladeViewController.xib in Resources */,
@@ -4822,6 +4831,7 @@
 				BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */,
 				BE2B7E88191AB40600E6F408 /* STKPieChartView.m in Sources */,
 				BE5F68F718F0A4FC006D2CD1 /* STKQueryObject.m in Sources */,
+				BE72B74C192FA880002349E3 /* STKCreateAccoladeViewController.m in Sources */,
 				BE1A73C918D8ECBB004A3BB3 /* STKPostController.m in Sources */,
 				BE937C9E191175E000C24A58 /* STKNotifiedBadgeView.m in Sources */,
 				BE1C7082192F8E7400223BDC /* STKAccoladeViewController.m in Sources */,

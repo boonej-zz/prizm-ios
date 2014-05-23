@@ -477,6 +477,7 @@ typedef enum {
 - (void)showAccolades:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKAccoladeViewController *avc = [[STKAccoladeViewController alloc] init];
+    [avc setUser:[self profile]];
     [[self navigationController] pushViewController:avc animated:YES];
 }
 

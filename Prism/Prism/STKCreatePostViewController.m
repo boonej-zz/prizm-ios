@@ -89,7 +89,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                          @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"btn_camera"], @"selectedImage" : [UIImage imageNamed:@"btn_camera_selected"], @"action" : @"changeImage:"},
                          @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"selectedImage" : [UIImage imageNamed:@"btn_pin_selected"], @"action" : @"findLocation:"},
                          @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"], @"selectedImage" : [UIImage imageNamed:@"btn_usertag_selected"], @"action" : @"addUserTags:"},
-                         @{@"key" : @"visibility", @"image" : [UIImage imageNamed:@"btn_globe"], @"selectedImage" : [UIImage imageNamed:@"btn_globe_selected"], @"action" : @"toggleTrust:"},
+                         @{@"key" : @"visibility", @"image" : [UIImage imageNamed:@"btn_globe"], @"selectedImage" : [UIImage imageNamed:@"globe_glow"], @"action" : @"toggleTrust:"},
                          @{@"key" : @"facebook", @"image" : [UIImage imageNamed:@"btn_facebook"], @"selectedImage" : [UIImage imageNamed:@"btn_facebook_selected"]},
                          @{@"key" : @"twitter", @"image" : [UIImage imageNamed:@"btn_twitter"], @"selectedImage" : [UIImage imageNamed:@"btn_twitter_selected"]},
                          @{@"key" : @"tumblr", @"image" : [UIImage imageNamed:@"btn_tumblr"], @"selectedImage" : [UIImage imageNamed:@"btn_tumblr_selected"]},

@@ -75,7 +75,11 @@ typedef enum {
     [[self promptLabel] setFont:[UIFont systemFontOfSize:12]];
     [[self promptLabel] setNumberOfLines:2];
     [[self promptLabel] setTextColor:[UIColor whiteColor]];
-    [[self promptLabel] setText:@"Use # to add a tag and @ to add a person"];
+    if(![self preventsUserTagging]) {
+        [[self promptLabel] setText:@"Use # to add a tag and @ to add a person"];
+    } else {
+        [[self promptLabel] setText:@"Use # to add a tag"];
+    }
     [[self view] addSubview:[self promptLabel]];
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStylePlain];
@@ -106,6 +110,16 @@ typedef enum {
     [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|" options:0 metrics:nil views:@{@"v" : iv}]];
     [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|" options:0 metrics:nil views:@{@"v" : overlay}]];
 
+}
+
+- (void)setPreventsUserTagging:(BOOL)preventsUserTagging
+{
+    _preventsUserTagging = preventsUserTagging;
+    if([self preventsUserTagging]) {
+        [[self promptLabel] setText:@"Use # to add a tag"];
+    } else {
+        [[self promptLabel] setText:@"Use # to add a tag and @ to add a person"];
+    }
 }
 
 - (void)setHidesDoneButton:(BOOL)hidesDoneButton
@@ -220,15 +234,17 @@ typedef enum {
                 [self updateView];
             }];
         } else {
-            if([textBasis length] > 1) {
-                [[STKUserStore store] searchUserTrustsWithName:textBasis
-                                                    completion:^(NSArray *users, NSError *error) {
-                                                        [self setUserTags:users];
-                                                        [self updateView];
-                                                    }];
-            } else {
-                [self setUserTags:nil];
-                [self updateView];
+            if(![self preventsUserTagging]) {
+                if([textBasis length] > 1) {
+                    [[STKUserStore store] searchUserTrustsWithName:textBasis
+                                                        completion:^(NSArray *users, NSError *error) {
+                                                            [self setUserTags:users];
+                                                            [self updateView];
+                                                        }];
+                } else {
+                    [self setUserTags:nil];
+                    [self updateView];
+                }
             }
         }
     } else {
@@ -236,6 +252,12 @@ typedef enum {
         [self setUserTags:nil];
         [self updateView];
     }
+
+    if([self preventsUserTagging] && [self markupType] == STKMarkupTypeUser) {
+        [self setMarkupRange:NSMakeRange(NSNotFound, 0)];
+        [self setReplacementRange:NSMakeRange(NSNotFound, 0)];
+    }
+    
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

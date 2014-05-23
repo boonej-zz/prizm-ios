@@ -305,7 +305,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 - (void)fetchProfilePostsForUser:(STKUser *)user
                 fetchDescription:(STKFetchDescription *)desc
                       completion:(void (^)(NSArray *posts, NSError *err))block
-{
+{/*
     NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseProfile == %@", user]
                                    fetchDescription:desc];
     
@@ -320,7 +320,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
-    }
+    }*/
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -334,7 +334,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [q setLimit:30];
         [q setPageDirection:[desc direction]];
         [q setPageKey:STKPostDateCreatedKey];
-        [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
+        [q setPageValue:[STKTimestampFormatter stringFromDate:[[desc referenceObject] datePosted]]];
         
         [q setFilters:[self serverFilterMapFromLocalFilterMap:[desc filterDictionary]]];
         

@@ -283,7 +283,6 @@ typedef enum {
 - (IBAction)typeChanged:(id)sender
 {
     [self setCurrentType:[sender selectedSegmentIndex]];
-    [[self tableView] reloadData];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
