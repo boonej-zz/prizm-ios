@@ -179,8 +179,10 @@
         if(!err) {
             int total = 0;
             for(NSString *key in vals) {
-                NSNumber *v = [vals objectForKey:key];
-                total += [v intValue];
+                if(![key isEqualToString:STKPostTypeAccolade]) {
+                    NSNumber *v = [vals objectForKey:key];
+                    total += [v intValue];
+                }
             }
             
             NSMutableDictionary *results = [[NSMutableDictionary alloc] init];

@@ -18,7 +18,11 @@
     [[self leftImageView] setPreferredSize:STKImageStoreThumbnailMedium];
     [[self centerImageView] setPreferredSize:STKImageStoreThumbnailMedium];
     [[self rightImageView] setPreferredSize:STKImageStoreThumbnailMedium];
-    
+
+    [[self leftImageView] setLoadingContentMode:UIViewContentModeCenter];
+    [[self centerImageView] setLoadingContentMode:UIViewContentModeCenter];
+    [[self rightImageView] setLoadingContentMode:UIViewContentModeCenter];
+
 }
 
 - (void)layoutContent
@@ -29,21 +33,30 @@
 {
     if(arrayIndex + 0 < [posts count]) {
         STKPost *p = [posts objectAtIndex:arrayIndex + 0];
+        [[self leftImageView] setLoadingImage:[p typeImage]];
+        [[self leftImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
         [[self leftImageView] setUrlString:[p imageURLString]];
     } else {
+        [[self leftImageView] setBackgroundColor:[UIColor clearColor]];
         [[self leftImageView] setUrlString:nil];
     }
     if(arrayIndex + 1 < [posts count]) {
         STKPost *p = [posts objectAtIndex:arrayIndex + 1];
+        [[self centerImageView] setLoadingImage:[p typeImage]];
+        [[self centerImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
         [[self centerImageView] setUrlString:[p imageURLString]];
     } else {
+        [[self centerImageView] setBackgroundColor:[UIColor clearColor]];
         [[self centerImageView] setUrlString:nil];
     }
     
     if(arrayIndex + 2 < [posts count]) {
         STKPost *p = [posts objectAtIndex:arrayIndex + 2];
+        [[self rightImageView] setLoadingImage:[p typeImage]];
+        [[self rightImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
         [[self rightImageView] setUrlString:[p imageURLString]];
     } else {
+        [[self rightImageView] setBackgroundColor:[UIColor clearColor]];
         [[self rightImageView] setUrlString:nil];
     }
 }

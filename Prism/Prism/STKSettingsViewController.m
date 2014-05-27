@@ -20,8 +20,9 @@
 
 @import Social;
 @import Accounts;
+@import MessageUI;
 
-@interface STKSettingsViewController () <STKAccountChooserDelegate>
+@interface STKSettingsViewController () <STKAccountChooserDelegate, MFMailComposeViewControllerDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *settings;
 @property (nonatomic, weak) UIButton *logoutButton;
@@ -51,6 +52,7 @@
         [self setSettings:items];
         if(![self settings]) {
             _settings = @[
+                          @{@"title" : @"Send Feedback", @"type" : @"STKLabelCell", @"selectionSelector" : @"sendFeedbackEmail:"},
                           @{@"title" : @"Friends", @"type" : @"STKLabelCell", @"next" : [self friendsSettings]},
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
                           @{@"title" : @"Notifications", @"type" : @"STKLabelCell", @"next" : [self notificationSettings]},
@@ -100,6 +102,11 @@
     return [self initWithItems:nil];
 }
 
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 - (void)accountChooser:(STKAccountChooserViewController *)chooser didChooseAccount:(ACAccount *)account
 {
@@ -141,6 +148,23 @@
         [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
             
         }];
+    }
+}
+
+- (void)sendFeedbackEmail:(id)sender
+{
+    if([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mvc = [[MFMailComposeViewController alloc] init];
+        [mvc setMailComposeDelegate:self];
+        
+        [mvc setSubject:@"Prizm Feedback"];
+        [mvc setToRecipients:@[@"admin@prizmapp.com"]];
+        [mvc setMessageBody:@"Summary: \nSteps to Reproduce: \nExpected Results: \nActual Results: \nAdditional Notes: \n" isHTML:NO];
+        [self presentViewController:mvc animated:YES completion:nil];
+        
+    } else {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"No E-mail setup" message:@"Please set up an e-mail account in your device's settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
     }
 }
 
@@ -327,6 +351,7 @@
     if(nextItems) {
         STKSettingsViewController *svc = [[STKSettingsViewController alloc] initWithItems:nextItems];
         [[self navigationController] pushViewController:svc animated:YES];
+        [svc setTitle:[self titleForIndexPath:indexPath]];
         return;
     }
     

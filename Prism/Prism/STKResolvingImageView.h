@@ -13,6 +13,10 @@
 
 @property (nonatomic, copy) NSString *urlString;
 @property (nonatomic) STKImageStoreThumbnail preferredSize;
+@property (nonatomic, strong) UIImage *loadingImage;
+
+@property (nonatomic) UIViewContentMode normalContentMode;
+@property (nonatomic) UIViewContentMode loadingContentMode;
 
 // Only pass weak references to parent object!
 @property (nonatomic, strong) void (^imageResolvedCompletion)(BOOL success);

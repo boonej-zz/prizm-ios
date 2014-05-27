@@ -38,6 +38,8 @@
 {
     [self setPost:p];
     
+    [[self contentImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
+    [[self contentImageView] setLoadingImage:[p typeImage]];
     [[self contentImageView] setUrlString:[p imageURLString]];
     
     if(![self displayFullBleed]) {
@@ -187,6 +189,7 @@
     [[[self headerView] sourceButton] addTarget:self action:@selector(sourceTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     [[self contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
+    [[self contentImageView] setLoadingContentMode:UIViewContentModeCenter];
 }
 
 @end

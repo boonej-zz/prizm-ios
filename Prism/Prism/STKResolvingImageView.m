@@ -32,6 +32,8 @@
 
 - (void)commonInit
 {
+    [self setNormalContentMode:[self contentMode]];
+    [self setLoadingContentMode:[self contentMode]];
     [self setPreferredSize:STKImageStoreThumbnailNone];
 }
 
@@ -39,19 +41,24 @@
 {
     _urlString = urlString;
     
-    [self setImage:nil];
-
+    if(urlString) {
+        [self setImage:[self loadingImage]];
+        [self setContentMode:[self loadingContentMode]];
+    } else {
+        [self setImage:nil];
+    }
+    
     if(_urlString) {
         __weak STKResolvingImageView *iv = self;
         [[STKImageStore store] fetchImageForURLString:_urlString
                                         preferredSize:[self preferredSize]
                                            completion:^(UIImage *img) {
                                                if([urlString isEqualToString:[iv urlString]]) {
+                                                   [iv setContentMode:[self normalContentMode]];
                                                    [iv setImage:img];
                                                    if([self imageResolvedCompletion]) {
                                                        [self imageResolvedCompletion](img != nil);
                                                    }
-                                                   //[iv setNeedsDisplay];
                                                }
                                            }];
     }

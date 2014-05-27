@@ -226,6 +226,11 @@
             }
         }
         [[self trustView] setUsers:otherUsers];
+        
+        if(![self selectedUser] && [[self trusts] count] > 0) {
+            [self selectUserAtIndex:0];
+        }
+        
         [self configureInterface];
     }];
     
