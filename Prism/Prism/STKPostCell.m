@@ -54,6 +54,10 @@
     if([p originalPost] && [[[p originalPost] creator] name]){
         NSString * fromUser = [NSString stringWithFormat:@"Via %@", [[[p originalPost] creator] name]];
         [[[self headerView] sourceLabel] setText:fromUser];
+    } else if([p externalProvider]){
+        NSString * fromProvider = [NSString stringWithFormat:@"Via %@", [p externalProvider]];
+        [[[self headerView] sourceLabel] setText:[fromProvider capitalizedString]];
+        
     } else {
         [[[self headerView] sourceLabel] setText:nil];
     }

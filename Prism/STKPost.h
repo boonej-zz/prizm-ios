@@ -43,6 +43,7 @@ extern NSString * const STKPostHashTagURLScheme;
 extern NSString * const STKPostUserURLScheme;
 
 extern NSString * const STKPostStatusDeleted;
+extern NSString * const STKPostExternalProvider;
 
 @interface STKPost : NSManagedObject <STKJSONObject>
 
@@ -57,6 +58,7 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, getter = isRepost) BOOL repost;
 @property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSString *creatorType;
+@property (nonatomic, strong) NSString *externalProvider;
 
 @property (nonatomic) int commentCount;
 @property (nonatomic) int likeCount;
