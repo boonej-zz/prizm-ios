@@ -19,6 +19,8 @@ NSString * const STKActivityItemTypeComment = @"comment";
 NSString * const STKActivityItemTypeTrustAccepted = @"trust_accepted";
 NSString * const STKActivityItemTypeRepost = @"repost";
 NSString * const STKActivityItemTypeTag = @"tag";
+NSString * const STKActivityItemTypeAccolade = @"accolade";
+
 
 @implementation STKActivityItem
 
@@ -73,6 +75,8 @@ NSString * const STKActivityItemTypeTag = @"tag";
         [str appendString:@"reposted your post."];
     } else if ([[self action] isEqualToString:STKActivityItemTypeTag]) {
         [str appendString:@"tagged you in a post."];
+    } else if([[self action] isEqualToString:STKActivityItemTypeAccolade]) {
+        [str appendString:@"sent you an accolade."];
     }
     
     

@@ -24,6 +24,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *commentButton;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 
+@property (nonatomic, strong) UIImage *overrideLoadingImage;
+
 @property (nonatomic) BOOL displayFullBleed;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftInset;
