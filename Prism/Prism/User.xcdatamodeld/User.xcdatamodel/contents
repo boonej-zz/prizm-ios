@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13C1021" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="STKActivityItem" representedClassName="STKActivityItem" syncable="YES">
         <attribute name="action" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
@@ -33,6 +33,7 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="visibility" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="accoladeReceiver" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="accoladesReceived" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="post" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="post" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="createdPosts" inverseEntity="STKUser" syncable="YES"/>
@@ -107,6 +108,7 @@
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="accoladesReceived" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="accoladeReceiver" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="creator" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="createdActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="creator" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="createdPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="creator" inverseEntity="STKPost" syncable="YES"/>
@@ -124,9 +126,9 @@
     <elements>
         <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="165"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="88"/>
-        <element name="STKPost" positionX="0" positionY="144" width="128" height="450"/>
+        <element name="STKPost" positionX="0" positionY="144" width="128" height="465"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="735"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="748"/>
     </elements>
 </model>

@@ -715,7 +715,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [c setIdentifiers:@[[[[STKUserStore store] currentUser] uniqueID], @"posts"]];
         
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
-        
+                
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
         }

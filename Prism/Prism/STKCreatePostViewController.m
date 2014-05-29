@@ -172,7 +172,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 {
     [[self postTextView] becomeFirstResponder];
     [[self markupController] displayAllUserResults];
-    
 }
 
 - (void)findLocation:(id)sender
@@ -295,8 +294,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         [[cell label] setTextColor:STKTextColor];
         [[cell imageView] setImage:[item objectForKey:@"image"]];
         [cell setBackgroundColor:[UIColor clearColor]];
-        
-        
         
         if([[[self postInfo] objectForKey:STKPostTypeKey] isEqual:[item objectForKey:STKPostTypeKey]]) {
             [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];

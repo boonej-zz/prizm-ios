@@ -207,7 +207,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     if([self currentUser]) {
         [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:^(STKUser *updatedUser, NSError *err) {
             if(!err) {
-                if(updatedUser) {
+                if(updatedUser && [[updatedUser uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
                     [self updateUserDetails:updatedUser completion:^(STKUser *u, NSError *err) {
                         if(!err) {
                             [[self context] save:nil];

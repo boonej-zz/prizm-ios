@@ -25,6 +25,7 @@ NSString * const STKPostURLKey = @"file_path";
 NSString * const STKPostTextKey = @"text";
 NSString * const STKPostTypeKey = @"category";
 NSString * const STKPostOriginIDKey = @"origin_post_id";
+NSString * const STKPostAccoladeReceiverKey = @"accolade_target";
 
 NSString * const STKPostVisibilityPublic = @"public";
 NSString * const STKPostVisibilityPrivate = @"private";
@@ -53,7 +54,7 @@ NSString * const STKPostUserURLScheme = @"user";
 @dynamic coordinate;
 @dynamic hashTags, imageURLString, uniqueID, datePosted, locationLatitude, locationLongitude, locationName,
 visibility, status, repost, text, comments, commentCount, creator, originalPost, likes, likeCount,
-type, fInverseFeed, activities, derivativePosts, tags, creatorType;
+type, fInverseFeed, activities, derivativePosts, tags, creatorType, accoladeReceiver;
 @dynamic fInverseProfile;
 
 
@@ -72,6 +73,9 @@ type, fInverseFeed, activities, derivativePosts, tags, creatorType;
              @"status" : @"status",
              @"is_repost" : @"repost",
              STKPostTextKey : @"text",
+             
+             @"accolade_target" : [STKBind bindMapForKey:@"accoladeReceiver"
+                                                matchMap:@{@"uniqueID" : @"_id"}],
              
              @"likes_count" : @"likeCount",
              @"comments_count" : @"commentCount",

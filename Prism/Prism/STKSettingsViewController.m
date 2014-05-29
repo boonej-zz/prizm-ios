@@ -52,11 +52,11 @@
         [self setSettings:items];
         if(![self settings]) {
             _settings = @[
-                          @{@"title" : @"Send Feedback", @"type" : @"STKLabelCell", @"selectionSelector" : @"sendFeedbackEmail:"},
                           @{@"title" : @"Friends", @"type" : @"STKLabelCell", @"next" : [self friendsSettings]},
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
                           @{@"title" : @"Notifications", @"type" : @"STKLabelCell", @"next" : [self notificationSettings]},
-                          @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]}
+                          @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]},
+                          @{@"title" : @"Send Feedback", @"type" : @"STKLabelCell", @"selectionSelector" : @"sendFeedbackEmail:"}
                         ];
         }
     }

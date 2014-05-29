@@ -17,13 +17,16 @@
 #import "STKContentStore.h"
 #import "STKImageStore.h"
 #import "STKUserStore.h"
+#import "STKLocationListViewController.h"
 
-@interface STKCreateAccoladeViewController () <STKMarkupControllerDelegate, UICollectionViewDataSource, UICollectionViewDataSource>
+@interface STKCreateAccoladeViewController () <STKMarkupControllerDelegate, UICollectionViewDataSource, UICollectionViewDataSource, STKLocationListViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *postTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *optionCollectionView;
 @property (nonatomic, strong) STKMarkupController *markupController;
+@property (weak, nonatomic) IBOutlet UIImageView *locationIndicator;
 
+@property (weak, nonatomic) IBOutlet UILabel *locationField;
 @property (nonatomic, getter = isUploadingImage) BOOL uploadingImage;
 @property (nonatomic) BOOL waitingForImageToFinish;
 
@@ -55,13 +58,44 @@
         [[self navigationItem] setTitle:@"Accolades"];
     
         _optionItems = @[
-                         @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"btn_camera"], @"selectedImage" : [UIImage imageNamed:@"btn_camera_selected"], @"action" : @"changeImage:"}
+                         @{@"key" : @"camera", @"image" : [UIImage imageNamed:@"btn_camera"], @"selectedImage" : [UIImage imageNamed:@"btn_camera_selected"], @"action" : @"changeImage:"},
+                         @{@"key" : @"location", @"image" : [UIImage imageNamed:@"btn_pin"], @"selectedImage" : [UIImage imageNamed:@"btn_pin_selected"], @"action" : @"findLocation:"},
+                         @{@"key" : @"user", @"image" : [UIImage imageNamed:@"btn_usertag"], @"selectedImage" : [UIImage imageNamed:@"btn_usertag_selected"], @"action" : @"addUserTags:"},
+                         @{@"key" : @"visibility", @"image" : [UIImage imageNamed:@"btn_globe"], @"selectedImage" : [UIImage imageNamed:@"globe_glow"], @"action" : @"toggleTrust:"},
+
    ];
 
         
     }
     return self;
 }
+
+- (void)findLocation:(id)sender
+{
+    STKLocationListViewController *lvc = [[STKLocationListViewController alloc] init];
+    [lvc setDelegate:self];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:lvc];
+    [[nvc navigationBar] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    [self presentViewController:nvc animated:YES completion:nil];
+}
+
+- (void)locationListViewController:(STKLocationListViewController *)lvc choseLocation:(STKFoursquareLocation *)loc
+{
+    [[self postInfo] setObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:[loc location].latitude]] forKey:STKPostLocationLatitudeKey];
+    [[self postInfo] setObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:[loc location].longitude]] forKey:STKPostLocationLongitudeKey];
+    if([loc name]) {
+        [[self postInfo] setObject:[loc name] forKey:STKPostLocationNameKey];
+        [[self locationField] setText:[loc name]];
+    }
+    [[self locationIndicator] setHidden:[[self postInfo] objectForKey:STKPostLocationNameKey] == nil];
+}
+
+- (void)addUserTags:(id)sender
+{
+    [[self postTextView] becomeFirstResponder];
+    [[self markupController] displayAllUserResults];
+}
+
 
 - (NSString *)captionPlaceholder
 {
@@ -95,6 +129,7 @@
     }
     
     [[self postInfo] setObject:STKPostTypeAccolade forKey:STKPostTypeKey];
+    [[self postInfo] setObject:[[self user] uniqueID] forKey:STKPostAccoladeReceiverKey];
     
     [[STKContentStore store] addPostWithInfo:[self postInfo] completion:^(STKPost *post, NSError *err) {
         [STKProcessingView dismiss];
@@ -130,7 +165,7 @@
 {
     if([[[self postTextView] text] length] > 0 && ![[[self postTextView] text] isEqualToString:[self captionPlaceholder]]) {
         NSMutableAttributedString *text = [[[self postTextView] attributedText] mutableCopy];
-    /*    [text enumerateAttributesInRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
+        [text enumerateAttributesInRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
             NSTextAttachment *attachment = [attrs objectForKey:NSAttachmentAttributeName];
             if(attachment) {
                 NSURL *userURL = [attrs objectForKey:NSLinkAttributeName];
@@ -139,11 +174,9 @@
                     [text replaceCharactersInRange:range withString:[NSString stringWithFormat:@"@%@", uniqueID]];
                 }
             }
-        }];*/
+        }];
         
-        NSString *str = [text string];
-        str = [str stringByAppendingFormat:@" @%@", [[self user] uniqueID]];
-        [[self postInfo] setObject:str
+        [[self postInfo] setObject:[text string]
                             forKey:STKPostTextKey];
     }
     
@@ -155,6 +188,31 @@
     [self createPost];
 }
 
+- (void)toggleTrust:(id)sender
+{
+    NSString *postType = [[self postInfo] objectForKey:STKPostTypeKey];
+    if([postType isEqualToString:STKPostTypePersonal]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Visibility"
+                                                     message:@"This button changes whether this post is visible to everyone or just members of your trust. However, you have selected that this is a 'Personal' post which is only viewable to you. You can select another category and then choose the visibility options for this post."
+                                                    delegate:nil
+                                           cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        return;
+    }
+    
+    NSString *postVisibility = [[self postInfo] objectForKey:STKPostVisibilityKey];
+    if(!postVisibility) {
+        [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
+    } else if([postVisibility isEqualToString:STKPostVisibilityPublic]) {
+        [[self postInfo] setObject:STKPostVisibilityTrust forKey:STKPostVisibilityKey];
+    } else {
+        [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
+    }
+    
+    [[self optionCollectionView] reloadData];
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -163,7 +221,6 @@
     //    [[[self imageView] layer] setBorderWidth:2];
     
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
-    [[self markupController] setPreventsUserTagging:YES];
     
     [[self postTextView] setText:[self captionPlaceholder]];
     [[self postTextView] setInputAccessoryView:[[self markupController] view]];
@@ -251,7 +308,19 @@
            didSelectUser:(STKUser *)user
         forMarkerAtRange:(NSRange)range
 {
-        // Disallow tagging
+    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
+    
+    if(range.location == NSNotFound) {
+        range = NSMakeRange([[[self postTextView] textStorage] length], 0);
+    }
+    
+    [[[self postTextView] textStorage] replaceCharactersInRange:range
+                                           withAttributedString:str];
+    [[[self postTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
+                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+    
+    NSInteger newIndex = range.location + [str length] + 2;
+    [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
 }
 
 - (void)markupController:(STKMarkupController *)markupController
@@ -301,6 +370,18 @@
             [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
         }
     }
+    
+    if([[item objectForKey:@"key"] isEqualToString:@"visibility"]) {
+        if([[[self postInfo] objectForKey:STKPostVisibilityKey] isEqualToString:STKPostVisibilityPublic]) {
+            [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
+        }
+    }
+    if([[item objectForKey:@"key"] isEqualToString:@"location"]) {
+        if([[self postInfo] objectForKey:STKPostLocationNameKey]) {
+            [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
+        }
+    }
+
     
     return cell;
 }

@@ -19,6 +19,7 @@
 #import "STKRelativeDateConverter.h"
 #import "STKProfileViewController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKTriImageCell.h"
 
 typedef enum {
     STKAccoladeTypeReceived,
@@ -73,15 +74,10 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    [[self tableView] setRowHeight:56];
+    [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
-    [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
-    [[self tableView] setSeparatorColor:STKTextTransparentColor];
-    [[self tableView] setBackgroundColor:[UIColor clearColor]];
+    [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-    [v setBackgroundColor:[UIColor clearColor]];
-    [[self tableView] setTableFooterView:v];
     
     [[self tableView] setContentInset:UIEdgeInsetsMake(64 + 50, 0, 0, 0)];
 }
@@ -110,6 +106,25 @@ typedef enum {
     [[self tableView] reloadData];
 }
 
+- (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
+{
+    int row = idx / 3;
+    int offset = idx % 3;
+    
+    STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+    
+    CGRect r = CGRectZero;
+    if(offset == 0)
+        r = [[c leftImageView] frame];
+    else if(offset == 1)
+        r = [[c centerImageView] frame];
+    else if(offset == 2)
+        r = [[c rightImageView] frame];
+    
+    return [[self view] convertRect:r fromView:c];
+}
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -125,7 +140,7 @@ typedef enum {
 
     [[[self blurView] displayLink] setPaused:NO];
 
-    [[self receivedPostController] setFilterMap:@{@"tags.uniqueID" : [[self user] uniqueID], @"type" : STKPostTypeAccolade}];
+    [[self receivedPostController] setFilterMap:@{@"accoladeReceiver" : [[self user] uniqueID], @"type" : STKPostTypeAccolade}];
     [[self sentPostController] setFilterMap:@{@"creator" : [[self user] uniqueID], @"type" : STKPostTypeAccolade}];
 
     [self reloadAccolades];
@@ -186,23 +201,25 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if([self type] == STKAccoladeTypeSent)
-        return [[[self sentPostController] posts] count];
-    
-    return [[[self receivedPostController] posts] count];
+    STKPostController *a = [self sentPostController];
+    if([self type] == STKAccoladeTypeReceived)
+        a = [self receivedPostController];
+
+    int postCount = [[a posts] count];
+    if(postCount % 3 > 0)
+        return postCount / 3 + 1;
+    return postCount / 3;
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    STKActivityCell *c = [STKActivityCell cellForTableView:tableView target:self];
-    
-    STKPost *p = [self postForIndexPath:indexPath];
-    
-    [[c profileImageView] setUrlString:[[p creator] profilePhotoPath]];
-    [[c nameLabel] setText:[[p creator] name]];
-    [[c activityTypeLabel] setText:@"sent an accolade"];
-    [[c imageReferenceView] setUrlString:[p imageURLString]];
-    [[c timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
+    STKPostController *a = [self sentPostController];
+    if([self type] == STKAccoladeTypeReceived)
+        a = [self receivedPostController];
+
+    STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:a];
+    [c populateWithPosts:[a posts] indexOffset:[indexPath row] * 3];
     return c;
 }
 

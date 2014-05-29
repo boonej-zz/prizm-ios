@@ -27,6 +27,7 @@ extern NSString * const STKPostVisibilityPublic;
 extern NSString * const STKPostVisibilityTrust;
 extern NSString * const STKPostVisibilityPrivate;
 
+extern NSString * const STKPostAccoladeReceiverKey;
 extern NSString * const STKPostLocationLatitudeKey;
 extern NSString * const STKPostLocationLongitudeKey;
 extern NSString * const STKPostLocationNameKey;
@@ -63,6 +64,7 @@ extern NSString * const STKPostStatusDeleted;
 @property (nonatomic, strong) STKUser *creator;
 @property (nonatomic, strong) STKPost *originalPost;
 @property (nonatomic, strong) NSSet *derivativePosts;
+@property (nonatomic, strong) STKUser *accoladeReceiver;
 
 @property (nonatomic, strong) NSSet *likes;
 @property (nonatomic, strong) NSSet *hashTags;
