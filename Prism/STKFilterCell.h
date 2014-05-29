@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *gridViewButton;
 @property (weak, nonatomic) IBOutlet UIButton *singleViewButton;
 @property (weak, nonatomic) IBOutlet UIButton *locationButton;
+@property (weak, nonatomic) IBOutlet UIButton *userButton;
 
 - (IBAction)showSinglePanePosts:(id)sender;
 - (IBAction)showGridPosts:(id)sender;

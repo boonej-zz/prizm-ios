@@ -319,7 +319,9 @@ typedef enum {
 - (IBAction)toggleFilterByUserPost:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setFilterByUserTags:![self filterByUserTags]];
-    [sender setSelected:[self filterByUserTags]];
+    [self setFilterByLocation:NO];
+    [[[self filterView] locationButton] setSelected:NO];
+    [[[self filterView] userButton] setSelected:[self filterByUserTags]];
     [[self postController] setFilterMap:[self filterDictionary]];
     [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self tableView] reloadData];
@@ -332,6 +334,8 @@ typedef enum {
 - (IBAction)toggleFilterbyLocation:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [self setFilterByLocation:![self filterByLocation]];
+    [self setFilterByUserTags:NO];
+    [[self filterView] setSelected:NO];
     [[[self filterView] locationButton] setSelected:[self filterByLocation]];
     [[self postController] setFilterMap:[self filterDictionary]];
     [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
