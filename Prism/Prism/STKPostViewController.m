@@ -355,7 +355,12 @@
     if([[self post] originalPost] && [[[[self post] originalPost] creator] name]){
         NSString * fromUser = [NSString stringWithFormat:@"Via %@", [[[[self post] originalPost] creator] name]];
         [[[self fakeHeaderView] sourceLabel] setText:fromUser];
-    }
+    } else if([[self post] externalProvider]){
+        NSString *fromProvider = [NSString stringWithFormat:@"Via %@", [[self post] externalProvider]];
+        [[[self fakeHeaderView] sourceLabel] setText:[fromProvider capitalizedString]];
+        
+    } 
+
     
     if([[[[self post] creator] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
         [[self editPostButton] setHidden:NO];
