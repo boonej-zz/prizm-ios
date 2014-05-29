@@ -308,13 +308,14 @@
     [[self dismissButtonImageView] setHidden:YES];
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
+    [c setOverrideLoadingImage:[[self menuController] transitioningImage]];
+    [[c contentImageView] setLoadingContentMode:[[c contentImageView] normalContentMode]];
     [c setDisplayFullBleed:YES];
     [[c contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
     [c populateWithPost:[self post]];
     [self setPostCell:c];
 
-    [[c contentImageView] setImage:[[self menuController] transitioningImage]];
-
+    
     if([self isMovingToParentViewController])
         [[[self postCell] contentImageView] setHidden:YES];
     
@@ -326,7 +327,7 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [[self overlayVIew] setHidden:YES];
-    
+
     [[self stretchView] setUrlString:[[self post] imageURLString]];
     
     [[STKContentStore store] fetchCommentsForPost:[self post]

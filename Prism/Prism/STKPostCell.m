@@ -39,7 +39,10 @@
     [self setPost:p];
     
     [[self contentImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
-    [[self contentImageView] setLoadingImage:[p typeImage]];
+    if([self overrideLoadingImage])
+        [[self contentImageView] setLoadingImage:[self overrideLoadingImage]];
+    else
+        [[self contentImageView] setLoadingImage:[p typeImage]];
     [[self contentImageView] setUrlString:[p imageURLString]];
     
     if(![self displayFullBleed]) {

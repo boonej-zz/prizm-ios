@@ -126,7 +126,8 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         if(!err) {
             NSLog(@"Will check Instagram %@", [user instagramToken]);
             [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[u instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
-                [u setInstagramLastMinID:instagramLastID];
+                if(!err)
+                    [u setInstagramLastMinID:instagramLastID];
                 
                 [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
                     ACAccount *account = [self matchingAccountForUser:u inAccounts:accounts];
@@ -135,7 +136,8 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                         if([twitterError code] == STKNetworkStoreErrorTwitterAccountNoLongerExists) {
                             [u setTwitterID:nil];
                         }
-                        [u setTwitterLastMinID:twitterLastID];
+                        if(!err)
+                            [u setTwitterLastMinID:twitterLastID];
 
                         [self setUpdating:NO];
                         
@@ -156,7 +158,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
 {
     if(!token) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            block(nil, nil);
+            block(minID, nil);
         }];
         return;
     }
@@ -200,7 +202,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                              
                                                                          });
                                                                      } else {
-                                                                         block(nil, error);
+                                                                         block(minID, error);
                                                                      }
                                                                  }];
     [dt resume];
@@ -292,14 +294,14 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
 {
     if(!account) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            block(nil, [NSError errorWithDomain:@"STKNetworkStoreErrorDomain" code:STKNetworkStoreErrorTwitterAccountNoLongerExists userInfo:nil]);
+            block(minID, [NSError errorWithDomain:@"STKNetworkStoreErrorDomain" code:STKNetworkStoreErrorTwitterAccountNoLongerExists userInfo:nil]);
         }];
         return;
     }
 
     [[STKUserStore store] fetchTwitterAccessToken:account completion:^(NSString *token, NSString *tokenSecret, NSError *err) {
         if(err) {
-            block(nil, err);
+            block(minID, err);
         } else {
             
             NSMutableDictionary *params = [@{@"trim_user" : @"true"} mutableCopy];

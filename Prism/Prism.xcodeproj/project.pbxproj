@@ -153,6 +153,8 @@
 		BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC726EB18AC111D009350E8 /* STKLabelCell.m */; };
 		BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC726EC18AC111D009350E8 /* STKLabelCell.xib */; };
 		BECA36B519004F88000A5851 /* STKGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECA36B419004F88000A5851 /* STKGradientView.m */; };
+		BECA9F1E1937CAF600AABA20 /* STKAccoladeUserListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECA9F1C1937CAF500AABA20 /* STKAccoladeUserListViewController.m */; };
+		BECA9F1F1937CAF600AABA20 /* STKAccoladeUserListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BECA9F1D1937CAF500AABA20 /* STKAccoladeUserListViewController.xib */; };
 		BED0B264185F689100564300 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B261185F689100564300 /* GoogleOpenSource.framework */; };
 		BED0B266185F689100564300 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B263185F689100564300 /* GooglePlus.framework */; };
 		BED0B268185F68C700564300 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B267185F68C700564300 /* AssetsLibrary.framework */; };
@@ -2163,6 +2165,9 @@
 		BEC726EC18AC111D009350E8 /* STKLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKLabelCell.xib; path = Prism/STKLabelCell.xib; sourceTree = "<group>"; };
 		BECA36B319004F88000A5851 /* STKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGradientView.h; sourceTree = "<group>"; };
 		BECA36B419004F88000A5851 /* STKGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGradientView.m; sourceTree = "<group>"; };
+		BECA9F1B1937CAF500AABA20 /* STKAccoladeUserListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKAccoladeUserListViewController.h; sourceTree = "<group>"; };
+		BECA9F1C1937CAF500AABA20 /* STKAccoladeUserListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKAccoladeUserListViewController.m; sourceTree = "<group>"; };
+		BECA9F1D1937CAF500AABA20 /* STKAccoladeUserListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKAccoladeUserListViewController.xib; sourceTree = "<group>"; };
 		BED0B261185F689100564300 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
 		BED0B263185F689100564300 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
 		BED0B267185F68C700564300 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -2467,6 +2472,9 @@
 				BE72B749192FA880002349E3 /* STKCreateAccoladeViewController.h */,
 				BE72B74A192FA880002349E3 /* STKCreateAccoladeViewController.m */,
 				BE72B74B192FA880002349E3 /* STKCreateAccoladeViewController.xib */,
+				BECA9F1B1937CAF500AABA20 /* STKAccoladeUserListViewController.h */,
+				BECA9F1C1937CAF500AABA20 /* STKAccoladeUserListViewController.m */,
+				BECA9F1D1937CAF500AABA20 /* STKAccoladeUserListViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4643,6 +4651,7 @@
 				BE477C1E186E2ED4003672A0 /* STKProfileCell.xib in Resources */,
 				BE0EC57718EDE971007102E1 /* STKSettingsShareCell.xib in Resources */,
 				BED773FF1890A5BB008770F0 /* STKCaptureViewController.xib in Resources */,
+				BECA9F1F1937CAF600AABA20 /* STKAccoladeUserListViewController.xib in Resources */,
 				BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */,
 				BE1FC3B7186C8C22003464E1 /* STKImageCollectionViewCell.xib in Resources */,
 				BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */,
@@ -4730,6 +4739,7 @@
 				BE7AFA7E18ECA32800DA30A7 /* STKNetworkStore.m in Sources */,
 				BEE84F5D192BFB2200820A19 /* STKLuminatingBar.m in Sources */,
 				BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */,
+				BECA9F1E1937CAF600AABA20 /* STKAccoladeUserListViewController.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE1A73C518D8BFB8004A3BB3 /* STKLockCell.m in Sources */,

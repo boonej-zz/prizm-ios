@@ -88,6 +88,10 @@
     return YES;
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSLog(@"%@", userInfo);
+}
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -96,6 +100,10 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+
+}
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {

@@ -19,6 +19,7 @@ extern NSString *const STKActivityItemTypeUnlike;
 extern NSString *const STKActivityItemTypeComment;
 extern NSString *const STKActivityItemTypeTrustAccepted;
 extern NSString * const STKActivityItemTypeTag;
+extern NSString * const STKActivityItemTypeAccolade;
 
 @interface STKActivityItem : NSManagedObject <STKJSONObject>
 

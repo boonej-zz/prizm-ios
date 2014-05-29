@@ -20,6 +20,7 @@
 #import "STKProfileViewController.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKTriImageCell.h"
+#import "STKAccoladeUserListViewController.h"
 
 typedef enum {
     STKAccoladeTypeReceived,
@@ -84,11 +85,17 @@ typedef enum {
 
 - (void)postAccolade:(id)sender
 {
-    STKCreateAccoladeViewController *avc = [[STKCreateAccoladeViewController alloc] init];
-    [avc setUser:[self user]];
-    
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:avc];
-    [self presentViewController:nvc animated:YES completion:nil];
+    if([[[self user] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
+        STKAccoladeUserListViewController *lvc = [[STKAccoladeUserListViewController alloc] init];
+        
+        [[self navigationController] pushViewController:lvc animated:YES];
+    } else {
+        STKCreateAccoladeViewController *avc = [[STKCreateAccoladeViewController alloc] init];
+        [avc setUser:[self user]];
+        
+        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:avc];
+        [self presentViewController:nvc animated:YES completion:nil];
+    }
 }
 
 - (void)reloadAccolades
@@ -128,10 +135,6 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if([[[self user] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
-        [[self navigationItem] setRightBarButtonItem:nil];
-    }
     
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
                                               landscapeImagePhone:nil style:UIBarButtonItemStylePlain
