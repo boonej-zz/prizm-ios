@@ -34,7 +34,7 @@ typedef enum {
 @property (nonatomic, strong) NSURLSession *session;
 @property (nonatomic, strong) STKAuthorizationToken *authorizationToken;
 
-- (STKConnection *)connectionForEndpoint:(NSString *)endpoint;
+- (STKConnection *)newConnectionForIdentifiers:(NSArray *)identifiers;
 
 - (void)fetchAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block;
 

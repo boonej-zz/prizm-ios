@@ -64,7 +64,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
                              completion:(void (^)(NSArray *locations, NSError *err))block
 {
     STKFoursquareConnection *c = [[STKFoursquareConnection alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.foursquare.com"]
-                                                                         endpoint:@"/v2/venues/search"];
+                                                                      identifiers:@[@"v2", @"venues", @"search"]];
+
     [c addQueryValue:[NSString stringWithFormat:@"%.20f,%.20f", coord.latitude, coord.longitude] forKey:@"ll"];
     [c addQueryValue:STKContentFoursquareClientID forKey:@"client_id"];
     [c addQueryValue:STKContentFoursquareClientSecret forKey:@"client_secret"];
@@ -161,8 +162,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
                 
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[[u uniqueID], @"feed"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [u uniqueID], @"feed"]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setLimit:30];
@@ -212,7 +212,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/explore"];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/explore"]];
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setLimit:30];
         if([desc referenceObject]) {
@@ -275,8 +275,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/search"];
-        [c setIdentifiers:@[@"hashtags", hashTag]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/search", @"hashtags", hashTag]];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
@@ -333,8 +332,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[[user uniqueID], @"posts"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [user uniqueID], @"posts"]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setLimit:30];
@@ -394,8 +392,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         }
         
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[post uniqueID], @"like"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKContentEndpointPost, [post uniqueID], @"like"]];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID]
                   forKey:@"creator"];
         [c setModelGraph:@[post]];
@@ -419,8 +416,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[post uniqueID], @"flag"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKContentEndpointPost, [post uniqueID], @"flag"]];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"reporter"];
         
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -454,8 +450,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         }
         
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[post uniqueID], @"unlike"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKContentEndpointPost, [post uniqueID], @"unlike"]];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID]
                   forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -476,8 +471,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[post uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/posts", [post uniqueID]]];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         
         [c deleteWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -519,8 +513,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[[comment post] uniqueID], @"comments", [comment uniqueID], @"like"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKContentEndpointPost, [[comment post] uniqueID], @"comments", [comment uniqueID], @"like"]];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
 
         [c postWithSession:[self session] completionBlock:^(STKPostComment *obj, NSError *err) {
@@ -560,8 +553,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[[comment post] uniqueID], @"comments", [comment uniqueID], @"unlike"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKContentEndpointPost, [[comment post] uniqueID], @"comments", [comment uniqueID], @"unlike"]];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(STKPostComment *obj, NSError *err) {
             if(err) {
@@ -582,8 +574,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[post uniqueID], @"likes"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKContentEndpointPost, [post uniqueID], @"likes"]];
 
         STKContainQuery *cq = [STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"likes"];
@@ -629,8 +620,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
        
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[p uniqueID], @"comments"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKContentEndpointPost, [p uniqueID], @"comments"]];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID]
                   forKey:@"creator"];
         [c addQueryValue:comment forKey:@"text"];
@@ -671,8 +661,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKContentEndpointPost];
-        [c setIdentifiers:@[[p uniqueID], @"comments", [comment uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKContentEndpointPost, [p uniqueID], @"comments", [comment uniqueID]]];
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID]
                   forKey:@"creator"];
         
@@ -711,8 +700,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
 
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[[[[STKUserStore store] currentUser] uniqueID], @"posts"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [[[STKUserStore store] currentUser] uniqueID], @"posts"]];
         
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
                 
@@ -751,8 +739,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[p uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/posts", [p uniqueID]]];
         
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
@@ -794,8 +781,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[p uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/posts", [p uniqueID]]];
         
         [c addQueryValue:[[[STKUserStore store] currentUser] uniqueID] forKey:@"creator"];
         
@@ -831,8 +817,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             return;
         }
         // needs fixin
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[post uniqueID], @"comments"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/posts", [post uniqueID], @"comments"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"creator"]];
@@ -865,8 +850,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/posts"];
-        [c setIdentifiers:@[[[postComment post] uniqueID], @"comments", [postComment uniqueID], @"likes"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/posts", [[postComment post] uniqueID], @"comments", [postComment uniqueID], @"likes"]];
         [c setModelGraph:@[@{@"likes": @[@"STKUser"]}]];
         [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
         [c setContext:[[STKUserStore store] context]];

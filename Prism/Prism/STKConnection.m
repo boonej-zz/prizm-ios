@@ -19,7 +19,6 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 @property (nonatomic, strong) NSMutableDictionary *internalArguments;
 
 @property (nonatomic, strong) NSURL *baseURL;
-@property (nonatomic, strong) NSString *endpoint;
 
 @property (nonatomic) NSDate *beginTime;
 
@@ -37,7 +36,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     return sharedConnectionList;
 }
 
-- (id)initWithBaseURL:(NSURL *)url endpoint:(NSString *)endpoint
+- (id)initWithBaseURL:(NSURL *)url identifiers:(NSArray *)resourceIdentifiers
 {
     self = [super init];
     if (self) {
@@ -45,9 +44,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         _internalArguments = [[NSMutableDictionary alloc] init];
 
         _baseURL = url;
-        _endpoint = endpoint;
-        if(!_endpoint)
-            _endpoint = @"";
+        _identifiers = resourceIdentifiers;
+
     }
     return self;
 }
@@ -66,11 +64,8 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     NSURLComponents *components = [[NSURLComponents alloc] initWithURL:[self baseURL]
                                                resolvingAgainstBaseURL:NO];
     if([self identifiers]) {
-        NSArray *fullArray = [@[[self endpoint]] arrayByAddingObjectsFromArray:[self identifiers]];
-        NSString *pathIdentifier = [fullArray componentsJoinedByString:@"/"];
+        NSString *pathIdentifier = [[self identifiers] componentsJoinedByString:@"/"];
         [components setPath:pathIdentifier];
-    } else {
-        [components setPath:[self endpoint]];
     }
     
     NSMutableURLRequest *req = [[NSMutableURLRequest alloc] init];

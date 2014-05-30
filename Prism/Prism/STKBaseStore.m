@@ -134,7 +134,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
 - (void)fetchAuthorizationCodeCompletion:(void (^)(NSString *code, NSError *err))block
 {
-    STKConnection *c = [self connectionForEndpoint:STKBaseStoreEndpointAuthorization];
+    STKConnection *c = [self newConnectionForIdentifiers:@[STKBaseStoreEndpointAuthorization]];
     
     [c addQueryValue:@"code" forKey:@"response_type"];
     [c addQueryValue:STKPrismClientID forKey:@"client_id"];
@@ -152,7 +152,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 {
     [self fetchAuthorizationCodeCompletion:^(NSString *code, NSError *err) {
         if(!err) {
-            STKConnection *c = [self connectionForEndpoint:STKBaseStoreEndpointToken];
+            STKConnection *c = [self newConnectionForIdentifiers:@[STKBaseStoreEndpointToken]];
             [c addQueryValue:code forKey:@"code"];
             [c addQueryValue:@"authorization_code" forKey:@"grant_type"];
             [c addQueryValue:STKPrismRedirectURI forKey:@"redirect_uri"];
@@ -172,7 +172,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
 - (void)refreshAccessToken:(void (^)(STKAuthorizationToken *token, NSError *err))block
 {
-    STKConnection *c = [self connectionForEndpoint:STKBaseStoreEndpointToken];
+    STKConnection *c = [self newConnectionForIdentifiers:@[STKBaseStoreEndpointToken]];
     [c addQueryValue:[[self authorizationToken] refreshToken] forKey:@"code"];
     [c addQueryValue:@"refresh_token" forKey:@"grant_type"];
     [c addQueryValue:STKPrismRedirectURI forKey:@"redirect_uri"];
@@ -187,10 +187,10 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 }
 
 
-- (STKConnection *)connectionForEndpoint:(NSString *)endpoint
+- (STKConnection *)newConnectionForIdentifiers:(NSArray *)identifiers
 {
     STKConnection *c = [[STKConnection alloc] initWithBaseURL:[[self class] baseURL]
-                                                     endpoint:endpoint];
+                                                  identifiers:identifiers];
     
     if([self authorizationToken]) {
         [c setAuthorizationString:[NSString stringWithFormat:@"Bearer %@", [[self authorizationToken] accessToken]]];
@@ -198,6 +198,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     
     return c;
 }
+
 
 
 

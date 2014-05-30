@@ -256,8 +256,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(err) {
                 return;
             }
-            STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-            [c setIdentifiers:@[[[self currentUser] uniqueID], @"devices"]];
+            STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"users", [[self currentUser] uniqueID], @"devices"]];
             
             NSString *deviceString = [deviceToken description];
             deviceString = [deviceString stringByReplacingOccurrencesOfString:@"<" withString:@""];
@@ -341,8 +340,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
-        [c setIdentifiers:@[[t uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/trusts", [t uniqueID]]];
         
         NSString *diveKey = nil;
         STKQueryObject *obj = [[STKQueryObject alloc] init];
@@ -394,8 +392,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/exists"];
-        [c setIdentifiers:@[[user uniqueID], @"trusts", [otherUser uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/exists", [user uniqueID], @"trusts", [otherUser uniqueID]]];
 //        [c setQueryObject:[STKContainQuery containQueryForField:@"to" keyValues:@{@"from" : ]]
         
         [c setModelGraph:@[@"STKTrust"]];
@@ -420,8 +417,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[user uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID]]];
 
         NSDictionary *changedValues = [user changedValues];
         if([changedValues count] == 0) {
@@ -454,8 +450,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[user uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID]]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q setFields:fields];
@@ -488,8 +483,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/search"];
-        [c setIdentifiers:@[@"users"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/search", @"users"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
         STKSearchQuery *sq = [STKSearchQuery searchQueryForField:@"name" value:name];
@@ -531,8 +525,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[user uniqueID], @"follow"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID], @"follow"]];
         [c addQueryValue:[[self currentUser] uniqueID] forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
@@ -564,8 +557,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[user uniqueID], @"unfollow"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID], @"unfollow"]];
         [c addQueryValue:[[self currentUser] uniqueID] forKey:@"creator"];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             if(err) {
@@ -586,8 +578,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[user uniqueID], @"followers"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID], @"followers"]];
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
@@ -617,8 +608,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[user uniqueID], @"following"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID], @"following"]];
         [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
@@ -675,8 +665,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[user uniqueID], @"trusts"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID], @"trusts"]];
         [c addQueryValue:[[self currentUser] uniqueID] forKey:@"creator"];
         
         [c setModelGraph:@[t]];
@@ -734,8 +723,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[self currentUser] uniqueID], @"trusts"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [[self currentUser] uniqueID], @"trusts"]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         if(referenceRequest) {
@@ -777,8 +765,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
        
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
-        [c setIdentifiers:@[[t uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/trusts", [t uniqueID]]];
         [c addQueryValue:STKRequestStatusAccepted forKey:@"status"];
         
         [c setModelGraph:@[t]];
@@ -807,8 +794,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
-        [c setIdentifiers:@[[t uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/trusts", [t uniqueID]]];
 
         [c addQueryValue:STKRequestStatusCancelled forKey:@"status"];
         
@@ -838,8 +824,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
-        [c setIdentifiers:@[[t uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/trusts", [t uniqueID]]];
         [c addQueryValue:STKRequestStatusCancelled forKey:@"status"];
         
         [c setModelGraph:@[t]];
@@ -863,8 +848,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/trusts"];
-        [c setIdentifiers:@[[t uniqueID]]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/trusts", [t uniqueID]]];
         [c addQueryValue:type forKey:@"type"];
         
         [c setModelGraph:@[t]];
@@ -910,8 +894,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[u uniqueID], @"trusts"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [u uniqueID], @"trusts"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
         NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
@@ -959,8 +942,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *conn = [[STKBaseStore store] connectionForEndpoint:@"/search"];
-        [conn setIdentifiers:@[[[self currentUser] uniqueID], @"trusts", name]];
+        STKConnection *conn = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/search", [[self currentUser] uniqueID], @"trusts", name]];
         [conn setModelGraph:@[@"STKUser"]];
         [conn setContext:[self context]];
         [conn setExistingMatchMap:@{@"uniqueID" : @"_id"}];
@@ -1002,8 +984,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[self currentUser] uniqueID], @"activites"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [[self currentUser] uniqueID], @"activites"]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         
@@ -1049,8 +1030,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[self currentUser] uniqueID], @"stats", @"category"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [[self currentUser] uniqueID], @"stats", @"category"]];
         
         
         STKQueryObject *obj = [[STKQueryObject alloc] init];
@@ -1072,8 +1052,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[self currentUser] uniqueID], @"stats", @"category"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [[self currentUser] uniqueID], @"stats", @"category"]];
         
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
 
@@ -1090,8 +1069,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
-        [c setIdentifiers:@[[[self currentUser] uniqueID], @"stats", @"hashtags"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [[self currentUser] uniqueID], @"stats", @"hashtags"]];
         
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
             
@@ -1183,7 +1161,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointLogin]];
         [c addQueryValue:token forKey:@"provider_token"];
         [c addQueryValue:secret forKey:@"provider_token_secret"];
         [c addQueryValue:STKUserExternalSystemTwitter forKey:@"provider"];
@@ -1393,7 +1371,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointLogin]];
         [c addQueryValue:oauthToken forKey:@"provider_token"];
         [c addQueryValue:STKUserExternalSystemFacebook forKey:@"provider"];
 
@@ -1509,7 +1487,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(nil, err);
             return;
         }
-        STKConnection * c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+        STKConnection * c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointLogin]];
         [c addQueryValue:token forKey:@"provider_token"];
         [c addQueryValue:STKUserExternalSystemGoogle forKey:@"provider"];
         
@@ -1565,8 +1543,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:@"/users"];
-        [c setIdentifiers:@[email, @"passwordreset"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", email, @"passwordreset"]];
         [c addQueryValue:password forKey:@"password"];
         
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
@@ -1598,7 +1575,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointLogin];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointLogin]];
         [c addQueryValue:[email lowercaseString] forKey:@"email"];
         [c addQueryValue:password forKey:@"password"];
         
@@ -1625,7 +1602,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         [info setEmail:[[info email] lowercaseString]];
         
-        STKConnection *c = [[STKBaseStore store] connectionForEndpoint:STKUserEndpointUser];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser]];
         
         if([info isInstitution]) {
             NSDictionary *values = [info remoteValueMapForLocalKeys:@[

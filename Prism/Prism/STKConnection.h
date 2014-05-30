@@ -38,7 +38,7 @@ typedef enum {
 
 + (void)cancelAllConnections;
 
-- (id)initWithBaseURL:(NSURL *)url endpoint:(NSString *)endpoint;
+- (id)initWithBaseURL:(NSURL *)url identifiers:(NSArray *)identifiers;
 
 // Request Information
 @property (nonatomic, readonly) NSURLRequest *request;
