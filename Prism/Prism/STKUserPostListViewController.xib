@@ -15,6 +15,7 @@
                 <outlet property="experienceAchievementConstraint" destination="v9w-8D-orp" id="jk2-rA-Y4X"/>
                 <outlet property="experienceButton" destination="DGT-3s-4Nk" id="UFU-vd-0T7"/>
                 <outlet property="filterBar" destination="JUn-fv-37I" id="EVL-q0-Oin"/>
+                <outlet property="filterViewHeightConstraint" destination="9sc-rQ-9iz" id="A6t-2F-h8T"/>
                 <outlet property="inspirationButton" destination="H5K-Hv-SNX" id="xLt-Ww-jOU"/>
                 <outlet property="inspirationPersonalConstraint" destination="SOp-6D-TDI" id="Elb-pu-gHU"/>
                 <outlet property="leftConstraint" destination="sPM-mg-Kqk" id="9Uc-TT-Z09"/>
@@ -179,8 +180,8 @@
                 <constraint firstAttribute="trailing" secondItem="nt0-Bx-rU5" secondAttribute="trailing" id="9b2-84-Qz3"/>
                 <constraint firstAttribute="trailing" secondItem="Xc3-2h-k1Z" secondAttribute="trailing" id="AVZ-Hn-bMS"/>
                 <constraint firstAttribute="trailing" secondItem="JUn-fv-37I" secondAttribute="trailing" id="EzE-5I-pol"/>
+                <constraint firstItem="nt0-Bx-rU5" firstAttribute="top" secondItem="JUn-fv-37I" secondAttribute="bottom" id="ace-6W-Woh"/>
                 <constraint firstItem="Xc3-2h-k1Z" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="sTs-RL-78b"/>
-                <constraint firstItem="nt0-Bx-rU5" firstAttribute="top" secondItem="JUn-fv-37I" secondAttribute="bottom" id="xkF-4Z-Hjk"/>
                 <constraint firstItem="nt0-Bx-rU5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="z8U-Vc-Vnu"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
