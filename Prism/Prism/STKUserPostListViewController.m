@@ -46,7 +46,7 @@
 
 @implementation STKUserPostListViewController
 
-static CGFloat filterViewHeight = 50.0;
+static const CGFloat filterViewHeight = 50.0;
 
 - (id)initWithTrust:(STKTrust *)t
 {
