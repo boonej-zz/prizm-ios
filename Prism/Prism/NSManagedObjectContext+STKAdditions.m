@@ -11,19 +11,20 @@
 @implementation NSManagedObjectContext (STKAdditions)
 
 - (NSManagedObject <STKJSONObject> *)instanceForEntityName:(NSString *)entityName
-                                                    object:(id)object
+                                              sourceObject:(id)sourceObject
                                                   matchMap:(NSDictionary *)matchMap
                                              alreadyExists:(BOOL *)alreadyExists
 {
     id obj = nil;
     if(matchMap) {
         NSMutableArray *predicates = [NSMutableArray array];
-        for(NSString *key in matchMap) {
+        for(NSString *localKey in matchMap) {
             NSPredicate *p = nil;
-            if([object isKindOfClass:[NSString class]]) {
-                p = [NSPredicate predicateWithFormat:@"%K == %@", key, object];
+            if([sourceObject isKindOfClass:[NSString class]]) {
+                p = [NSPredicate predicateWithFormat:@"%K == %@", localKey, sourceObject];
             } else {
-                p = [NSPredicate predicateWithFormat:@"%K == %@", key, [object valueForKeyPath:[matchMap objectForKey:key]]];
+                NSString *remoteKey = [matchMap objectForKey:localKey];
+                p = [NSPredicate predicateWithFormat:@"%K == %@", localKey, [sourceObject valueForKeyPath:remoteKey]];
             }
             [predicates addObject:p];
         }

@@ -337,6 +337,8 @@ typedef enum {
     [self setFilterByUserTags:NO];
     [[self filterView] setSelected:NO];
     [[[self filterView] locationButton] setSelected:[self filterByLocation]];
+    [[[self filterView] userButton] setSelected:[self filterByUserTags]];
+
     [[self postController] setFilterMap:[self filterDictionary]];
     [[self postController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self tableView] reloadData];

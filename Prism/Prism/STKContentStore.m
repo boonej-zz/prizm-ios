@@ -64,7 +64,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
                              completion:(void (^)(NSArray *locations, NSError *err))block
 {
     STKFoursquareConnection *c = [[STKFoursquareConnection alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.foursquare.com"]
-                                                                      identifiers:@[@"v2", @"venues", @"search"]];
+                                                                      identifiers:@[@"/v2", @"venues", @"search"]];
 
     [c addQueryValue:[NSString stringWithFormat:@"%.20f,%.20f", coord.latitude, coord.longitude] forKey:@"ll"];
     [c addQueryValue:STKContentFoursquareClientID forKey:@"client_id"];

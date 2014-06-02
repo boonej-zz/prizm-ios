@@ -20,6 +20,7 @@
 #import "STKUserPostListViewController.h"
 #import "STKFetchDescription.h"
 #import "STKOptionCell.h"
+#import "STKNavigationButton.h"
 
 @import MessageUI;
 
@@ -58,7 +59,17 @@
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setTitle:@"Trust"];
-        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+
+        STKNavigationButton *view = [[STKNavigationButton alloc] init];
+        [view setImage:[UIImage imageNamed:@"addusertrust"]];
+        [view setOffset:8];
+        
+        [view addTarget:self action:@selector(addNewTrust:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+        [[self navigationItem] setRightBarButtonItem:bbi];
+        
+        
+        
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_trust"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_trust_selected"]];
         [[self tabBarItem] setTitle:@"Trust"];
@@ -68,6 +79,11 @@
                               STKTrustTypeCoach, STKTrustTypeTeacher, STKTrustTypeFamily]];
     }
     return self;
+}
+
+- (void)addNewTrust:(id)sender
+{
+    
 }
 
 - (void)viewDidLoad
@@ -102,6 +118,9 @@
 
 - (void)countView:(STKCountView *)countView didSelectCircleAtIndex:(int)index
 {
+    if(![self selectedUser])
+        return;
+    
     STKTrust *t = [[self trusts] objectAtIndex:[[[self trustView] users] indexOfObject:[self selectedUser]]];
     NSString *otherName = [[t otherUser] name];
     

@@ -29,11 +29,7 @@ extern NSString * const STKJSONBindFunctionKey;
                  sourceKey:(NSString *)sourceKey
             destinationKey:(NSString *)destKey
                   matchMap:(NSDictionary *)matchMap;
-/*
-- (void)bindFromDictionary:(NSDictionary *)d
-                 sourceKey:(NSString *)sourceKey
-          destinationBlock:(void (^)(id inVal))block;
-*/
+
 - (void)bindFromDictionary:(NSDictionary *)dataDictionary
                     keyMap:(NSDictionary *)keyMap;
 
@@ -47,7 +43,6 @@ extern NSString * const STKJSONBindFunctionKey;
 - (NSDictionary *)remoteValueMapForLocalKeys:(NSArray *)localKeys;
 
 @end
-
 
 @interface STKBind : NSObject
 

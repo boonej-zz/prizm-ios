@@ -12,7 +12,7 @@
 @interface NSManagedObjectContext (STKAdditions)
 
 - (NSManagedObject <STKJSONObject> *)instanceForEntityName:(NSString *)entityName
-                                                    object:(id)object
+                                              sourceObject:(id)sourceObject
                                                   matchMap:(NSDictionary *)matchMap
                                              alreadyExists:(BOOL *)alreadyExists;
 

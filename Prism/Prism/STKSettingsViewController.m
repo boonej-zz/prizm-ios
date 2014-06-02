@@ -158,7 +158,7 @@
         [mvc setMailComposeDelegate:self];
         
         [mvc setSubject:@"Prizm Feedback"];
-        [mvc setToRecipients:@[@"admin@prizmapp.com"]];
+        [mvc setToRecipients:@[@"feedback@prizmapp.com"]];
         [mvc setMessageBody:@"Summary: \nSteps to Reproduce: \nExpected Results: \nActual Results: \nAdditional Notes: \n" isHTML:NO];
         [self presentViewController:mvc animated:YES completion:nil];
         

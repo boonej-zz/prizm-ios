@@ -154,7 +154,7 @@ NSString * const STKJSONBindTransformKey = @"transform";
             // Is this a relationship?
             
             NSDictionary *relationships = [[(NSManagedObject *)self entity] relationshipsByName];
-            NSRelationshipDescription *relationship = [relationships objectForKey:[config objectForKey:@"key"]];
+            NSRelationshipDescription *relationship = [relationships objectForKey:[config objectForKey:STKJSONBindFieldKey]];
             if(relationship) {
                 if([value isKindOfClass:[NSArray class]]) {
                     NSString *bindFunction = STKJSONBindFunctionReplace;
@@ -168,10 +168,10 @@ NSString * const STKJSONBindTransformKey = @"transform";
                     }
                     
                     for(NSDictionary *d in value) {
-                        [self createOrInsertJSONObject:d forRelationship:relationship matchMap:[config objectForKey:@"match"]];
+                        [self createOrInsertJSONObject:d forRelationship:relationship matchMap:[config objectForKey:STKJSONBindMatchDictionaryKey]];
                     }
                 } else {
-                    [self createOrInsertJSONObject:value forRelationship:relationship matchMap:[config objectForKey:@"match"]];
+                    [self createOrInsertJSONObject:value forRelationship:relationship matchMap:[config objectForKey:STKJSONBindMatchDictionaryKey]];
                 }
                 return;
             }
@@ -181,21 +181,6 @@ NSString * const STKJSONBindTransformKey = @"transform";
     }
 }
 
-
-/*
-- (void)bindFromDictionary:(NSDictionary *)d
-                 sourceKey:(NSString *)sourceKey
-          destinationBlock:(void (^)(id inVal))block
-{
-    id value = [d valueForKeyPath:sourceKey];
-    if(!value)
-        return;
-    if([value isKindOfClass:[NSNull class]])
-        return;
-
-    block(value);
-}
-*/
 - (void)bindFromDictionary:(NSDictionary *)dataDictionary
                     keyMap:(NSDictionary *)keyMap
 {
@@ -222,7 +207,7 @@ NSString * const STKJSONBindTransformKey = @"transform";
     NSManagedObject *mSelf = (NSManagedObject *)self;
     
     NSManagedObject <STKJSONObject> *obj = [[mSelf managedObjectContext] instanceForEntityName:[[relationship destinationEntity] name]
-                                                                                        object:jsonObject
+                                                                                  sourceObject:jsonObject
                                                                                       matchMap:matchMap
                                                                                  alreadyExists:nil];
     [obj readFromJSONObject:jsonObject];

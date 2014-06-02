@@ -36,36 +36,40 @@ typedef enum {
 
 @interface STKConnection : NSObject
 
++ (NSMutableArray *)activeConnections;
 + (void)cancelAllConnections;
 
 - (id)initWithBaseURL:(NSURL *)url identifiers:(NSArray *)identifiers;
 
 // Request Information
-@property (nonatomic, readonly) NSURLRequest *request;
 @property (nonatomic) STKConnectionMethod method;
 @property (nonatomic, strong) NSArray *identifiers;
-@property (nonatomic, strong) NSDictionary *parameters;
+@property (nonatomic, strong) NSDictionary *additionalHeaders;
 @property (nonatomic, strong) NSString *authorizationString;
 @property (nonatomic, strong) NSData *HTTPBody;
 @property (nonatomic, strong) STKQueryObject *queryObject;
 
+@property (nonatomic, readonly) NSURLRequest *request;
+
 // Parsing Information
 @property (nonatomic, strong) id <STKJSONObject> jsonRootObject;
-@property (nonatomic) BOOL shouldReturnArray;
+
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, copy) NSString *entityName;
-@property (nonatomic, strong) NSDictionary *resolutionMap;
 
-// { ourName : theirName}
+@property (nonatomic, strong) NSDictionary *resolutionMap;
+@property (nonatomic) BOOL shouldReturnArray;
+
+// { localKey : remoteKey, ... }
 @property (nonatomic, strong) NSDictionary *existingMatchMap;
 @property (nonatomic, copy) void (^insertionBlock)(NSManagedObject *rootObject);
 
 // Pass either an array or dictionary containing any number of arrays, dictionaries and strings.
-// The structure of the modelGraph is used is to match the structure of the incoming *internal* JSON.
+// The structure of the modelGraph is used is to match the structure of the incoming JSON.
 
 // For example, pass @{@"jsonFieldName" : @[@"ClassName]}, will search internal data for key jsonFieldName,
 // assume it is an array, and each object in that array will be parsed into ClassName.
-// If used in cojunction with context, ClassName will be treated as Core data entities
+// If used in conjunction with context, ClassName will be treated as Core data entities
 // Only supports homogenous arrays.
 @property (nonatomic, strong) id modelGraph;
 
@@ -81,20 +85,14 @@ typedef enum {
 - (void)getWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 - (void)deleteWithSession:(NSURLSession *)session completionBlock:(void (^)(id obj, NSError *err))block;
 
-// Verifies keys, returns YES if all keys are in object.
-// Optionally pass missingKeysOut to see which keys are missing
-// keyMap values can either be an NSString
-// or ^ NSDictionary * (id value) block, where the NSDictionary is @{outputKey : value}
-- (BOOL)addQueryValues:(id)object
-           missingKeys:(NSArray **)missingKeysOut
-            withKeyMap:(NSDictionary *)keyMap;
-
 - (void)addQueryValue:(id)value forKey:(NSString *)key;
 - (void)addQueryValues:(NSDictionary *)dict;
 
-+ (NSMutableArray *)activeConnections;
-- (void)reportFailureWithError:(NSError *)err;
+// ------
+
 - (id)populateModelGraphWithData:(id)incomingData error:(NSError **)err;
 - (id)populateModelObjectWithData:(id)incomingData error:(NSError **)err;
+
+- (void)reportFailureWithError:(NSError *)err;
 
 @end

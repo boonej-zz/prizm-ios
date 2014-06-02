@@ -830,6 +830,18 @@ const long STKCreateProgressGeocoding = 4;
             return;
         }
         
+        NSString *firstName = [[self user] firstName];
+        if([firstName length] > 0) {
+            NSString *firstChar = [[firstName substringToIndex:1] uppercaseString];
+            [[self user] setFirstName:[firstChar stringByAppendingString:[firstName substringFromIndex:1]]];
+        }
+        
+        NSString *lastName = [[self user] lastName];
+        if([lastName length] > 0) {
+            NSString *firstChar = [[lastName substringToIndex:1] uppercaseString];
+            [[self user] setLastName:[firstChar stringByAppendingString:[lastName substringFromIndex:1]]];
+        }
+        
         void (^registerBlock)(void) = nil;
         
         if([self isEditingProfile]) {

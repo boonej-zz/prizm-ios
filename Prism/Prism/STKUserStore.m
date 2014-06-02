@@ -364,7 +364,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             }
         }
         
-        [obj setFields:@[diveKey]];
+        if(diveKey) {
+            [obj setFields:@[diveKey]];
+        }
         [obj addSubquery:[STKResolutionQuery resolutionQueryForField:diveKey]];
 
         [c setQueryObject:obj];
@@ -393,7 +395,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/exists", [user uniqueID], @"trusts", [otherUser uniqueID]]];
-//        [c setQueryObject:[STKContainQuery containQueryForField:@"to" keyValues:@{@"from" : ]]
         
         [c setModelGraph:@[@"STKTrust"]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
@@ -1642,9 +1643,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         
         if([info externalServiceType] && [info externalServiceID]) {
-            [c addQueryValues:info missingKeys:nil withKeyMap:@{@"externalServiceID" : @"provider_id",
-                                                                @"externalServiceType" : @"provider",
-                                                                @"token" : @"provider_token"}];
+            [c addQueryValue:[info externalServiceID] forKey:@"provider_id"];
+            [c addQueryValue:[info externalServiceType] forKey:@"provider"];
+            [c addQueryValue:[info token] forKey:@"provider_token"];
             if([[info externalServiceType] isEqualToString:STKUserExternalSystemTwitter]) {
                 [c addQueryValue:[info secret] forKey:@"provider_token_secret"];
             }

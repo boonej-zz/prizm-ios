@@ -22,6 +22,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
 @property (nonatomic) NSDate *beginTime;
 
+
 @end
 
 @implementation STKConnection
@@ -87,6 +88,10 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
             
             [components setPercentEncodedQuery:queryString];
         }
+    }
+    
+    for(NSString *headerKey in [self additionalHeaders]) {
+        [req addValue:[[self additionalHeaders] objectForKey:headerKey] forHTTPHeaderField:headerKey];
     }
     
     if([self queryObject]) {
@@ -199,60 +204,6 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 - (void)addQueryValues:(NSDictionary *)dict
 {
     [_internalArguments addEntriesFromDictionary:dict];
-}
-
-- (void)setParameters:(NSDictionary *)parameters
-{
-    [_internalArguments removeAllObjects];
-    for(NSString *key in parameters) {
-        id val = [parameters objectForKey:key];
-        [self addQueryValue:val forKey:key];
-    }
-}
-- (BOOL)addQueryValues:(id)object
-           missingKeys:(NSArray **)missingKeysOut
-            withKeyMap:(NSDictionary *)keyMap
-{
-    BOOL success = YES;
-    NSMutableArray *missingKeys = [[NSMutableArray alloc] init];
-    for(NSString *key in keyMap) {
-        id objectKeyOrBlock = [keyMap objectForKey:key];
-        
-        if([objectKeyOrBlock isKindOfClass:[NSString class]]
-        || [objectKeyOrBlock isKindOfClass:[NSDictionary class]]) {
-            id value = [object valueForKeyPath:key];
-            if(!value) {
-                success = NO;
-                [missingKeys addObject:key];
-            } else {
-                [self addQueryValue:value
-                             forKey:objectKeyOrBlock];
-            }
-        } else {
-            // The assumption is that this is a block
-            NSString *initialValue = [object valueForKey:key];
-            if(!initialValue) {
-                success = NO;
-                [missingKeys addObject:key];
-            } else {
-                NSDictionary * (^block)(id value) = objectKeyOrBlock;
-                NSDictionary *result = block([object valueForKeyPath:key]);
-                for(NSString *internalKey in result) {
-                    [self addQueryValue:[result objectForKey:internalKey]
-                                 forKey:internalKey];
-                }
-            }
-        }
-    }
-    if(missingKeysOut) {
-        *missingKeysOut = [missingKeys copy];
-    }
-    return success;
-}
-
-- (NSDictionary *)parameters
-{
-    return [[self internalArguments] copy];
 }
 
 - (void)handleError:(NSError *)error
@@ -444,9 +395,11 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     if ([node isKindOfClass:[NSArray class]]) {
         
         if(![incomingData isKindOfClass:[NSArray class]]) {
-            *err = [NSError errorWithDomain:STKConnectionErrorDomain
-                                       code:STKConnectionErrorCodeInvalidModelGraph
-                                   userInfo:@{@"expected" : @"NSArray", @"received" : NSStringFromClass([incomingData class])}];
+            if(err) {
+                *err = [NSError errorWithDomain:STKConnectionErrorDomain
+                                           code:STKConnectionErrorCodeInvalidModelGraph
+                                       userInfo:@{@"expected" : @"NSArray", @"received" : NSStringFromClass([incomingData class])}];
+            }
             return nil;
         }
 
@@ -466,9 +419,11 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     } else if([node isKindOfClass:[NSDictionary class]]) {
         
         if(![incomingData isKindOfClass:[NSDictionary class]]) {
-            *err = [NSError errorWithDomain:STKConnectionErrorDomain
-                                       code:STKConnectionErrorCodeInvalidModelGraph
-                                   userInfo:@{@"expected" : @"NSDictionary", @"received" : NSStringFromClass([incomingData class])}];
+            if(err) {
+                *err = [NSError errorWithDomain:STKConnectionErrorDomain
+                                           code:STKConnectionErrorCodeInvalidModelGraph
+                                       userInfo:@{@"expected" : @"NSDictionary", @"received" : NSStringFromClass([incomingData class])}];
+            }
             return nil;
         }
         
@@ -490,9 +445,11 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     } else {
         
         if(![incomingData isKindOfClass:[NSDictionary class]]) {
-            *err = [NSError errorWithDomain:STKConnectionErrorDomain
-                                       code:STKConnectionErrorCodeInvalidModelGraph
-                                   userInfo:@{@"expected" : @"NSDictionary-Model or Model", @"received" : NSStringFromClass([incomingData class])}];
+            if(err) {
+                *err = [NSError errorWithDomain:STKConnectionErrorDomain
+                                           code:STKConnectionErrorCodeInvalidModelGraph
+                                       userInfo:@{@"expected" : @"NSDictionary-Model or Model", @"received" : NSStringFromClass([incomingData class])}];
+            }
             return nil;
         }
         
@@ -500,7 +457,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         if([node isKindOfClass:[NSString class]]) {
             if([self context]) {
                 obj = [[self context] instanceForEntityName:node
-                                                     object:incomingData
+                                                     sourceObject:incomingData
                                                    matchMap:[self existingMatchMap]
                                               alreadyExists:nil];
             } else
@@ -513,7 +470,9 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         
         NSError *resultErr = [obj readFromJSONObject:incomingData];
         if(resultErr) {
-            *err = resultErr;
+            if(err) {
+                *err = resultErr;
+            }
         }
         return obj;
     }
@@ -523,17 +482,23 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 - (id)populateModelObjectWithData:(id)incomingData error:(NSError **)err
 {
     if([self jsonRootObject]) {
-        *err = [[self jsonRootObject] readFromJSONObject:incomingData];
+        NSError *jsonErr = [[self jsonRootObject] readFromJSONObject:incomingData];
+        if(err) {
+            *err = jsonErr;
+        }
 
         return [self jsonRootObject];
     } else if ([self entityName]) {
         
         id obj = [[self context] instanceForEntityName:[self entityName]
-                                                object:incomingData
+                                                sourceObject:incomingData
                                               matchMap:[self existingMatchMap]
                                          alreadyExists:nil];
         
-        *err = [obj readFromJSONObject:incomingData];
+        NSError *jsonErr = [obj readFromJSONObject:incomingData];
+        if(err) {
+            *err = jsonErr;
+        }
         
         return obj;
     }
@@ -547,7 +512,10 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     for(NSString *key in dict) {
         NSString *entity = [resolveToEntityMap objectForKey:key];
         for(NSString *idKey in [dict objectForKey:key]) {
-            NSManagedObject <STKJSONObject> * instance = [[self context] instanceForEntityName:entity object:@{@"_id" : idKey} matchMap:@{@"uniqueID" : @"_id"} alreadyExists:nil];
+            NSManagedObject <STKJSONObject> * instance = [[self context] instanceForEntityName:entity
+                                                                                  sourceObject:@{@"_id" : idKey}
+                                                                                      matchMap:@{@"uniqueID" : @"_id"}
+                                                                                 alreadyExists:nil];
             [instance readFromJSONObject:[[dict objectForKey:key] objectForKey:idKey]];
         }
     }
