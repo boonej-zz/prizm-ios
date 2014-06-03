@@ -563,7 +563,7 @@ typedef enum {
     
     STKInitialProfileStatisticsCell *c = [self statsView];
     if([self isShowingCurrentUserProfile]) {
-        [[c accoladesButton] setHidden:NO];
+        [[c accoladesButton] setHidden:YES]; //force hide accolades button for v1
         [[c followButton] setHidden:YES];
         [[c trustButton] setHidden:YES];
         [[c editButton] setHidden:NO];
@@ -588,7 +588,7 @@ typedef enum {
 
         if([t isAccepted]) {
             [[c followButton] setHidden:YES];
-            [[c accoladesButton] setHidden:NO];
+            [[c accoladesButton] setHidden:YES]; //force hide accolades button for v1
             
         } else {
             [[c followButton] setHidden:NO];
