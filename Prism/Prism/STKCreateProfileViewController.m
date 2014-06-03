@@ -26,6 +26,7 @@
 #import "STKSegmentedControlCell.h"
 #import "STKSegmentedPanel.h"
 #import "STKItemListViewController.h"
+#import "STKExploreViewController.h"
 
 @import AddressBook;
 @import Social;
@@ -862,6 +863,10 @@ const long STKCreateProgressGeocoding = 4;
                                            completion:^(id user, NSError *err) {
                                                [STKProcessingView dismiss];
                                                if(!err) {
+                                                   if([[self presentingViewController] isKindOfClass:[STKMenuController class]]){
+                                                       STKMenuController *menuController = (STKMenuController *)[self presentingViewController];
+                                                       [menuController setSelectedViewController:[[menuController viewControllers] objectAtIndex:1]];
+                                                   }
                                                    [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
                                                } else {
                                                    [[STKErrorStore alertViewForError:err delegate:nil] show];
