@@ -46,7 +46,7 @@
 
 @implementation STKUserPostListViewController
 
-static const CGFloat filterViewHeight = 50.0;
+static const CGFloat STKUserPostListFilterViewHeight = 50.0;
 
 - (id)initWithTrust:(STKTrust *)t
 {
@@ -165,7 +165,7 @@ static const CGFloat filterViewHeight = 50.0;
         [[self filterViewHeightConstraint] setConstant:0];
         [[self blurViewHeightConstraint] setConstant:[[self blurViewHeightConstraint] constant] - [[self filterBar] bounds].size.height];
     } else {
-        [[self filterViewHeightConstraint] setConstant:filterViewHeight];
+        [[self filterViewHeightConstraint] setConstant:STKUserPostListFilterViewHeight];
     }
     
     [[self tableView] setRowHeight:106];
@@ -178,7 +178,7 @@ static const CGFloat filterViewHeight = 50.0;
     [super viewWillAppear:animated];
     [[[self blurView] displayLink] setPaused:NO];
     if([self showsFilterBar]) {
-        [[self filterViewHeightConstraint] setConstant:filterViewHeight];
+        [[self filterViewHeightConstraint] setConstant:STKUserPostListFilterViewHeight];
         [[self tableView] setContentInset:UIEdgeInsetsMake([[self filterBar] bounds].size.height + [[self filterBar] frame].origin.y, 0, 0, 0)];
     } else {
         [[self filterViewHeightConstraint] setConstant:0];

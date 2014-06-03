@@ -82,10 +82,10 @@
     [desc setDirection:STKQueryObjectPageReload];
     [desc setFilterDictionary:[self filterMap]];
     [desc setSortDescriptors:[self sortDescriptors]];
-    self.pendingRequestCount++;
+    [self setPendingRequestCount:[self pendingRequestCount]+1];
     int capturedRequestCount = self.pendingRequestCount;
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
-        if (self.pendingRequestCount == capturedRequestCount) {
+        if ([self pendingRequestCount] == capturedRequestCount) {
             [self addPosts:posts];
         }
         completion(posts, err);
@@ -99,10 +99,10 @@
     [desc setFilterDictionary:[self filterMap]];
     [desc setSortDescriptors:[self sortDescriptors]];
 
-    self.pendingRequestCount++;
+    [self setPendingRequestCount:[self pendingRequestCount]+1];
     int capturedRequestCount = self.pendingRequestCount;
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
-        if (self.pendingRequestCount == capturedRequestCount) {
+        if ([self pendingRequestCount] == capturedRequestCount) {
             [self addPosts:posts];
         }
         completion(posts, err);
@@ -117,10 +117,10 @@
     [desc setFilterDictionary:[self filterMap]];
     [desc setSortDescriptors:[self sortDescriptors]];
 
-    self.pendingRequestCount++;
+    [self setPendingRequestCount:[self pendingRequestCount]+1];
     int capturedRequestCount = self.pendingRequestCount;
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
-        if (self.pendingRequestCount == capturedRequestCount) {
+        if ([self pendingRequestCount] == capturedRequestCount) {
             [self addPosts:posts];
         }
         completion(posts, err);
