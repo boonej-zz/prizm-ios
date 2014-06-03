@@ -56,13 +56,13 @@
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setTitle:@"Graph"];
 
-        STKNavigationButton *view = [[STKNavigationButton alloc] init];
-        [view addTarget:self action:@selector(showInsights:) forControlEvents:UIControlEventTouchUpInside];
-        [view setImage:[UIImage imageNamed:@"insight"]];
-        [view setSelectedImage:[UIImage imageNamed:@"insight"]];
-        [view setOffset:11];
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
-        [[self navigationItem] setRightBarButtonItem:bbi];
+//        STKNavigationButton *view = [[STKNavigationButton alloc] init];
+//        [view addTarget:self action:@selector(showInsights:) forControlEvents:UIControlEventTouchUpInside];
+//        [view setImage:[UIImage imageNamed:@"insight"]];
+//        [view setSelectedImage:[UIImage imageNamed:@"insight"]];
+//        [view setOffset:11];
+//        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+//        [[self navigationItem] setRightBarButtonItem:bbi];
         
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_graph"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_graph_selected"]];
