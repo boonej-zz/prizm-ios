@@ -22,6 +22,12 @@
 #import "STKFetchDescription.h"
 #import "STKPostCell.h"
 
+@interface STKPostController ()
+
+@property (nonatomic) int pendingRequestCount;
+
+@end
+
 @implementation STKPostController
 
 - (id)initWithViewController:(UIViewController <STKPostControllerDelegate> *)viewController
@@ -76,8 +82,12 @@
     [desc setDirection:STKQueryObjectPageReload];
     [desc setFilterDictionary:[self filterMap]];
     [desc setSortDescriptors:[self sortDescriptors]];
+    self.pendingRequestCount++;
+    int capturedRequestCount = self.pendingRequestCount;
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
-        [self addPosts:posts];
+        if (self.pendingRequestCount == capturedRequestCount) {
+            [self addPosts:posts];
+        }
         completion(posts, err);
     });
 }
@@ -89,8 +99,12 @@
     [desc setFilterDictionary:[self filterMap]];
     [desc setSortDescriptors:[self sortDescriptors]];
 
+    self.pendingRequestCount++;
+    int capturedRequestCount = self.pendingRequestCount;
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
-        [self addPosts:posts];
+        if (self.pendingRequestCount == capturedRequestCount) {
+            [self addPosts:posts];
+        }
         completion(posts, err);
     });
     
@@ -103,8 +117,12 @@
     [desc setFilterDictionary:[self filterMap]];
     [desc setSortDescriptors:[self sortDescriptors]];
 
+    self.pendingRequestCount++;
+    int capturedRequestCount = self.pendingRequestCount;
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
-        [self addPosts:posts];
+        if (self.pendingRequestCount == capturedRequestCount) {
+            [self addPosts:posts];
+        }
         completion(posts, err);
     });
 }
