@@ -141,7 +141,7 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Website", @"key" : @"website", @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
                    ];
         
-        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"website", @"subtype", @"phoneNumber", @"zipCode"];
+        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"website", @"subtype", @"phoneNumber", @"zipCode"];
     } else {
         _items = @[
                    @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Partner", @"Individual"]},
@@ -167,7 +167,7 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                    ];
         
-        _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+        _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode"];
    
     }
     if([[self user] externalServiceType]) {
@@ -523,6 +523,9 @@ const long STKCreateProgressGeocoding = 4;
         [[self user] setGender:STKUserGenderFemale];
     }
     
+    UIImage *defaultImage = [UIImage imageNamed:@"coverphotoholder"];
+    [[self coverPhotoImageView] setImage:defaultImage];
+
     // If we got the profile/cover photo from ane external service, upload it to our server
     if([self isEditingProfile]) {
         if([[self user] coverPhotoPath]) {

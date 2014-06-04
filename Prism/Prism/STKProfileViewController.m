@@ -557,7 +557,12 @@ typedef enum {
     } else
         [[[self profileView] locationLabel] setText:@""];
     
-    [[[self profileView] coverPhotoImageView] setUrlString:[p coverPhotoPath]];
+    if ([p coverPhotoPath]) {
+        [[[self profileView] coverPhotoImageView] setUrlString:[p coverPhotoPath]];
+    } else {
+        UIImage *defaultImage = [UIImage imageNamed:@"coverphotoholder"];
+        [[[self profileView] coverPhotoImageView] setImage:defaultImage];
+    }
     [[[self profileView] avatarView] setUrlString:[p profilePhotoPath]];
     
     

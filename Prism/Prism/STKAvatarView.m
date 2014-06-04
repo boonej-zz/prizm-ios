@@ -93,7 +93,7 @@
     if([self image]) {
         [[self image] drawInRect:CGRectInset([self bounds], 2, 2)];
     } else {
-        [[UIImage imageNamed:@"trust_user_missing"] drawInRect:[self bounds]];
+        [[STKAvatarView defaultAvatar:rect] drawInRect:[self bounds]];
     }
    
     if([self overlayColor]) {
@@ -110,4 +110,16 @@
     [bpInnerStroke stroke];
 }
 
++ (UIImage *)defaultAvatar:(CGRect)rect
+{
+    if (rect.size.width > 77) {
+        return [UIImage imageNamed:@"trust_user_missing_144"];
+    }
+    
+    if (rect.size.width > 36) {
+        return [UIImage imageNamed:@"trust_user_missing_77"];
+    }
+    
+    return [UIImage imageNamed:@"trust_user_missing_36"];
+}
 @end
