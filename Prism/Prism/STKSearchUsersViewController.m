@@ -6,16 +6,18 @@
 //  Copyright (c) 2014 Higher Altitude. All rights reserved.
 //
 
-#import "STKSearchTrustsViewController.h"
+#import "STKSearchUsersViewController.h"
 #import "STKUserStore.h"
 #import "STKUser.h"
 #import "STKSearchTrustCell.h"
 #import "STKTextImageCell.h"
 #import "UIERealTimeBlurView.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKSearchProfileCell.h"
 
-@interface STKSearchTrustsViewController ()
+@interface STKSearchUsersViewController ()
 
+@property (nonatomic, assign) STKSearchUsersType searchType;
 @property (nonatomic, strong) NSArray *filterPostOptions;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
@@ -26,7 +28,7 @@
 
 @end
 
-@implementation STKSearchTrustsViewController
+@implementation STKSearchUsersViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,6 +36,16 @@
     if (self) {
         [[self navigationItem] setTitle:@"Search"];
         [[self navigationItem] setLeftBarButtonItem:[self backButtonItem]];
+        [self setSearchType:STKSearchUsersNotInTrust];
+    }
+    return self;
+}
+
+- (id)initWithSearchType:(STKSearchUsersType)type
+{
+    self = [super init];
+    if(self){
+        [self setSearchType:type];
     }
     return self;
 }
@@ -90,20 +102,26 @@
     }
     
     [[STKUserStore store] searchUsersWithName:searchString completion:^(NSArray *profiles, NSError *err) {
-        STKUser *currentUser = [[STKUserStore store] currentUser];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self != %@", currentUser];
-        profiles = [profiles filteredArrayUsingPredicate:predicate];
         
-        NSMutableArray *trustless = [NSMutableArray array];
-        [profiles enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            STKUser *u = (STKUser *)obj;
-            STKTrust *trust = [currentUser trustForUser:u];
-            if (trust == nil || [trust isCancelled]) {
-                [trustless addObject:u];
-            }
-        }];
+        if([self searchType] == STKSearchUsersNotInTrust){
+            STKUser *currentUser = [[STKUserStore store] currentUser];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self != %@", currentUser];
+            profiles = [profiles filteredArrayUsingPredicate:predicate];
+            
+            NSMutableArray *trustless = [NSMutableArray array];
+            [profiles enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                STKUser *u = (STKUser *)obj;
+                STKTrust *trust = [currentUser trustForUser:u];
+                if (trust == nil || [trust isCancelled]) {
+                    [trustless addObject:u];
+                }
+            }];
+            
+            [self setProfilesFound:trustless];
+        }else{
+            [self setProfilesFound:profiles];
+        }
         
-        [self setProfilesFound:trustless];
         [self reloadSearchResults];
     }];
 }
@@ -168,18 +186,44 @@
         
     }
     
-    STKSearchTrustCell *c = [STKSearchTrustCell cellForTableView:tableView target:self];
-    STKUser *u = [[self profilesFound] objectAtIndex:[indexPath row]];
-    [[c nameLabel] setTextColor:STKTextColor];
-    [[c nameLabel] setText:[u name]];
-    [[c avatarView] setUrlString:[u profilePhotoPath]];
-    
-    STKUser *currentUser = [[STKUserStore store] currentUser];
-    STKTrust *trust = [u trustForUser:currentUser];
+    if([self searchType] == STKSearchUsersNotInTrust){
+        STKSearchTrustCell *c = [STKSearchTrustCell cellForTableView:tableView target:self];
+        STKUser *u = [[self profilesFound] objectAtIndex:[indexPath row]];
+        [[c nameLabel] setTextColor:STKTextColor];
+        [[c nameLabel] setText:[u name]];
+        [[c avatarView] setUrlString:[u profilePhotoPath]];
 
-    [self updateCell:c withTrust:trust];
+        STKUser *currentUser = [[STKUserStore store] currentUser];
+        STKTrust *trust = [u trustForUser:currentUser];
+
+        [self updateCell:c withTrust:trust];
+
+        return c;
     
-    return c;
+    }else{
+        STKSearchProfileCell *cell = [STKSearchProfileCell cellForTableView:tableView target:self];
+        STKUser *user = [[self profilesFound] objectAtIndex:[indexPath row]];
+        [[cell nameLabel] setTextColor:STKTextColor];
+        [[cell nameLabel] setText:[user name]];
+        [[cell avatarView] setUrlString:[user profilePhotoPath]];
+        [[cell cancelTrustButton] setHidden:YES];
+        [[cell mailButton] setHidden:YES];
+        
+        if([user isEqual:[[STKUserStore store] currentUser]]) {
+            [[cell followButton] setHidden:YES];
+        } else {
+            [[cell followButton] setHidden:NO];
+            if([user isFollowedByUser:[[STKUserStore store] currentUser]]) {
+                [[cell followButton] setSelected:YES];
+            } else {
+                [[cell followButton] setSelected:NO];
+            }
+        }
+        
+        return cell;
+    }
+    
+    return nil;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -265,6 +309,25 @@
     }
 
     [[self searchResultsTableView] reloadData];
+}
+
+- (void)toggleFollow:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKUser *u = [[self profilesFound] objectAtIndex:[ip row]];
+    if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
+        [[STKUserStore store] unfollowUser:u completion:^(id obj, NSError *err) {
+            if(!err) {
+                [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
+            }
+        }];
+    } else {
+        [[STKUserStore store] followUser:u completion:^(id obj, NSError *err) {
+            if(!err) {
+                [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
+            }
+        }];
+    }
+    
 }
 
 @end

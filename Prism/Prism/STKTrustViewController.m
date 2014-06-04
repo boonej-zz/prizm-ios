@@ -21,7 +21,7 @@
 #import "STKFetchDescription.h"
 #import "STKOptionCell.h"
 #import "STKNavigationButton.h"
-#import "STKSearchTrustsViewController.h"
+#import "STKSearchUsersViewController.h"
 
 @import MessageUI;
 
@@ -84,7 +84,7 @@
 
 - (void)addNewTrust:(id)sender
 {
-    STKSearchTrustsViewController *searchController = [[STKSearchTrustsViewController alloc] init];
+    STKSearchUsersViewController *searchController = [[STKSearchUsersViewController alloc] init];
 
     [[self navigationController] pushViewController:searchController animated:YES];
 }

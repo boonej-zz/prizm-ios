@@ -25,12 +25,6 @@
 #import "STKSearchResultsViewController.h"
 #import "STKLuminatingBar.h"
 
-typedef enum {
-    STKExploreTypeLatest = 0,
-    STKExploreTypePopular = 1,
-    STKExploreTypeFeatured = 2
-} STKExploreType;
-
 
 @interface STKExploreViewController ()
     <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate>
@@ -46,6 +40,8 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *exploreTypeControl;
 @property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
+@property (nonatomic, assign) NSInteger forcedExploreType;
+@property (nonatomic, assign) BOOL isForcedExploreType;
 
 
 @property (nonatomic, strong) STKNavigationButton *searchButton;
@@ -249,6 +245,11 @@ typedef enum {
     return (STKExploreType)[[self exploreTypeControl] selectedSegmentIndex];
 }
 
+- (void)setExploreType:(STKExploreType)type
+{
+    [self setForcedExploreType:type];
+    [self setIsForcedExploreType:YES];
+}
 
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -260,6 +261,11 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if([self isForcedExploreType]){
+        [[self exploreTypeControl] setSelectedSegmentIndex:[self forcedExploreType]];
+        [self setIsForcedExploreType:NO];
+    }
  
     if([self exploreType] == STKExploreTypeLatest)
         [self setActivePostController:[self recentPostsController]];
@@ -268,7 +274,6 @@ typedef enum {
     else if ([self exploreType] == STKExploreTypeFeatured)
         [self setActivePostController:[self featuredPostsController]];
 
-    
     [[self searchButton] setSelected:[self isSearchBarActive]];
     
     [[[self blurView] displayLink] setPaused:NO];

@@ -22,6 +22,8 @@
 #import "STKImageSharer.h"
 #import "STKPostController.h"
 #import "STKLuminatingBar.h"
+#import "STKSearchUsersViewController.h"
+#import "STKExploreViewController.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
@@ -31,6 +33,8 @@
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *cardView;
+@property (weak, nonatomic) IBOutlet UIView *instructionView;
+
 @property (nonatomic, strong) UIImage *cardToolbarNormalImage;
 @property (nonatomic) float initialCardViewOffset;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cardViewTopOffset;
@@ -66,7 +70,8 @@
             [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser] fetchDescription:fs completion:completion];
         }];
 
-        
+        [_instructionView setHidden:NO];
+        [[self view] addSubview:_instructionView];
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
         
@@ -114,7 +119,6 @@
             [[c layer] setShadowColor:[[UIColor blackColor] CGColor]];
             [[c layer] setShadowOffset:CGSizeMake(0, 0)];
             [[c layer] setShadowOpacity:.4];
-//            [[c layer] setShadowRadius:];
         }
         
         [[[c headerView] backdropFadeView] setAlpha:1];
@@ -336,8 +340,6 @@
     if([[STKUserStore store] currentUser]) {
         [self fetchNewPosts];
     }
-
-
 }
 
 - (void)menuWillAppear:(BOOL)animated
@@ -360,11 +362,14 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if([[[self postController] posts] count] > 0){
+        [_instructionView setHidden:YES];
+    }
+    
     return [[[self postController] posts] count];
 }
 
@@ -375,6 +380,26 @@
     [c populateWithPost:[[[self postController] posts] objectAtIndex:[indexPath row]]];
     
     return c;
+}
+
+- (IBAction)findFriends:(id)sender
+{
+    STKSearchUsersViewController *stvc = [[STKSearchUsersViewController alloc] initWithSearchType:STKSearchUsersToFollow];
+    [[self navigationController] pushViewController:stvc animated:YES];
+}
+
+- (IBAction)stuffWeLike:(id)sender
+{
+    STKExploreViewController *evc = [[STKExploreViewController alloc] init];
+    [evc setExploreType:STKExploreTypeFeatured];
+    [[self navigationController] pushViewController:evc animated:YES];
+}
+
+- (IBAction)trending:(id)sender
+{
+    STKExploreViewController *evc = [[STKExploreViewController alloc] init];
+    [evc setExploreType:STKExploreTypePopular];
+    [[self navigationController] pushViewController:evc animated:YES];
 }
 
 

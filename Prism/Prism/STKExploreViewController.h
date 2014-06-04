@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    STKExploreTypeLatest = 0,
+    STKExploreTypePopular = 1,
+    STKExploreTypeFeatured = 2
+} STKExploreType;
+
 @interface STKExploreViewController : UIViewController
 
+- (void)setExploreType:(STKExploreType)type;
 @end

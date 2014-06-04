@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKSearchTrustsViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKSearchUsersViewController">
             <connections>
                 <outlet property="blurView" destination="4s0-yf-wvq" id="vly-jX-Jmc"/>
                 <outlet property="searchResultsTableView" destination="i2W-9G-KzE" id="Waz-TO-jgw"/>
