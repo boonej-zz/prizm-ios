@@ -190,40 +190,21 @@
 - (void)updateCell:(STKSearchTrustCell *)c withTrust:(STKTrust *)trust
 {
     if(!trust || [trust isCancelled]) {
-        if([[[STKUserStore store] currentUser] isInstitution]) {
-            [[c trustButton] setTitle:@"Request Luminary" forState:UIControlStateNormal];
-            [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -90, 0, 0)];
-        } else {
-            [[c trustButton] setTitle:@"Request Trust" forState:UIControlStateNormal];
-            [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -60, 0, 0)];
-        }
         [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
-        
-        [[c trustButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 95, 0, 0)];
     } else {
         if([trust isPending]) {
             if([[trust recepient] isEqual:[[STKUserStore store] currentUser]]) {
-                [[c trustButton] setTitle:@"Accept" forState:UIControlStateNormal];
-                [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -20, 0, 0)];
                 [[c trustButton] setImage:[UIImage imageNamed:@"activity_accept_trust"] forState:UIControlStateNormal];
             } else {
-                [[c trustButton] setTitle:@"Requested" forState:UIControlStateNormal];
-                [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -50, 0, 0)];
                 [[c trustButton] setImage:[UIImage imageNamed:@"reject"] forState:UIControlStateNormal];
             }
         } else if([trust isRejected]) {
             if([[trust recepient] isEqual:[[STKUserStore store] currentUser]]) {
-                [[c trustButton] setTitle:@"Request Trust" forState:UIControlStateNormal];
-                [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -20, 0, 0)];
                 [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
             } else {
-                [[c trustButton] setTitle:@"Requested" forState:UIControlStateNormal];
-                [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -50, 0, 0)];
                 [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
             }
         } else if([trust isAccepted]) {
-            [[c trustButton] setTitle:@"Trusted" forState:UIControlStateNormal];
-            [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -25, 0, 0)];
             [[c trustButton] setImage:[UIImage imageNamed:@"btn_trust"] forState:UIControlStateNormal];
         }
     }
