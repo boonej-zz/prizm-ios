@@ -36,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *pieChartPercentageLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *lifetimeActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *graphActivityIndicator;
+@property (weak, nonatomic) IBOutlet UIView *instructionsView;
 
 @property (nonatomic, strong) NSArray *orderArray;
 @property (nonatomic, strong) NSDictionary *typePercentages;
@@ -190,6 +191,12 @@
     
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
+        if(![vals count] > 0){
+            [[self instructionsView] setHidden:NO];
+        }else{
+            [[self instructionsView] setHidden:YES];
+        }
+        
         [[self lifetimeActivityIndicator] stopAnimating];
         if(!err) {
             int total = 0;

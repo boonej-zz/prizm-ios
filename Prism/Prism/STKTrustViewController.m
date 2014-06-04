@@ -43,6 +43,7 @@
 @property (weak, nonatomic) IBOutlet UIView *trustTypeContainer;
 @property (weak, nonatomic) IBOutlet UIImageView *trustTypeBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UILabel *trustTypeLabel;
+@property (weak, nonatomic) IBOutlet UIView *instructionsView;
 
 @property (nonatomic, weak) STKUser *selectedUser;
 @property (nonatomic, strong) NSArray *trustTypes;
@@ -254,6 +255,11 @@
         }
         
         [self configureInterface];
+        
+        if(![[[self trustView] users] count] > 0){
+            [[self instructionsView] setHidden:NO];
+            [[self trustView] setHidden:YES];
+        }
     }];
     
     [self configureInterface];
