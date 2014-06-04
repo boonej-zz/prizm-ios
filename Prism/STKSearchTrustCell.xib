@@ -20,32 +20,28 @@
                         <color key="textColor" red="0.23344397668393779" green="0.23344397668393779" blue="0.23344397668393779" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ab8-7U-saC">
-                        <rect key="frame" x="178" y="10" width="122" height="24"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                        <inset key="titleEdgeInsets" minX="-55" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <inset key="imageEdgeInsets" minX="95" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <state key="normal" title="Request Trust" image="btn_trust">
-                            <color key="titleColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <connections>
-                            <action selector="toggleTrust:" destination="2" eventType="touchUpInside" id="w1e-7W-vPJ"/>
-                        </connections>
-                    </button>
                     <view contentMode="scaleToFill" id="7et-gZ-jKt" customClass="STKAvatarView">
                         <rect key="frame" x="10" y="4" width="35" height="35"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fbZ-Fp-CCp" userLabel="trust button">
+                        <rect key="frame" x="273" y="10" width="44" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" image="btn_trust">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="toggleTrust:" destination="2" eventType="touchUpInside" id="R7g-gi-liK"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
             </tableViewCellContentView>
             <connections>
                 <outlet property="avatarView" destination="7et-gZ-jKt" id="0Pg-2N-NEu"/>
                 <outlet property="nameLabel" destination="DLx-wG-Oym" id="rXB-AQ-pmJ"/>
-                <outlet property="trustButton" destination="ab8-7U-saC" id="298-zj-BIk"/>
+                <outlet property="trustButton" destination="fbZ-Fp-CCp" id="B1I-gc-jAH"/>
             </connections>
         </tableViewCell>
     </objects>

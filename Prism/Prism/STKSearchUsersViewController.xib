@@ -39,7 +39,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aa6-D6-gwL">
-                    <rect key="frame" x="0.0" y="64" width="270" height="50"/>
+                    <rect key="frame" x="0.0" y="64" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="explore_search_blue" translatesAutoresizingMaskIntoConstraints="NO" id="dCd-rF-xQO">
@@ -51,7 +51,7 @@
                             </constraints>
                         </imageView>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search by name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Tq5-eT-nmf">
-                            <rect key="frame" x="53" y="10" width="214" height="30"/>
+                            <rect key="frame" x="53" y="10" width="264" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="7IU-tc-T4V"/>
@@ -75,24 +75,10 @@
                         <constraint firstAttribute="centerY" secondItem="dCd-rF-xQO" secondAttribute="centerY" id="tIS-y3-0md"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nfh-Oy-Cml">
-                    <rect key="frame" x="270" y="64" width="50" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.30588235289999999" green="0.46274509800000002" blue="0.61568627450000002" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="50" id="ZSf-Hp-kcR"/>
-                        <constraint firstAttribute="width" constant="50" id="xrh-hk-Bb1"/>
-                    </constraints>
-                    <state key="normal" image="searchfilter_filteron">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="Nfh-Oy-Cml" firstAttribute="leading" secondItem="aa6-D6-gwL" secondAttribute="trailing" id="4ua-Us-ChK"/>
                 <constraint firstItem="4s0-yf-wvq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="4xE-8h-EcE"/>
-                <constraint firstItem="Nfh-Oy-Cml" firstAttribute="top" secondItem="aa6-D6-gwL" secondAttribute="top" id="6i9-xz-44d"/>
                 <constraint firstAttribute="bottom" secondItem="i2W-9G-KzE" secondAttribute="bottom" id="D5i-HW-WML"/>
                 <constraint firstAttribute="trailing" secondItem="jg2-PJ-oVD" secondAttribute="trailing" id="I3k-g6-OaV"/>
                 <constraint firstAttribute="bottom" secondItem="jg2-PJ-oVD" secondAttribute="bottom" id="O8h-ld-ZSk"/>
@@ -100,7 +86,7 @@
                 <constraint firstItem="aa6-D6-gwL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="XE4-fY-pl3"/>
                 <constraint firstItem="jg2-PJ-oVD" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="YRk-Ht-KaM"/>
                 <constraint firstItem="i2W-9G-KzE" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="bH5-Lt-Zr5"/>
-                <constraint firstAttribute="trailing" secondItem="aa6-D6-gwL" secondAttribute="trailing" constant="50" id="bJQ-6T-9bR"/>
+                <constraint firstAttribute="trailing" secondItem="aa6-D6-gwL" secondAttribute="trailing" id="bJQ-6T-9bR"/>
                 <constraint firstAttribute="trailing" secondItem="4s0-yf-wvq" secondAttribute="trailing" id="crj-jc-b8S"/>
                 <constraint firstItem="aa6-D6-gwL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gJc-5z-zxB"/>
                 <constraint firstItem="jg2-PJ-oVD" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="hKS-sX-lwH"/>
@@ -115,6 +101,5 @@
     <resources>
         <image name="explore_search_blue" width="22" height="22"/>
         <image name="img_background" width="320" height="568"/>
-        <image name="searchfilter_filteron" width="56" height="56"/>
     </resources>
 </document>
