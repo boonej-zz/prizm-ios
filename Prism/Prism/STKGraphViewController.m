@@ -374,7 +374,7 @@
         [orderedColors addObject:[UIColor colorWithRed:.29 green:.35 blue:.54 alpha:1]];
         
         [[self pieChartPercentageLabel] setHidden:NO];
-        [[self pieChartPercentageLabel] setText:[NSString stringWithFormat:@"%d%%",(int)v]];
+        [[self pieChartPercentageLabel] setText:[NSString stringWithFormat:@"%d%%",(int)(v*100)]];
     } else {
         for(NSString *key in [self orderArray]) {
             [orderedColors addObject:[[self typeColors] objectForKey:key]];
