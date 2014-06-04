@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -19,6 +19,7 @@
                 <outlet property="passionButton" destination="3kD-xS-BfU" id="sBc-bP-WyK"/>
                 <outlet property="percentTableView" destination="k7u-Cp-1Um" id="DcB-yq-kf2"/>
                 <outlet property="personalButton" destination="z6p-OR-5Ld" id="Z2d-Fy-GAg"/>
+                <outlet property="pieChartPercentageLabel" destination="WPc-Un-RL7" id="LVh-76-WOv"/>
                 <outlet property="pieChartView" destination="bbw-nr-E7X" id="jQP-JU-Geb"/>
                 <outlet property="rightDateLabel" destination="W53-H2-bAG" id="1wE-hQ-QNY"/>
                 <outlet property="underlayView" destination="eyr-wJ-YQY" id="5MB-rd-HY1"/>
@@ -61,10 +62,21 @@
                         <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bbw-nr-E7X" customClass="STKPieChartView">
                             <rect key="frame" x="20" y="52" width="120" height="120"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WPc-Un-RL7" userLabel="percentage label">
+                                    <rect key="frame" x="39" y="50" width="42" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="120" id="5xu-Lg-sUd"/>
                                 <constraint firstAttribute="width" constant="120" id="AV1-Hs-59V"/>
+                                <constraint firstAttribute="centerY" secondItem="WPc-Un-RL7" secondAttribute="centerY" constant="-0.5" id="Gf1-ES-0TN"/>
+                                <constraint firstAttribute="centerX" secondItem="WPc-Un-RL7" secondAttribute="centerX" id="h4J-IK-a4s"/>
                             </constraints>
                         </view>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="20" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="k7u-Cp-1Um">
