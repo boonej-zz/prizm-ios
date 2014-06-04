@@ -88,6 +88,7 @@
     STKSearchUsersViewController *searchController = [[STKSearchUsersViewController alloc] init];
 
     [[self navigationController] pushViewController:searchController animated:YES];
+    [[self menuController] setMenuVisible:NO animated:YES];
 }
 
 - (void)viewDidLoad
