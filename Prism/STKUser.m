@@ -77,6 +77,7 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
              @"followers_count" : @"followerCount",
              @"following_count" : @"followingCount",
              @"posts_count" : @"postCount",
+             @"trust_count" : @"trustCount",
              
              @"instagram_token" : @"instagramToken",
              @"instagram_min_id" : @"instagramLastMinID",
@@ -142,6 +143,21 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
 - (BOOL)isFollowingUser:(STKUser *)u
 {
     return [[self following] member:u] != nil;
+}
+
+- (BOOL)shouldDisplayGraphInstructions
+{
+    return ![self postCount] > 0;
+}
+
+- (BOOL)shouldDisplayHomeFeedInstructions
+{
+    return !([self trustCount] + [self followingCount]) > 0;
+}
+
+- (BOOL)shouldDisplayTrustInstructions
+{
+    return ![self trustCount] > 0;
 }
 
 - (BOOL)hasTrusts

@@ -191,7 +191,7 @@
     
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
-        if(![vals count] > 0){
+        if([[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]){
             [[self instructionsView] setHidden:NO];
         }else{
             [[self instructionsView] setHidden:YES];

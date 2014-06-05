@@ -79,6 +79,7 @@ extern NSString * const STKUserSubTypeLuminary;
 @property (nonatomic) int followerCount;
 @property (nonatomic) int followingCount;
 @property (nonatomic) int postCount;
+@property (nonatomic) int trustCount;
 
 @property (nonatomic, strong) NSSet *ownedTrusts;
 @property (nonatomic, strong) NSSet *receivedTrusts;
@@ -100,6 +101,10 @@ extern NSString * const STKUserSubTypeLuminary;
 - (STKTrust *)trustForUser:(STKUser *)u;
 - (BOOL)isFollowedByUser:(STKUser *)u;
 - (BOOL)isFollowingUser:(STKUser *)u;
+
+- (BOOL)shouldDisplayGraphInstructions;
+- (BOOL)shouldDisplayHomeFeedInstructions;
+- (BOOL)shouldDisplayTrustInstructions;
 
 - (BOOL)isInstitution;
 

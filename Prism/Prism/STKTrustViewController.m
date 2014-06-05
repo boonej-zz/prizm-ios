@@ -238,7 +238,7 @@
         }];
     }
     
-    if([[[[STKUserStore store] currentUser] trusts] count] > 0) {
+    if([[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]) {
         [[self instructionsView] setHidden:YES];
     } else {
         [[self instructionsView] setHidden:NO];

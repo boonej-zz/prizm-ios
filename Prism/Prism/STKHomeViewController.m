@@ -307,6 +307,13 @@
 
     [[self luminatingBar] setLuminating:YES];
     [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        
+        if([[[STKUserStore store] currentUser] shouldDisplayHomeFeedInstructions]){
+            [[self instructionView] setHidden:NO];
+        }else{
+            [[self instructionView] setHidden:YES];
+        }
+
         [self setFetchInProgress:NO];
         [[self luminatingBar] setLuminating:NO];
         [[self tableView] reloadData];
@@ -331,12 +338,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if([[[STKUserStore store] currentUser] followingCount] > 0) {
-        [[self instructionView] setHidden:YES];
-    } else {
-        [[self instructionView] setHidden:NO];
-    }
     
     [[[self blurView] displayLink] setPaused:NO];
     
