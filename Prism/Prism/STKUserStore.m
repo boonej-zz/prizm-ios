@@ -954,6 +954,25 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)searchUserNotInTrustWithName:(NSString *)name completion:(void (^)(id data, NSError *error))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err){
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *conn = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/search", [[self currentUser] uniqueID], @"invite", name]];
+        [conn setModelGraph:@[@"STKUser"]];
+        [conn setContext:[self context]];
+        [conn setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [conn setShouldReturnArray:YES];
+        [conn getWithSession:[self session] completionBlock:^(NSArray *users, NSError *err) {
+            block(users, err);
+        }];
+    }];
+}
+
 - (void)fetchActivityForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *activities, NSError *err))block
 {/*
     NSArray *cached = nil;

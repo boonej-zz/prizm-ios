@@ -101,29 +101,38 @@
         return;
     }
     
-    [[STKUserStore store] searchUsersWithName:searchString completion:^(NSArray *profiles, NSError *err) {
-        
-        if([self searchType] == STKSearchUsersNotInTrust){
-            STKUser *currentUser = [[STKUserStore store] currentUser];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self != %@", currentUser];
-            profiles = [profiles filteredArrayUsingPredicate:predicate];
+    if([self searchType] == STKSearchUsersNotInTrust){
+        [[STKUserStore store] searchUserNotInTrustWithName:searchString completion:^(NSArray *users, NSError *error) {
+            if(!error && [users count] > 0){
+                [self setProfilesFound:users];
+                [self reloadSearchResults];
+            }
+        }];
+    }else{
+        [[STKUserStore store] searchUsersWithName:searchString completion:^(NSArray *profiles, NSError *err) {
             
-            NSMutableArray *trustless = [NSMutableArray array];
-            [profiles enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                STKUser *u = (STKUser *)obj;
-                STKTrust *trust = [currentUser trustForUser:u];
-                if (trust == nil || [trust isCancelled]) {
-                    [trustless addObject:u];
-                }
-            }];
+//            if([self searchType] == STKSearchUsersNotInTrust){
+//                STKUser *currentUser = [[STKUserStore store] currentUser];
+//                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self != %@", currentUser];
+//                profiles = [profiles filteredArrayUsingPredicate:predicate];
+//                
+//                NSMutableArray *trustless = [NSMutableArray array];
+//                [profiles enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                    STKUser *u = (STKUser *)obj;
+//                    STKTrust *trust = [currentUser trustForUser:u];
+//                    if (trust == nil || [trust isCancelled]) {
+//                        [trustless addObject:u];
+//                    }
+//                }];
+//                
+//                [self setProfilesFound:trustless];
+//            }else{
+                [self setProfilesFound:profiles];
+//            }
             
-            [self setProfilesFound:trustless];
-        }else{
-            [self setProfilesFound:profiles];
-        }
-        
-        [self reloadSearchResults];
-    }];
+            [self reloadSearchResults];
+        }];
+    }
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField

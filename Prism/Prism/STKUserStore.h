@@ -84,6 +84,7 @@ typedef enum {
 - (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)fetchTrustPostsForTrust:(STKTrust *)t type:(STKTrustPostType)type completion:(void (^)(NSArray *posts, NSError *err))block;
 - (void)searchUserTrustsWithName:(NSString *)name completion:(void (^)(id data, NSError *error))block;
+- (void)searchUserNotInTrustWithName:(NSString *)name completion:(void (^)(id data, NSError *error))block;
 - (void)updateTrust:(STKTrust *)t toType:(NSString *)type completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 
 - (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSDictionary *weeks, NSError *err))block;
