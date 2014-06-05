@@ -19,6 +19,9 @@ NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.comp
 #elif BASE_URL_STAGING
 NSString * const STKUserBaseURLString = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com";
 NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com/callback";
+#elif BASE_URL_USERTESTING
+NSString * const STKUserBaseURLString = @"https://ec2-54-187-131-68.us-west-2.compute.amazonaws.com";
+NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com/callback";
 #endif
 
 NSString * const STKPrismClientSecret = @"f27198fb-689d-4965-acb0-0e9c5f61ddec";

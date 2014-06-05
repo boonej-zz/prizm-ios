@@ -38,7 +38,9 @@
     CAGradientLayer *l = (CAGradientLayer *)[self layer];
     [l setStartPoint:CGPointMake(0.5, 1)];
     [l setEndPoint:CGPointMake(0.5, 0)];
-    _colors = @[(__bridge id)[[UIColor colorWithWhite:0.2 alpha:0.75] CGColor], (__bridge id)[[UIColor colorWithWhite:0.2 alpha:0.25] CGColor], (__bridge id)[[UIColor colorWithWhite:0.2 alpha:0.0] CGColor]];
+    _colors = @[(__bridge id)[[UIColor colorWithWhite:0.0 alpha:0.55] CGColor],
+//                (__bridge id)[[UIColor colorWithWhite:0.0 alpha:0.25] CGColor],
+                (__bridge id)[[UIColor colorWithWhite:0.0 alpha:0.0] CGColor]];
     [l setColors:_colors];
 }
 

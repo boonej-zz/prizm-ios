@@ -238,6 +238,12 @@
         }];
     }
     
+    if([[[[STKUserStore store] currentUser] trusts] count] > 0) {
+        [[self instructionsView] setHidden:YES];
+    } else {
+        [[self instructionsView] setHidden:NO];
+    }
+    
     [[STKUserStore store] fetchTopTrustsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *trusts, NSError *err) {
         [self setTrusts:trusts];
         NSMutableArray *otherUsers = [[NSMutableArray alloc] init];

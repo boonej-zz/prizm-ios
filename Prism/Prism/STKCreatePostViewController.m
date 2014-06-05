@@ -364,7 +364,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)createPost
 {
     
-    if(![[self postInfo] objectForKey:STKPostURLKey]) {
+    if(![[self postInfo] objectForKey:STKPostURLKey] && ![self isUploadingImage]) {
         // Do a card
         NSString *postText = [[self postInfo] objectForKey:STKPostTextKey];
         UIImage *img = [STKMarkupUtilities imageForText:postText];
@@ -424,7 +424,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                             forKey:STKPostTextKey];
     }
     
-    if(![[self postInfo] objectForKey:STKPostTextKey] && ![[self postInfo] objectForKey:STKPostURLKey]) {
+    if(![[self postInfo] objectForKey:STKPostTextKey] && ![[self postInfo] objectForKey:STKPostURLKey] && ![self isUploadingImage]) {
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Missing Information" message:@"A post must contain an image, text or both." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
     }

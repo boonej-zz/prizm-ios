@@ -509,10 +509,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)followUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block
 {
+    [[self currentUser] setFollowingCount:[[self currentUser] followingCount] + 1];
     [user setFollowerCount:[user followerCount] + 1];
     [[user mutableSetValueForKey:@"followers"] addObject:[self currentUser]];
     
     void (^reversal)(void) = ^{
+        [[self currentUser] setFollowingCount:[[self currentUser] followingCount] - 1];
         [user setFollowerCount:[user followerCount] - 1];
         [[user mutableSetValueForKey:@"followers"] removeObject:[self currentUser]];
         [[self context] save:nil];
@@ -541,10 +543,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)unfollowUser:(STKUser *)user completion:(void (^)(id obj, NSError *err))block
 {
+    [[self currentUser] setFollowingCount:[[self currentUser] followingCount] - 1];
     [[user mutableSetValueForKey:@"followers"] removeObject:[self currentUser]];
     [user setFollowerCount:[user followerCount] - 1];
     
     void (^reversal)(void) = ^{
+        [[self currentUser] setFollowingCount:[[self currentUser] followingCount] + 1];
         [[user mutableSetValueForKey:@"followers"] addObject:[self currentUser]];
         [user setFollowerCount:[user followerCount] + 1];
         [[self context] save:nil];

@@ -70,7 +70,6 @@
             [[STKContentStore store] fetchFeedForUser:[[STKUserStore store] currentUser] fetchDescription:fs completion:completion];
         }];
 
-        [_instructionView setHidden:NO];
         [[self view] addSubview:_instructionView];
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
@@ -333,6 +332,12 @@
 {
     [super viewWillAppear:animated];
     
+    if([[[STKUserStore store] currentUser] followingCount] > 0) {
+        [[self instructionView] setHidden:YES];
+    } else {
+        [[self instructionView] setHidden:NO];
+    }
+    
     [[[self blurView] displayLink] setPaused:NO];
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
@@ -366,10 +371,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if([[[self postController] posts] count] > 0){
-        [_instructionView setHidden:YES];
-    }
-    
     return [[[self postController] posts] count];
 }
 
