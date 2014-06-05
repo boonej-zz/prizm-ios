@@ -40,9 +40,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *exploreTypeControl;
 @property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
-@property (nonatomic, assign) NSInteger forcedExploreType;
-@property (nonatomic, assign) BOOL isForcedExploreType;
-
 
 @property (nonatomic, strong) STKNavigationButton *searchButton;
 @property (nonatomic, strong) UIBarButtonItem *searchButtonItem;
@@ -240,18 +237,6 @@
 
 }
 
-- (STKExploreType)exploreType
-{
-    return (STKExploreType)[[self exploreTypeControl] selectedSegmentIndex];
-}
-
-- (void)setExploreType:(STKExploreType)type
-{
-    [self setForcedExploreType:type];
-    [self setIsForcedExploreType:YES];
-}
-
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -262,11 +247,6 @@
 {
     [super viewWillAppear:animated];
     
-    if([self isForcedExploreType]){
-        [[self exploreTypeControl] setSelectedSegmentIndex:[self forcedExploreType]];
-        [self setIsForcedExploreType:NO];
-    }
- 
     if([self exploreType] == STKExploreTypeLatest)
         [self setActivePostController:[self recentPostsController]];
     else if([self exploreType] == STKExploreTypePopular)
@@ -274,6 +254,8 @@
     else if ([self exploreType] == STKExploreTypeFeatured)
         [self setActivePostController:[self featuredPostsController]];
 
+    [[self exploreTypeControl] setSelectedSegmentIndex:[self exploreType]];
+    
     [[self searchButton] setSelected:[self isSearchBarActive]];
     
     [[[self blurView] displayLink] setPaused:NO];
@@ -322,6 +304,8 @@
 
 - (IBAction)exploreTypeChanged:(UISegmentedControl *)sender
 {
+    [self setExploreType:[sender selectedSegmentIndex]];
+    
     if([self exploreType] == STKExploreTypeLatest)
         [self setActivePostController:[self recentPostsController]];
     else if([self exploreType] == STKExploreTypePopular)

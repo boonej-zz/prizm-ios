@@ -16,5 +16,6 @@ typedef enum {
 
 @interface STKExploreViewController : UIViewController
 
-- (void)setExploreType:(STKExploreType)type;
+@property (nonatomic) STKExploreType exploreType;
+
 @end

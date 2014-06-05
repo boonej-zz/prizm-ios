@@ -88,26 +88,15 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
     // Initialization code
     self.clipsToBounds = YES;
     [self setBackgroundColor:[UIColor clearColor]];
-    // on iOS7 uses the native UIToolbar implementation
-    /*if (UIEDeviceSystemMajorVersion() > 6) {
-     
-     // flag for os version
-     _ios7 = YES;
-     _nativeBlurView = [[UIToolbar alloc] initWithFrame:self.bounds];
-     
-     // add the toolbar layer as sublayer
-     [self.layer insertSublayer:_nativeBlurView.layer atIndex:0];
-     
-     } else {*/
+
     self.userInteractionEnabled = NO;
     _tintLayer = [[CALayer alloc] init];
     _tintLayer.frame = self.bounds;
     _tintLayer.opacity = 0.0;
     [[self layer] addSublayer:_tintLayer];
-    //default tint color
-    self.tintColor = [UIColor blackColor];
-   // }
 
+    
+    self.tintColor = [UIColor blackColor];
 }
 
 - (void)setTintColor:(UIColor*)tintColor
@@ -192,10 +181,12 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
     
     if (superview != nil) {
         
-        //create the display link
-        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(refresh)];
-        _displayLink.frameInterval = (NSInteger)(ceil(60.0/UIERealTimeBlurViewFPS));
-        [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+        if([[UIScreen mainScreen] bounds].size.height > 500) {
+            //create the display link
+            _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(refresh)];
+            _displayLink.frameInterval = (NSInteger)(ceil(60.0/UIERealTimeBlurViewFPS));
+            [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+        }
 
     } else {
         
@@ -208,7 +199,6 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
 /*** Manually performs the refresh of the blurred background */
 - (void)refresh
 {
-    if (_ios7) return;
     
     if (self.superview != nil) {
         [self uie_renderLayerWithView:self.superview];

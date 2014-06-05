@@ -391,16 +391,18 @@
 
 - (IBAction)stuffWeLike:(id)sender
 {
-    STKExploreViewController *evc = [[STKExploreViewController alloc] init];
-    [evc setExploreType:STKExploreTypeFeatured];
-    [[self navigationController] pushViewController:evc animated:YES];
+    UINavigationController *nvc = (UINavigationController *)[[self menuController] childViewControllerForType:[STKExploreViewController class]];
+    STKExploreViewController *vc = [[nvc viewControllers] firstObject];
+    [vc setExploreType:STKExploreTypeFeatured];
+    [[self menuController] setSelectedViewController:nvc];
 }
 
 - (IBAction)trending:(id)sender
 {
-    STKExploreViewController *evc = [[STKExploreViewController alloc] init];
-    [evc setExploreType:STKExploreTypePopular];
-    [[self navigationController] pushViewController:evc animated:YES];
+    UINavigationController *nvc = (UINavigationController *)[[self menuController] childViewControllerForType:[STKExploreViewController class]];
+    STKExploreViewController *vc = [[nvc viewControllers] firstObject];
+    [vc setExploreType:STKExploreTypePopular];
+    [[self menuController] setSelectedViewController:nvc];
 }
 
 

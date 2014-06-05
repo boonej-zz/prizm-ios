@@ -351,6 +351,18 @@
     [[self backgroundImageView] setImage:[self backgroundImage]];
 }
 
+- (UIViewController *)childViewControllerForType:(Class)cls
+{
+    NSLog(@"%@", cls);
+    for(UINavigationController *vc in [self viewControllers]) {
+        NSLog(@"%@ == %@", [vc class], cls);
+        if([[[vc viewControllers] firstObject] isKindOfClass:cls]) {
+            return vc;
+        }
+    }
+    return nil;
+}
+
 - (UIImageView *)transitionImageView
 {
     if(!_transitionImageView) {

@@ -20,6 +20,8 @@
 
 @property (nonatomic, readonly) UIImage *transitioningImage;
 
+- (UIViewController *)childViewControllerForType:(Class)cls;
+
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
 
 // Pass image's rect in vc's view coordinate space
