@@ -10,6 +10,7 @@
 #import "STKCircleView.h"
 #import "STKUser.h"
 #import "STKImageStore.h"
+#import "STKAvatarView.h"
 @import QuartzCore;
 
 @interface STKTrustView ()
@@ -151,9 +152,13 @@
             
             STKUser *u = [[self users] objectAtIndex:i - 1];
             
-            [[STKImageStore store] fetchImageForURLString:[u profilePhotoPath] preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
-                [cv setImage:img];
-            }];
+            if ([u profilePhotoPath]) {
+                [[STKImageStore store] fetchImageForURLString:[u profilePhotoPath] preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
+                    [cv setImage:img];
+                }];
+            } else {
+                [cv setImage:[STKAvatarView defaultAvatarImage:[cv bounds]]];
+            }
         } else {
             [cv setImage:nil];
         }

@@ -10,6 +10,8 @@
 
 @interface STKAvatarView : UIView
 
++ (UIImage *)defaultAvatarImage:(CGRect)rect;
+
 @property (nonatomic, strong) NSString *urlString;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UIColor *overlayColor;

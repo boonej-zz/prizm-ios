@@ -93,7 +93,7 @@
     if([self image]) {
         [[self image] drawInRect:CGRectInset([self bounds], 2, 2)];
     } else {
-        [[STKAvatarView defaultAvatar:rect] drawInRect:[self bounds]];
+        [[STKAvatarView defaultAvatarImage:rect] drawInRect:[self bounds]];
     }
    
     if([self overlayColor]) {
@@ -110,7 +110,7 @@
     [bpInnerStroke stroke];
 }
 
-+ (UIImage *)defaultAvatar:(CGRect)rect
++ (UIImage *)defaultAvatarImage:(CGRect)rect
 {
     if (rect.size.width > 77) {
         return [UIImage imageNamed:@"trust_user_missing_144"];

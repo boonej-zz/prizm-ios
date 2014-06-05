@@ -14,6 +14,7 @@
 #import "UIERealTimeBlurView.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKSearchProfileCell.h"
+#import "STKProfileViewController.h"
 
 @interface STKSearchUsersViewController ()
 
@@ -238,6 +239,18 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView == [self searchResultsTableView]) {
+        if([indexPath row] < [[self profilesFound] count]) {
+            STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+            [pvc setProfile:[[self profilesFound] objectAtIndex:[indexPath row]]];
+            [[self navigationController] pushViewController:pvc animated:YES];
+            
+        }
+    }
 }
 
 - (void)updateCell:(STKSearchTrustCell *)c withTrust:(STKTrust *)trust

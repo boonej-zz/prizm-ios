@@ -70,6 +70,7 @@
         [bp setLineWidth:4];
         [bp addClip];
         
+//        [[STKAvatarView defaultAvatarImage:rect] drawInRect:r];
         [[UIImage imageNamed:@"trust_user_missing"] drawInRect:r];
     }
 }
