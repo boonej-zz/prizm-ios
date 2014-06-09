@@ -29,6 +29,12 @@
 #import "UIImage+BoxBlur.h"
 #import <objc/runtime.h>
 
+@interface UIERealTimeBlurView ()
+
+@property (nonatomic, weak) UIImageView *smallScreenImageView;
+
+@end
+
 /*** Returns the os version */
 NSUInteger UIEDeviceSystemMajorVersion();
 
@@ -180,14 +186,21 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
     if (_renderStatic) return;
     
     if (superview != nil) {
-        
+        UIEDeviceSystemMajorVersion();
         if([[UIScreen mainScreen] bounds].size.height > 500) {
             //create the display link
             _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(refresh)];
             _displayLink.frameInterval = (NSInteger)(ceil(60.0/UIERealTimeBlurViewFPS));
             [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+        } else {
+            self.opaque = YES;
+            if (self.smallScreenImageView == nil) {
+                UIImageView *iv = [[UIImageView alloc] initWithImage:[UIERealTimeBlurView staticImage:[self bounds]]];
+                iv.opaque = YES;
+                [self insertSubview:iv atIndex:0];
+                self.smallScreenImageView = iv;
+            }
         }
-
     } else {
         
         //invalidate and free the display link
@@ -203,6 +216,29 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
     if (self.superview != nil) {
         [self uie_renderLayerWithView:self.superview];
     }
+}
+
++ (UIImage *)staticImage:(CGRect)rect
+{
+    UIGraphicsBeginImageContext(rect.size);
+    [[UIColor colorWithWhite:1.0 alpha:0.2] set];
+    UIRectFill(rect);
+
+    UIImage *overlay = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIImage *bg = [UIImage imageNamed:@"img_background"];
+
+    UIGraphicsBeginImageContext(rect.size);
+    
+    [bg drawAtPoint:CGPointZero];
+    [overlay drawAtPoint:CGPointZero];
+    
+    UIImage *staticImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return staticImage;
 }
 
 @end
