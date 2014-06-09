@@ -96,7 +96,12 @@
             NSRange nameRange = [result rangeAtIndex:1];
             
             NSString *hashTagName = [[str string] substringWithRange:nameRange];
-            [str addAttribute:NSLinkAttributeName value:[NSURL URLWithString:[NSString stringWithFormat:@"%@://%@", STKPostHashTagURLScheme, hashTagName]] range:fullRange];
+            NSString *urlString = [NSString stringWithFormat:@"%@://%@", STKPostHashTagURLScheme, hashTagName];
+            NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            
+            if(url){
+                [str addAttribute:NSLinkAttributeName value:url range:fullRange];
+            }
         }
     }
     
