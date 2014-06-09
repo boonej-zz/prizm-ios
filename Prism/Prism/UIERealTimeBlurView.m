@@ -186,19 +186,18 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
     if (_renderStatic) return;
     
     if (superview != nil) {
-        UIEDeviceSystemMajorVersion();
         if([[UIScreen mainScreen] bounds].size.height > 500) {
             //create the display link
             _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(refresh)];
             _displayLink.frameInterval = (NSInteger)(ceil(60.0/UIERealTimeBlurViewFPS));
             [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         } else {
-            self.opaque = YES;
-            if (self.smallScreenImageView == nil) {
+            [self setOpaque:YES];
+            if ([self smallScreenImageView] == nil) {
                 UIImageView *iv = [[UIImageView alloc] initWithImage:[UIERealTimeBlurView staticImage:[self bounds]]];
-                iv.opaque = YES;
+                [iv setOpaque:YES];
                 [self insertSubview:iv atIndex:0];
-                self.smallScreenImageView = iv;
+                [self setSmallScreenImageView:iv];
             }
         }
     } else {

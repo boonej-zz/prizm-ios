@@ -47,6 +47,9 @@ extern NSString * const STKPostExternalProvider;
 
 @interface STKPost : NSManagedObject <STKJSONObject>
 
++ (UIImage *)imageForType:(NSString *)t;
++ (UIImage *)disabledImageForType:(NSString *)t;
+
 @property (nonatomic, strong) NSString *uniqueID;
 @property (nonatomic) NSString *type;
 @property (nonatomic, strong) NSDate *datePosted;
@@ -79,7 +82,6 @@ extern NSString * const STKPostExternalProvider;
 - (BOOL)isPostLikedByUser:(STKUser *)u;
 
 - (UIImage *)typeImage;
-
-+ (UIImage *)imageForType:(NSString *)t;
+- (UIImage *)disabledTypeImage;
 
 @end

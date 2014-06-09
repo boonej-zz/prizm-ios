@@ -21,6 +21,7 @@
 
 #import <GooglePlus/GooglePlus.h>
 #import <Crashlytics/Crashlytics.h>
+#import "Mixpanel.h"
 
 #import "STKAuthorizationToken.h"
 
@@ -39,6 +40,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [Crashlytics startWithAPIKey:@"e70b092ac5acf46c6e8a86bc59e79c34df550f5f"];
+    [Mixpanel sharedInstanceWithToken:@"73c8b5e42732b21ff8b74d73aabc8f79"];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
