@@ -239,9 +239,11 @@
     }
     
     if([[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]) {
-        [[self instructionsView] setHidden:YES];
-    } else {
         [[self instructionsView] setHidden:NO];
+        [[self trustView] setHidden:YES];
+    } else {
+        [[self instructionsView] setHidden:YES];
+        [[self trustView] setHidden:NO];
     }
     
     [[STKUserStore store] fetchTopTrustsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *trusts, NSError *err) {
