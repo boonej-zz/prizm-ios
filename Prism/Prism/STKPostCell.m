@@ -42,7 +42,7 @@
     if([self overrideLoadingImage])
         [[self contentImageView] setLoadingImage:[self overrideLoadingImage]];
     else
-        [[self contentImageView] setLoadingImage:[p typeImage]];
+        [[self contentImageView] setLoadingImage:[p disabledTypeImage]];
     [[self contentImageView] setUrlString:[p imageURLString]];
     
     if(![self displayFullBleed]) {
@@ -50,7 +50,7 @@
         [[[self headerView] posterLabel] setText:[[p creator] name]];
         [[[self headerView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
     
-        [[[self headerView] postTypeView] setImage:[p typeImage]];
+        [[[self headerView] postTypeView] setImage:[p disabledTypeImage]];
     }
     
     //if the post object is a re-post set FROM the original creator name in the headerviews source label

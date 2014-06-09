@@ -33,7 +33,7 @@
 {
     if(arrayIndex + 0 < [posts count]) {
         STKPost *p = [posts objectAtIndex:arrayIndex + 0];
-        [[self leftImageView] setLoadingImage:[p typeImage]];
+        [[self leftImageView] setLoadingImage:[p disabledTypeImage]];
         [[self leftImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
         [[self leftImageView] setUrlString:[p imageURLString]];
     } else {
@@ -42,7 +42,7 @@
     }
     if(arrayIndex + 1 < [posts count]) {
         STKPost *p = [posts objectAtIndex:arrayIndex + 1];
-        [[self centerImageView] setLoadingImage:[p typeImage]];
+        [[self centerImageView] setLoadingImage:[p disabledTypeImage]];
         [[self centerImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
         [[self centerImageView] setUrlString:[p imageURLString]];
     } else {
@@ -52,7 +52,7 @@
     
     if(arrayIndex + 2 < [posts count]) {
         STKPost *p = [posts objectAtIndex:arrayIndex + 2];
-        [[self rightImageView] setLoadingImage:[p typeImage]];
+        [[self rightImageView] setLoadingImage:[p disabledTypeImage]];
         [[self rightImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
         [[self rightImageView] setUrlString:[p imageURLString]];
     } else {

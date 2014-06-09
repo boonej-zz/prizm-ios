@@ -129,6 +129,11 @@ type, fInverseFeed, activities, derivativePosts, tags, creatorType, accoladeRece
     return [[self class] imageForType:[self type]];
 }
 
+- (UIImage *)disabledTypeImage
+{
+    return [[self class] disabledImageForType:[self type]];
+}
+
 + (UIImage *)imageForType:(NSString *)t
 {
     NSDictionary *m = @{STKPostTypeAchievement : @"category_achievements_sm",
@@ -136,6 +141,23 @@ type, fInverseFeed, activities, derivativePosts, tags, creatorType, accoladeRece
                         STKPostTypeExperience : @"category_experiences_sm",
                         STKPostTypeInspiration : @"category_inspiration_sm",
                         STKPostTypePassion : @"category_passions_sm"};
+    
+    NSString *imageName = m[t];
+    
+    if(imageName) {
+        return [UIImage imageNamed:imageName];
+    }
+    
+    return nil;
+}
+
++ (UIImage *)disabledImageForType:(NSString *)t
+{
+    NSDictionary *m = @{STKPostTypeAchievement : @"category_achievements_disabled",
+                        STKPostTypeAspiration : @"category_aspirations_disabled",
+                        STKPostTypeExperience : @"category_experiences_disabled",
+                        STKPostTypeInspiration : @"category_inspiration_disabled",
+                        STKPostTypePassion : @"category_passions_disabled"};
     
     NSString *imageName = m[t];
     
