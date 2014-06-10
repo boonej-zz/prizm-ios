@@ -147,17 +147,17 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
 
 - (BOOL)shouldDisplayGraphInstructions
 {
-    return ![self postCount] > 0;
+    return [self postCount] == 0;
 }
 
 - (BOOL)shouldDisplayHomeFeedInstructions
 {
-    return !([self trustCount] + [self followingCount]) > 0;
+    return ([self trustCount] + [self followingCount]) == 0;
 }
 
 - (BOOL)shouldDisplayTrustInstructions
 {
-    return ![self trustCount] > 0;
+    return [self trustCount] == 0;
 }
 
 - (BOOL)hasTrusts
