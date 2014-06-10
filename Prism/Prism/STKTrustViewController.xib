@@ -198,7 +198,7 @@
                         <constraint firstItem="3eZ-Ub-i6c" firstAttribute="leading" secondItem="Vzt-QN-V70" secondAttribute="leading" id="zSY-lo-HJf"/>
                     </constraints>
                 </view>
-                <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4L1-nw-zS3" userLabel="Instructions View">
+                <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4L1-nw-zS3" userLabel="Instructions View">
                     <rect key="frame" x="0.0" y="64" width="320" height="310"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -253,6 +253,7 @@
                 <constraint firstAttribute="trailing" secondItem="ION-au-gvc" secondAttribute="trailing" id="2Zd-sy-IFf"/>
                 <constraint firstAttribute="bottom" secondItem="Vzt-QN-V70" secondAttribute="bottom" constant="-101" id="6GV-Bg-mtY"/>
                 <constraint firstItem="Mdr-on-fv4" firstAttribute="top" secondItem="1" secondAttribute="top" id="6ov-H4-7Cj"/>
+                <constraint firstItem="4L1-nw-zS3" firstAttribute="leading" secondItem="alL-qq-7Ni" secondAttribute="leading" id="7KR-yg-V2h"/>
                 <constraint firstAttribute="trailing" secondItem="RwR-nx-6cr" secondAttribute="trailing" id="93a-qS-tIn"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="width" secondItem="4L1-nw-zS3" secondAttribute="width" id="FH5-J0-Qgt"/>
                 <constraint firstItem="RwR-nx-6cr" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GZf-0y-PHO"/>
@@ -260,6 +261,7 @@
                 <constraint firstAttribute="bottom" secondItem="8x9-xm-oZA" secondAttribute="bottom" constant="6" id="M4L-MZ-bHi"/>
                 <constraint firstAttribute="trailing" secondItem="Vzt-QN-V70" secondAttribute="trailing" id="NnA-Mj-4us"/>
                 <constraint firstAttribute="trailing" secondItem="yrH-qv-7qp" secondAttribute="trailing" id="SGt-fu-GHE"/>
+                <constraint firstItem="4L1-nw-zS3" firstAttribute="top" secondItem="alL-qq-7Ni" secondAttribute="top" id="Taa-Yk-f6Q"/>
                 <constraint firstAttribute="trailing" secondItem="Mdr-on-fv4" secondAttribute="trailing" id="V4V-Te-B9y"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="WHr-oL-3Es"/>
                 <constraint firstItem="Vzt-QN-V70" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bAy-Zx-FEy"/>
