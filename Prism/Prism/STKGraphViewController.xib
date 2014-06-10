@@ -13,9 +13,6 @@
                 <outlet property="graphActivityIndicator" destination="8oh-Ql-GTd" id="3al-cQ-lNJ"/>
                 <outlet property="graphView" destination="lb5-pg-axI" id="IRu-ez-n8E"/>
                 <outlet property="inspirationButton" destination="8GX-AC-QCw" id="sNL-rI-Ly5"/>
-                <outlet property="instructionsFooterView" destination="IU8-eI-r4t" id="DdG-vP-CyO"/>
-                <outlet property="instructionsHeaderDescription" destination="XgD-X4-FhD" id="UQr-yR-y85"/>
-                <outlet property="instructionsHeaderView" destination="phB-8j-3p1" id="g7j-yG-W7r"/>
                 <outlet property="instructionsView" destination="sY6-CH-TCQ" id="Oo2-DI-je3"/>
                 <outlet property="leftDateLabel" destination="J0X-hG-6hC" id="agD-XW-Wmo"/>
                 <outlet property="lifetimeActivityIndicator" destination="4p7-9Z-b8g" id="kFq-ZR-QrL"/>
@@ -304,7 +301,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" white="1" alpha="0.25" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -325,7 +322,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                                 </view>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XgD-X4-FhD" userLabel="Description">
                                     <rect key="frame" x="15" y="55" width="290" height="93"/>
@@ -339,7 +336,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" white="1" alpha="0.25" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

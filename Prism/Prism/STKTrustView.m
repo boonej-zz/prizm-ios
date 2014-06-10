@@ -116,23 +116,6 @@
     [[[self circleViews] objectAtIndex:3] setCenter:CGPointMake(b.size.width / 2.0 + 45, indexHeight3)];
     [[[self circleViews] objectAtIndex:4] setCenter:CGPointMake(b.size.width / 2.0 - 90, indexHeight4)];
     [[[self circleViews] objectAtIndex:5] setCenter:CGPointMake(b.size.width / 2.0 - 90, indexHeight5)];
-    
-//    if([UIScreen mainScreen].bounds.size.height > 568){
-//        [[[self circleViews] objectAtIndex:0] setCenter:CGPointMake(b.size.width / 2.0, b.size.height / 2.0)];
-//        [[[self circleViews] objectAtIndex:1] setCenter:CGPointMake(b.size.width - 75, 175)];
-//        [[[self circleViews] objectAtIndex:2] setCenter:CGPointMake(b.size.width / 2.0 + 35, b.size.height / 2.0 - 85)];
-//        [[[self circleViews] objectAtIndex:3] setCenter:CGPointMake(b.size.width / 2.0 + 45, b.size.height / 2.0 + 90)];
-//        [[[self circleViews] objectAtIndex:4] setCenter:CGPointMake(b.size.width / 2.0 - 90, b.size.height / 2.0 + 70)];
-//        [[[self circleViews] objectAtIndex:5] setCenter:CGPointMake(b.size.width / 2.0 - 90, b.size.height / 2.0 - 87)];
-//    }else{
-//        //device is a 3.5
-//        [[[self circleViews] objectAtIndex:0] setCenter:CGPointMake(b.size.width / 2.0, b.size.height / 2.0)];
-//        [[[self circleViews] objectAtIndex:1] setCenter:CGPointMake(b.size.width - 75, 120)];
-//        [[[self circleViews] objectAtIndex:2] setCenter:CGPointMake(b.size.width / 2.0 + 35, b.size.height / 2.0 - 75)];
-//        [[[self circleViews] objectAtIndex:3] setCenter:CGPointMake(b.size.width / 2.0 + 45, b.size.height / 2.0 + 80)];
-//        [[[self circleViews] objectAtIndex:4] setCenter:CGPointMake(b.size.width / 2.0 - 90, b.size.height / 2.0 + 60)];
-//        [[[self circleViews] objectAtIndex:5] setCenter:CGPointMake(b.size.width / 2.0 - 90, b.size.height / 2.0 - 77)];
-//    }
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex

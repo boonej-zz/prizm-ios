@@ -37,9 +37,6 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *lifetimeActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *graphActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *instructionsView;
-@property (weak, nonatomic) IBOutlet UIView *instructionsHeaderView;
-@property (weak, nonatomic) IBOutlet UIView *instructionsHeaderDescription;
-@property (weak, nonatomic) IBOutlet UIView *instructionsFooterView;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *pieChartPercentLabelYConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *pieChartPercentLabelXConstraint;
@@ -201,14 +198,6 @@
     
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
-        if([[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]) {
-            [[self instructionsHeaderView] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5f]];
-            [[self instructionsHeaderDescription] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.3f]];
-            [[self instructionsFooterView] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.3f]];
-            [[self instructionsView] setHidden:NO];
-        } else {
-            [[self instructionsView] setHidden:YES];
-        }
         
         [[self lifetimeActivityIndicator] stopAnimating];
         if(!err) {
@@ -269,6 +258,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if([[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]) {
+        [[self instructionsView] setHidden:NO];
+    } else {
+        [[self instructionsView] setHidden:YES];
+    }
     
     [[self lifetimeLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     [[[self lifetimeLabel] layer] setCornerRadius:2];

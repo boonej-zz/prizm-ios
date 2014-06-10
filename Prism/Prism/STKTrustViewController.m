@@ -44,8 +44,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *trustTypeBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UILabel *trustTypeLabel;
 @property (weak, nonatomic) IBOutlet UIView *instructionsView;
-@property (weak, nonatomic) IBOutlet UIView *instructionsViewHeader;
-@property (weak, nonatomic) IBOutlet UIView *instructionsViewDescription;
 
 @property (nonatomic, weak) STKUser *selectedUser;
 @property (nonatomic, strong) NSArray *trustTypes;
@@ -239,8 +237,6 @@
     }
     
     if([[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]) {
-        [[self instructionsViewHeader] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.4f]];
-        [[self instructionsViewDescription] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.2f]];
         [[self instructionsView] setHidden:NO];
         [[self trustView] setHidden:YES];
     } else {

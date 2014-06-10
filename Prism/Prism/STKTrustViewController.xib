@@ -10,8 +10,6 @@
                 <outlet property="countView" destination="RwR-nx-6cr" id="XKi-sa-zJl"/>
                 <outlet property="dateLabel" destination="8x9-xm-oZA" id="Qy4-hT-2ZE"/>
                 <outlet property="instructionsView" destination="4L1-nw-zS3" id="COg-kn-XMe"/>
-                <outlet property="instructionsViewDescription" destination="AKf-El-GXa" id="EGC-MQ-aiF"/>
-                <outlet property="instructionsViewHeader" destination="02s-c6-I8N" id="TIi-nH-GOJ"/>
                 <outlet property="numberImageView" destination="aaD-L5-veV" id="LIp-PG-nlQ"/>
                 <outlet property="optionConstraint" destination="6GV-Bg-mtY" id="tGH-8d-HmB"/>
                 <outlet property="selectedNameLabel" destination="II4-Au-G5q" id="g8C-Hh-MMX"/>
@@ -204,11 +202,11 @@
                     <rect key="frame" x="0.0" y="64" width="320" height="310"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="jrm-bd-v5J">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="jrm-bd-v5J">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="310"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SpI-sr-Lfm" userLabel="header">
+                        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SpI-sr-Lfm" userLabel="header">
                             <rect key="frame" x="15" y="15" width="290" height="200"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -216,40 +214,38 @@
                                     <rect key="frame" x="0.0" y="0.0" width="290" height="40"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This is your Trust." textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b2E-r9-rX4">
+                                        <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This is your Trust." textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b2E-r9-rX4">
                                             <rect key="frame" x="0.0" y="0.0" width="290" height="44"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                                 </view>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AKf-El-GXa" userLabel="description">
                                     <rect key="frame" x="0.0" y="40" width="290" height="144"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="15" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="4jT-Xy-uYa">
-                                            <rect key="frame" x="5" y="-13" width="280" height="169"/>
+                                        <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="15" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="270" translatesAutoresizingMaskIntoConstraints="NO" id="4jT-Xy-uYa">
+                                            <rect key="frame" x="10" y="-13" width="270" height="169"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <string key="text">It’s the top 100 people who make up your brain trust and give you advice. Their opinions matter most to you. Add them in the upper right corner. They’ll be ranked on their activity in your Prizm.</string>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" secondItem="jrm-bd-v5J" secondAttribute="height" id="0qH-4U-hG6"/>
-                        <constraint firstAttribute="width" secondItem="jrm-bd-v5J" secondAttribute="width" id="FfE-Tb-pI8"/>
-                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.6845703125" green="0.6845703125" blue="0.6845703125" alpha="0.0" colorSpace="calibratedRGB"/>
