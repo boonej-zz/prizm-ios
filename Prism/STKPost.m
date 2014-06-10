@@ -154,7 +154,7 @@ type, fInverseFeed, activities, derivativePosts, tags, creatorType, accoladeRece
 + (UIImage *)disabledImageForType:(NSString *)t
 {
     NSDictionary *m = @{STKPostTypeAchievement : @"category_achievements_disabled",
-                        STKPostTypeAspiration : @"category_aspirations_disabled",
+                        STKPostTypeAspiration : @"category_aspiration_disabled",
                         STKPostTypeExperience : @"category_experiences_disabled",
                         STKPostTypeInspiration : @"category_inspiration_disabled",
                         STKPostTypePassion : @"category_passions_disabled"};
