@@ -37,6 +37,12 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *lifetimeActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *graphActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *instructionsView;
+@property (weak, nonatomic) IBOutlet UIView *instructionsHeaderView;
+@property (weak, nonatomic) IBOutlet UIView *instructionsHeaderDescription;
+@property (weak, nonatomic) IBOutlet UIView *instructionsFooterView;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pieChartPercentLabelYConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pieChartPercentLabelXConstraint;
 
 @property (nonatomic, strong) NSArray *orderArray;
 @property (nonatomic, strong) NSDictionary *typePercentages;
@@ -86,7 +92,6 @@
                               STKPostTypeInspiration : @"Inspiration",
                               STKPostTypePersonal : @"Personal"}];
         
-    
     }
     return self;
 }
@@ -189,11 +194,19 @@
 {
     [super viewWillAppear:animated];
     
+    if ([[UIScreen mainScreen] bounds].size.height < 500){
+       [[self pieChartPercentLabelYConstraint] setConstant: -15];
+       [[self pieChartPercentLabelXConstraint] setConstant: +5];
+    }
+    
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
-        if([[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]){
+        if([[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]) {
+            [[self instructionsHeaderView] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5f]];
+            [[self instructionsHeaderDescription] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.3f]];
+            [[self instructionsFooterView] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.3f]];
             [[self instructionsView] setHidden:NO];
-        }else{
+        } else {
             [[self instructionsView] setHidden:YES];
         }
         

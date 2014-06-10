@@ -43,6 +43,8 @@
 @property (nonatomic, strong) NSMutableArray *reusableCards;
 @property (nonatomic, strong) NSMutableDictionary *cardMap;
 @property (nonatomic, strong) UINib *homeCellNib;
+@property (weak, nonatomic) IBOutlet UIView *instructionHeaderView;
+@property (weak, nonatomic) IBOutlet UIView *instructionDescriptionView;
 
 @property (nonatomic, strong) STKBackdropView *backdropView;
 
@@ -71,6 +73,10 @@
         }];
 
         [[self view] addSubview:_instructionView];
+        
+        [[self instructionHeaderView] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.4f]];
+        [[self instructionDescriptionView] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.2f]];
+        
         _cardMap = [[NSMutableDictionary alloc] init];
         _reusableCards = [[NSMutableArray alloc] init];
         

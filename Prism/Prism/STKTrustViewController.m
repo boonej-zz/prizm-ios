@@ -44,6 +44,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *trustTypeBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UILabel *trustTypeLabel;
 @property (weak, nonatomic) IBOutlet UIView *instructionsView;
+@property (weak, nonatomic) IBOutlet UIView *instructionsViewHeader;
+@property (weak, nonatomic) IBOutlet UIView *instructionsViewDescription;
 
 @property (nonatomic, weak) STKUser *selectedUser;
 @property (nonatomic, strong) NSArray *trustTypes;
@@ -69,8 +71,6 @@
         [view addTarget:self action:@selector(addNewTrust:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
         [[self navigationItem] setRightBarButtonItem:bbi];
-        
-        
         
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_trust"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_trust_selected"]];
@@ -239,6 +239,8 @@
     }
     
     if([[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]) {
+        [[self instructionsViewHeader] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.4f]];
+        [[self instructionsViewDescription] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.2f]];
         [[self instructionsView] setHidden:NO];
         [[self trustView] setHidden:YES];
     } else {

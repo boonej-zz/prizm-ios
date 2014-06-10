@@ -8,6 +8,10 @@
 
 #import "STKPieChartView.h"
 
+@interface STKPieChartView()
+
+@end
+
 @implementation STKPieChartView
 
 - (id)initWithFrame:(CGRect)frame
@@ -33,13 +37,25 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    float w = [self bounds].size.width;
-    float h = [self bounds].size.height;
-    float diameter = w;
-    CGPoint center = CGPointMake(w / 2.0, h / 2.0);
-    float arcRadius = diameter / 2.0 - 8.0;
-    float lineWidth = 16;
     
+    float w, h, lineWidth, diameter;
+    CGPoint center;
+    
+    if([UIScreen mainScreen].bounds.size.height > 500){
+        w = [self bounds].size.width;
+        h = [self bounds].size.height;
+        lineWidth = 16;
+        diameter = w;
+        center = CGPointMake(w / 2.0, h / 2.0);
+    }else{
+        w = [self bounds].size.width - 35;
+        h = [self bounds].size.height + 35;
+        lineWidth = 12;
+        diameter = w;
+        center = CGPointMake(w / 2.0 + 10, h / 2.0);
+    }
+    
+    float arcRadius = diameter / 2.0 - 8.0;
     float angle = -M_PI / 2.0;
     for(int i = 0; i < [[self colors] count]; i++) {
         if(i < [[self values] count]) {

@@ -13,6 +13,9 @@
                 <outlet property="graphActivityIndicator" destination="8oh-Ql-GTd" id="3al-cQ-lNJ"/>
                 <outlet property="graphView" destination="lb5-pg-axI" id="IRu-ez-n8E"/>
                 <outlet property="inspirationButton" destination="8GX-AC-QCw" id="sNL-rI-Ly5"/>
+                <outlet property="instructionsFooterView" destination="IU8-eI-r4t" id="DdG-vP-CyO"/>
+                <outlet property="instructionsHeaderDescription" destination="XgD-X4-FhD" id="UQr-yR-y85"/>
+                <outlet property="instructionsHeaderView" destination="phB-8j-3p1" id="g7j-yG-W7r"/>
                 <outlet property="instructionsView" destination="sY6-CH-TCQ" id="Oo2-DI-je3"/>
                 <outlet property="leftDateLabel" destination="J0X-hG-6hC" id="agD-XW-Wmo"/>
                 <outlet property="lifetimeActivityIndicator" destination="4p7-9Z-b8g" id="kFq-ZR-QrL"/>
@@ -20,6 +23,8 @@
                 <outlet property="passionButton" destination="3kD-xS-BfU" id="sBc-bP-WyK"/>
                 <outlet property="percentTableView" destination="k7u-Cp-1Um" id="DcB-yq-kf2"/>
                 <outlet property="personalButton" destination="z6p-OR-5Ld" id="Z2d-Fy-GAg"/>
+                <outlet property="pieChartPercentLabelXConstraint" destination="h4J-IK-a4s" id="xu4-LJ-ja9"/>
+                <outlet property="pieChartPercentLabelYConstraint" destination="Gf1-ES-0TN" id="vJW-hR-yDu"/>
                 <outlet property="pieChartPercentageLabel" destination="WPc-Un-RL7" id="LVh-76-WOv"/>
                 <outlet property="pieChartView" destination="bbw-nr-E7X" id="jQP-JU-Geb"/>
                 <outlet property="rightDateLabel" destination="W53-H2-bAG" id="1wE-hQ-QNY"/>
@@ -283,42 +288,62 @@
                     <rect key="frame" x="0.0" y="72" width="320" height="496"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cwv-IA-h2m">
-                            <rect key="frame" x="0.0" y="-8" width="320" height="165"/>
+                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BnT-70-D79" userLabel="Footer">
+                            <rect key="frame" x="15" y="219" width="290" height="103"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3pt-N5-w2o">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="165"/>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IU8-eI-r4t" userLabel="Footer Title">
+                                    <rect key="frame" x="0.0" y="26" width="290" height="93"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="It will help you connect the dots between where you are now and where you want to be" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="222" translatesAutoresizingMaskIntoConstraints="NO" id="v8m-bZ-ny3">
-                                            <rect key="frame" x="69" y="47" width="222" height="71"/>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your Graph will build based on the category and hashtags of your posts. " textAlignment="center" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="270" translatesAutoresizingMaskIntoConstraints="NO" id="YTa-pm-WCG">
+                                            <rect key="frame" x="10" y="-5" width="270" height="93"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cwv-IA-h2m" userLabel="Header">
+                            <rect key="frame" x="0.0" y="-8" width="320" height="165"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="phB-8j-3p1" userLabel="Header Title">
+                                    <rect key="frame" x="15" y="15" width="290" height="40"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This is your Graph" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hk-7X-SZ1">
-                                            <rect key="frame" x="20" y="20" width="320" height="21"/>
+                                            <rect key="frame" x="-15" y="10" width="320" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="19"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <color key="tintColor" white="0.28102189781021897" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XgD-X4-FhD" userLabel="Description">
+                                    <rect key="frame" x="15" y="55" width="290" height="93"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="It will help you connect the dots between where you are now and where you want to be" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="222" translatesAutoresizingMaskIntoConstraints="NO" id="v8m-bZ-ny3">
+                                            <rect key="frame" x="34" y="23" width="222" height="54"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                            <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your Graph will build based on the category and hashtags of your posts. " lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="140" translatesAutoresizingMaskIntoConstraints="NO" id="YTa-pm-WCG">
-                            <rect key="frame" x="20" y="243" width="140" height="165"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
-                            <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
@@ -330,7 +355,10 @@
                 <constraint firstAttribute="trailing" secondItem="W53-H2-bAG" secondAttribute="trailing" constant="8" id="3Y5-u8-hrz"/>
                 <constraint firstAttribute="trailing" secondItem="9dF-5u-Y3r" secondAttribute="trailing" id="4zH-wS-Bj8"/>
                 <constraint firstItem="KmK-bA-jTu" firstAttribute="top" secondItem="J1K-iY-ESY" secondAttribute="bottom" id="5B2-fe-TD1"/>
+                <constraint firstItem="cwv-IA-h2m" firstAttribute="height" secondItem="lb5-pg-axI" secondAttribute="height" id="5cY-Mk-2yb"/>
                 <constraint firstItem="eyr-wJ-YQY" firstAttribute="top" secondItem="1" secondAttribute="top" id="8e7-ZQ-BLa"/>
+                <constraint firstItem="cwv-IA-h2m" firstAttribute="width" secondItem="lb5-pg-axI" secondAttribute="width" id="Cjd-H3-KTj"/>
+                <constraint firstItem="1Z4-iv-qi4" firstAttribute="width" secondItem="BnT-70-D79" secondAttribute="width" id="DLE-mA-Lxc"/>
                 <constraint firstItem="J1K-iY-ESY" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="DZm-nZ-v0s"/>
                 <constraint firstItem="eyr-wJ-YQY" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="EbN-OS-x5x"/>
                 <constraint firstItem="1Z4-iv-qi4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Gty-Fs-uoe"/>
@@ -341,6 +369,7 @@
                 <constraint firstItem="J0X-hG-6hC" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="Shp-M4-1vb"/>
                 <constraint firstItem="9dF-5u-Y3r" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Soa-yd-E6K"/>
                 <constraint firstItem="9dF-5u-Y3r" firstAttribute="top" secondItem="1Z4-iv-qi4" secondAttribute="bottom" id="YYf-hb-Vw8"/>
+                <constraint firstItem="1Z4-iv-qi4" firstAttribute="height" secondItem="BnT-70-D79" secondAttribute="height" id="afS-i6-Is9"/>
                 <constraint firstItem="1Z4-iv-qi4" firstAttribute="top" secondItem="KmK-bA-jTu" secondAttribute="bottom" id="cYN-Ju-eTN"/>
                 <constraint firstItem="lb5-pg-axI" firstAttribute="centerX" secondItem="8oh-Ql-GTd" secondAttribute="centerX" constant="-0.5" id="eHG-0p-mSf"/>
                 <constraint firstItem="W53-H2-bAG" firstAttribute="top" secondItem="lb5-pg-axI" secondAttribute="bottom" id="ePq-u3-qhB"/>
