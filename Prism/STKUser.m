@@ -38,7 +38,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 @dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
-accountStoreID, instagramLastMinID, instagramToken, phoneNumber;
+accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
