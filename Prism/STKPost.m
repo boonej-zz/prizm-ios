@@ -140,6 +140,7 @@ type, fInverseFeed, activities, derivativePosts, tags, creatorType, accoladeRece
                         STKPostTypeAspiration : @"category_aspirations_sm",
                         STKPostTypeExperience : @"category_experiences_sm",
                         STKPostTypeInspiration : @"category_inspiration_sm",
+                        STKPostTypePersonal : @"category_personal_sm",
                         STKPostTypePassion : @"category_passions_sm"};
     
     NSString *imageName = m[t];
@@ -157,6 +158,7 @@ type, fInverseFeed, activities, derivativePosts, tags, creatorType, accoladeRece
                         STKPostTypeAspiration : @"category_aspiration_disabled",
                         STKPostTypeExperience : @"category_experiences_disabled",
                         STKPostTypeInspiration : @"category_inspiration_disabled",
+                        STKPostTypePersonal : @"category_personal_disabled",
                         STKPostTypePassion : @"category_passions_disabled"};
     
     NSString *imageName = m[t];
