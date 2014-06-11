@@ -388,6 +388,7 @@
 - (IBAction)findFriends:(id)sender
 {
     STKSearchUsersViewController *stvc = [[STKSearchUsersViewController alloc] initWithSearchType:STKSearchUsersToFollow];
+    [stvc setTitle:@"Find Friends"];
     [[self navigationController] pushViewController:stvc animated:YES];
 }
 

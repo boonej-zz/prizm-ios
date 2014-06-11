@@ -36,6 +36,7 @@
     [[STKUserStore store] updateDeviceTokenForCurrentUser:deviceToken];
 }
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -45,7 +46,6 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [self configureAppearanceProxies];
-    
     
     STKUser *u = [[STKUserStore store] currentUser];
     

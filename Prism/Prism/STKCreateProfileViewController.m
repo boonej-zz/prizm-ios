@@ -523,10 +523,7 @@ const long STKCreateProgressGeocoding = 4;
     if(![[self user] gender]) {
         [[self user] setGender:STKUserGenderFemale];
     }
-    
-    UIImage *defaultImage = [UIImage imageNamed:@"coverphotoholder"];
-    [[self coverPhotoImageView] setImage:defaultImage];
-
+  
     // If we got the profile/cover photo from ane external service, upload it to our server
     if([self isEditingProfile]) {
         if([[self user] coverPhotoPath]) {

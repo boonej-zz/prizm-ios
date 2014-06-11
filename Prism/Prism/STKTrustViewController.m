@@ -84,7 +84,7 @@
 - (void)addNewTrust:(id)sender
 {
     STKSearchUsersViewController *searchController = [[STKSearchUsersViewController alloc] init];
-
+    [searchController setTitle:@"Add to Trust"];
     [[self navigationController] pushViewController:searchController animated:YES];
     [[self menuController] setMenuVisible:NO animated:YES];
 }
@@ -163,6 +163,8 @@
 
 - (void)configureInterface
 {
+    [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]];
+    
     if([self selectedUser]) {
         NSUInteger idx = [[[self trustView] users] indexOfObject:[self selectedUser]];
         if(idx == NSNotFound) {
@@ -236,14 +238,6 @@
         }];
     }
     
-    if([[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]) {
-        [[self instructionsView] setHidden:NO];
-        [[self trustView] setHidden:YES];
-    } else {
-        [[self instructionsView] setHidden:YES];
-        [[self trustView] setHidden:NO];
-    }
-    
     [[STKUserStore store] fetchTopTrustsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *trusts, NSError *err) {
         [self setTrusts:trusts];
         NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
@@ -262,11 +256,6 @@
         }
         
         [self configureInterface];
-        
-        if(![[[self trustView] users] count] > 0){
-            [[self instructionsView] setHidden:NO];
-            [[self trustView] setHidden:YES];
-        }
     }];
     
     [self configureInterface];

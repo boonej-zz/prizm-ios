@@ -50,7 +50,7 @@
         [[[self headerView] posterLabel] setText:[[p creator] name]];
         [[[self headerView] timeLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[p datePosted]]];
     
-        [[[self headerView] postTypeView] setImage:[p disabledTypeImage]];
+        [[[self headerView] postTypeView] setImage:[p typeImage]];
     }
     
     //if the post object is a re-post set FROM the original creator name in the headerviews source label
