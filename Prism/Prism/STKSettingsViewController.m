@@ -17,6 +17,7 @@
 #import "STKAccountChooserViewController.h"
 #import "STKWebViewController.h"
 #import "UIERealTimeBlurView.h"
+#import "STKSearchUsersViewController.h"
 
 @import Social;
 @import Accounts;
@@ -75,7 +76,11 @@
 
 - (NSArray *)friendsSettings
 {
-    return @[];
+    return @[@{@"title" : @"Find Friends on Prizm", @"type" : @"STKLabelCell", @"selectionSelector" : @"findFriends:"},
+             @{@"title" : @"Add Friends", @"type" : @"STKLabelCell", @"selectionSelector" : @"addFriends:"},
+             @{@"title" : @"Invite Friends", @"type" : @"STKLabelCell", @"selectionSelector" : @"inviteFriends:"},
+             @{@"title" : @"Share your Prizm", @"type" : @"STKLabelCell", @"selectionSelector" : @"shareYourPrizm:"}
+             ];
 }
 
 - (NSArray *)notificationSettings
@@ -166,6 +171,28 @@
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"No E-mail setup" message:@"Please set up an e-mail account in your device's settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
     }
+}
+
+- (void)findFriends:(id)sender
+{
+    STKSearchUsersViewController *stvc = [[STKSearchUsersViewController alloc] initWithSearchType:STKSearchUsersToFollow];
+    [stvc setTitle:@"Find Friends"];
+    [[self navigationController] pushViewController:stvc animated:YES];
+}
+
+- (void)addFriends:(id)sender
+{
+    
+}
+
+- (void)inviteFriends:(id)sender
+{
+    
+}
+
+- (void)shareYourPrizm:(id)sender
+{
+    
 }
 
 - (void)connectTwitterAccount:(ACAccount *)acct
