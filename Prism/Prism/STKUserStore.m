@@ -278,7 +278,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     _currentUser = currentUser;
     
     if(currentUser) {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert];
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
         
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser uniqueID]
                                                   forKey:STKUserStoreCurrentUserKey];
