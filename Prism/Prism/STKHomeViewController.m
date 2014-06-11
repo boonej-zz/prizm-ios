@@ -307,13 +307,7 @@
     [[self luminatingBar] setLuminating:YES];
     [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
         
-        if ([[[STKUserStore store] currentUser] shouldDisplayHomeFeedInstructions]) {
-            [[self instructionView] setHidden:NO];
-            [[self tableView] setHidden:YES];
-        } else {
-            [[self instructionView] setHidden:YES];
-            [[self tableView] setHidden:NO];
-        }
+        [[self instructionView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayHomeFeedInstructions]];
 
         [self setFetchInProgress:NO];
         [[self luminatingBar] setLuminating:NO];
