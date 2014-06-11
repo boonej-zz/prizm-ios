@@ -317,7 +317,19 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     [_activityViewController setExcludedActivityTypes:
      @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail]];
     
+    // revert appearance proxies to get default iOS behavior when sharing through Messages
+    UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:nil
+                                       forBarMetrics:UIBarMetricsDefault];
 
+    UIActivityViewControllerCompletionHandler handler = ^void (NSString *activityType, BOOL completed) {
+        // restore appearance proxies to original
+        [[UINavigationBar appearance] setBackgroundImage:backgroundImage
+                                           forBarMetrics:UIBarMetricsDefault];
+    };
+    
+    [_activityViewController setCompletionHandler:handler];
+    
     return [self activityViewController];
 }
 
