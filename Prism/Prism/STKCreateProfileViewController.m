@@ -27,6 +27,7 @@
 #import "STKSegmentedPanel.h"
 #import "STKItemListViewController.h"
 #import "STKExploreViewController.h"
+#import "UIERealTimeBlurView.h"
 
 @import AddressBook;
 @import Social;
@@ -72,6 +73,7 @@ const long STKCreateProgressGeocoding = 4;
 @property (weak, nonatomic) IBOutlet UIView *coverOverlayView;
 @property (nonatomic, getter = isEditingProfile) BOOL editingProfile;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topOffset;
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 - (IBAction)previousTapped:(id)sender;
 - (IBAction)nextTapped:(id)sender;
@@ -500,6 +502,8 @@ const long STKCreateProgressGeocoding = 4;
         [[[self user] managedObjectContext] discardChangesToEditableObject:[self user]];
         [self setUser:nil];
     }
+    
+    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -594,6 +598,8 @@ const long STKCreateProgressGeocoding = 4;
                                         }];
         }
     }
+    
+    [[[self blurView] displayLink] setPaused:NO];
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
