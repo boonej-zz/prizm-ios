@@ -724,11 +724,10 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             if(!err) {
                 [post setFInverseFeed:[[STKUserStore store] currentUser]];
                 [[[STKUserStore store] context] save:nil];
+            } else {
+                int postCount = [[[STKUserStore store] currentUser] postCount];
+                [[[STKUserStore store] currentUser]  setPostCount:postCount+1];
             }
-
-            int postCount = [[[STKUserStore store] currentUser] postCount];
-            [[[STKUserStore store] currentUser]  setPostCount:postCount+1];
-
             block(post, err);
         }];
     }];
