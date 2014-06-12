@@ -15,8 +15,8 @@ typedef enum {
 } STKQueryObjectPage;
 
 typedef enum {
-    STKQueryObjectSortAscending = -1,
-    STKQueryObjectSortDescending = 1
+    STKQueryObjectSortAscending = 1,
+    STKQueryObjectSortDescending = -1
 } STKQueryObjectSort;
 
 extern NSString * const STKQueryObjectFormatBasic;
