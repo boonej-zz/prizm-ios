@@ -726,6 +726,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
                 [[[STKUserStore store] context] save:nil];
             }
 
+            int postCount = [[[STKUserStore store] currentUser] postCount];
+            [[[STKUserStore store] currentUser]  setPostCount:postCount+1];
+
             block(post, err);
         }];
     }];

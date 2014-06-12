@@ -291,8 +291,7 @@
     
     [[self postController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
         [self setFetchInProgress:NO];
-        [[self tableView] reloadData];
-        [self layoutCards];
+        [self configureInterface];
     }];
 }
 
@@ -306,13 +305,9 @@
 
     [[self luminatingBar] setLuminating:YES];
     [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-        
-        [[self instructionView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayHomeFeedInstructions]];
-
         [self setFetchInProgress:NO];
         [[self luminatingBar] setLuminating:NO];
-        [[self tableView] reloadData];
-        [self layoutCards];
+        [self configureInterface];
     }];
 }
 
@@ -341,6 +336,15 @@
     if([[STKUserStore store] currentUser]) {
         [self fetchNewPosts];
     }
+    
+    [self configureInterface];
+}
+
+- (void)configureInterface
+{
+    [[self instructionView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayHomeFeedInstructions]];
+    [[self tableView] reloadData];
+    [self layoutCards];
 }
 
 - (void)menuWillAppear:(BOOL)animated

@@ -152,7 +152,7 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount;
 
 - (BOOL)shouldDisplayHomeFeedInstructions
 {
-    return ([self trustCount] + [self followingCount]) == 0;
+    return ([self postCount] + [self trustCount] + [self followingCount]) == 0;
 }
 
 - (BOOL)shouldDisplayTrustInstructions
