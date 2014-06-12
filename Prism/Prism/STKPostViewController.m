@@ -361,18 +361,17 @@
         
     } 
 
-    [self configureEditPostButton];
+    [[self editPostButton] setHidden:[self shouldHideEditButton]];
     
     [[self tableView] reloadData];
 }
 
-- (void)configureEditPostButton
+- (BOOL)shouldHideEditButton
 {
     if([[[[self post] creator] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
-        [[self editPostButton] setHidden:NO];
-    } else {
-        [[self editPostButton] setHidden:YES];
+        return NO;
     }
+    return YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -479,10 +478,7 @@
 
     [[self dismissButtonImageView] setHidden:NO];
 
-    /* 
-     Reconfigure editPostButton. keyboardWillAppear: always hides it... We don't always need to reveal it
-     */
-    [self configureEditPostButton];
+    [[self editPostButton] setHidden:[self shouldHideEditButton]];
     
     [self setEditingPostText:NO];
 
