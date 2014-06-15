@@ -84,7 +84,7 @@
         [nvc presentViewController:registerNVC animated:NO completion:nil];
     }
     
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 
     
     return YES;
