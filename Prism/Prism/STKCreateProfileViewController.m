@@ -313,6 +313,7 @@ const long STKCreateProgressGeocoding = 4;
         [[self profilePhotoButton] setTitleColor:STKLightBlueColor forState:UIControlStateNormal];
         [[self avatarView] setHidden:YES];
     }
+
 }
 
 - (CGFloat)topOffsetConstant
@@ -602,6 +603,7 @@ const long STKCreateProgressGeocoding = 4;
     }
     
     [[[self blurView] displayLink] setPaused:NO];
+    [[self blurView] setHidden:![self isEditingProfile]];
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
