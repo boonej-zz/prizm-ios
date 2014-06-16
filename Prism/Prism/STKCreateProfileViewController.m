@@ -221,7 +221,7 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                        ];
-            _requiredKeys = @[@"email", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"subtype", @"phoneNumber", @"zipCode"];
+            _requiredKeys = @[@"email", @"firstName", @"zipCode", @"subtype", @"phoneNumber", @"zipCode"];
         } else {
             _items = @[
                        // Public
@@ -254,7 +254,7 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                        ];
-            _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+            _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode"];
         }
         
         
