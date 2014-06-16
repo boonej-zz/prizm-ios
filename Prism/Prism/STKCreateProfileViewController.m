@@ -288,6 +288,8 @@ const long STKCreateProgressGeocoding = 4;
 - (void)configureInterface
 {
     [[self backgroundImageView] setHidden:![self isEditingProfile]];
+    [[[self blurView] displayLink] setPaused:![self isEditingProfile]];
+    [[self blurView] setHidden:![self isEditingProfile]];
         
     if([[self user] coverPhotoPath] || [[self user] coverPhoto] || [self progressMask] & STKCreateProgressUploadingCover) {
         [[self coverOverlayView] setHidden:NO];
@@ -504,7 +506,7 @@ const long STKCreateProgressGeocoding = 4;
         [self setUser:nil];
     }
     
-    [[[self blurView] displayLink] setPaused:YES];
+    [[[self blurView] displayLink] setPaused:[self isEditingProfile]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -601,9 +603,6 @@ const long STKCreateProgressGeocoding = 4;
                                         }];
         }
     }
-    
-    [[[self blurView] displayLink] setPaused:NO];
-    [[self blurView] setHidden:![self isEditingProfile]];
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
