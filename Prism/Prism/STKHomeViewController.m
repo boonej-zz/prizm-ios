@@ -342,7 +342,12 @@
 
 - (void)configureInterface
 {
-    [[self instructionView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayHomeFeedInstructions]];
+    if([[[self postController] posts] count] > 0) {
+        [[self instructionView] setHidden:YES];
+    } else {
+        [[self instructionView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayHomeFeedInstructions]];
+    }
+    
     [[self tableView] reloadData];
     [self layoutCards];
 }
