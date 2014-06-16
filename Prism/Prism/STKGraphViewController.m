@@ -112,6 +112,11 @@
                                          if(askingWeek == [[self dateBar] lastWeekInYear] && askingYear == [[self dateBar] year]) {
                                              [[self graphActivityIndicator] stopAnimating];
                                          }
+                                         
+                                         if([weeks count] > 0) {
+                                             [[self instructionsView] setHidden:YES];
+                                         }
+                                         
                                          [self addWeeklyEntries:weeks];
                                          [self configureGraphArea];
                                      }];
@@ -188,10 +193,9 @@
 {
     [super viewWillAppear:animated];
     
-    
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
-        
+    
         [[self lifetimeActivityIndicator] stopAnimating];
         if(!err) {
             int total = 0;
@@ -252,11 +256,7 @@
 {
     [super viewDidLoad];
     
-    if([[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]) {
-        [[self instructionsView] setHidden:NO];
-    } else {
-        [[self instructionsView] setHidden:YES];
-    }
+    [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]];
     
     [[self lifetimeLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     [[[self lifetimeLabel] layer] setCornerRadius:2];
