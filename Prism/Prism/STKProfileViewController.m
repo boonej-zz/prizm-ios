@@ -194,23 +194,24 @@ typedef enum {
         [keys addObject:@{@"title" : @"Website:", @"value" : [[self profile] website], @"action" : @"website"}];
     }
     
-    if([[self profile] dateFounded]) {
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"MMMM dd, yyyy"];
-
-        [keys addObject:@{@"title" : @"Founded:", @"value" : [df stringFromDate:[[self profile] dateFounded]]}];
+    // only allow website as general user's additional field
+    if ([[self profile] isInstitution]) {
+        if([[self profile] dateFounded]) {
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            [df setDateFormat:@"MMMM dd, yyyy"];
+            
+            [keys addObject:@{@"title" : @"Founded:", @"value" : [df stringFromDate:[[self profile] dateFounded]]}];
+        }
+        
+        if([[self profile] enrollment]) {
+            [keys addObject:@{@"title" : @"Population:", @"value" : [[self profile] enrollment]}];
+        }
+        
+        if([[self profile] mascotName]) {
+            [keys addObject:@{@"title" : @"Mascot:", @"value" : [[self profile] mascotName]}];
+        }
     }
-
-    if([[self profile] enrollment]) {
-        [keys addObject:@{@"title" : @"Population:", @"value" : [[self profile] enrollment]}];
-    }
-
-    if([[self profile] mascotName]) {
-        [keys addObject:@{@"title" : @"Mascot:", @"value" : [[self profile] mascotName]}];
-    }
-    
     [self setAdditionalInformationKeys:keys];
-    
 }
 
 - (void)determineLuminariesFromTrusts:(NSArray *)trusts
@@ -824,11 +825,7 @@ typedef enum {
             if([self isShowingLuminaries]) {
                 return 1;
             } else {
-                if([[self profile] isInstitution]) {
-                    return 1 + [[self additionalInformationKeys] count];
-                }
-            
-                return 1;
+                return 1 + [[self additionalInformationKeys] count];
             }
         }
     }
