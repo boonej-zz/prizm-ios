@@ -52,7 +52,7 @@
         h = [self bounds].size.height + 35;
         lineWidth = 12;
         diameter = w;
-        center = CGPointMake(w / 2.0 + 10, h / 2.0);
+        center = CGPointMake(w / 2.0 + 10, h / 2.0 - 7);
     }
     
     float arcRadius = diameter / 2.0 - 8.0;
