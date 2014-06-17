@@ -21,6 +21,7 @@
 #import "STKUser.h"
 #import "STKLocationListViewController.h"
 #import "STKFoursquareLocation.h"
+#import "STKHomeViewController.h"
 
 #import "STKMarkupController.h"
 #import "STKMarkupUtilities.h"
@@ -385,7 +386,12 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[STKContentStore store] addPostWithInfo:[self postInfo] completion:^(STKPost *post, NSError *err) {
         [STKProcessingView dismiss];
         if(!err) {
-            [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+            if([self originalPost]) {
+                STKHomeViewController *home = [[STKHomeViewController alloc] init];
+                [[self navigationController] pushViewController:home animated:YES];
+            } else {
+                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+            }
         } else {
             [[STKErrorStore alertViewForError:err delegate:nil] show];
         }
