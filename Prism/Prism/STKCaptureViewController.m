@@ -309,12 +309,12 @@
     if([self type] == STKImageChooserTypeProfile) {
         UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([[self overlayView] bounds], 4, 4)];
         [[self overlayView] setCutPath:bp];
-        [[self dimensionLabel] setText:@"640x640px"];
+        [[self dimensionLabel] setText:@"256x256px"];
     } else if([self type] == STKImageChooserTypeCover) {
         float h = STKUserCoverPhotoSize.height;
         UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(2, (320.0 - h) / 2.0, 316.0, h)];
         [[self overlayView] setCutPath:bp];
-        [[self dimensionLabel] setText:@"640x1280px"];
+        [[self dimensionLabel] setText:@"640x376px"];
     } else {
         [[self overlayView] setCutPath:nil];
         [[self dimensionLabel] setText:@""];

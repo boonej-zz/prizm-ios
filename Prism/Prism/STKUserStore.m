@@ -256,7 +256,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(err) {
                 return;
             }
-            STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"users", [[self currentUser] uniqueID], @"devices"]];
+            STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [[self currentUser] uniqueID], @"devices"]];
             
             NSString *deviceString = [deviceToken description];
             deviceString = [deviceString stringByReplacingOccurrencesOfString:@"<" withString:@""];

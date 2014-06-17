@@ -116,6 +116,10 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     
     _request = [req copy];
 
+    if(![[self request] URL]) {
+        NSLog(@"OK");
+    }
+    
     NSURLSessionDataTask *dt = [session dataTaskWithRequest:[self request]
                                           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
   /*
