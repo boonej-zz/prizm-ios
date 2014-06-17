@@ -26,6 +26,8 @@
 #import "STKMarkupController.h"
 #import "STKMarkupUtilities.h"
 
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+
 NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 @interface STKCreatePostViewController ()
