@@ -356,8 +356,8 @@
         NSString * fromUser = [NSString stringWithFormat:@"Post via %@", [[[[self post] originalPost] creator] name]];
         [[[self fakeHeaderView] sourceLabel] setText:fromUser];
     } else if([[self post] externalProvider]){
-        NSString *fromProvider = [NSString stringWithFormat:@"Post via %@", [[self post] externalProvider]];
-        [[[self fakeHeaderView] sourceLabel] setText:[fromProvider capitalizedString]];
+        NSString *fromProvider = [NSString stringWithFormat:@"Post via %@", [[[self post] externalProvider] capitalizedString]];
+        [[[self fakeHeaderView] sourceLabel] setText:fromProvider];
         
     } 
 

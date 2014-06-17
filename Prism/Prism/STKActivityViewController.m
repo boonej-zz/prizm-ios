@@ -40,6 +40,10 @@ typedef enum {
 @property (nonatomic, strong) NSMutableArray *requests;
 @property (nonatomic, strong) NSMutableArray *activities;
 
+@property (nonatomic) BOOL activityFetchInProgress;
+@property (nonatomic) BOOL requestFetchInProgress;
+
+
 @property (nonatomic) STKActivityViewControllerType currentType;
 - (IBAction)typeChanged:(id)sender;
 
@@ -109,10 +113,17 @@ typedef enum {
     [fd setDirection:STKQueryObjectPageOlder];
 
     if([self currentType] == STKActivityViewControllerTypeActivity) {
+        if ([self activityFetchInProgress]) {
+            return;
+        }
+        [self setActivityFetchInProgress:YES];
+
+
         [fd setReferenceObject:[[self activities] lastObject]];
         [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser]
                                  fetchDescription:fd
                                         completion:^(NSArray *activities, NSError *err) {
+                                            [self setActivityFetchInProgress:NO];
                                             [[self activities] addObjectsFromArray:activities];
                                             
                                             [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
@@ -128,16 +139,21 @@ typedef enum {
 
 - (void)fetchNewItems
 {
-    [[self luminatingBar] setLuminating:YES];
-
     STKFetchDescription *fd = [[STKFetchDescription alloc] init];
     [fd setDirection:STKQueryObjectPageNewer];
     
     if([self currentType] == STKActivityViewControllerTypeActivity) {
+        if ([self activityFetchInProgress]) {
+            return;
+        }
+        [self setActivityFetchInProgress:YES];
+        [[self luminatingBar] setLuminating:YES];
+
         [fd setReferenceObject:[[self activities] firstObject]];
         [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser]
                                   fetchDescription:fd
                                         completion:^(NSArray *activities, NSError *err) {
+                                            [self setActivityFetchInProgress:NO];
                                             [[self luminatingBar] setLuminating:NO];
                                             [[self activities] addObjectsFromArray:activities];
                                             
@@ -146,11 +162,16 @@ typedef enum {
                                         }];
         
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
+        if ([self requestFetchInProgress]) {
+            return;
+        }
+        [self setRequestFetchInProgress:YES];
+        [[self luminatingBar] setLuminating:YES];
+
         [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:[[self requests] firstObject] completion:^(NSArray *requests, NSError *err) {
             [[self luminatingBar] setLuminating:NO];
             if(!err) {
-                requests = [requests filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"not (uniqueID in %@)", [[self requests] valueForKey:@"uniqueID"]]];
-                
+                [self setRequestFetchInProgress:NO];
                 [[self requests] addObjectsFromArray:requests];
                 [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
                 [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];

@@ -221,7 +221,7 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                        ];
-            _requiredKeys = @[@"email", @"firstName", @"zipCode", @"coverPhotoPath", @"profilePhotoPath", @"subtype", @"phoneNumber", @"zipCode"];
+            _requiredKeys = @[@"email", @"firstName", @"zipCode", @"subtype", @"phoneNumber", @"zipCode"];
         } else {
             _items = @[
                        // Public
@@ -254,7 +254,7 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                        ];
-            _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode", @"coverPhotoPath", @"profilePhotoPath"];
+            _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode"];
         }
         
         
@@ -288,8 +288,6 @@ const long STKCreateProgressGeocoding = 4;
 - (void)configureInterface
 {
     [[self backgroundImageView] setHidden:![self isEditingProfile]];
-    [[[self blurView] displayLink] setPaused:![self isEditingProfile]];
-    [[self blurView] setHidden:![self isEditingProfile]];
         
     if([[self user] coverPhotoPath] || [[self user] coverPhoto] || [self progressMask] & STKCreateProgressUploadingCover) {
         [[self coverOverlayView] setHidden:NO];
@@ -506,7 +504,7 @@ const long STKCreateProgressGeocoding = 4;
         [self setUser:nil];
     }
     
-    [[[self blurView] displayLink] setPaused:[self isEditingProfile]];
+    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -602,6 +600,14 @@ const long STKCreateProgressGeocoding = 4;
                                             [[self tableView] reloadData];
                                         }];
         }
+    }
+    
+    if([self isEditingProfile]) {
+        [[self blurView] setHidden:NO];
+        [[[self blurView] displayLink] setPaused:NO];
+    } else {
+        [[self blurView] setHidden:YES];
+        [[[self blurView] displayLink] setPaused:YES];
     }
 }
 

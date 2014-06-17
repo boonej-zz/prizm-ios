@@ -34,6 +34,7 @@
 
 @property (nonatomic, strong) UIImagePickerController *imagePickerController;
 @property (weak, nonatomic) IBOutlet UIButton *captureButton;
+@property (weak, nonatomic) IBOutlet UILabel *dimensionLabel;
 
 @end
 
@@ -274,6 +275,8 @@
     [[self imageCaptureOutput] setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
     [[[self imageCaptureOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:AVCaptureVideoOrientationPortrait];
     [[self session] addOutput:[self imageCaptureOutput]];
+ 
+    [[self dimensionLabel] setFont:STKFont(11)];
 }
 
 - (CGRect)rectForCameraArea
@@ -306,12 +309,15 @@
     if([self type] == STKImageChooserTypeProfile) {
         UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([[self overlayView] bounds], 4, 4)];
         [[self overlayView] setCutPath:bp];
+        [[self dimensionLabel] setText:@"256x256px"];
     } else if([self type] == STKImageChooserTypeCover) {
         float h = STKUserCoverPhotoSize.height;
         UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(2, (320.0 - h) / 2.0, 316.0, h)];
         [[self overlayView] setCutPath:bp];
+        [[self dimensionLabel] setText:@"640x376px"];
     } else {
         [[self overlayView] setCutPath:nil];
+        [[self dimensionLabel] setText:@""];
     }
     
 }
