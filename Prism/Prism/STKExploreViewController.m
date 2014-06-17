@@ -269,7 +269,7 @@
 {
     STKPostController *pc = [self activePostController];
     [[self luminatingBar] setLuminating:YES];
-    [pc fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+    [pc reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self luminatingBar] setLuminating:NO];
         [[self tableView] reloadData];
     }];
