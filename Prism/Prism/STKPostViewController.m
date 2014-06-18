@@ -925,7 +925,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
            didSelectUser:(STKUser *)user
         forMarkerAtRange:(NSRange)range
 {
-    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
+    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(16), NSForegroundColorAttributeName : STKTextColor}];
     
     if(range.location == NSNotFound) {
         range = NSMakeRange([[[self commentTextView] textStorage] length], 0);
@@ -934,7 +934,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [[[self commentTextView] textStorage] replaceCharactersInRange:range
                                            withAttributedString:str];
     [[[self commentTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+                                                                                              attributes:@{NSFontAttributeName : STKFont(16), NSForegroundColorAttributeName : STKTextColor}]];
     
     NSInteger newIndex = range.location + [str length] + 2;
     [[self commentTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
@@ -952,7 +952,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [[[self commentTextView] textStorage] replaceCharactersInRange:range
                                                      withString:[NSString stringWithFormat:@"#%@ ", hashTag]];
     [[[self commentTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+                                                                                              attributes:@{NSFontAttributeName : STKFont(16), NSForegroundColorAttributeName : STKTextColor}]];
     
     NSInteger newIndex = range.location + [hashTag length] + 2;
     [[self commentTextView] setSelectedRange:NSMakeRange(newIndex, 0)];

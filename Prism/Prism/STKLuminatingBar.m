@@ -69,7 +69,7 @@
         _luminating = luminating;
         
         _luminatingLayer = [CAGradientLayer layer];
-        [_luminatingLayer setFrame:CGRectMake(0, 0, [self bounds].size.width, [self bounds].size.height + 3)];
+        [_luminatingLayer setFrame:CGRectMake(0, 0, [self bounds].size.width, [self bounds].size.height)];
         [_luminatingLayer setStartPoint:CGPointMake(0, 0)];
         [_luminatingLayer setEndPoint:CGPointMake(0, 1)];
         [_luminatingLayer setLocations:@[@0, @(0.5), @1]];
