@@ -116,9 +116,10 @@
             NSString *userID = [[str string] substringWithRange:nameRange];
             STKUser *u = [[STKUserStore store] userForID:userID];
             
-            NSAttributedString *userTag = [[self class] userTagForUser:u attributes:attributes];
-            
-            [str replaceCharactersInRange:fullRange withAttributedString:userTag];
+            if(u){
+                NSAttributedString *userTag = [[self class] userTagForUser:u attributes:attributes];
+                [str replaceCharactersInRange:fullRange withAttributedString:userTag];
+            }
         }
     }
     
