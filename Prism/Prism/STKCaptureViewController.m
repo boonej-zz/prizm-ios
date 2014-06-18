@@ -229,7 +229,6 @@
 
 - (UIImage *)landscapeCroppedCoverCameraImage:(UIImage *)image
 {
-    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
     CGRect cropRect = [self rectForCameraArea];
 
     CGSize sz = [image size];
@@ -249,7 +248,6 @@
     UIImage *croppedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil);
     return croppedImage;
 }
 
