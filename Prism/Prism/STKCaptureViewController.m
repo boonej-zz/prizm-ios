@@ -36,6 +36,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *captureButton;
 @property (weak, nonatomic) IBOutlet UILabel *dimensionLabel;
 
+@property (nonatomic) UIDeviceOrientation deviceOrientation;
+
 @end
 
 @implementation STKCaptureViewController
@@ -175,30 +177,19 @@
 
 - (IBAction)snapPhoto:(id)sender
 {
-    CGRect cropRect = [self rectForCameraArea];
     [[self imageCaptureOutput] captureStillImageAsynchronouslyFromConnection:[[self imageCaptureOutput] connectionWithMediaType:AVMediaTypeVideo]
                                                            completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
                                                                if(!error) {
                                                                    NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                                                                    UIImage *image = [[UIImage alloc] initWithData:imageData];
-                                                                   CGSize sz = [image size];
-
-                                                                   CGSize destSize = CGSizeMake(640, 640);
-                                                                   float diffY = 0;
-                                                                   if([self type] == STKImageChooserTypeCover) {
-                                                                       destSize.height = STKUserCoverPhotoSize.height * 2.0;
-                                                                       diffY += (640.0 - STKUserCoverPhotoSize.height * 2.0) / 2.0;
+                                                                   
+                                                                   UIImage *croppedImage;
+                                                                   if ([self type] == STKImageChooserTypeCover && UIDeviceOrientationIsLandscape([self deviceOrientation])) {
+                                                                       croppedImage = [self landscapeCroppedCoverCameraImage:image];
+                                                                   } else {
+                                                                       croppedImage = [self croppedCameraImage:image];
                                                                    }
-
-                                                                   UIGraphicsBeginImageContextWithOptions(destSize, YES, 1.0);
-                                                                   
-                                                                   float s = destSize.width / sz.width;
-                                                                   CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -diffY);
-                                                                   CGContextScaleCTM(UIGraphicsGetCurrentContext(), s, s);
-                                                                   [image drawInRect:CGRectMake(0, -cropRect.origin.y * 2.0 / s, sz.width, sz.height)];
-                                                                   UIImage *croppedImage = UIGraphicsGetImageFromCurrentImageContext();
-                                                                   UIGraphicsEndImageContext();
-                                                                   
+                                                                   croppedImage = [self updateImageToCurrentOrientation:croppedImage];
                                                                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                                                        _capturedImage = croppedImage;
                                                                        [[self capturedImageView] setImage:croppedImage];
@@ -210,6 +201,56 @@
                                                                    
                                                                }
                                                            }];
+}
+
+- (UIImage *)croppedCameraImage:(UIImage *)image
+{
+    CGRect cropRect = [self rectForCameraArea];
+    
+    CGSize sz = [image size];
+    float diffY = 0;
+    CGSize destSize = CGSizeMake(640, 640);
+    if ([self type] == STKImageChooserTypeCover) {
+        destSize.height = STKUserCoverPhotoSize.height * 2.0;
+        diffY += (640.0 - STKUserCoverPhotoSize.height * 2.0) / 2.0;
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(destSize, YES, 1.0);
+    
+    float s = destSize.width / sz.width;
+    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -diffY);
+    CGContextScaleCTM(UIGraphicsGetCurrentContext(), s, s);
+    [image drawInRect:CGRectMake(0, -cropRect.origin.y * 2.0 / s, sz.width, sz.height)];
+    UIImage *croppedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return croppedImage;
+}
+
+- (UIImage *)landscapeCroppedCoverCameraImage:(UIImage *)image
+{
+    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+    CGRect cropRect = [self rectForCameraArea];
+
+    CGSize sz = [image size];
+    float diffX = 0;
+    CGSize destSize = CGSizeMake(640, 640);
+    if ([self type] == STKImageChooserTypeCover) {
+        destSize.width = STKUserCoverPhotoSize.height * 2.0;
+        diffX += (640.0 - STKUserCoverPhotoSize.height * 2.0) / 2.0;
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(destSize, YES, 1.0);
+    
+    float s = destSize.height / sz.width;
+    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), -diffX, 0);
+    CGContextScaleCTM(UIGraphicsGetCurrentContext(), s, s);
+    [image drawInRect:CGRectMake(0, -cropRect.origin.y * 2.0 / s, sz.width, sz.height)];
+    UIImage *croppedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil);
+    return croppedImage;
 }
 
 - (IBAction)flipCamera:(id)sender
@@ -306,20 +347,7 @@
 
     [self configureInterface];
 
-    if([self type] == STKImageChooserTypeProfile) {
-        UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([[self overlayView] bounds], 4, 4)];
-        [[self overlayView] setCutPath:bp];
-        [[self dimensionLabel] setText:@"256x256px"];
-    } else if([self type] == STKImageChooserTypeCover) {
-        float h = STKUserCoverPhotoSize.height;
-        UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(2, (320.0 - h) / 2.0, 316.0, h)];
-        [[self overlayView] setCutPath:bp];
-        [[self dimensionLabel] setText:@"640x376px"];
-    } else {
-        [[self overlayView] setCutPath:nil];
-        [[self dimensionLabel] setText:@""];
-    }
-    
+    [self configureOverlayView];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -413,6 +441,64 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return [self capturedImageView];
+}
+
+// we need to know what orientation the user thinks they are in
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAll;
+}
+
+- (BOOL)shouldAutorotate
+{
+    [self setDeviceOrientation:[[UIDevice currentDevice] orientation]];
+    return NO;
+}
+
+- (void)setDeviceOrientation:(UIDeviceOrientation)deviceOrientation
+{
+    _deviceOrientation = deviceOrientation;
+    
+    if([self type] == STKImageChooserTypeCover) {
+        [self configureOverlayView];
+    }
+}
+
+- (UIImage *)updateImageToCurrentOrientation:(UIImage *)image
+{
+    if ([self deviceOrientation] == UIDeviceOrientationPortrait) {
+        return image;
+    }
+    
+    NSDictionary *map = @{@(UIDeviceOrientationLandscapeLeft) : @(UIImageOrientationLeft),
+                          @(UIDeviceOrientationLandscapeRight) : @(UIImageOrientationRight),
+                          @(UIDeviceOrientationPortraitUpsideDown) : @(UIImageOrientationDown)};
+    
+    return [UIImage imageWithCGImage:[image CGImage] scale:1.0 orientation:[map[@([self deviceOrientation])] intValue]];
+}
+
+- (void)configureOverlayView
+{
+    if([self type] == STKImageChooserTypeProfile) {
+        UIBezierPath *bp = [UIBezierPath bezierPathWithOvalInRect:CGRectInset([[self overlayView] bounds], 4, 4)];
+        [[self overlayView] setCutPath:bp];
+        [[self dimensionLabel] setText:@"256x256px"];
+    } else if([self type] == STKImageChooserTypeCover) {
+        float h = STKUserCoverPhotoSize.height;
+        
+        UIBezierPath *bp = nil;
+        if (UIDeviceOrientationIsLandscape([self deviceOrientation])) {
+            bp = [UIBezierPath bezierPathWithRect:CGRectMake((320.0 - h) / 2.0, 2, h, 316.0)];
+        } else {
+            bp = [UIBezierPath bezierPathWithRect:CGRectMake(2, (320.0 - h) / 2.0, 316.0, h)];
+        }
+        [[self overlayView] setCutPath:bp];
+        
+        [[self dimensionLabel] setText:@"640x376px"];
+    } else {
+        [[self overlayView] setCutPath:nil];
+        [[self dimensionLabel] setText:@""];
+    }
 }
 
 @end
