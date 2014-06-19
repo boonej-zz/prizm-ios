@@ -17,6 +17,7 @@
 #import "STKContentStore.h"
 #import "STKUserStore.h"
 #import "STKLuminatingBar.h"
+#import "STKFetchDescription.h"
 
 @interface STKUserPostListViewController () <UITableViewDelegate, UITableViewDataSource, STKPostControllerDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *blurViewHeightConstraint;
@@ -200,6 +201,10 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
     __weak STKUserPostListViewController *ws = self;
     if([self user]) {
         [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            if(!([[STKUserStore store] currentUser] == [self user])) {
+                [fs setFilterDictionary:@{@"scope" : @"public"}];
+            }
+
             [[STKContentStore store] fetchProfilePostsForUser:[ws user] fetchDescription:fs completion:completion];
         }];
     } else if([self trust]) {
