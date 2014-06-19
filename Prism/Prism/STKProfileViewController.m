@@ -171,18 +171,23 @@ typedef enum {
             [self refreshProfileViews];
         }];
         
-        __weak STKProfileViewController *ws = self;
-        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
-            if(!([[STKUserStore store] currentUser] == [ws profile])) {
-                [fs setFilterDictionary:@{@"scope" : @"public"}];
-            }
-            [[STKContentStore store] fetchProfilePostsForUser:[ws profile] fetchDescription:fs completion:completion];
-        }];
+        if([[self profile] isActive]){
+            __weak STKProfileViewController *ws = self;
+            [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+                if(!([[STKUserStore store] currentUser] == [ws profile])) {
+                    [fs setFilterDictionary:@{@"scope" : @"public"}];
+                }
+                [[STKContentStore store] fetchProfilePostsForUser:[ws profile] fetchDescription:fs completion:completion];
+            }];
 
-        [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-            [[ws tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionDynamic]
-                            withRowAnimation:UITableViewRowAnimationNone];
-        }];
+            [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+                [[ws tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionDynamic]
+                                withRowAnimation:UITableViewRowAnimationNone];
+            }];
+        } else {
+            //account is inactive. disable corresponding ui
+            [self setPostController:nil];
+        }
     }
     
     [self determineAdditionalInfoFields];
@@ -561,7 +566,7 @@ typedef enum {
     } else
         [[[self profileView] locationLabel] setText:@""];
     
-    if ([p coverPhotoPath]) {
+    if ([p coverPhotoPath] && [[self profile] isActive]) {
         [[[self profileView] coverPhotoImageView] setUrlString:[p coverPhotoPath]];
     } else {
         UIImage *defaultImage = [UIImage imageNamed:@"coverphotoholder"];
@@ -575,7 +580,7 @@ typedef enum {
         [[c accoladesButton] setHidden:YES]; //force hide accolades button for v1
         [[c followButton] setHidden:YES];
         [[c trustButton] setHidden:YES];
-        [[c editButton] setHidden:NO];
+        [[c editButton] setHidden:![[self profile] isActive]];
         [[c messageButton] setHidden:YES];
         
         if([[self profile] isInstitution]) {
@@ -589,7 +594,7 @@ typedef enum {
             [[c trustButton] setHidden:YES];
             [[c messageButton] setHidden:![MFMailComposeViewController canSendMail]];
         } else {
-            [[c trustButton] setHidden:NO];
+            [[c trustButton] setHidden:![[self profile] isActive]];
             [[c messageButton] setHidden:YES];
         }
 
@@ -600,7 +605,7 @@ typedef enum {
             [[c accoladesButton] setHidden:YES]; //force hide accolades button for v1
             
         } else {
-            [[c followButton] setHidden:NO];
+            [[c followButton] setHidden:![[self profile] isActive]];
             [[c accoladesButton] setHidden:YES];
             
             

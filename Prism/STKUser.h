@@ -37,6 +37,9 @@ extern NSString * const STKUserSubTypeCommunity;
 extern NSString * const STKUserSubTypeEducation;
 extern NSString * const STKUserSubTypeLuminary;
 
+extern NSInteger const STKUserStatusActive;
+extern NSInteger const STKUserStatusInActive;
+
 
 @interface STKUser : NSManagedObject <STKJSONObject>
 
@@ -45,6 +48,7 @@ extern NSString * const STKUserSubTypeLuminary;
 @property (nonatomic, retain) NSDate *birthday;
 @property (nonatomic, strong) NSString *city;
 @property (nonatomic, strong) NSDate *dateCreated;
+@property (nonatomic, strong) NSDate *dateDeleted;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *firstName;
 @property (nonatomic, retain) NSString *lastName;
@@ -96,6 +100,7 @@ extern NSString * const STKUserSubTypeLuminary;
 @property (nonatomic, strong) NSSet *postsTaggedIn;
 
 @property (nonatomic, strong) NSString *accountStoreID;
+@property (nonatomic) int status;
 
 - (NSString *)name;
 - (STKTrust *)trustForUser:(STKUser *)u;
@@ -107,6 +112,7 @@ extern NSString * const STKUserSubTypeLuminary;
 - (BOOL)shouldDisplayTrustInstructions;
 
 - (BOOL)isInstitution;
+- (BOOL)isActive;
 
 - (BOOL)hasTrusts;
 - (NSArray *)trusts;

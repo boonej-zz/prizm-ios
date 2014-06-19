@@ -30,6 +30,9 @@ NSString * const STKUserSubTypeCommunity = @"community";
 NSString * const STKUserSubTypeEducation = @"education";
 NSString * const STKUserSubTypeLuminary = @"luminary";
 
+NSInteger const STKUserStatusActive = 0;
+NSInteger const STKUserStatusInActive = 1;
+
 CGSize STKUserCoverPhotoSize = {.width = 320, .height = 188};
 CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 
@@ -38,7 +41,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 @dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
-accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount;
+accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, status, dateDeleted;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
@@ -107,7 +110,9 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount;
                      return [df dateFromString:inValue];
                  }
              }],
-             @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp]
+             @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp],
+             @"delete_date" : [STKBind bindMapForKey:@"dateDeleted" transform:STKBindTransformDateTimestamp],
+             @"status" : @"status"
     };
 }
 
@@ -179,6 +184,11 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount;
 - (BOOL)isInstitution
 {
     return [[self type] isEqualToString:STKUserTypeInstitution] || [[self type] isEqualToString:STKUserTypeInstitutionPending];
+}
+
+- (BOOL)isActive
+{
+    return [self status] == STKUserStatusActive;
 }
 
 /////

@@ -23,7 +23,7 @@
 @import Accounts;
 @import MessageUI;
 
-@interface STKSettingsViewController () <STKAccountChooserDelegate, MFMailComposeViewControllerDelegate>
+@interface STKSettingsViewController () <STKAccountChooserDelegate, MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *settings;
 @property (nonatomic, weak) UIButton *logoutButton;
@@ -70,7 +70,7 @@
              @{@"title" : @"Privacy Policy", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/privacy.html"},
              @{@"title" : @"Support Questions", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/support.html"},
              @{@"title" : @"Version", @"type" : @"STKDetailCell", @"value" : [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge id)kCFBundleVersionKey]},
-             @{@"title" : @"Disable Account", @"type" : @"STKLabelCell"}
+             @{@"title" : @"Disable Account", @"type" : @"STKLabelCell", @"selectionSelector" : @"disableAccount:"}
              ];
 }
 
@@ -195,6 +195,36 @@
     
 }
 
+- (void)disableAccount:(id)sender
+{
+    STKUser *user = [[STKUserStore store] currentUser];
+    [[STKUserStore store] disableUser:user completion:^(STKUser *u, NSError *err) {
+        NSString *title, *message;
+        if(err) {
+            title = @"Disable Account Error";
+            message = err.description;
+        } else {
+            title = @"Disable Account Success";
+            message = @"Your account is now inactive";
+        }
+        
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:title
+                                                     message:message
+                                                    delegate:self
+                                           cancelButtonTitle:@"Dismiss"
+                                           otherButtonTitles:nil , nil];
+        [av show];
+        
+    }];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [[STKUserStore store] logout];
+    }
+}
+
 - (void)connectTwitterAccount:(ACAccount *)acct
 {
     [[[STKUserStore store] currentUser] setTwitterID:[acct username]];
@@ -218,6 +248,7 @@
 {
     NSString *selName = [self actionSelectorForIndexPath:ip];
     if(selName) {
+        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [self performSelector:NSSelectorFromString(selName) withObject:@([sender isOn])];
         return;
     }

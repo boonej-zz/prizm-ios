@@ -62,6 +62,8 @@ typedef enum {
 
 - (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
 
+- (void)disableUser:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block;
+
 - (void)fetchTrustForUser:(STKUser *)user otherUser:(STKUser *)otherUser completion:(void (^)(STKTrust *t, NSError *err))block;
 
 - (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block;

@@ -443,6 +443,28 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)disableUser:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID]]];
+        [c setModelGraph:@[user]];
+        [c setContext:[user managedObjectContext]];
+        [c deleteWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
+            if(!err){
+                [[user managedObjectContext] save:nil];
+                [[self context] save:nil];
+            }
+            block(user, err);
+        }];
+        
+    }];
+}
+
 - (void)fetchUserDetails:(STKUser *)user additionalFields:(NSArray *)fields completion:(void (^)(STKUser *u, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
