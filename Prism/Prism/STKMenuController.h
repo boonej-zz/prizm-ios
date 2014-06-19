@@ -21,7 +21,6 @@
 @property (nonatomic, readonly) UIImage *transitioningImage;
 
 - (UIViewController *)childViewControllerForType:(Class)cls;
-- (UIViewController *)_selectedViewController;
 
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
 

@@ -63,12 +63,6 @@
     return UIStatusBarStyleLightContent;
 }
 
-- (UIViewController *)_selectedViewController
-{
-    NSLog(@"%@", [self selectedViewController]);
-    return [self selectedViewController];
-}
-
 - (void)userBecameUnauthorized:(NSNotification *)note
 {
     if([[self presentedViewController] isKindOfClass:[STKVerticalNavigationController class]]) {
