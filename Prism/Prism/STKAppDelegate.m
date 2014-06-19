@@ -109,6 +109,7 @@
 {
     if([[url scheme] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]]){
         [[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation];
+        return YES;
     }
     
     UIImage *passedUrlImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
