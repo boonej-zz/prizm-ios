@@ -173,6 +173,9 @@ typedef enum {
         
         __weak STKProfileViewController *ws = self;
         [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            if(!([[STKUserStore store] currentUser] == [ws profile])) {
+                [fs setFilterDictionary:@{@"scope" : @"public"}];
+            }
             [[STKContentStore store] fetchProfilePostsForUser:[ws profile] fetchDescription:fs completion:completion];
         }];
 
