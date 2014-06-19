@@ -18,6 +18,7 @@
 #import "STKVerticalNavigationController.h"
 #import "STKUserStore.h"
 #import "STKBaseStore.h"
+#import "UIViewController+STKControllerItems.h"
 
 #import <GooglePlus/GooglePlus.h>
 #import <Crashlytics/Crashlytics.h>
@@ -84,9 +85,6 @@
         [nvc presentViewController:registerNVC animated:NO completion:nil];
     }
     
-//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-
-    
     return YES;
 }
 
@@ -109,8 +107,16 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    if([[url scheme] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]])
+    if([[url scheme] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]]){
         [[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation];
+    }
+    
+    UIImage *passedUrlImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+    if(passedUrlImage){
+        STKMenuController *menuController = (STKMenuController *)[[self window] rootViewController];
+        [menuController transitionToCreatePostWithImage:passedUrlImage];
+    }
+
     return YES;
 }
 

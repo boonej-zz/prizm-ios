@@ -150,6 +150,10 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[STKImageStore store] uploadImage:_postImage thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
         if(postImage == [self postImage]) {
             
+            if(![[self imageView] image]){
+                [[self imageView] setImage:postImage];
+            }
+            
             [self setUploadingImage:NO];
             
             if(!err) {

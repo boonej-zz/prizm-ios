@@ -63,6 +63,12 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (UIViewController *)_selectedViewController
+{
+    NSLog(@"%@", [self selectedViewController]);
+    return [self selectedViewController];
+}
+
 - (void)userBecameUnauthorized:(NSNotification *)note
 {
     if([[self presentedViewController] isKindOfClass:[STKVerticalNavigationController class]]) {
@@ -385,6 +391,25 @@
     STKPostViewController *postVC = [[STKPostViewController alloc] init];
     [postVC setPost:p];
     [[vc navigationController] pushViewController:postVC animated:animated];
+}
+
+- (void)transitionToCreatePostWithImage:(UIImage *)image
+{
+    
+    void (^createPost)(void) = ^{
+        STKCreatePostViewController *cpvc = [[STKCreatePostViewController alloc] init];
+        [cpvc setPostImage:image];
+        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:cpvc];
+        [[self selectedViewController] presentViewController:nvc animated:YES completion:nil];
+    };
+    
+    if([[self selectedViewController] presentedViewController]){
+        [[[self selectedViewController] presentedViewController] dismissViewControllerAnimated:NO completion:^{
+            createPost();
+        }];
+    }else{
+        createPost();
+    }
 }
 
 - (UIImage *)transitioningImage

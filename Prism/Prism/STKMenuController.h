@@ -21,6 +21,7 @@
 @property (nonatomic, readonly) UIImage *transitioningImage;
 
 - (UIViewController *)childViewControllerForType:(Class)cls;
+- (UIViewController *)_selectedViewController;
 
 - (void)setMenuVisible:(BOOL)menuVisible animated:(BOOL)animated;
 
@@ -31,4 +32,6 @@
         inViewController:(UIViewController *)vc
                 animated:(BOOL)animated;
 
+// Pass another applications image to create a new post, dismissing any present modal view
+- (void)transitionToCreatePostWithImage:(UIImage *)image;
 @end

@@ -12,5 +12,6 @@
 @interface STKCreatePostViewController : UIViewController
 
 @property (nonatomic, weak) STKPost *originalPost;
+- (void)setPostImage:(UIImage *)postImage;
 
 @end

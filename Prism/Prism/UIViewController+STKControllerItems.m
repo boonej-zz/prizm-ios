@@ -96,7 +96,6 @@
 
 - (void)createNewPost:(id)sender
 {
-    
     STKCreatePostViewController *cpc = [[STKCreatePostViewController alloc] init];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:cpc];
     [self presentViewController:nvc animated:YES completion:^{
