@@ -91,7 +91,9 @@
             }
         } else {
             [STKProcessingView dismiss];
-            [[STKErrorStore alertViewForError:err delegate:nil] show];
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }];
         }
     }];
 }
@@ -109,7 +111,9 @@
                 [[self navigationController] pushViewController:pvc animated:YES];
             }
         } else {
-            [[STKErrorStore alertViewForError:err delegate:nil] show];
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }];
         }
     }];
 }
@@ -127,7 +131,9 @@
                 [[self navigationController] pushViewController:pvc animated:YES];
             }
         } else {
-            [[STKErrorStore alertViewForError:err delegate:nil] show];
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }];
         }
     }];
 }
