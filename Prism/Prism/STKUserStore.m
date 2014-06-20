@@ -22,6 +22,7 @@
 #import "STKNetworkStore.h"
 #import <Crashlytics/Crashlytics.h>
 #import "STKFetchDescription.h"
+#import "Mixpanel.h"
 
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
@@ -282,15 +283,22 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser uniqueID]
                                                   forKey:STKUserStoreCurrentUserKey];
-    
+        
         [Crashlytics setUserIdentifier:[NSString stringWithFormat:@"%@ %@ %@", [currentUser name], [currentUser uniqueID], [[UIDevice currentDevice] name]]];
-        
-        
+
+        NSString *analyticsIdentifier = [NSString stringWithFormat:@"%@ %@", [currentUser name], [currentUser uniqueID]];
+//        [[Mixpanel sharedInstance] identify:analyticsIdentifier];
+        [[Mixpanel sharedInstance] registerSuperProperties:@{@"Current user" : analyticsIdentifier}];
+        [[Mixpanel sharedInstance] track:@"Session started" properties:@{@"time stamp" : @([[NSDate date] timeIntervalSince1970])}];
     } else {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
         [self setContext:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[self cachePathForDatabase] error:nil];
         [self establishDatabaseAndCurrentUser];
+        if ([[[Mixpanel sharedInstance] currentSuperProperties] count] > 0) {
+            [[Mixpanel sharedInstance] track:@"Session ended" properties:@{@"time stamp" : @([[NSDate date] timeIntervalSince1970])}];
+        }
+        [[Mixpanel sharedInstance] registerSuperProperties:@{}];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserChangedNotification object:self];
@@ -557,6 +565,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 reversal();
             } else {
                 [[self context] save:nil];
+                
+                [self trackFollow:user];
             }
             block(nil, err);
         }];
@@ -1862,6 +1872,22 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     
 }
 
+- (void)trackFollow:(STKUser *)user
+{
+    NSString *followedUserIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
 
+    [[Mixpanel sharedInstance] track:@"User followed" properties:@{@"Target User" : followedUserIdentifier,
+                                                                   @"Target User Id" : [user uniqueID],
+                                                                   @"Following Count" : @([user followingCount])}];
+}
+
+- (void)trackUnfollow:(STKUser *)user
+{
+    NSString *followedUserIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+    
+    [[Mixpanel sharedInstance] track:@"User un-followed" properties:@{@"Target User" : followedUserIdentifier,
+                                                                   @"Target User Id" : [user uniqueID],
+                                                                   @"Following Count" : @([user followingCount])}];
+}
 
 @end

@@ -15,6 +15,7 @@
 #import "UIViewController+STKControllerItems.h"
 #import "STKSearchProfileCell.h"
 #import "STKProfileViewController.h"
+#import "Mixpanel.h"
 
 @interface STKSearchUsersViewController ()
 
@@ -37,7 +38,7 @@
     if (self) {
         [[self navigationItem] setTitle:@"Search"];
         [[self navigationItem] setLeftBarButtonItem:[self backButtonItem]];
-        [self setSearchType:STKSearchUsersNotInTrust];
+        [self setSearchType:STKSearchUsersTypeNotInTrust];
     }
     return self;
 }
@@ -102,7 +103,7 @@
         return;
     }
     
-    if([self searchType] == STKSearchUsersNotInTrust){
+    if([self searchType] == STKSearchUsersTypeNotInTrust) {
         [[STKUserStore store] searchUserNotInTrustWithName:searchString completion:^(NSArray *users, NSError *error) {
             if(!error && [users count] > 0){
                 [self setProfilesFound:users];
@@ -196,7 +197,7 @@
         
     }
     
-    if([self searchType] == STKSearchUsersNotInTrust){
+    if([self searchType] == STKSearchUsersTypeNotInTrust){
         STKSearchTrustCell *c = [STKSearchTrustCell cellForTableView:tableView target:self];
         STKUser *u = [[self profilesFound] objectAtIndex:[indexPath row]];
         [[c nameLabel] setTextColor:STKTextColor];
@@ -321,16 +322,56 @@
         [[STKUserStore store] unfollowUser:u completion:^(id obj, NSError *err) {
             if(!err) {
                 [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
+                [self trackUnfollow:u];
             }
         }];
     } else {
         [[STKUserStore store] followUser:u completion:^(id obj, NSError *err) {
             if(!err) {
                 [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
+                [self trackFollow:u];
             }
         }];
     }
     
+}
+
+- (void)trackViewUser:(STKUser *)user
+{
+    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+    
+    [[Mixpanel sharedInstance] track:@"Search result - view user" properties:@{@"Search filter" : [self searchTypeString],
+                                                                                   @"Search term" : [[self searchTextField] text],
+                                                                                   @"Found user" : userIdentifier
+                                                                                   }];
+}
+
+- (void)trackUnfollow:(STKUser *)user
+{
+    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+    
+    [[Mixpanel sharedInstance] track:@"Search result - unfollow user" properties:@{@"Search filter" : [self searchTypeString],
+                                                                                   @"Search term" : [[self searchTextField] text],
+                                                                                   @"Found user" : userIdentifier
+                                                                                   }];
+}
+
+- (void)trackFollow:(STKUser *)user
+{
+    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+    
+    [[Mixpanel sharedInstance] track:@"Search result - follow user" properties:@{@"Search filter" : [self searchTypeString],
+                                                                                   @"Search term" : [[self searchTextField] text],
+                                                                                   @"Found user" : userIdentifier
+                                                                                   }];
+}
+
+- (NSString *)searchTypeString
+{
+    NSDictionary *map = @{@(STKSearchUsersTypeToFollow) : @"user to follow",
+                          @(STKSearchUsersTypeNotInTrust) : @"user to trust"};
+    
+    return map[@([self searchType])];
 }
 
 @end

@@ -16,8 +16,9 @@
 #import "STKFoursquareConnection.h"
 #import "STKFoursquareLocation.h"
 #import "STKPostComment.h"
-#import "STKPostComment.h"
 #import "STKFetchDescription.h"
+#import "Mixpanel.h"
+#import "STKHashTag.h"
 
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 
@@ -404,6 +405,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             }
             [[[STKUserStore store] context] save:nil];
             block(post, err);
+           
+            [self trackLikePost:post];
         }];
     }];
 }
@@ -521,6 +524,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
                 reversal();
             } else {
                 [[[STKUserStore store] context] save:nil];
+                
+                [self trackLikeComment:comment];
             }
             block(obj, err);
         }];
@@ -633,6 +638,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
                 reversal();
             } else {
                 [[[STKUserStore store] context] save:nil];
+                
+                [self trackComment:p];
             }
             block(p, err);
         }];
@@ -724,6 +731,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             if(!err) {
                 [post setFInverseFeed:[[STKUserStore store] currentUser]];
                 [[[STKUserStore store] context] save:nil];
+                
+                [self trackPostCreation:post];
             } else {
                 int postCount = [[[STKUserStore store] currentUser] postCount];
                 [[[STKUserStore store] currentUser]  setPostCount:postCount+1];
@@ -866,5 +875,52 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     }];
 }
 
+- (void)trackPostCreation:(STKPost *)post
+{
+    BOOL repost = NO;
+    STKUser *originalPoster = [post creator];
+    NSString *source = ([post externalProvider]) ? [post externalProvider] : @"prizm";
+    if ([post originalPost] != nil) {
+        repost = YES;
+        originalPoster = [[post originalPost] creator];
+    }
+    NSString *originalPosterIdentifier = [NSString stringWithFormat:@"%@ %@", [originalPoster name], [originalPoster uniqueID]];
+    
+    NSMutableString *hashTags = [[NSMutableString alloc] init];
+    
+    for (STKHashTag *ht in [post hashTags]) {
+        [hashTags appendString:[ht title]];
+    }
+    [[Mixpanel sharedInstance] track:@"Post added" properties:@{@"Repost" : @(repost),
+                                                                @"Source" : source,
+                                                                @"Original Creator" : originalPosterIdentifier,
+                                                                @"Hashtags" : hashTags
+                                                                }];
+}
+
+- (void)trackLikePost:(STKPost *)post
+{
+    NSString *targetUserIdentifier = [NSString stringWithFormat:@"%@ %@", [[post creator] name], [[post creator] uniqueID]];
+
+    BOOL followingCreator = [[[[STKUserStore store] currentUser] following] containsObject:[post creator]];
+    
+    [[Mixpanel sharedInstance] track:@"Post liked" properties:@{@"Post creator" : targetUserIdentifier,
+                                                                @"Following creator" : @(followingCreator)
+                                                                }];
+}
+
+- (void)trackLikeComment:(STKPostComment *)postComment
+{
+    NSString *posterIdentifier = [NSString stringWithFormat:@"%@ %@", [[[postComment post] creator] name], [[[postComment post] creator] uniqueID]];
+
+    [[Mixpanel sharedInstance] track:@"Comment liked" properties:@{@"Post creator" : posterIdentifier}];
+}
+
+- (void)trackComment:(STKPost *)post
+{
+    NSString *posterIdentifier = [NSString stringWithFormat:@"%@ %@", [[post creator] name], [[post creator] uniqueID]];
+    
+    [[Mixpanel sharedInstance] track:@"Commented on post" properties:@{@"Post creator" : posterIdentifier}];
+}
 
 @end

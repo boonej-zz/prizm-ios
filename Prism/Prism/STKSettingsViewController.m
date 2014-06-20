@@ -175,7 +175,7 @@
 
 - (void)findFriends:(id)sender
 {
-    STKSearchUsersViewController *stvc = [[STKSearchUsersViewController alloc] initWithSearchType:STKSearchUsersToFollow];
+    STKSearchUsersViewController *stvc = [[STKSearchUsersViewController alloc] initWithSearchType:STKSearchUsersTypeToFollow];
     [stvc setTitle:@"Find Friends"];
     [[self navigationController] pushViewController:stvc animated:YES];
 }

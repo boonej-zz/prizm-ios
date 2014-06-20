@@ -19,6 +19,7 @@
 #import "STKHashtagPostsViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "UIViewController+STKControllerItems.h"
+#import "Mixpanel.h"
 
 typedef enum {
     STKSearchTypeUser = 0,
@@ -122,12 +123,14 @@ typedef enum {
         [[STKUserStore store] unfollowUser:u completion:^(id obj, NSError *err) {
             if(!err) {
                 [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
+                [self trackUnfollow:u];
             }
         }];
     } else {
         [[STKUserStore store] followUser:u completion:^(id obj, NSError *err) {
             if(!err) {
                 [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
+                [self trackFollow:u];
             }
         }];
     }
@@ -306,7 +309,6 @@ typedef enum {
     [cell setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(tableView == [self searchResultsTableView]) {
@@ -332,6 +334,49 @@ typedef enum {
     }
 }
 
+- (void)trackViewUser:(STKUser *)user
+{
+    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
 
+    [[Mixpanel sharedInstance] track:@"Search result - view user" properties:@{@"Search filter" : [self searchTypeString],
+                                                                                   @"Search term" : [[self searchTextField] text],
+                                                                                   @"Found user" : userIdentifier
+                                                                                   }];
+}
+
+- (void)trackViewHashTag:(NSString *)hashtag
+{
+    [[Mixpanel sharedInstance] track:@"Search result - view hashtag" properties:@{@"Search filter" : [self searchTypeString],
+                                                                                   @"Search term" : [[self searchTextField] text],
+                                                                                   @"Hashtag" : hashtag}];
+}
+
+- (void)trackUnfollow:(STKUser *)user
+{
+    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+
+    [[Mixpanel sharedInstance] track:@"Search result - unfollow user" properties:@{@"Search filter" : [self searchTypeString],
+                                                                                 @"Search term" : [[self searchTextField] text],
+                                                                                 @"Found user" : userIdentifier
+                                                                                 }];
+}
+
+- (void)trackFollow:(STKUser *)user
+{
+    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+    
+    [[Mixpanel sharedInstance] track:@"Search result - follow user" properties:@{@"Search filter" : [self searchTypeString],
+                                                                                   @"Search term" : [[self searchTextField] text],
+                                                                                   @"Found user" : userIdentifier
+                                                                                   }];
+}
+
+- (NSString *)searchTypeString  
+{
+    NSDictionary *map = @{@(STKSearchTypeUser) : @"user",
+                          @(STKSearchTypeHashTag) : @"hashtag"};
+    
+    return map[@([self searchType])];
+}
 
 @end
