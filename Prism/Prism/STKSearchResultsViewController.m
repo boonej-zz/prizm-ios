@@ -114,6 +114,8 @@ typedef enum {
     [[[self blurView] displayLink] setPaused:NO];
 
     [[self searchTextField] setText:nil];
+    [self setHashTagsFound:nil];
+    [self setProfilesFound:nil];
 }
 
 - (void)toggleFollow:(id)sender atIndexPath:(NSIndexPath *)ip
