@@ -255,16 +255,15 @@ typedef enum {
 
 - (void)countView:(STKCountView *)countView didSelectCircleAtIndex:(int)index
 {
+    NSPredicate *activeUsersOnly = [NSPredicate predicateWithFormat:@"(status != %d)", STKUserStatusInActive];
+    
     switch (index) {
         case 0: {
             STKUserListViewController *vc = [[STKUserListViewController alloc] init];
             [vc setTitle:@"Followers"];
             [[self navigationController] pushViewController:vc animated:YES];
             [[STKUserStore store] fetchFollowersOfUser:[self profile] completion:^(NSArray *followers, NSError *err) {
-                NSMutableArray *follwersCopy = [followers mutableCopy];
-                NSPredicate *activeUsersOnly = [NSPredicate predicateWithFormat:@"(status != %d)", STKUserStatusInActive];
-                NSArray *filtered = [follwersCopy filteredArrayUsingPredicate:activeUsersOnly];
-                [vc setUsers:filtered];
+                [vc setUsers:[followers filteredArrayUsingPredicate:activeUsersOnly]];
             }];
         } break;
         case 1: {
@@ -272,10 +271,7 @@ typedef enum {
             [vc setTitle:@"Following"];
             [[self navigationController] pushViewController:vc animated:YES];
             [[STKUserStore store] fetchUsersFollowingOfUser:[self profile] completion:^(NSArray *followers, NSError *err) {
-                NSMutableArray *followersCopy = [followers mutableCopy];
-                NSPredicate *activeUsersOnly = [NSPredicate predicateWithFormat:@"(status != %d)", STKUserStatusInActive];
-                NSArray *filtered = [followersCopy filteredArrayUsingPredicate:activeUsersOnly];
-                [vc setUsers:filtered];
+                [vc setUsers:[followers filteredArrayUsingPredicate:activeUsersOnly]];
             }];
         } break;
         case 2: {
