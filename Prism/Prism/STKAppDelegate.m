@@ -26,6 +26,12 @@
 
 #import "STKAuthorizationToken.h"
 
+#ifdef DEBUG 
+    static NSString * const STKMixpanelKey = @"";//@"73c8b5e42732b21ff8b74d73aabc8f79";
+#else
+    static NSString * const STKMixpanelKey = @"4a0537b6af3aacf933fa10bc70050237";
+#endif
+
 @interface STKAppDelegate ()
 
 @end
@@ -42,7 +48,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [Crashlytics startWithAPIKey:@"e70b092ac5acf46c6e8a86bc59e79c34df550f5f"];
-    [Mixpanel sharedInstanceWithToken:@"73c8b5e42732b21ff8b74d73aabc8f79"];
+    [Mixpanel sharedInstanceWithToken:STKMixpanelKey];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
