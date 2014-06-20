@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    STKSearchUsersNotInTrust = 0,
-    STKSearchUsersToFollow = 1
+    STKSearchUsersTypeNotInTrust = 0,
+    STKSearchUsersTypeToFollow = 1
 }STKSearchUsersType;
 
 @interface STKSearchUsersViewController : UIViewController

@@ -28,6 +28,7 @@
 #import "STKItemListViewController.h"
 #import "STKExploreViewController.h"
 #import "UIERealTimeBlurView.h"
+#import "Mixpanel.h"
 
 @import AddressBook;
 @import Social;
@@ -875,7 +876,7 @@ const long STKCreateProgressGeocoding = 4;
         } else {
             registerBlock = ^{
                 [[STKUserStore store] registerAccount:[self user]
-                                           completion:^(id user, NSError *err) {
+                                           completion:^(STKUser *user, NSError *err) {
                                                [STKProcessingView dismiss];
                                                if(!err) {
                                                    if([[self presentingViewController] isKindOfClass:[STKMenuController class]]){
@@ -883,6 +884,13 @@ const long STKCreateProgressGeocoding = 4;
                                                        [menuController setSelectedViewController:[[menuController viewControllers] objectAtIndex:1]];
                                                    }
                                                    [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                                   
+                                                   // profile created
+                                                   // report event and type of account created
+                                                   NSString *val = [user externalServiceType];
+                                                   if(!val)
+                                                       val = @"email";
+                                                   [[Mixpanel sharedInstance] track:@"Profile Created" properties:@{@"type" : val}];
                                                } else {
                                                    [[STKErrorStore alertViewForError:err delegate:nil] show];
                                                }

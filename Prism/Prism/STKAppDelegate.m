@@ -26,6 +26,12 @@
 
 #import "STKAuthorizationToken.h"
 
+#ifdef DEBUG 
+    static NSString * const STKMixpanelKey = @"";//@"73c8b5e42732b21ff8b74d73aabc8f79";
+#else
+    static NSString * const STKMixpanelKey = @"4a0537b6af3aacf933fa10bc70050237";
+#endif
+
 @interface STKAppDelegate ()
 
 @end
@@ -42,7 +48,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [Crashlytics startWithAPIKey:@"e70b092ac5acf46c6e8a86bc59e79c34df550f5f"];
-    [Mixpanel sharedInstanceWithToken:@"73c8b5e42732b21ff8b74d73aabc8f79"];
+    [Mixpanel sharedInstanceWithToken:STKMixpanelKey];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
@@ -98,11 +104,17 @@
 {
     [[STKUserStore store] transferPostsFromSocialNetworks];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
+    if ([[[Mixpanel sharedInstance] currentSuperProperties] count] > 0) {
+        [[Mixpanel sharedInstance] track:@"Session started" properties:@{@"time stamp" : @([[NSDate date] timeIntervalSince1970])}];
+    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-
+    if ([[[Mixpanel sharedInstance] currentSuperProperties] count] > 0) {
+        [[Mixpanel sharedInstance] track:@"Session ended" properties:@{@"time stamp" : @([[NSDate date] timeIntervalSince1970])}];
+    }
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

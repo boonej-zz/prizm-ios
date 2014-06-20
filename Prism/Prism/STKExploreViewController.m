@@ -24,7 +24,7 @@
 #import "STKNavigationButton.h"
 #import "STKSearchResultsViewController.h"
 #import "STKLuminatingBar.h"
-
+#import "Mixpanel.h"
 
 @interface STKExploreViewController ()
     <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate>
@@ -263,8 +263,20 @@
     [[self tableView] setContentInset:UIEdgeInsetsMake([[self exploreTypeControl] frame].origin.y + [[self exploreTypeControl] frame].size.height, 0, 0, 0)];
 
     [self reloadPosts];
+    
+    [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:@{@"Explore Type" : [self exploreTypeString]}];
 }
 
+- (NSString *)exploreTypeString
+{
+    NSDictionary *map = @{
+                          @(STKExploreTypeFeatured) : @"featured",
+                          @(STKExploreTypeLatest) : @"latest",
+                          @(STKExploreTypePopular) : @"popular"
+                          };
+    return map[@([self exploreType])];
+}
+     
 - (void)reloadPosts
 {
     STKPostController *pc = [self activePostController];
@@ -315,6 +327,8 @@
 
     [[self tableView] reloadData];
     [self reloadPosts];
+    
+    [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:@{@"Explore Type" : [self exploreTypeString]}];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

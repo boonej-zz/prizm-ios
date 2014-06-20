@@ -100,6 +100,10 @@ static Mixpanel *sharedInstance = nil;
 
 + (Mixpanel *)sharedInstanceWithToken:(NSString *)apiToken
 {
+    if ([apiToken isEqualToString:@""]) {
+        return nil;
+    }
+
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[super alloc] initWithToken:apiToken andFlushInterval:60];
