@@ -424,10 +424,9 @@
 {
     if([self editingPostText]) {
         [self setEditingPostText:NO];
-        [[self commentTextView] setText:nil];
     }
+    [[self commentTextView] setText:nil];
     [[self view] endEditing:YES];
-
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
