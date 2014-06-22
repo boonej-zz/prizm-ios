@@ -64,6 +64,8 @@
 @property (nonatomic, strong) MPNotificationViewController *notificationViewController;
 @property (nonatomic, strong) NSMutableSet *shownNotifications;
 
+@property (nonatomic, strong) NSDate *sessionStartTime;
+
 @end
 
 @interface MixpanelPeople ()
@@ -114,7 +116,7 @@ static Mixpanel *sharedInstance = nil;
 + (Mixpanel *)sharedInstance
 {
     if (sharedInstance == nil) {
-        NSLog(@"%@ warning sharedInstance called before sharedInstanceWithToken:", self);
+        //NSLog(@"%@ warning sharedInstance called before sharedInstanceWithToken:", self);
     }
     return sharedInstance;
 }
@@ -1354,6 +1356,25 @@ static Mixpanel *sharedInstance = nil;
     [self.people append:properties];
 
     [self trackNotification:notification event:@"$campaign_delivery"];
+}
+
+#pragma mark - STK Custom Methods
+
+- (void)startSession
+{
+    [self setSessionStartTime:[NSDate date]];
+}
+
+- (void)endSession
+{
+    if ([[[Mixpanel sharedInstance] currentSuperProperties] count] > 0 && [self sessionStartTime])  {
+        NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:[self sessionStartTime]];
+        
+        int minutes = duration / 60;
+        NSString *minuteString = [NSString stringWithFormat:@"%d minute(s)", minutes];
+        [[Mixpanel sharedInstance] track:@"Session" properties:@{@"Duration minutes rounded" : minuteString,
+                                                                 @"Duration in seconds" : @(duration)}];
+    }
 }
 
 #pragma mark - UIAlertViewDelegate

@@ -105,16 +105,12 @@
     [[STKUserStore store] transferPostsFromSocialNetworks];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
-    if ([[[Mixpanel sharedInstance] currentSuperProperties] count] > 0) {
-        [[Mixpanel sharedInstance] track:@"Session started" properties:@{@"time stamp" : @([[NSDate date] timeIntervalSince1970])}];
-    }
+    [[Mixpanel sharedInstance] startSession];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    if ([[[Mixpanel sharedInstance] currentSuperProperties] count] > 0) {
-        [[Mixpanel sharedInstance] track:@"Session ended" properties:@{@"time stamp" : @([[NSDate date] timeIntervalSince1970])}];
-    }
+    [[Mixpanel sharedInstance] endSession];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

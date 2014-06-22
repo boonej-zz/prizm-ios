@@ -499,6 +499,9 @@
 
 - (void)createAlias:(NSString *)alias forDistinctID:(NSString *)distinctID;
 
+- (void)startSession;
+- (void)endSession;
+
 @end
 
 /*!
