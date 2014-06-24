@@ -10,11 +10,16 @@
 #import "STKUser.h"
 #import "STKUserStore.h"
 #import "STKPost.h"
+#import "STKImageStore.h"
 
 @implementation STKMarkupUtilities
 
-
 + (UIImage *)imageForText:(NSString *)text
+{
+    return [self imageForText:text withAvatarImage:nil];
+}
+
++ (UIImage *)imageForText:(NSString *)text withAvatarImage:(UIImage *)avatarImage;
 {
     NSMutableDictionary *found = [NSMutableDictionary dictionary];
     NSRegularExpression *tagFinder = [[NSRegularExpression alloc] initWithPattern:@"@([A-Za-z0-9]*)" options:0 error:nil];
@@ -40,7 +45,14 @@
     
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(640, 640), YES, 1);
     
-    [[UIImage imageNamed:@"prismcard"] drawInRect:CGRectMake(0, 0, 640, 640)];
+    UIImage *prismCard = [UIImage imageNamed:@"prismcard"];
+    [prismCard drawInRect:CGRectMake(0, 0, 640, 640)];
+    
+    
+    CGPoint avatarOrigin = CGPointZero;
+    avatarOrigin.y = (640 - avatarImage.size.height)/2;
+    avatarOrigin.x = (640 - avatarImage.size.width)/2;
+    [avatarImage drawAtPoint:avatarOrigin];
     
     CGRect textRect = CGRectMake(48, (640 - 416) / 2.0, 640 - 48 * 2, 416);
     
@@ -154,6 +166,25 @@
     UIGraphicsEndImageContext();
     
     return img;
+}
+
++ (void)imageForInviteCard:(STKUser *)user withCompletion:(void (^)(UIImage *img))block
+{
+    [[STKImageStore store] fetchImageForURLString:[user profilePhotoPath] completion:^(UIImage *img) {
+        // created masked avatar image at 256x256px
+        int dim = STKUserProfilePhotoSize.height*2;
+        CGSize size = CGSizeMake(dim,dim);
+        
+        UIGraphicsBeginImageContextWithOptions(size, YES, 1);
+        [img drawInRect:CGRectMake(0, 0, size.width, size.height)];
+        
+        UIImage *avatarImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        UIImageWriteToSavedPhotosAlbum(avatarImage, nil, nil, NULL);
+        
+        block([self imageForText:[user name] withAvatarImage:avatarImage]);
+    }];
 }
 
 @end

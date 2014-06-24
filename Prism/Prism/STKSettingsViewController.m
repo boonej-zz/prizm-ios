@@ -18,6 +18,7 @@
 #import "STKWebViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "STKSearchUsersViewController.h"
+#import "STKInviteFriendsViewController.h"
 
 @import Social;
 @import Accounts;
@@ -77,9 +78,7 @@
 - (NSArray *)friendsSettings
 {
     return @[@{@"title" : @"Find Friends on Prizm", @"type" : @"STKLabelCell", @"selectionSelector" : @"findFriends:"},
-             @{@"title" : @"Add Friends", @"type" : @"STKLabelCell", @"selectionSelector" : @"addFriends:"},
-             @{@"title" : @"Invite Friends", @"type" : @"STKLabelCell", @"selectionSelector" : @"inviteFriends:"},
-             @{@"title" : @"Share your Prizm", @"type" : @"STKLabelCell", @"selectionSelector" : @"shareYourPrizm:"}
+             @{@"title" : @"Invite Friends", @"type" : @"STKLabelCell", @"selectionSelector" : @"inviteFriends:"}
              ];
 }
 
@@ -187,7 +186,8 @@
 
 - (void)inviteFriends:(id)sender
 {
-    
+    STKInviteFriendsViewController *vc = [[STKInviteFriendsViewController alloc] init];
+    [[self navigationController] pushViewController:vc animated:YES];
 }
 
 - (void)shareYourPrizm:(id)sender

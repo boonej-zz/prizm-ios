@@ -11,29 +11,6 @@
 #import "STKImageStore.h"
 #import "STKContentStore.h"
 
-@class STKActivity;
-
-@protocol STKActivityDelegate <NSObject>
-
-- (void)activity:(STKActivity *)activity
-wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
-
-@end
-
-@interface STKImageSharer () <STKActivityDelegate>
-
-@end
-
-@interface STKActivity : UIActivity
-
-@property (nonatomic, strong) UIImage *image;
-@property (nonatomic, strong) NSString *text;
-@property (nonatomic, weak) id <STKActivityDelegate> delegate;
-
-- (id)initWithDelegate:(id <STKActivityDelegate>)delegate;
-
-@end
-
 @implementation STKActivity
 - (id)initWithDelegate:(id <STKActivityDelegate>)delegate
 {
@@ -265,7 +242,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 @end
 
-@interface STKImageSharer () <UIDocumentInteractionControllerDelegate>
+@interface STKImageSharer () <UIDocumentInteractionControllerDelegate, STKActivityDelegate>
 @property (nonatomic, strong) UIActivity *continuingActivity;
 @property (nonatomic, strong) UIDocumentInteractionController *documentControllerRef;
 @property (nonatomic, strong) UIActivityViewController *activityViewController;
@@ -284,6 +261,31 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     });
     
     return sharer;
+}
+
+- (NSArray *)activitiesForImage:(UIImage *)image title:(NSString *)title
+{
+    NSMutableArray *a = [NSMutableArray array];
+    if(image)
+        [a addObject:image];
+    if(title)
+        [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", title]];
+    else
+        [a addObject:@"@beprizmatic"];
+
+    NSArray *activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
+                            [[STKActivityTumblr alloc] initWithDelegate:self],
+                            [[STKActivityWhatsapp alloc] initWithDelegate:self]];
+    NSMutableArray *mutableCopy = [activities mutableCopy];
+    for (UIActivity *activity in activities) {
+        if ([activity canPerformWithActivityItems:a]) {
+            NSLog(@"found activity able to perform %@", activity.activityTitle);
+        } else {
+            [mutableCopy removeObject:activity];
+        }
+    }
+    
+    return mutableCopy;
 }
 
 - (UIActivityViewController *)activityViewControllerForPost:(STKPost *)post

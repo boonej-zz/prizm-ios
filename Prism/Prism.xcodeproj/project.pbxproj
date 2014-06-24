@@ -28,6 +28,8 @@
 		883D87DC19463E7F00195B11 /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 883D87C919463E7F00195B11 /* UIImage+MPAverageColor.m */; };
 		883D87DD19463E7F00195B11 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 883D87CB19463E7F00195B11 /* UIImage+MPImageEffects.m */; };
 		883D87DE19463E7F00195B11 /* UIView+MPSnapshotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 883D87CD19463E7F00195B11 /* UIView+MPSnapshotImage.m */; };
+		886FBD21195A035F0007188B /* STKInviteFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 886FBD20195A035F0007188B /* STKInviteFriendsViewController.m */; };
+		886FBD23195A094F0007188B /* STKInviteFriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */; };
 		88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */; };
 		88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */; };
 		BE02EAA3182A80A200A5505A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA2182A80A200A5505A /* Foundation.framework */; };
@@ -279,6 +281,9 @@
 		883D87CB19463E7F00195B11 /* UIImage+MPImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPImageEffects.m"; sourceTree = "<group>"; };
 		883D87CC19463E7F00195B11 /* UIView+MPSnapshotImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPSnapshotImage.h"; sourceTree = "<group>"; };
 		883D87CD19463E7F00195B11 /* UIView+MPSnapshotImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPSnapshotImage.m"; sourceTree = "<group>"; };
+		886FBD1F195A035F0007188B /* STKInviteFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInviteFriendsViewController.h; sourceTree = "<group>"; };
+		886FBD20195A035F0007188B /* STKInviteFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInviteFriendsViewController.m; sourceTree = "<group>"; };
+		886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInviteFriendsViewController.xib; sourceTree = "<group>"; };
 		88A74C7C184714A600DF05AC /* STKHashtagToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHashtagToolbar.h; sourceTree = "<group>"; };
 		88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagToolbar.m; sourceTree = "<group>"; };
 		88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+STKHashtagDetector.h"; sourceTree = "<group>"; };
@@ -2571,6 +2576,9 @@
 				8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */,
 				8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */,
 				8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */,
+				886FBD1F195A035F0007188B /* STKInviteFriendsViewController.h */,
+				886FBD20195A035F0007188B /* STKInviteFriendsViewController.m */,
+				886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4738,6 +4746,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE5F690218F2131F006D2CD1 /* STKWebViewController.xib in Resources */,
+				886FBD23195A094F0007188B /* STKInviteFriendsViewController.xib in Resources */,
 				BE1E09D61850E58900975652 /* STKVerticalNavigationController.xib in Resources */,
 				8805330E193E5FD900A8E44D /* STKSearchUsersViewController.xib in Resources */,
 				BEB1687D190700F900CED5F7 /* STKSegmentedControlCell.xib in Resources */,
@@ -4889,6 +4898,7 @@
 				BE2B7E85191AB3EC00E6F408 /* STKDateBar.m in Sources */,
 				BE52B13C18E30EF100C44F30 /* NSManagedObject+STKAdditions.m in Sources */,
 				BE7B4858192B99AD00BDCE15 /* STKItemListViewController.m in Sources */,
+				886FBD21195A035F0007188B /* STKInviteFriendsViewController.m in Sources */,
 				BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */,
 				BE05502018A404E600F6B534 /* UIERealTimeBlurView.m in Sources */,
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
