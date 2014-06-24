@@ -11,6 +11,29 @@
 #import "STKImageStore.h"
 #import "STKContentStore.h"
 
+@class STKActivity;
+
+@protocol STKActivityDelegate <NSObject>
+
+- (void)activity:(STKActivity *)activity
+wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
+
+@end
+
+@interface STKImageSharer () <STKActivityDelegate>
+
+@end
+
+@interface STKActivity : UIActivity
+
+@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) NSString *text;
+@property (nonatomic, weak) id <STKActivityDelegate> delegate;
+
+- (id)initWithDelegate:(id <STKActivityDelegate>)delegate;
+
+@end
+
 @implementation STKActivity
 - (id)initWithDelegate:(id <STKActivityDelegate>)delegate
 {
@@ -242,12 +265,13 @@
 
 @end
 
-@interface STKImageSharer () <UIDocumentInteractionControllerDelegate, STKActivityDelegate>
+@interface STKImageSharer () <UIDocumentInteractionControllerDelegate>
 @property (nonatomic, strong) UIActivity *continuingActivity;
 @property (nonatomic, strong) UIDocumentInteractionController *documentControllerRef;
-@property (nonatomic, strong) UIActivityViewController *activityViewController;
 @property (nonatomic, weak) STKPost *currentPost;
 @property (nonatomic, strong) void (^finishHandler)(UIDocumentInteractionController *);
+
+@property (nonatomic, strong) UIViewController *viewController;
 @end
 
 @implementation STKImageSharer
@@ -263,8 +287,10 @@
     return sharer;
 }
 
-- (NSArray *)activitiesForImage:(UIImage *)image title:(NSString *)title
+- (NSArray *)activitiesForImage:(UIImage *)image title:(NSString *)title viewController:(UIViewController *)viewController
 {
+    [self setViewController:viewController];
+    
     NSMutableArray *a = [NSMutableArray array];
     if(image)
         [a addObject:image];
@@ -272,7 +298,7 @@
         [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", title]];
     else
         [a addObject:@"@beprizmatic"];
-
+    
     NSArray *activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
                             [[STKActivityTumblr alloc] initWithDelegate:self],
                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];
@@ -314,9 +340,9 @@
                             [[STKActivityReport alloc] initWithDelegate:self],
                             [[STKActivityTumblr alloc] initWithDelegate:self],
                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];
-    _activityViewController = [[UIActivityViewController alloc] initWithActivityItems:a
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:a
                                                                 applicationActivities:activities];
-    [_activityViewController setExcludedActivityTypes:
+    [activityViewController setExcludedActivityTypes:
      @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail]];
     
     // revert appearance proxies to get default iOS behavior when sharing through Messages
@@ -330,22 +356,39 @@
                                            forBarMetrics:UIBarMetricsDefault];
     };
     
-    [_activityViewController setCompletionHandler:handler];
+    [activityViewController setCompletionHandler:handler];
+    [self setViewController:activityViewController];
     
-    return [self activityViewController];
+    return activityViewController;
 }
 
 - (void)activity:(STKActivity *)activity
 wantsToPresentDocumentController:(UIDocumentInteractionController *)doc
 {
-    [[self activityViewController] dismissViewControllerAnimated:YES completion:^{
-        if([self finishHandler]) {
-            [doc setDelegate:self];
-            [self setContinuingActivity:activity];
-            [self setDocumentControllerRef:doc];
-            [self finishHandler](doc);
-        }
-    }];
+    void (^completion)(void) = ^{
+        [doc setDelegate:self];
+        [self setContinuingActivity:activity];
+        [self setDocumentControllerRef:doc];
+    };
+    
+    // finish handler is provided when we want to dismiss the view asking to share
+    if ([self finishHandler]) {
+        [[self viewController] dismissViewControllerAnimated:YES completion:^{
+            completion();
+            if ([self finishHandler]) {
+                [self finishHandler](doc);
+            }
+
+        }];
+        return;
+    }
+    
+
+    completion();
+    [doc presentOpenInMenuFromRect:[[[self viewController] view] bounds]
+                                inView:[[self viewController] view]
+                              animated:YES];
+    
 }
 
 - (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application

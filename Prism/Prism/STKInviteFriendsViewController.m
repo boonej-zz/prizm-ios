@@ -17,7 +17,7 @@
 NSString * const STKInviteFriendsShareText = @"Prizm app store link";
 
 @interface STKInviteFriendsViewController ()
-    <UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate, STKActivityDelegate>
+    <UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
@@ -25,8 +25,7 @@ NSString * const STKInviteFriendsShareText = @"Prizm app store link";
 @property (nonatomic, strong) UIImage *shareCard;
 @property (nonatomic, strong) NSArray *activities;
 
-@property (nonatomic, strong) UIActivity *continuingActivity;
-@property (nonatomic, strong) UIDocumentInteractionController *documentControllerRef;
+@property (nonatomic, strong) STKImageSharer *imageSharer;
 
 @end
 
@@ -65,8 +64,9 @@ NSString * const STKInviteFriendsShareText = @"Prizm app store link";
 {
     _shareCard = shareCard;
     
-    STKImageSharer *sharer = [[STKImageSharer alloc] init];
-    [self setActivities:[sharer activitiesForImage:shareCard title:STKInviteFriendsShareText]];
+    [self setImageSharer:[[STKImageSharer alloc] init]];
+    
+    [self setActivities:[[self imageSharer] activitiesForImage:shareCard title:STKInviteFriendsShareText viewController:self]];
 
     [[self tableView] reloadData];
 }
@@ -137,28 +137,9 @@ NSString * const STKInviteFriendsShareText = @"Prizm app store link";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath section] == 1) {
-        STKActivity *activity = [self activities][[indexPath row]];
-        [activity setDelegate:self];
+        UIActivity *activity = [self activities][[indexPath row]];
         [activity performActivity];
     }
-}
-
-- (void)activity:(STKActivity *)activity
-wantsToPresentDocumentController:(UIDocumentInteractionController *)doc
-{
-    [doc setDelegate:self];
-    [self setContinuingActivity:activity];
-    [self setDocumentControllerRef:doc];
-    [doc presentOpenInMenuFromRect:[[self view] bounds]
-                            inView:[self view]
-                          animated:YES];
-}
-
-- (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application
-{
-    [[self continuingActivity] activityDidFinish:YES];
-    [self setContinuingActivity:nil];
-    [self setDocumentControllerRef:nil];
 }
 
 @end
