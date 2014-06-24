@@ -176,11 +176,13 @@ typedef enum {
                                                          [self fetchPostsForProfileWithScope:scope];
                                                          [self refreshProfileViews];
                                                      }];
+                    } else {
+                        [self fetchPostsForProfileWithScope:nil];
                     }
+                    
                 }
-            } else {
-                [self fetchPostsForProfileWithScope:@[@"public"]];
             }
+            
             [self determineAdditionalInfoFields];
             [self refreshProfileViews];
         }];
