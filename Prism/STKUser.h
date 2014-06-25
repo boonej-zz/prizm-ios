@@ -74,6 +74,10 @@ extern NSInteger const STKUserStatusInActive;
 @property (nonatomic, strong) NSString *instagramLastMinID;
 @property (nonatomic, strong) NSString *twitterID;
 @property (nonatomic, strong) NSString *twitterLastMinID;
+@property (nonatomic, strong) NSString *tumblrAccessToken;
+@property (nonatomic, strong) NSString *tumblrAccessSecret;
+@property (nonatomic, strong) NSString *tumblrLastMinID;
+
 
 @property (nonatomic, strong) NSDate *dateFounded;
 @property (nonatomic, strong) NSString *mascotName;

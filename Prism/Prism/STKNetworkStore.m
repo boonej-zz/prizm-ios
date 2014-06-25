@@ -14,10 +14,13 @@
 #import "STKContentStore.h"
 #import "STKPost.h"
 #import "STKMarkupUtilities.h"
+#import "OAuthCore.h"
 
 @import Accounts;
 
 const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
+NSString * const STKTumblrConsumerKey = @"qrKElSuNLokWhEWDqcLNYCZo2UsXIVkLNWXOmII1tdxEVHKfXe";
+NSString * const STKTubmlrConsumerSecret = @"v9ltz8mRlYqvPSNbPtJuo32aouyrZAPvTFy4Mra5SSUPYTpJH7";
 
 @interface STKNetworkStore ()
 @property (nonatomic, strong) NSURLSession *session;
@@ -100,6 +103,25 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                          }
                                                                      }];
         [dt resume];
+    } else if(type == STKNetworkTypeTumblr) {
+        NSString *urlString = [NSString stringWithFormat:@"https://api.instagram.com/v1/users/self/media/recent/?access_token=%@&count=1", [u instagramToken]];
+        NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+        
+        NSURLSessionDataTask *dt = [[[STKBaseStore store] session] dataTaskWithRequest:req
+                                                                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                                         if(!error) {
+                                                                             NSDictionary *val = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                                                                             NSArray *posts = [val objectForKey:@"data"];
+                                                                             
+                                                                             // Now go ahead and push this up
+                                                                             NSArray *sorted = [posts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"created_time" ascending:NO]]];
+                                                                             NSString *firstID = [[sorted firstObject] objectForKey:@"created_time"];
+                                                                             block(firstID, nil);
+                                                                         } else {
+                                                                             block(nil, error);
+                                                                         }
+                                                                     }];
+        [dt resume];
     }
 }
 
@@ -122,7 +144,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     
     [self setUpdating:YES];
     
-    [[STKUserStore store] fetchUserDetails:u additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token"] completion:^(STKUser *user, NSError *err) {
+    [[STKUserStore store] fetchUserDetails:u additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token", @"tumblr_token", @"tumblr_min_id"] completion:^(STKUser *user, NSError *err) {
         if(!err) {
             NSLog(@"Will check Instagram %@", [user instagramToken]);
             [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[u instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
@@ -144,6 +166,11 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                         block(u, nil);
                     }];
                 }];
+            }];
+            
+#warning testing tumblr
+            [self transferPostsFromTumblrWithToken:[u tumblrAccessToken] secret:[u tumblrAccessSecret] lastMinimumID:[u tumblrLastMinID] completion:^(NSString *lastID, NSError *err) {
+                
             }];
         } else {
             NSLog(@"Failed to get instagram/twitter details");
@@ -197,7 +224,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                                      block(firstID, nil);
                                                                                  else
                                                                                      block(minID, nil);
-                                                                                 [self createPostsFromInstagram:postsToSend];
+                                                                             [self createPostsFromInstagram:postsToSend];
                                                                              });
                                                                              
                                                                          });
@@ -437,5 +464,37 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     }
 }
 
+- (void)transferPostsFromTumblrWithToken:(NSString *)token
+                                secret:(NSString *)secret
+                           lastMinimumID:(NSString *)minID
+                              completion:(void (^)(NSString *lastID, NSError *err))block
+{
+    if(!token) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            block(minID, nil);
+        }];
+        return;
+    }
+    
+    // get blogs, then get all posts
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://api.tumblr.com/v2/user/info"]];
+    [request setHTTPMethod:@"POST"];
+
+    NSString *body = [NSString stringWithFormat:@"oauth_verifier=%@", secret];
+    [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSString *oauthHeader = OAuthorizationHeader(request.URL, request.HTTPMethod, nil, STKTumblrConsumerKey, STKTubmlrConsumerSecret, token, nil);
+    [request setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
+    
+    NSURLSession *session = [[STKBaseStore store] session];
+    NSURLSessionDataTask *dt = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (!error) {
+            NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            NSLog(@"user/list %@", string);
+        }
+    }];
+    
+    [dt resume];
+}
 
 @end

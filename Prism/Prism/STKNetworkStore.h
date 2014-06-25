@@ -12,7 +12,8 @@
 
 typedef enum {
     STKNetworkTypeInstagram,
-    STKNetworkTypeTwitter
+    STKNetworkTypeTwitter,
+    STKNetworkTypeTumblr
 } STKNetworkType;
 
 @import Social;

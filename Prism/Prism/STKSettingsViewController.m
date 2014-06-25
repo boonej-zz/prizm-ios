@@ -8,6 +8,7 @@
 
 #import "STKSettingsViewController.h"
 #import "STKInstagramAuthViewController.h"
+#import "STKTumblrAuthViewController.h"
 #import "STKLabelCell.h"
 #import "STKSettingsShareCell.h"
 #import "STKUserStore.h"
@@ -97,6 +98,9 @@
       }},
       @{@"title": @"Twitter", @"image" : @"sharing_twitter", @"type" : @"STKSettingsShareCell", @"actionSelector" : @"configureTwitter:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u twitterID] != nil)];
+      }},
+      @{@"title": @"Tumblr", @"image" : @"sharing_tumblr", @"type" : @"STKSettingsShareCell", @"actionSelector" : @"configureTumblr:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
+          [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u tumblrAccessToken] != nil)];
       }}
     ];
 }
@@ -179,20 +183,10 @@
     [[self navigationController] pushViewController:stvc animated:YES];
 }
 
-- (void)addFriends:(id)sender
-{
-    
-}
-
 - (void)inviteFriends:(id)sender
 {
     STKInviteFriendsViewController *vc = [[STKInviteFriendsViewController alloc] init];
     [[self navigationController] pushViewController:vc animated:YES];
-}
-
-- (void)shareYourPrizm:(id)sender
-{
-    
 }
 
 - (void)disableAccount:(id)sender
@@ -274,6 +268,31 @@
     } else {
         [[[STKUserStore store] currentUser] setInstagramLastMinID:nil];
         [[[STKUserStore store] currentUser] setInstagramToken:nil];
+        [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+            
+        }];
+    }
+}
+
+- (void)configureTumblr:(NSNumber *)activating
+{
+    if ([activating boolValue]) {
+        STKTumblrAuthViewController *vc = [[STKTumblrAuthViewController alloc] init];
+        [vc setTokenFound:^(NSString *token) {
+            if(token) {
+                [[[STKUserStore store] currentUser] setTumblrAccessToken:token];
+                [[STKNetworkStore store] establishMinimumIDForUser:[[STKUserStore store] currentUser] networkType:STKNetworkTypeTumblr completion:^(NSString *minID, NSError *err) {
+                    [[[STKUserStore store] currentUser] setTumblrLastMinID:minID];
+                    [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+                        
+                    }];
+                }];
+            }
+        }];
+        [[self navigationController] pushViewController:vc animated:YES];
+    } else {
+        [[[STKUserStore store] currentUser] setTumblrLastMinID:nil];
+        [[[STKUserStore store] currentUser] setTumblrAccessToken:nil];
         [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
             
         }];
