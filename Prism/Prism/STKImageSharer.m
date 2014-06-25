@@ -11,6 +11,10 @@
 #import "STKImageStore.h"
 #import "STKContentStore.h"
 
+NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
+NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
+NSString * const STKActivityTypeWhatsapp = @"STKActivityWhatsapp";
+
 @class STKActivity;
 
 @protocol STKActivityDelegate <NSObject>
@@ -66,7 +70,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 - (NSString *)activityType
 {
-    return @"STKActivityInstagram";
+    return STKActivityTypeInstagram;
 }
 - (NSString *)activityTitle
 {
@@ -119,7 +123,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @implementation STKActivityTumblr
 - (NSString *)activityType
 {
-    return @"STKActivityTumblr";
+    return STKActivityTypeTumblr;
 }
 - (NSString *)activityTitle
 {
@@ -172,7 +176,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @implementation STKActivityWhatsapp
 - (NSString *)activityType
 {
-    return @"STKActivityWhatsapp";
+    return STKActivityTypeWhatsapp;
 }
 - (NSString *)activityTitle
 {

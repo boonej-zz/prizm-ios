@@ -8,7 +8,6 @@
 
 #import "STKSettingsViewController.h"
 #import "STKInstagramAuthViewController.h"
-#import "STKTumblrAuthViewController.h"
 #import "STKLabelCell.h"
 #import "STKSettingsShareCell.h"
 #import "STKUserStore.h"
@@ -277,6 +276,7 @@
 - (void)configureTumblr:(NSNumber *)activating
 {
     if ([activating boolValue]) {
+        /*
         STKTumblrAuthViewController *vc = [[STKTumblrAuthViewController alloc] init];
         [vc setTokenFound:^(NSString *token) {
             if(token) {
@@ -290,6 +290,7 @@
             }
         }];
         [[self navigationController] pushViewController:vc animated:YES];
+         */
     } else {
         [[[STKUserStore store] currentUser] setTumblrLastMinID:nil];
         [[[STKUserStore store] currentUser] setTumblrAccessToken:nil];

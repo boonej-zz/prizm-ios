@@ -11,6 +11,8 @@
 		8805330E193E5FD900A8E44D /* STKSearchUsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */; };
 		88053311193E6F0000A8E44D /* STKSearchTrustCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 88053310193E6F0000A8E44D /* STKSearchTrustCell.m */; };
 		88053313193E6F2300A8E44D /* STKSearchTrustCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88053312193E6F2300A8E44D /* STKSearchTrustCell.xib */; };
+		88384077195B3275006750FC /* STKInviteFriendsShareCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 88384075195B3275006750FC /* STKInviteFriendsShareCell.m */; };
+		88384078195B3275006750FC /* STKInviteFriendsShareCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88384076195B3275006750FC /* STKInviteFriendsShareCell.xib */; };
 		883D87CE19463E7F00195B11 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 883D87B119463E7F00195B11 /* Media.xcassets */; };
 		883D87CF19463E7F00195B11 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 883D87B319463E7F00195B11 /* Mixpanel.m */; };
 		883D87D019463E7F00195B11 /* MPCloseBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 883D87B419463E7F00195B11 /* MPCloseBtn.png */; };
@@ -252,6 +254,9 @@
 		8805330F193E6F0000A8E44D /* STKSearchTrustCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchTrustCell.h; sourceTree = "<group>"; };
 		88053310193E6F0000A8E44D /* STKSearchTrustCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchTrustCell.m; sourceTree = "<group>"; };
 		88053312193E6F2300A8E44D /* STKSearchTrustCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchTrustCell.xib; sourceTree = "<group>"; };
+		88384074195B3275006750FC /* STKInviteFriendsShareCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInviteFriendsShareCell.h; sourceTree = "<group>"; };
+		88384075195B3275006750FC /* STKInviteFriendsShareCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInviteFriendsShareCell.m; sourceTree = "<group>"; };
+		88384076195B3275006750FC /* STKInviteFriendsShareCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInviteFriendsShareCell.xib; sourceTree = "<group>"; };
 		883D87B119463E7F00195B11 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		883D87B219463E7F00195B11 /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
 		883D87B319463E7F00195B11 /* Mixpanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mixpanel.m; sourceTree = "<group>"; };
@@ -2718,6 +2723,9 @@
 				8805330F193E6F0000A8E44D /* STKSearchTrustCell.h */,
 				88053310193E6F0000A8E44D /* STKSearchTrustCell.m */,
 				88053312193E6F2300A8E44D /* STKSearchTrustCell.xib */,
+				88384074195B3275006750FC /* STKInviteFriendsShareCell.h */,
+				88384075195B3275006750FC /* STKInviteFriendsShareCell.m */,
+				88384076195B3275006750FC /* STKInviteFriendsShareCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4790,6 +4798,7 @@
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
 				BE7391C91901A58200AD81AB /* STKHashtagPostsViewController.xib in Resources */,
+				88384078195B3275006750FC /* STKInviteFriendsShareCell.xib in Resources */,
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
 				D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */,
 				D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */,
@@ -4983,6 +4992,7 @@
 				BE8368FB18DA186300526637 /* STKTrust.m in Sources */,
 				BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */,
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
+				88384077195B3275006750FC /* STKInviteFriendsShareCell.m in Sources */,
 				BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */,
 				BEFCEE07182C210600648B9F /* STKSecurePassword.m in Sources */,
 				BE95438B1892CD1400DCC3B1 /* STKCommentCell.m in Sources */,
