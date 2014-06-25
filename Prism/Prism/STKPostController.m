@@ -107,7 +107,6 @@
         }
         completion(posts, err);
     });
-    
 }
 - (void)fetchOlderPostsWithCompletion:(void (^)(NSArray *newPosts, NSError *err))completion
 {

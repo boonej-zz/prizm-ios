@@ -150,48 +150,71 @@ typedef enum {
         if([[self profile] isInstitution]) {
             additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email"];
         }
+
         [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:additionalFields completion:^(STKUser *u, NSError *err) {
             if(!err) {
                 if([[self profile] isInstitution]) {
                     STKFetchDescription *fd = [[STKFetchDescription alloc] init];
                     [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
                     [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+                        NSArray * scope = @[@"public"];
+                        if(trusts){
+                            scope = @[@"public", @"trust"];
+                        }
                         [self determineLuminariesFromTrusts:trusts];
+                        [self fetchPostsForProfileWithScope:scope];
                     }];
                 } else {
                     if(![[self profile] isEqual:[[STKUserStore store] currentUser]]) {
                         [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
                                                      completion:^(STKTrust *t, NSError *err) {
+                                                         NSArray * scope = @[@"public"];
+                                                         if(t) {
+                                                             scope = @[@"public", @"trust"];
+                                                         }
+                                                         
+                                                         [self fetchPostsForProfileWithScope:scope];
                                                          [self refreshProfileViews];
                                                      }];
+                    } else {
+                        [self fetchPostsForProfileWithScope:nil];
                     }
+                    
                 }
             }
+            
             [self determineAdditionalInfoFields];
             [self refreshProfileViews];
         }];
-        
-        if([[self profile] isActive]){
-            __weak STKProfileViewController *ws = self;
-            [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
-                if(!([[STKUserStore store] currentUser] == [ws profile])) {
-                    [fs setFilterDictionary:@{@"scope" : @"public"}];
-                }
-                [[STKContentStore store] fetchProfilePostsForUser:[ws profile] fetchDescription:fs completion:completion];
-            }];
-
-            [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-                [[ws tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionDynamic]
-                                withRowAnimation:UITableViewRowAnimationNone];
-            }];
-        } else {
-            //account is inactive. disable corresponding ui
-            [self setPostController:nil];
-        }
     }
-    
+
     [self determineAdditionalInfoFields];
     [self refreshProfileViews];
+}
+
+- (void)fetchPostsForProfileWithScope:(NSArray *)scope
+{
+    if([[self profile] isActive]){
+        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            if(!([[STKUserStore store] currentUser] == [self profile])) {
+                if([scope count] == 1) {
+                    [fs setFilterDictionary:@{@"scope" : scope[0]}];
+                } else {
+                    [fs setFilterDictionary:@{@"scope" : scope}];
+                }
+            }
+            [[STKContentStore store] fetchProfilePostsForUser:[self profile] fetchDescription:fs completion:completion];
+        }];
+        
+        [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionDynamic]
+                          withRowAnimation:UITableViewRowAnimationNone];
+        }];
+    } else {
+        //account is inactive. disable posts view
+        [self setPostController:nil];
+    }
+    
 }
 
 - (void)determineAdditionalInfoFields
@@ -359,18 +382,22 @@ typedef enum {
 
 - (void)fetchNewPosts
 {
-    [[self luminatingBar] setLuminating:YES];
-    [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-        [[self luminatingBar] setLuminating:NO];
-        [[self tableView] reloadData];
-    }];
+    if([[self profile] postCount] > 0){
+        [[self luminatingBar] setLuminating:YES];
+        [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+            [[self luminatingBar] setLuminating:NO];
+            [[self tableView] reloadData];
+        }];
+    }
 }
 
 - (void)fetchOlderPosts
 {
-    [[self postController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-        [[self tableView] reloadData];
-    }];
+    if([[self  profile] postCount] > 0){
+        [[self postController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+            [[self tableView] reloadData];
+        }];
+    }
 }
 
 
@@ -822,7 +849,7 @@ typedef enum {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(section == STKProfileSectionDynamic) {
-        if(![self isShowingInformation]) {
+        if(![self isShowingInformation]) {            
             int count = [[[self postController] posts] count];
             if([self showPostsInSingleLayout]) {
                 return count;
