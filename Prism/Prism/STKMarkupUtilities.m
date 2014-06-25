@@ -48,13 +48,33 @@
     UIImage *prismCard = [UIImage imageNamed:@"prismcard"];
     [prismCard drawInRect:CGRectMake(0, 0, 640, 640)];
     
-    
-    CGPoint avatarOrigin = CGPointZero;
-    avatarOrigin.y = (640 - avatarImage.size.height)/2;
-    avatarOrigin.x = (640 - avatarImage.size.width)/2;
-    [avatarImage drawAtPoint:avatarOrigin];
-    
     CGRect textRect = CGRectMake(48, (640 - 416) / 2.0, 640 - 48 * 2, 416);
+    if (avatarImage) {
+        textRect = CGRectMake(48, 640 - 32, 640 - 48 * 2, 64);
+        
+
+        CGContextSaveGState(UIGraphicsGetCurrentContext());
+        CGPoint avatarOrigin = CGPointZero;
+        avatarOrigin.y = 96;
+        avatarOrigin.x = (640 - avatarImage.size.width)/2;
+
+        CGRect avatarRect = CGRectMake(avatarOrigin.x, avatarOrigin.y, avatarImage.size.width, avatarImage.size.height);
+        UIBezierPath *bpInner = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(avatarRect, 2, 2)];
+        
+        [bpInner addClip];
+        
+        [avatarImage drawAtPoint:avatarOrigin];
+        
+        CGContextRestoreGState(UIGraphicsGetCurrentContext());
+        
+        UIBezierPath *bpInnerStroke = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(avatarRect, 2, 2)];
+        [STKTextColor set];
+        [bpInnerStroke setFlatness:1];
+        [bpInnerStroke setLineJoinStyle:kCGLineJoinRound];
+        [bpInnerStroke setLineWidth:3];
+        [bpInnerStroke stroke];
+    }
+    
     
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setAlignment:NSTextAlignmentCenter];
@@ -86,6 +106,10 @@
     CGRect centeredRect = CGRectMake(0, 0, w, h);
     centeredRect.origin.x = (640 - w) / 2.0;
     centeredRect.origin.y = (640 - h) / 2.0;
+    
+    if (avatarImage) {
+        centeredRect.origin.y += 96;
+    }
     
     [text drawInRect:centeredRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : STKTextColor, NSParagraphStyleAttributeName : style}];
     
