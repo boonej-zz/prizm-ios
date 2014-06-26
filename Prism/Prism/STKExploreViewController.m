@@ -106,6 +106,7 @@
 - (void)initiateFilter:(id)sender
 {
     if([self filterNavController]) {
+        [self setIsShowingFilterView:NO];
         [[[self blurView] displayLink] setPaused:NO];
         [[self blurView] setHidden:NO];
         [[self filterNavController] willMoveToParentViewController:nil];
@@ -115,6 +116,7 @@
         [self configureInterface];
         
     } else {
+        [self setIsShowingFilterView:YES];
         STKExploreFilterViewController *filtervc = [[STKExploreFilterViewController alloc] init];
         [filtervc setDelegate:self];
         if([self isFilterActive]) {
@@ -304,34 +306,49 @@
     [[self tableView] setContentInset:UIEdgeInsetsMake([[self exploreTypeControl] frame].origin.y + [[self exploreTypeControl] frame].size.height, 0, 0, 0)];
 
     [self reloadPosts];
-    
+    [self configureInterface];
     [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:@{@"Explore Type" : [self exploreTypeString]}];
 }
 
 - (void)configureInterface
 {
-    STKNavigationButton *view = [[STKNavigationButton alloc] init];
-    [view setImage:[UIImage imageNamed:@"btn_search"]];
-    [view setHighlightedImage:[UIImage imageNamed:@"btn_search_selected"]];
-    [view setSelectedImage:[UIImage imageNamed:@"btn_search_selected"]];
-    [view setOffset:8];
-    [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
-    [self setSearchButton:view];
-    
-    STKNavigationButton *filterView = [[STKNavigationButton alloc] init];
-    [filterView setImage:[UIImage imageNamed:@"filter_active"]];
-    [filterView setHighlightedImage:[UIImage imageNamed:@"filter_active"]];
-    [filterView setSelectedImage:[UIImage imageNamed:@"filter_active"]];
-    [filterView setOffset:8];
-    [filterView addTarget:self action:@selector(initiateFilter:) forControlEvents:UIControlEventTouchUpInside];
-    [self setFilterButton:filterView];
-    
-    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
-    UIBarButtonItem *filterbbi = [[UIBarButtonItem alloc] initWithCustomView:filterView];
-    [self setSearchButtonItem:bbi];
-    [self setFilterButtonItem:filterbbi];
-    
-    [[self navigationItem] setRightBarButtonItems:@[bbi, filterbbi]];
+    if([self isShowingFilterView]) {
+        STKNavigationButton *filterCancelView = [[STKNavigationButton alloc] init];
+        [filterCancelView setImage:[UIImage imageNamed:@"filter_cancel"]];
+        [filterCancelView setHighlightedImage:[UIImage imageNamed:@"filter_cancel"]];
+        [filterCancelView setSelectedImage:[UIImage imageNamed:@"filter_cancel"]];
+        [filterCancelView setOffset:8];
+        [filterCancelView addTarget:self action:@selector(initiateFilter:) forControlEvents:UIControlEventTouchUpInside];
+        [self setFilterButton:filterCancelView];
+        
+        UIBarButtonItem *filterCancelbbi = [[UIBarButtonItem alloc] initWithCustomView:filterCancelView];
+        [[self navigationItem] setRightBarButtonItems:@[filterCancelbbi]];
+        
+    } else {
+        STKNavigationButton *view = [[STKNavigationButton alloc] init];
+        [view setImage:[UIImage imageNamed:@"btn_search"]];
+        [view setHighlightedImage:[UIImage imageNamed:@"btn_search_selected"]];
+        [view setSelectedImage:[UIImage imageNamed:@"btn_search_selected"]];
+        [view setOffset:8];
+        [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
+        [self setSearchButton:view];
+        
+        STKNavigationButton *filterView = [[STKNavigationButton alloc] init];
+        [filterView setImage:[UIImage imageNamed:@"filter_active"]];
+        [filterView setHighlightedImage:[UIImage imageNamed:@"filter_activeon"]];
+        [filterView setSelectedImage:[UIImage imageNamed:@"filter_activeon"]];
+        [filterView setOffset:8];
+        [filterView addTarget:self action:@selector(initiateFilter:) forControlEvents:UIControlEventTouchUpInside];
+        [self setFilterButton:filterView];
+        
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+        UIBarButtonItem *filterbbi = [[UIBarButtonItem alloc] initWithCustomView:filterView];
+        [self setSearchButtonItem:bbi];
+        [self setFilterButtonItem:filterbbi];
+        
+        [[self navigationItem] setRightBarButtonItems:@[bbi, filterbbi]];
+        [[self filterButton] setHidden:[self isSearchBarActive]];
+    }
 }
 
 - (NSString *)exploreTypeString
