@@ -19,6 +19,7 @@
 #import "UIERealTimeBlurView.h"
 #import "STKSearchUsersViewController.h"
 #import "STKInviteFriendsViewController.h"
+//#import "TMAPIClient.h"
 
 @import Social;
 @import Accounts;
@@ -99,6 +100,12 @@
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u twitterID] != nil)];
       }}
     ];
+    /*
+      @{@"title": @"Tumblr", @"image" : @"sharing_tumblr", @"type" : @"STKSettingsShareCell", @"actionSelector" : @"configureTumblr:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
+          [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u tumblrToken] != nil)];
+      }}
+    ];
+     */
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -179,20 +186,10 @@
     [[self navigationController] pushViewController:stvc animated:YES];
 }
 
-- (void)addFriends:(id)sender
-{
-    
-}
-
 - (void)inviteFriends:(id)sender
 {
     STKInviteFriendsViewController *vc = [[STKInviteFriendsViewController alloc] init];
     [[self navigationController] pushViewController:vc animated:YES];
-}
-
-- (void)shareYourPrizm:(id)sender
-{
-    
 }
 
 - (void)disableAccount:(id)sender
@@ -280,6 +277,44 @@
     }
 }
 
+/*
+- (void)configureTumblr:(NSNumber *)activating
+{
+    if ([activating boolValue]) {
+        [[TMAPIClient sharedInstance] authenticate:[[NSBundle mainBundle] bundleIdentifier] callback:^(NSError *error) {
+            if (!error) {
+                STKUser *u = [[STKUserStore store] currentUser];
+                [u setTumblrToken:[[TMAPIClient sharedInstance] OAuthToken]];
+                [u setTumblrTokenSecret:[[TMAPIClient sharedInstance] OAuthTokenSecret]];
+
+                [[STKNetworkStore store] establishMinimumIDForUser:u networkType:STKNetworkTypeTumblr completion:^(NSString *minID, NSError *err) {
+                    [[[STKUserStore store] currentUser] setTumblrLastMinID:minID];
+                    [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+                        
+                    }];
+                }];
+                
+                [[self tableView] reloadData];
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Your Tumblr account is now connected to your Prizm account. Use #prizm in your Tumblr posts and they will automatically be added to your Prizm profile."
+                                                            delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [av show];
+            }
+        }];
+    } else {
+        [[[STKUserStore store] currentUser] setTumblrLastMinID:nil];
+        [[[STKUserStore store] currentUser] setTumblrToken:nil];
+        [[[STKUserStore store] currentUser] setTumblrTokenSecret:nil];
+        
+        // nil out secrets in tumblr api
+        [[TMAPIClient sharedInstance] setOAuthToken:nil];
+        [[TMAPIClient sharedInstance] setOAuthTokenSecret:nil];
+        
+        [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+            
+        }];
+    }
+}
+*/
 - (void)done:(id)sender
 {
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];

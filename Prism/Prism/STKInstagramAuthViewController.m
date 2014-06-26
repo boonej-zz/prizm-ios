@@ -69,6 +69,7 @@
 {
     NSString *string = [[request URL] absoluteString];
 
+    NSLog(@"request %@", string);
     NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"access_token=([^&]*)" options:0 error:nil];
     NSTextCheckingResult *result = [exp firstMatchInString:string options:0 range:NSMakeRange(0, [string length])];
     
@@ -80,7 +81,7 @@
                                                         delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [av show];
 
-//            [[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/accounts/manage_access"]]];
+            //[[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/accounts/manage_access"]]];
         }
     }
     

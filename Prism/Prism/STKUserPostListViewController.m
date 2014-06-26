@@ -201,10 +201,6 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
     __weak STKUserPostListViewController *ws = self;
     if([self user]) {
         [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
-            if(!([[STKUserStore store] currentUser] == [self user])) {
-                [fs setFilterDictionary:@{@"scope" : @"public"}];
-            }
-
             [[STKContentStore store] fetchProfilePostsForUser:[ws user] fetchDescription:fs completion:completion];
         }];
     } else if([self trust]) {
@@ -264,6 +260,17 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
     } else if([[self personalButton] isSelected]) {
         [d setObject:STKPostTypePersonal forKey:@"type"];
     }
+    
+    if(![[[[STKUserStore store] currentUser] uniqueID] isEqualToString:[[self user] uniqueID]]) {
+        if([[[STKUserStore store] currentUser] trustForUser:[self user]]) {
+            [d setObject:@"public trust" forKey:@"visibility"];
+        } else {
+            [d setObject:@"public" forKey:@"visibility"];
+        }
+    } else {
+        [d setObject:@"private public trust" forKey:@"visibility"];
+    }
+
     
     return d;
 }

@@ -195,7 +195,10 @@
 + (void)imageForInviteCard:(STKUser *)user withCompletion:(void (^)(UIImage *img))block
 {
     [[STKImageStore store] fetchImageForURLString:[user profilePhotoPath] completion:^(UIImage *img) {
-        // created masked avatar image at 256x256px
+        if (img == nil) {
+            img = [UIImage imageNamed:@"trust_user_missing_144"];
+        }
+        // created avatar image at 256x256px
         int dim = STKUserProfilePhotoSize.height*2;
         CGSize size = CGSizeMake(dim,dim);
         

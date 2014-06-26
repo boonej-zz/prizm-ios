@@ -13,6 +13,8 @@
 #import "STKImageSharer.h"
 #import "STKPost.h"
 #import "UIERealTimeBlurView.h"
+#import "STKInviteFriendsShareCell.h"
+#import "STKProcessingView.h"
 
 @import Social;
 @import MessageUI;
@@ -22,7 +24,9 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 
 @interface STKInviteFriendsViewController ()
     <UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate,
-    MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate>
+    MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate,
+    UINavigationControllerDelegate>
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
@@ -40,22 +44,6 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 @end
 
 @implementation STKInviteFriendsViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        [self setAutomaticallyAdjustsScrollViewInsets:NO];
-
-        // Custom initialization
-        
-        [STKMarkupUtilities imageForInviteCard:[[STKUserStore store] currentUser] withCompletion:^(UIImage *img) {
-            [self setShareCard:img];
-        }];
-        
-    }
-    return self;
-}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -79,6 +67,12 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
     
     [self setAvailableServiceTypes:serviceTypes];
     [self configureInterface];
+    
+    [STKProcessingView present];
+    [STKMarkupUtilities imageForInviteCard:[[STKUserStore store] currentUser] withCompletion:^(UIImage *img) {
+        [STKProcessingView dismiss];
+        [self setShareCard:img];
+    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -129,52 +123,50 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 
         return c;
     }
-    UITableViewCell *c;
-
+    STKInviteFriendsShareCell *c;
+    c = [STKInviteFriendsShareCell cellForTableView:tableView target:self];
+    NSString *text;
+    UIImage *image;
     if ([indexPath section] == 1) {
-        c = [tableView dequeueReusableCellWithIdentifier:@"SocialTypeCell"];
-        if(!c) {
-            c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SocialTypeCell"];
-        }
         NSString *serviceType = [self availableServiceTypes][[indexPath row]];
-        [[c textLabel] setText:serviceType];
-        [c setSelectionStyle:UITableViewCellSelectionStyleNone];
+        text = [self prettifyServiceType:serviceType];
+        image = [self imageForServiceType:serviceType];
     }
     if ([indexPath section] == 2) {
-        c = [tableView dequeueReusableCellWithIdentifier:@"ActivityCell"];
-        if(!c) {
-            c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ActivityCell"];
-        }
         UIActivity *activity = [self activities][[indexPath row]];
-        [[c textLabel] setText:[activity activityTitle]];
-        [[c imageView] setImage:[activity activityImage]];
-        [c setSelectionStyle:UITableViewCellSelectionStyleNone];
+        text = [activity activityTitle];
+        image = [self imageForActivity:activity];
     }
     if ([indexPath section] == 3) {
-        c = [tableView dequeueReusableCellWithIdentifier:@"MessageCell"];
-        if(!c) {
-            c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MessageCell"];
-        }
-        [[c textLabel] setText:[[self messageServiceArray] firstObject]];
-        [c setSelectionStyle:UITableViewCellSelectionStyleNone];
+        text = [[self messageServiceArray] firstObject];
     }
     if ([indexPath section] == 4) {
-        c = [tableView dequeueReusableCellWithIdentifier:@"EmailCell"];
-        if(!c) {
-            c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmailCell"];
-        }
-        [[c textLabel] setText:[[self emailServiceArray] firstObject]];
-        [c setSelectionStyle:UITableViewCellSelectionStyleNone];
+        text = [[self emailServiceArray] firstObject];
     }
-    
-    UIImageView *iv = [c imageView];
-    CGPoint center = [iv center];
-    CGRect frame = [iv frame];
-    frame.size = CGSizeMake(43, 43);
-    [iv setFrame:frame];
-    [iv setCenter:center];
+
+    [[c textView] setText:text];
+    [[c networkImageView] setImage:image];
     
     return c;
+}
+
+- (NSString *)prettifyServiceType:(NSString *)serviceType
+{
+    return @{SLServiceTypeFacebook : @"Facebook", SLServiceTypeTwitter : @"Twitter"}[serviceType];
+}
+
+- (UIImage *)imageForServiceType:(NSString *)serviceType
+{
+    NSDictionary *map = @{SLServiceTypeTwitter : @"sharing_twitter", SLServiceTypeFacebook : @"sharing_facebook"};
+    
+    return [UIImage imageNamed:map[serviceType]];
+}
+
+- (UIImage *)imageForActivity:(UIActivity *)activity
+{
+    NSDictionary *map = @{STKActivityTypeWhatsapp : @"sharing_whatsapp", STKActivityTypeTumblr : @"sharing_tumblr",
+                          STKActivityTypeInstagram : @"sharing_instagram"};
+    return [UIImage imageNamed:map[[activity activityType]]];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -205,7 +197,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
         return 320;
     }
 
-    return 64;
+    return 44;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -215,6 +207,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self setNavigationBackgroundImage:[[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault]];
     if ([indexPath section] == 1) {
         NSString *serviceType = [self availableServiceTypes][[indexPath row]];
         SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:serviceType];
@@ -230,11 +223,11 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
     }
     
     if ([indexPath section] == 3) {
-        [self setNavigationBackgroundImage:[[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault]];
-        [[UINavigationBar appearance] setBackgroundImage:nil
-                                           forBarMetrics:UIBarMetricsDefault];
-        
+#warning smelly, but no direct manipulations on the nav controller had any effect
+        [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+
         MFMessageComposeViewController *vc = [[MFMessageComposeViewController alloc] init];
+        
         [vc setMessageComposeDelegate:self];
         [vc setBody:STKInviteFriendsShareText];
         [vc addAttachmentData:UIImageJPEGRepresentation([self shareCard], 1.0) typeIdentifier:@"public.data" filename:@"prizm-share-card.jpeg"];
@@ -242,11 +235,10 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
     }
     
     if ([indexPath section] == 4) {
-        [self setNavigationBackgroundImage:[[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault]];
-        [[UINavigationBar appearance] setBackgroundColor:[UIColor whiteColor]];
+        [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
 
-        
         MFMailComposeViewController *vc = [[MFMailComposeViewController alloc] init];
+        
         [vc setMailComposeDelegate:self];
         [vc setSubject:STKInviteFriendsEmailSubject];
         [vc setMessageBody:STKInviteFriendsShareText isHTML:NO];
@@ -255,18 +247,19 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
     }
 }
 
-
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
+    [[UINavigationBar appearance] setBackgroundImage:[self navigationBackgroundImage] forBarMetrics:UIBarMetricsDefault];
+
     [controller dismissViewControllerAnimated:YES completion:^{
-        [[UINavigationBar appearance] setBackgroundColor:nil];
     }];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
+    [[UINavigationBar appearance] setBackgroundImage:[self navigationBackgroundImage] forBarMetrics:UIBarMetricsDefault];
+    
     [controller dismissViewControllerAnimated:YES completion:^{
-        [[UINavigationBar appearance] setBackgroundColor:nil];
     }];
 }
 

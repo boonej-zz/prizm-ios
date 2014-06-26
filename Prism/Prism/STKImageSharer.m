@@ -11,6 +11,10 @@
 #import "STKImageStore.h"
 #import "STKContentStore.h"
 
+NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
+NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
+NSString * const STKActivityTypeWhatsapp = @"STKActivityWhatsapp";
+
 @class STKActivity;
 
 @protocol STKActivityDelegate <NSObject>
@@ -66,7 +70,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 - (NSString *)activityType
 {
-    return @"STKActivityInstagram";
+    return STKActivityTypeInstagram;
 }
 - (NSString *)activityTitle
 {
@@ -119,7 +123,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @implementation STKActivityTumblr
 - (NSString *)activityType
 {
-    return @"STKActivityTumblr";
+    return STKActivityTypeTumblr;
 }
 - (NSString *)activityTitle
 {
@@ -172,7 +176,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @implementation STKActivityWhatsapp
 - (NSString *)activityType
 {
-    return @"STKActivityWhatsapp";
+    return STKActivityTypeWhatsapp;
 }
 - (NSString *)activityTitle
 {
@@ -304,9 +308,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];
     NSMutableArray *mutableCopy = [activities mutableCopy];
     for (UIActivity *activity in activities) {
-        if ([activity canPerformWithActivityItems:a]) {
-            NSLog(@"found activity able to perform %@", activity.activityTitle);
-        } else {
+        if ([activity canPerformWithActivityItems:a] == NO) {
             [mutableCopy removeObject:activity];
         }
     }
@@ -344,7 +346,8 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                                                                 applicationActivities:activities];
     [activityViewController setExcludedActivityTypes:
      @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail]];
-    
+
+#warning smelly, but we do not have direct access to system provided activities and their navigation controllers
     // revert appearance proxies to get default iOS behavior when sharing through Messages
     UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:nil

@@ -206,14 +206,18 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)transferPostsFromSocialNetworks
 {
     if([self currentUser]) {
-        [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:^(STKUser *updatedUser, NSError *err) {
+        __weak STKUser *u = [self currentUser];
+        [[STKNetworkStore store] checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:^(NSDictionary *updatedUserEntries, NSError *err) {
             if(!err) {
-                if(updatedUser && [[updatedUser uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
-                    [self updateUserDetails:updatedUser completion:^(STKUser *u, NSError *err) {
-                        if(!err) {
-                            [[self context] save:nil];
-                        }
-                    }];
+                if(u && [[u uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]]) {
+                    if(updatedUserEntries) {
+                        [u setValuesForKeysWithDictionary:updatedUserEntries];
+                        [self updateUserDetails:u completion:^(STKUser *updated, NSError *err) {
+                            if(!err) {
+                                [[self context] save:nil];
+                            }
+                        }];
+                    }
                 }
             }
         }];

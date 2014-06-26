@@ -107,6 +107,9 @@
         <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="subtype" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="trustCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="tumblrLastMinID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tumblrToken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tumblrTokenSecret" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitterID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitterLastMinID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
@@ -134,6 +137,6 @@
         <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="795"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="840"/>
     </elements>
 </model>

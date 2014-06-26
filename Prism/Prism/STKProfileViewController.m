@@ -151,33 +151,33 @@ typedef enum {
             additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email"];
         }
 
+        __weak id ws = self;
+        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchProfilePostsForUser:[ws profile] fetchDescription:fs completion:completion];
+        }];
+        
         [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:additionalFields completion:^(STKUser *u, NSError *err) {
             if(!err) {
                 if([[self profile] isInstitution]) {
                     STKFetchDescription *fd = [[STKFetchDescription alloc] init];
                     [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
                     [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
-                        NSArray * scope = @[@"public"];
-                        if(trusts){
-                            scope = @[@"public", @"trust"];
-                        }
                         [self determineLuminariesFromTrusts:trusts];
-                        [self fetchPostsForProfileWithScope:scope];
+                        [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
+                                                     completion:^(STKTrust *t, NSError *err) {
+                                                         [self fetchNewPosts];
+                                                         [self refreshProfileViews];
+                                                     }];
                     }];
                 } else {
                     if(![[self profile] isEqual:[[STKUserStore store] currentUser]]) {
                         [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
                                                      completion:^(STKTrust *t, NSError *err) {
-                                                         NSArray * scope = @[@"public"];
-                                                         if(t) {
-                                                             scope = @[@"public", @"trust"];
-                                                         }
-                                                         
-                                                         [self fetchPostsForProfileWithScope:scope];
+                                                         [self fetchNewPosts];
                                                          [self refreshProfileViews];
                                                      }];
                     } else {
-                        [self fetchPostsForProfileWithScope:nil];
+                        [self fetchNewPosts];
                     }
                 }
             }
@@ -189,31 +189,6 @@ typedef enum {
 
     [self determineAdditionalInfoFields];
     [self refreshProfileViews];
-}
-
-- (void)fetchPostsForProfileWithScope:(NSArray *)scope
-{
-    if([[self profile] isActive]){
-        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
-            if(!([[STKUserStore store] currentUser] == [self profile])) {
-                if([scope count] == 1) {
-                    [fs setFilterDictionary:@{@"scope" : scope[0]}];
-                } else {
-                    [fs setFilterDictionary:@{@"scope" : scope}];
-                }
-            }
-            [[STKContentStore store] fetchProfilePostsForUser:[self profile] fetchDescription:fs completion:completion];
-        }];
-        
-        [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-            [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:STKProfileSectionDynamic]
-                          withRowAnimation:UITableViewRowAnimationNone];
-        }];
-    } else {
-        //account is inactive. disable posts view
-        [self setPostController:nil];
-    }
-    
 }
 
 - (void)determineAdditionalInfoFields
@@ -346,6 +321,16 @@ typedef enum {
         [d setObject:[[self profile] uniqueID] forKey:@"tags.uniqueID"];
     }
     
+    if(![self isShowingCurrentUserProfile]) {
+        if([[self profile] trustForUser:[[STKUserStore store] currentUser]]) {
+            [d setObject:@"trust public" forKey:@"visibility"];
+        } else {
+            [d setObject:@"public" forKey:@"visibility"];
+        }
+    } else {
+        [d setObject:@"private trust public" forKey:@"visibility"];
+    }
+    
     return d;
 }
 
@@ -383,6 +368,7 @@ typedef enum {
 {
     if([[self profile] postCount] > 0){
         [[self luminatingBar] setLuminating:YES];
+        [[self postController] setFilterMap:[self filterDictionary]];
         [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
             [[self luminatingBar] setLuminating:NO];
             [[self tableView] reloadData];
@@ -393,6 +379,7 @@ typedef enum {
 - (void)fetchOlderPosts
 {
     if([[self  profile] postCount] > 0){
+        [[self postController] setFilterMap:[self filterDictionary]];
         [[self postController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
             [[self tableView] reloadData];
         }];
@@ -443,7 +430,7 @@ typedef enum {
 - (void)menuWillAppear:(BOOL)animated
 {
     [[self blurView] setOverlayOpacity:0.5];
-    [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+    [[self navigationItem] setRightBarButtonItem:nil];
 }
 
 - (void)menuWillDisappear:(BOOL)animated

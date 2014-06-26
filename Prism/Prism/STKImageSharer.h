@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const STKActivityTypeInstagram;
+extern NSString * const STKActivityTypeTumblr;
+extern NSString * const STKActivityTypeWhatsapp;
+
 @class STKPost;
 
 @interface STKImageSharer : NSObject

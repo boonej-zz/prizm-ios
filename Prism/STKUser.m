@@ -42,7 +42,8 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 @dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
-accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, status, dateDeleted;
+accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, status, dateDeleted, tumblrToken,
+tumblrTokenSecret, tumblrLastMinID;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
@@ -83,10 +84,15 @@ accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, sta
              @"posts_count" : @"postCount",
              @"trust_count" : @"trustCount",
              
+             
+             @"tumblr_token_secret" : @"tumblrTokenSecret",
+             @"tumblr_token" : @"tumblrToken",
+             @"tumblr_min_id" : @"tumblrLastMinID",
              @"instagram_token" : @"instagramToken",
              @"instagram_min_id" : @"instagramLastMinID",
              @"twitter_token" : @"twitterID",
              @"twitter_min_id" : @"twitterLastMinID",
+             
              @"trusts" : [STKBind bindMapForKey:@"ownedTrusts" matchMap:@{@"uniqueID" : @"_id"}],
 
              @"followers" : [STKBind bindMapForKey:@"followers" matchMap:@{@"uniqueID" : @"_id"}],
