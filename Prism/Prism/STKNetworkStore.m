@@ -302,9 +302,23 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     if(!link)
         link = @"";
 
-    // don't include #prizm in the post (it will make #prizm trend through the roof)
-    text = [text stringByReplacingOccurrencesOfString:@"#prizm" withString:@""];
-   
+    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#prizm[#@\\s]" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray *matches = [exp matchesInString:text options:kNilOptions range:NSMakeRange(0, [text length])];
+    // modify the string backwards
+    int lastIndex = (int)[matches count] - 1;
+    for (int i = lastIndex; i >= 0; i--) {
+        NSTextCheckingResult *match = matches[i];
+        NSRange hRange = NSMakeRange([match range].location, 1);
+        text = [text stringByReplacingCharactersInRange:hRange withString:@""];
+    }
+    
+    // strip out last #hashtag if post ends in #prizm
+    NSRange lastMatch = [text rangeOfString:@"#prizm" options:NSBackwardsSearch|NSCaseInsensitiveSearch range:NSMakeRange(0, [text length])];
+    if (lastMatch.location + lastMatch.length == [text length]) {
+        NSRange hRange = NSMakeRange(lastMatch.location, 1);
+        text = [text stringByReplacingCharactersInRange:hRange withString:@""];
+    }
+    
     NSURLSessionDataTask *dt = [[[STKBaseStore store] session] dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if(!error) {
             UIImage *img = [UIImage imageWithData:data];
@@ -428,7 +442,22 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     }
 
     // don't include #prizm in the post (it will make #prizm trend through the roof)
-    text = [text stringByReplacingOccurrencesOfString:@"#prizm" withString:@""];
+    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#prizm[#@\\s]" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray *matches = [exp matchesInString:text options:kNilOptions range:NSMakeRange(0, [text length])];
+    // modify the string backwards
+    int lastIndex = (int)[matches count] - 1;
+    for (int i = lastIndex; i >= 0; i--) {
+        NSTextCheckingResult *match = matches[i];
+        NSRange hRange = NSMakeRange([match range].location, 1);
+        text = [text stringByReplacingCharactersInRange:hRange withString:@""];
+    }
+    
+    // strip out last #hashtag if post ends in #prizm
+    NSRange lastMatch = [text rangeOfString:@"#prizm" options:NSBackwardsSearch|NSCaseInsensitiveSearch range:NSMakeRange(0, [text length])];
+    if (lastMatch.location + lastMatch.length == [text length]) {
+        NSRange hRange = NSMakeRange(lastMatch.location, 1);
+        text = [text stringByReplacingCharactersInRange:hRange withString:@""];
+    }
     
     if(imageURL) {
         NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:imageURL]];
