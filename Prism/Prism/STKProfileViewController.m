@@ -324,12 +324,12 @@ typedef enum {
     
     if(![self isShowingCurrentUserProfile]) {
         if([[self profile] trustForUser:[[STKUserStore store] currentUser]]) {
-            [d setObject:STKPostVisibilityTrust forKey:STKPostVisibilityKey];
+            [d setObject:@"trust public" forKey:@"visibility"];
         } else {
-            [d setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
+            [d setObject:@"public" forKey:@"visibility"];
         }
     } else {
-        [d setObject:STKPostVisibilityPrivate forKey:STKPostVisibilityKey];
+        [d setObject:@"private trust public" forKey:@"visibility"];
     }
     
     return d;
@@ -369,6 +369,7 @@ typedef enum {
 {
     if([[self profile] postCount] > 0){
         [[self luminatingBar] setLuminating:YES];
+        [[self postController] setFilterMap:[self filterDictionary]];
         [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
             [[self luminatingBar] setLuminating:NO];
             [[self tableView] reloadData];
@@ -379,6 +380,7 @@ typedef enum {
 - (void)fetchOlderPosts
 {
     if([[self  profile] postCount] > 0){
+        [[self postController] setFilterMap:[self filterDictionary]];
         [[self postController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
             [[self tableView] reloadData];
         }];
