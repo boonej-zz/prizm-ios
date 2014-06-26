@@ -19,7 +19,6 @@
 @import Accounts;
 
 const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
-NSString * const STKNetworkStoreTumblrSyncInfoKey = @"STKNetworkStoreTumblrSyncInfoKey";
 
 @interface STKNetworkStore ()
 @property (nonatomic, strong) NSURLSession *session;
@@ -107,32 +106,20 @@ NSString * const STKNetworkStoreTumblrSyncInfoKey = @"STKNetworkStoreTumblrSyncI
         [[TMAPIClient sharedInstance] userInfo:^(NSDictionary* response, NSError *error) {
             if (!error) {
                 NSArray *blogs = response[@"user"][@"blogs"];
-                NSMutableArray *hosts = [NSMutableArray array];
+                
+                __block NSUInteger hostCount = [blogs count];
+                __block NSMutableArray *posts = [NSMutableArray array];
                 for (NSDictionary *blog in blogs) {
                     NSURL *url = [NSURL URLWithString:blog[@"url"]];
                     NSString *host = [url host];
-                    [hosts addObject:host];
-                }
-                
-                __block NSUInteger hostCount = [hosts count];
-                __block NSMutableArray *posts = [NSMutableArray array];
-                for (NSString *host in hosts) {
-                    [[TMAPIClient sharedInstance] posts:host type:nil parameters:nil callback:^(NSDictionary *response, NSError *error) {
+                    [[TMAPIClient sharedInstance] posts:host type:nil parameters:@{@"limit" : @(1)} callback:^(NSDictionary *response, NSError *error) {
                         if (!error) {
                             hostCount--;
-                            NSLog(@"post at host response\n%@", response);
                             [posts addObjectsFromArray:response[@"posts"]];
                             if (hostCount == 0) {
                                 // all posts of all types gathered (we don't need to filter here, because we just want the most
                                 // recent date
-                                
                                 NSArray *sortedPosts = [posts sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO]]];
-                                [sortedPosts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                    NSLog(@"tumblr date %@", obj[@"date"]);
-                                }];
-                                NSDictionary *lastMins = @{@"date" : [sortedPosts firstObject][@"date"],
-                                                           @"hosts" : hosts};
-                                [[NSUserDefaults standardUserDefaults] setObject:lastMins forKey:STKNetworkStoreTumblrSyncInfoKey];
                                 
                                 block([sortedPosts firstObject][@"date"], error);
                             }
@@ -184,7 +171,7 @@ NSString * const STKNetworkStoreTumblrSyncInfoKey = @"STKNetworkStoreTumblrSyncI
                         if(!err)
                             [u setTwitterLastMinID:twitterLastID];
 
-                        [self transferPostsFromTumblrWithToken:[u tumblrToken] secret:[u tumblrTokenSecret] lastMinimumID:[u tumblrLastMinID] completion:^(NSString *tumblrLastID, NSError *err) {
+                        [self transferPostsFromTumblrWithLastMinimumID:[u tumblrLastMinID] completion:^(NSString *tumblrLastID, NSError *err) {
                             if (!err)
                                 [u setTumblrLastMinID:tumblrLastID];
                                 
@@ -487,18 +474,280 @@ NSString * const STKNetworkStoreTumblrSyncInfoKey = @"STKNetworkStoreTumblrSyncI
     }
 }
 
-- (void)transferPostsFromTumblrWithToken:(NSString *)token
-                                secret:(NSString *)secret
-                           lastMinimumID:(NSString *)minID
+- (void)transferPostsFromTumblrWithLastMinimumID:(NSString *)minID
                               completion:(void (^)(NSString *lastID, NSError *err))block
 {
-    if(!token) {
+    STKUser *u = [[STKUserStore store] currentUser];
+    if ([u tumblrToken] && [u tumblrTokenSecret] && minID) {
+        [[TMAPIClient sharedInstance] setOAuthToken:[u tumblrToken]];
+        [[TMAPIClient sharedInstance] setOAuthTokenSecret:[u tumblrTokenSecret]];
+    } else {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(minID, nil);
         }];
         return;
     }
     
+    
+    [[TMAPIClient sharedInstance] userInfo:^(NSDictionary* response, NSError *error) {
+        if (!error) {
+            NSArray *blogs = response[@"user"][@"blogs"];
+            
+            __block NSUInteger hostCount = [blogs count];
+            __block NSMutableArray *posts = [NSMutableArray array];
+            for (NSDictionary *blog in blogs) {
+                NSURL *url = [NSURL URLWithString:blog[@"url"]];
+                NSString *host = [url host];
+                
+                NSMutableArray *postsInBlog = [NSMutableArray array];
+                [self fetchRecentTumblrPosts:host fetchedSoFar:postsInBlog lastMinimumID:minID completion:^(NSArray *p, NSError *err) {
+                    if (!error) {
+                        [posts addObjectsFromArray:p];
+                        
+                        hostCount--;
+                        if (hostCount == 0) {
+                            NSArray *sortedPosts = [posts sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO]]];
+                            
+                            [self createPostsForTumblr:sortedPosts];
+                            NSString *newLastMin = minID;
+                            if ([sortedPosts firstObject]) {
+                                newLastMin = [sortedPosts firstObject][@"date"];
+                            }
+                            block(newLastMin, error);
+                        }
+                    } else {
+                        block(minID, error);
+                    }
+                }];
+            }
+        } else {
+            block(minID, error);
+        }
+    }];
+}
+
+- (void)fetchRecentTumblrPosts:(NSString *)host fetchedSoFar:(NSMutableArray *)fetchedSoFar lastMinimumID:(NSString *)minID completion:(void (^)(NSArray *posts, NSError *err))block
+{
+    NSMutableDictionary *parameters = [@{@"filter" : @"text"} mutableCopy];
+    
+    if ([fetchedSoFar count]) {
+        parameters[@"offset"] = @([fetchedSoFar count]);
+    }
+    
+    [[TMAPIClient sharedInstance] posts:host type:nil parameters:parameters callback:^(NSDictionary *response, NSError *error) {
+        if (!error) {
+            BOOL morePosts = YES;
+            NSArray *posts = response[@"posts"];
+            
+            if ([posts count]) {
+                if (minID) {
+                    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+                        NSString *date = [evaluatedObject objectForKey:@"date"];
+                        
+                        // want minID to be less than date
+                        if ([minID compare:date] == NSOrderedAscending) {
+                            return YES;
+                        }
+
+                        return NO;
+                    }];
+                    NSArray *filteredPosts = [posts filteredArrayUsingPredicate:predicate];
+                    [fetchedSoFar addObjectsFromArray:filteredPosts];
+                    
+                    if ([posts count] > [filteredPosts count]) {
+                        morePosts = NO;
+                    }
+                } else {
+                    [fetchedSoFar addObjectsFromArray:posts];
+                }
+            } else {
+                morePosts = NO;
+            }
+            
+            if (morePosts == NO) {
+                block(fetchedSoFar, error);
+            } else {
+                [self fetchRecentTumblrPosts:host fetchedSoFar:fetchedSoFar lastMinimumID:minID completion:block];
+            }
+        } else {
+            block(nil, error);
+        }
+    }];
+}
+
+- (void)createPostsForTumblr:(NSArray *)posts
+{
+    NSDictionary *post = [posts lastObject];
+    
+    if (post == nil) {
+        return;
+    }
+    BOOL createPost = NO;
+    
+    // catch tumblr official tagged
+    NSArray *tumblrTags = post[@"tags"];
+    if ([tumblrTags containsObject:@"prizm"]) {
+        createPost = YES;
+    }
+    // links have url, title, description
+    // quotes have text, source
+    // text has title body
+    // photos have caption
+    
+    NSString *title = post[@"title"];
+    NSString *description = post[@"description"];
+    NSString *body = post[@"body"];
+    NSString *text = post[@"text"];
+    NSString *caption = post[@"caption"];
+    NSString *source = post[@"source"];
+    
+    // construct postText and imageURL
+    NSString *postText = @"";
+    NSString *imageURL;
+    
+    if ([post[@"type"] isEqualToString:@"text"]) {
+        NSMutableString *s = [NSMutableString string];
+        if (title) {
+            [s appendFormat:@"%@\n", title];
+        }
+        if (body) {
+            [s appendFormat:@"%@\n", body];
+        }
+        
+        if ([s length]) {
+            postText = [s substringToIndex:[s length] - 1];
+        }
+    }
+    if ([post[@"type"] isEqualToString:@"link"]) {
+        NSMutableString *s = [NSMutableString string];
+        NSString *url = post[@"url"];
+        if (title) {
+            [s appendFormat:@"%@\n", title];
+        }
+        if (url) {
+            [s appendFormat:@"%@\n", url];
+        }
+        if (description) {
+            [s appendFormat:@"%@\n", description];
+        }
+        
+        if ([s length]) {
+            postText = [s substringToIndex:[s length] - 1];
+        }
+    }
+    if ([post[@"type"] isEqualToString:@"quote"]) {
+        NSMutableString *s = [NSMutableString string];
+        if (text) {
+            [s appendFormat:@"%@\n", text];
+        }
+        if (source) {
+            [s appendFormat:@"%@\n", source];
+        }
+        
+        if ([s length]) {
+            postText = [s substringToIndex:[s length] - 1];
+        }
+    } else {
+        if (caption) {
+            postText = caption;
+        }
+        
+        NSDictionary *photo = [post[@"photos"] firstObject];
+        imageURL = photo[@"original_size"][@"url"];
+    }
+    
+    // catch content with #prizm
+    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#prizm" options:0 error:nil];
+    NSTextCheckingResult *result = [exp firstMatchInString:postText options:0 range:NSMakeRange(0, [postText length])];
+    
+    if (result) {
+        createPost = YES;
+    }
+    
+    NSString *type = post[@"type"];
+    
+    // type and status get final say
+    if ([type isEqualToString:@"video"] || [type isEqualToString:@"audio"] ||
+        [type isEqualToString:@"chat"] || [type isEqualToString:@"answer"] ||
+        [post[@"state"] isEqualToString:@"published"] == NO) {
+        
+        createPost = NO;
+    }
+    
+    if (createPost) {
+        NSString *postType = STKPostTypeExperience;
+        NSString *lowercaseSearchString = [postText lowercaseString];
+        if([lowercaseSearchString rangeOfString:@"#aspiration"].location != NSNotFound) {
+            postType = STKPostTypeAspiration;
+        } else if([lowercaseSearchString rangeOfString:@"#inspiration"].location != NSNotFound) {
+            postType = STKPostTypeInspiration;
+        } else if([lowercaseSearchString rangeOfString:@"#experience"].location != NSNotFound) {
+            postType = STKPostTypeExperience;
+        } else if([lowercaseSearchString rangeOfString:@"#achievement"].location != NSNotFound) {
+            postType = STKPostTypeAchievement;
+        } else if([lowercaseSearchString rangeOfString:@"#passion"].location != NSNotFound) {
+            postType = STKPostTypePassion;
+        }
+        
+        NSString *link = post[@"post_url"];
+        
+        if (imageURL) {
+            NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:imageURL]];
+            NSURLSessionDataTask *dt = [[[STKBaseStore store] session] dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                if(!error) {
+                    UIImage *img = [UIImage imageWithData:data];
+                    if(img) {
+                        [[STKImageStore store] uploadImage:img thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
+                            if(!err) {
+                                NSDictionary *postInfo = @{
+                                                           STKPostTextKey : postText,
+                                                           STKPostTypeKey : postType,
+                                                           @"external_provider" : @"tumblr",
+                                                           @"external_link" : link,
+                                                           STKPostURLKey : URLString
+                                                           };
+                                
+                                [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
+                                    if(!err) {
+                                        NSMutableArray *a = [posts mutableCopy];
+                                        [a removeLastObject];
+                                        [self createPostsForTumblr:a];
+                                    }
+                                }];
+                            }
+                            
+                        }];
+                    }
+                }
+            }];
+            [dt resume];
+        } else {
+            UIImage *img = [STKMarkupUtilities imageForText:postText];
+            [[STKImageStore store] uploadImage:img thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
+                if(!err) {
+                    NSDictionary *postInfo = @{
+                                               STKPostTextKey : postText,
+                                               STKPostTypeKey : postType,
+                                               @"external_provider" : @"tumblr",
+                                               @"external_link" : link,
+                                               STKPostURLKey : URLString
+                                               };
+                    
+                    [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
+                        if(!err) {
+                            NSMutableArray *a = [posts mutableCopy];
+                            [a removeLastObject];
+                            [self createPostsForTumblr:a];
+                        }
+                    }];
+                }
+            }];
+        }
+    } else {
+        NSMutableArray *a = [posts mutableCopy];
+        [a removeLastObject];
+        [self createPostsForTumblr:a];
+    }
 }
 
 @end

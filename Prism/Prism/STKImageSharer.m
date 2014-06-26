@@ -308,9 +308,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];
     NSMutableArray *mutableCopy = [activities mutableCopy];
     for (UIActivity *activity in activities) {
-        if ([activity canPerformWithActivityItems:a]) {
-            NSLog(@"found activity able to perform %@", activity.activityTitle);
-        } else {
+        if ([activity canPerformWithActivityItems:a] == NO) {
             [mutableCopy removeObject:activity];
         }
     }
