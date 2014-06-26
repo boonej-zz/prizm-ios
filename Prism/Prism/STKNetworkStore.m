@@ -136,7 +136,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     }
 }
 
-- (void)checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:(void (^)(STKUser *updatedUser, NSError *err))block
+- (void)checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:(void (^)(NSDictionary *updatedUserData, NSError *err))block
 {
     if([self updating]) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -155,26 +155,25 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     
     [self setUpdating:YES];
     
+    NSMutableDictionary *stats = [[NSMutableDictionary alloc] init];
     [[STKUserStore store] fetchUserDetails:u additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token", @"tumblr_token", @"tumblr_min_id"] completion:^(STKUser *user, NSError *err) {
         if(!err) {
             NSLog(@"Will check Instagram %@", [user instagramToken]);
             [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[u instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
                 if(!err)
-                    [u setInstagramLastMinID:instagramLastID];
+                    [stats setObject:instagramLastID forKey:@"instagramLastMinID"];
                 
                 [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
                     ACAccount *account = [self matchingAccountForUser:u inAccounts:accounts];
                     NSLog(@"Will check Twitter %@", [account username]);
                     [self transferPostsFromTwitterAccount:account lastMinimumID:[u twitterLastMinID] completion:^(NSString *twitterLastID, NSError *twitterError) {
-                        if([twitterError code] == STKNetworkStoreErrorTwitterAccountNoLongerExists) {
-                            [u setTwitterID:nil];
-                        }
+
                         if(!err)
-                            [u setTwitterLastMinID:twitterLastID];
+                            [stats setObject:twitterLastID forKey:@"twitterLastMinID"];
 
                         [self setUpdating:NO];
                         
-                        block(u, nil);
+                        block(stats, nil);
                         /*
                         [self transferPostsFromTumblrWithLastMinimumID:[u tumblrLastMinID] completion:^(NSString *tumblrLastID, NSError *err) {
                             if (!err)
@@ -189,6 +188,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                 }];
             }];
         } else {
+            block(nil, err);
             NSLog(@"Failed to get instagram/twitter/tumblr details");
         }
     }];
@@ -240,7 +240,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                                      block(firstID, nil);
                                                                                  else
                                                                                      block(minID, nil);
-                                                                             [self createPostsFromInstagram:postsToSend];
+                                                                                 [self createPostsFromInstagram:postsToSend];
                                                                              });
                                                                              
                                                                          });

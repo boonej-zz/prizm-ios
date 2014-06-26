@@ -24,6 +24,7 @@
 #import "STKLuminatingBar.h"
 #import "STKSearchUsersViewController.h"
 #import "STKExploreViewController.h"
+#import <Crashlytics/Crashlytics.h>
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
@@ -366,7 +367,6 @@
 {
     [super viewWillDisappear:animated];
     [[[self blurView] displayLink] setPaused:YES];
-
 }
 
 - (void)viewDidAppear:(BOOL)animated

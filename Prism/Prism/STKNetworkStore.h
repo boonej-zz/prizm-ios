@@ -22,7 +22,7 @@ typedef enum {
 
 + (STKNetworkStore *)store;
 
-- (void)checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:(void (^)(STKUser *updatedUser, NSError *err))block;
+- (void)checkAndFetchPostsFromOtherNetworksForCurrentUserCompletion:(void (^)(NSDictionary *updatedUserValues, NSError *err))block;
 - (void)establishMinimumIDForUser:(STKUser *)u networkType:(STKNetworkType)type completion:(void (^)(NSString *minID, NSError *err))block;
 
 @end
