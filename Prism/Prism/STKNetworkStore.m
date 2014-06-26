@@ -302,6 +302,15 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     if(!link)
         link = @"";
 
+    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#prizm(?:[@#\\s]|$)" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray *matches = [exp matchesInString:text options:kNilOptions range:NSMakeRange(0, [text length])];
+    // modify the string backwards
+    int lastIndex = (int)[matches count] - 1;
+    for (int i = lastIndex; i >= 0; i--) {
+        NSTextCheckingResult *match = matches[i];
+        NSRange hRange = NSMakeRange([match range].location, 1);
+        text = [text stringByReplacingCharactersInRange:hRange withString:@""];
+    }
     
     NSURLSessionDataTask *dt = [[[STKBaseStore store] session] dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if(!error) {
@@ -425,6 +434,16 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         postType = STKPostTypePassion;
     }
 
+    // don't include #prizm in the post (it will make #prizm trend through the roof)
+    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#prizm(?:[@#\\s]|$)" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray *matches = [exp matchesInString:text options:kNilOptions range:NSMakeRange(0, [text length])];
+    // modify the string backwards
+    int lastIndex = (int)[matches count] - 1;
+    for (int i = lastIndex; i >= 0; i--) {
+        NSTextCheckingResult *match = matches[i];
+        NSRange hRange = NSMakeRange([match range].location, 1);
+        text = [text stringByReplacingCharactersInRange:hRange withString:@""];
+    }
     
     if(imageURL) {
         NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:imageURL]];

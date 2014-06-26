@@ -185,10 +185,11 @@ typedef enum {
     if([self searchType] == STKSearchTypeHashTag) {
         
         [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
-        
+        [[self searchResultsTableView] setSeparatorInset:UIEdgeInsetsZero];
     } else {
         
         [[self searchResultsTableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+        [[self searchResultsTableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
     }
     
     [[self searchResultsTableView] reloadData];
@@ -256,7 +257,6 @@ typedef enum {
                 [[c textLabel] setTextColor:STKTextColor];
                 [[c textLabel] setFont:STKFont(16)];
                 [c setSelectionStyle:UITableViewCellSelectionStyleNone];
-
             }
             [[c textLabel] setText:@"No results found."];
             return c;

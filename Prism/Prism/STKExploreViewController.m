@@ -114,8 +114,10 @@
         [[self view] addSubview:[nvc view]];
         [nvc didMoveToParentViewController:self];
         
+        [[nvc view] setTranslatesAutoresizingMaskIntoConstraints:NO];
         [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|" options:0 metrics:nil views:@{@"v" : [nvc view]}]];
         [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : [nvc view]}]];
+
         [nvc setNavigationBarHidden:YES];
         
         [self setSearchNavController:nvc];
@@ -153,7 +155,7 @@
 - (void)menuWillAppear:(BOOL)animated
 {
     [[self blurView] setOverlayOpacity:0.5];
-    [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+    [[self navigationItem] setRightBarButtonItem:nil];
 }
 
 - (void)menuWillDisappear:(BOOL)animated

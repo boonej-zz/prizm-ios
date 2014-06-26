@@ -51,6 +51,7 @@
 - (IBAction)showList:(id)sender;
 - (IBAction)sendEmail:(id)sender;
 
+@property (nonatomic, strong) UIBarButtonItem *addTrustBarButtonItem;
 @end
 
 @implementation STKTrustViewController
@@ -69,6 +70,7 @@
         [view addTarget:self action:@selector(addNewTrust:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
         [[self navigationItem] setRightBarButtonItem:bbi];
+        [self setAddTrustBarButtonItem:bbi];
         
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_trust"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_trust_selected"]];
@@ -326,6 +328,7 @@
     } else {
         [[self underlayView] setAlpha:0.5];
     }
+    [[self navigationItem] setRightBarButtonItem:nil];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
@@ -337,6 +340,7 @@
     } else {
         [[self underlayView] setAlpha:0.0];
     }
+    [[self navigationItem] setRightBarButtonItem:[self addTrustBarButtonItem]];
 }
 
 

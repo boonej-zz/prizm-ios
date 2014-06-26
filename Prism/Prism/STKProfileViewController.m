@@ -429,7 +429,7 @@ typedef enum {
 - (void)menuWillAppear:(BOOL)animated
 {
     [[self blurView] setOverlayOpacity:0.5];
-    [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+    [[self navigationItem] setRightBarButtonItem:nil];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
