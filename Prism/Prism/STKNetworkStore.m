@@ -14,13 +14,12 @@
 #import "STKContentStore.h"
 #import "STKPost.h"
 #import "STKMarkupUtilities.h"
-#import "OAuthCore.h"
+#import "TMAPIClient.h"
 
 @import Accounts;
 
 const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
-NSString * const STKTumblrConsumerKey = @"qrKElSuNLokWhEWDqcLNYCZo2UsXIVkLNWXOmII1tdxEVHKfXe";
-NSString * const STKTubmlrConsumerSecret = @"v9ltz8mRlYqvPSNbPtJuo32aouyrZAPvTFy4Mra5SSUPYTpJH7";
+NSString * const STKNetworkStoreTumblrSyncInfoKey = @"STKNetworkStoreTumblrSyncInfoKey";
 
 @interface STKNetworkStore ()
 @property (nonatomic, strong) NSURLSession *session;
@@ -104,24 +103,48 @@ NSString * const STKTubmlrConsumerSecret = @"v9ltz8mRlYqvPSNbPtJuo32aouyrZAPvTFy
                                                                      }];
         [dt resume];
     } else if(type == STKNetworkTypeTumblr) {
-        NSString *urlString = [NSString stringWithFormat:@"https://api.instagram.com/v1/users/self/media/recent/?access_token=%@&count=1", [u instagramToken]];
-        NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-        
-        NSURLSessionDataTask *dt = [[[STKBaseStore store] session] dataTaskWithRequest:req
-                                                                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                                                         if(!error) {
-                                                                             NSDictionary *val = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                                                                             NSArray *posts = [val objectForKey:@"data"];
-                                                                             
-                                                                             // Now go ahead and push this up
-                                                                             NSArray *sorted = [posts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"created_time" ascending:NO]]];
-                                                                             NSString *firstID = [[sorted firstObject] objectForKey:@"created_time"];
-                                                                             block(firstID, nil);
-                                                                         } else {
-                                                                             block(nil, error);
-                                                                         }
-                                                                     }];
-        [dt resume];
+        //establish minimum id
+        [[TMAPIClient sharedInstance] userInfo:^(NSDictionary* response, NSError *error) {
+            if (!error) {
+                NSArray *blogs = response[@"user"][@"blogs"];
+                NSMutableArray *hosts = [NSMutableArray array];
+                for (NSDictionary *blog in blogs) {
+                    NSURL *url = [NSURL URLWithString:blog[@"url"]];
+                    NSString *host = [url host];
+                    [hosts addObject:host];
+                }
+                
+                __block NSUInteger hostCount = [hosts count];
+                __block NSMutableArray *posts = [NSMutableArray array];
+                for (NSString *host in hosts) {
+                    [[TMAPIClient sharedInstance] posts:host type:nil parameters:nil callback:^(NSDictionary *response, NSError *error) {
+                        if (!error) {
+                            hostCount--;
+                            NSLog(@"post at host response\n%@", response);
+                            [posts addObjectsFromArray:response[@"posts"]];
+                            if (hostCount == 0) {
+                                // all posts of all types gathered (we don't need to filter here, because we just want the most
+                                // recent date
+                                
+                                NSArray *sortedPosts = [posts sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO]]];
+                                [sortedPosts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                    NSLog(@"tumblr date %@", obj[@"date"]);
+                                }];
+                                NSDictionary *lastMins = @{@"date" : [sortedPosts firstObject][@"date"],
+                                                           @"hosts" : hosts};
+                                [[NSUserDefaults standardUserDefaults] setObject:lastMins forKey:STKNetworkStoreTumblrSyncInfoKey];
+                                
+                                block([sortedPosts firstObject][@"date"], error);
+                            }
+                        } else {
+                            block(nil, error);
+                        }
+                    }];
+                }
+            } else {
+                block(nil, error);
+            }
+        }];
     }
 }
 
@@ -161,19 +184,19 @@ NSString * const STKTubmlrConsumerSecret = @"v9ltz8mRlYqvPSNbPtJuo32aouyrZAPvTFy
                         if(!err)
                             [u setTwitterLastMinID:twitterLastID];
 
-                        [self setUpdating:NO];
-                        
-                        block(u, nil);
+                        [self transferPostsFromTumblrWithToken:[u tumblrToken] secret:[u tumblrTokenSecret] lastMinimumID:[u tumblrLastMinID] completion:^(NSString *tumblrLastID, NSError *err) {
+                            if (!err)
+                                [u setTumblrLastMinID:tumblrLastID];
+                                
+                            [self setUpdating:NO];
+                            
+                            block(u, nil);
+                        }];
                     }];
                 }];
             }];
-            
-#warning testing tumblr
-            [self transferPostsFromTumblrWithToken:[u tumblrAccessToken] secret:[u tumblrAccessSecret] lastMinimumID:[u tumblrLastMinID] completion:^(NSString *lastID, NSError *err) {
-                
-            }];
         } else {
-            NSLog(@"Failed to get instagram/twitter details");
+            NSLog(@"Failed to get instagram/twitter/tumblr details");
         }
     }];
 }
@@ -476,25 +499,6 @@ NSString * const STKTubmlrConsumerSecret = @"v9ltz8mRlYqvPSNbPtJuo32aouyrZAPvTFy
         return;
     }
     
-    // get blogs, then get all posts
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://api.tumblr.com/v2/user/info"]];
-    [request setHTTPMethod:@"POST"];
-
-    NSString *body = [NSString stringWithFormat:@"oauth_verifier=%@", secret];
-    [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    NSString *oauthHeader = OAuthorizationHeader(request.URL, request.HTTPMethod, nil, STKTumblrConsumerKey, STKTubmlrConsumerSecret, token, nil);
-    [request setValue:oauthHeader forHTTPHeaderField:@"Authorization"];
-    
-    NSURLSession *session = [[STKBaseStore store] session];
-    NSURLSessionDataTask *dt = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (!error) {
-            NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSLog(@"user/list %@", string);
-        }
-    }];
-    
-    [dt resume];
 }
 
 @end

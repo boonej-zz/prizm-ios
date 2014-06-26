@@ -106,9 +106,9 @@
         <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="subtype" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="trustCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="tumblrAccessSecret" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tumblrAccessToken" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tumblrLastMinID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tumblrToken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tumblrTokenSecret" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitterID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitterLastMinID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>

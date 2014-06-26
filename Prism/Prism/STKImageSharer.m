@@ -348,7 +348,8 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                                                                 applicationActivities:activities];
     [activityViewController setExcludedActivityTypes:
      @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail]];
-    
+
+#warning smelly, but we do not have direct access to system provided activities and their navigation controllers
     // revert appearance proxies to get default iOS behavior when sharing through Messages
     UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:nil

@@ -32,6 +32,23 @@
 		883D87DE19463E7F00195B11 /* UIView+MPSnapshotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 883D87CD19463E7F00195B11 /* UIView+MPSnapshotImage.m */; };
 		886FBD21195A035F0007188B /* STKInviteFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 886FBD20195A035F0007188B /* STKInviteFriendsViewController.m */; };
 		886FBD23195A094F0007188B /* STKInviteFriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */; };
+		88A18CAE195B579A0057812D /* JXHTTPDataBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C82195B579A0057812D /* JXHTTPDataBody.m */; };
+		88A18CAF195B579A0057812D /* JXHTTPFileBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C84195B579A0057812D /* JXHTTPFileBody.m */; };
+		88A18CB0195B579A0057812D /* JXHTTPFormEncodedBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C86195B579A0057812D /* JXHTTPFormEncodedBody.m */; };
+		88A18CB1195B579A0057812D /* JXHTTPJSONBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C88195B579A0057812D /* JXHTTPJSONBody.m */; };
+		88A18CB2195B579A0057812D /* JXHTTPMultipartBody.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C8A195B579A0057812D /* JXHTTPMultipartBody.m */; };
+		88A18CB3195B579A0057812D /* JXHTTPOperation+Convenience.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C8C195B579A0057812D /* JXHTTPOperation+Convenience.m */; };
+		88A18CB4195B579A0057812D /* JXHTTPOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C8E195B579A0057812D /* JXHTTPOperation.m */; };
+		88A18CB5195B579A0057812D /* JXHTTPOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C91195B579A0057812D /* JXHTTPOperationQueue.m */; };
+		88A18CB6195B579A0057812D /* JXOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C95195B579A0057812D /* JXOperation.m */; };
+		88A18CB7195B579A0057812D /* JXURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C97195B579A0057812D /* JXURLConnectionOperation.m */; };
+		88A18CB8195B579A0057812D /* JXURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18C99195B579A0057812D /* JXURLEncoding.m */; };
+		88A18CB9195B579A0057812D /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 88A18C9A195B579A0057812D /* LICENSE.txt */; };
+		88A18CBB195B579A0057812D /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 88A18C9D195B579A0057812D /* LICENSE */; };
+		88A18CBC195B579A0057812D /* TMAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18CA2195B579A0057812D /* TMAPIClient.m */; };
+		88A18CBD195B579A0057812D /* TMOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18CA6195B579A0057812D /* TMOAuth.m */; };
+		88A18CBE195B579A0057812D /* TMTumblrAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18CA8195B579A0057812D /* TMTumblrAuthenticator.m */; };
+		88A18CBF195B579A0057812D /* TMSDKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A18CAB195B579A0057812D /* TMSDKFunctions.m */; };
 		88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */; };
 		88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */; };
 		BE02EAA3182A80A200A5505A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA2182A80A200A5505A /* Foundation.framework */; };
@@ -289,6 +306,43 @@
 		886FBD1F195A035F0007188B /* STKInviteFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInviteFriendsViewController.h; sourceTree = "<group>"; };
 		886FBD20195A035F0007188B /* STKInviteFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInviteFriendsViewController.m; sourceTree = "<group>"; };
 		886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInviteFriendsViewController.xib; sourceTree = "<group>"; };
+		88A18C80195B579A0057812D /* JXHTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTP.h; sourceTree = "<group>"; };
+		88A18C81195B579A0057812D /* JXHTTPDataBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPDataBody.h; sourceTree = "<group>"; };
+		88A18C82195B579A0057812D /* JXHTTPDataBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXHTTPDataBody.m; sourceTree = "<group>"; };
+		88A18C83195B579A0057812D /* JXHTTPFileBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPFileBody.h; sourceTree = "<group>"; };
+		88A18C84195B579A0057812D /* JXHTTPFileBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXHTTPFileBody.m; sourceTree = "<group>"; };
+		88A18C85195B579A0057812D /* JXHTTPFormEncodedBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPFormEncodedBody.h; sourceTree = "<group>"; };
+		88A18C86195B579A0057812D /* JXHTTPFormEncodedBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXHTTPFormEncodedBody.m; sourceTree = "<group>"; };
+		88A18C87195B579A0057812D /* JXHTTPJSONBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPJSONBody.h; sourceTree = "<group>"; };
+		88A18C88195B579A0057812D /* JXHTTPJSONBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXHTTPJSONBody.m; sourceTree = "<group>"; };
+		88A18C89195B579A0057812D /* JXHTTPMultipartBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPMultipartBody.h; sourceTree = "<group>"; };
+		88A18C8A195B579A0057812D /* JXHTTPMultipartBody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXHTTPMultipartBody.m; sourceTree = "<group>"; };
+		88A18C8B195B579A0057812D /* JXHTTPOperation+Convenience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JXHTTPOperation+Convenience.h"; sourceTree = "<group>"; };
+		88A18C8C195B579A0057812D /* JXHTTPOperation+Convenience.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JXHTTPOperation+Convenience.m"; sourceTree = "<group>"; };
+		88A18C8D195B579A0057812D /* JXHTTPOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPOperation.h; sourceTree = "<group>"; };
+		88A18C8E195B579A0057812D /* JXHTTPOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXHTTPOperation.m; sourceTree = "<group>"; };
+		88A18C8F195B579A0057812D /* JXHTTPOperationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPOperationDelegate.h; sourceTree = "<group>"; };
+		88A18C90195B579A0057812D /* JXHTTPOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPOperationQueue.h; sourceTree = "<group>"; };
+		88A18C91195B579A0057812D /* JXHTTPOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXHTTPOperationQueue.m; sourceTree = "<group>"; };
+		88A18C92195B579A0057812D /* JXHTTPOperationQueueDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPOperationQueueDelegate.h; sourceTree = "<group>"; };
+		88A18C93195B579A0057812D /* JXHTTPRequestBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXHTTPRequestBody.h; sourceTree = "<group>"; };
+		88A18C94195B579A0057812D /* JXOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXOperation.h; sourceTree = "<group>"; };
+		88A18C95195B579A0057812D /* JXOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXOperation.m; sourceTree = "<group>"; };
+		88A18C96195B579A0057812D /* JXURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXURLConnectionOperation.h; sourceTree = "<group>"; };
+		88A18C97195B579A0057812D /* JXURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXURLConnectionOperation.m; sourceTree = "<group>"; };
+		88A18C98195B579A0057812D /* JXURLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXURLEncoding.h; sourceTree = "<group>"; };
+		88A18C99195B579A0057812D /* JXURLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JXURLEncoding.m; sourceTree = "<group>"; };
+		88A18C9A195B579A0057812D /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		88A18C9D195B579A0057812D /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		88A18CA1195B579A0057812D /* TMAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMAPIClient.h; sourceTree = "<group>"; };
+		88A18CA2195B579A0057812D /* TMAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMAPIClient.m; sourceTree = "<group>"; };
+		88A18CA5195B579A0057812D /* TMOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMOAuth.h; sourceTree = "<group>"; };
+		88A18CA6195B579A0057812D /* TMOAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMOAuth.m; sourceTree = "<group>"; };
+		88A18CA7195B579A0057812D /* TMTumblrAuthenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMTumblrAuthenticator.h; sourceTree = "<group>"; };
+		88A18CA8195B579A0057812D /* TMTumblrAuthenticator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMTumblrAuthenticator.m; sourceTree = "<group>"; };
+		88A18CAA195B579A0057812D /* TMSDKFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMSDKFunctions.h; sourceTree = "<group>"; };
+		88A18CAB195B579A0057812D /* TMSDKFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMSDKFunctions.m; sourceTree = "<group>"; };
+		88A18CAC195B579A0057812D /* TMTumblrSDK-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TMTumblrSDK-Prefix.pch"; sourceTree = "<group>"; };
 		88A74C7C184714A600DF05AC /* STKHashtagToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHashtagToolbar.h; sourceTree = "<group>"; };
 		88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagToolbar.m; sourceTree = "<group>"; };
 		88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+STKHashtagDetector.h"; sourceTree = "<group>"; };
@@ -2391,6 +2445,122 @@
 			path = Mixpanel;
 			sourceTree = "<group>";
 		};
+		88A18C7C195B57820057812D /* TumblrOAuth */ = {
+			isa = PBXGroup;
+			children = (
+				88A18C7D195B579A0057812D /* JXHTTP */,
+				88A18C9B195B579A0057812D /* TMTumblrSDK */,
+			);
+			path = TumblrOAuth;
+			sourceTree = "<group>";
+		};
+		88A18C7D195B579A0057812D /* JXHTTP */ = {
+			isa = PBXGroup;
+			children = (
+				88A18C7F195B579A0057812D /* JXHTTP */,
+				88A18C9A195B579A0057812D /* LICENSE.txt */,
+			);
+			path = JXHTTP;
+			sourceTree = "<group>";
+		};
+		88A18C7F195B579A0057812D /* JXHTTP */ = {
+			isa = PBXGroup;
+			children = (
+				88A18C80195B579A0057812D /* JXHTTP.h */,
+				88A18C81195B579A0057812D /* JXHTTPDataBody.h */,
+				88A18C82195B579A0057812D /* JXHTTPDataBody.m */,
+				88A18C83195B579A0057812D /* JXHTTPFileBody.h */,
+				88A18C84195B579A0057812D /* JXHTTPFileBody.m */,
+				88A18C85195B579A0057812D /* JXHTTPFormEncodedBody.h */,
+				88A18C86195B579A0057812D /* JXHTTPFormEncodedBody.m */,
+				88A18C87195B579A0057812D /* JXHTTPJSONBody.h */,
+				88A18C88195B579A0057812D /* JXHTTPJSONBody.m */,
+				88A18C89195B579A0057812D /* JXHTTPMultipartBody.h */,
+				88A18C8A195B579A0057812D /* JXHTTPMultipartBody.m */,
+				88A18C8B195B579A0057812D /* JXHTTPOperation+Convenience.h */,
+				88A18C8C195B579A0057812D /* JXHTTPOperation+Convenience.m */,
+				88A18C8D195B579A0057812D /* JXHTTPOperation.h */,
+				88A18C8E195B579A0057812D /* JXHTTPOperation.m */,
+				88A18C8F195B579A0057812D /* JXHTTPOperationDelegate.h */,
+				88A18C90195B579A0057812D /* JXHTTPOperationQueue.h */,
+				88A18C91195B579A0057812D /* JXHTTPOperationQueue.m */,
+				88A18C92195B579A0057812D /* JXHTTPOperationQueueDelegate.h */,
+				88A18C93195B579A0057812D /* JXHTTPRequestBody.h */,
+				88A18C94195B579A0057812D /* JXOperation.h */,
+				88A18C95195B579A0057812D /* JXOperation.m */,
+				88A18C96195B579A0057812D /* JXURLConnectionOperation.h */,
+				88A18C97195B579A0057812D /* JXURLConnectionOperation.m */,
+				88A18C98195B579A0057812D /* JXURLEncoding.h */,
+				88A18C99195B579A0057812D /* JXURLEncoding.m */,
+			);
+			path = JXHTTP;
+			sourceTree = "<group>";
+		};
+		88A18C9B195B579A0057812D /* TMTumblrSDK */ = {
+			isa = PBXGroup;
+			children = (
+				88A18C9D195B579A0057812D /* LICENSE */,
+				88A18C9E195B579A0057812D /* TMTumblrSDK */,
+			);
+			path = TMTumblrSDK;
+			sourceTree = "<group>";
+		};
+		88A18C9E195B579A0057812D /* TMTumblrSDK */ = {
+			isa = PBXGroup;
+			children = (
+				88A18C9F195B579A0057812D /* Activity */,
+				88A18CA0195B579A0057812D /* APIClient */,
+				88A18CA3195B579A0057812D /* AppClient */,
+				88A18CA4195B579A0057812D /* Authentication */,
+				88A18CA9195B579A0057812D /* Core */,
+				88A18CAC195B579A0057812D /* TMTumblrSDK-Prefix.pch */,
+			);
+			path = TMTumblrSDK;
+			sourceTree = "<group>";
+		};
+		88A18C9F195B579A0057812D /* Activity */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Activity;
+			sourceTree = "<group>";
+		};
+		88A18CA0195B579A0057812D /* APIClient */ = {
+			isa = PBXGroup;
+			children = (
+				88A18CA1195B579A0057812D /* TMAPIClient.h */,
+				88A18CA2195B579A0057812D /* TMAPIClient.m */,
+			);
+			path = APIClient;
+			sourceTree = "<group>";
+		};
+		88A18CA3195B579A0057812D /* AppClient */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AppClient;
+			sourceTree = "<group>";
+		};
+		88A18CA4195B579A0057812D /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				88A18CA5195B579A0057812D /* TMOAuth.h */,
+				88A18CA6195B579A0057812D /* TMOAuth.m */,
+				88A18CA7195B579A0057812D /* TMTumblrAuthenticator.h */,
+				88A18CA8195B579A0057812D /* TMTumblrAuthenticator.m */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		88A18CA9195B579A0057812D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				88A18CAA195B579A0057812D /* TMSDKFunctions.h */,
+				88A18CAB195B579A0057812D /* TMSDKFunctions.m */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		BE02EA96182A80A200A5505A = {
 			isa = PBXGroup;
 			children = (
@@ -2398,6 +2568,7 @@
 				883D87B019463E7F00195B11 /* Mixpanel */,
 				BE52B14018E3106400C44F30 /* STK */,
 				BEF96ACF186221340016E737 /* OAuthCore */,
+				88A18C7C195B57820057812D /* TumblrOAuth */,
 				BED0B1DA185F61FC00564300 /* Google Plus */,
 				BEF7A0831843ACA500A3AFFB /* Utility */,
 				BE02EAA8182A80A200A5505A /* Prism */,
@@ -4753,6 +4924,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88A18CB9195B579A0057812D /* LICENSE.txt in Resources */,
 				BE5F690218F2131F006D2CD1 /* STKWebViewController.xib in Resources */,
 				886FBD23195A094F0007188B /* STKInviteFriendsViewController.xib in Resources */,
 				BE1E09D61850E58900975652 /* STKVerticalNavigationController.xib in Resources */,
@@ -4794,6 +4966,7 @@
 				883D87D619463E7F00195B11 /* MPSurvey.storyboard in Resources */,
 				883D87D319463E7F00195B11 /* MPNotification.storyboard in Resources */,
 				BE2B7E8D191AB96700E6F408 /* STKGraphCell.xib in Resources */,
+				88A18CBB195B579A0057812D /* LICENSE in Resources */,
 				BE1A73C618D8BFB8004A3BB3 /* STKLockCell.xib in Resources */,
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
@@ -4855,6 +5028,7 @@
 				BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */,
 				BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */,
 				BE8F35E91833D48D00C4ED03 /* STKPostCell.m in Sources */,
+				88A18CBE195B579A0057812D /* TMTumblrAuthenticator.m in Sources */,
 				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
 				BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */,
 				BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */,
@@ -4890,18 +5064,21 @@
 				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
 				BE63C53918FD89890087585E /* STKActivityIndicatorView.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
+				88A18CB7195B579A0057812D /* JXURLConnectionOperation.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
 				883D87D519463E7F00195B11 /* MPSurvey.m in Sources */,
 				883D87D719463E7F00195B11 /* MPSurveyNavigationController.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
+				88A18CBD195B579A0057812D /* TMOAuth.m in Sources */,
 				BE5767F5187B4DFF004AEE1F /* STKPostViewController.m in Sources */,
 				BE7391C3190193AB00AD81AB /* STKSearchResultsViewController.m in Sources */,
 				883D87DD19463E7F00195B11 /* UIImage+MPImageEffects.m in Sources */,
 				BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */,
 				BE5767F9187B4E98004AEE1F /* STKPostHeaderView.m in Sources */,
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
+				88A18CB1195B579A0057812D /* JXHTTPJSONBody.m in Sources */,
 				BE0EC57618EDE971007102E1 /* STKSettingsShareCell.m in Sources */,
 				BE9CC7A618FDFF480097D308 /* STKLuminariesCell.m in Sources */,
 				BE2B7E85191AB3EC00E6F408 /* STKDateBar.m in Sources */,
@@ -4910,6 +5087,7 @@
 				886FBD21195A035F0007188B /* STKInviteFriendsViewController.m in Sources */,
 				BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */,
 				BE05502018A404E600F6B534 /* UIERealTimeBlurView.m in Sources */,
+				88A18CAF195B579A0057812D /* JXHTTPFileBody.m in Sources */,
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
@@ -4920,6 +5098,7 @@
 				BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */,
 				8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */,
 				BE24B523183AA653009BC02A /* STKCircleView.m in Sources */,
+				88A18CB8195B579A0057812D /* JXURLEncoding.m in Sources */,
 				BE05502118A404E600F6B534 /* UIImage+BoxBlur.m in Sources */,
 				BE1FC3B0186C817C003464E1 /* STKTextImageCell.m in Sources */,
 				BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */,
@@ -4944,26 +5123,35 @@
 				883D87D419463E7F00195B11 /* MPNotificationViewController.m in Sources */,
 				BE5F68FD18F0A53D006D2CD1 /* STKContainQuery.m in Sources */,
 				BE5F690518F214C8006D2CD1 /* STKTextView.m in Sources */,
+				88A18CB0195B579A0057812D /* JXHTTPFormEncodedBody.m in Sources */,
 				BE7D396E19142D58003B333F /* STKMarkupTextView.m in Sources */,
 				BE3014C21891F24F0069F31E /* STKCaptureOverlayView.m in Sources */,
 				BE6BAE3F18FED70A00B21EE7 /* STKInstitutionInfoCell.m in Sources */,
+				88A18CB5195B579A0057812D /* JXHTTPOperationQueue.m in Sources */,
+				88A18CB3195B579A0057812D /* JXHTTPOperation+Convenience.m in Sources */,
+				88A18CB4195B579A0057812D /* JXHTTPOperation.m in Sources */,
 				BE654EA5188841A6006DCA5C /* Lookup.xcdatamodeld in Sources */,
 				BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */,
 				BE7AFA7B18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m in Sources */,
 				BE2B7E82191AB3E300E6F408 /* STKGraphView.m in Sources */,
 				BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
+				88A18CB2195B579A0057812D /* JXHTTPMultipartBody.m in Sources */,
 				883D87D819463E7F00195B11 /* MPSurveyQuestion.m in Sources */,
+				88A18CBC195B579A0057812D /* TMAPIClient.m in Sources */,
 				D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */,
 				883D87DA19463E7F00195B11 /* NSData+MPBase64.m in Sources */,
 				BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */,
+				88A18CBF195B579A0057812D /* TMSDKFunctions.m in Sources */,
 				BEC01A0E182AF42600080601 /* STKTrustViewController.m in Sources */,
 				BE09FFEF184E27B30059115B /* STKBackdropView.m in Sources */,
 				BE61085E183D159E003A182C /* STKActivityCell.m in Sources */,
 				883D87D919463E7F00195B11 /* MPSurveyQuestionViewController.m in Sources */,
 				BE02EAB3182A80A200A5505A /* STKAppDelegate.m in Sources */,
+				88A18CAE195B579A0057812D /* JXHTTPDataBody.m in Sources */,
 				BEF96AD9186221340016E737 /* OAuth+Additions.m in Sources */,
 				BEF96ADA186221340016E737 /* OAuthCore.m in Sources */,
+				88A18CB6195B579A0057812D /* JXOperation.m in Sources */,
 				BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */,
 				BE52B13F18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.m in Sources */,
 				BE13648E18689F39003D9D5C /* STKAccountChooserViewController.m in Sources */,
