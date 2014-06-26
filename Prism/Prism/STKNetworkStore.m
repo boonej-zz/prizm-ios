@@ -14,7 +14,7 @@
 #import "STKContentStore.h"
 #import "STKPost.h"
 #import "STKMarkupUtilities.h"
-#import "TMAPIClient.h"
+//#import "TMAPIClient.h"
 
 @import Accounts;
 
@@ -102,7 +102,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                      }];
         [dt resume];
     } else if(type == STKNetworkTypeTumblr) {
-        //establish minimum id
+/*        //establish minimum id
         [[TMAPIClient sharedInstance] userInfo:^(NSDictionary* response, NSError *error) {
             if (!error) {
                 NSArray *blogs = response[@"user"][@"blogs"];
@@ -132,6 +132,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                 block(nil, error);
             }
         }];
+ */
     }
 }
 
@@ -171,6 +172,10 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                         if(!err)
                             [u setTwitterLastMinID:twitterLastID];
 
+                        [self setUpdating:NO];
+                        
+                        block(u, nil);
+                        /*
                         [self transferPostsFromTumblrWithLastMinimumID:[u tumblrLastMinID] completion:^(NSString *tumblrLastID, NSError *err) {
                             if (!err)
                                 [u setTumblrLastMinID:tumblrLastID];
@@ -179,6 +184,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                             
                             block(u, nil);
                         }];
+                         */
                     }];
                 }];
             }];
@@ -473,7 +479,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         }];
     }
 }
-
+/*
 - (void)transferPostsFromTumblrWithLastMinimumID:(NSString *)minID
                               completion:(void (^)(NSString *lastID, NSError *err))block
 {
@@ -749,5 +755,5 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         [self createPostsForTumblr:a];
     }
 }
-
+*/
 @end

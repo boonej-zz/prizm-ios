@@ -19,7 +19,7 @@
 #import "UIERealTimeBlurView.h"
 #import "STKSearchUsersViewController.h"
 #import "STKInviteFriendsViewController.h"
-#import "TMAPIClient.h"
+//#import "TMAPIClient.h"
 
 @import Social;
 @import Accounts;
@@ -98,11 +98,14 @@
       }},
       @{@"title": @"Twitter", @"image" : @"sharing_twitter", @"type" : @"STKSettingsShareCell", @"actionSelector" : @"configureTwitter:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u twitterID] != nil)];
-      }},
+      }}
+    ];
+    /*
       @{@"title": @"Tumblr", @"image" : @"sharing_tumblr", @"type" : @"STKSettingsShareCell", @"actionSelector" : @"configureTumblr:", @"configure": ^(STKUser *u, UITableViewCell *cell) {
           [[(STKSettingsShareCell *)cell toggleSwitch] setOn:([u tumblrToken] != nil)];
       }}
     ];
+     */
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -274,6 +277,7 @@
     }
 }
 
+/*
 - (void)configureTumblr:(NSNumber *)activating
 {
     if ([activating boolValue]) {
@@ -310,7 +314,7 @@
         }];
     }
 }
-
+*/
 - (void)done:(id)sender
 {
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];

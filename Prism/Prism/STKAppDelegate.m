@@ -25,7 +25,7 @@
 #import "Mixpanel.h"
 
 #import "STKAuthorizationToken.h"
-#import "TMAPIClient.h"
+//#import "TMAPIClient.h"
 
 #ifdef DEBUG 
     static NSString * const STKMixpanelKey = @"";//@"73c8b5e42732b21ff8b74d73aabc8f79";
@@ -117,12 +117,14 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     if([[url scheme] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]]){
-        NSString *path = [url absoluteString];
+/*        NSString *path = [url absoluteString];
         if ([path rangeOfString:@"tumblr"].location) {
             [[TMAPIClient sharedInstance] handleOpenURL:url];
         } else {
             [[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation];
-        }
+        }*/
+
+        [[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation];
         return YES;
     }
     
