@@ -39,13 +39,9 @@ typedef enum {
 
 @property (weak, nonatomic) IBOutlet UITableView *searchResultsTableView;
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
-@property (weak, nonatomic) IBOutlet UICollectionView *filterOptionView;
 
 @property (nonatomic, strong) NSArray *profilesFound;
 @property (nonatomic, strong) NSArray *hashTagsFound;
-
-- (IBAction)toggleFilterView:(id)sender;
-
 
 @end
 
@@ -64,11 +60,6 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    [[self filterOptionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
-              forCellWithReuseIdentifier:@"STKTextImageCell"];
-    [[self filterOptionView] setBackgroundColor:[UIColor clearColor]];
-    [[self filterOptionView] setScrollEnabled:NO];
     
     [[self searchResultsTableView] setBackgroundColor:[UIColor clearColor]];
     [[self searchResultsTableView] setSeparatorColor:STKTextTransparentColor];
@@ -193,11 +184,6 @@ typedef enum {
     }
     
     [[self searchResultsTableView] reloadData];
-}
-
-- (IBAction)toggleFilterView:(id)sender
-{
-    //    [[self filterOptionView] setHidden:![[self filterOptionView] isHidden]];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
