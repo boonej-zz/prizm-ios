@@ -302,7 +302,9 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     if(!link)
         link = @"";
 
-    
+    // don't include #prizm in the post (it will make #prizm trend through the roof)
+    text = [text stringByReplacingOccurrencesOfString:@"#prizm" withString:@""];
+   
     NSURLSessionDataTask *dt = [[[STKBaseStore store] session] dataTaskWithRequest:req completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if(!error) {
             UIImage *img = [UIImage imageWithData:data];
@@ -425,6 +427,8 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         postType = STKPostTypePassion;
     }
 
+    // don't include #prizm in the post (it will make #prizm trend through the roof)
+    text = [text stringByReplacingOccurrencesOfString:@"#prizm" withString:@""];
     
     if(imageURL) {
         NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:imageURL]];
