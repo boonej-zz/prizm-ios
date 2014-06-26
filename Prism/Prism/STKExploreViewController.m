@@ -25,11 +25,13 @@
 #import "STKSearchResultsViewController.h"
 #import "STKLuminatingBar.h"
 #import "Mixpanel.h"
+#import "STKExploreFilterViewController.h"
 
 @interface STKExploreViewController ()
-    <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate>
+    <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate, STKExploreFilterDelegate>
 
 @property (nonatomic, strong) UINavigationController *searchNavController;
+@property (nonatomic, strong) UINavigationController *filterNavController;
 
 @property (nonatomic, strong) STKPostController *recentPostsController;
 @property (nonatomic, strong) STKPostController *popularPostsController;
@@ -42,7 +44,13 @@
 @property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
 
 @property (nonatomic, strong) STKNavigationButton *searchButton;
+@property (nonatomic, strong) STKNavigationButton *filterButton;
 @property (nonatomic, strong) UIBarButtonItem *searchButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *filterButtonItem;
+@property (nonatomic, strong) NSDictionary *activeFilter;
+@property (nonatomic, strong) NSDictionary *defaultFeaturedFilter;
+@property (nonatomic, assign) BOOL isFilterActive;
+@property (nonatomic, assign) BOOL isShowingFilterView;
 
 - (IBAction)exploreTypeChanged:(id)sender;
 
@@ -56,25 +64,15 @@
     if (self) {
         [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
         [[self navigationItem] setTitle:@"Explore"];
-        [[self tabBarItem] setTitle:@"Explore"]
-        ;
-        STKNavigationButton *view = [[STKNavigationButton alloc] init];
-        [view setImage:[UIImage imageNamed:@"btn_search"]];
-        [view setHighlightedImage:[UIImage imageNamed:@"btn_search_selected"]];
-        [view setSelectedImage:[UIImage imageNamed:@"btn_search_selected"]];
-        [view setOffset:8];
-        [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
-        [self setSearchButton:view];
-        
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
-        [self setSearchButtonItem:bbi];
-        
-        [[self navigationItem] setRightBarButtonItem:bbi];
+        [[self tabBarItem] setTitle:@"Explore"];
         
         [self setAutomaticallyAdjustsScrollViewInsets:NO];
         
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_explore"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_explore_selected"]];
+        
+        //set default Featured filters dict
+        [self setDefaultFeaturedFilter:@{@"key" : @"creatorType", @"filter" : STKUserTypeInstitution}];
         
         _recentPostsController = [[STKPostController alloc] initWithViewController:self];
         [[self recentPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
@@ -82,7 +80,8 @@
         }];
         
         _featuredPostsController = [[STKPostController alloc] initWithViewController:self];
-        [[self featuredPostsController] setFilterMap:@{@"creatorType" : STKUserTypeInstitution}];
+//        [[self featuredPostsController] setFilterMap:@{@"creatorType" : STKUserTypeInstitution}];
+        [[self featuredPostsController] setFilterMap:[self filterMap]];
         [[self featuredPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
         }];
@@ -93,8 +92,8 @@
         [[self popularPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
         }];
-
         
+        [self configureInterface];
     }
     return self;
 }
@@ -102,6 +101,45 @@
 - (void)initiateSearch:(id)sender
 {
     [self setSearchBarActive:![self isSearchBarActive]];
+}
+
+- (void)initiateFilter:(id)sender
+{
+    if([self filterNavController]) {
+        [[[self blurView] displayLink] setPaused:NO];
+        [[self blurView] setHidden:NO];
+        [[self filterNavController] willMoveToParentViewController:nil];
+        [[self filterNavController] removeFromParentViewController];
+        [[[self filterNavController] view] removeFromSuperview];
+        [self setFilterNavController:nil];
+        [self configureInterface];
+        
+    } else {
+        STKExploreFilterViewController *filtervc = [[STKExploreFilterViewController alloc] init];
+        [filtervc setDelegate:self];
+        if([self isFilterActive]) {
+            [filtervc setFilterSelected:[[self activeFilter] objectForKey:@"filter"]];
+        }
+        
+        STKNavigationButton *filterCancelView = [[STKNavigationButton alloc] init];
+        [filterCancelView setImage:[UIImage imageNamed:@"filter_cancel"]];
+        [filterCancelView setHighlightedImage:[UIImage imageNamed:@"filter_cancel"]];
+        [filterCancelView setSelectedImage:[UIImage imageNamed:@"filter_cancel"]];
+        [filterCancelView setOffset:8];
+        [filterCancelView addTarget:self action:@selector(initiateFilter:) forControlEvents:UIControlEventTouchUpInside];
+        [self setFilterButton:filterCancelView];
+        
+        UIBarButtonItem *filterCancelbbi = [[UIBarButtonItem alloc] initWithCustomView:filterCancelView];
+        [[self navigationItem] setRightBarButtonItems:@[filterCancelbbi]];
+        
+        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:filtervc];
+        [self setFilterNavController:nvc];
+        [self addChildViewController:nvc];
+        [[self view] addSubview:[nvc view]];
+        [nvc setNavigationBarHidden:YES];
+        [[[self blurView] displayLink] setPaused:YES];
+        [[self blurView] setHidden:YES];
+    }
 }
 
 - (void)setSearchBarActive:(BOOL)active
@@ -125,11 +163,13 @@
         [[self tableView] setHidden:YES];
         [[self exploreTypeControl] setHidden:YES];
         [[self searchButton] setSelected:YES];
+        [[self filterButton] setHidden:YES];
         [[self navigationItem] setTitle:@"Search"];
     } else {
         [[self tableView] setHidden:NO];
         [[self exploreTypeControl] setHidden:NO];
         [[self searchButton] setSelected:NO];
+        [[self filterButton] setHidden:NO];
 
         [[[self blurView] displayLink] setPaused:NO];
         [[self blurView] setHidden:NO];
@@ -143,7 +183,6 @@
         [[self navigationItem] setTitle:@"Explore"];
     }
 }
-
 
 - (BOOL)isSearchBarActive
 {
@@ -267,6 +306,32 @@
     [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:@{@"Explore Type" : [self exploreTypeString]}];
 }
 
+- (void)configureInterface
+{
+    STKNavigationButton *view = [[STKNavigationButton alloc] init];
+    [view setImage:[UIImage imageNamed:@"btn_search"]];
+    [view setHighlightedImage:[UIImage imageNamed:@"btn_search_selected"]];
+    [view setSelectedImage:[UIImage imageNamed:@"btn_search_selected"]];
+    [view setOffset:8];
+    [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
+    [self setSearchButton:view];
+    
+    STKNavigationButton *filterView = [[STKNavigationButton alloc] init];
+    [filterView setImage:[UIImage imageNamed:@"filter_active"]];
+    [filterView setHighlightedImage:[UIImage imageNamed:@"filter_active"]];
+    [filterView setSelectedImage:[UIImage imageNamed:@"filter_active"]];
+    [filterView setOffset:8];
+    [filterView addTarget:self action:@selector(initiateFilter:) forControlEvents:UIControlEventTouchUpInside];
+    [self setFilterButton:filterView];
+    
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+    UIBarButtonItem *filterbbi = [[UIBarButtonItem alloc] initWithCustomView:filterView];
+    [self setSearchButtonItem:bbi];
+    [self setFilterButtonItem:filterbbi];
+    
+    [[self navigationItem] setRightBarButtonItems:@[bbi, filterbbi]];
+}
+
 - (NSString *)exploreTypeString
 {
     NSDictionary *map = @{
@@ -280,12 +345,58 @@
 - (void)reloadPosts
 {
     STKPostController *pc = [self activePostController];
+    NSDictionary *filterMap = [self filterMap];
+    [pc setFilterMap:filterMap];
+    
     [[self luminatingBar] setLuminating:YES];
     [pc reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self luminatingBar] setLuminating:NO];
         [[self tableView] reloadData];
     }];
+}
 
+- (NSDictionary *)filterMap
+{
+    if([self isFilterActive] && [self activeFilter]){
+        if([self exploreType] == STKExploreTypeFeatured) {
+            return @{[[self defaultFeaturedFilter] objectForKey:@"key"] : [[self defaultFeaturedFilter] objectForKey:@"filter"],
+                     [[self activeFilter] objectForKey:@"key"] : [[self activeFilter] objectForKey:@"filter"]};
+        } else {
+            return @{[[self activeFilter] objectForKey:@"key"] : [[self activeFilter] objectForKey:@"filter"]};
+        }
+    } else {
+        if([self exploreType] == STKExploreTypeFeatured) {
+            return @{[[self defaultFeaturedFilter] objectForKey:@"key"] : [[self defaultFeaturedFilter] objectForKey:@"filter"]};
+        } else {
+            return nil;
+        }
+    }
+}
+
+- (void)didChangeFilter:(STKExploreFilterType)filterType withValue:(NSString *)filter
+{
+    if(!filter) {
+        [self setIsFilterActive:NO];
+        [self setActiveFilter:nil];
+        [self reloadPosts];
+        
+    } else if([filter isEqualToString:@"filterall"]) {
+        [self setActiveFilter:nil];
+        [self reloadPosts];
+        [self initiateFilter:nil];
+
+    } else {
+        NSString *key;
+        if(filterType == STKExploreFilterTypeCategory) {
+            key = @"type";
+        } else {
+            key = @"subtype";
+        }
+        
+        [self setIsFilterActive:YES];
+        [self setActiveFilter:@{@"key" : key, @"filter" : filter}];
+        [self reloadPosts];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -312,7 +423,6 @@
     [c populateWithPosts:[[self activePostController] posts] indexOffset:[indexPath row] * 3];
     return c;
 }
-
 
 - (IBAction)exploreTypeChanged:(UISegmentedControl *)sender
 {

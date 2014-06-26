@@ -228,6 +228,8 @@
 		BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEE03182C210600648B9F /* NSError+STKConnection.m */; };
 		BEFCEE0B182C211A00648B9F /* STKUserStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEE0A182C211A00648B9F /* STKUserStore.m */; };
 		BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BEFCEE0D182C212800648B9F /* STKImageStore.m */; };
+		D073F6E7195B4A590049E573 /* STKExploreFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D073F6E5195B4A590049E573 /* STKExploreFilterViewController.m */; };
+		D073F6E8195B4A590049E573 /* STKExploreFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D073F6E6195B4A590049E573 /* STKExploreFilterViewController.xib */; };
 		D097F29518D353B30053F479 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE36BC4618CA14B200694145 /* Crashlytics.framework */; };
 		D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */; };
 		D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */; };
@@ -2307,6 +2309,9 @@
 		BEFCEE0A182C211A00648B9F /* STKUserStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUserStore.m; sourceTree = "<group>"; };
 		BEFCEE0C182C212800648B9F /* STKImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKImageStore.h; sourceTree = "<group>"; };
 		BEFCEE0D182C212800648B9F /* STKImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKImageStore.m; sourceTree = "<group>"; };
+		D073F6E4195B4A590049E573 /* STKExploreFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKExploreFilterViewController.h; sourceTree = "<group>"; };
+		D073F6E5195B4A590049E573 /* STKExploreFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKExploreFilterViewController.m; sourceTree = "<group>"; };
+		D073F6E6195B4A590049E573 /* STKExploreFilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKExploreFilterViewController.xib; sourceTree = "<group>"; };
 		D097F29318D3533E0053F479 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Prism/Crashlytics.framework; sourceTree = "<group>"; };
 		D0E3508018FF30A40006B992 /* STKSearchHashTagsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchHashTagsCell.h; sourceTree = "<group>"; };
 		D0E3508118FF30A40006B992 /* STKSearchHashTagsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchHashTagsCell.m; sourceTree = "<group>"; };
@@ -2503,6 +2508,9 @@
 				BEC01A1A182AF44600080601 /* STKGraphViewController.h */,
 				BEC01A1B182AF44600080601 /* STKGraphViewController.m */,
 				BEC01A1C182AF44600080601 /* STKGraphViewController.xib */,
+				D073F6E4195B4A590049E573 /* STKExploreFilterViewController.h */,
+				D073F6E5195B4A590049E573 /* STKExploreFilterViewController.m */,
+				D073F6E6195B4A590049E573 /* STKExploreFilterViewController.xib */,
 				BEFCEDF7182C1EE100648B9F /* STKCreatePostViewController.h */,
 				BEFCEDF8182C1EE100648B9F /* STKCreatePostViewController.m */,
 				BEFCEDF9182C1EE100648B9F /* STKCreatePostViewController.xib */,
@@ -4790,6 +4798,7 @@
 				BE02EAAD182A80A200A5505A /* InfoPlist.strings in Resources */,
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
 				BE7391C91901A58200AD81AB /* STKHashtagPostsViewController.xib in Resources */,
+				D073F6E8195B4A590049E573 /* STKExploreFilterViewController.xib in Resources */,
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
 				D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */,
 				D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */,
@@ -4924,6 +4933,7 @@
 				BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */,
 				BE7391C719019AB600AD81AB /* STKHashtagPostsViewController.m in Sources */,
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
+				D073F6E7195B4A590049E573 /* STKExploreFilterViewController.m in Sources */,
 				BEC0676818E46B1F00B5C5E6 /* STKHashTag.m in Sources */,
 				BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,

@@ -179,7 +179,6 @@ typedef enum {
                     } else {
                         [self fetchPostsForProfileWithScope:nil];
                     }
-                    
                 }
             }
             

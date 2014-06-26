@@ -62,6 +62,7 @@ extern NSString * const STKPostExternalProvider;
 @property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSString *creatorType;
 @property (nonatomic, strong) NSString *externalProvider;
+@property (nonatomic, strong) NSString *subtype;
 
 @property (nonatomic) int commentCount;
 @property (nonatomic) int likeCount;

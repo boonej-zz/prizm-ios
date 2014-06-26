@@ -30,6 +30,7 @@
         <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="repost" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subtype" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
@@ -130,7 +131,7 @@
     <elements>
         <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="165"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="88"/>
-        <element name="STKPost" positionX="0" positionY="144" width="128" height="480"/>
+        <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKUser" positionX="0" positionY="0" width="128" height="795"/>

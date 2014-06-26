@@ -23,6 +23,7 @@ NSString * const STKUserTypePersonal = @"user";
 NSString * const STKUserTypeInstitution = @"institution_verified";
 NSString * const STKUserTypeInstitutionPending = @"institution";
 
+NSString * const STKUserSubTypeKey = @"council";
 NSString * const STKUserSubTypeFoundation = @"foundation";
 NSString * const STKUserSubTypeMilitary = @"military";
 NSString * const STKUserSubTypeCompany = @"company";

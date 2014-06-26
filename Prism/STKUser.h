@@ -30,6 +30,7 @@ extern NSString * const STKUserTypePersonal;
 extern NSString * const STKUserTypeInstitution;
 extern NSString * const STKUserTypeInstitutionPending;
 
+extern NSString * const STKUserSubTypeKey;
 extern NSString * const STKUserSubTypeMilitary;
 extern NSString * const STKUserSubTypeFoundation;
 extern NSString * const STKUserSubTypeCompany;
