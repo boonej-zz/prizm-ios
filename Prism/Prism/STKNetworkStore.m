@@ -160,7 +160,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         if(!err) {
             NSLog(@"Will check Instagram %@", [user instagramToken]);
             [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[u instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
-                if(!err)
+                if(!err && instagramLastID)
                     [stats setObject:instagramLastID forKey:@"instagramLastMinID"];
                 
                 [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
@@ -168,7 +168,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                     NSLog(@"Will check Twitter %@", [account username]);
                     [self transferPostsFromTwitterAccount:account lastMinimumID:[u twitterLastMinID] completion:^(NSString *twitterLastID, NSError *twitterError) {
 
-                        if(!err)
+                        if(!err && twitterLastID)
                             [stats setObject:twitterLastID forKey:@"twitterLastMinID"];
 
                         [self setUpdating:NO];
