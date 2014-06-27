@@ -45,11 +45,12 @@
 
 @property (nonatomic, strong) STKNavigationButton *searchButton;
 @property (nonatomic, strong) STKNavigationButton *filterButton;
+@property (nonatomic, strong) STKNavigationButton *cancelButton;
+
 @property (nonatomic, strong) UIBarButtonItem *searchButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *filterButtonItem;
 @property (nonatomic, strong) NSDictionary *activeFilter;
 @property (nonatomic, strong) NSDictionary *defaultFeaturedFilter;
-@property (nonatomic, assign) BOOL isFilterActive;
 @property (nonatomic, assign) BOOL isShowingFilterView;
 
 - (IBAction)exploreTypeChanged:(id)sender;
@@ -105,43 +106,28 @@
 
 - (void)initiateFilter:(id)sender
 {
-    if([self filterNavController]) {
-        [self setIsShowingFilterView:NO];
-        [[[self blurView] displayLink] setPaused:NO];
-        [[self blurView] setHidden:NO];
-        [[self filterNavController] willMoveToParentViewController:nil];
-        [[self filterNavController] removeFromParentViewController];
-        [[[self filterNavController] view] removeFromSuperview];
-        [self setFilterNavController:nil];
-        [self configureInterface];
-        
-    } else {
-        [self setIsShowingFilterView:YES];
+    [self setFilterScreenActive:![self isFilterScreenActive]];
+}
+
+- (void)setFilterScreenActive:(BOOL)active
+{
+    if(active) {
         STKExploreFilterViewController *filtervc = [[STKExploreFilterViewController alloc] init];
         [filtervc setDelegate:self];
-        if([self isFilterActive]) {
-            [filtervc setFilterSelected:[[self activeFilter] objectForKey:@"filter"]];
-        }
-        
-        STKNavigationButton *filterCancelView = [[STKNavigationButton alloc] init];
-        [filterCancelView setImage:[UIImage imageNamed:@"filter_cancel"]];
-        [filterCancelView setHighlightedImage:[UIImage imageNamed:@"filter_cancel"]];
-        [filterCancelView setSelectedImage:[UIImage imageNamed:@"filter_cancel"]];
-        [filterCancelView setOffset:8];
-        [filterCancelView addTarget:self action:@selector(initiateFilter:) forControlEvents:UIControlEventTouchUpInside];
-        [self setFilterButton:filterCancelView];
-        
-        UIBarButtonItem *filterCancelbbi = [[UIBarButtonItem alloc] initWithCustomView:filterCancelView];
-        [[self navigationItem] setRightBarButtonItems:@[filterCancelbbi]];
+        [filtervc setFilters:[self activeFilter]];
         
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:filtervc];
         [self setFilterNavController:nvc];
-        [self addChildViewController:nvc];
-        [[self view] addSubview:[nvc view]];
-        [nvc setNavigationBarHidden:YES];
-        [[[self blurView] displayLink] setPaused:YES];
-        [[self blurView] setHidden:YES];
+        [self setOverlayViewController:nvc];
+    } else {
+        [self setOverlayViewController:nil];
+        [self setFilterNavController:nil];
     }
+    [self configureInterface];
+}
+- (BOOL)isFilterScreenActive
+{
+    return [self filterNavController] != nil;
 }
 
 - (void)setSearchBarActive:(BOOL)active
@@ -150,42 +136,13 @@
         STKSearchResultsViewController *searchController = [[STKSearchResultsViewController alloc] init];
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:searchController];
         
-        [self addChildViewController:nvc];
-        [[self view] addSubview:[nvc view]];
-        [nvc didMoveToParentViewController:self];
-        
-        [[nvc view] setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|" options:0 metrics:nil views:@{@"v" : [nvc view]}]];
-        [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : [nvc view]}]];
-
-        [nvc setNavigationBarHidden:YES];
-        
+        [self setOverlayViewController:nvc];
         [self setSearchNavController:nvc];
-        [[[self blurView] displayLink] setPaused:YES];
-        [[self blurView] setHidden:YES];
-        
-        [[self tableView] setHidden:YES];
-        [[self exploreTypeControl] setHidden:YES];
-        [[self searchButton] setSelected:YES];
-        [[self filterButton] setHidden:YES];
-        [[self navigationItem] setTitle:@"Search"];
     } else {
-        [[self tableView] setHidden:NO];
-        [[self exploreTypeControl] setHidden:NO];
-        [[self searchButton] setSelected:NO];
-        [[self filterButton] setHidden:NO];
-
-        [[[self blurView] displayLink] setPaused:NO];
-        [[self blurView] setHidden:NO];
-
-        
-        [[self searchNavController] willMoveToParentViewController:nil];
-        [[self searchNavController] removeFromParentViewController];
-        [[[self searchNavController] view] removeFromSuperview];
+        [self setOverlayViewController:nil];
         [self setSearchNavController:nil];
-        
-        [[self navigationItem] setTitle:@"Explore"];
     }
+    [self configureInterface];
 }
 
 - (BOOL)isSearchBarActive
@@ -193,16 +150,38 @@
     return [self searchNavController] != nil;
 }
 
+- (void)setOverlayViewController:(UINavigationController *)vc
+{
+    for(UIViewController *cvc in [self childViewControllers]) {
+        [cvc willMoveToParentViewController:nil];
+        [[cvc view] removeFromSuperview];
+        [cvc removeFromParentViewController];
+    }
+    
+    if(vc) {
+        [vc setNavigationBarHidden:YES];
+        [self addChildViewController:vc];
+        [[self view] addSubview:[vc view]];
+        
+        [[vc view] setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|" options:0 metrics:nil views:@{@"v" : [vc view]}]];
+        [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : [vc view]}]];
+        
+        [vc didMoveToParentViewController:self];
+    }
+}
+
+
 - (void)menuWillAppear:(BOOL)animated
 {
     [[self blurView] setOverlayOpacity:0.5];
-    [[self navigationItem] setRightBarButtonItem:nil];
+    [[self navigationItem] setRightBarButtonItems:nil];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
     [[self blurView] setOverlayOpacity:0.0];
-    [[self navigationItem] setRightBarButtonItem:[self searchButtonItem]];
+    [self configureInterface];
 }
 
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
@@ -228,6 +207,7 @@
 {
     return YES;
 }
+
 - (void)swipe:(UISwipeGestureRecognizer *)gr
 {
     if([gr state] == UIGestureRecognizerStateEnded) {
@@ -297,9 +277,6 @@
     else if ([self exploreType] == STKExploreTypeFeatured)
         [self setActivePostController:[self featuredPostsController]];
 
-    [[self exploreTypeControl] setSelectedSegmentIndex:[self exploreType]];
-    
-    [[self searchButton] setSelected:[self isSearchBarActive]];
     
     [[[self blurView] displayLink] setPaused:NO];
 
@@ -310,29 +287,34 @@
     [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:@{@"Explore Type" : [self exploreTypeString]}];
 }
 
+- (void)dismissOverlay:(id)sender
+{
+    if([self isSearchBarActive]) {
+        [self setSearchBarActive:NO];
+    } else if([self isFilterScreenActive]) {
+        [self setFilterScreenActive:NO];
+    }
+}
+
 - (void)configureInterface
 {
-    if([self isShowingFilterView]) {
-        STKNavigationButton *filterCancelView = [[STKNavigationButton alloc] init];
-        [filterCancelView setImage:[UIImage imageNamed:@"filter_cancel"]];
-        [filterCancelView setHighlightedImage:[UIImage imageNamed:@"filter_cancel"]];
-        [filterCancelView setSelectedImage:[UIImage imageNamed:@"filter_cancel"]];
-        [filterCancelView setOffset:8];
-        [filterCancelView addTarget:self action:@selector(initiateFilter:) forControlEvents:UIControlEventTouchUpInside];
-        [self setFilterButton:filterCancelView];
-        
-        UIBarButtonItem *filterCancelbbi = [[UIBarButtonItem alloc] initWithCustomView:filterCancelView];
-        [[self navigationItem] setRightBarButtonItems:@[filterCancelbbi]];
-        
-    } else {
+    [[self exploreTypeControl] setSelectedSegmentIndex:[self exploreType]];
+    
+    if(![self cancelButton]) {
+        STKNavigationButton *cancelButton = [[STKNavigationButton alloc] init];
+        [cancelButton setImage:[UIImage imageNamed:@"filter_cancel"]];
+        [cancelButton setOffset:8];
+        [cancelButton addTarget:self action:@selector(dismissOverlay:) forControlEvents:UIControlEventTouchUpInside];
+        [self setCancelButton:cancelButton];
+    }
+    if(![self searchButton]) {
         STKNavigationButton *view = [[STKNavigationButton alloc] init];
         [view setImage:[UIImage imageNamed:@"btn_search"]];
-        [view setHighlightedImage:[UIImage imageNamed:@"btn_search_selected"]];
-        [view setSelectedImage:[UIImage imageNamed:@"btn_search_selected"]];
         [view setOffset:8];
         [view addTarget:self action:@selector(initiateSearch:) forControlEvents:UIControlEventTouchUpInside];
         [self setSearchButton:view];
-        
+    }
+    if(![self filterButton]) {
         STKNavigationButton *filterView = [[STKNavigationButton alloc] init];
         [filterView setImage:[UIImage imageNamed:@"filter_active"]];
         [filterView setHighlightedImage:[UIImage imageNamed:@"filter_activeon"]];
@@ -340,14 +322,25 @@
         [filterView setOffset:8];
         [filterView addTarget:self action:@selector(initiateFilter:) forControlEvents:UIControlEventTouchUpInside];
         [self setFilterButton:filterView];
-        
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
-        UIBarButtonItem *filterbbi = [[UIBarButtonItem alloc] initWithCustomView:filterView];
-        [self setSearchButtonItem:bbi];
-        [self setFilterButtonItem:filterbbi];
-        
-        [[self navigationItem] setRightBarButtonItems:@[bbi, filterbbi]];
-        [[self filterButton] setHidden:[self isSearchBarActive]];
+    }
+    
+    [[self navigationItem] setTitle:@"Explore"];
+
+    
+    if([self isFilterScreenActive]) {
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:[self cancelButton]];
+        [[self navigationItem] setRightBarButtonItems:@[bbi]];
+    } else if([self isSearchBarActive]) {
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:[self cancelButton]];
+        [[self navigationItem] setRightBarButtonItems:@[bbi]];
+        [[self navigationItem] setTitle:@"Search"];
+    } else {
+        UIBarButtonItem *bbiSearch = [[UIBarButtonItem alloc] initWithCustomView:[self searchButton]];
+        UIBarButtonItem *bbiFilter = [[UIBarButtonItem alloc] initWithCustomView:[self filterButton]];
+        [[self navigationItem] setRightBarButtonItems:@[bbiFilter, bbiSearch]];
+        if([self isFilterActive]) {
+            [[self filterButton] setSelected:YES];
+        }
     }
 }
 
@@ -376,46 +369,26 @@
 
 - (NSDictionary *)filterMap
 {
-    if([self isFilterActive] && [self activeFilter]){
-        if([self exploreType] == STKExploreTypeFeatured) {
-            return @{[[self defaultFeaturedFilter] objectForKey:@"key"] : [[self defaultFeaturedFilter] objectForKey:@"filter"],
-                     [[self activeFilter] objectForKey:@"key"] : [[self activeFilter] objectForKey:@"filter"]};
-        } else {
-            return @{[[self activeFilter] objectForKey:@"key"] : [[self activeFilter] objectForKey:@"filter"]};
-        }
-    } else {
-        if([self exploreType] == STKExploreTypeFeatured) {
-            return @{[[self defaultFeaturedFilter] objectForKey:@"key"] : [[self defaultFeaturedFilter] objectForKey:@"filter"]};
-        } else {
-            return nil;
-        }
+    NSMutableDictionary *d = [NSMutableDictionary dictionary];
+    if([self exploreType] == STKExploreTypeFeatured) {
+        [d setObject:STKUserTypeInstitution forKey:@"creatorType"];
     }
+    
+    [d addEntriesFromDictionary:[self activeFilter]];
+    
+    return d;
 }
 
-- (void)didChangeFilter:(STKExploreFilterType)filterType withValue:(NSString *)filter
+- (BOOL)isFilterActive
 {
-    if(!filter) {
-        [self setIsFilterActive:NO];
-        [self setActiveFilter:nil];
-        [self reloadPosts];
-        
-    } else if([filter isEqualToString:@"filterall"]) {
-        [self setActiveFilter:nil];
-        [self reloadPosts];
-        [self initiateFilter:nil];
+    return [[self activeFilter] count] > 0;
+}
 
-    } else {
-        NSString *key;
-        if(filterType == STKExploreFilterTypeCategory) {
-            key = @"type";
-        } else {
-            key = @"subtype";
-        }
-        
-        [self setIsFilterActive:YES];
-        [self setActiveFilter:@{@"key" : key, @"filter" : filter}];
-        [self reloadPosts];
-    }
+- (void)exploreFilterViewController:(STKExploreFilterViewController *)vc
+                   didUpdateFilters:(NSDictionary *)filter
+{
+    [self setActiveFilter:filter];
+    [self reloadPosts];
 }
 
 - (void)viewDidAppear:(BOOL)animated

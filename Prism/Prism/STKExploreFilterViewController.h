@@ -8,21 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
+@class STKExploreFilterViewController;
+
 typedef enum {
     STKExploreFilterTypeCategory = 0,
     STKExploreFilterTypeCouncil
-}STKExploreFilterType;
+} STKExploreFilterType;
 
 @protocol STKExploreFilterDelegate <NSObject>
 
 @optional
 
-- (void)didChangeFilter:(STKExploreFilterType)filterType withValue:(NSString *)filter;
+- (void)exploreFilterViewController:(STKExploreFilterViewController *)vc
+                   didUpdateFilters:(NSDictionary *)filter;
 
 @end
 
 @interface STKExploreFilterViewController : UIViewController
 
 @property (nonatomic, weak) id <STKExploreFilterDelegate> delegate;
-@property (nonatomic, strong) NSString *filterSelected;
+@property (nonatomic, strong) NSDictionary *filters;
+
+
 @end

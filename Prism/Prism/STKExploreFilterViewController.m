@@ -29,37 +29,37 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _categoryItems = @[
-                           @{@"title" : @"Aspiration", STKPostTypeKey : STKPostTypeAspiration,
+                           @{@"title" : @"Aspiration", @"key" : STKPostTypeAspiration,
                              @"image" : [UIImage imageNamed:@"category_aspiration_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_aspirations_selected"]},
-                           @{@"title" : @"Passion", STKPostTypeKey : STKPostTypePassion,
+                           @{@"title" : @"Passion", @"key" : STKPostTypePassion,
                              @"image" : [UIImage imageNamed:@"category_passions_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_passions_selected"]},
-                           @{@"title" : @"Experience", STKPostTypeKey : STKPostTypeExperience,
+                           @{@"title" : @"Experience", @"key" : STKPostTypeExperience,
                              @"image" : [UIImage imageNamed:@"category_experiences_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_experiences_selected"]},
-                           @{@"title" : @"Achievement", STKPostTypeKey : STKPostTypeAchievement,
+                           @{@"title" : @"Achievement", @"key" : STKPostTypeAchievement,
                              @"image" : [UIImage imageNamed:@"category_achievements_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_achievements_selected"]},
-                           @{@"title" : @"Inspiration", STKPostTypeKey : STKPostTypeInspiration,
+                           @{@"title" : @"Inspiration", @"key" : STKPostTypeInspiration,
                              @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_inspiration_selected"]},
-                           @{@"title" : @"Filter All", STKPostTypeKey : @"filterall",
+                           @{@"title" : @"Filter All", @"key" : @"filterall",
                              @"image" : [UIImage imageNamed:@"category_filterall"],
                              @"selectedImage" : [UIImage imageNamed:@"category_filterall"]}
                            ];
         _councilItems = @[
-                          @{@"title" : @"Community", STKUserSubTypeKey : STKUserSubTypeCommunity,
+                          @{@"title" : @"Community", @"key" : STKUserSubTypeCommunity,
                             @"image" : [UIImage imageNamed:@"council_community"]},
-                          @{@"title" : @"Companies", STKUserSubTypeKey : STKUserSubTypeCompany,
+                          @{@"title" : @"Corporate", @"key" : STKUserSubTypeCompany,
                             @"image" : [UIImage imageNamed:@"council_companies"]},
-                          @{@"title" : @"Education", STKUserSubTypeKey : STKUserSubTypeEducation,
+                          @{@"title" : @"Education", @"key" : STKUserSubTypeEducation,
                             @"image" : [UIImage imageNamed:@"council_education"]},
-                          @{@"title" : @"Foundations", STKUserSubTypeKey : STKUserSubTypeFoundation,
+                          @{@"title" : @"Foundation", @"key" : STKUserSubTypeFoundation,
                             @"image" : [UIImage imageNamed:@"council_foundations"]},
-                          @{@"title" : @"Military", STKUserSubTypeKey : STKUserSubTypeMilitary,
+                          @{@"title" : @"Military", @"key" : STKUserSubTypeMilitary,
                             @"image" : [UIImage imageNamed:@"council_military"]},
-                          @{@"title" : @"Luminaires", STKUserSubTypeKey : STKUserSubTypeLuminary,
+                          @{@"title" : @"Luminary", @"key" : STKUserSubTypeLuminary,
                             @"image" : [UIImage imageNamed:@"council_luminaires"]},
                           ];
     }
@@ -119,7 +119,7 @@
         [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
         [cell setBackgroundColor:[UIColor clearColor]];
         
-        if([item objectForKey:STKPostTypeKey] == [self filterSelected]) {
+        if([[item objectForKey:@"key"] isEqualToString:[[self filters] objectForKey:@"type"]]) {
             [cell setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.4]];
         }
         
@@ -135,7 +135,7 @@
         [[cell imageView] setImage:[item objectForKey:@"image"]];
         [cell setBackgroundColor:[UIColor clearColor]];
         
-        if([item objectForKey:STKUserSubTypeKey] == [self filterSelected]) {
+        if([[item objectForKey:@"key"] isEqualToString:[[self filters] objectForKey:@"subtype"]]) {
             [cell setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.4]];
         }
         
@@ -147,29 +147,36 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSMutableDictionary *current = [[self filters] mutableCopy];
+    if(!current) {
+        current = [NSMutableDictionary dictionary];
+    }
     NSDictionary *item;
     if(collectionView == [self categoryCollectionView]) {
         item = [[self categoryItems] objectAtIndex:[indexPath row]];
-        if([[self filterSelected] isEqualToString:[item objectForKey:STKPostTypeKey]]) {
-            [self setFilterSelected:nil];
-            
+        NSString *val = [item objectForKey:@"key"];
+        
+        if([val isEqualToString:@"filterall"]) {
+            [current removeAllObjects];
+        } else if([[[self filters] objectForKey:@"type"] isEqualToString:val]) {
+            [current removeObjectForKey:@"type"];
         } else {
-            [self setFilterSelected:[item objectForKey:STKPostTypeKey]];
-            
+            [current setObject:val forKey:@"type"];
         }
-        [[self delegate] didChangeFilter:STKExploreFilterTypeCategory withValue:[self filterSelected]];
+        
     }
     
     if(collectionView == [self councilCollectionView]) {
         item = [[self councilItems] objectAtIndex:[indexPath row]];
-        if([[self filterSelected] isEqualToString:[item objectForKey:STKUserSubTypeKey]]) {
-            [self setFilterSelected:nil];
+        NSString *val = [item objectForKey:@"key"];
+        if([[[self filters] objectForKey:@"subtype"] isEqualToString:val]) {
+            [current removeObjectForKey:@"subtype"];
         } else {
-            [self setFilterSelected:[item objectForKey:STKUserSubTypeKey]];
+            [current setObject:val forKey:@"subtype"];
         }
-        [[self delegate] didChangeFilter:STKExploreFilterTypeCouncil withValue:[self filterSelected]];
     }
-    
+    [self setFilters:[current copy]];
+    [[self delegate] exploreFilterViewController:self didUpdateFilters:[self filters]];
     [self reloadData];
 }
 
