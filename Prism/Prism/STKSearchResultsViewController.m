@@ -103,8 +103,6 @@ typedef enum {
 {
     [super viewWillDisappear:animated];
     [[[self blurView] displayLink] setPaused:NO];
-
-    [[self searchTextField] setText:nil];
 }
 
 - (void)toggleFollow:(id)sender atIndexPath:(NSIndexPath *)ip
@@ -129,21 +127,21 @@ typedef enum {
 
 - (IBAction)searchTypeChanged:(UISegmentedControl *)sender
 {
+    [self setHashTagsFound:nil];
+    [self setProfilesFound:nil];
+    [self reloadSearchResults];
+
     if([sender selectedSegmentIndex] == 0) {
         [self setSearchType:STKSearchTypeUser];
     } else {
         [self setSearchType:STKSearchTypeHashTag];
     }
-    
-    [self setHashTagsFound:nil];
-    [self setProfilesFound:nil];
-    [self reloadSearchResults];
+
+    [self performSearch:[[self searchTextField] text]];
 }
 
-
-- (IBAction)searchFieldDidChange:(UITextField *)sender
+- (void)performSearch:(NSString *)searchString
 {
-    NSString *searchString = [sender text];
     if([searchString length] < 2) {
         [self reloadSearchResults];
         return;
@@ -161,6 +159,12 @@ typedef enum {
             }
         }];
     }
+}
+
+- (IBAction)searchFieldDidChange:(UITextField *)sender
+{
+    NSString *searchString = [sender text];
+    [self performSearch:searchString];
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
