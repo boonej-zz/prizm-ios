@@ -12,6 +12,7 @@
 #import "STKImageCollectionViewCell.h"
 #import "STKPost.h"
 #import "STKUser.h"
+#import "STKRenderServer.h"
 
 @interface STKExploreFilterViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -19,6 +20,7 @@
 @property (nonatomic, weak) IBOutlet UICollectionView *councilCollectionView;
 @property (nonatomic, strong) NSArray *categoryItems;
 @property (nonatomic, strong) NSArray *councilItems;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end
 
@@ -50,20 +52,31 @@
                            ];
         _councilItems = @[
                           @{@"title" : @"Community", @"key" : STKUserSubTypeCommunity,
-                            @"image" : [UIImage imageNamed:@"council_community"]},
+                            @"image" : [UIImage imageNamed:@"council_community"],
+                            @"selectedImage" : [UIImage imageNamed:@"partners_community_selected"]},
                           @{@"title" : @"Corporate", @"key" : STKUserSubTypeCompany,
-                            @"image" : [UIImage imageNamed:@"council_companies"]},
+                            @"image" : [UIImage imageNamed:@"council_companies"],
+                            @"selectedImage" : [UIImage imageNamed:@"partners-brands_selected"]},
                           @{@"title" : @"Education", @"key" : STKUserSubTypeEducation,
-                            @"image" : [UIImage imageNamed:@"council_education"]},
+                            @"image" : [UIImage imageNamed:@"council_education"],
+                            @"selectedImage" : [UIImage imageNamed:@"partners_education_selected"]},
                           @{@"title" : @"Foundation", @"key" : STKUserSubTypeFoundation,
-                            @"image" : [UIImage imageNamed:@"council_foundations"]},
+                            @"image" : [UIImage imageNamed:@"council_foundations"],
+                            @"selectedImage" : [UIImage imageNamed:@"partners_foundation_selected"]},
                           @{@"title" : @"Military", @"key" : STKUserSubTypeMilitary,
-                            @"image" : [UIImage imageNamed:@"council_military"]},
+                            @"image" : [UIImage imageNamed:@"council_military"],
+                            @"selectedImage" : [UIImage imageNamed:@"partners_military_selected"]},
                           @{@"title" : @"Luminary", @"key" : STKUserSubTypeLuminary,
-                            @"image" : [UIImage imageNamed:@"council_luminaires"]},
+                            @"image" : [UIImage imageNamed:@"council_luminaires"],
+                            @"selectedImage" : [UIImage imageNamed:@"partners_luminariesa_selected"]},
                           ];
     }
     return self;
+}
+
+- (float)menuHeight
+{
+    return 293;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -85,6 +98,7 @@
     [[self councilCollectionView] setBackgroundColor:[UIColor clearColor]];
     [[self councilCollectionView] setScrollEnabled:NO];
     
+    [[self imageView] setImage:[self backgroundImage]];
 }
 
 - (void)reloadData
@@ -116,11 +130,14 @@
                                                                                                forIndexPath:indexPath];
         [[cell label] setText:[item objectForKey:@"title"]];
         [[cell label] setTextColor:STKTextColor];
-        [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
-        [cell setBackgroundColor:[UIColor clearColor]];
+        
+        [cell setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.3]];
+
         
         if([[item objectForKey:@"key"] isEqualToString:[[self filters] objectForKey:@"type"]]) {
-            [cell setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.4]];
+            [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
+        } else {
+            [[cell imageView] setImage:[item objectForKey:@"image"]];
         }
         
         return cell;
@@ -132,11 +149,12 @@
                                                                                                forIndexPath:indexPath];
         [[cell label] setText:[item objectForKey:@"title"]];
         [[cell label] setTextColor:STKTextColor];
-        [[cell imageView] setImage:[item objectForKey:@"image"]];
-        [cell setBackgroundColor:[UIColor clearColor]];
+        [cell setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.3]];
         
         if([[item objectForKey:@"key"] isEqualToString:[[self filters] objectForKey:@"subtype"]]) {
-            [cell setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.4]];
+            [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
+        } else {
+            [[cell imageView] setImage:[item objectForKey:@"image"]];
         }
         
         return cell;

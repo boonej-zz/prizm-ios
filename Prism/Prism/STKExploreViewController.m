@@ -115,7 +115,12 @@
         STKExploreFilterViewController *filtervc = [[STKExploreFilterViewController alloc] init];
         [filtervc setDelegate:self];
         [filtervc setFilters:[self activeFilter]];
-        
+
+        CGRect r = CGRectMake(0, 64, 320, [filtervc menuHeight]);
+        UIImage *bgImage = [[STKRenderServer renderServer] instantBlurredImageForView:[self view]
+                                                                            inSubrect:r];
+        [filtervc setBackgroundImage:bgImage];
+
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:filtervc];
         [self setFilterNavController:nvc];
         [self setOverlayViewController:nvc];
@@ -293,6 +298,7 @@
         [self setSearchBarActive:NO];
     } else if([self isFilterScreenActive]) {
         [self setFilterScreenActive:NO];
+        [self reloadPosts];
     }
 }
 
@@ -388,7 +394,6 @@
                    didUpdateFilters:(NSDictionary *)filter
 {
     [self setActiveFilter:filter];
-    [self reloadPosts];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -455,5 +460,8 @@
 }
 
 
-
 @end
+
+
+
+

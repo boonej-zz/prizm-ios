@@ -702,28 +702,30 @@ const long STKCreateProgressGeocoding = 4;
     if([[NSDate date] timeIntervalSinceDate:[l timestamp]] < 5 * 60) {
         
         [self setProgressMask:[self progressMask] | STKCreateProgressGeocoding];
-        _geocoder = [[CLGeocoder alloc] init];
-        [_geocoder reverseGeocodeLocation:l
-                        completionHandler:^(NSArray *placemarks, NSError *error) {
-                            [self setProgressMask:[self progressMask] & ~STKCreateProgressGeocoding];
-                            if(!error) {
-                                CLPlacemark *cp = [placemarks lastObject];
-                                if([cp postalCode] && ![[self user] zipCode]) {
-                                    [[self user] setZipCode:[cp postalCode]];
-                                    [[self user] setCity:[cp locality]];
-                                    
-                                    [[self user] setState:[cp administrativeArea]];
+        if(l) {
+            _geocoder = [[CLGeocoder alloc] init];
+            [_geocoder reverseGeocodeLocation:l
+                            completionHandler:^(NSArray *placemarks, NSError *error) {
+                                [self setProgressMask:[self progressMask] & ~STKCreateProgressGeocoding];
+                                if(!error) {
+                                    CLPlacemark *cp = [placemarks lastObject];
+                                    if([cp postalCode] && ![[self user] zipCode]) {
+                                        [[self user] setZipCode:[cp postalCode]];
+                                        [[self user] setCity:[cp locality]];
+                                        
+                                        [[self user] setState:[cp administrativeArea]];
 
-                                    
-                                    UITableViewCell *c = [self visibleCellForKey:@"zipCode"];
-                                    if(c) {
-                                        [[self tableView] reloadRowsAtIndexPaths:@[[[self tableView] indexPathForCell:c]]
-                                                                withRowAnimation:UITableViewRowAnimationAutomatic];
+                                        
+                                        UITableViewCell *c = [self visibleCellForKey:@"zipCode"];
+                                        if(c) {
+                                            [[self tableView] reloadRowsAtIndexPaths:@[[[self tableView] indexPathForCell:c]]
+                                                                    withRowAnimation:UITableViewRowAnimationAutomatic];
+                                        }
                                     }
                                 }
-                            }
-                            _geocoder = nil;
-                        }];
+                                _geocoder = nil;
+                            }];
+        }
         [[self locationManager] stopUpdatingLocation];
     }
 }

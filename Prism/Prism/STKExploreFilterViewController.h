@@ -28,6 +28,8 @@ typedef enum {
 
 @property (nonatomic, weak) id <STKExploreFilterDelegate> delegate;
 @property (nonatomic, strong) NSDictionary *filters;
+@property (nonatomic, strong) UIImage *backgroundImage;
 
+- (float)menuHeight;
 
 @end

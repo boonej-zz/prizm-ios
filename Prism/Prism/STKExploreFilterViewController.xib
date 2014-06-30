@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="categoryCollectionView" destination="5aU-ct-8ck" id="lqe-OP-agn"/>
                 <outlet property="councilCollectionView" destination="KXU-qi-D2f" id="8R1-gR-YK4"/>
+                <outlet property="imageView" destination="OPE-Nu-IIu" id="WsE-Sm-5QT"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -19,9 +20,9 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2HM-ql-qUX" userLabel="Overlay">
                     <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="calibratedWhite"/>
                 </view>
-                <imageView userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="OPE-Nu-IIu">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="OPE-Nu-IIu">
                     <rect key="frame" x="0.0" y="64" width="320" height="293"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -89,10 +90,10 @@
                 <constraint firstItem="KXU-qi-D2f" firstAttribute="trailing" secondItem="vhT-nu-ucU" secondAttribute="trailing" id="P0t-hR-b0l"/>
                 <constraint firstItem="2HM-ql-qUX" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Pek-gO-P1B"/>
                 <constraint firstItem="OPE-Nu-IIu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="QjZ-OD-1ts"/>
-                <constraint firstItem="2HM-ql-qUX" firstAttribute="top" secondItem="5aU-ct-8ck" secondAttribute="top" id="Taw-f9-f4w"/>
                 <constraint firstItem="5aU-ct-8ck" firstAttribute="top" secondItem="OPE-Nu-IIu" secondAttribute="top" id="YU4-i6-Zlt"/>
-                <constraint firstItem="2HM-ql-qUX" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="gX3-6B-7EF"/>
                 <constraint firstAttribute="trailing" secondItem="2HM-ql-qUX" secondAttribute="trailing" id="hEv-Qn-QJc"/>
+                <constraint firstItem="5aU-ct-8ck" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="hMR-ic-Ckh"/>
+                <constraint firstItem="5aU-ct-8ck" firstAttribute="top" secondItem="2HM-ql-qUX" secondAttribute="top" id="hWi-4B-gZ0"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

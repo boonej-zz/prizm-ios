@@ -101,10 +101,13 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
             [self setAuthenticating:YES];
             void (^completion)(STKAuthorizationToken *token, NSError *err) = ^(STKAuthorizationToken *token, NSError *err) {
                 [self setAuthenticating:NO];
-                for(void (^req)(NSError *err) in [self authorizedRequestQueue]) {
+                
+                NSArray *requests = [[self authorizedRequestQueue] copy];
+                [[self authorizedRequestQueue] removeAllObjects];
+
+                for(void (^req)(NSError *err) in requests) {
                     req(err);
                 }
-                [[self authorizedRequestQueue] removeAllObjects];
             };
             
             if([[self authorizationToken] refreshToken]) {
