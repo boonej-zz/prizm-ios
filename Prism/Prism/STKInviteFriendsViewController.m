@@ -45,6 +45,20 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 
 @implementation STKInviteFriendsViewController
 
+-(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    if (self) {
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                               target:self action:@selector(back:)];
+        [[self navigationItem] setLeftBarButtonItem:bbi];
+    }
+    
+    return self;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
