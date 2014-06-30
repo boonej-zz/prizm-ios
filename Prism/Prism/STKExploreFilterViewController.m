@@ -22,6 +22,8 @@
 @property (nonatomic, strong) NSArray *councilItems;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
+- (IBAction)overlayTapped:(id)sender;
+
 @end
 
 @implementation STKExploreFilterViewController
@@ -77,6 +79,11 @@
 - (float)menuHeight
 {
     return 293;
+}
+
+- (IBAction)overlayTapped:(id)sender
+{
+    [[self delegate] didDismissExploreFilterViewController:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated

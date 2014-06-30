@@ -21,6 +21,7 @@ typedef enum {
 
 - (void)exploreFilterViewController:(STKExploreFilterViewController *)vc
                    didUpdateFilters:(NSDictionary *)filter;
+- (void)didDismissExploreFilterViewController:(STKExploreFilterViewController *)vc;
 
 @end
 

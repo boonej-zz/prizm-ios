@@ -396,6 +396,11 @@
     [self setActiveFilter:filter];
 }
 
+- (void)didDismissExploreFilterViewController:(STKExploreFilterViewController *)vc
+{
+    [self dismissOverlay:nil];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
