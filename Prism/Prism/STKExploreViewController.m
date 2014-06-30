@@ -343,7 +343,7 @@
     } else {
         UIBarButtonItem *bbiSearch = [[UIBarButtonItem alloc] initWithCustomView:[self searchButton]];
         UIBarButtonItem *bbiFilter = [[UIBarButtonItem alloc] initWithCustomView:[self filterButton]];
-        [[self navigationItem] setRightBarButtonItems:@[bbiFilter, bbiSearch]];
+        [[self navigationItem] setRightBarButtonItems:@[bbiSearch, bbiFilter]];
         if([self isFilterActive]) {
             [[self filterButton] setSelected:YES];
         }
