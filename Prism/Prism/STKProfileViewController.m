@@ -223,10 +223,14 @@ typedef enum {
 {
     NSMutableArray *lums = [NSMutableArray array];
     for(STKTrust *t in [[self profile] ownedTrusts]) {
-        [lums addObject:[t recepient]];
+        if (t.status == STKRequestStatusAccepted) {
+            [lums addObject:[t recepient]];
+        }
     }
     for(STKTrust *t in [[self profile] receivedTrusts]) {
-        [lums addObject:[t creator]];
+        if (t.status == STKRequestStatusAccepted) {
+            [lums addObject:[t creator]];
+        }
     }
     [self setLuminaries:lums];
 }
