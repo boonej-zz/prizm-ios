@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -17,6 +17,24 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="ist-ZS-7cO">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dgj-jg-mYk" userLabel="Profile Deactivated View">
+                    <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This profile has been deactivated." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y54-fJ-7MW">
+                            <rect key="frame" x="20" y="274" width="280" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.65000000000000002" colorSpace="calibratedRGB"/>
+                </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="rRt-hT-A27">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -51,8 +69,12 @@
                 <constraint firstAttribute="trailing" secondItem="rRt-hT-A27" secondAttribute="trailing" id="EPV-9t-ohX"/>
                 <constraint firstItem="I98-XS-S6S" firstAttribute="top" secondItem="Xxc-HM-7qT" secondAttribute="bottom" id="FOt-5h-Nuq"/>
                 <constraint firstAttribute="bottom" secondItem="rRt-hT-A27" secondAttribute="bottom" id="Fhy-vb-PeS"/>
+                <constraint firstItem="Dgj-jg-mYk" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="Sdm-FT-wcV"/>
+                <constraint firstAttribute="trailing" secondItem="Dgj-jg-mYk" secondAttribute="trailing" id="Vwo-o2-Uzm"/>
+                <constraint firstAttribute="bottom" secondItem="Dgj-jg-mYk" secondAttribute="bottom" id="hxZ-z7-z8w"/>
                 <constraint firstItem="rRt-hT-A27" firstAttribute="top" secondItem="1" secondAttribute="top" id="lmC-tC-pRm"/>
                 <constraint firstItem="I98-XS-S6S" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="n90-Hu-hg3"/>
+                <constraint firstItem="Dgj-jg-mYk" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="nYQ-Do-Ejc"/>
                 <constraint firstAttribute="trailing" secondItem="Xxc-HM-7qT" secondAttribute="trailing" id="yxb-IK-ehc"/>
                 <constraint firstAttribute="trailing" secondItem="I98-XS-S6S" secondAttribute="trailing" id="zqj-ar-7dm"/>
             </constraints>
@@ -61,4 +83,7 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
+    <resources>
+        <image name="img_background" width="320" height="568"/>
+    </resources>
 </document>
