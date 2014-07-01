@@ -294,8 +294,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         postType = STKPostTypePassion;
     }
     
-    
-    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+   NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
     if(!text)
         text = @"";
