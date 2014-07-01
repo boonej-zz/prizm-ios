@@ -121,6 +121,16 @@ typedef enum {
         [self setProfile:[[STKUserStore store] currentUser]];
     }
     
+    if ([[self profile] isActive] == NO) {
+        [[self tableView] setHidden:YES];
+        [[self navigationItem] setTitle:@"Prizm"];
+        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        [self refreshProfileViews];
+        
+        return;
+    }
+    
+    
     if([self isShowingCurrentUserProfile]) {
         [[self navigationItem] setTitle:@"Profile"];
         [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
@@ -577,6 +587,7 @@ typedef enum {
 - (void)refreshProfileViews
 {
     STKUser *p = [self profile];
+    
     [[[self profileView] nameLabel] setText:[p name]];
     if([p city] && [p state]) {
         NSString *city = [p city];
@@ -585,7 +596,7 @@ typedef enum {
     } else
         [[[self profileView] locationLabel] setText:@""];
     
-    if ([p coverPhotoPath] && [[self profile] isActive]) {
+    if ([p coverPhotoPath]) {
         [[[self profileView] coverPhotoImageView] setUrlString:[p coverPhotoPath]];
     } else {
         UIImage *defaultImage = [UIImage imageNamed:@"coverphotoholder"];
@@ -599,7 +610,7 @@ typedef enum {
         [[c accoladesButton] setHidden:YES]; //force hide accolades button for v1
         [[c followButton] setHidden:YES];
         [[c trustButton] setHidden:YES];
-        [[c editButton] setHidden:![[self profile] isActive]];
+        [[c editButton] setHidden:NO];
         [[c messageButton] setHidden:YES];
         
         if([[self profile] isInstitution]) {
@@ -613,7 +624,7 @@ typedef enum {
             [[c trustButton] setHidden:YES];
             [[c messageButton] setHidden:![MFMailComposeViewController canSendMail]];
         } else {
-            [[c trustButton] setHidden:![[self profile] isActive]];
+            [[c trustButton] setHidden:NO];
             [[c messageButton] setHidden:YES];
         }
 
@@ -624,7 +635,7 @@ typedef enum {
             [[c accoladesButton] setHidden:YES]; //force hide accolades button for v1
             
         } else {
-            [[c followButton] setHidden:![[self profile] isActive]];
+            [[c followButton] setHidden:NO];
             [[c accoladesButton] setHidden:YES];
             
             
