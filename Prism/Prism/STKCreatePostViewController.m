@@ -23,9 +23,10 @@
 #import "STKFoursquareLocation.h"
 #import "STKHomeViewController.h"
 #import "UIViewController+STKControllerItems.h"
-
+#import <AssetsLibrary/AssetsLibrary.h>
 #import "STKMarkupController.h"
 #import "STKMarkupUtilities.h"
+#import "UIImage+STKLocation.h"
 
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
@@ -146,6 +147,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     _postImage = postImage;
     [self setUploadingImage:YES];
     [[self optionCollectionView] reloadData];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"prefs:root=LOCATION_SERVICES"]];
     
     [[STKImageStore store] uploadImage:_postImage thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
         if(postImage == [self postImage]) {
@@ -498,10 +500,17 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 {
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
                                                                         forType:STKImageChooserTypeImage
-                                                                     completion:^(UIImage *img, UIImage *originalImage) {
-                                                                         [self setOriginalPostImage:originalImage];
-                                                                         [self setPostImage:img];
-                                                                         [[self imageView] setImage:img];
+                                                                     completion:^(UIImage *img, UIImage *originalImage, NSDictionary *imageInfo) {
+                                                                         [UIImage LocationCoordinateFromImageInfo:imageInfo completion:^(NSError *err, CLLocationCoordinate2D coordinate) {
+                                                                             if (!err) {
+                                                                                 [[self postInfo] setObject:[NSString stringWithFormat:@"%@", [NSNumber numberWithDouble:coordinate.latitude]] forKey:STKPostLocationLatitudeKey];
+                                                                                 [[self postInfo] setObject:[NSString stringWithFormat:@"%@",[NSNumber numberWithDouble:coordinate.longitude]] forKey:STKPostLocationLongitudeKey];
+                                                                             }
+                                                                             [self setOriginalPostImage:originalImage];
+                                                                             [self setPostImage:img];
+                                                                             [[self imageView] setImage:img];
+                                                                         }];
+                                                                         
                                                                      }];
 }
 
@@ -514,7 +523,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[STKImageChooser sharedImageChooser] initiateImageEditorForViewController:self
                                                                        forType:STKImageChooserTypeImage
                                                                          image:[self originalPostImage]
-                                                                    completion:^(UIImage *img, UIImage *originalImage) {
+                                                                    completion:^(UIImage *img, UIImage *originalImage, NSDictionary *imageInfo) {
                                                                         [self setOriginalPostImage:originalImage];
                                                                         [self setPostImage:img];
                                                                         [[self imageView] setImage:img];

@@ -13,7 +13,7 @@
 
 @interface STKImageChooser () <STKCaptureViewControllerDelegate>
 @property (nonatomic, strong) STKCaptureViewController *captureViewController;
-@property (nonatomic, strong) void (^imageBlock)(UIImage *, UIImage *);
+@property (nonatomic, strong) void (^imageBlock)(UIImage *, UIImage *, NSDictionary *);
 @property (nonatomic, weak) UIViewController *sourceViewController;
 @end
 
@@ -32,7 +32,7 @@
 
 - (void)initiateImageChooserForViewController:(UIViewController *)vc
                                       forType:(STKImageChooserType)type
-                                   completion:(void (^)(UIImage *, UIImage *))block
+                                   completion:(void (^)(UIImage *, UIImage *, NSDictionary *))block
 {
     
     
@@ -53,7 +53,7 @@
 - (void)initiateImageEditorForViewController:(UIViewController *)vc
                                      forType:(STKImageChooserType)type
                                        image:(UIImage *)image
-                                  completion:(void (^)(UIImage *, UIImage *))block
+                                  completion:(void (^)(UIImage *, UIImage *, NSDictionary *))block
 {
     [self setImageBlock:block];
     [self setSourceViewController:vc];
@@ -72,7 +72,7 @@
                 originalImage:(UIImage *)originalImage
 {
     [[captureViewController presentingViewController] dismissViewControllerAnimated:YES completion:^{
-        [self imageBlock](image, originalImage);
+        [self imageBlock](image, originalImage, captureViewController.imageInfo);
     }];
 }
 @end

@@ -362,6 +362,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    [self setImageInfo:info];
     UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
     [self setCapturedImage:img];
     
