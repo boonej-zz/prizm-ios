@@ -59,6 +59,11 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
     return self;
 }
 
+- (void)back:(id)sender
+{
+    [[self navigationController] popViewControllerAnimated:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

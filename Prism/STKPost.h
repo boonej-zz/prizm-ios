@@ -27,6 +27,7 @@ extern NSString * const STKPostVisibilityPublic;
 extern NSString * const STKPostVisibilityTrust;
 extern NSString * const STKPostVisibilityPrivate;
 
+extern NSString * const STKPostVisibilityKey;
 extern NSString * const STKPostAccoladeReceiverKey;
 extern NSString * const STKPostLocationLatitudeKey;
 extern NSString * const STKPostLocationLongitudeKey;

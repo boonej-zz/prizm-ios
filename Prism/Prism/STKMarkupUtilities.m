@@ -207,9 +207,7 @@
         
         UIImage *avatarImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        
-        UIImageWriteToSavedPhotosAlbum(avatarImage, nil, nil, NULL);
-        
+                
         block([self imageForText:[user name] withAvatarImage:avatarImage]);
     }];
 }
