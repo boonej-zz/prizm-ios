@@ -31,8 +31,8 @@ NSString * const STKUserSubTypeCommunity = @"community";
 NSString * const STKUserSubTypeEducation = @"education";
 NSString * const STKUserSubTypeLuminary = @"luminary";
 
-NSInteger const STKUserStatusActive = 0;
-NSInteger const STKUserStatusInActive = 1;
+BOOL const STKUserStatusActive = YES;
+BOOL const STKUserStatusInActive = NO;
 
 CGSize STKUserCoverPhotoSize = {.width = 320, .height = 188};
 CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
@@ -42,7 +42,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 @dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
-accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, status, dateDeleted, tumblrToken,
+accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
 tumblrTokenSecret, tumblrLastMinID;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
@@ -119,7 +119,7 @@ tumblrTokenSecret, tumblrLastMinID;
              }],
              @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp],
              @"delete_date" : [STKBind bindMapForKey:@"dateDeleted" transform:STKBindTransformDateTimestamp],
-             @"status" : @"status"
+             @"active" : @"active"
     };
 }
 
@@ -191,11 +191,6 @@ tumblrTokenSecret, tumblrLastMinID;
 - (BOOL)isInstitution
 {
     return [[self type] isEqualToString:STKUserTypeInstitution] || [[self type] isEqualToString:STKUserTypeInstitutionPending];
-}
-
-- (BOOL)isActive
-{
-    return [self status] == STKUserStatusActive;
 }
 
 /////

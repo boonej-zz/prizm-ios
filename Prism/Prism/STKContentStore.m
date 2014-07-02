@@ -723,7 +723,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             if([lowercaseText rangeOfString:@"#public"].location != NSNotFound) {
                 [c addQueryValue:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
                 didSetVisibilityWithHashtag = YES;
-            } else if ([lowercaseText rangeOfString:@"#personal"].length != NSNotFound) {
+            } else if ([lowercaseText rangeOfString:@"#personal"].location != NSNotFound) {
                 [c addQueryValue:STKPostVisibilityPrivate forKey:STKPostVisibilityKey];
                 didSetVisibilityWithHashtag = YES;
             } else if ([lowercaseText rangeOfString:@"#trust"].location != NSNotFound) {
