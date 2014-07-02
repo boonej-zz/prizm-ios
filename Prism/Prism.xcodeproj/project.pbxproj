@@ -5138,14 +5138,16 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
 				OTHER_LDFLAGS = (
@@ -5169,15 +5171,16 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
@@ -5275,15 +5278,16 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
@@ -5358,8 +5362,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
@@ -5370,7 +5372,10 @@
 					DEBUG,
 				);
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(PROJECT_DIR)",
+				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
 				OTHER_LDFLAGS = (
@@ -5453,16 +5458,19 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
