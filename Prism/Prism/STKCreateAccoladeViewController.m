@@ -279,7 +279,7 @@
 {
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
                                                                         forType:STKImageChooserTypeImage
-                                                                     completion:^(UIImage *img, UIImage *originalImage) {
+                                                                     completion:^(UIImage *img, UIImage *originalImage, NSDictionary *imageInfo) {
                                                                          [self setOriginalPostImage:originalImage];
                                                                          [self setPostImage:img];
                                                                          [[self imageView] setImage:img];
@@ -295,7 +295,7 @@
     [[STKImageChooser sharedImageChooser] initiateImageEditorForViewController:self
                                                                        forType:STKImageChooserTypeImage
                                                                          image:[self originalPostImage]
-                                                                    completion:^(UIImage *img, UIImage *originalImage) {
+                                                                    completion:^(UIImage *img, UIImage *originalImage, NSDictionary *imageInfo) {
                                                                         [self setOriginalPostImage:originalImage];
                                                                         [self setPostImage:img];
                                                                         [[self imageView] setImage:img];

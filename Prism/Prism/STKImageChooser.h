@@ -20,12 +20,12 @@ typedef enum {
 
 - (void)initiateImageChooserForViewController:(UIViewController *)vc
                                       forType:(STKImageChooserType)type
-                                   completion:(void (^)(UIImage *, UIImage *))block;
+                                   completion:(void (^)(UIImage *, UIImage *, NSDictionary *))block;
 
 - (void)initiateImageEditorForViewController:(UIViewController *)vc
                                      forType:(STKImageChooserType)type
                                        image:(UIImage *)image
-                                  completion:(void (^)(UIImage *, UIImage *))block;
+                                  completion:(void (^)(UIImage *, UIImage *, NSDictionary *))block;
 
 
 @end

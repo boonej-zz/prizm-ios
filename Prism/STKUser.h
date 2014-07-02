@@ -38,8 +38,8 @@ extern NSString * const STKUserSubTypeCommunity;
 extern NSString * const STKUserSubTypeEducation;
 extern NSString * const STKUserSubTypeLuminary;
 
-extern NSInteger const STKUserStatusActive;
-extern NSInteger const STKUserStatusInActive;
+extern BOOL const STKUserStatusActive;
+extern BOOL const STKUserStatusInActive;
 
 
 @interface STKUser : NSManagedObject <STKJSONObject>
@@ -105,7 +105,7 @@ extern NSInteger const STKUserStatusInActive;
 @property (nonatomic, strong) NSSet *postsTaggedIn;
 
 @property (nonatomic, strong) NSString *accountStoreID;
-@property (nonatomic) int status;
+@property (nonatomic, assign) BOOL active;
 
 - (NSString *)name;
 - (STKTrust *)trustForUser:(STKUser *)u;
@@ -117,7 +117,6 @@ extern NSInteger const STKUserStatusInActive;
 - (BOOL)shouldDisplayTrustInstructions;
 
 - (BOOL)isInstitution;
-- (BOOL)isActive;
 
 - (BOOL)hasTrusts;
 - (NSArray *)trusts;

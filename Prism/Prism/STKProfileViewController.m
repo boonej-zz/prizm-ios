@@ -116,7 +116,7 @@ typedef enum {
         [self setProfile:[[STKUserStore store] currentUser]];
     }
     
-    if ([[self profile] isActive] == NO) {
+    if ([[self profile] active] == NO) {
         [[self tableView] setHidden:YES];
         [[self navigationItem] setTitle:@"Prizm"];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
@@ -222,7 +222,7 @@ typedef enum {
 
 - (void)countView:(STKCountView *)countView didSelectCircleAtIndex:(int)index
 {
-    NSPredicate *activeUsersOnly = [NSPredicate predicateWithFormat:@"(status != %d)", STKUserStatusInActive];
+    NSPredicate *activeUsersOnly = [NSPredicate predicateWithFormat:@"(active == YES)"];
     
     switch (index) {
         case 0: {

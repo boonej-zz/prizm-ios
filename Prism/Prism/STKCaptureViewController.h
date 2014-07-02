@@ -24,6 +24,7 @@
 @property (nonatomic, weak) id <STKCaptureViewControllerDelegate> delegate;
 @property (nonatomic) STKImageChooserType type;
 @property (nonatomic, strong) UIImage *editingImage;
+@property (nonatomic, strong) NSDictionary *imageInfo;
 
 - (IBAction)showLibrary:(id)sender;
 

@@ -714,7 +714,25 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         for(NSString *key in info) {
             [c addQueryValue:[info objectForKey:key] forKey:key];
         }
-        if(![info objectForKey:STKPostVisibilityKey]) {
+        
+        NSString *lowercaseText = [info objectForKey:STKPostTextKey];
+        
+        BOOL didSetVisibilityWithHashtag = NO;
+        // This will set the Visibility based on hashtag triggers set in posts text
+        if([lowercaseText length] > 0){
+            if([lowercaseText rangeOfString:@"#public"].location != NSNotFound) {
+                [c addQueryValue:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
+                didSetVisibilityWithHashtag = YES;
+            } else if ([lowercaseText rangeOfString:@"#personal"].location != NSNotFound) {
+                [c addQueryValue:STKPostVisibilityPrivate forKey:STKPostVisibilityKey];
+                didSetVisibilityWithHashtag = YES;
+            } else if ([lowercaseText rangeOfString:@"#trust"].location != NSNotFound) {
+               [c addQueryValue:STKPostVisibilityTrust forKey:STKPostVisibilityKey];
+                didSetVisibilityWithHashtag = YES;
+            }
+        }
+        
+        if(![info objectForKey:STKPostVisibilityKey] && !didSetVisibilityWithHashtag) {
             [c addQueryValue:STKPostVisibilityTrust forKey:STKPostVisibilityKey];
         }
         

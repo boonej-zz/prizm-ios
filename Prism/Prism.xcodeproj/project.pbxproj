@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */; };
 		8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */; };
 		8805330E193E5FD900A8E44D /* STKSearchUsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */; };
 		88053311193E6F0000A8E44D /* STKSearchTrustCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 88053310193E6F0000A8E44D /* STKSearchTrustCell.m */; };
@@ -250,6 +251,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+STKLocation.h"; sourceTree = "<group>"; };
+		2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+STKLocation.m"; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -4639,6 +4642,8 @@
 				BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */,
 				BE8076041923F48F00D558E0 /* STKMarkupUtilities.h */,
 				BE8076051923F48F00D558E0 /* STKMarkupUtilities.m */,
+				2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */,
+				2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -4923,6 +4928,7 @@
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
+				2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */,
 				BE7D5AE918D382E5005D3893 /* STKTextInputViewController.m in Sources */,
 				BEE5F03D187DC03300CB5325 /* STKInitialProfileStatisticsCell.m in Sources */,
 				BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */,
@@ -5132,14 +5138,16 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
 				OTHER_LDFLAGS = (
@@ -5163,15 +5171,16 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
@@ -5269,15 +5278,16 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
@@ -5352,8 +5362,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
@@ -5364,7 +5372,10 @@
 					DEBUG,
 				);
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(PROJECT_DIR)",
+				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
 				OTHER_LDFLAGS = (
@@ -5447,16 +5458,19 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
-					/Users/joeconway/Projects/Prism/Prism/Prism,
-					/Users/joeconway/Projects/Prism/Prism,
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
