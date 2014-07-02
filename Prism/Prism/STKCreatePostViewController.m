@@ -186,7 +186,16 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (void)findLocation:(id)sender
 {
-    STKLocationListViewController *lvc = [[STKLocationListViewController alloc] init];
+    STKLocationListViewController *lvc = nil;
+    if ([self.postInfo objectForKey:STKPostLocationLatitudeKey] && [self.postInfo objectForKey:STKPostLocationLongitudeKey]) {
+        double latitude = [[self.postInfo objectForKey:STKPostLocationLatitudeKey] doubleValue];
+        double longitude = [[self.postInfo objectForKey:STKPostLocationLongitudeKey] doubleValue];
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+        lvc = [[STKLocationListViewController alloc] initWithLocationCoordinate:coordinate];
+    } else {
+        lvc = [[STKLocationListViewController alloc] init];
+    }
+    
     [lvc setDelegate:self];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:lvc];
     [[nvc navigationBar] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];

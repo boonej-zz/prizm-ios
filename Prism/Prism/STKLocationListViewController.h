@@ -19,6 +19,9 @@
 @end
 
 @interface STKLocationListViewController : UITableViewController
+
+- (id)initWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate;
+
 @property (nonatomic, weak) id <STKLocationListViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSArray *locations;
 @end

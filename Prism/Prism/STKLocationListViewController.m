@@ -21,12 +21,22 @@
 
 @property (nonatomic, strong) UIBarButtonItem *refreshButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *spinningButtonItem;
-
+@property (nonatomic) CLLocationCoordinate2D locationCoordinate;
 @property (nonatomic) BOOL fetchingLocations;
 
 @end
 
 @implementation STKLocationListViewController
+
+- (id)initWithLocationCoordinate:(CLLocationCoordinate2D)locationCoordinate
+{
+    self = [super init];
+    if (self) {
+        self.locationCoordinate = locationCoordinate;
+        
+    }
+    return  self;
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -35,7 +45,7 @@
         _locationManager = [[CLLocationManager alloc] init];
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [_locationManager setDelegate:self];
-        
+        self.locationCoordinate = CLLocationCoordinate2DMake(0, 0);
         
         UIColor *clr = [UIColor colorWithRed:49.0 / 255.0 green:141.0 / 255.0 blue:205.0 / 255.0 alpha:1];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
@@ -94,12 +104,27 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self fetchLocations];
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : STKFont(22)}];
+    if (self.locationCoordinate.longitude != 0 && self.locationCoordinate.latitude != 0) {
+        [[STKContentStore store] fetchLocationNamesForCoordinate:self.locationCoordinate completion:^(NSArray *locations, NSError *err) {
+            [self finishFetchingLocations];
+            if(!err) {
+                [self setLocations:locations];
+                [[self tableView] reloadData];
+            } else {
+                
+                UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+                [av show];
+            }
+        }];
+    } else {
+        [self fetchLocations];
+        [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : STKFont(22)}];
+    }
 }
 
 - (void)fetchLocations
 {
+    
     [[self locationManager] startUpdatingLocation];
     [[self navigationItem] setLeftBarButtonItem:[self spinningButtonItem]];
     [[self activityIndicator] startAnimating];
