@@ -28,12 +28,10 @@
 #import "STKUserPostListViewController.h"
 #import "STKTrust.h"
 #import "STKPostController.h"
-#import "STKLuminariesCell.h"
 #import "STKInstagramAuthViewController.h"
 #import "STKNetworkStore.h"
 #import "STKSettingsViewController.h"
 #import "STKInstitutionInfoCell.h"
-#import "STKButtonRow.h"
 #import "STKWebViewController.h"
 #import "STKFetchDescription.h"
 #import "STKLuminatingBar.h"
@@ -43,7 +41,7 @@
 
 typedef enum {
     STKProfileSectionStatic,
-    STKProfileSectionDynamic
+    STKProfileSectionPosts
 } STKProfileSection;
 
 @interface STKProfileViewController ()
@@ -61,12 +59,9 @@ typedef enum {
 @property (nonatomic, strong) STKPostController *postController;
 @property (nonatomic, strong) STKPostController *tagsPostController;
 
-@property (nonatomic, getter = isShowingLuminaries) BOOL showingLuminaries;
-@property (nonatomic, getter = isShowingInformation) BOOL showingInformation;
 @property (nonatomic) BOOL showPostsInSingleLayout;
 @property (nonatomic) BOOL filterByLocation;
 @property (nonatomic) BOOL filterByUserTags;
-@property (nonatomic) NSArray *additionalInformationKeys;
 
 - (BOOL)isShowingCurrentUserProfile;
 
@@ -146,16 +141,6 @@ typedef enum {
     
     
     if([self profile]) {
-        if([[self profile] isInstitution]) {
-            [[[self profileView] toggleButtons] setImages:@[[UIImage imageNamed:@"action_prism"],
-                                                            [UIImage imageNamed:@"btn_info"],
-                                                            [UIImage imageNamed:@"luminaries"]]];
-
-        } else {
-            [[[self profileView] toggleButtons] setImages:@[[UIImage imageNamed:@"action_prism"],
-                                                            [UIImage imageNamed:@"btn_info"]]];
-        }
-        
         NSArray *additionalFields = nil;
         if([[self profile] isInstitution]) {
             additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email"];
@@ -192,76 +177,47 @@ typedef enum {
                 }
             }
             
-            [self determineAdditionalInfoFields];
             [self refreshProfileViews];
         }];
     }
 
-    [self determineAdditionalInfoFields];
     [self refreshProfileViews];
-}
-
-- (void)determineAdditionalInfoFields
-{
-    NSMutableArray *keys = [NSMutableArray array];
-
-    if([[self profile] website]) {
-        [keys addObject:@{@"title" : @"Website:", @"value" : [[self profile] website], @"action" : @"website"}];
-    }
-    
-    // only allow website as general user's additional field
-    if ([[self profile] isInstitution]) {
-        if([[self profile] dateFounded]) {
-            NSDateFormatter *df = [[NSDateFormatter alloc] init];
-            [df setDateFormat:@"MMMM dd, yyyy"];
-            
-            [keys addObject:@{@"title" : @"Founded:", @"value" : [df stringFromDate:[[self profile] dateFounded]]}];
-        }
-        
-        if([[self profile] enrollment]) {
-            [keys addObject:@{@"title" : @"Population:", @"value" : [[self profile] enrollment]}];
-        }
-        
-        if([[self profile] mascotName]) {
-            [keys addObject:@{@"title" : @"Mascot:", @"value" : [[self profile] mascotName]}];
-        }
-    }
-    [self setAdditionalInformationKeys:keys];
 }
 
 - (void)determineLuminariesFromTrusts:(NSArray *)trusts
 {
     NSMutableArray *lums = [NSMutableArray array];
     for(STKTrust *t in [[self profile] ownedTrusts]) {
-        if (t.status == STKRequestStatusAccepted) {
+        if ([t.status isEqualToString:STKRequestStatusAccepted]) {
             [lums addObject:[t recepient]];
         }
     }
     for(STKTrust *t in [[self profile] receivedTrusts]) {
-        if (t.status == STKRequestStatusAccepted) {
+        if ([t.status isEqualToString:STKRequestStatusAccepted]) {
             [lums addObject:[t creator]];
         }
     }
     [self setLuminaries:lums];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)showMoreLuminariesTapped:(id)sender atIndexPath:(NSIndexPath *)indexPath
 {
-    if([self isShowingInformation] && ![self isShowingLuminaries]) {
-        if([indexPath row] > 0) {
-            NSDictionary *k = [[self additionalInformationKeys] objectAtIndex:[indexPath row] - 1];
-            if([[k objectForKey:@"action"] isEqualToString:@"website"]) {
-                NSString *urlString = [k objectForKey:@"value"];
-                if([urlString rangeOfString:@"http"].location == NSNotFound) {
-                    urlString = [@"http://" stringByAppendingString:urlString];
-                }
-                STKWebViewController *wvc = [[STKWebViewController alloc] init];
-                [wvc setUrl:[NSURL URLWithString:urlString]];
-                UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
-                [self presentViewController:nvc animated:YES completion:nil];
-            }
-        }
+    STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+    [vc setUsers:[self luminaries]];
+    [vc setTitle:@"Luminary"];
+    [[self navigationController] pushViewController:vc animated:YES];
+}
+
+- (void)websiteTapped:(id)sender atIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *urlString = [[self profile] website];
+    if([urlString rangeOfString:@"http"].location == NSNotFound) {
+        urlString = [@"http://" stringByAppendingString:urlString];
     }
+    STKWebViewController *wvc = [[STKWebViewController alloc] init];
+    [wvc setUrl:[NSURL URLWithString:urlString]];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
+    [self presentViewController:nvc animated:YES completion:nil];
 }
 
 - (void)countView:(STKCountView *)countView didSelectCircleAtIndex:(int)index
@@ -419,14 +375,14 @@ typedef enum {
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {
     if([self showPostsInSingleLayout]) {
-        STKPostCell *c = (STKPostCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:STKProfileSectionDynamic]];
+        STKPostCell *c = (STKPostCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:STKProfileSectionPosts]];
         
         return [[self view] convertRect:[[c contentImageView] frame] fromView:[[c contentImageView] superview]];
     } else {
         int row = idx / 3;
         int offset = idx % 3;
         
-        STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:STKProfileSectionDynamic]];
+        STKTriImageCell *c = (STKTriImageCell *)[[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:STKProfileSectionPosts]];
         
         CGRect r = CGRectZero;
         if(offset == 0)
@@ -503,7 +459,6 @@ typedef enum {
     }
 }
 
-
 - (void)requestTrust:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     STKTrust *t = [[self profile] trustForUser:[[STKUserStore store] currentUser]];
@@ -559,35 +514,55 @@ typedef enum {
     [self refreshProfileViews];
 }
 
-- (void)profileStateChanged:(STKButtonRow *)btnRow atIndexPath:(NSIndexPath *)ip
-{
-    switch ([btnRow currentIndex]) {
-        case 0: {
-            [self setShowingInformation:NO];
-            [self setShowingLuminaries:NO];
-        } break;
-        case 1: {
-            [self setShowingInformation:YES];
-            [self setShowingLuminaries:NO];
-        } break;
-        case 2: {
-            [self setShowingInformation:YES];
-            [self setShowingLuminaries:YES];
-        } break;
-    }
-    [[self tableView] reloadData];
-}
-
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [cell setBackgroundColor:[UIColor clearColor]];
 }
 
+- (void)setLuminaries:(NSArray *)luminaries
+{
+    _luminaries = luminaries;
+    
+    [[self profileView] setLuminaries:luminaries];
+}
 
 - (void)refreshProfileViews
 {
     STKUser *p = [self profile];
     
+    if ([p isInstitution]) {
+        [[self profileView] setType:STKProfileCellTypeInstitution];
+        NSDate *founded;
+        NSString *mascot, *pop;
+        founded = [p dateFounded];
+        mascot = [p mascotName];
+        pop = [p enrollment];
+        
+        NSMutableArray *infoComponents = [NSMutableArray array];
+        if (founded != nil) {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+
+            [infoComponents addObject:[NSString stringWithFormat:@"Founded %@", [dateFormatter stringFromDate:founded]]];
+        }
+        if (mascot != nil) {
+            [infoComponents addObject:[NSString stringWithFormat:@"Mascot %@", mascot]];
+        }
+        if (pop != nil) {
+            [infoComponents addObject:[NSString stringWithFormat:@"Pop %@", pop]];
+        }
+        
+        [[[self profileView] luminaryInfoLabel] setText:[infoComponents componentsJoinedByString:@" • "]];
+        [[self profileView] setLuminaries:[self luminaries]];
+    } else {
+        [[self profileView] setType:STKProfileCellTypeUser];
+    }
+    [[[self profileView] blurbLabel] setText:[p blurb]];
+    
+    if ([p website]) {
+        NSAttributedString *attributedWebsite = [[NSAttributedString alloc] initWithString:[p website] attributes:@{NSFontAttributeName : STKFont(12), NSForegroundColorAttributeName : [UIColor whiteColor]}];
+        [[[self profileView] websiteButton] setAttributedTitle:attributedWebsite forState:UIControlStateNormal];
+    }
     [[[self profileView] nameLabel] setText:[p name]];
     if([p city] && [p state]) {
         NSString *city = [p city];
@@ -724,71 +699,20 @@ typedef enum {
         } else if([indexPath row] == 1) {
             return [self statsView];
         } else if([indexPath row] == 2) {
-            if([self isShowingInformation]) {
-                UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell-InfoHeader"];
-                if(!c) {
-                    c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell-InfoHeader"];
-                    [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
-                    [[c textLabel] setFont:STKFont(14)];
-                    [[c textLabel] setTextColor:STKTextColor];
-                    [c setSelectionStyle:UITableViewCellSelectionStyleNone];
-                }
-                if([self isShowingLuminaries])
-                    [[c textLabel] setText:@"Luminary"];
-                else
-                    [[c textLabel] setText:@"Information"];
-                
-                return c;
-            } else {
-                return [self filterView];
-            }
+            return [self filterView];
         }
-    } else if([indexPath section] == STKProfileSectionDynamic) {
-        if([self isShowingInformation]) {
-            if([self isShowingLuminaries]) {
-                STKLuminariesCell *c = [STKLuminariesCell cellForTableView:tableView target:self];
-                [c setUsers:[self luminaries]];
-                [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
-                return c;
-            } else {
-                if([indexPath row] == 0) {
-                    UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell-Info"];
-                    if(!c) {
-                        c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell-Info"];
-                        [[c contentView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
-                        [[c textLabel] setFont:STKFont(12)];
-                        [[c textLabel] setTextColor:STKTextColor];
-                        [[c textLabel] setNumberOfLines:0];
-                        [c setSelectionStyle:UITableViewCellSelectionStyleNone];
-                    }
-                    [[c textLabel] setText:[[self profile] blurb]];
-                    return c;
-                } else {
-                    STKInstitutionInfoCell *c = [STKInstitutionInfoCell cellForTableView:tableView target:self];
-                    
-                    NSString *label = [[[self additionalInformationKeys] objectAtIndex:[indexPath row] - 1] objectForKey:@"title"];
-                    NSString *text = [[[self additionalInformationKeys] objectAtIndex:[indexPath row] - 1] objectForKey:@"value"];
-                    
-                    [[c titleLabel] setText:label];
-                    [[c valueLabel] setText:text];
-                    
-                    return c;
-                }
-
-            }
+    } else if([indexPath section] == STKProfileSectionPosts) {
+        if([self showPostsInSingleLayout]) {
+            STKPostCell *c = [STKPostCell cellForTableView:tableView target:[self postController]];
+            
+            [c populateWithPost:[[[self postController] posts] objectAtIndex:[indexPath row]]];
+            
+            return c;
         } else {
-            if([self showPostsInSingleLayout]) {
-                STKPostCell *c = [STKPostCell cellForTableView:tableView target:[self postController]];
-                
-                [c populateWithPost:[[[self postController] posts] objectAtIndex:[indexPath row]]];
-                
-                return c;
-            } else {
-                STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self postController]];
-                [c populateWithPosts:[[self postController] posts] indexOffset:[indexPath row] * 3];
-                
-                return c;
-            }
+            STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self postController]];
+            [c populateWithPosts:[[self postController] posts] indexOffset:[indexPath row] * 3];
+            
+            return c;
         }
     }
     return nil;
@@ -798,28 +722,13 @@ typedef enum {
 {
     if([indexPath section] == STKProfileSectionStatic) {
         if([indexPath row] == 0)
-            return 246;
+            return 182;
         if([indexPath row] == 1)
             return 155;
         if([indexPath row] == 2) {
-            if([self isShowingInformation]) {
-                return 34;
-            } else {
-                return 50;
-            }
+            return 50;
         }
-    } else if([indexPath section] == STKProfileSectionDynamic) {
-        if([self isShowingInformation]) {
-            if([self isShowingLuminaries]) {
-                return 163;
-            } else {
-                if([indexPath row] == 0) {
-                    return [self heightForInfoCell];
-                } else {
-                    return 44;
-                }
-            }
-        }
+    } else if([indexPath section] == STKProfileSectionPosts) {
         if([self showPostsInSingleLayout]) {
             return 401;
         }
@@ -849,22 +758,14 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(section == STKProfileSectionDynamic) {
-        if(![self isShowingInformation]) {            
-            int count = [[[self postController] posts] count];
-            if([self showPostsInSingleLayout]) {
-                return count;
-            } else {
-                if(count % 3 > 0)
-                    return count / 3 + 1;
-                return count / 3;
-            }
+    if(section == STKProfileSectionPosts) {
+        int count = [[[self postController] posts] count];
+        if([self showPostsInSingleLayout]) {
+            return count;
         } else {
-            if([self isShowingLuminaries]) {
-                return 1;
-            } else {
-                return 1 + [[self additionalInformationKeys] count];
-            }
+            if(count % 3 > 0)
+                return count / 3 + 1;
+            return count / 3;
         }
     }
     return 3;
