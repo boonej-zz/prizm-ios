@@ -14,12 +14,105 @@
 
 @implementation STKMarkupUtilities
 
-+ (UIImage *)imageForText:(NSString *)text
++ (UIImage *)imageForInviteCard:(UIImage *)avatarImage
 {
-    return [self imageForText:text withAvatarImage:nil];
+    // padding
+    CGFloat topToImagePadding = 64.0;
+    CGFloat imageToNamePadding = 24.0;
+    CGFloat centerToPromptPadding = 48.0;
+    
+    CGSize imageSize = CGSizeMake(144, 144);
+    CGPoint avatarOrigin = CGPointMake((640 - imageSize.width)/2, topToImagePadding);
+    
+    const CGFloat fontSize = 40;
+    UIColor *textColor = [UIColor whiteColor]; //STKTextColor
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(640, 640), YES, 1);
+    
+    UIImage *prismCard = [UIImage imageNamed:@"prismcard"];
+    [prismCard drawInRect:CGRectMake(0, 0, 640, 640)];
+    
+    CGContextSaveGState(UIGraphicsGetCurrentContext());
+    
+    CGRect avatarRect = CGRectMake(avatarOrigin.x, avatarOrigin.y, imageSize.width, imageSize.height);
+    UIBezierPath *bpInner = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(avatarRect, 2, 2)];
+    
+    [bpInner addClip];
+    
+    [avatarImage drawAtPoint:avatarOrigin];
+    
+    CGContextRestoreGState(UIGraphicsGetCurrentContext());
+    
+    UIBezierPath *bpInnerStroke = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(avatarRect, 2, 2)];
+    [STKTextColor set];
+    [bpInnerStroke setFlatness:1];
+    [bpInnerStroke setLineJoinStyle:kCGLineJoinRound];
+    [bpInnerStroke setLineWidth:3];
+    [bpInnerStroke stroke];
+    
+    CGRect nameRect = CGRectMake(48, avatarRect.size.height + avatarRect.origin.y + imageToNamePadding, 640 - 48 * 2, 64);
+    
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setAlignment:NSTextAlignmentCenter];
+    
+    NSString *name = [[[STKUserStore store] currentUser] name];
+    
+    int fontSizeToFit = fontSize;
+    UIFont *f = STKFont(fontSizeToFit);
+    
+    CGRect sizeRect = nameRect;
+    int iterations = 16;
+    
+    for(int i = 0; i < iterations; i++) {
+        CGRect r = [name boundingRectWithSize:CGSizeMake(nameRect.size.width - 10, 10000)
+                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                   attributes:@{NSFontAttributeName : f, NSParagraphStyleAttributeName : style} context:nil];
+        
+        // Does the width fit?
+        if(r.size.width < nameRect.size.width) {
+            sizeRect = r;
+            break;
+        }
+        
+        fontSizeToFit -= 2;
+        f = STKFont(fontSizeToFit);
+    }
+    
+    
+    [name drawInRect:nameRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : textColor, NSParagraphStyleAttributeName : style}];
+    
+    
+    CGRect textRect = CGRectMake(48, 320+centerToPromptPadding, 640 - 48 * 2, 64);
+    
+    f = STKFont(fontSize);
+    
+    NSString *prompt = @"Join me on Prizm";
+    sizeRect = [prompt boundingRectWithSize:CGSizeMake(textRect.size.width - 10, 10000)
+                                    options:NSStringDrawingUsesLineFragmentOrigin
+                                 attributes:@{NSFontAttributeName : f, NSParagraphStyleAttributeName : style} context:nil];
+    
+    float w = ceilf(sizeRect.size.width);
+    float h = ceilf(sizeRect.size.height);
+    
+    CGRect centeredRect = CGRectMake(0, 0, w, h);
+    centeredRect.origin.x = (640 - w) / 2.0;
+    centeredRect.origin.y = 320+centerToPromptPadding;
+    
+    [prompt drawInRect:centeredRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : textColor, NSParagraphStyleAttributeName : style}];
+
+    UIBezierPath *centerLine = [UIBezierPath bezierPathWithRect:CGRectMake(48, 320, 640 - 48*2, 1)];
+    [STKTextColor set];
+    [centerLine stroke];
+
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+    
+    return img;
 }
 
-+ (UIImage *)imageForText:(NSString *)text withAvatarImage:(UIImage *)avatarImage;
++ (UIImage *)imageForText:(NSString *)text
 {
     NSMutableDictionary *found = [NSMutableDictionary dictionary];
     NSRegularExpression *tagFinder = [[NSRegularExpression alloc] initWithPattern:@"@([A-Za-z0-9]*)" options:0 error:nil];
@@ -49,32 +142,6 @@
     [prismCard drawInRect:CGRectMake(0, 0, 640, 640)];
     
     CGRect textRect = CGRectMake(48, (640 - 416) / 2.0, 640 - 48 * 2, 416);
-    if (avatarImage) {
-        textRect = CGRectMake(48, 640 - 32, 640 - 48 * 2, 64);
-        
-
-        CGContextSaveGState(UIGraphicsGetCurrentContext());
-        CGPoint avatarOrigin = CGPointZero;
-        avatarOrigin.y = 96;
-        avatarOrigin.x = (640 - avatarImage.size.width)/2;
-
-        CGRect avatarRect = CGRectMake(avatarOrigin.x, avatarOrigin.y, avatarImage.size.width, avatarImage.size.height);
-        UIBezierPath *bpInner = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(avatarRect, 2, 2)];
-        
-        [bpInner addClip];
-        
-        [avatarImage drawAtPoint:avatarOrigin];
-        
-        CGContextRestoreGState(UIGraphicsGetCurrentContext());
-        
-        UIBezierPath *bpInnerStroke = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(avatarRect, 2, 2)];
-        [STKTextColor set];
-        [bpInnerStroke setFlatness:1];
-        [bpInnerStroke setLineJoinStyle:kCGLineJoinRound];
-        [bpInnerStroke setLineWidth:3];
-        [bpInnerStroke stroke];
-    }
-    
     
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setAlignment:NSTextAlignmentCenter];
@@ -106,11 +173,7 @@
     CGRect centeredRect = CGRectMake(0, 0, w, h);
     centeredRect.origin.x = (640 - w) / 2.0;
     centeredRect.origin.y = (640 - h) / 2.0;
-    
-    if (avatarImage) {
-        centeredRect.origin.y += 96;
-    }
-    
+        
     [text drawInRect:centeredRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : STKTextColor, NSParagraphStyleAttributeName : style}];
     
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
@@ -208,7 +271,7 @@
         UIImage *avatarImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
                 
-        block([self imageForText:[user name] withAvatarImage:avatarImage]);
+        block([self imageForInviteCard:avatarImage]);
     }];
 }
 
