@@ -815,6 +815,13 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 [t setStatus:STKRequestStatusPending];
             } else {
                 [[self context] save:nil];
+                
+                // if the current user is not an institution and the requesting user is, then update
+                // the current users type to institution and subtype to luminary
+                if(![[self currentUser] isInstitution] && [[t otherUser] isInstitution]) {
+                    [[self currentUser] setType:STKUserTypeInstitution];
+                    [[self currentUser] setSubtype:STKUserSubTypeLuminary];
+                }
             }
             block(obj, err);
         }];
@@ -892,7 +899,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         [c setModelGraph:@[t]];
         [c setContext:[self context]];
-        
+
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             block(obj, err);
         }];

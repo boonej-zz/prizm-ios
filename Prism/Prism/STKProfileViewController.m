@@ -530,7 +530,7 @@ typedef enum {
 {
     STKUser *p = [self profile];
     
-    if ([p isInstitution]) {
+    if ([p isInstitution] && ![p isLuminary]) {
         [[self profileView] setType:STKProfileCellTypeInstitution];
         NSDate *founded;
         NSString *mascot, *pop;
@@ -554,6 +554,7 @@ typedef enum {
         
         [[[self profileView] luminaryInfoLabel] setText:[infoComponents componentsJoinedByString:@" • "]];
         [[self profileView] setLuminaries:[self luminaries]];
+        
     } else {
         [[self profileView] setType:STKProfileCellTypeUser];
     }
@@ -595,7 +596,7 @@ typedef enum {
         
         [[c editButton] setHidden:YES];
 
-        if([[self profile] isInstitution]) {
+        if([[self profile] isInstitution] &&[[self profile] isLuminary] && ![[[STKUserStore store] currentUser] isInstitution]) {
             [[c trustButton] setHidden:YES];
             [[c messageButton] setHidden:![MFMailComposeViewController canSendMail]];
         } else {

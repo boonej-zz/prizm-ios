@@ -193,6 +193,11 @@ tumblrTokenSecret, tumblrLastMinID;
     return [[self type] isEqualToString:STKUserTypeInstitution] || [[self type] isEqualToString:STKUserTypeInstitutionPending];
 }
 
+- (BOOL)isLuminary
+{
+    return [[self subtype] isEqualToString:STKUserSubTypeLuminary];
+}
+
 /////
 
 - (void)setValuesFromFacebook:(NSDictionary *)d
