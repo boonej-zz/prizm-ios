@@ -40,7 +40,7 @@
     
     [bpInner addClip];
     
-    [avatarImage drawAtPoint:avatarOrigin];
+    [avatarImage drawInRect:avatarRect];
     
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
     
