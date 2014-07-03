@@ -106,9 +106,7 @@
 
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
-    
+        
     return img;
 }
 
