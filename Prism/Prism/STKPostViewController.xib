@@ -6,21 +6,18 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKPostViewController">
             <connections>
+                <outlet property="blurView" destination="jZx-K8-MKz" id="My4-37-lsN"/>
                 <outlet property="bottomCommentConstraint" destination="fYT-Li-F5G" id="e2A-D8-OsN"/>
                 <outlet property="categoryCollectionView" destination="btj-gk-C8i" id="84D-Gu-8s9"/>
                 <outlet property="commentBarPlaceholder" destination="lXE-2H-qgp" id="4fD-nq-aSJ"/>
                 <outlet property="commentFooterView" destination="Dln-PT-0fM" id="ful-9b-Qwr"/>
                 <outlet property="commentTextView" destination="Ufz-ig-UNY" id="2tJ-9e-1Dx"/>
-                <outlet property="dismissButtonImageView" destination="ffu-8M-aFq" id="e3R-yg-DCk"/>
-                <outlet property="dismissButtonTopConstraint" destination="2NO-zg-hx6" id="sAt-Cx-dSo"/>
                 <outlet property="editMenuBackgroundImageView" destination="U4W-UO-TxE" id="xr1-u4-zpq"/>
                 <outlet property="editMenuContainerBottomConstraint" destination="icS-oE-nSj" id="2Us-Ue-btP"/>
                 <outlet property="editOverlayView" destination="fA8-lv-Nlj" id="rTh-es-3u4"/>
                 <outlet property="editPostButton" destination="3RX-hR-78U" id="Mll-nN-Z6A"/>
                 <outlet property="editView" destination="EUn-8F-UMb" id="wS2-pb-jDD"/>
                 <outlet property="editViewAnimationContainer" destination="wUo-0r-d0Y" id="PHe-aj-kpG"/>
-                <outlet property="fakeContainerView" destination="Qys-Ur-GtV" id="mfm-2t-fYh"/>
-                <outlet property="fakeHeaderView" destination="KfP-Fo-rS2" id="xMr-38-VzX"/>
                 <outlet property="overlayVIew" destination="tVf-Km-kul" id="Nbq-Kg-kOs"/>
                 <outlet property="postButton" destination="ywj-I7-cIa" id="UqV-K9-EEW"/>
                 <outlet property="postButtonRightConstraint" destination="gga-ls-2mF" id="3Td-cG-vc8"/>
@@ -37,8 +34,25 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="EuQ-DN-KAZ">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="nMV-8o-FzA"/>
+                        <constraint firstAttribute="height" constant="64" id="wtt-F5-ClQ"/>
+                    </constraints>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jZx-K8-MKz" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="dhb-4u-Tp0"/>
+                        <constraint firstAttribute="width" constant="320" id="lLK-6C-tj7"/>
+                    </constraints>
+                </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="UWv-rb-JIt">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -53,14 +67,6 @@
                     <constraints>
                         <constraint firstAttribute="width" constant="320" id="S1K-bu-XGJ"/>
                         <constraint firstAttribute="height" constant="300" id="azu-WG-Jyg"/>
-                    </constraints>
-                </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="btn_cancelb" translatesAutoresizingMaskIntoConstraints="NO" id="ffu-8M-aFq">
-                    <rect key="frame" x="285" y="73" width="20" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="20" id="Ivf-y0-AaM"/>
-                        <constraint firstAttribute="height" constant="20" id="c4F-UQ-gTz"/>
                     </constraints>
                 </imageView>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dln-PT-0fM" userLabel="Comment Container">
@@ -162,35 +168,6 @@
                         <constraint firstItem="ywj-I7-cIa" firstAttribute="leading" secondItem="3RX-hR-78U" secondAttribute="trailing" constant="14" id="x81-Fb-3LV"/>
                         <constraint firstItem="Ufz-ig-UNY" firstAttribute="trailing" secondItem="lXE-2H-qgp" secondAttribute="trailing" id="yw6-PF-aol"/>
                         <constraint firstAttribute="bottom" secondItem="RPE-rT-7DA" secondAttribute="bottom" id="zyh-Kr-ovo"/>
-                    </constraints>
-                </view>
-                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qys-Ur-GtV" userLabel="Fake Header View">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="igP-1O-4nf">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="568" id="MMX-qi-o2b"/>
-                            </constraints>
-                        </imageView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KfP-Fo-rS2" customClass="STKPostHeaderView">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstItem="igP-1O-4nf" firstAttribute="leading" secondItem="Qys-Ur-GtV" secondAttribute="leading" id="3SN-3G-h0N"/>
-                        <constraint firstAttribute="trailing" secondItem="igP-1O-4nf" secondAttribute="trailing" id="3WT-vk-WhA"/>
-                        <constraint firstAttribute="height" constant="64" id="FSY-rB-Yxa"/>
-                        <constraint firstItem="igP-1O-4nf" firstAttribute="top" secondItem="Qys-Ur-GtV" secondAttribute="top" id="QSo-If-7hW"/>
-                        <constraint firstAttribute="bottom" secondItem="KfP-Fo-rS2" secondAttribute="bottom" id="WO1-t0-Hd5"/>
-                        <constraint firstAttribute="trailing" secondItem="KfP-Fo-rS2" secondAttribute="trailing" id="gbc-UD-x7p"/>
-                        <constraint firstItem="KfP-Fo-rS2" firstAttribute="leading" secondItem="Qys-Ur-GtV" secondAttribute="leading" id="s8s-wV-jan"/>
-                        <constraint firstItem="KfP-Fo-rS2" firstAttribute="top" secondItem="Qys-Ur-GtV" secondAttribute="top" id="yC8-oj-qvc"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tVf-Km-kul" userLabel="Overlay View" customClass="UIControl">
@@ -329,26 +306,26 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="Qys-Ur-GtV" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="25H-Zg-TQj"/>
-                <constraint firstItem="ffu-8M-aFq" firstAttribute="top" secondItem="1" secondAttribute="top" constant="73" id="2NO-zg-hx6"/>
-                <constraint firstItem="UWv-rb-JIt" firstAttribute="top" secondItem="1" secondAttribute="top" id="AfS-Kq-g9z"/>
+                <constraint firstItem="jZx-K8-MKz" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="BsS-ku-dPF"/>
+                <constraint firstItem="tVf-Km-kul" firstAttribute="top" secondItem="1" secondAttribute="top" id="CBz-p7-60q"/>
                 <constraint firstAttribute="bottom" secondItem="UWv-rb-JIt" secondAttribute="bottom" id="GGv-Wl-ROC"/>
                 <constraint firstItem="tVf-Km-kul" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="IUJ-eu-R56"/>
                 <constraint firstItem="UWv-rb-JIt" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Ims-17-YBM"/>
                 <constraint firstAttribute="centerX" secondItem="NL1-hu-ihE" secondAttribute="centerX" id="Lbu-cv-G55"/>
-                <constraint firstAttribute="trailing" secondItem="Qys-Ur-GtV" secondAttribute="trailing" id="RTr-gF-GQH"/>
+                <constraint firstAttribute="trailing" secondItem="EuQ-DN-KAZ" secondAttribute="trailing" id="Rb7-aG-jop"/>
+                <constraint firstItem="jZx-K8-MKz" firstAttribute="top" secondItem="1" secondAttribute="top" id="Smg-xF-09c"/>
                 <constraint firstItem="fA8-lv-Nlj" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Wam-vd-DKY"/>
-                <constraint firstItem="Qys-Ur-GtV" firstAttribute="top" secondItem="1" secondAttribute="top" id="ZaD-fN-uMD"/>
+                <constraint firstItem="NL1-hu-ihE" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="cUT-zC-sVN"/>
                 <constraint firstAttribute="trailing" secondItem="fA8-lv-Nlj" secondAttribute="trailing" id="dVP-B4-MHb"/>
+                <constraint firstItem="UWv-rb-JIt" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="dXi-dq-jyD"/>
+                <constraint firstItem="EuQ-DN-KAZ" firstAttribute="top" secondItem="jZx-K8-MKz" secondAttribute="top" id="dg0-Xu-Ech"/>
                 <constraint firstAttribute="bottom" secondItem="Dln-PT-0fM" secondAttribute="bottom" id="fYT-Li-F5G"/>
                 <constraint firstAttribute="trailing" secondItem="tVf-Km-kul" secondAttribute="trailing" id="jKW-dj-Rql"/>
-                <constraint firstAttribute="trailing" secondItem="ffu-8M-aFq" secondAttribute="trailing" constant="14" id="k1E-Ta-BMn"/>
                 <constraint firstAttribute="trailing" secondItem="Dln-PT-0fM" secondAttribute="trailing" id="kbN-qK-Beq"/>
                 <constraint firstAttribute="trailing" secondItem="UWv-rb-JIt" secondAttribute="trailing" id="lvP-6d-ID7"/>
                 <constraint firstAttribute="bottom" secondItem="fA8-lv-Nlj" secondAttribute="bottom" id="mag-OY-WTP"/>
-                <constraint firstItem="tVf-Km-kul" firstAttribute="top" secondItem="1" secondAttribute="top" id="me6-LZ-hiG"/>
+                <constraint firstItem="EuQ-DN-KAZ" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="nCc-kH-kKk"/>
                 <constraint firstItem="fA8-lv-Nlj" firstAttribute="top" secondItem="1" secondAttribute="top" id="ns3-xT-guy"/>
-                <constraint firstItem="NL1-hu-ihE" firstAttribute="top" secondItem="Qys-Ur-GtV" secondAttribute="bottom" id="sSZ-Ws-ZmJ"/>
                 <constraint firstItem="Dln-PT-0fM" firstAttribute="top" secondItem="tVf-Km-kul" secondAttribute="bottom" id="vBR-zk-VoJ"/>
                 <constraint firstItem="Dln-PT-0fM" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="yBs-Bk-ND4"/>
             </constraints>
@@ -357,7 +334,6 @@
         </view>
     </objects>
     <resources>
-        <image name="btn_cancelb" width="24" height="24"/>
         <image name="btn_edit_post" width="22" height="22"/>
         <image name="btn_write_comment" width="16" height="16"/>
         <image name="img_background" width="320" height="568"/>
