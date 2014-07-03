@@ -119,24 +119,20 @@
     }
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    float offset = [scrollView contentOffset].x;
-    if (offset > 480) {
-        [[self pageControl] setCurrentPage:2];
-    } else if (offset < 160) {
-        [[self pageControl] setCurrentPage:0];
-    } else {
-        [[self pageControl] setCurrentPage:1];
-    }
-}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     float offset = [scrollView contentOffset].x;
     if (offset <= 320) {
         [[self gradientLayer] setColors:[NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0 alpha:offset/320*0.5] CGColor], (id)[[UIColor colorWithWhite:0 alpha:0.3+offset/320*0.2] CGColor], nil]];
         [[self gradientLayer] setLocations:@[@((320-offset)/320*0.4), @(1)]];
+    }
+    
+    if (offset > 480) {
+        [[self pageControl] setCurrentPage:2];
+    } else if (offset < 160) {
+        [[self pageControl] setCurrentPage:0];
+    } else {
+        [[self pageControl] setCurrentPage:1];
     }
 }
 
