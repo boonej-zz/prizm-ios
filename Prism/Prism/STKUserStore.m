@@ -821,9 +821,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 if(![[self currentUser] isInstitution] && [[t otherUser] isInstitution]) {
                     [[self currentUser] setType:STKUserTypeInstitution];
                     [[self currentUser] setSubtype:STKUserSubTypeLuminary];
-                    [self updateUserDetails:[self currentUser] completion:^(STKUser *u, NSError *err) {
-                        
-                    }];
                 }
             }
             block(obj, err);
