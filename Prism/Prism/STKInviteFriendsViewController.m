@@ -158,9 +158,11 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
     }
     if ([indexPath section] == 3) {
         text = [[self messageServiceArray] firstObject];
+        image = [UIImage imageNamed:@"sharing_message"];
     }
     if ([indexPath section] == 4) {
         text = [[self emailServiceArray] firstObject];
+        image = [UIImage imageNamed:@"sharing_mail"];
     }
 
     [[c textView] setText:text];
