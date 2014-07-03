@@ -17,14 +17,15 @@
 + (UIImage *)imageForInviteCard:(UIImage *)avatarImage
 {
     // padding
-    CGFloat topToImagePadding = 64.0;
-    CGFloat imageToNamePadding = 24.0;
-    CGFloat centerToPromptPadding = 48.0;
-    
-    CGSize imageSize = CGSizeMake(144, 144);
+    CGFloat topToImagePadding = 80.0;
+    CGFloat imageToNamePadding = 16.0;
+    CGFloat centerToPromptPadding = 56.0;
+    CGFloat centerLineOffset = 26;
+    CGSize imageSize = CGSizeMake(170, 170);
     CGPoint avatarOrigin = CGPointMake((640 - imageSize.width)/2, topToImagePadding);
     
-    const CGFloat fontSize = 40;
+    CGFloat nameTextSize = 32;
+    CGFloat promptTextSize = 36;
     UIColor *textColor = [UIColor whiteColor]; //STKTextColor
     
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(640, 640), YES, 1);
@@ -57,7 +58,7 @@
     
     NSString *name = [[[STKUserStore store] currentUser] name];
     
-    int fontSizeToFit = fontSize;
+    int fontSizeToFit = nameTextSize;
     UIFont *f = STKFont(fontSizeToFit);
     
     CGRect sizeRect = nameRect;
@@ -84,7 +85,7 @@
     
     CGRect textRect = CGRectMake(48, 320+centerToPromptPadding, 640 - 48 * 2, 64);
     
-    f = STKFont(fontSize);
+    f = STKFont(promptTextSize);
     
     NSString *prompt = @"Join me on Prizm";
     sizeRect = [prompt boundingRectWithSize:CGSizeMake(textRect.size.width - 10, 10000)
@@ -100,13 +101,17 @@
     
     [prompt drawInRect:centeredRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : textColor, NSParagraphStyleAttributeName : style}];
 
-    UIBezierPath *centerLine = [UIBezierPath bezierPathWithRect:CGRectMake(48, 320, 640 - 48*2, 1)];
-    [STKTextColor set];
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 48, 320+centerLineOffset);
+    CGPathAddLineToPoint(path, NULL, 640-48, 320+centerLineOffset);
+    UIBezierPath *centerLine = [UIBezierPath bezierPathWithCGPath:path];
+    [textColor set];
+    [centerLine setLineWidth:0.5];
     [centerLine stroke];
-
+    
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-        
+    
     return img;
 }
 
