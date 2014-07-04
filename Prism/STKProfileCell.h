@@ -26,7 +26,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *coverPhotoImageView;
 @property (weak, nonatomic) IBOutlet STKAvatarView *avatarView;
 
-@property (weak, nonatomic) IBOutlet UITextView *blurbLabel;
+@property (weak, nonatomic) IBOutlet UILabel *blurbLabel;
 @property (weak, nonatomic) IBOutlet UILabel *luminaryInfoLabel;
 @property (weak, nonatomic) IBOutlet UIButton *websiteButton;
 

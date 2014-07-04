@@ -96,19 +96,17 @@
                                 <rect key="frame" x="320" y="0.0" width="320" height="182"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bWu-s1-hYF">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="pGj-Br-pm8">
                                         <rect key="frame" x="20" y="20" width="280" height="80"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="80" id="SN7-d7-RpW"/>
-                                            <constraint firstAttribute="width" constant="280" id="tRh-dR-AQB"/>
+                                            <constraint firstAttribute="height" constant="80" id="HWy-vf-bEb"/>
+                                            <constraint firstAttribute="width" constant="280" id="dLy-th-KZf"/>
                                         </constraints>
-                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="XTU-Hr-Tyl" userLabel="lum-info">
                                         <rect key="frame" x="20" y="108" width="280" height="0.0"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -130,14 +128,12 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="XTU-Hr-Tyl" firstAttribute="centerX" secondItem="bWu-s1-hYF" secondAttribute="centerX" id="8Ud-mm-rCd"/>
                                     <constraint firstAttribute="width" constant="320" id="8rM-U5-WDV"/>
-                                    <constraint firstAttribute="trailing" secondItem="bWu-s1-hYF" secondAttribute="trailing" constant="20" id="LC7-FD-ctf"/>
-                                    <constraint firstItem="bWu-s1-hYF" firstAttribute="leading" secondItem="lmx-Lj-Ezq" secondAttribute="leading" constant="20" id="OOt-TM-zAv"/>
-                                    <constraint firstItem="XTU-Hr-Tyl" firstAttribute="top" secondItem="bWu-s1-hYF" secondAttribute="bottom" constant="8" id="RyD-nN-Mgc"/>
+                                    <constraint firstAttribute="centerX" secondItem="pGj-Br-pm8" secondAttribute="centerX" id="E2q-Us-xqT"/>
+                                    <constraint firstItem="XTU-Hr-Tyl" firstAttribute="top" secondItem="pGj-Br-pm8" secondAttribute="bottom" constant="8" id="J9M-ud-6dK"/>
                                     <constraint firstItem="8R1-mg-Eis" firstAttribute="centerX" secondItem="XTU-Hr-Tyl" secondAttribute="centerX" id="Uvv-Hh-I57"/>
                                     <constraint firstItem="8R1-mg-Eis" firstAttribute="top" secondItem="XTU-Hr-Tyl" secondAttribute="bottom" constant="4" id="YAI-aw-wNU"/>
-                                    <constraint firstItem="bWu-s1-hYF" firstAttribute="top" secondItem="lmx-Lj-Ezq" secondAttribute="top" constant="20" id="Z9p-Uo-iWG"/>
+                                    <constraint firstItem="pGj-Br-pm8" firstAttribute="top" secondItem="lmx-Lj-Ezq" secondAttribute="top" constant="20" id="gLU-fC-Dia"/>
                                     <constraint firstAttribute="height" constant="182" id="gxJ-LH-S8O"/>
                                     <constraint firstItem="XTU-Hr-Tyl" firstAttribute="leading" secondItem="lmx-Lj-Ezq" secondAttribute="leading" constant="20" id="h9o-8e-SBg"/>
                                     <constraint firstAttribute="trailing" secondItem="XTU-Hr-Tyl" secondAttribute="trailing" constant="20" id="qJn-UI-chh"/>
@@ -344,7 +340,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="avatarView" destination="VfH-7o-GLK" id="yxu-AR-x8W"/>
-                <outlet property="blurbLabel" destination="bWu-s1-hYF" id="hXF-bC-eCa"/>
+                <outlet property="blurbLabel" destination="pGj-Br-pm8" id="B76-El-yOV"/>
                 <outlet property="centerAvatarView" destination="bRI-8g-hv4" id="y1x-EN-yZ8"/>
                 <outlet property="centerNameLabel" destination="xB7-vu-4GJ" id="wJN-Gc-OAH"/>
                 <outlet property="centerTitleLabel" destination="DY5-pN-zbi" id="psZ-Qw-U8A"/>

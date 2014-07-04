@@ -36,13 +36,14 @@
     
     [[self nameLabel] setFont:STKFont(18)];
     [[self locationLabel] setFont:STKFont(12)];
-    [[self blurbLabel] setFont:STKFont(18)];
+    [[self blurbLabel] setFont:STKFont(14)];
     [[self luminaryInfoLabel] setFont:STKFont(12)];
     [[self leftNameLabel] setFont:STKFont(18)];
     [[self centerNameLabel] setFont:STKFont(18)];
     [[self rightNameLabel] setFont:STKFont(18)];
     [[self luminaryLabel] setFont:STKFont(18)];
     
+    [[self blurbLabel] setTextColor:STKTextColor];
     [[self leftNameLabel] setTextColor:STKTextColor];
     [[self leftTitleLabel] setTextColor:STKTextColor];
     [[self centerNameLabel] setTextColor:STKTextColor];
