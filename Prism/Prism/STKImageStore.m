@@ -271,7 +271,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 {
     NSUUID *uuid = [[NSUUID alloc] init];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"yyyyMMddhhmmss"];
+    [df setDateFormat:@"ssmmhhddMMyyyy"];
     
     NSString *base = [NSString stringWithFormat:@"%@/%@_%@", directory, [df stringFromDate:[NSDate date]], [uuid UUIDString]];
 
