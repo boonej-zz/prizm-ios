@@ -31,7 +31,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VfH-7o-GLK" customClass="STKAvatarView">
-                                        <rect key="frame" x="128" y="20" width="64" height="64"/>
+                                        <rect key="frame" x="128" y="30" width="64" height="64"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="64" id="DeM-AQ-nVj"/>
@@ -39,14 +39,14 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" translatesAutoresizingMaskIntoConstraints="NO" id="0AX-fu-Jaj">
-                                        <rect key="frame" x="140" y="92" width="40" height="20"/>
+                                        <rect key="frame" x="140" y="108" width="40" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="srj-6G-oFS">
-                                        <rect key="frame" x="137" y="116" width="46" height="21"/>
+                                        <rect key="frame" x="137" y="128" width="46" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="location_pin_small" translatesAutoresizingMaskIntoConstraints="NO" id="DlM-xl-Dck">
@@ -81,10 +81,10 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="VfH-7o-GLK" firstAttribute="top" secondItem="Yzf-dL-4Wx" secondAttribute="top" constant="20" id="0SW-wX-Jlf"/>
-                                    <constraint firstItem="srj-6G-oFS" firstAttribute="top" secondItem="0AX-fu-Jaj" secondAttribute="bottom" constant="4" id="Qan-X2-ySh"/>
+                                    <constraint firstItem="VfH-7o-GLK" firstAttribute="top" secondItem="Yzf-dL-4Wx" secondAttribute="top" constant="30" id="0SW-wX-Jlf"/>
+                                    <constraint firstItem="srj-6G-oFS" firstAttribute="top" secondItem="0AX-fu-Jaj" secondAttribute="bottom" id="Qan-X2-ySh"/>
                                     <constraint firstAttribute="height" constant="182" id="Rjg-00-dbo"/>
-                                    <constraint firstItem="0AX-fu-Jaj" firstAttribute="top" secondItem="VfH-7o-GLK" secondAttribute="bottom" constant="8" id="Wua-j3-Kyz"/>
+                                    <constraint firstItem="0AX-fu-Jaj" firstAttribute="top" secondItem="VfH-7o-GLK" secondAttribute="bottom" constant="14" id="Wua-j3-Kyz"/>
                                     <constraint firstAttribute="trailing" secondItem="VfH-7o-GLK" secondAttribute="trailing" constant="128" id="hAF-3w-S9b"/>
                                     <constraint firstItem="0AX-fu-Jaj" firstAttribute="centerX" secondItem="VfH-7o-GLK" secondAttribute="centerX" constant="-0.5" id="oll-bC-1yB"/>
                                     <constraint firstItem="srj-6G-oFS" firstAttribute="centerX" secondItem="0AX-fu-Jaj" secondAttribute="centerX" id="sFb-7b-Rp7"/>

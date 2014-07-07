@@ -43,22 +43,22 @@
     [[self rightNameLabel] setFont:STKFont(18)];
     [[self luminaryLabel] setFont:STKFont(18)];
     
-    [[self blurbLabel] setTextColor:STKTextColor];
-    [[self leftNameLabel] setTextColor:STKTextColor];
-    [[self leftTitleLabel] setTextColor:STKTextColor];
-    [[self centerNameLabel] setTextColor:STKTextColor];
-    [[self centerTitleLabel] setTextColor:STKTextColor];
-    [[self rightNameLabel] setTextColor:STKTextColor];
-    [[self rightTitleLabel] setTextColor:STKTextColor];
-    [[self luminaryLabel] setTextColor:STKTextColor];
-    [[self moreLuminariesButton] setTitleColor:STKTextColor forState:UIControlStateNormal];
+    [[self blurbLabel] setTextColor:[UIColor whiteColor]];
+    [[self leftNameLabel] setTextColor:[UIColor whiteColor]];
+    [[self leftTitleLabel] setTextColor:[UIColor whiteColor]];
+    [[self centerNameLabel] setTextColor:[UIColor whiteColor]];
+    [[self centerTitleLabel] setTextColor:[UIColor whiteColor]];
+    [[self rightNameLabel] setTextColor:[UIColor whiteColor]];
+    [[self rightTitleLabel] setTextColor:[UIColor whiteColor]];
+    [[self luminaryLabel] setTextColor:[UIColor whiteColor]];
+    [[self moreLuminariesButton] setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     CAGradientLayer *gradient = [CAGradientLayer layer];
     [gradient setFrame:[[self profileGradient] bounds]];
-    [gradient setColors:[NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0 alpha:0] CGColor], (id)[[UIColor colorWithWhite:0 alpha:0.3] CGColor], nil]];
-    [gradient setLocations:@[@(0.4), @(1)]];
+    [gradient setColors:@[(id)[[UIColor colorWithWhite:0 alpha:0.0] CGColor], (id)[[UIColor colorWithWhite:0 alpha:0.6] CGColor]]];
+//    [gradient setLocations:@[@(0.4), @(1)]];
     [[[self profileGradient] layer] insertSublayer:gradient atIndex:0];
     [self setGradientLayer:gradient];
 }
@@ -123,10 +123,20 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     float offset = [scrollView contentOffset].x;
-    if (offset <= 320) {
-        [[self gradientLayer] setColors:[NSArray arrayWithObjects:(id)[[UIColor colorWithWhite:0 alpha:offset/320*0.5] CGColor], (id)[[UIColor colorWithWhite:0 alpha:0.3+offset/320*0.2] CGColor], nil]];
-        [[self gradientLayer] setLocations:@[@((320-offset)/320*0.4), @(1)]];
+    float topOpacity = 0;
+    if(offset < 320.0) {
+        // 0 -> 0
+        // 160 -> 0.3
+        // 320 -> 0.6
+        topOpacity = (offset / 320.0) * 0.6;
+    } else {
+        topOpacity = 0.6;
     }
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    [[self gradientLayer] setColors:@[(id)[[UIColor colorWithWhite:0 alpha:topOpacity] CGColor], (id)[[UIColor colorWithWhite:0 alpha:0.6] CGColor]]];
+    [CATransaction commit];
     
     if (offset > 480) {
         [[self pageControl] setCurrentPage:2];
