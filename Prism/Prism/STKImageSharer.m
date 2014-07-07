@@ -350,13 +350,15 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 #warning smelly, but we do not have direct access to system provided activities and their navigation controllers
     // revert appearance proxies to get default iOS behavior when sharing through Messages
     UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
+    UIColor *tintColor = [[UITextField appearance] tintColor];
     [[UINavigationBar appearance] setBackgroundImage:nil
                                        forBarMetrics:UIBarMetricsDefault];
-
+    [[UITextField appearance] setTintColor:nil];
     UIActivityViewControllerCompletionHandler handler = ^void (NSString *activityType, BOOL completed) {
         // restore appearance proxies to original
         [[UINavigationBar appearance] setBackgroundImage:backgroundImage
                                            forBarMetrics:UIBarMetricsDefault];
+        [[UITextField appearance] setTintColor:tintColor];
     };
     
     [activityViewController setCompletionHandler:handler];

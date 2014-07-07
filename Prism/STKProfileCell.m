@@ -33,6 +33,7 @@
 - (void)cellDidLoad
 {
     [[self scrollView] setDelegate:self];
+    [[self scrollView] setScrollsToTop:NO];
     
     [[self nameLabel] setFont:STKFont(18)];
     [[self locationLabel] setFont:STKFont(12)];

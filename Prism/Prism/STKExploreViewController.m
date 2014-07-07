@@ -308,7 +308,7 @@
     
     if(![self cancelButton]) {
         STKNavigationButton *cancelButton = [[STKNavigationButton alloc] init];
-        [cancelButton setImage:[UIImage imageNamed:@"filter_cancel"]];
+        [cancelButton setImage:[UIImage imageNamed:@"btn_cancel"]];
         [cancelButton setOffset:8];
         [cancelButton addTarget:self action:@selector(dismissOverlay:) forControlEvents:UIControlEventTouchUpInside];
         [self setCancelButton:cancelButton];

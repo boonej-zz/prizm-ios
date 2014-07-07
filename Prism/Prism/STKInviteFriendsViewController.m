@@ -41,6 +41,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 
 // grab the navigationbarbackround image so we can customize and restore navigation bar
 @property (nonatomic, strong) UIImage *navigationBackgroundImage;
+@property (nonatomic, strong) UIColor *textFieldTintColor;
 @end
 
 @implementation STKInviteFriendsViewController
@@ -229,6 +230,8 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self setNavigationBackgroundImage:[[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault]];
+    [self setTextFieldTintColor:[[UITextField appearance] tintColor]];
+    
     if ([indexPath section] == 1) {
         NSString *serviceType = [self availableServiceTypes][[indexPath row]];
         SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:serviceType];
@@ -246,7 +249,8 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
     if ([indexPath section] == 3) {
 #warning smelly, but no direct manipulations on the nav controller had any effect
         [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-
+        [[UITextField appearance] setTintColor:nil];
+        
         MFMessageComposeViewController *vc = [[MFMessageComposeViewController alloc] init];
         
         [vc setMessageComposeDelegate:self];
@@ -257,7 +261,8 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
     
     if ([indexPath section] == 4) {
         [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-
+        [[UITextField appearance] setTintColor:nil];
+        
         MFMailComposeViewController *vc = [[MFMailComposeViewController alloc] init];
         
         [vc setMailComposeDelegate:self];
@@ -271,6 +276,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
     [[UINavigationBar appearance] setBackgroundImage:[self navigationBackgroundImage] forBarMetrics:UIBarMetricsDefault];
+    [[UITextField appearance] setTintColor:[self textFieldTintColor]];
 
     [controller dismissViewControllerAnimated:YES completion:^{
     }];
@@ -279,6 +285,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
     [[UINavigationBar appearance] setBackgroundImage:[self navigationBackgroundImage] forBarMetrics:UIBarMetricsDefault];
+    [[UITextField appearance] setTintColor:[self textFieldTintColor]];
     
     [controller dismissViewControllerAnimated:YES completion:^{
     }];

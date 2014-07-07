@@ -322,7 +322,8 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                STKPostURLKey : URLString,
                                                STKPostTypeKey : postType,
                                                @"external_provider" : @"instagram",
-                                               @"external_link" : link
+                                               @"external_link" : link,
+                                               STKPostVisibilityKey : STKPostVisibilityPublic
                                                };
                     
                     [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
@@ -457,7 +458,8 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                        STKPostTypeKey : postType,
                                                        @"external_provider" : @"twitter",
                                                        @"external_link" : link,
-                                                       STKPostURLKey : URLString
+                                                       STKPostURLKey : URLString,
+                                                       STKPostVisibilityKey : STKPostVisibilityPublic
                                                        };
                             
                             [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
@@ -483,7 +485,8 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                            STKPostTypeKey : postType,
                                            @"external_provider" : @"twitter",
                                            @"external_link" : link,
-                                           STKPostURLKey : URLString
+                                           STKPostURLKey : URLString,
+                                           STKPostVisibilityKey : STKPostVisibilityPublic
                                            };
                 
                 [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
