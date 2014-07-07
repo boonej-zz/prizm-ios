@@ -817,9 +817,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 [[self context] save:nil];
                 
                 // if the current user is not an institution and the requesting user is, then update
-                // the current users type to institution and subtype to luminary
+                // the current users subtype to luminary
                 if(![[self currentUser] isInstitution] && [[t otherUser] isInstitution]) {
-                    [[self currentUser] setType:STKUserTypeInstitution];
                     [[self currentUser] setSubtype:STKUserSubTypeLuminary];
                 }
             }

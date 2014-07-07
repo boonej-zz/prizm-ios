@@ -595,8 +595,12 @@ typedef enum {
     } else {
         
         [[c editButton] setHidden:YES];
-
-        if([[self profile] isInstitution] &&[[self profile] isLuminary] && ![[[STKUserStore store] currentUser] isInstitution]) {
+        
+        STKUser *currentUser = [[STKUserStore store] currentUser];
+        BOOL currentUserToRequestPrivs = [currentUser isInstitution] || [currentUser isLuminary];
+        BOOL showingUserHasRestrictedPrivs = [[self profile] isInstitution] || [[self profile] isLuminary];
+        
+        if(showingUserHasRestrictedPrivs && !currentUserToRequestPrivs) {
             [[c trustButton] setHidden:YES];
             [[c messageButton] setHidden:![MFMailComposeViewController canSendMail]];
         } else {
