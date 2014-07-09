@@ -171,4 +171,24 @@
     ROUTE(sender);
 }
 
+- (IBAction)pageLeft:(id)sender
+{
+    float offset = [[self scrollView] contentOffset].x;
+    CGSize scrollViewSize = [[self scrollView] bounds].size;
+
+    offset -= 320;
+    
+    [[self scrollView] scrollRectToVisible:CGRectMake(offset, 0, scrollViewSize.width, scrollViewSize.height) animated:YES];
+}
+
+- (IBAction)pageRight:(id)sender
+{
+    float offset = [[self scrollView] contentOffset].x;
+    CGSize scrollViewSize = [[self scrollView] bounds].size;
+
+    offset += 320;
+    
+    [[self scrollView] scrollRectToVisible:CGRectMake(offset, 0, scrollViewSize.width, scrollViewSize.height) animated:YES];
+}
+
 @end
