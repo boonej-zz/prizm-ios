@@ -37,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *dimensionLabel;
 
 @property (nonatomic) UIDeviceOrientation deviceOrientation;
+@property (nonatomic) BOOL croppingImage;
 
 @end
 
@@ -67,7 +68,12 @@
 
 - (IBAction)dismiss:(id)sender
 {
-    [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    if ([self croppingImage] == NO) {
+        [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [self setCroppingImage:NO];
+        [self showLibrary:nil];
+    }
 }
 
 - (IBAction)okayEdit:(id)sender
@@ -420,6 +426,7 @@
     
     [[self editScrollView] setContentOffset:CGPointMake(centerDiffX, centerDiffY)];
     
+    [self setCroppingImage:YES];
 }
 
 

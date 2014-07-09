@@ -95,6 +95,12 @@
         [tags appendFormat:@"#%@ ", tag];
     }
     [[self hashTagLabel] setText:tags];
+    
+    if ([[[self hashTagLabel] text] length] || [self displayFullBleed]) {
+        [[self hashTagContainer] setHidden:NO];
+    } else {
+        [[self hashTagContainer] setHidden:YES];
+    }
 }
 
 - (void)setDisplayFullBleed:(BOOL)displayFullBleed
@@ -102,6 +108,8 @@
     _displayFullBleed = displayFullBleed;
     
     if(_displayFullBleed) {
+        [[self hashTagContainer] setHidden:NO];
+        
         [[self topInset] setConstant:0];
         [[self leftInset] setConstant:0];
         [[self rightInset] setConstant:0];
