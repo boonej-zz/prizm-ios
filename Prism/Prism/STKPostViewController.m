@@ -31,6 +31,8 @@
 #import "STKHashtagPostsViewController.h"
 #import "STKMarkupController.h"
 #import "STKMarkupUtilities.h"
+#import "UIERealTimeBlurView.h"
+
 @interface STKPostViewController ()
     <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate,
     UITextViewDelegate, UIGestureRecognizerDelegate, UITextViewDelegate,
@@ -72,6 +74,8 @@
 @property (nonatomic, strong) NSMutableArray *comments;
 
 @property (strong, nonatomic) IBOutlet UIView *editView;
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+
 
 - (IBAction)postComment:(id)sender;
 - (IBAction)changeVisibility:(id)sender;
@@ -289,13 +293,12 @@
     [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setDelaysContentTouches:NO];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(40, 0, 0, 0)];
 
 
     [[self postButtonRightConstraint] setConstant:-[[self postButton] bounds].size.width - 3];
     
     [[[self fakeHeaderView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [[self fakeHeaderView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     [footerView setBackgroundColor:[UIColor clearColor]];
@@ -306,6 +309,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [[[self blurView] displayLink] setPaused:NO];
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setOverrideLoadingImage:[[self menuController] transitioningImage]];
@@ -387,7 +392,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    float visualOffsetY = [scrollView contentOffset].y + 64;
+    float visualOffsetY = [scrollView contentOffset].y + 40;
     
     if(visualOffsetY < 0) {
         [[self stretchView] setHidden:NO];
@@ -402,6 +407,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [[[self blurView] displayLink] setPaused:YES];
     
     [[self navigationController] setNavigationBarHidden:NO];
     
@@ -470,7 +477,7 @@
     
     [self setEditingPostText:NO];
 
-    [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(40, 0, 0, 0)];
 
     float duration = [[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     [[self bottomCommentConstraint] setConstant:0];

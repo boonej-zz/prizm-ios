@@ -126,6 +126,8 @@
         [[[self hashTagContainer] layer] setShadowOffset:CGSizeMake(0, 1)];
         [[[self hashTagContainer] layer] setShadowRadius:4];
         [[[self hashTagContainer] layer] setShadowPath:[bp CGPath]];
+        
+        [[self headerView] setHidden:YES];
     } else {
         
     }

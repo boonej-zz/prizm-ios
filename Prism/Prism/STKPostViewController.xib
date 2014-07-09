@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKPostViewController">
             <connections>
+                <outlet property="blurView" destination="2j2-te-10m" id="xXA-FM-VHd"/>
                 <outlet property="bottomCommentConstraint" destination="fYT-Li-F5G" id="e2A-D8-OsN"/>
                 <outlet property="categoryCollectionView" destination="btj-gk-C8i" id="84D-Gu-8s9"/>
                 <outlet property="commentBarPlaceholder" destination="lXE-2H-qgp" id="4fD-nq-aSJ"/>
@@ -35,8 +36,8 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="UWv-rb-JIt">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="UWv-rb-JIt">
+                    <rect key="frame" x="0.0" y="2" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -44,12 +45,37 @@
                         <outlet property="delegate" destination="-1" id="ux7-rk-QwG"/>
                     </connections>
                 </tableView>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="7Eg-yd-ey0">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="128"/>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2j2-te-10m" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="104"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
+                <view opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5UH-8h-b86" userLabel="ExtendedNav">
+                    <rect key="frame" x="0.0" y="64" width="320" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qys-Ur-GtV" userLabel="Fake Header View">
+                    <rect key="frame" x="0.0" y="40" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KfP-Fo-rS2" customClass="STKPostHeaderView">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="FSY-rB-Yxa"/>
+                        <constraint firstAttribute="bottom" secondItem="KfP-Fo-rS2" secondAttribute="bottom" id="WO1-t0-Hd5"/>
+                        <constraint firstAttribute="trailing" secondItem="KfP-Fo-rS2" secondAttribute="trailing" id="gbc-UD-x7p"/>
+                        <constraint firstItem="KfP-Fo-rS2" firstAttribute="leading" secondItem="Qys-Ur-GtV" secondAttribute="leading" id="s8s-wV-jan"/>
+                        <constraint firstItem="KfP-Fo-rS2" firstAttribute="top" secondItem="Qys-Ur-GtV" secondAttribute="top" id="yC8-oj-qvc"/>
+                    </constraints>
+                </view>
                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NL1-hu-ihE" customClass="STKResolvingImageView">
-                    <rect key="frame" x="0.0" y="128" width="320" height="300"/>
+                    <rect key="frame" x="0.0" y="104" width="320" height="300"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.90220494923857864" green="0.90220494923857864" blue="0.90220494923857864" alpha="0.0" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -156,25 +182,6 @@
                         <constraint firstItem="ywj-I7-cIa" firstAttribute="leading" secondItem="3RX-hR-78U" secondAttribute="trailing" constant="14" id="x81-Fb-3LV"/>
                         <constraint firstItem="Ufz-ig-UNY" firstAttribute="trailing" secondItem="lXE-2H-qgp" secondAttribute="trailing" id="yw6-PF-aol"/>
                         <constraint firstAttribute="bottom" secondItem="RPE-rT-7DA" secondAttribute="bottom" id="zyh-Kr-ovo"/>
-                    </constraints>
-                </view>
-                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qys-Ur-GtV" userLabel="Fake Header View">
-                    <rect key="frame" x="0.0" y="64" width="320" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KfP-Fo-rS2" customClass="STKPostHeaderView">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="64" id="FSY-rB-Yxa"/>
-                        <constraint firstAttribute="bottom" secondItem="KfP-Fo-rS2" secondAttribute="bottom" id="WO1-t0-Hd5"/>
-                        <constraint firstAttribute="trailing" secondItem="KfP-Fo-rS2" secondAttribute="trailing" id="gbc-UD-x7p"/>
-                        <constraint firstItem="KfP-Fo-rS2" firstAttribute="leading" secondItem="Qys-Ur-GtV" secondAttribute="leading" id="s8s-wV-jan"/>
-                        <constraint firstItem="KfP-Fo-rS2" firstAttribute="top" secondItem="Qys-Ur-GtV" secondAttribute="top" id="yC8-oj-qvc"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tVf-Km-kul" userLabel="Overlay View" customClass="UIControl">
@@ -321,7 +328,7 @@
                 <constraint firstAttribute="centerX" secondItem="NL1-hu-ihE" secondAttribute="centerX" id="Lbu-cv-G55"/>
                 <constraint firstAttribute="trailing" secondItem="Qys-Ur-GtV" secondAttribute="trailing" id="RTr-gF-GQH"/>
                 <constraint firstItem="fA8-lv-Nlj" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Wam-vd-DKY"/>
-                <constraint firstItem="Qys-Ur-GtV" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="ZaD-fN-uMD"/>
+                <constraint firstItem="Qys-Ur-GtV" firstAttribute="top" secondItem="1" secondAttribute="top" constant="40" id="ZaD-fN-uMD"/>
                 <constraint firstAttribute="trailing" secondItem="fA8-lv-Nlj" secondAttribute="trailing" id="dVP-B4-MHb"/>
                 <constraint firstAttribute="bottom" secondItem="Dln-PT-0fM" secondAttribute="bottom" id="fYT-Li-F5G"/>
                 <constraint firstAttribute="trailing" secondItem="tVf-Km-kul" secondAttribute="trailing" id="jKW-dj-Rql"/>
