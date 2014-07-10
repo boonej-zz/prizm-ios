@@ -22,8 +22,8 @@
 
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 
-NSString * const STKContentFoursquareClientID = @"NPXBWJD343KPWSECQJM1NKJEZ4SYQ4RGRYWEBTLCU21PNUXO";
-NSString * const STKContentFoursquareClientSecret = @"B2KSDXAPXQTWWMZLB2ODCCR3JOJVRQKCS1MNODYKD4TF2VCS";
+NSString * const STKContentFoursquareClientID = @"FGEGQPWV4ONDR1O30NCGZYALDVHJMBHIXZOLUNB0E0GVNE24";
+NSString * const STKContentFoursquareClientSecret = @"4XPKWKBIGSVZD3YQESZEHTSVZ45FFTNCGQV3OLLEBJR1ETVI";
 
 NSString * const STKContentEndpointPost = @"/posts";
 
