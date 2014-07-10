@@ -278,7 +278,9 @@ typedef enum {
     [[c nameLabel] setTextColor:STKTextColor];
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
-    
+
+    [[c luminaryIcon] setHidden:![u isLuminary]];
+
     if([u isEqual:[[STKUserStore store] currentUser]]) {
         [[c followButton] setHidden:YES];
     } else {

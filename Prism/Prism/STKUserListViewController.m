@@ -168,7 +168,8 @@
     [[c nameLabel] setTextColor:STKTextColor];
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
-    
+    [[c luminaryIcon] setHidden:![u isLuminary]];
+
     if([self type] == STKUserListTypeFollow) {
         if([u isEqual:[[STKUserStore store] currentUser]]) {
             [[c followButton] setHidden:YES];
