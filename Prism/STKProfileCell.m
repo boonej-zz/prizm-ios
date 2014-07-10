@@ -33,14 +33,15 @@
 - (void)cellDidLoad
 {
     [[self scrollView] setDelegate:self];
+    [[self scrollView] setScrollsToTop:NO];
     
     [[self nameLabel] setFont:STKFont(18)];
     [[self locationLabel] setFont:STKFont(12)];
     [[self blurbLabel] setFont:STKFont(14)];
     [[self luminaryInfoLabel] setFont:STKFont(12)];
-    [[self leftNameLabel] setFont:STKFont(18)];
-    [[self centerNameLabel] setFont:STKFont(18)];
-    [[self rightNameLabel] setFont:STKFont(18)];
+    [[self leftNameLabel] setFont:STKFont(14)];
+    [[self centerNameLabel] setFont:STKFont(14)];
+    [[self rightNameLabel] setFont:STKFont(14)];
     [[self luminaryLabel] setFont:STKFont(18)];
     
     [[self blurbLabel] setTextColor:[UIColor whiteColor]];

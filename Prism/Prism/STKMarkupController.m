@@ -285,6 +285,9 @@ typedef enum {
         STKUser *user = [[self userTags] objectAtIndex:indexPath.row];
         [[cell avatarView] setUrlString:[user profilePhotoPath]];
         [[cell nameLabel] setText:[user name]];
+        
+        [[cell luminaryIcon] setHidden:![user isLuminary]];
+
 
         return cell;
     } else if([self markupType] == STKMarkupTypeHashtag) {

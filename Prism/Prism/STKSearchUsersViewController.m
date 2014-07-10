@@ -219,7 +219,8 @@
         [[cell avatarView] setUrlString:[user profilePhotoPath]];
         [[cell cancelTrustButton] setHidden:YES];
         [[cell mailButton] setHidden:YES];
-        
+        [[cell luminaryIcon] setHidden:![user isLuminary]];
+
         if([user isEqual:[[STKUserStore store] currentUser]]) {
             [[cell followButton] setHidden:YES];
         } else {

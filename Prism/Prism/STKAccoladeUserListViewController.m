@@ -96,6 +96,8 @@
     [[c followButton] setHidden:YES];
     [[c cancelTrustButton] setHidden:YES];
     [[c mailButton] setHidden:YES];
+    
+    [[c luminaryIcon] setHidden:![u isLuminary]];
 
     return c;
 }

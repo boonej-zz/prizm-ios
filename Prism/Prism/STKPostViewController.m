@@ -31,13 +31,14 @@
 #import "STKHashtagPostsViewController.h"
 #import "STKMarkupController.h"
 #import "STKMarkupUtilities.h"
+#import "UIERealTimeBlurView.h"
+
 @interface STKPostViewController ()
     <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate,
     UITextViewDelegate, UIGestureRecognizerDelegate, UITextViewDelegate,
     STKPostControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate,
     STKMarkupControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *dismissButtonTopConstraint;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *postButtonRightConstraint;
 @property (weak, nonatomic) IBOutlet STKPostHeaderView *fakeHeaderView;
@@ -73,7 +74,8 @@
 @property (nonatomic, strong) NSMutableArray *comments;
 
 @property (strong, nonatomic) IBOutlet UIView *editView;
-@property (weak, nonatomic) IBOutlet UIImageView *dismissButtonImageView;
+@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+
 
 - (IBAction)postComment:(id)sender;
 - (IBAction)changeVisibility:(id)sender;
@@ -107,9 +109,17 @@
                            @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_personal_selected"]}
                            ];
-
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_cancel"]
+                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                               target:self action:@selector(dismiss:)];
+        [[self navigationItem] setLeftBarButtonItem:bbi];
     }
     return self;
+}
+
+- (void)dismiss:(id)sender
+{
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)setPost:(STKPost *)post
@@ -261,10 +271,6 @@
     [_markupController setHidesDoneButton:YES];
     [[self overlayVIew] addSubview:[[self markupController] view]];
     
-    [[self dismissButtonImageView] setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.2]];
-    [[[self dismissButtonImageView] layer] setCornerRadius:10];
-    [[self dismissButtonImageView] setClipsToBounds:YES];
-    
     [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];
     [[self categoryCollectionView] setBackgroundColor:[UIColor clearColor]];
@@ -287,13 +293,12 @@
     [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setDelaysContentTouches:NO];
-//    [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, 36, 0)];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(40, 0, 0, 0)];
 
 
     [[self postButtonRightConstraint] setConstant:-[[self postButton] bounds].size.width - 3];
     
     [[[self fakeHeaderView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [[self fakeHeaderView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     [footerView setBackgroundColor:[UIColor clearColor]];
@@ -305,7 +310,7 @@
 {
     [super viewWillAppear:animated];
     
-    [[self dismissButtonImageView] setHidden:YES];
+    [[[self blurView] displayLink] setPaused:NO];
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setOverrideLoadingImage:[[self menuController] transitioningImage]];
@@ -319,7 +324,7 @@
     if([self isMovingToParentViewController])
         [[[self postCell] contentImageView] setHidden:YES];
     
-    [[self navigationController] setNavigationBarHidden:YES];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
@@ -378,7 +383,6 @@
 {
     [super viewDidAppear:animated];
     [[[self postCell] contentImageView] setHidden:NO];
-    [[self dismissButtonImageView] setHidden:NO];
 }
 
 - (IBAction)overlayTapped:(id)sender
@@ -388,28 +392,23 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if([scrollView contentOffset].y < 0) {
+    float visualOffsetY = [scrollView contentOffset].y + 40;
+    
+    if(visualOffsetY < 0) {
         [[self stretchView] setHidden:NO];
-        float y = fabs([scrollView contentOffset].y);
+        float y = fabs(visualOffsetY);
         [[self stretchHeightConstraint] setConstant:300 + y];
         [[self stretchWidthConstraint] setConstant:320 + y];
-        [[self dismissButtonTopConstraint] setConstant:73];
-        [[self dismissButtonImageView] setHidden:YES];
-//        if([scrollView contentOffset].y < -100) {
-//        }
     } else {
         [[self stretchView] setHidden:YES];
-        [[self dismissButtonImageView] setHidden:NO];
-        [[self dismissButtonTopConstraint] setConstant:73 - [scrollView contentOffset].y];
-
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-
-    [[self dismissButtonImageView] setHidden:YES];
+    
+    [[[self blurView] displayLink] setPaused:YES];
     
     [[self navigationController] setNavigationBarHidden:NO];
     
@@ -432,7 +431,6 @@
 - (void)keyboardWillAppear:(NSNotification *)note
 {
     [[self commentBarPlaceholder] setHidden:YES];
-    [[self dismissButtonImageView] setHidden:YES];
     
     CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, r.size.height + [[self commentFooterView] bounds].size.height, 0)];
@@ -475,14 +473,11 @@
 {
     [[self commentBarPlaceholder] setHidden:NO];
 
-    [[self dismissButtonImageView] setHidden:NO];
-
     [[self editPostButton] setHidden:[self shouldHideEditButton]];
     
     [self setEditingPostText:NO];
 
-    [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, [[self commentFooterView] bounds].size.height, 0)];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(40, 0, 0, 0)];
 
     float duration = [[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     [[self bottomCommentConstraint] setConstant:0];
