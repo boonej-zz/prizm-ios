@@ -130,6 +130,9 @@
 }
 - (void)configureInterface
 {
+    //hide dimension label
+    [[self dimensionLabel] setHidden:YES];
+    
     if([self capturedImage]) {
         [[self editScrollView] setBackgroundColor:[UIColor blackColor]];
         [[self flipCameraButton] setHidden:YES];
