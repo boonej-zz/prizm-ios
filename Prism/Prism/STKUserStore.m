@@ -36,7 +36,7 @@ NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurr
 
 NSString * const STKUserStoreExternalCredentialGoogleClientID = @"657032544324-5ijt9s2qqo1sh05gobelp90703vhmpj3.apps.googleusercontent.com";
 NSString * const STKUserStoreExternalCredentialFacebookAppID = @"1408826952716972";
-NSString * const STKUserStoreExternalCredentialTwitterTokenSecret = @"MzIoqUFCk7BYUNpCNxtGuhuLu";
+
 NSString * const STKUserStoreExternalCredentialTwitterConsumerKey = @"MzIoqUFCk7BYUNpCNxtGuhuLu";
 //@"B8y2wlENU9eQCV2FO2s3rg";
 NSString * const STKUserStoreExternalCredentialTwitterConsumerSecret = @"yGhuwPvSljoVJoD4il2qtHZG0q4hWlXC87Mcdly0pxaFrMHEaf";

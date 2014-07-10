@@ -131,7 +131,7 @@ typedef enum {
         [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
 
     } else {
-        [[self navigationItem] setTitle:@"Prizm"];
+        [[self navigationItem] setTitle:@"Profile"];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
     }
     

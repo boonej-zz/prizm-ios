@@ -292,16 +292,18 @@
     [self configureInterface];
     
     CAKeyframeAnimation *transformAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    [transformAnim setDuration:1];
     [transformAnim setValues:@[[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 1, 0)],[NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 1, 0)]]];
     [transformAnim setKeyTimes:@[@0,@(0.5),@1]];
     
     CAKeyframeAnimation *fadeAnim = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
+    [fadeAnim setDuration:1];
     [fadeAnim setValues:@[@1,@(0)]];
     [fadeAnim setKeyTimes:@[@0,@1]];
     
     CAAnimationGroup *animGroup = [CAAnimationGroup animation];
     [animGroup setAnimations:@[transformAnim, fadeAnim]];
-    [animGroup setDuration:0.5];
+    [animGroup setDuration:1];
     [animGroup setDelegate:self];
     
     
