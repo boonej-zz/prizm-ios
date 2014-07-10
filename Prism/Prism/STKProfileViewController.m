@@ -127,7 +127,7 @@ typedef enum {
     
     
     if([self isShowingCurrentUserProfile]) {
-        [[self navigationItem] setTitle:@"Profile"];
+        [[self navigationItem] setTitle:@"Me"];
         [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
 
     } else {

@@ -38,6 +38,7 @@
 
 @property (nonatomic) UIDeviceOrientation deviceOrientation;
 @property (nonatomic) BOOL croppingImage;
+@property (weak, nonatomic) IBOutlet UIView *flipAnimationView;
 
 @end
 
@@ -129,6 +130,9 @@
 }
 - (void)configureInterface
 {
+    //hide dimension label
+    [[self dimensionLabel] setHidden:YES];
+    
     if([self capturedImage]) {
         [[self editScrollView] setBackgroundColor:[UIColor blackColor]];
         [[self flipCameraButton] setHidden:YES];
@@ -259,6 +263,8 @@
 
 - (IBAction)flipCamera:(id)sender
 {
+    [[self session] stopRunning];
+
     AVCaptureDeviceInput *i = [self deviceInput];
     AVCaptureDevice *device = [i device];
     
@@ -276,9 +282,52 @@
         
         _deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:newDevice error:nil];
         
+        [[self session] setSessionPreset:AVCaptureSessionPreset1280x720];
+        if ([[self session] canAddInput:[self deviceInput]] == NO) {
+            [[self session] setSessionPreset:AVCaptureSessionPreset640x480];
+        }
+
         [[self session] addInput:[self deviceInput]];
     }
     [self configureInterface];
+    
+    CAKeyframeAnimation *transformAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    [transformAnim setValues:@[[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 1, 0)],[NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 1, 0)]]];
+    [transformAnim setKeyTimes:@[@0,@(0.5),@1]];
+    
+    CAKeyframeAnimation *fadeAnim = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
+    [fadeAnim setValues:@[@1,@(0)]];
+    [fadeAnim setKeyTimes:@[@0,@1]];
+    
+    CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+    [animGroup setAnimations:@[transformAnim, fadeAnim]];
+    [animGroup setDuration:0.5];
+    [animGroup setDelegate:self];
+    
+    
+    [[[self captureView] videoLayer] setOpacity:0];
+    [[[self captureView] videoLayer] setTransform:CATransform3DMakeRotation(M_PI, 0, 1, 0)];
+    [[[self captureView] videoLayer] addAnimation:animGroup forKey:@"rotateStart"];
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+    [[self session] startRunning];
+    CAKeyframeAnimation *transformAnim = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    [transformAnim setValues:@[[NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 1, 0)],[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:CATransform3DIdentity]]];
+    [transformAnim setKeyTimes:@[@0,@(0.2),@1]];
+    
+    CAKeyframeAnimation *fadeAnim = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
+    [fadeAnim setValues:@[@0,@0,@(1)]];
+    [fadeAnim setKeyTimes:@[@0,@(0.2),@1]];
+    
+    CAAnimationGroup *animGroup = [CAAnimationGroup animation];
+    [animGroup setAnimations:@[transformAnim, fadeAnim]];
+    [animGroup setDuration:0.5];
+    
+    [[[self captureView] videoLayer] setOpacity:1];
+    [[[self captureView] videoLayer] setTransform:CATransform3DIdentity];
+    [[[self captureView] videoLayer] addAnimation:animGroup forKey:@"rotateEnd"];
 }
 
 - (AVCaptureDevice *)deviceForPosition:(AVCaptureDevicePosition)pos

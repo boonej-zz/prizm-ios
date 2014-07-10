@@ -34,6 +34,8 @@
 
 - (void)commonInit
 {
+    [[self layer] setBackgroundColor:[[UIColor colorWithWhite:0 alpha:0.8] CGColor]];
+
     [self setClipsToBounds:YES];
     _videoLayer = [AVCaptureVideoPreviewLayer layer];
     [[self layer] addSublayer:_videoLayer];
@@ -45,7 +47,6 @@
 {
     [super layoutSubviews];
     [_videoLayer setPosition:[self center]];
-
 }
 
 - (AVCaptureSession *)session
@@ -57,6 +58,5 @@
 {
 	[(AVCaptureVideoPreviewLayer *)[self videoLayer] setSession:session];
 }
-
 
 @end

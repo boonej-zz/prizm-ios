@@ -139,6 +139,7 @@
     [[self gradientLayer] setColors:@[(id)[[UIColor colorWithWhite:0 alpha:topOpacity] CGColor], (id)[[UIColor colorWithWhite:0 alpha:0.6] CGColor]]];
     [CATransaction commit];
     
+    
     if (offset > 480) {
         [[self pageControl] setCurrentPage:2];
     } else if (offset < 160) {
@@ -169,6 +170,26 @@
 - (IBAction)rightLuminaryTapped:(id)sender
 {
     ROUTE(sender);
+}
+
+- (IBAction)pageLeft:(id)sender
+{
+    float offset = [[self scrollView] contentOffset].x;
+    CGSize scrollViewSize = [[self scrollView] bounds].size;
+
+    offset -= 320;
+    
+    [[self scrollView] scrollRectToVisible:CGRectMake(offset, 0, scrollViewSize.width, scrollViewSize.height) animated:YES];
+}
+
+- (IBAction)pageRight:(id)sender
+{
+    float offset = [[self scrollView] contentOffset].x;
+    CGSize scrollViewSize = [[self scrollView] bounds].size;
+
+    offset += 320;
+    
+    [[self scrollView] scrollRectToVisible:CGRectMake(offset, 0, scrollViewSize.width, scrollViewSize.height) animated:YES];
 }
 
 @end
