@@ -139,6 +139,7 @@
     [[self gradientLayer] setColors:@[(id)[[UIColor colorWithWhite:0 alpha:topOpacity] CGColor], (id)[[UIColor colorWithWhite:0 alpha:0.6] CGColor]]];
     [CATransaction commit];
     
+    
     if (offset > 480) {
         [[self pageControl] setCurrentPage:2];
     } else if (offset < 160) {
