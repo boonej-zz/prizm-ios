@@ -34,12 +34,12 @@ NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.current
 
 NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurrentUserChangedNotification";
 
-NSString * const STKUserStoreExternalCredentialGoogleClientID = @"945478453792.apps.googleusercontent.com";
-NSString * const STKUserStoreExternalCredentialFacebookAppID = @"744512878911220";
-NSString * const STKUserStoreExternalCredentialTwitterTokenSecret = @"tYnRjsX7toPoFAmRQnFOen8W3BsyJ2irnfmNYAIZwFAxd";
-NSString * const STKUserStoreExternalCredentialTwitterConsumerKey = @"Ru65wMMNzljgbdZxie6okg";
+NSString * const STKUserStoreExternalCredentialGoogleClientID = @"657032544324-5ijt9s2qqo1sh05gobelp90703vhmpj3.apps.googleusercontent.com";
+NSString * const STKUserStoreExternalCredentialFacebookAppID = @"1408826952716972";
+NSString * const STKUserStoreExternalCredentialTwitterTokenSecret = @"MzIoqUFCk7BYUNpCNxtGuhuLu";
+NSString * const STKUserStoreExternalCredentialTwitterConsumerKey = @"MzIoqUFCk7BYUNpCNxtGuhuLu";
 //@"B8y2wlENU9eQCV2FO2s3rg";
-NSString * const STKUserStoreExternalCredentialTwitterConsumerSecret = @"sJHdOEwTXQDO2y7nEjeHRdt8gX0TUhirOSNk32o";
+NSString * const STKUserStoreExternalCredentialTwitterConsumerSecret = @"yGhuwPvSljoVJoD4il2qtHZG0q4hWlXC87Mcdly0pxaFrMHEaf";
 //@"XKWgxHrWgE8sfnFv7IcrgcvLM6XFZdBGmQexnzwFo";
 
 NSString * const STKUserEndpointUser = @"/users";

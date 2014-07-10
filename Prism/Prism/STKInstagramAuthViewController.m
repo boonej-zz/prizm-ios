@@ -96,7 +96,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/oauth/authorize/?client_id=9fd051f75f184a95a1a4e934e6353ae7&response_type=token&redirect_uri=http://prismoauth.com"]
+    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/oauth/authorize/?client_id=79742fc71a814e64905b2b3cc56c9e13&response_type=token&redirect_uri=http://prismoauth.com"]
                                          cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:20];
     [[self webView] loadRequest:req];
 }
