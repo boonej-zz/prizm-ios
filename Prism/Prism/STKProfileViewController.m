@@ -560,6 +560,9 @@ typedef enum {
     }
     [[[self profileView] blurbLabel] setText:[p blurb]];
     
+    
+    [[[self profileView] luminaryIcon] setHidden:![p isLuminary]];
+    
     if ([p website]) {
         NSAttributedString *attributedWebsite = [[NSAttributedString alloc] initWithString:[p website] attributes:@{NSFontAttributeName : STKFont(12), NSForegroundColorAttributeName : [UIColor whiteColor]}];
         [[[self profileView] websiteButton] setAttributedTitle:attributedWebsite forState:UIControlStateNormal];
