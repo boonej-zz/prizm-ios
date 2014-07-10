@@ -692,6 +692,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKHashTag"];
     [req setPredicate:p];
     [req setFetchLimit:5];
+    [req setResultType:NSDictionaryResultType];
+    [req setReturnsDistinctResults:YES];
+    [req setPropertiesToFetch:@[@"title"]];
     
     NSArray *results = [[[[STKUserStore store] context] executeFetchRequest:req error:nil] valueForKey:@"title"];
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
