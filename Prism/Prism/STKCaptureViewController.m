@@ -306,7 +306,7 @@
     }
     [self configureInterface];
     
-
+    
     CALayer *animLayer = [CALayer layer];
     [animLayer setBounds:CGRectMake(0, 0, 320, 320)];
     [animLayer setPosition:CGPointMake(160, 204)];
@@ -317,20 +317,37 @@
     CABasicAnimation *transformAnim = [CABasicAnimation animationWithKeyPath:@"transform.rotation.y"];
     [transformAnim setFromValue:@(0.0)];
     [transformAnim setToValue:@(M_PI)];
-    [transformAnim setDuration:1];
+    [transformAnim setDuration:0.5];
     
     CAKeyframeAnimation *fadeAnim = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
     [fadeAnim setValues:@[@0, @(1)]];
-    [fadeAnim setDuration:1];
-  
+    [fadeAnim setDuration:0.5];
+    [fadeAnim setDelegate:self];
+    
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
-        [animLayer removeFromSuperlayer];
-        [[self session] startRunning];
+        [CATransaction begin];
+        CAKeyframeAnimation *fadeAnim = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
+        [fadeAnim setValues:@[@1, @(0)]];
+        [fadeAnim setDuration:0.1];
+        [animLayer setOpacity:0];
+        
+        [CATransaction setCompletionBlock:^{
+            [animLayer removeFromSuperlayer];
+        }];
+
+        [animLayer addAnimation:fadeAnim forKey:@"fade"];
+        [CATransaction commit];
     }];
+    
     [[[self captureView] videoLayer] addAnimation:transformAnim forKey:@"rotateStart"];
     [animLayer addAnimation:fadeAnim forKey:@"fade"];
     [CATransaction commit];
+    
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [[self session] startRunning];
+    }];
 }
 
 - (AVCaptureDevice *)deviceForPosition:(AVCaptureDevicePosition)pos
