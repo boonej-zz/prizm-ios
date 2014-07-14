@@ -40,6 +40,13 @@
     return [self initWithRootViewController:nil];
 }
 
+- (void)setBackButtonHidden:(BOOL)backButtonHidden
+{
+    _backButtonHidden = backButtonHidden;
+    
+    [[self backButton] setHidden:_backButtonHidden];
+}
+
 - (void)pushViewController:(UIViewController *)vc forSender:(UIView *)sender
 {/*
     CGRect r = [[self containerView] convertRect:[sender frame]

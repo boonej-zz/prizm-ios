@@ -17,6 +17,7 @@
 #import "STKPostController.h"
 
 @import MapKit;
+@import AddressBook;
 
 @interface STKLocationViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
@@ -69,18 +70,40 @@
     [[self navigationItem] setLeftBarButtonItem:bbi];
 
     [self setTitle:[self locationName]];
+    
+    if([self addressDictionary]) {
+        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+        
+        __weak STKLocationViewController *ws = self;
+        [geocoder geocodeAddressDictionary:[self addressDictionary] completionHandler:^(NSArray *placemarks, NSError *error) {
+            CLPlacemark *placemark = [placemarks lastObject];
+            if(placemark) {
+                [self setCoordinate:[[placemark location] coordinate]];
+                [ws addPlacemarkWithCoordinate:[self coordinate] range:3200];
+            }
+        }];
+    } else {
+        [self addPlacemarkWithCoordinate:[self coordinate] range:50];
+    }
+    
+    if([self locationName]) {
+        [[self localPosts] setFilterMap:@{@"location_name" : [self locationName]}];
+        [[self localPosts] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+            [[self tableView] reloadData];
+        }];
+    }
+}
+
+
+- (void)addPlacemarkWithCoordinate:(CLLocationCoordinate2D)coord range:(float)range
+{
     MKPointAnnotation *placemark = [[MKPointAnnotation alloc] init];
     [placemark setCoordinate:[self coordinate]];
     [[self mapView] addAnnotation:placemark];
     
-    [[self mapView] setRegion:MKCoordinateRegionMakeWithDistance([self coordinate], 50, 50)];
-    
-    [[self localPosts] setFilterMap:@{@"location_name" : [self locationName]}];
-    [[self localPosts] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-        [[self tableView] reloadData];
-    }];
-}
+    [[self mapView] setRegion:MKCoordinateRegionMakeWithDistance([self coordinate], range, range)];
 
+}
 
 - (IBAction)openInMaps:(id)sender
 {

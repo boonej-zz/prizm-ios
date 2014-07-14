@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -53,7 +53,7 @@
                                             <constraint firstAttribute="width" constant="16" id="uXr-gH-XkH"/>
                                         </constraints>
                                     </imageView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="srj-6G-oFS">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="srj-6G-oFS" customClass="UIControl">
                                         <rect key="frame" x="137" y="128" width="46" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -85,6 +85,9 @@
                                             <constraint firstAttribute="trailing" secondItem="JEx-Mt-5lJ" secondAttribute="trailing" id="jw8-mt-755"/>
                                             <constraint firstAttribute="bottom" secondItem="JEx-Mt-5lJ" secondAttribute="bottom" id="p0b-bm-M0D"/>
                                         </constraints>
+                                        <connections>
+                                            <action selector="profileLocationTapped:" destination="2" eventType="touchUpInside" id="y4L-jp-Y2B"/>
+                                        </connections>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

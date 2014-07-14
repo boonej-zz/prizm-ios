@@ -38,6 +38,7 @@
 #import "STKAccoladeViewController.h"
 
 @import MessageUI;
+@import AddressBook;
 
 typedef enum {
     STKProfileSectionStatic,
@@ -127,7 +128,7 @@ typedef enum {
     
     
     if([self isShowingCurrentUserProfile]) {
-        [[self navigationItem] setTitle:@"Me"];
+        [[self navigationItem] setTitle:@"Profile"];
         [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
 
     } else {
@@ -141,9 +142,9 @@ typedef enum {
     
     
     if([self profile]) {
-        NSArray *additionalFields = nil;
+        NSArray *additionalFields = @[@"zip_postal"];
         if([[self profile] isInstitution]) {
-            additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email"];
+            additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email", @"zip_postal"];
         }
 
         __weak id ws = self;
@@ -421,7 +422,11 @@ typedef enum {
         MFMailComposeViewController *mvc = [[MFMailComposeViewController alloc] init];
         [mvc setMailComposeDelegate:self];
         [mvc setToRecipients:@[[[self profile] email]]];
-        [mvc setSubject:@"Prizm: Contact Us"];
+        if([[self profile] isLuminary]) {
+            [mvc setSubject:@"Prizm Luminary"];
+        } else {
+            [mvc setSubject:@"Prizm Trust"];
+        }
         [self presentViewController:mvc animated:YES completion:nil];
     }
 }
@@ -429,6 +434,16 @@ typedef enum {
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)profileLocationTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    if([[self profile] city] && [[self profile] state] && [[self profile] zipCode]) {
+        STKLocationViewController *lvc = [[STKLocationViewController alloc] init];
+        [lvc setAddressDictionary:@{(__bridge id)kABPersonAddressZIPKey : [[self profile] zipCode]}];
+        [lvc setLocationName:[NSString stringWithFormat:@"%@, %@", [[self profile] city], [[self profile] state]]];
+        [[self navigationController] pushViewController:lvc animated:YES];
+    }
 }
 
 - (void)showUser:(STKUser *)u

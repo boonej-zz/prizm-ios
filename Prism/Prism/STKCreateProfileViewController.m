@@ -614,6 +614,7 @@ const long STKCreateProgressGeocoding = 4;
 
 - (void)keyboardWillAppear:(NSNotification *)note
 {
+    [[self verticalController] setBackButtonHidden:YES];
     
     CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, r.size.height, 0)];
@@ -632,6 +633,8 @@ const long STKCreateProgressGeocoding = 4;
 
 - (void)keyboardWillDisappear:(NSNotification *)note
 {
+    [[self verticalController] setBackButtonHidden:NO];
+
     [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self topOffset] setConstant:[self topOffsetConstant]];
 }

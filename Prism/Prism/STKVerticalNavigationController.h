@@ -13,6 +13,8 @@
 - (id)initWithRootViewController:(UIViewController *)vc;
 - (void)pushViewController:(UIViewController *)vc forSender:(UIView *)sender;
 
+@property (nonatomic) BOOL backButtonHidden;
+
 @end
 
 

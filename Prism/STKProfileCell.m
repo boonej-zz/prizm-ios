@@ -81,6 +81,10 @@
         [[self pageControl] setNumberOfPages:2];
     }
 }
+- (IBAction)profileLocationTapped:(id)sender
+{
+    ROUTE(sender);
+}
 
 - (void)setLuminaries:(NSArray *)luminaries
 {
