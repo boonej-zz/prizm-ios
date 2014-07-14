@@ -110,7 +110,7 @@ typedef enum {
 {
     STKFetchDescription *fd = [[STKFetchDescription alloc] init];
     [fd setDirection:STKQueryObjectPageOlder];
-
+    
     if([self currentType] == STKActivityViewControllerTypeActivity) {
         if ([self activityFetchInProgress]) {
             return;
@@ -123,7 +123,9 @@ typedef enum {
                                  fetchDescription:fd
                                         completion:^(NSArray *activities, NSError *err) {
                                             [self setActivityFetchInProgress:NO];
-                                            [[self activities] addObjectsFromArray:activities];
+                                            NSMutableSet *activitySet = [NSMutableSet setWithArray:[self activities]];
+                                            [activitySet addObjectsFromArray:activities];
+                                            [self setActivities:[[activitySet allObjects] mutableCopy]];
                                             
                                             [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
                                             [[self tableView] reloadData];
@@ -154,7 +156,9 @@ typedef enum {
                                         completion:^(NSArray *activities, NSError *err) {
                                             [self setActivityFetchInProgress:NO];
                                             [[self luminatingBar] setLuminating:NO];
-                                            [[self activities] addObjectsFromArray:activities];
+                                            NSMutableSet *activitySet = [NSMutableSet setWithArray:[self activities]];
+                                            [activitySet addObjectsFromArray:activities];
+                                            [self setActivities:[[activitySet allObjects] mutableCopy]];
                                             
                                             [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
                                             [[self tableView] reloadData];
