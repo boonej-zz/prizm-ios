@@ -10,6 +10,7 @@
 #import "STKUser.h"
 #import "STKActivityItem.h"
 #import "STKPost.h"
+#import "STKPostComment.h"
 #import "STKConnection.h"
 #import "STKUser.h"
 #import <GoogleOpenSource/GoogleOpenSource.h>
@@ -306,11 +307,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserChangedNotification object:self];
 }
 
-- (void)pruneDatabase
-{
-    // Currently not implemented, use internalLastModified, ensure you don't delete current user
-}
-
 - (void)establishDatabaseAndCurrentUser
 {
     NSString *currentuniqueID = [[NSUserDefaults standardUserDefaults] objectForKey:STKUserStoreCurrentUserKey];
@@ -328,10 +324,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];
-                [self pruneDatabase];
                 
                 [self attemptTransparentLoginWithUser:u];
                 
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [self pruneDatabase];
+                }];
                 
                 return;
             }
@@ -1018,30 +1016,46 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 }
 
 - (void)fetchActivityForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *activities, NSError *err))block
-{/*
+{
+    int fetchLimit = [fetchDescription limit];
+    STKActivityItem *referenceActivity = [fetchDescription referenceObject];
+    STKQueryObjectPage direction = [fetchDescription direction];
+    
+    if (fetchLimit == 0) {
+        fetchLimit = 30;
+    }
+
     NSArray *cached = nil;
     if(!referenceActivity) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
         [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@", u]];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
-        [req setFetchLimit:30];
+        [req setFetchLimit:fetchLimit];
         cached = [[self context] executeFetchRequest:req error:nil];
     } else {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated > %@", u, [referenceActivity dateCreated]]];
+        if (direction == STKQueryObjectPageNewer) {
+            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated > %@", u, [referenceActivity dateCreated]]];
+        } else {
+            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated < %@", u, [referenceActivity dateCreated]]];
+        }
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
-        [req setFetchLimit:30];
+        [req setFetchLimit:fetchLimit];
         cached = [[self context] executeFetchRequest:req error:nil];
     }
     
-    STKActivityItem *topItem = referenceActivity;
+
     if([cached count] > 0) {
-        topItem = [cached firstObject];
+        if (direction == STKQueryObjectPageOlder) {
+            referenceActivity = [cached lastObject];
+        } else {
+            referenceActivity = [cached firstObject];
+        }
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
     }
-    */
+
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -1052,11 +1066,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         
-        if([fetchDescription referenceObject]) {
-            [q setPageDirection:[fetchDescription direction]];
+        if(referenceActivity) {
+            [q setPageDirection:direction];
             [q setPageKey:@"create_date"];
-            [q setPageValue:[STKTimestampFormatter stringFromDate:[[fetchDescription referenceObject] dateCreated]]];
+            [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceActivity dateCreated]]];
         }
+        [q setLimit:fetchLimit];
         
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
         STKResolutionQuery *postResolve = [STKResolutionQuery resolutionQueryForField:@"post_id"];
@@ -1896,6 +1911,140 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [[Mixpanel sharedInstance] track:@"User un-followed" properties:@{@"Target User" : followedUserIdentifier,
                                                                    @"Target User Id" : [user uniqueID],
                                                                    @"Following Count" : @([user followingCount])}];
+}
+
+
+#pragma mark Database pruning to test caching mechanism
+
+NSInteger const STKUserStoreCachedRecordCount = 30;
+BOOL const STKUserStoreCacheKeepOlder = NO; // YES - cache has oldest items - NO - cache has newest items
+
+- (void)pruneDatabase
+{
+    // just used to prunedatabase to test caches missing old data, new data, or both
+    
+    return;
+    
+    // round up objects we are interested in
+    // user / home feed / activities / pending trusts / profile (user's posts)
+    // resolve comments, hashtags, users
+    
+    // go through 6 entities deleting all objects not already collected
+    
+    NSLog(@"pruneDatabase start");
+    
+    // Fetch everything
+    STKUserStore *userStore = [STKUserStore store];
+    NSManagedObjectContext *context = [userStore context];
+    STKUser *currentUser = [userStore currentUser];
+    
+    NSMutableSet *deleteUsers = [NSMutableSet setWithArray:[context executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"STKUser"] error:nil]];
+    NSMutableSet *deletePosts = [NSMutableSet setWithArray:[context executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"STKPost"] error:nil]];;
+    NSMutableSet *deleteActivities = [NSMutableSet setWithArray:[context executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"] error:nil]];;
+    NSMutableSet *deleteTrusts = [NSMutableSet setWithArray:[context executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"STKTrust"] error:nil]];;
+    NSMutableSet *deleteComments = [NSMutableSet setWithArray:[context executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"STKPostComment"] error:nil]];;
+    NSMutableSet *deleteHashTags = [NSMutableSet setWithArray:[context executeFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"STKHashTag"] error:nil]];;
+    
+    NSSortDescriptor *dateCreatedSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:STKUserStoreCacheKeepOlder];
+    NSSortDescriptor *datePostedSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:STKUserStoreCacheKeepOlder];
+    NSSortDescriptor *dateModifiedSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:STKUserStoreCacheKeepOlder];
+    
+    
+    NSPredicate *homePostsPredicate = [NSPredicate predicateWithFormat:@"fInverseFeed == %@", currentUser];
+    NSArray *sortedHomePosts = [[deletePosts filteredSetUsingPredicate:homePostsPredicate] sortedArrayUsingDescriptors:@[datePostedSortDescriptor]];
+    
+    NSSet *saveHomePosts;
+    if (sortedHomePosts.count >= STKUserStoreCachedRecordCount) {
+        saveHomePosts = [NSSet setWithArray:[sortedHomePosts subarrayWithRange:NSMakeRange(0, STKUserStoreCachedRecordCount)]];
+    } else {
+        saveHomePosts = [NSSet setWithArray:sortedHomePosts];
+    }
+    
+    NSArray *sortedProfilePosts = [[currentUser createdPosts] sortedArrayUsingDescriptors:@[datePostedSortDescriptor]];
+    
+    NSSet *saveProfilePosts;
+    if (sortedProfilePosts.count >= STKUserStoreCachedRecordCount) {
+        saveProfilePosts = [NSSet setWithArray:[sortedProfilePosts subarrayWithRange:NSMakeRange(0, STKUserStoreCachedRecordCount)]];
+    } else {
+        saveProfilePosts = [NSSet setWithArray:sortedProfilePosts];
+    }
+    
+    
+    NSArray *sortedActivities = [deleteActivities sortedArrayUsingDescriptors:@[dateCreatedSortDescriptor]];
+    if ([sortedActivities count] >= STKUserStoreCachedRecordCount) {
+        sortedActivities = [sortedActivities subarrayWithRange:NSMakeRange(0, STKUserStoreCachedRecordCount)];
+    }
+    NSSet *saveActivities = [NSSet setWithArray:[sortedActivities subarrayWithRange:NSMakeRange(10,1)]];
+//    NSSet *saveActivities = [NSSet setWithArray:sortedActivities];
+    
+    NSPredicate *trustPredicate = [NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending];
+    NSArray *sortedTrusts = [[deleteTrusts filteredSetUsingPredicate:trustPredicate] sortedArrayUsingDescriptors:@[dateModifiedSortDescriptor]];
+    
+    NSSet *saveTrusts;
+    if (sortedTrusts.count >= STKUserStoreCachedRecordCount) {
+        saveTrusts = [NSSet setWithArray:[sortedTrusts subarrayWithRange:NSMakeRange(0, STKUserStoreCachedRecordCount)]];
+    } else {
+        saveTrusts = [NSSet setWithArray:sortedTrusts];
+    }
+    
+    NSMutableSet *saveComments = [NSMutableSet set];
+    NSMutableSet *saveHashTags = [NSMutableSet set];
+    NSMutableSet *saveUsers = [NSMutableSet setWithObject:currentUser];
+    
+    for (STKTrust *trust in saveTrusts) {
+        [saveUsers addObject:trust.creator];
+        [saveUsers addObject:trust.recepient];
+    }
+    
+    NSMutableSet *savePosts = [NSMutableSet setWithSet:saveHomePosts];
+    [savePosts unionSet:saveProfilePosts];
+    
+    for (STKActivityItem *activity in saveActivities) {
+        [saveUsers addObject:activity.creator];
+        [saveUsers addObject:activity.notifiedUser];
+        if (activity.post) {
+            [savePosts addObject:activity.post];
+        }
+    }
+    
+    [saveUsers unionSet:[currentUser following]];
+    [saveUsers unionSet:[currentUser followers]];
+    
+    // iterate through posts last ** they are finally fully constructed
+    for (STKPost *post in savePosts) {
+        NSSet *comments = post.comments;
+        
+        for (STKPostComment *pc in comments) {
+            [saveUsers addObject:[pc creator]];
+        }
+        [saveComments unionSet:post.comments];
+        
+        [saveHashTags unionSet:post.hashTags];
+        [saveUsers addObject:post.creator];
+    }
+    
+    [deleteUsers minusSet:saveUsers];
+    [deletePosts minusSet:savePosts];
+    [deleteActivities minusSet:saveActivities];
+    [deleteComments minusSet:saveComments];
+    [deleteHashTags minusSet:saveHashTags];
+    [deleteTrusts minusSet:saveTrusts];
+    
+    void (^block)(id obj, BOOL *stop) = ^void (NSManagedObject *obj, BOOL *stop)
+    {
+        [context deleteObject:obj];
+    };
+    
+    [deleteUsers enumerateObjectsUsingBlock:block];
+    [deletePosts enumerateObjectsUsingBlock:block];
+    [deleteActivities enumerateObjectsUsingBlock:block];
+    [deleteComments enumerateObjectsUsingBlock:block];
+    [deleteHashTags enumerateObjectsUsingBlock:block];
+    [deleteTrusts enumerateObjectsUsingBlock:block];
+    
+    [context save:nil];
+    
+    NSLog(@"pruneDatabase end");
 }
 
 @end
