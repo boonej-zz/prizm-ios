@@ -371,7 +371,10 @@
                 [otherUsers addObject:[t creator]];
             }
         }
-        [lvc setUsers:otherUsers];
+        
+        NSSortDescriptor *alphabetic = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
+        NSArray *sortedUsers = [otherUsers sortedArrayUsingDescriptors:@[alphabetic]];
+        [lvc setUsers:sortedUsers];
     }];
 
 }
