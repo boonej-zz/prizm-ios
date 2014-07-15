@@ -123,12 +123,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [req setFetchLimit:1];
         NSArray *cachedRequests = [[self context] executeFetchRequest:req error:nil];
 
-        STKFetchDescription *fd = [[STKFetchDescription alloc] init];
-        [fd setReferenceObject:[cachedActivities firstObject]];
-        [fd setDirection:STKQueryObjectPageNewer];
+        STKFetchDescription *activityFd = [[STKFetchDescription alloc] init];
+        [activityFd setReferenceObject:[cachedActivities firstObject]];
+        [activityFd setDirection:STKQueryObjectPageNewer];
         
-        [self fetchActivityForUser:[self currentUser] fetchDescription:fd completion:^(NSArray *activities, NSError *err) {
-            [self fetchRequestsForCurrentUserWithReferenceRequest:[cachedRequests firstObject] completion:^(NSArray *requests, NSError *err) {
+        STKFetchDescription *requestFd = [[STKFetchDescription alloc] init];
+        [requestFd setReferenceObject:[cachedRequests firstObject]];
+        [requestFd setDirection:STKQueryObjectPageNewer];
+        
+        [self fetchActivityForUser:[self currentUser] fetchDescription:activityFd completion:^(NSArray *activities, NSError *err) {
+            [self fetchRequestsForCurrentUserWithReferenceRequest:requestFd completion:^(NSArray *requests, NSError *err) {
                 [self notifyNotificationCount];
             }];
         }];
@@ -719,7 +723,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKTrust *)referenceRequest completion:(void (^)(NSArray *requests, NSError *err))block
+- (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *requests, NSError *err))block
 {
     if(![self currentUser]) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -727,32 +731,61 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
         return;
     }
-    /*
+    
+    int fetchLimit = [fetchDescription limit];
+    STKTrust *referenceRequest = [fetchDescription referenceObject];
+    STKQueryObjectPage direction = [fetchDescription direction];
+    
+    if (fetchLimit == 0) {
+        fetchLimit = 30;
+    }
+    
     NSArray *cached = nil;
     if(!referenceRequest) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
         [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@", [self currentUser]]];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
-        [req setFetchLimit:30];
         cached = [[self context] executeFetchRequest:req error:nil];
     } else {
-        // Get anything newer than what we have that has made its way to the cache.
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and dateModified > %@", [self currentUser], [referenceRequest dateModified]]];
+        if (direction == STKQueryObjectPageNewer) {
+            [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and dateModified > %@", [self currentUser], [referenceRequest dateModified]]];
+        } else {
+            [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and dateModified < %@", [self currentUser], [referenceRequest dateModified]]];
+        }
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
-        [req setFetchLimit:30];
         cached = [[self context] executeFetchRequest:req error:nil];
     }
     
-
-    STKTrust *topItem = referenceRequest;
     if([cached count] > 0) {
-        topItem = [cached firstObject];
+
+        if (direction == STKQueryObjectPageOlder) {
+            referenceRequest = [cached lastObject];
+            
+            // filter out canceled requests for cached response
+            // we don't want to return a whole page of canceled responses from the cache
+            cached = [cached filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
+
+            if ([cached count] > fetchLimit) {
+                cached = [cached subarrayWithRange:NSMakeRange([cached count] - fetchLimit, fetchLimit)];
+            }
+        } else {
+            referenceRequest = [cached firstObject];
+            
+            // filter out canceled requests for cached response
+            // we don't want to return a whole page of canceled responses from the cache
+            cached = [cached filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
+
+            if ([cached count] > fetchLimit) {
+                cached = [cached subarrayWithRange:NSMakeRange(0, fetchLimit)];
+            }
+        }
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
     }
-*/
+
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -764,10 +797,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         if(referenceRequest) {
-            [q setPageDirection:STKQueryObjectPageNewer];
-            [q setPageKey:@"modify_date"];
             [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceRequest dateModified]]];
         }
+        [q setPageKey:@"modify_date"];
+        [q setLimit:fetchLimit];
+        [q setPageDirection:direction];
+        
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
         [q setFilters:@{@"to" : [[self currentUser] uniqueID]}];
         [c setQueryObject:q];
@@ -1067,10 +1102,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKQueryObject *q = [[STKQueryObject alloc] init];
         
         if(referenceActivity) {
-            [q setPageDirection:direction];
-            [q setPageKey:@"create_date"];
             [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceActivity dateCreated]]];
         }
+        [q setPageDirection:direction];
+        [q setPageKey:@"create_date"];
         [q setLimit:fetchLimit];
         
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
@@ -1916,7 +1951,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 #pragma mark Database pruning to test caching mechanism
 
-NSInteger const STKUserStoreCachedRecordCount = 30;
+NSInteger const STKUserStoreCachedRecordCount = 1;
 BOOL const STKUserStoreCacheKeepOlder = NO; // YES - cache has oldest items - NO - cache has newest items
 
 - (void)pruneDatabase
@@ -1974,8 +2009,7 @@ BOOL const STKUserStoreCacheKeepOlder = NO; // YES - cache has oldest items - NO
     if ([sortedActivities count] >= STKUserStoreCachedRecordCount) {
         sortedActivities = [sortedActivities subarrayWithRange:NSMakeRange(0, STKUserStoreCachedRecordCount)];
     }
-    NSSet *saveActivities = [NSSet setWithArray:[sortedActivities subarrayWithRange:NSMakeRange(10,1)]];
-//    NSSet *saveActivities = [NSSet setWithArray:sortedActivities];
+    NSSet *saveActivities = [NSSet setWithArray:sortedActivities];
     
     NSPredicate *trustPredicate = [NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusPending];
     NSArray *sortedTrusts = [[deleteTrusts filteredSetUsingPredicate:trustPredicate] sortedArrayUsingDescriptors:@[dateModifiedSortDescriptor]];

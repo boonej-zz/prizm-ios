@@ -42,11 +42,13 @@ NSString * const STKQueryObjectFilterExists = @"*";
         [d setObject:@([self sortOrder]) forKey:@"sort"];
     }
     
-    if([self pageKey] && [self pageValue]) {
+    if([self pageKey]) {
+        [d setObject:[self pageKey] forKey:@"page_by"];
         if([self pageDirection] != STKQueryObjectPageReload) {
-            [d setObject:[self pageValue] forKey:@"page"];
-            [d setObject:[self pageKey] forKey:@"page_by"];
             [d setObject:@([self pageDirection]) forKey:@"page_direction"];
+        }
+        if ([self pageValue]) {
+            [d setObject:[self pageValue] forKey:@"page"];
         }
     }
     

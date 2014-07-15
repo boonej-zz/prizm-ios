@@ -80,7 +80,7 @@ typedef enum {
 
 - (void)fetchTopTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block;
 - (void)requestTrustForUser:(STKUser *)user completion:(void (^)(STKTrust *requestItem, NSError *err))block;
-- (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKTrust *)request completion:(void (^)(NSArray *requests, NSError *err))block;
+- (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *requests, NSError *err))block;
 - (void)acceptTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)rejectTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
 - (void)cancelTrustRequest:(STKTrust *)t completion:(void (^)(STKTrust *requestItem, NSError *err))block;
