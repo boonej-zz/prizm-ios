@@ -138,7 +138,7 @@ typedef enum {
 
     } else {
         [[self navigationItem] setTitle:@"Profile"];
-        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        [[self navigationItem] setRightBarButtonItem:nil];
     }
     
     if([[[self navigationController] viewControllers] indexOfObject:self] > 0) {
