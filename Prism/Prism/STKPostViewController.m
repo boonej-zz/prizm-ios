@@ -29,29 +29,24 @@
 #import "STKRenderServer.h"
 #import "STKTextImageCell.h"
 #import "STKHashtagPostsViewController.h"
-#import "STKMarkupController.h"
-#import "STKMarkupUtilities.h"
 #import "UIERealTimeBlurView.h"
+#import "STKCreateCommentViewController.h"
+#import "STKMarkupUtilities.h"
 
 @interface STKPostViewController ()
     <UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate,
     UITextViewDelegate, UIGestureRecognizerDelegate, UITextViewDelegate,
-    STKPostControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate,
-    STKMarkupControllerDelegate>
+    STKPostControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *postButtonRightConstraint;
 @property (weak, nonatomic) IBOutlet STKPostHeaderView *fakeHeaderView;
 @property (weak, nonatomic) IBOutlet UIView *fakeContainerView;
 @property (weak, nonatomic) IBOutlet UIControl *overlayVIew;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentFooterView;
-@property (weak, nonatomic) IBOutlet UITextView *commentTextView;
-@property (weak, nonatomic) IBOutlet UILabel *commentBarPlaceholder;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomCommentConstraint;
 @property (nonatomic, strong) UIView *commentHeaderView;
-@property (weak, nonatomic) IBOutlet UIButton *postButton;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *visibilityControl;
 @property (weak, nonatomic) IBOutlet UIView *editOverlayView;
 @property (weak, nonatomic) IBOutlet UIImageView *editMenuBackgroundImageView;
@@ -59,7 +54,6 @@
 @property (weak, nonatomic) IBOutlet UIView *editViewAnimationContainer;
 @property (nonatomic, strong) NSArray *categoryItems;
 
-@property (nonatomic, strong) STKMarkupController *markupController;
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
@@ -75,9 +69,10 @@
 
 @property (strong, nonatomic) IBOutlet UIView *editView;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *fakeHeaderContainerTopConstraint;
 
+- (IBAction)transitionToCommentScreen:(id)sender;
 
-- (IBAction)postComment:(id)sender;
 - (IBAction)changeVisibility:(id)sender;
 - (BOOL)postHasText;
 - (IBAction)editPost:(id)sender;
@@ -113,6 +108,7 @@
                                                   landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                                target:self action:@selector(dismiss:)];
         [[self navigationItem] setLeftBarButtonItem:bbi];
+        [[self navigationItem] setTitle:@"Post"];
     }
     return self;
 }
@@ -144,17 +140,6 @@
 {
     [[self view] endEditing:YES];
     [self setEditMenuVisible:YES];
-}
-
-- (void)setEditingPostText:(BOOL)editingPostText
-{
-    _editingPostText = editingPostText;
-    if([self editingPostText]) {
-        [[self postButton] setTitle:@"Edit" forState:UIControlStateNormal];
-    } else {
-        [[self postButton] setTitle:@"Post" forState:UIControlStateNormal];
-    }
-
 }
 
 - (STKPostComment *)commentForIndexPath:(NSIndexPath *)ip
@@ -266,20 +251,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    _markupController = [[STKMarkupController alloc] initWithDelegate:self];
-    [_markupController setHidesDoneButton:YES];
-    [[self overlayVIew] addSubview:[[self markupController] view]];
-    
+        
     [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];
     [[self categoryCollectionView] setBackgroundColor:[UIColor clearColor]];
     [[self categoryCollectionView] setScrollEnabled:NO];
-
-    
-    [[self postButton] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.1]];
-    [[self postButton] setClipsToBounds:YES];
-    [[[self postButton] layer] setCornerRadius:10];
     
     [[self editMenuContainerBottomConstraint] setConstant:-[[self editView] bounds].size.height];
 
@@ -293,10 +269,8 @@
     [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setDelaysContentTouches:NO];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(40, 0, 0, 0)];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(41, 0, 0, 0)];
 
-
-    [[self postButtonRightConstraint] setConstant:-[[self postButton] bounds].size.width - 3];
     
     [[[self fakeHeaderView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -324,13 +298,6 @@
     if([self isMovingToParentViewController])
         [[[self postCell] contentImageView] setHidden:YES];
     
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillDisappear:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
     [[self overlayVIew] setHidden:YES];
 
     [[self stretchView] setUrlString:[[self post] imageURLString]];
@@ -358,7 +325,7 @@
     [[[self fakeHeaderView] postTypeView] setImage:[[self post] typeImage]];
     
     if([[self post] originalPost] && [[[[self post] originalPost] creator] name]){
-        NSString * fromUser = [NSString stringWithFormat:@"Post via %@", [[[[self post] originalPost] creator] name]];
+        NSString *fromUser = [NSString stringWithFormat:@"Post via %@", [[[[self post] originalPost] creator] name]];
         [[[self fakeHeaderView] sourceLabel] setText:fromUser];
     } else if([[self post] externalProvider]){
         NSString *fromProvider = [NSString stringWithFormat:@"Post via %@", [[[self post] externalProvider] capitalizedString]];
@@ -393,7 +360,8 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     float visualOffsetY = [scrollView contentOffset].y + 40;
-    
+
+    [[self fakeHeaderContainerTopConstraint] setConstant:65];
     if(visualOffsetY < 0) {
         [[self stretchView] setHidden:NO];
         float y = fabs(visualOffsetY);
@@ -401,6 +369,7 @@
         [[self stretchWidthConstraint] setConstant:320 + y];
     } else {
         [[self stretchView] setHidden:YES];
+        [[self fakeHeaderContainerTopConstraint] setConstant:65 - visualOffsetY];
     }
 }
 
@@ -419,89 +388,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (IBAction)commentOverlayTapped:(id)sender
-{
-    if([self editingPostText]) {
-        [self setEditingPostText:NO];
-    }
-    [[self commentTextView] setText:nil];
-    [[self view] endEditing:YES];
-}
-
-- (void)keyboardWillAppear:(NSNotification *)note
-{
-    [[self commentBarPlaceholder] setHidden:YES];
-    
-    CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(0, 0, r.size.height + [[self commentFooterView] bounds].size.height, 0)];
-
-    float duration = [[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-
-    [[self bottomCommentConstraint] setConstant:r.size.height];
-    [[self postButtonRightConstraint] setConstant:9];
-    [[self view] setNeedsUpdateConstraints];
-    
-    
-    [[self editPostButton] setHidden:YES];
-
-    [[[self markupController] view] setHidden:YES];
-    [UIView animateWithDuration:duration
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         [[self view] layoutIfNeeded];
-                     } completion:^(BOOL finished) {
-                         if(finished) {
-                             [[[self markupController] view] setHidden:NO];
-
-                             CGRect commentBoxRect = [[[self commentFooterView] superview] convertRect:[[self commentFooterView] frame] toView:[self view]];
-                             CGRect converted = [[self view] convertRect:commentBoxRect toView:[self overlayVIew]];
-                             [[[self markupController] view] setFrame:CGRectMake(0, converted.origin.y - 45, 320, 44)];
-                         }
-                     }];
-
-    [[self overlayVIew] setHidden:NO];
-
-    if([self editingPostText]) {
-        [[self tableView] setContentOffset:CGPointMake(0, 216) animated:YES];
-    } else {
-        [[self tableView] scrollRectToVisible:CGRectMake(0, [[self tableView] contentSize].height - 1, 1, 1) animated:YES];
-    }
-}
-
-- (void)keyboardWillDisappear:(NSNotification *)note
-{
-    [[self commentBarPlaceholder] setHidden:NO];
-
-    [[self editPostButton] setHidden:[self shouldHideEditButton]];
-    
-    [self setEditingPostText:NO];
-
-    [[self tableView] setContentInset:UIEdgeInsetsMake(40, 0, 0, 0)];
-
-    float duration = [[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    [[self bottomCommentConstraint] setConstant:0];
-    [[self postButtonRightConstraint] setConstant:-[[self postButton] bounds].size.width - 3];
-    [[self view] setNeedsUpdateConstraints];
-    
-    [UIView animateWithDuration:duration
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         [[self view] layoutIfNeeded];
-                     } completion:nil];
-
-    [[self overlayVIew] setHidden:YES];
-}
 
 - (IBAction)editPostText:(id)sender
 {
     [self setEditMenuVisible:NO];
-    
-    [self setEditingPostText:YES];
-    [[self commentTextView] setText:[[self post] text]];
-    [[self commentTextView] becomeFirstResponder];
-    [[self commentTextView] selectAll:nil];
+    STKCreateCommentViewController *cvc = [[STKCreateCommentViewController alloc] init];
+    [cvc setPost:[self post]];
+    [cvc setEditingPostText:YES];
+    [[self navigationController] pushViewController:cvc animated:YES];
 }
 
 - (UITableViewCell *)postController:(STKPostController *)pc cellForPostAtIndexPath:(NSIndexPath *)ip
@@ -634,19 +528,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
     return (int)r.size.height + 65;
 }
-/*
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath section] == 0) {
-        return 433;
-    }
-    STKPostComment *pc = [self commentForIndexPath:indexPath];
-    NSString *text = [pc text];
-    if(!pc)
-        text = [[self post] text];
-    
-    return [self heightForTableViewGivenCommentText:text];
-}*/
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -768,68 +650,13 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     return nil;
 }
 
-- (IBAction)postComment:(id)sender
+- (IBAction)transitionToCommentScreen:(id)sender
 {
-    if([[[self commentTextView] text] length] == 0) {
-        return;
-    }
-    
-    NSMutableAttributedString *text = [[[self commentTextView] attributedText] mutableCopy];
-    
-    [text enumerateAttributesInRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
-        NSTextAttachment *attachment = [attrs objectForKey:NSAttachmentAttributeName];
-        if(attachment) {
-            NSURL *userURL = [attrs objectForKey:NSLinkAttributeName];
-            if(userURL) {
-                NSString *uniqueID = [userURL host];
-                [text replaceCharactersInRange:range withString:[NSString stringWithFormat:@"@%@", uniqueID]];
-            }
-        }
-    }];
-    NSString *actualText = [text string];
-    
-    if([self editingPostText]) {
-        [self setEditingPostText:NO];
-        
-        [STKProcessingView present];
-        STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
-        [p setText:actualText];
-        [[STKContentStore store] editPost:p
-                               completion:^(STKPost *result, NSError *err) {
-                                   [[[self post] managedObjectContext] discardChangesToEditableObject:p];
-                                   [STKProcessingView dismiss];
-                                   [[self tableView] reloadData];
-                               }];
-        
-        [[self commentTextView] setText:nil];
-        [[self view] endEditing:YES];
-    } else {
-        
-        [[STKContentStore store] addComment:actualText toPost:[self post] completion:^(STKPost *p, NSError *err) {
-            [self extractComments];
-            if(err) {
-                [[self postCell] populateWithPost:[self post]];
-            }
-        }];
-        
-        [self extractComments];
-
-        [[self postCell] populateWithPost:[self post]];
-        [[self commentTextView] setText:nil];
-        [[self view] endEditing:YES];
-
-        int index = [[self comments] count] - 1;
-        if([self postHasText]) {
-            index ++;
-        }
-        NSIndexPath *ip = [NSIndexPath indexPathForRow:index inSection:1];
-        [[self tableView] insertRowsAtIndexPaths:@[ip]
-                                withRowAnimation:UITableViewRowAnimationAutomatic];
-        [[self tableView] scrollToRowAtIndexPath:ip
-                                atScrollPosition:UITableViewScrollPositionBottom
-                                        animated:YES];
-    }
+    STKCreateCommentViewController *cvc = [[STKCreateCommentViewController alloc] init];
+    [cvc setPost:[self post]];
+    [[self navigationController] pushViewController:cvc animated:YES];
 }
+
 
 - (IBAction)changeVisibility:(UISegmentedControl *)sender
 {
@@ -909,54 +736,6 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
     }];
 }
-
-- (void)textViewDidChange:(UITextView *)textView
-{
-    [[self markupController] textView:textView updatedWithText:[textView text]];
-}
-
-- (void)markupController:(STKMarkupController *)markupController
-           didSelectUser:(STKUser *)user
-        forMarkerAtRange:(NSRange)range
-{
-    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(16), NSForegroundColorAttributeName : STKTextColor}];
-    
-    if(range.location == NSNotFound) {
-        range = NSMakeRange([[[self commentTextView] textStorage] length], 0);
-    }
-    
-    [[[self commentTextView] textStorage] replaceCharactersInRange:range
-                                           withAttributedString:str];
-    [[[self commentTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                              attributes:@{NSFontAttributeName : STKFont(16), NSForegroundColorAttributeName : STKTextColor}]];
-    
-    NSInteger newIndex = range.location + [str length] + 2;
-    [[self commentTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
-    
-}
-
-- (void)markupController:(STKMarkupController *)markupController
-        didSelectHashTag:(NSString *)hashTag
-        forMarkerAtRange:(NSRange)range
-{
-    if(range.location == NSNotFound) {
-        range = NSMakeRange([[[self commentTextView] textStorage] length], 0);
-    }
-    
-    [[[self commentTextView] textStorage] replaceCharactersInRange:range
-                                                     withString:[NSString stringWithFormat:@"#%@ ", hashTag]];
-    [[[self commentTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                              attributes:@{NSFontAttributeName : STKFont(16), NSForegroundColorAttributeName : STKTextColor}]];
-    
-    NSInteger newIndex = range.location + [hashTag length] + 2;
-    [[self commentTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
-}
-
-- (void)markupControllerDidFinish:(STKMarkupController *)markupController
-{
-//    [[self commentTextField] resignFirstResponder];
-}
-
 
 
 @end
