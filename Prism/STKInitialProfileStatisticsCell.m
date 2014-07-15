@@ -44,4 +44,9 @@
     ROUTE(sender);
 }
 
+- (IBAction)share:(id)sender
+{
+    ROUTE(sender);
+}
+
 @end

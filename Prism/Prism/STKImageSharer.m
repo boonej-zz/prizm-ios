@@ -320,6 +320,16 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                                               finishHandler:(void (^)(UIDocumentInteractionController *))block
 {
     UIImage *image = [[STKImageStore store] cachedImageForURLString:[post imageURLString]];
+    UIActivityViewController *controller = [self activityViewControllerForImage:image object:post finishHandler:block];
+    if (! controller) return nil;
+    [self setViewController:controller];
+    
+    return controller;
+}
+
+- (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image object:(id)object
+                                               finishHandler:(void (^)(UIDocumentInteractionController *))block
+{
     if(!image) {
         return nil;
     }
@@ -327,13 +337,13 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     NSMutableArray *a = [NSMutableArray array];
     if(image)
         [a addObject:image];
-    if([post text])
-        [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", [post text]]];
+    if([object valueForKey:@"text"])
+        [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", [object valueForKey:@"text"]]];
     else
         [a addObject:@"@beprizmatic"];
-
-    if(post)
-        [a addObject:post];
+    
+    if(object)
+        [a addObject:object];
     
     
     [self setFinishHandler:block];
@@ -343,10 +353,10 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                             [[STKActivityTumblr alloc] initWithDelegate:self],
                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:a
-                                                                applicationActivities:activities];
+                                                                                         applicationActivities:activities];
     [activityViewController setExcludedActivityTypes:
      @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail]];
-
+    
 #warning smelly, but we do not have direct access to system provided activities and their navigation controllers
     // revert appearance proxies to get default iOS behavior when sharing through Messages
     UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
@@ -366,6 +376,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     
     return activityViewController;
 }
+
 
 - (void)activity:(STKActivity *)activity
 wantsToPresentDocumentController:(UIDocumentInteractionController *)doc

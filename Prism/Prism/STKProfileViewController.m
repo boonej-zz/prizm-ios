@@ -65,6 +65,7 @@ typedef enum {
 @property (nonatomic) BOOL filterByUserTags;
 
 - (BOOL)isShowingCurrentUserProfile;
+- (BOOL)canEmailProfile;
 
 @end
 
@@ -99,6 +100,10 @@ typedef enum {
 - (BOOL)isShowingCurrentUserProfile
 {
     return [[[self profile] uniqueID] isEqualToString:[[[STKUserStore store] currentUser] uniqueID]];
+}
+
+- (BOOL)canEmailProfile {
+    return [MFMailComposeViewController canSendMail] && ![[self profile] isLuminary];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -431,6 +436,20 @@ typedef enum {
     }
 }
 
+- (void)share:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    NSDictionary *obj = @{@"name": @"Guess who is on Prizm?"};
+    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[[self profileView] coverPhotoImageView] image]  object:obj finishHandler:^(UIDocumentInteractionController *doc) {
+        [doc presentOpenInMenuFromRect:[[self view] bounds]
+                                inView:[self view]
+                              animated:YES];
+    }];
+    
+    if(vc) {
+        [self presentViewController:vc animated:YES completion:nil];
+    }
+}
+
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -606,6 +625,7 @@ typedef enum {
         [[c trustButton] setHidden:YES];
         [[c editButton] setHidden:NO];
         [[c messageButton] setHidden:YES];
+        [[c shareButton] setHidden:YES];
         
         if([[self profile] isInstitution]) {
             [[c accoladesButton] setHidden:YES];
@@ -613,14 +633,15 @@ typedef enum {
     } else {
         
         [[c editButton] setHidden:YES];
+        [[c shareButton] setHidden:YES];
         
         STKUser *currentUser = [[STKUserStore store] currentUser];
         BOOL currentUserToRequestPrivs = [currentUser isInstitution] || [currentUser isLuminary];
         BOOL showingUserHasRestrictedPrivs = [[self profile] isInstitution] || [[self profile] isLuminary];
-        
         if(showingUserHasRestrictedPrivs && !currentUserToRequestPrivs) {
             [[c trustButton] setHidden:YES];
-            [[c messageButton] setHidden:![MFMailComposeViewController canSendMail]];
+            [[c messageButton] setHidden:![self canEmailProfile]];
+            [[c shareButton] setHidden:![[self profile] isLuminary]];
         } else {
             [[c trustButton] setHidden:NO];
             [[c messageButton] setHidden:YES];

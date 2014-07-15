@@ -21,5 +21,7 @@ extern NSString * const STKActivityTypeWhatsapp;
 
 - (UIActivityViewController *)activityViewControllerForPost:(STKPost *)post
                                               finishHandler:(void (^)(UIDocumentInteractionController *))block;
+- (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image object:(id)object
+                                               finishHandler:(void (^)(UIDocumentInteractionController *))block;
 - (NSArray *)activitiesForImage:(UIImage *)image title:(NSString *)title viewController:(UIViewController *)viewController;
 @end
