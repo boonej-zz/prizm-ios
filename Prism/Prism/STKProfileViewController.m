@@ -152,33 +152,29 @@ typedef enum {
         }];
         
         [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:additionalFields completion:^(STKUser *u, NSError *err) {
-            if(!err) {
-                if([[self profile] isInstitution]) {
-                    STKFetchDescription *fd = [[STKFetchDescription alloc] init];
-                    [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
-                    [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
-                        [self determineLuminariesFromTrusts:trusts];
-                        [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
-                                                     completion:^(STKTrust *t, NSError *err) {
-                                                         [self fetchNewPosts];
-                                                         [self refreshProfileViews];
-                                                     }];
-                    }];
-                } else {
-                    if(![[self profile] isEqual:[[STKUserStore store] currentUser]]) {
-                        [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
-                                                     completion:^(STKTrust *t, NSError *err) {
-                                                         [self fetchNewPosts];
-                                                         [self refreshProfileViews];
-                                                     }];
-                    } else {
-                        [self fetchNewPosts];
-                    }
-                }
-            }
-            
             [self refreshProfileViews];
         }];
+        
+        if([[self profile] isInstitution]) {
+            STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+            [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
+            [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+                [self determineLuminariesFromTrusts:trusts];
+                [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
+                                             completion:^(STKTrust *t, NSError *err) {
+                                                 [self refreshProfileViews];
+                                             }];
+            }];
+        } else {
+            if(![[self profile] isEqual:[[STKUserStore store] currentUser]]) {
+                [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
+                                             completion:^(STKTrust *t, NSError *err) {
+                                                 [self refreshProfileViews];
+                                             }];
+            }
+        }
+        
+        [self fetchNewPosts];
     }
 
     [self refreshProfileViews];

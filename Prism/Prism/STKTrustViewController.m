@@ -253,7 +253,7 @@
         }
         [[self trustView] setUsers:otherUsers];
         
-        if(![self selectedUser] && [[self trusts] count] > 0) {
+        if([[self trusts] count] > 0 && [self selectedUser] != [[[self trustView] users] objectAtIndex:0]) {
             [self selectUserAtIndex:0];
         }
         

@@ -406,6 +406,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
+        STKTrust *t = [user trustForUser:otherUser];
+        if (t) {
+            block(t, nil);
+        }
+        
+        
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/exists", [user uniqueID], @"trusts", [otherUser uniqueID]]];
         
         [c setModelGraph:@[@"STKTrust"]];
@@ -941,6 +947,25 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchTopTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block
 {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+
+    NSSortDescriptor *toSort = [NSSortDescriptor sortDescriptorWithKey:@"recepientScore" ascending:NO];
+    NSSortDescriptor *fromSort = [NSSortDescriptor sortDescriptorWithKey:@"creatorScore" ascending:NO];
+    [request setFetchLimit:5];
+    
+    [request setSortDescriptors:@[toSort]];
+    NSArray *to = [[self context] executeFetchRequest:request error:nil];
+    [request setSortDescriptors:@[fromSort]];
+    NSArray *from = [[self context] executeFetchRequest:request error:nil];
+    
+    NSMutableArray *all = [NSMutableArray array];
+    [all addObjectsFromArray:to];
+    [all addObjectsFromArray:from];
+    [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
+    if ([all count]) {
+        block(all,nil);
+    }
+    
     STKFetchDescription *fdFrom = [[STKFetchDescription alloc] init];
     [fdFrom setLimit:5];
     [fdFrom setFilterDictionary:@{@"recepient" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
@@ -956,7 +981,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             [all addObjectsFromArray:fromTrusts];
             [all addObjectsFromArray:toTrusts];
             [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
-            
             block(all, nil);
         }];
         
@@ -972,6 +996,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
+        if ([[u trusts] count]) {
+            block([u trusts], nil);
+        }
+
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [u uniqueID], @"trusts"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
