@@ -372,7 +372,7 @@
             }
         }
         
-        NSSortDescriptor *alphabetic = [[NSSortDescriptor alloc] initWithKey:@"lastName" ascending:YES];
+        NSSortDescriptor *alphabetic = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
         NSArray *sortedUsers = [otherUsers sortedArrayUsingDescriptors:@[alphabetic]];
         [lvc setUsers:sortedUsers];
     }];
