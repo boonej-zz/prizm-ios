@@ -132,7 +132,23 @@ typedef enum {
                                         }];
         
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
-       // No older reqeusts
+        if ([self requestFetchInProgress]) {
+            return;
+        }
+        [self setRequestFetchInProgress:YES];
+        
+        [fd setReferenceObject:[[self requests] lastObject]];
+        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:fd completion:^(NSArray *requests, NSError *err) {
+            if(!err) {
+                [self setRequestFetchInProgress:NO];
+                NSMutableSet *requestSet = [NSMutableSet setWithArray:[self requests]];
+                [requestSet addObjectsFromArray:requests];
+                [self setRequests:[[requestSet allObjects] mutableCopy]];
+                [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
+                [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
+            }
+            [[self tableView] reloadData];
+        }];
     }
     [[self tableView] reloadData];
 }
@@ -171,11 +187,14 @@ typedef enum {
         [self setRequestFetchInProgress:YES];
         [[self luminatingBar] setLuminating:YES];
 
-        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:[[self requests] firstObject] completion:^(NSArray *requests, NSError *err) {
+        [fd setReferenceObject:[[self requests] firstObject]];
+        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:fd completion:^(NSArray *requests, NSError *err) {
             [[self luminatingBar] setLuminating:NO];
             if(!err) {
                 [self setRequestFetchInProgress:NO];
-                [[self requests] addObjectsFromArray:requests];
+                NSMutableSet *requestSet = [NSMutableSet setWithArray:[self requests]];
+                [requestSet addObjectsFromArray:requests];
+                [self setRequests:[[requestSet allObjects] mutableCopy]];
                 [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
                 [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
             }
