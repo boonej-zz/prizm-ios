@@ -48,6 +48,8 @@
 @property (nonatomic, weak) STKUser *selectedUser;
 @property (nonatomic, strong) NSArray *trustTypes;
 
+@property (nonatomic) BOOL saveTrustSelection;
+
 - (IBAction)showList:(id)sender;
 - (IBAction)sendEmail:(id)sender;
 
@@ -145,6 +147,7 @@
 
 - (void)trustView:(STKTrustView *)tv didSelectCircleAtIndex:(int)idx
 {
+    [self setSaveTrustSelection:YES];
     [self selectUserAtIndex:idx];
 }
 
@@ -165,10 +168,17 @@
 
 - (void)configureInterface
 {
+    NSLog(@"configure interface trust count %u", [[[self trustView] users] count]);
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]];
     
     if([self selectedUser]) {
         NSUInteger idx = [[[self trustView] users] indexOfObject:[self selectedUser]];
+
+        // select top trust when current selection falls off screen
+        if(idx >= [[self trusts] count] || idx >= 5) {
+            idx = 0;
+        }
+
         if(idx == NSNotFound) {
             [self setSelectedUser:nil];
         } else {
@@ -251,13 +261,21 @@
                 [otherUsers addObject:[t creator]];
             }
         }
+        NSLog(@"other users count %d", [otherUsers count]);
         [[self trustView] setUsers:otherUsers];
-        
-        if([[self trusts] count] > 0 && [self selectedUser] != [[[self trustView] users] objectAtIndex:0]) {
-            [self selectUserAtIndex:0];
+        if([[self trusts] count] > 0) {
+            
+            if ([self saveTrustSelection] == NO && [self selectedUser] != [[[self trustView] users] objectAtIndex:0]) {
+                //overwrite selection with highest ranged
+                [self selectUserAtIndex:0];
+            } else if (![self selectedUser]) {
+                [self selectUserAtIndex:0];
+            } else {
+                [self configureInterface];
+            }
+        } else {
+            [self configureInterface];
         }
-        
-        [self configureInterface];
     }];
     
     [self configureInterface];
