@@ -948,35 +948,36 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)fetchTopTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block
 {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-
+    
     NSSortDescriptor *toSort = [NSSortDescriptor sortDescriptorWithKey:@"recepientScore" ascending:NO];
     NSSortDescriptor *fromSort = [NSSortDescriptor sortDescriptorWithKey:@"creatorScore" ascending:NO];
     [request setFetchLimit:5];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusAccepted]];
     
     [request setSortDescriptors:@[toSort]];
     NSArray *to = [[self context] executeFetchRequest:request error:nil];
     [request setSortDescriptors:@[fromSort]];
     NSArray *from = [[self context] executeFetchRequest:request error:nil];
     
-    NSMutableArray *all = [NSMutableArray array];
+    NSMutableSet *all = [NSMutableSet set];
     [all addObjectsFromArray:to];
     [all addObjectsFromArray:from];
-    [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
-    if ([all count]) {
-        block(all,nil);
+    NSArray *allArray = [[all allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
+    if ([allArray count]) {
+        block(allArray,nil);
     }
     
     STKFetchDescription *fdFrom = [[STKFetchDescription alloc] init];
     [fdFrom setLimit:5];
     [fdFrom setFilterDictionary:@{@"recepient" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
     [fdFrom setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"to_score" ascending:NO]]];
-    [self fetchTrustsForUser:u fetchDescription:fdFrom completion:^(NSArray *fromTrusts, NSError *fromErr) {
+    [self fetchTrustsForUserInternal:u fetchDescription:fdFrom completion:^(NSArray *fromTrusts, NSError *fromErr) {
         STKFetchDescription *fdTo = [[STKFetchDescription alloc] init];
         [fdTo setLimit:5];
         [fdTo setFilterDictionary:@{@"creator" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
         [fdTo setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"from_score" ascending:NO]]];
         
-        [self fetchTrustsForUser:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
+        [self fetchTrustsForUserInternal:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
             NSMutableArray *all = [[NSMutableArray alloc] init];
             [all addObjectsFromArray:fromTrusts];
             [all addObjectsFromArray:toTrusts];
@@ -1000,43 +1001,48 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block([u trusts], nil);
         }
 
-        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [u uniqueID], @"trusts"]];
+        [self fetchTrustsForUserInternal:u fetchDescription:fetchDescription completion:block];
+    }];
+}
 
-        STKQueryObject *q = [[STKQueryObject alloc] init];
-        NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
-        for(NSString *key in [fetchDescription filterDictionary]) {
-            [filters setObject:[[fetchDescription filterDictionary] objectForKey:key] forKey:[STKTrust remoteKeyForLocalKey:key]];
+- (void)fetchTrustsForUserInternal:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block
+{
+    STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [u uniqueID], @"trusts"]];
+    
+    STKQueryObject *q = [[STKQueryObject alloc] init];
+    NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
+    for(NSString *key in [fetchDescription filterDictionary]) {
+        [filters setObject:[[fetchDescription filterDictionary] objectForKey:key] forKey:[STKTrust remoteKeyForLocalKey:key]];
+    }
+    [q setFilters:filters];
+    
+    if([fetchDescription limit])
+        [q setLimit:[fetchDescription limit]];
+    
+    if([[fetchDescription sortDescriptors] count] > 0) {
+        [q setSortKey:[[[fetchDescription sortDescriptors] firstObject] key]];
+        [q setSortOrder:([[[fetchDescription sortDescriptors] firstObject] ascending] ? STKQueryObjectSortAscending : STKQueryObjectSortDescending)];
+    }
+    
+    STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
+    [fq setFields:@[@"create_date", @"email"]];
+    STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
+    [tq setFields:@[@"create_date", @"email"]];
+    
+    [q addSubquery:fq];
+    [q addSubquery:tq];
+    [c setQueryObject:q];
+    
+    [c setModelGraph:@[@"STKTrust"]];
+    [c setContext:[self context]];
+    [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+    [c setShouldReturnArray:YES];
+    [c setResolutionMap:@{@"User" : @"STKUser"}];
+    [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
+        if(!err) {
+            [[self context] save:nil];
         }
-        [q setFilters:filters];
-        
-        if([fetchDescription limit])
-            [q setLimit:[fetchDescription limit]];
-        
-        if([[fetchDescription sortDescriptors] count] > 0) {
-            [q setSortKey:[[[fetchDescription sortDescriptors] firstObject] key]];
-            [q setSortOrder:([[[fetchDescription sortDescriptors] firstObject] ascending] ? STKQueryObjectSortAscending : STKQueryObjectSortDescending)];
-        }
-        
-        STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
-        [fq setFields:@[@"create_date", @"email"]];
-        STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
-        [tq setFields:@[@"create_date", @"email"]];
-        
-        [q addSubquery:fq];
-        [q addSubquery:tq];
-        [c setQueryObject:q];
-        
-        [c setModelGraph:@[@"STKTrust"]];
-        [c setContext:[self context]];
-        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c setShouldReturnArray:YES];
-        [c setResolutionMap:@{@"User" : @"STKUser"}];
-        [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
-            if(!err) {
-                [[self context] save:nil];
-            }
-            block(trusts, err);
-        }];
+        block(trusts, err);
     }];
 }
 
@@ -1073,7 +1079,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [conn setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [conn setShouldReturnArray:YES];
         [conn getWithSession:[self session] completionBlock:^(NSArray *users, NSError *err) {
-            block(users, err);
+            NSMutableArray *mUsers = [users mutableCopy];
+            [mUsers removeObject:[self currentUser]];
+            block(mUsers, err);
         }];
     }];
 }

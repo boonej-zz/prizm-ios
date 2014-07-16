@@ -16,6 +16,7 @@
 #import "STKSearchProfileCell.h"
 #import "STKProfileViewController.h"
 #import "Mixpanel.h"
+#import "STKFetchDescription.h"
 
 @interface STKSearchUsersViewController ()
 
@@ -85,6 +86,15 @@
     
     [[[self blurView] displayLink] setPaused:NO];
     [self reloadSearchResults];
+    
+    if ([self searchType] == STKSearchUsersTypeNotInTrust) {
+        STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+        [fd setDirection:STKQueryObjectPageNewer];
+        
+        [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+            [self reloadSearchResults];
+        }];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

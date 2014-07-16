@@ -209,6 +209,22 @@ typedef enum {
     [vc setUsers:[self luminaries]];
     [vc setTitle:@"Luminary"];
     [[self navigationController] pushViewController:vc animated:YES];
+    
+    STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+    [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
+    [fd setDirection:STKQueryObjectPageNewer];
+    
+    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+        NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
+        for(STKTrust *t in trusts) {
+            if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
+                [otherUsers addObject:[t recepient]];
+            } else {
+                [otherUsers addObject:[t creator]];
+            }
+        }
+        [vc setUsers:otherUsers];
+    }];
 }
 
 - (void)websiteTapped:(id)sender atIndexPath:(NSIndexPath *)indexPath
