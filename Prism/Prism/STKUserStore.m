@@ -24,6 +24,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import "STKFetchDescription.h"
 #import "Mixpanel.h"
+#import "STKImageStore.h"
 
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
@@ -306,6 +307,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [self establishDatabaseAndCurrentUser];
         [[Mixpanel sharedInstance] endSession];
         [[Mixpanel sharedInstance] registerSuperProperties:@{}];
+        
+        [[STKImageStore store] deleteAllCachedImages];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserChangedNotification object:self];
@@ -1987,14 +1990,46 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 #pragma mark Database pruning to test caching mechanism
 
-NSInteger const STKUserStoreCachedRecordCount = 1;
-BOOL const STKUserStoreCacheKeepOlder = NO; // YES - cache has oldest items - NO - cache has newest items
-
 - (void)pruneDatabase
 {
-    // just used to prunedatabase to test caches missing old data, new data, or both
+    int postLifeInDays = 7;
+    int activityLifeInDays = 4;
+    
+    NSMutableArray *activityIds = [NSMutableArray array];
+    NSMutableArray *postIds = [NSMutableArray array];
+
+    NSFetchRequest *activityRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    NSFetchRequest *postRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
+    
+    NSDate *postCutOff = [NSDate dateWithTimeIntervalSinceNow:-3600*24*postLifeInDays];
+    NSDate *activityCutOff = [NSDate dateWithTimeIntervalSinceNow:-3600*24*activityLifeInDays];
+    
+    [postRequest setPredicate:[NSPredicate predicateWithFormat:@"datePosted < %@", postCutOff]];
+    [activityRequest setPredicate:[NSPredicate predicateWithFormat:@"dateCreated < %@", activityCutOff]];
+    
+    NSArray *posts = [[self context] executeFetchRequest:postRequest error:nil];
+    NSArray *activities = [[self context] executeFetchRequest:activityRequest error:nil];
+    
+    [posts enumerateObjectsUsingBlock:^(STKPost *p, NSUInteger idx, BOOL *stop) {
+        [[STKImageStore store] deleteCachedImagesForURLString:[p imageURLString]];
+        [postIds addObject:[p uniqueID]];
+        [[self context] deleteObject:p];
+    }];
+    [activities enumerateObjectsUsingBlock:^(STKActivityItem *ai, NSUInteger idx, BOOL *stop) {
+        [activityIds addObject:[ai uniqueID]];
+        [[self context] deleteObject:ai];
+    }];
+    
+    NSDictionary *noteInfo = @{@"STKActivityItem" : activityIds, @"STKPost" : postIds};
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreDidCleanCacheNotification object:nil userInfo:noteInfo];
+    
+    NSLog(@"cache cleaned");
     
     return;
+    NSInteger const STKUserStoreCachedRecordCount = 1;
+    BOOL const STKUserStoreCacheKeepOlder = NO; // YES - cache has oldest items - NO - cache has newest items
+
+    // just used to prunedatabase to test caches missing old data, new data, or both
     
     // round up objects we are interested in
     // user / home feed / activities / pending trusts / profile (user's posts)

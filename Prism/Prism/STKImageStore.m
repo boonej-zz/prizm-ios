@@ -379,4 +379,36 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     [self uploadImage:image toPath:fileName completion:block];
 }
 
+- (void)deleteCachedImagesForURLString:(NSString *)url
+{
+    NSArray *paths = @[
+                       [self thumbnailPathForURLString:url size:STKImageStoreThumbnailNone],
+                       [self thumbnailPathForURLString:url size:STKImageStoreThumbnailLarge],
+                       [self thumbnailPathForURLString:url size:STKImageStoreThumbnailMedium],
+                       [self thumbnailPathForURLString:url size:STKImageStoreThumbnailSmall]
+                       ];
+
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [paths enumerateObjectsUsingBlock:^(NSString *p, NSUInteger idx, BOOL *stop) {
+        NSString *path = [self cachePathForURLString:p];
+        [[self memoryCache] setObject:nil forKey:path];
+        
+        [fm removeItemAtPath:path error:nil];
+    }];
+}
+
+- (void)deleteAllCachedImages
+{
+    [self clearCache:nil];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSArray *imagePaths = [fm contentsOfDirectoryAtPath:[self cachePath] error:nil];
+    
+    [imagePaths enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString *path = [[self cachePath] stringByAppendingPathComponent:obj];
+        [fm removeItemAtPath:path error:nil];
+    }];
+}
+
 @end
