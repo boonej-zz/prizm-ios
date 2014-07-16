@@ -499,6 +499,9 @@ typedef enum {
 
     if(!t || [t isCancelled]) {
         [[STKUserStore store] requestTrustForUser:[self profile] completion:^(STKTrust *requestItem, NSError *err) {
+            if(err) {
+                [[STKErrorStore alertViewForErrorWithOriginMessage:err delegate:nil] show];
+            }
             [self refreshProfileViews];
         }];
     } else if([t isPending]) {

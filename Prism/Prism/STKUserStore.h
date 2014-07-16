@@ -16,7 +16,6 @@ extern NSString * const STKUserStoreActivityUpdateNotification;
 extern NSString * const STKUserStoreActivityUpdateCountKey;
 
 extern NSString * const STKUserStoreCurrentUserChangedNotification;
-
 extern NSString * const STKUserStoreErrorDomain;
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]

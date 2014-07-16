@@ -16,6 +16,7 @@
 
 NSString * const STKErrorUserDoesNotExist = @"user_does_not_exist";
 NSString * const STKErrorBadPassword = @"invalid_user_credentials";
+NSString * const STKErrorTrustLimit = @"unable_to_create_trust_100_limit";
 
 NSString * const STKErrorInvalidRequest = @"invalid_request";
 NSString * const STKErrorInvalidRegistration = @"invalid_registration";
@@ -28,6 +29,17 @@ NSString * const STKErrorStoreServerError = @"server_error";
 {
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:[self errorTitleStringForError:err]
                                                  message:[self errorStringForError:err]
+                                                delegate:delegate
+                                       cancelButtonTitle:@"OK"
+                                       otherButtonTitles:nil];
+    return av;
+}
+
++ (UIAlertView *)alertViewForErrorWithOriginMessage:(NSError *)err
+                                           delegate:(id <UIAlertViewDelegate>)delegate
+{
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:[self errorTitleStringForError:err]
+                                                 message:[self errorStringFromError:err]
                                                 delegate:delegate
                                        cancelButtonTitle:@"OK"
                                        otherButtonTitles:nil];
@@ -137,6 +149,16 @@ NSString * const STKErrorStoreServerError = @"server_error";
     }
     
     return text;
+}
+
++ (NSString *)errorStringFromError:(NSError *)err
+{
+    NSDictionary *userInfo = [err userInfo];
+    if([userInfo objectForKey:@"error_description"]) {
+        return [userInfo objectForKey:@"error_description"];
+    }
+    
+    return [self errorStringForError:err];
 }
 
 @end

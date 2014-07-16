@@ -11,11 +11,14 @@
 extern NSString * const STKErrorUserDoesNotExist;
 extern NSString * const STKErrorBadPassword;
 extern NSString * const STKErrorInvalidRequest;
+extern NSString * const STKErrorTrustLimit;
 
 @interface STKErrorStore : NSObject
 
 + (UIAlertView *)alertViewForError:(NSError *)err
                           delegate:(id <UIAlertViewDelegate>)delegate;
++ (UIAlertView *)alertViewForErrorWithOriginMessage:(NSError *)err
+                                           delegate:(id <UIAlertViewDelegate>)delegate;
 + (NSString *)errorStringForError:(NSError *)err;
 
 @end
