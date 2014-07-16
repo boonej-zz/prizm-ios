@@ -1995,9 +1995,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     int postLifeInDays = 7;
     int activityLifeInDays = 4;
     
-    NSMutableArray *activityIds = [NSMutableArray array];
-    NSMutableArray *postIds = [NSMutableArray array];
-
     NSFetchRequest *activityRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     NSFetchRequest *postRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
     
@@ -2012,20 +2009,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     
     [posts enumerateObjectsUsingBlock:^(STKPost *p, NSUInteger idx, BOOL *stop) {
         [[STKImageStore store] deleteCachedImagesForURLString:[p imageURLString]];
-        [postIds addObject:[p uniqueID]];
         [[self context] deleteObject:p];
     }];
     [activities enumerateObjectsUsingBlock:^(STKActivityItem *ai, NSUInteger idx, BOOL *stop) {
-        [activityIds addObject:[ai uniqueID]];
         [[self context] deleteObject:ai];
     }];
     
-    NSDictionary *noteInfo = @{@"STKActivityItem" : activityIds, @"STKPost" : postIds};
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreDidCleanCacheNotification object:nil userInfo:noteInfo];
-    
-    NSLog(@"cache cleaned");
     
     return;
+
     NSInteger const STKUserStoreCachedRecordCount = 1;
     BOOL const STKUserStoreCacheKeepOlder = NO; // YES - cache has oldest items - NO - cache has newest items
 
