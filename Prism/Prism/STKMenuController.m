@@ -421,7 +421,7 @@
         
         
         if([fromVC class] == [STKPostViewController class]) {
-            [[self transitionImageView] setFrame:CGRectMake(0, 104, 320, 300)];
+            [[self transitionImageView] setFrame:CGRectMake(0, 111, 320, 300)];
         } else {
             [[self transitionImageView] setFrame:[self imageTransitionRect]];
         }
@@ -455,7 +455,7 @@
 
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         if([inVC class] == [STKPostViewController class]) {
-            [[self transitionImageView] setFrame:CGRectMake(0, 104, 320, 300)];
+            [[self transitionImageView] setFrame:CGRectMake(0, 111, 320, 300)];
             [[inVC view] setAlpha:1];
         } else {
             [[self transitionImageView] setFrame:[self imageTransitionRect]];

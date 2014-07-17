@@ -269,7 +269,7 @@
     [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setDelaysContentTouches:NO];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(41, 0, 0, 0)];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
 
     
     [[[self fakeHeaderView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -359,7 +359,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    float visualOffsetY = [scrollView contentOffset].y + 40;
+    float visualOffsetY = [scrollView contentOffset].y + 65;
 
     [[self fakeHeaderContainerTopConstraint] setConstant:65];
     if(visualOffsetY < 0) {
@@ -533,7 +533,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([indexPath section] == 0) {
-        return 433;
+        return 416;
     }
     
     STKPostComment *pc = [self commentForIndexPath:indexPath];

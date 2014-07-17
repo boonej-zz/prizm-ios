@@ -43,22 +43,22 @@
                     </connections>
                 </tableView>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qys-Ur-GtV" userLabel="Fake Header View">
-                    <rect key="frame" x="0.0" y="65" width="320" height="40"/>
+                    <rect key="frame" x="0.0" y="65" width="320" height="46"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KfP-Fo-rS2" customClass="STKPostHeaderView">
-                            <rect key="frame" x="0.0" y="-1" width="320" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="46"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.0019632448186528428" green="0.0019632448186528428" blue="0.0019632448186528428" alpha="0.0" colorSpace="calibratedRGB"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="44" id="vjF-5D-kis"/>
+                                <constraint firstAttribute="height" constant="46" id="vjF-5D-kis"/>
                             </constraints>
                         </view>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="40" id="FSY-rB-Yxa"/>
-                        <constraint firstAttribute="bottom" secondItem="KfP-Fo-rS2" secondAttribute="bottom" constant="-3" id="WO1-t0-Hd5"/>
+                        <constraint firstAttribute="height" constant="46" id="FSY-rB-Yxa"/>
+                        <constraint firstAttribute="bottom" secondItem="KfP-Fo-rS2" secondAttribute="bottom" id="WO1-t0-Hd5"/>
                         <constraint firstAttribute="trailing" secondItem="KfP-Fo-rS2" secondAttribute="trailing" id="gbc-UD-x7p"/>
                         <constraint firstItem="KfP-Fo-rS2" firstAttribute="leading" secondItem="Qys-Ur-GtV" secondAttribute="leading" id="s8s-wV-jan"/>
                     </constraints>
@@ -69,7 +69,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NL1-hu-ihE" customClass="STKResolvingImageView">
-                    <rect key="frame" x="0.0" y="105" width="320" height="300"/>
+                    <rect key="frame" x="0.0" y="111" width="320" height="300"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.90220494923857864" green="0.90220494923857864" blue="0.90220494923857864" alpha="0.0" colorSpace="calibratedRGB"/>
                     <constraints>
