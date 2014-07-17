@@ -12,9 +12,22 @@
 #import "STKPost.h"
 #import "STKImageStore.h"
 
+@interface STKMarkupUtilities()
+
++ (UIImage *)imageForInviteCard:(UIImage *)avatarImage profile:(STKUser *)profile text:(NSString *)text;
+
+@end
+
 @implementation STKMarkupUtilities
 
 + (UIImage *)imageForInviteCard:(UIImage *)avatarImage
+{
+    STKUser *user = [[STKUserStore store] currentUser];
+    NSString *prompt = @"Join me on Prizm";
+    return  [self imageForInviteCard:avatarImage profile:user text:prompt];
+}
+
++ (UIImage *)imageForInviteCard:(UIImage *)avatarImage profile:(STKUser *)profile text:(NSString *)text
 {
     // padding
     CGFloat topToImagePadding = 80.0;
@@ -56,7 +69,7 @@
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setAlignment:NSTextAlignmentCenter];
     
-    NSString *name = [[[STKUserStore store] currentUser] name];
+    NSString *name = [profile name];
     
     int fontSizeToFit = nameTextSize;
     UIFont *f = STKFont(fontSizeToFit);
@@ -87,7 +100,7 @@
     
     f = STKFont(promptTextSize);
     
-    NSString *prompt = @"Join me on Prizm";
+    NSString *prompt = text;
     sizeRect = [prompt boundingRectWithSize:CGSizeMake(textRect.size.width - 10, 10000)
                                     options:NSStringDrawingUsesLineFragmentOrigin
                                  attributes:@{NSFontAttributeName : f, NSParagraphStyleAttributeName : style} context:nil];
@@ -100,7 +113,7 @@
     centeredRect.origin.y = 320+centerToPromptPadding;
     
     [prompt drawInRect:centeredRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : textColor, NSParagraphStyleAttributeName : style}];
-
+    
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 48, 320+centerLineOffset);
     CGPathAddLineToPoint(path, NULL, 640-48, 320+centerLineOffset);
@@ -275,6 +288,23 @@
         UIGraphicsEndImageContext();
                 
         block([self imageForInviteCard:avatarImage]);
+    }];
+}
+
++ (void)imageForShareCard:(STKUser *)user withCompletion:(void (^)(UIImage *img))block
+{
+    [[STKImageStore store] fetchImageForURLString:[user profilePhotoPath] completion:^(UIImage *img) {
+        // created avatar image at 256x256px
+        int dim = STKUserProfilePhotoSize.height*2;
+        CGSize size = CGSizeMake(dim,dim);
+        
+        UIGraphicsBeginImageContextWithOptions(size, YES, 1);
+        [img drawInRect:CGRectMake(0, 0, size.width, size.height)];
+        
+        UIImage *avatarImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        block([self imageForInviteCard:avatarImage profile:user text:@"Look who is on Prizm."]);
     }];
 }
 

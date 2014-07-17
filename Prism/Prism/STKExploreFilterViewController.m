@@ -48,7 +48,7 @@
                            @{@"title" : @"Inspiration", @"key" : STKPostTypeInspiration,
                              @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_inspiration_selected"]},
-                           @{@"title" : @"Filter All", @"key" : @"filterall",
+                           @{@"title" : @"Show All", @"key" : @"filterall",
                              @"image" : [UIImage imageNamed:@"category_filterall"],
                              @"selectedImage" : [UIImage imageNamed:@"category_filterall"]}
                            ];

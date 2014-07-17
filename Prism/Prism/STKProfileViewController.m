@@ -36,6 +36,7 @@
 #import "STKFetchDescription.h"
 #import "STKLuminatingBar.h"
 #import "STKAccoladeViewController.h"
+#import "STKMarkupUtilities.h"
 
 @import MessageUI;
 @import AddressBook;
@@ -438,16 +439,21 @@ typedef enum {
 
 - (void)share:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    NSDictionary *obj = @{@"name": @"Guess who is on Prizm?"};
-    UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:[[[self profileView] coverPhotoImageView] image]  object:obj finishHandler:^(UIDocumentInteractionController *doc) {
-        [doc presentOpenInMenuFromRect:[[self view] bounds]
-                                inView:[self view]
-                              animated:YES];
+    [STKMarkupUtilities imageForShareCard:self.profile withCompletion:^(UIImage *img) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            id obj = @{@"hidePrizmatic": @YES};
+            UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:img  object:obj finishHandler:^(UIDocumentInteractionController *doc) {
+                [doc presentOpenInMenuFromRect:[[self view] bounds]
+                                        inView:[self view]
+                                      animated:YES];
+            }];
+            
+            if(vc) {
+                [self presentViewController:vc animated:YES completion:nil];
+            }
+        });
     }];
     
-    if(vc) {
-        [self presentViewController:vc animated:YES completion:nil];
-    }
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error

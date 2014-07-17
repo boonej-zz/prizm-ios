@@ -16,4 +16,6 @@
 + (NSAttributedString *)userTagForUser:(STKUser *)user attributes:(NSDictionary *)attributes;
 + (NSAttributedString *)renderedTextForText:(NSString *)text attributes:(NSDictionary *)attributes;
 + (void)imageForInviteCard:(STKUser *)user withCompletion:(void (^)(UIImage *img))block;
++ (void)imageForShareCard:(STKUser *)user withCompletion:(void (^)(UIImage *img))block;
+
 @end

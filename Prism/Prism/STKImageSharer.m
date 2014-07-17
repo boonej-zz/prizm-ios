@@ -340,7 +340,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     if([object valueForKey:@"text"])
         [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", [object valueForKey:@"text"]]];
     else
-        [a addObject:@"@beprizmatic"];
+        if (![object valueForKey:@"hidePrizmatic"]){
+            [a addObject:@"@beprizmatic"];
+        }
     
     if(object)
         [a addObject:object];
