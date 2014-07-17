@@ -70,7 +70,7 @@
 {
     return @[@{@"title" : @"Terms of Use", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/terms"},
              @{@"title" : @"Privacy Policy", @"type" : @"STKLabelCell", @"url" : @"http://prizmapp.com/privacy"},
-             @{@"title" : @"Support Questions", @"type" : @"STKLabelCell", @"url" : @"https://www.prizmapp.desk.com/"},
+             @{@"title" : @"Support Questions", @"type" : @"STKLabelCell", @"url" : @"https://prizmapp.desk.com/"},
              @{@"title" : @"Version", @"type" : @"STKDetailCell", @"value" : [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge id)kCFBundleVersionKey]},
              @{@"title" : @"Disable Account", @"type" : @"STKLabelCell", @"selectionSelector" : @"disableAccount:"}
              ];
