@@ -14,5 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 
 @property (nonatomic, strong) UIColor *backdropColor;
+@property (nonatomic, strong) NSFormatter *textFormatter;
 
 @end

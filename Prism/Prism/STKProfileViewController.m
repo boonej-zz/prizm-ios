@@ -139,7 +139,7 @@ typedef enum {
 
     } else {
         [[self navigationItem] setTitle:@"Profile"];
-        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        [[self navigationItem] setRightBarButtonItem:nil];
     }
     
     if([[[self navigationController] viewControllers] indexOfObject:self] > 0) {
@@ -505,6 +505,9 @@ typedef enum {
 
     if(!t || [t isCancelled]) {
         [[STKUserStore store] requestTrustForUser:[self profile] completion:^(STKTrust *requestItem, NSError *err) {
+            if(err) {
+                [[STKErrorStore alertViewForErrorWithOriginMessage:err delegate:nil] show];
+            }
             [self refreshProfileViews];
         }];
     } else if([t isPending]) {

@@ -157,6 +157,7 @@
 		BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE96C61B185A0D0C005D44BC /* STKWebViewController.m */; };
 		BE9CC7A618FDFF480097D308 /* STKLuminariesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9CC7A418FDFF480097D308 /* STKLuminariesCell.m */; };
 		BE9CC7A718FDFF480097D308 /* STKLuminariesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE9CC7A518FDFF480097D308 /* STKLuminariesCell.xib */; };
+		BE9E806219746BE600C63180 /* STKPhoneNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9E806119746BE600C63180 /* STKPhoneNumberFormatter.m */; };
 		BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */; };
 		BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */; };
 		BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAC71A618522D6C00F0B211 /* STKTextFieldCell.m */; };
@@ -179,6 +180,8 @@
 		BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC726EB18AC111D009350E8 /* STKLabelCell.m */; };
 		BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC726EC18AC111D009350E8 /* STKLabelCell.xib */; };
 		BECA36B519004F88000A5851 /* STKGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECA36B419004F88000A5851 /* STKGradientView.m */; };
+		BECA6B4A197588670026FEEC /* STKCreateCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECA6B48197588670026FEEC /* STKCreateCommentViewController.m */; };
+		BECA6B4B197588670026FEEC /* STKCreateCommentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BECA6B49197588670026FEEC /* STKCreateCommentViewController.xib */; };
 		BECA9F1E1937CAF600AABA20 /* STKAccoladeUserListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECA9F1C1937CAF500AABA20 /* STKAccoladeUserListViewController.m */; };
 		BECA9F1F1937CAF600AABA20 /* STKAccoladeUserListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BECA9F1D1937CAF500AABA20 /* STKAccoladeUserListViewController.xib */; };
 		BED0B264185F689100564300 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED0B261185F689100564300 /* GoogleOpenSource.framework */; };
@@ -2202,6 +2205,8 @@
 		BE9CC7A318FDFF480097D308 /* STKLuminariesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLuminariesCell.h; sourceTree = "<group>"; };
 		BE9CC7A418FDFF480097D308 /* STKLuminariesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLuminariesCell.m; sourceTree = "<group>"; };
 		BE9CC7A518FDFF480097D308 /* STKLuminariesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLuminariesCell.xib; sourceTree = "<group>"; };
+		BE9E806019746BE600C63180 /* STKPhoneNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKPhoneNumberFormatter.h; sourceTree = "<group>"; };
+		BE9E806119746BE600C63180 /* STKPhoneNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKPhoneNumberFormatter.m; sourceTree = "<group>"; };
 		BEAC71A01852285700F0B211 /* STKCreateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreateProfileViewController.h; sourceTree = "<group>"; };
 		BEAC71A11852285700F0B211 /* STKCreateProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCreateProfileViewController.m; sourceTree = "<group>"; };
 		BEAC71A21852285700F0B211 /* STKCreateProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCreateProfileViewController.xib; sourceTree = "<group>"; };
@@ -2236,6 +2241,9 @@
 		BEC726EC18AC111D009350E8 /* STKLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = STKLabelCell.xib; path = Prism/STKLabelCell.xib; sourceTree = "<group>"; };
 		BECA36B319004F88000A5851 /* STKGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGradientView.h; sourceTree = "<group>"; };
 		BECA36B419004F88000A5851 /* STKGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGradientView.m; sourceTree = "<group>"; };
+		BECA6B47197588670026FEEC /* STKCreateCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCreateCommentViewController.h; sourceTree = "<group>"; };
+		BECA6B48197588670026FEEC /* STKCreateCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCreateCommentViewController.m; sourceTree = "<group>"; };
+		BECA6B49197588670026FEEC /* STKCreateCommentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCreateCommentViewController.xib; sourceTree = "<group>"; };
 		BECA9F1B1937CAF500AABA20 /* STKAccoladeUserListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKAccoladeUserListViewController.h; sourceTree = "<group>"; };
 		BECA9F1C1937CAF500AABA20 /* STKAccoladeUserListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKAccoladeUserListViewController.m; sourceTree = "<group>"; };
 		BECA9F1D1937CAF500AABA20 /* STKAccoladeUserListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKAccoladeUserListViewController.xib; sourceTree = "<group>"; };
@@ -2595,6 +2603,9 @@
 				886FBD1F195A035F0007188B /* STKInviteFriendsViewController.h */,
 				886FBD20195A035F0007188B /* STKInviteFriendsViewController.m */,
 				886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */,
+				BECA6B47197588670026FEEC /* STKCreateCommentViewController.h */,
+				BECA6B48197588670026FEEC /* STKCreateCommentViewController.m */,
+				BECA6B49197588670026FEEC /* STKCreateCommentViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4644,6 +4655,8 @@
 				BE8076051923F48F00D558E0 /* STKMarkupUtilities.m */,
 				2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */,
 				2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */,
+				BE9E806019746BE600C63180 /* STKPhoneNumberFormatter.h */,
+				BE9E806119746BE600C63180 /* STKPhoneNumberFormatter.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -4767,6 +4780,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE5F690218F2131F006D2CD1 /* STKWebViewController.xib in Resources */,
+				BECA6B4B197588670026FEEC /* STKCreateCommentViewController.xib in Resources */,
 				886FBD23195A094F0007188B /* STKInviteFriendsViewController.xib in Resources */,
 				BE1E09D61850E58900975652 /* STKVerticalNavigationController.xib in Resources */,
 				8805330E193E5FD900A8E44D /* STKSearchUsersViewController.xib in Resources */,
@@ -4891,6 +4905,7 @@
 				BECA36B519004F88000A5851 /* STKGradientView.m in Sources */,
 				BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */,
 				BE2E5FC518FB49E000A53AF6 /* STKSegmentedControl.m in Sources */,
+				BE9E806219746BE600C63180 /* STKPhoneNumberFormatter.m in Sources */,
 				BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */,
 				BE1FC3B5186C8C0A003464E1 /* STKImageCollectionViewCell.m in Sources */,
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
@@ -4944,6 +4959,7 @@
 				BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */,
 				BE7D396B19141B32003B333F /* STKMarkupController.m in Sources */,
 				BE4F81D4191981FF00CF5628 /* STKBindTransforms.m in Sources */,
+				BECA6B4A197588670026FEEC /* STKCreateCommentViewController.m in Sources */,
 				BEB1687C190700F900CED5F7 /* STKSegmentedControlCell.m in Sources */,
 				BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */,
 				BE7391C719019AB600AD81AB /* STKHashtagPostsViewController.m in Sources */,
@@ -5156,7 +5172,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5FCF9AEB-AD60-4E71-B9D7-1941DE8A9461";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Staging)";
@@ -5187,7 +5203,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5FCF9AEB-AD60-4E71-B9D7-1941DE8A9461";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -5294,7 +5310,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5FCF9AEB-AD60-4E71-B9D7-1941DE8A9461";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (Staging)";
@@ -5384,7 +5400,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5FCF9AEB-AD60-4E71-B9D7-1941DE8A9461";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (User Testing)";
@@ -5477,7 +5493,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5FCF9AEB-AD60-4E71-B9D7-1941DE8A9461";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Dev)";

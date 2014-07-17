@@ -29,6 +29,7 @@
 #import "STKExploreViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "Mixpanel.h"
+#import "STKPhoneNumberFormatter.h"
 
 @import AddressBook;
 @import Social;
@@ -141,7 +142,7 @@ const long STKCreateProgressGeocoding = 4;
 
                    
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
-                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
+                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
                    @{@"title" : @"Website", @"key" : @"website", @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
                    ];
         
@@ -167,7 +168,7 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
                    
                    @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
-                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
+                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                    ];
         
@@ -220,7 +221,7 @@ const long STKCreateProgressGeocoding = 4;
                        
                        
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
-                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"zipCode", @"subtype", @"phoneNumber", @"zipCode"];
         } else {
@@ -253,7 +254,7 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                        
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
-                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode"];
         }
@@ -670,6 +671,13 @@ const long STKCreateProgressGeocoding = 4;
         return;
     }
     
+    if([[item objectForKey:@"key"] isEqualToString:@"phoneNumber"]) {
+        NSRegularExpression *regex = [[NSRegularExpression alloc] initWithPattern:@"[^0-9]" options:0 error:nil];
+        NSString *convertedPhoneNumber = [regex stringByReplacingMatchesInString:[sender text] options:0 range:NSMakeRange(0, [[sender text] length]) withTemplate:@""];
+        [[self user] setPhoneNumber:convertedPhoneNumber];
+        return;
+    }
+    
     [[self user] setValue:text forKey:[item objectForKey:@"key"]];
 }
 
@@ -1028,12 +1036,12 @@ const long STKCreateProgressGeocoding = 4;
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
     
-    
     if([cellType isEqual:@"textView"] || [cellType isEqualToString:@"list"]) {
         [[c textField] setEnabled:NO];
     } else {
         [[c textField] setEnabled:YES];
     }
+    
     
     [[c label] setText:[item objectForKey:@"title"]];
     NSString *value = nil;
@@ -1060,6 +1068,19 @@ const long STKCreateProgressGeocoding = 4;
     [[c textField] setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [[c textField] setSecureTextEntry:NO];
     [[c textField] setKeyboardType:UIKeyboardTypeDefault];
+    
+    if([textOptions objectForKey:@"formatter"]) {
+        if([[textOptions objectForKey:@"formatter"] isEqualToString:@"phoneNumber"]) {
+            static STKPhoneNumberFormatter *phoneFormatter = nil;
+            if(!phoneFormatter) {
+                phoneFormatter = [[STKPhoneNumberFormatter alloc] init];
+            }
+            [c setTextFormatter:phoneFormatter];
+        }
+        [[c textField] setText:[[c textFormatter] stringForObjectValue:[[c textField] text]]];
+    } else {
+        [c setTextFormatter:nil];
+    }
     
     for(NSString *optKey in textOptions) {
         if([optKey isEqualToString:@"autocapitalizationType"])

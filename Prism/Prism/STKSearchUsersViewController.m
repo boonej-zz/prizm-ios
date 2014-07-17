@@ -288,6 +288,9 @@
     
     if(!t || [t isCancelled]) {
         [[STKUserStore store] requestTrustForUser:u completion:^(STKTrust *requestItem, NSError *err) {
+            if(err) {
+                [[STKErrorStore alertViewForErrorWithOriginMessage:err delegate:nil] show];
+            }
             [[self searchResultsTableView] reloadData];
         }];
     } else if([t isPending]) {

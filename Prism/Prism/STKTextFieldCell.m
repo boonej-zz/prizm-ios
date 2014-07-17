@@ -7,6 +7,7 @@
 //
 
 #import "STKTextFieldCell.h"
+#import "STKPhoneNumberFormatter.h"
 
 @interface STKTextFieldCell ()
 @property (weak, nonatomic) IBOutlet UIView *backdropView;
@@ -29,9 +30,46 @@
     return YES;
 }
 
-- (IBAction)textFieldDidChange:(id)sender
+- (IBAction)textFieldDidChange:(UITextField *)textField
 {
-    ROUTE(sender);
+    ROUTE(textField);
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // Ugly
+    if([[self textFormatter] isKindOfClass:[STKPhoneNumberFormatter class]]) {
+        // This really is just nonsense
+        
+        NSString *convertString = nil;
+        if([string isEqualToString:@""]) {
+            // If we are deleting, account for ()-
+            NSRegularExpression *regex = [[NSRegularExpression alloc] initWithPattern:@"[^0-9]" options:0 error:nil];
+            NSString *trimmedBeforeRange = [regex stringByReplacingMatchesInString:[textField text] options:0 range:NSMakeRange(0, range.location + range.length) withTemplate:@""];
+            
+            int offset = [[textField text] length] - [trimmedBeforeRange length];
+            range.location -= offset;
+            NSString *rawString = [regex stringByReplacingMatchesInString:[textField text] options:0 range:NSMakeRange(0, [[textField text] length]) withTemplate:@""];
+            convertString = [rawString stringByReplacingCharactersInRange:range withString:string];
+        } else {
+            convertString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
+        }
+        
+        
+        NSString *str = [[self textFormatter] stringForObjectValue:convertString];
+        
+        [textField setText:str];
+        [textField sendActionsForControlEvents:UIControlEventEditingChanged];
+        /*
+        UITextPosition *start = [textField positionFromPosition:[textField beginningOfDocument]
+                                                         offset:indexToInsertCursor];
+        UITextPosition *end = [textField positionFromPosition:start offset:0];
+        [textField setSelectedTextRange:[textField textRangeFromPosition:start toPosition:end]];*/
+        
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField

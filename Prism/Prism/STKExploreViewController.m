@@ -76,6 +76,7 @@
         [self setDefaultFeaturedFilter:@{@"key" : @"creatorType", @"filter" : STKUserTypeInstitution}];
         
         _recentPostsController = [[STKPostController alloc] initWithViewController:self];
+        [[self recentPostsController] setSortDescriptors:@[]];
         [[self recentPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
         }];
