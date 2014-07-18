@@ -300,6 +300,7 @@
     
     [[self overlayVIew] setHidden:YES];
 
+    [[self stretchView] setLoadingImage:[[self menuController] transitioningImage]];
     [[self stretchView] setUrlString:[[self post] imageURLString]];
     
     [[STKContentStore store] fetchCommentsForPost:[self post]
