@@ -86,6 +86,9 @@
     int capturedRequestCount = self.pendingRequestCount;
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
         if ([self pendingRequestCount] == capturedRequestCount) {
+            if(!err && [self usesFreshReload]) {
+                [[self posts] removeAllObjects];
+            }
             [self addPosts:posts];
         }
         completion(posts, err);
