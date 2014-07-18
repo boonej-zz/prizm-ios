@@ -174,14 +174,14 @@
     if([self selectedUser]) {
         NSUInteger idx = [[[self trustView] users] indexOfObject:[self selectedUser]];
 
-        // select top trust when current selection falls off screen
-        if(idx >= [[self trusts] count] || idx >= 5) {
-            idx = 0;
-        }
-
         if(idx == NSNotFound) {
             [self setSelectedUser:nil];
         } else {
+            // select top trust when current selection falls off screen
+            if(idx >= [[self trusts] count] || idx >= 5) {
+                idx = 0;
+            }
+
             [[self selectedNameLabel] setText:[[self selectedUser] name]];
             [[self trustTypeLabel] setText:[STKTrust titleForTrustType:[[self selectedTrust] type]]];
             [[self trustView] setSelectedIndex:idx + 1];
@@ -251,28 +251,28 @@
     }
     
     [[STKUserStore store] fetchTopTrustsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *trusts, NSError *err) {
-        [self setTrusts:trusts];
-        NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
-        for(STKTrust *t in [self trusts]) {
+        if (!err) {
+            [self setTrusts:trusts];
             
-            if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
-                [otherUsers addObject:[t recepient]];
-            } else {
-                [otherUsers addObject:[t creator]];
+            NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
+            for(STKTrust *t in [self trusts]) {
+                if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
+                    [otherUsers addObject:[t recepient]];
+                } else {
+                    [otherUsers addObject:[t creator]];
+                }
             }
-        }
-        NSLog(@"other users count %d", [otherUsers count]);
-        [[self trustView] setUsers:otherUsers];
-        if([[self trusts] count] > 0) {
-            
-            if ([self saveTrustSelection] == NO && [self selectedUser] != [[[self trustView] users] objectAtIndex:0]) {
-                //overwrite selection with highest ranged
-                [self selectUserAtIndex:0];
-            } else if (![self selectedUser]) {
-                [self selectUserAtIndex:0];
-            } else {
-                [self configureInterface];
+            [[self trustView] setUsers:otherUsers];
+            if([[self trusts] count] > 0) {
+                
+                if ([self trusts] > 0 && [self saveTrustSelection] == NO && [self selectedUser] != [[[self trustView] users] objectAtIndex:0]) {
+                    //overwrite selection with highest ranged
+                    [self selectUserAtIndex:0];
+                } else if ([self trusts] > 0 && [self selectedUser] == nil) {
+                    [self selectUserAtIndex:0];
+                }
             }
+            [self configureInterface];
         } else {
             [self configureInterface];
         }
