@@ -979,13 +979,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [fdTo setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"from_score" ascending:NO]]];
         
         [self fetchTrustsForUserInternal:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
-            NSMutableArray *all = [[NSMutableArray alloc] init];
-            [all addObjectsFromArray:fromTrusts];
-            [all addObjectsFromArray:toTrusts];
-            [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
-            block(all, nil);
+            if (!toErr) {
+                NSMutableArray *all = [[NSMutableArray alloc] init];
+                [all addObjectsFromArray:fromTrusts];
+                [all addObjectsFromArray:toTrusts];
+                [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
+                block(all, nil);
+            } else {
+                block(nil, toErr);
+            }
         }];
-        
     }];
     
 }
