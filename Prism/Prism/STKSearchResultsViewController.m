@@ -113,6 +113,8 @@ typedef enum {
             if(!err) {
                 [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
                 [self trackUnfollow:u];
+            } else {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
         }];
     } else {
@@ -120,6 +122,8 @@ typedef enum {
             if(!err) {
                 [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
                 [self trackFollow:u];
+            } else {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
         }];
     }

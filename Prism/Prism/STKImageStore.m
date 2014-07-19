@@ -355,20 +355,24 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         [req setContentType:@"image/jpeg"];
         [req setData:imageData];
         [req setCannedACL:[S3CannedACL publicRead]];
-        
-        S3PutObjectResponse *response = [[self amazonClient] putObject:req];
-        if(![response error] && ![response exception]) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSString *fullPath = [[STKImageStoreBucketHostURLString stringByAppendingPathComponent:STKImageStoreBucketName] stringByAppendingPathComponent:fileName];
-                NSString *cachePath = [self cachePathForURLString:fullPath];
-                [imageData writeToFile:cachePath atomically:YES];
-                
-                block(fullPath, nil);
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                block(nil, [response error]);
-            });
+        @try {
+            S3PutObjectResponse *response = [[self amazonClient] putObject:req];
+            if(![response error] && ![response exception]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *fullPath = [[STKImageStoreBucketHostURLString stringByAppendingPathComponent:STKImageStoreBucketName] stringByAppendingPathComponent:fileName];
+                    NSString *cachePath = [self cachePathForURLString:fullPath];
+                    [imageData writeToFile:cachePath atomically:YES];
+                    
+                    block(fullPath, nil);
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    block(nil, [response error]);
+                });
+            }
+        }
+        @catch (AmazonServiceException *e) {
+            NSLog(@"caught amazon exception");
         }
     });
 }
@@ -377,6 +381,38 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 {
     NSString *fileName = [[self uploadPathsInDirectory:directory thumbnailCount:0] firstObject];
     [self uploadImage:image toPath:fileName completion:block];
+}
+
+- (void)deleteCachedImagesForURLString:(NSString *)url
+{
+    NSArray *paths = @[
+                       [self thumbnailPathForURLString:url size:STKImageStoreThumbnailNone],
+                       [self thumbnailPathForURLString:url size:STKImageStoreThumbnailLarge],
+                       [self thumbnailPathForURLString:url size:STKImageStoreThumbnailMedium],
+                       [self thumbnailPathForURLString:url size:STKImageStoreThumbnailSmall]
+                       ];
+
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [paths enumerateObjectsUsingBlock:^(NSString *p, NSUInteger idx, BOOL *stop) {
+        NSString *path = [self cachePathForURLString:p];
+        [[self memoryCache] setObject:nil forKey:path];
+        
+        [fm removeItemAtPath:path error:nil];
+    }];
+}
+
+- (void)deleteAllCachedImages
+{
+    [self clearCache:nil];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSArray *imagePaths = [fm contentsOfDirectoryAtPath:[self cachePath] error:nil];
+    
+    [imagePaths enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString *path = [[self cachePath] stringByAppendingPathComponent:obj];
+        [fm removeItemAtPath:path error:nil];
+    }];
 }
 
 @end

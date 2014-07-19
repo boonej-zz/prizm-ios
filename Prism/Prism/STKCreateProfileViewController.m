@@ -362,6 +362,9 @@ const long STKCreateProgressGeocoding = 4;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if ([self user] == nil) {
+        [[self navigationController] popViewControllerAnimated:YES];
+    }
     [[self tableView] flashScrollIndicators];
 }
 
@@ -597,7 +600,7 @@ const long STKCreateProgressGeocoding = 4;
                                             [STKProcessingView dismiss];
                                             if(err ) {
                                                 [[STKErrorStore alertViewForError:err delegate:nil] show];
-                                                [[self navigationController] popViewControllerAnimated:YES];
+                                                [self setUser:nil];
                                             }
                                             [[self tableView] reloadData];
                                         }];
@@ -879,8 +882,7 @@ const long STKCreateProgressGeocoding = 4;
                 [[STKUserStore store] updateUserDetails:[self user] completion:^(STKUser *u, NSError *err) {
                     [STKProcessingView dismiss];
                     if(err) {
-                        UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-                        [av show];
+                        [[STKErrorStore alertViewForError:err delegate:nil] show];
                     } else {
                         [[self navigationController] popViewControllerAnimated:YES];
                     }

@@ -19,6 +19,7 @@
 #import "STKFetchDescription.h"
 #import "Mixpanel.h"
 #import "STKHashTag.h"
+#import "STKUser.h"
 
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 
@@ -106,13 +107,13 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
         [req setPredicate:predicate];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-        [req setFetchLimit:30];
+        [req setFetchLimit:[desc limit]];
         
         return [[[STKUserStore store] context] executeFetchRequest:req error:nil];
     } else {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
-        [req setFetchLimit:30];
+        [req setFetchLimit:[desc limit]];
         
         if([desc direction] == STKQueryObjectPageNewer) {
             [req setPredicate:[NSCompoundPredicate andPredicateWithSubpredicates:@[predicate,
@@ -131,32 +132,30 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         fetchDescription:(STKFetchDescription *)desc
               completion:(void (^)(NSArray *posts, NSError *err))block
 {
-/*    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
-                                   fetchDescription:desc];
-
+    int fetchLimit = [desc limit];
     STKPost *referencePost = [desc referenceObject];
+    STKQueryObjectPage direction = [desc direction];
+
+    if (fetchLimit == 0) {
+        fetchLimit = 30;
+    }
+
+    
+    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
+                                   fetchDescription:desc];
+    
     if([cached count] > 0) {
-        BOOL returnAfter = NO;
-        
-        if([desc direction] == STKQueryObjectPageNewer) {
+        if(direction == STKQueryObjectPageNewer) {
             referencePost = [cached firstObject];
-        } else if ([desc direction] == STKQueryObjectPageOlder) {
-            // If we have 30 posts, then just skip pulling these from the server
-            if([cached count] == 30) {
-                referencePost = nil;
-                returnAfter = YES;
-            } else {
-                referencePost = [cached lastObject];
-            }
+        } else if (direction == STKQueryObjectPageOlder) {
+            referencePost = [cached lastObject];
         }
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
-        if(returnAfter)
-            return;
-    }*/
-    
+    }
+
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -166,10 +165,10 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [u uniqueID], @"feed"]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
-        [q setLimit:30];
-        [q setPageDirection:[desc direction]];
+        [q setLimit:fetchLimit];
+        [q setPageDirection:direction];
         [q setPageKey:STKPostDateCreatedKey];
-        [q setPageValue:[STKTimestampFormatter stringFromDate:[[desc referenceObject] datePosted]]];
+        [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
         
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
         [q addSubquery:rq];
@@ -196,6 +195,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [c getWithSession:[self session] completionBlock:^(NSArray *posts, NSError *err) {
             if(!err) {
                 //[[[[STKUserStore store] currentUser] mutableSetValueForKeyPath:@"fFeedPosts"] addObjectsFromArray:posts];
+                [[[STKUserStore store] currentUser] addFFeedPosts:[NSSet setWithArray:posts]];
                 [[[STKUserStore store] context] save:nil];
                 block(posts, nil);
             } else {

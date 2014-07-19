@@ -16,6 +16,7 @@
 #import "STKSearchProfileCell.h"
 #import "STKProfileViewController.h"
 #import "Mixpanel.h"
+#import "STKFetchDescription.h"
 
 @interface STKSearchUsersViewController ()
 
@@ -85,6 +86,15 @@
     
     [[[self blurView] displayLink] setPaused:NO];
     [self reloadSearchResults];
+    
+    if ([self searchType] == STKSearchUsersTypeNotInTrust) {
+        STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+        [fd setDirection:STKQueryObjectPageNewer];
+        
+        [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+            [self reloadSearchResults];
+        }];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -297,10 +307,16 @@
         if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
             // Accept
             [[STKUserStore store] acceptTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [[self searchResultsTableView] reloadData];
             }];
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [[self searchResultsTableView] reloadData];
             }];
         }
@@ -309,6 +325,9 @@
             // Do nothing, is rejected
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [[self searchResultsTableView] reloadData];
             }];
         }
@@ -327,6 +346,8 @@
             if(!err) {
                 [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
                 [self trackUnfollow:u];
+            } else {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
         }];
     } else {
@@ -334,6 +355,8 @@
             if(!err) {
                 [[(STKSearchProfileCell *)[[self searchResultsTableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
                 [self trackFollow:u];
+            } else {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
         }];
     }
