@@ -392,7 +392,6 @@
                 [otherUsers addObject:[t creator]];
             }
         }
-        
         NSSortDescriptor *alphabetic = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
         NSArray *sortedUsers = [otherUsers sortedArrayUsingDescriptors:@[alphabetic]];
         if (err) {
