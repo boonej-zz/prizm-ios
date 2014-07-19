@@ -136,15 +136,23 @@
         [p setText:actualText];
         [[STKContentStore store] editPost:p
                                completion:^(STKPost *result, NSError *err) {
-                                   [[[self post] managedObjectContext] discardChangesToEditableObject:p];
-                                   [STKProcessingView dismiss];
-                                   [[self navigationController] popViewControllerAnimated:YES];
+                                   if (err) {
+                                       [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                   } else {
+                                       [[[self post] managedObjectContext] discardChangesToEditableObject:p];
+                                       [STKProcessingView dismiss];
+                                       [[self navigationController] popViewControllerAnimated:YES];
+                                   }
                                }];
         
     } else {
         
         [[STKContentStore store] addComment:actualText toPost:[self post] completion:^(STKPost *p, NSError *err) {
-            [self extractComments];
+            if (err) {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            } else {
+                [self extractComments];
+            }
         }];
         
         [[self textView] setText:nil];
@@ -189,12 +197,18 @@
     if([pc isLikedByUser:[[STKUserStore store] currentUser]]) {
         [[STKContentStore store] unlikeComment:pc
                                     completion:^(STKPostComment *p, NSError *err) {
+                                        if (err) {
+                                            [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                        }
                                         [[self commentTableView] reloadData];
                                     }];
         
     } else {
         [[STKContentStore store] likeComment:pc
                                   completion:^(STKPostComment *p, NSError *err) {
+                                      if (err) {
+                                          [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                      }
                                       [[self commentTableView] reloadData];
                                   }];
     }
