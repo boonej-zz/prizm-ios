@@ -455,12 +455,18 @@
     if([pc isLikedByUser:[[STKUserStore store] currentUser]]) {
         [[STKContentStore store] unlikeComment:pc
                                     completion:^(STKPostComment *p, NSError *err) {
+                                        if (err) {
+                                            [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                        }
                                         [[self tableView] reloadData];
                                     }];
 
     } else {
         [[STKContentStore store] likeComment:pc
                                   completion:^(STKPostComment *p, NSError *err) {
+                                      if (err) {
+                                          [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                      }
                                       [[self tableView] reloadData];
                                   }];
     }
@@ -488,7 +494,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     if(editingStyle == UITableViewCellEditingStyleDelete) {
         STKPostComment *pc = [self commentForIndexPath:indexPath];
         [[STKContentStore store] deleteComment:pc completion:^(STKPost *p, NSError *err) {
-            [self extractComments];
+            if (err) {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            } else {
+                [self extractComments];
+            }
             [[self tableView] reloadData];
         }];
         [self extractComments];
@@ -661,11 +671,22 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (IBAction)changeVisibility:(UISegmentedControl *)sender
 {
-    NSString *visibilityString = [@{@0 : STKPostVisibilityPublic, @1 : STKPostVisibilityTrust, @2: STKPostVisibilityPrivate}
+    NSDictionary *visibilityMap = @{@0 : STKPostVisibilityPublic, @1 : STKPostVisibilityTrust, @2: STKPostVisibilityPrivate};
+    NSString *visibilityString = [visibilityMap
                                    objectForKey:@([sender selectedSegmentIndex])];
 
     STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
-    [p setVisibility:visibilityString];
+    NSString *revertVisibility = [p visibility];
+    __block int revertIndex = NSNotFound;
+    [visibilityMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if ([obj isEqualToString:revertVisibility]) {
+            revertIndex = [key integerValue];
+        }
+    }];
+
+    void (^reversal)(void) = ^{
+        [[self visibilityControl] setSelectedSegmentIndex:revertIndex];
+    };
     
     if([visibilityString isEqualToString:STKPostVisibilityPrivate]) {
         [p setType:STKPostTypePersonal];
@@ -675,6 +696,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [[STKContentStore store] editPost:p
                            completion:^(STKPost *result, NSError *err) {
                                [[[self post] managedObjectContext] discardChangesToEditableObject:p];
+                               if (err) {
+                                   [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                   reversal();
+                               }
                                [[self tableView] reloadData];
                            }];
 }
@@ -712,7 +737,27 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *category = [[[self categoryItems] objectAtIndex:[indexPath row]] objectForKey:STKPostTypeKey];
     
+    if ([[[self post] type] isEqualToString:category]) {
+        return;
+    }
+    
     NSString *prevType = [[self post] type];
+    NSString *prevVisibility = [[self post] visibility];
+    
+    NSDictionary *visibilityMap = @{@0 : STKPostVisibilityPublic, @1 : STKPostVisibilityTrust, @2: STKPostVisibilityPrivate};
+    __block int revertIndex = NSNotFound;
+    [visibilityMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if ([obj isEqualToString:prevVisibility]) {
+            revertIndex = [key integerValue];
+        }
+    }];
+    
+    void (^reversal)(void) = ^{
+        [[self visibilityControl] setSelectedSegmentIndex:revertIndex];
+        [[self post] setType:prevType];
+        [[self post] setVisibility:prevVisibility];
+    };
+    
     [[self post] setType:category];
     
     if([[[self post] type] isEqualToString:STKPostTypePersonal]) {
@@ -734,7 +779,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     [[STKContentStore store] editPost:[self post] completion:^(STKPost *p, NSError *err) {
         [[[self fakeHeaderView] postTypeView] setImage:[[self post] typeImage]];
-
+        if (err) {
+            reversal();
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
+            [[self categoryCollectionView] reloadData];
+        }
     }];
 }
 

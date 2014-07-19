@@ -526,10 +526,16 @@ typedef enum {
         if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
             // Accept
             [[STKUserStore store] acceptTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [self refreshProfileViews];
             }];
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [self refreshProfileViews];
             }];
         }
@@ -538,6 +544,9 @@ typedef enum {
             // Do nothing, is rejected
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [self refreshProfileViews];
             }];
         }
@@ -558,11 +567,17 @@ typedef enum {
 {
     if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
         [[STKUserStore store] unfollowUser:[self profile] completion:^(id obj, NSError *err) {
+            if (err) {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }
             [self refreshProfileViews];
         }];
         
     } else {
         [[STKUserStore store] followUser:[self profile] completion:^(id obj, NSError *err) {
+            if (err) {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }
             [self refreshProfileViews];
         }];
     }

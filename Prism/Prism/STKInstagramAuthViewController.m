@@ -37,6 +37,8 @@
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [STKProcessingView dismiss];
+    [[STKErrorStore alertViewForError:error delegate:nil] show];
+    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)loadView
@@ -87,7 +89,6 @@
     
     return YES;
 }
-
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     [[self navigationController] popViewControllerAnimated:YES];

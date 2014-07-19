@@ -274,6 +274,9 @@
             }
             [self configureInterface];
         } else {
+            if ([err code] == NSURLErrorNotConnectedToInternet) {
+#pragma warning warn user they are looking at stale data
+            }
             [self configureInterface];
         }
     }];
@@ -379,7 +382,7 @@
     STKFetchDescription *fd = [[STKFetchDescription alloc] init];
     [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
     [fd setDirection:STKQueryObjectPageNewer];
-
+    
     [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
         NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
         for(STKTrust *t in trusts) {
@@ -392,9 +395,15 @@
         
         NSSortDescriptor *alphabetic = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
         NSArray *sortedUsers = [otherUsers sortedArrayUsingDescriptors:@[alphabetic]];
-        [lvc setUsers:sortedUsers];
+        if (err) {
+            if ([err code] == NSURLErrorNotConnectedToInternet) {
+#pragma warning warn user they are looking at stale data
+                [lvc setUsers:sortedUsers];
+            }
+        } else {
+            [lvc setUsers:sortedUsers];
+        }
     }];
-
 }
 
 - (IBAction)sendEmail:(id)sender
@@ -442,7 +451,9 @@
     [[self trustTypeCollectionView] reloadData];
     [self configureInterface];
     [[STKUserStore store] updateTrust:[self selectedTrust] toType:type completion:^(STKTrust *requestItem, NSError *err) {
-        
+        if (err) {
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
+        }
     }];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self dismissTrustMenu:nil];
