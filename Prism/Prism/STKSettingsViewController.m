@@ -57,7 +57,6 @@
             _settings = @[
                           @{@"title" : @"Friends", @"type" : @"STKLabelCell", @"next" : [self friendsSettings]},
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
-                          @{@"title" : @"Notifications", @"type" : @"STKLabelCell", @"next" : [self notificationSettings]},
                           @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]},
                           @{@"title" : @"Send Feedback", @"type" : @"STKLabelCell", @"selectionSelector" : @"sendFeedbackEmail:"}
                         ];
@@ -196,20 +195,28 @@
 {
     STKUser *user = [[STKUserStore store] currentUser];
     [[STKUserStore store] disableUser:user completion:^(STKUser *u, NSError *err) {
+        UIAlertView *av = nil;
+
         NSString *title, *message;
         if(err) {
-            title = @"Disable Account Error";
-            message = err.description;
+            if ([err code] == NSURLErrorNotConnectedToInternet) {
+                av = [STKErrorStore alertViewForError:err delegate:nil];
+            } else {
+                title = @"Disable Account Error";
+                message = err.description;
+            }
         } else {
             title = @"Disable Account Success";
             message = @"Your account is now inactive";
         }
         
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:title
+        if (av == nil) {
+            av = [[UIAlertView alloc] initWithTitle:title
                                                      message:message
                                                     delegate:self
                                            cancelButtonTitle:@"Dismiss"
                                            otherButtonTitles:nil , nil];
+        }
         [av show];
         
     }];
@@ -228,16 +235,22 @@
     
     [STKProcessingView present];
     [[STKNetworkStore store] establishMinimumIDForUser:[[STKUserStore store] currentUser] networkType:STKNetworkTypeTwitter completion:^(NSString *minID, NSError *err) {
-        [[[STKUserStore store] currentUser] setTwitterLastMinID:minID];
-        [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+        // will only make it this far without internet
+        if (err) {
             [STKProcessingView dismiss];
-            if(err) {
-                UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-                [av show];
-            } else {
-                NSLog(@"Twitter: %@ %@", [acct username], minID);
-            }
-        }];
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
+        } else {
+            [[[STKUserStore store] currentUser] setTwitterLastMinID:minID];
+            [[STKUserStore store] updateUserDetails:[[STKUserStore store] currentUser] completion:^(STKUser *u, NSError *err) {
+                [STKProcessingView dismiss];
+                if(err) {
+                    UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+                    [av show];
+                } else {
+                    NSLog(@"Twitter: %@ %@", [acct username], minID);
+                }
+            }];
+        }
     }];
 }
 

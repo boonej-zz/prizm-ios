@@ -330,17 +330,23 @@
         if([post isPostLikedByUser:[[STKUserStore store] currentUser]]) {
             [[STKContentStore store] unlikePost:post
                                      completion:^(STKPost *p, NSError *err) {
+                                         if (!err) {
+                                             [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
+                                             [[c likeButton] setSelected:NO];
+                                         } else {
+                                             [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                         }
                                      }];
-            [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
-            [[c likeButton] setSelected:NO];
-
         } else {
             [[STKContentStore store] likePost:post
                                    completion:^(STKPost *p, NSError *err) {
-
+                                       if (!err) {
+                                           [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
+                                           [[c likeButton] setSelected:YES];
+                                       } else {
+                                           [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                       }
                                    }];
-            [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
-            [[c likeButton] setSelected:YES];
         }
         
     }

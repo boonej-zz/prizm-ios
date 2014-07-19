@@ -68,12 +68,16 @@
         [[STKUserStore store] unfollowUser:u completion:^(id obj, NSError *err) {
             if(!err) {
                 [[(STKSearchProfileCell *)[[self tableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
+            } else {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
         }];
     } else {
         [[STKUserStore store] followUser:u completion:^(id obj, NSError *err) {
             if(!err) {
                 [[(STKSearchProfileCell *)[[self tableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
+            } else {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
         }];
     }

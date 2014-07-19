@@ -996,16 +996,22 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)fetchTrustsForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
-        if(err) {
-            block(nil, err);
-            return;
+        NSMutableArray *predicates = [[NSMutableArray alloc] init];
+        NSPredicate *predicate;
+        if ([fetchDescription filterDictionary]) {
+            for (NSString *key in [fetchDescription filterDictionary]) {
+                [predicates addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, [fetchDescription filterDictionary][key]]];
+            }
+            predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
         }
-        
-        if ([[u trusts] count]) {
-            block([u trusts], nil);
+        NSArray *trusts = [u trusts];
+        if (predicate) {
+            trusts = [[u trusts] filteredArrayUsingPredicate:predicate];
         }
-
-        [self fetchTrustsForUserInternal:u fetchDescription:fetchDescription completion:block];
+        block(trusts, err);
+        if (!err) {
+            [self fetchTrustsForUserInternal:u fetchDescription:fetchDescription completion:block];
+        }
     }];
 }
 
@@ -1857,7 +1863,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         return;
     
     void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
-        if(!valErr) {
+        if(!valErr || [valErr code] == NSURLErrorNotConnectedToInternet) {
             [self authenticateUser:u];
             [[self context] save:nil];
         } else {
@@ -1882,6 +1888,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
             if(!err) {
                 [[self accountStore] renewCredentialsForAccount:acct completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
+                    // can get this far without internet. if error is connection error, return existing user
                     if(!error) {
                         if([[acct identifier] isEqualToString:[u accountStoreID]]) {
                             [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *u, NSError *err) {
@@ -1891,7 +1898,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                             validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
                         }
                     } else {
-                        validationBlock(nil, error);
+                        if ([error code] == NSURLErrorNotConnectedToInternet) {
+                            validationBlock(u, error);
+                        } else {
+                            validationBlock(nil, error);
+                        }
                     }
                     
                 }];
@@ -1955,11 +1966,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         NSString *password = STKSecurityGetPassword(email);
         if(password) {
             [self validateWithEmail:email password:password completion:^(STKUser *user, NSError *err) {
-                if(!err) {
-                    validationBlock(user, nil);
-                } else {
-                    validationBlock(nil, err);
+                // can get this far without internet. if error is connection error, return existing user
+                if ([err code] == NSURLErrorNotConnectedToInternet) {
+                    user = u;
                 }
+                validationBlock(u, err);
             }];
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
