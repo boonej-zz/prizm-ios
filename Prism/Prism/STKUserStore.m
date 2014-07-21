@@ -1892,12 +1892,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             }
         }
     };
-
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        validationBlock(u,nil);
-    }];
-    
-    return;
     
     NSString *serviceType = [u externalServiceType];
     if([serviceType isEqualToString:STKUserExternalSystemFacebook]) {
@@ -1915,7 +1909,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                         }
                     } else {
                         if ([error code] == NSURLErrorNotConnectedToInternet) {
-                            validationBlock(u, error);
+                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                validationBlock(u,nil);
+                            }];
                         } else {
                             validationBlock(nil, error);
                         }
@@ -1963,8 +1959,13 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                 }
                             }];
                         } else {
-                            // Could not authenticate via Twitter
-                            validationBlock(nil, err);
+                            if ([err code] == NSURLErrorNotConnectedToInternet) {
+                                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                    validationBlock(u,nil);
+                                }];
+                            } else {
+                                validationBlock(nil, err);
+                            }
                         }
                     }];
                 } else {
