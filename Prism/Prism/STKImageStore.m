@@ -80,8 +80,8 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 {
     if(!_cachePath) {
         _cachePath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"imagecache"];
-        [[NSFileManager defaultManager] createDirectoryAtPath:_cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
+    [[NSFileManager defaultManager] createDirectoryAtPath:_cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     return _cachePath;
 }
 

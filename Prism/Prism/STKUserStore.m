@@ -401,17 +401,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchTrustForUser:(STKUser *)user otherUser:(STKUser *)otherUser completion:(void (^)(STKTrust *t, NSError *err))block
 {
+    STKTrust *t = [user trustForUser:otherUser];
+    if (t) {
+        block(t, nil);
+    }
+
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
             return;
         }
-        
-        STKTrust *t = [user trustForUser:otherUser];
-        if (t) {
-            block(t, nil);
-        }
-        
         
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/exists", [user uniqueID], @"trusts", [otherUser uniqueID]]];
         
@@ -968,92 +967,102 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         block(allArray,nil);
     }
     
-    STKFetchDescription *fdFrom = [[STKFetchDescription alloc] init];
-    [fdFrom setLimit:5];
-    [fdFrom setFilterDictionary:@{@"recepient" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
-    [fdFrom setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"from_score" ascending:NO]]];
-    [self fetchTrustsForUserInternal:u fetchDescription:fdFrom completion:^(NSArray *fromTrusts, NSError *fromErr) {
-        STKFetchDescription *fdTo = [[STKFetchDescription alloc] init];
-        [fdTo setLimit:5];
-        [fdTo setFilterDictionary:@{@"creator" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
-        [fdTo setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"to_score" ascending:NO]]];
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
+            block(nil, err);
+            return;
+        }
         
-        [self fetchTrustsForUserInternal:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
-            if (!toErr) {
-                NSMutableArray *all = [[NSMutableArray alloc] init];
-                [all addObjectsFromArray:fromTrusts];
-                [all addObjectsFromArray:toTrusts];
-                [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
-                block(all, nil);
-            } else {
-                block(nil, toErr);
-            }
+        STKFetchDescription *fdFrom = [[STKFetchDescription alloc] init];
+        [fdFrom setLimit:5];
+        [fdFrom setFilterDictionary:@{@"recepient" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
+        [fdFrom setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"from_score" ascending:NO]]];
+        [self fetchTrustsForUserInternal:u fetchDescription:fdFrom completion:^(NSArray *fromTrusts, NSError *fromErr) {
+            STKFetchDescription *fdTo = [[STKFetchDescription alloc] init];
+            [fdTo setLimit:5];
+            [fdTo setFilterDictionary:@{@"creator" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
+            [fdTo setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"to_score" ascending:NO]]];
+            
+            [self fetchTrustsForUserInternal:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
+                if (!toErr) {
+                    NSMutableArray *all = [[NSMutableArray alloc] init];
+                    [all addObjectsFromArray:fromTrusts];
+                    [all addObjectsFromArray:toTrusts];
+                    [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
+                    block(all, nil);
+                } else {
+                    block(nil, toErr);
+                }
+            }];
         }];
     }];
-    
 }
 
 - (void)fetchTrustsForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
-        NSMutableArray *predicates = [[NSMutableArray alloc] init];
-        NSPredicate *predicate;
-        if ([fetchDescription filterDictionary]) {
-            for (NSString *key in [fetchDescription filterDictionary]) {
-                [predicates addObject:[NSPredicate predicateWithFormat:@"%K == %@ && (recepient == %@ || creator == %@)", key, [fetchDescription filterDictionary][key], u, u]];
-            }
-            predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    NSMutableArray *predicates = [[NSMutableArray alloc] init];
+    NSPredicate *predicate;
+    if ([fetchDescription filterDictionary]) {
+        for (NSString *key in [fetchDescription filterDictionary]) {
+            [predicates addObject:[NSPredicate predicateWithFormat:@"%K == %@ && (recepient == %@ || creator == %@)", key, [fetchDescription filterDictionary][key], u, u]];
         }
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-        NSArray *trusts = [[self context] executeFetchRequest:request error:nil];
-        if (predicate) {
-            trusts = [trusts filteredArrayUsingPredicate:predicate];
-        }
-        block(trusts, nil);
-        if (!err) {
-            [self fetchTrustsForUserInternal:u fetchDescription:fetchDescription completion:block];
-        }
-    }];
+        predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    }
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+    NSArray *trusts = [[self context] executeFetchRequest:request error:nil];
+    if (predicate) {
+        trusts = [trusts filteredArrayUsingPredicate:predicate];
+    }
+    block(trusts, nil);
+    
+    [self fetchTrustsForUserInternal:u fetchDescription:fetchDescription completion:block];
 }
 
 - (void)fetchTrustsForUserInternal:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block
 {
-    STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [u uniqueID], @"trusts"]];
-    
-    STKQueryObject *q = [[STKQueryObject alloc] init];
-    NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
-    for(NSString *key in [fetchDescription filterDictionary]) {
-        [filters setObject:[[fetchDescription filterDictionary] objectForKey:key] forKey:[STKTrust remoteKeyForLocalKey:key]];
-    }
-    [q setFilters:filters];
-    
-    if([fetchDescription limit])
-        [q setLimit:[fetchDescription limit]];
-    
-    if([[fetchDescription sortDescriptors] count] > 0) {
-        [q setSortKey:[[[fetchDescription sortDescriptors] firstObject] key]];
-        [q setSortOrder:([[[fetchDescription sortDescriptors] firstObject] ascending] ? STKQueryObjectSortAscending : STKQueryObjectSortDescending)];
-    }
-    
-    STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
-    [fq setFields:@[@"create_date", @"email"]];
-    STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
-    [tq setFields:@[@"create_date", @"email"]];
-    
-    [q addSubquery:fq];
-    [q addSubquery:tq];
-    [c setQueryObject:q];
-    
-    [c setModelGraph:@[@"STKTrust"]];
-    [c setContext:[self context]];
-    [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-    [c setShouldReturnArray:YES];
-    [c setResolutionMap:@{@"User" : @"STKUser"}];
-    [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
-        if(!err) {
-            [[self context] save:nil];
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
+            block(nil, err);
+            return;
         }
-        block(trusts, err);
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [u uniqueID], @"trusts"]];
+        
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+        NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
+        for(NSString *key in [fetchDescription filterDictionary]) {
+            [filters setObject:[[fetchDescription filterDictionary] objectForKey:key] forKey:[STKTrust remoteKeyForLocalKey:key]];
+        }
+        [q setFilters:filters];
+        
+        if([fetchDescription limit])
+            [q setLimit:[fetchDescription limit]];
+        
+        if([[fetchDescription sortDescriptors] count] > 0) {
+            [q setSortKey:[[[fetchDescription sortDescriptors] firstObject] key]];
+            [q setSortOrder:([[[fetchDescription sortDescriptors] firstObject] ascending] ? STKQueryObjectSortAscending : STKQueryObjectSortDescending)];
+        }
+        
+        STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
+        [fq setFields:@[@"create_date", @"email"]];
+        STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
+        [tq setFields:@[@"create_date", @"email"]];
+        
+        [q addSubquery:fq];
+        [q addSubquery:tq];
+        [c setQueryObject:q];
+        
+        [c setModelGraph:@[@"STKTrust"]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c setShouldReturnArray:YES];
+        [c setResolutionMap:@{@"User" : @"STKUser"}];
+        [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
+            if(!err) {
+                [[self context] save:nil];
+            }
+            block(trusts, err);
+        }];
     }];
 }
 
@@ -1883,6 +1892,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             }
         }
     };
+
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        validationBlock(u,nil);
+    }];
+    
+    return;
     
     NSString *serviceType = [u externalServiceType];
     if([serviceType isEqualToString:STKUserExternalSystemFacebook]) {
@@ -2005,7 +2020,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)pruneDatabase
 {
-    int postLifeInDays = 7;
+    int postLifeInDays = 28;//7;
     int activityLifeInDays = 4;
     
     NSFetchRequest *activityRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];

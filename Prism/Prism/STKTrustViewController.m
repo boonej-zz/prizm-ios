@@ -168,7 +168,6 @@
 
 - (void)configureInterface
 {
-    NSLog(@"configure interface trust count %u", [[[self trustView] users] count]);
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]];
     
     if([self selectedUser]) {
