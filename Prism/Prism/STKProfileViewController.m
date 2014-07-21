@@ -189,15 +189,15 @@ typedef enum {
 
 - (void)determineLuminariesFromTrusts:(NSArray *)trusts
 {
+    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO];
+    trusts = [trusts sortedArrayUsingDescriptors:@[sd]];
+
     NSMutableArray *lums = [NSMutableArray array];
-    for(STKTrust *t in [[self profile] ownedTrusts]) {
-        if ([t.status isEqualToString:STKRequestStatusAccepted]) {
-            [lums addObject:[t recepient]];
-        }
-    }
-    for(STKTrust *t in [[self profile] receivedTrusts]) {
-        if ([t.status isEqualToString:STKRequestStatusAccepted]) {
+    for(STKTrust *t in trusts) {
+        if ([t recepient] == [self profile]) {
             [lums addObject:[t creator]];
+        } else {
+            [lums addObject:[t recepient]];
         }
     }
     [self setLuminaries:lums];
@@ -223,6 +223,8 @@ typedef enum {
                 [otherUsers addObject:[t creator]];
             }
         }
+        NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+        [otherUsers sortUsingDescriptors:@[sd]];
         [vc setUsers:otherUsers];
     }];
 }

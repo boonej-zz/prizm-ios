@@ -133,7 +133,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [requestFd setDirection:STKQueryObjectPageNewer];
         
         [self fetchActivityForUser:[self currentUser] fetchDescription:activityFd completion:^(NSArray *activities, NSError *err) {
-            [self fetchRequestsForCurrentUserWithReferenceRequest:requestFd completion:^(NSArray *requests, NSError *err) {
+            [self fetchRequestsForCurrentUserWithFetchDescription:requestFd completion:^(NSArray *requests, NSError *err) {
                 [self notifyNotificationCount];
             }];
         }];
@@ -730,7 +730,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *requests, NSError *err))block
+- (void)fetchRequestsForCurrentUserWithFetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *requests, NSError *err))block
 {
     if(![self currentUser]) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -953,7 +953,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     NSSortDescriptor *toSort = [NSSortDescriptor sortDescriptorWithKey:@"recepientScore" ascending:NO];
     NSSortDescriptor *fromSort = [NSSortDescriptor sortDescriptorWithKey:@"creatorScore" ascending:NO];
     [request setFetchLimit:5];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusAccepted]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"status == %@ && (recepient == %@ || creator == %@)", STKRequestStatusAccepted, u, u]];
     
     [request setSortDescriptors:@[toSort]];
     NSArray *to = [[self context] executeFetchRequest:request error:nil];
@@ -971,12 +971,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     STKFetchDescription *fdFrom = [[STKFetchDescription alloc] init];
     [fdFrom setLimit:5];
     [fdFrom setFilterDictionary:@{@"recepient" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
-    [fdFrom setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"to_score" ascending:NO]]];
+    [fdFrom setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"from_score" ascending:NO]]];
     [self fetchTrustsForUserInternal:u fetchDescription:fdFrom completion:^(NSArray *fromTrusts, NSError *fromErr) {
         STKFetchDescription *fdTo = [[STKFetchDescription alloc] init];
         [fdTo setLimit:5];
         [fdTo setFilterDictionary:@{@"creator" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
-        [fdTo setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"from_score" ascending:NO]]];
+        [fdTo setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"to_score" ascending:NO]]];
         
         [self fetchTrustsForUserInternal:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
             if (!toErr) {
@@ -1000,15 +1000,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         NSPredicate *predicate;
         if ([fetchDescription filterDictionary]) {
             for (NSString *key in [fetchDescription filterDictionary]) {
-                [predicates addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, [fetchDescription filterDictionary][key]]];
+                [predicates addObject:[NSPredicate predicateWithFormat:@"%K == %@ && (recepient == %@ || creator == %@)", key, [fetchDescription filterDictionary][key], u, u]];
             }
             predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
         }
-        NSArray *trusts = [u trusts];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+        NSArray *trusts = [[self context] executeFetchRequest:request error:nil];
         if (predicate) {
-            trusts = [[u trusts] filteredArrayUsingPredicate:predicate];
+            trusts = [trusts filteredArrayUsingPredicate:predicate];
         }
-        block(trusts, err);
+        block(trusts, nil);
         if (!err) {
             [self fetchTrustsForUserInternal:u fetchDescription:fetchDescription completion:block];
         }

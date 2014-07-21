@@ -274,9 +274,6 @@
             }
             [self configureInterface];
         } else {
-            if ([err code] == NSURLErrorNotConnectedToInternet) {
-#pragma warning warn user they are looking at stale data
-            }
             [self configureInterface];
         }
     }];

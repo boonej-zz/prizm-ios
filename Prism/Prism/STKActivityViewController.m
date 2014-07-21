@@ -140,7 +140,7 @@ typedef enum {
         [self setRequestFetchInProgress:YES];
         
         [fd setReferenceObject:[[self requests] lastObject]];
-        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:fd completion:^(NSArray *requests, NSError *err) {
+        [[STKUserStore store] fetchRequestsForCurrentUserWithFetchDescription:fd completion:^(NSArray *requests, NSError *err) {
             if(!err || [err code] == NSURLErrorNotConnectedToInternet) {
                 [self setRequestFetchInProgress:NO];
                 NSMutableSet *requestSet = [NSMutableSet setWithArray:[self requests]];
@@ -192,7 +192,7 @@ typedef enum {
         [[self luminatingBar] setLuminating:YES];
         
         [fd setReferenceObject:[[self requests] firstObject]];
-        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:fd completion:^(NSArray *requests, NSError *err) {
+        [[STKUserStore store] fetchRequestsForCurrentUserWithFetchDescription:fd completion:^(NSArray *requests, NSError *err) {
             [[self luminatingBar] setLuminating:NO];
             if(!err || [err code] == NSURLErrorNotConnectedToInternet) {
                 [self setRequestFetchInProgress:NO];
