@@ -304,7 +304,7 @@
         UIImage *avatarImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        block([self imageForInviteCard:avatarImage profile:user text:@"Look who is on Prizm."]);
+        block([self imageForInviteCard:avatarImage profile:user text:@"Look who's on Prizm!"]);
     }];
 }
 
