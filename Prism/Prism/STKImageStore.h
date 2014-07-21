@@ -38,6 +38,7 @@ typedef enum {
 
 - (UIImage *)cachedImageForURLString:(NSString *)url;
 - (UIImage *)bestCachedImageForURLString:(NSString *)url;
-
+- (void)deleteCachedImagesForURLString:(NSString *)url;
+- (void)deleteAllCachedImages;
 
 @end

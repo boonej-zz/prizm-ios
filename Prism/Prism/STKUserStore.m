@@ -10,6 +10,7 @@
 #import "STKUser.h"
 #import "STKActivityItem.h"
 #import "STKPost.h"
+#import "STKPostComment.h"
 #import "STKConnection.h"
 #import "STKUser.h"
 #import <GoogleOpenSource/GoogleOpenSource.h>
@@ -23,6 +24,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import "STKFetchDescription.h"
 #import "Mixpanel.h"
+#import "STKImageStore.h"
 
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
@@ -122,12 +124,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [req setFetchLimit:1];
         NSArray *cachedRequests = [[self context] executeFetchRequest:req error:nil];
 
-        STKFetchDescription *fd = [[STKFetchDescription alloc] init];
-        [fd setReferenceObject:[cachedActivities firstObject]];
-        [fd setDirection:STKQueryObjectPageNewer];
+        STKFetchDescription *activityFd = [[STKFetchDescription alloc] init];
+        [activityFd setReferenceObject:[cachedActivities firstObject]];
+        [activityFd setDirection:STKQueryObjectPageNewer];
         
-        [self fetchActivityForUser:[self currentUser] fetchDescription:fd completion:^(NSArray *activities, NSError *err) {
-            [self fetchRequestsForCurrentUserWithReferenceRequest:[cachedRequests firstObject] completion:^(NSArray *requests, NSError *err) {
+        STKFetchDescription *requestFd = [[STKFetchDescription alloc] init];
+        [requestFd setReferenceObject:[cachedRequests firstObject]];
+        [requestFd setDirection:STKQueryObjectPageNewer];
+        
+        [self fetchActivityForUser:[self currentUser] fetchDescription:activityFd completion:^(NSArray *activities, NSError *err) {
+            [self fetchRequestsForCurrentUserWithReferenceRequest:requestFd completion:^(NSArray *requests, NSError *err) {
                 [self notifyNotificationCount];
             }];
         }];
@@ -301,14 +307,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [self establishDatabaseAndCurrentUser];
         [[Mixpanel sharedInstance] endSession];
         [[Mixpanel sharedInstance] registerSuperProperties:@{}];
+        
+        [[STKImageStore store] deleteAllCachedImages];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserChangedNotification object:self];
-}
-
-- (void)pruneDatabase
-{
-    // Currently not implemented, use internalLastModified, ensure you don't delete current user
 }
 
 - (void)establishDatabaseAndCurrentUser
@@ -328,10 +331,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];
-                [self pruneDatabase];
                 
                 [self attemptTransparentLoginWithUser:u];
                 
+                [self pruneDatabase];
                 
                 return;
             }
@@ -403,6 +406,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(nil, err);
             return;
         }
+        
+        STKTrust *t = [user trustForUser:otherUser];
+        if (t) {
+            block(t, nil);
+        }
+        
         
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/exists", [user uniqueID], @"trusts", [otherUser uniqueID]]];
         
@@ -721,7 +730,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKTrust *)referenceRequest completion:(void (^)(NSArray *requests, NSError *err))block
+- (void)fetchRequestsForCurrentUserWithReferenceRequest:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *requests, NSError *err))block
 {
     if(![self currentUser]) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -729,32 +738,61 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
         return;
     }
-    /*
+    
+    int fetchLimit = [fetchDescription limit];
+    STKTrust *referenceRequest = [fetchDescription referenceObject];
+    STKQueryObjectPage direction = [fetchDescription direction];
+    
+    if (fetchLimit == 0) {
+        fetchLimit = 30;
+    }
+    
     NSArray *cached = nil;
     if(!referenceRequest) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
         [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@", [self currentUser]]];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
-        [req setFetchLimit:30];
         cached = [[self context] executeFetchRequest:req error:nil];
     } else {
-        // Get anything newer than what we have that has made its way to the cache.
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and dateModified > %@", [self currentUser], [referenceRequest dateModified]]];
+        if (direction == STKQueryObjectPageNewer) {
+            [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and dateModified > %@", [self currentUser], [referenceRequest dateModified]]];
+        } else {
+            [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@ and dateModified < %@", [self currentUser], [referenceRequest dateModified]]];
+        }
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
-        [req setFetchLimit:30];
         cached = [[self context] executeFetchRequest:req error:nil];
     }
     
-
-    STKTrust *topItem = referenceRequest;
     if([cached count] > 0) {
-        topItem = [cached firstObject];
+
+        if (direction == STKQueryObjectPageOlder) {
+            referenceRequest = [cached lastObject];
+            
+            // filter out canceled requests for cached response
+            // we don't want to return a whole page of canceled responses from the cache
+            cached = [cached filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
+
+            if ([cached count] > fetchLimit) {
+                cached = [cached subarrayWithRange:NSMakeRange([cached count] - fetchLimit, fetchLimit)];
+            }
+        } else {
+            referenceRequest = [cached firstObject];
+            
+            // filter out canceled requests for cached response
+            // we don't want to return a whole page of canceled responses from the cache
+            cached = [cached filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
+
+            if ([cached count] > fetchLimit) {
+                cached = [cached subarrayWithRange:NSMakeRange(0, fetchLimit)];
+            }
+        }
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
     }
-*/
+
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
@@ -766,10 +804,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         if(referenceRequest) {
-            [q setPageDirection:STKQueryObjectPageNewer];
-            [q setPageKey:@"modify_date"];
             [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceRequest dateModified]]];
         }
+        [q setPageKey:@"modify_date"];
+        [q setLimit:fetchLimit];
+        [q setPageDirection:direction];
+        
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
         [q setFilters:@{@"to" : [[self currentUser] uniqueID]}];
         [c setQueryObject:q];
@@ -908,25 +948,47 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchTopTrustsForUser:(STKUser *)u completion:(void (^)(NSArray *trusts, NSError *err))block
 {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+    
+    NSSortDescriptor *toSort = [NSSortDescriptor sortDescriptorWithKey:@"recepientScore" ascending:NO];
+    NSSortDescriptor *fromSort = [NSSortDescriptor sortDescriptorWithKey:@"creatorScore" ascending:NO];
+    [request setFetchLimit:5];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"status == %@", STKRequestStatusAccepted]];
+    
+    [request setSortDescriptors:@[toSort]];
+    NSArray *to = [[self context] executeFetchRequest:request error:nil];
+    [request setSortDescriptors:@[fromSort]];
+    NSArray *from = [[self context] executeFetchRequest:request error:nil];
+    
+    NSMutableSet *all = [NSMutableSet set];
+    [all addObjectsFromArray:to];
+    [all addObjectsFromArray:from];
+    NSArray *allArray = [[all allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
+    if ([allArray count]) {
+        block(allArray,nil);
+    }
+    
     STKFetchDescription *fdFrom = [[STKFetchDescription alloc] init];
     [fdFrom setLimit:5];
     [fdFrom setFilterDictionary:@{@"recepient" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
     [fdFrom setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"to_score" ascending:NO]]];
-    [self fetchTrustsForUser:u fetchDescription:fdFrom completion:^(NSArray *fromTrusts, NSError *fromErr) {
+    [self fetchTrustsForUserInternal:u fetchDescription:fdFrom completion:^(NSArray *fromTrusts, NSError *fromErr) {
         STKFetchDescription *fdTo = [[STKFetchDescription alloc] init];
         [fdTo setLimit:5];
         [fdTo setFilterDictionary:@{@"creator" : [u uniqueID], @"status" : STKRequestStatusAccepted}];
         [fdTo setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"from_score" ascending:NO]]];
         
-        [self fetchTrustsForUser:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
-            NSMutableArray *all = [[NSMutableArray alloc] init];
-            [all addObjectsFromArray:fromTrusts];
-            [all addObjectsFromArray:toTrusts];
-            [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
-            
-            block(all, nil);
+        [self fetchTrustsForUserInternal:u fetchDescription:fdTo completion:^(NSArray *toTrusts, NSError *toErr) {
+            if (!toErr) {
+                NSMutableArray *all = [[NSMutableArray alloc] init];
+                [all addObjectsFromArray:fromTrusts];
+                [all addObjectsFromArray:toTrusts];
+                [all sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"otherScore" ascending:NO]]];
+                block(all, nil);
+            } else {
+                block(nil, toErr);
+            }
         }];
-        
     }];
     
 }
@@ -934,48 +996,63 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)fetchTrustsForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
-        if(err) {
-            block(nil, err);
-            return;
-        }
-        
-        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [u uniqueID], @"trusts"]];
-
-        STKQueryObject *q = [[STKQueryObject alloc] init];
-        NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
-        for(NSString *key in [fetchDescription filterDictionary]) {
-            [filters setObject:[[fetchDescription filterDictionary] objectForKey:key] forKey:[STKTrust remoteKeyForLocalKey:key]];
-        }
-        [q setFilters:filters];
-        
-        if([fetchDescription limit])
-            [q setLimit:[fetchDescription limit]];
-        
-        if([[fetchDescription sortDescriptors] count] > 0) {
-            [q setSortKey:[[[fetchDescription sortDescriptors] firstObject] key]];
-            [q setSortOrder:([[[fetchDescription sortDescriptors] firstObject] ascending] ? STKQueryObjectSortAscending : STKQueryObjectSortDescending)];
-        }
-        
-        STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
-        [fq setFields:@[@"create_date", @"email"]];
-        STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
-        [tq setFields:@[@"create_date", @"email"]];
-        
-        [q addSubquery:fq];
-        [q addSubquery:tq];
-        [c setQueryObject:q];
-        
-        [c setModelGraph:@[@"STKTrust"]];
-        [c setContext:[self context]];
-        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c setShouldReturnArray:YES];
-        [c setResolutionMap:@{@"User" : @"STKUser"}];
-        [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
-            if(!err) {
-                [[self context] save:nil];
+        NSMutableArray *predicates = [[NSMutableArray alloc] init];
+        NSPredicate *predicate;
+        if ([fetchDescription filterDictionary]) {
+            for (NSString *key in [fetchDescription filterDictionary]) {
+                [predicates addObject:[NSPredicate predicateWithFormat:@"%K == %@", key, [fetchDescription filterDictionary][key]]];
             }
-            block(trusts, err);
-        }];
+            predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+        }
+        NSArray *trusts = [u trusts];
+        if (predicate) {
+            trusts = [[u trusts] filteredArrayUsingPredicate:predicate];
+        }
+        block(trusts, err);
+        if (!err) {
+            [self fetchTrustsForUserInternal:u fetchDescription:fetchDescription completion:block];
+        }
+    }];
+}
+
+- (void)fetchTrustsForUserInternal:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *trusts, NSError *err))block
+{
+    STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [u uniqueID], @"trusts"]];
+    
+    STKQueryObject *q = [[STKQueryObject alloc] init];
+    NSMutableDictionary *filters = [[NSMutableDictionary alloc] init];
+    for(NSString *key in [fetchDescription filterDictionary]) {
+        [filters setObject:[[fetchDescription filterDictionary] objectForKey:key] forKey:[STKTrust remoteKeyForLocalKey:key]];
+    }
+    [q setFilters:filters];
+    
+    if([fetchDescription limit])
+        [q setLimit:[fetchDescription limit]];
+    
+    if([[fetchDescription sortDescriptors] count] > 0) {
+        [q setSortKey:[[[fetchDescription sortDescriptors] firstObject] key]];
+        [q setSortOrder:([[[fetchDescription sortDescriptors] firstObject] ascending] ? STKQueryObjectSortAscending : STKQueryObjectSortDescending)];
+    }
+    
+    STKResolutionQuery *fq = [STKResolutionQuery resolutionQueryForField:@"from"];
+    [fq setFields:@[@"create_date", @"email"]];
+    STKResolutionQuery *tq = [STKResolutionQuery resolutionQueryForField:@"to"];
+    [tq setFields:@[@"create_date", @"email"]];
+    
+    [q addSubquery:fq];
+    [q addSubquery:tq];
+    [c setQueryObject:q];
+    
+    [c setModelGraph:@[@"STKTrust"]];
+    [c setContext:[self context]];
+    [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+    [c setShouldReturnArray:YES];
+    [c setResolutionMap:@{@"User" : @"STKUser"}];
+    [c getWithSession:[self session] completionBlock:^(NSArray *trusts, NSError *err) {
+        if(!err) {
+            [[self context] save:nil];
+        }
+        block(trusts, err);
     }];
 }
 
@@ -1012,36 +1089,54 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [conn setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [conn setShouldReturnArray:YES];
         [conn getWithSession:[self session] completionBlock:^(NSArray *users, NSError *err) {
-            block(users, err);
+            NSMutableArray *mUsers = [users mutableCopy];
+            [mUsers removeObject:[self currentUser]];
+            block(mUsers, err);
         }];
     }];
 }
 
 - (void)fetchActivityForUser:(STKUser *)u fetchDescription:(STKFetchDescription *)fetchDescription completion:(void (^)(NSArray *activities, NSError *err))block
-{/*
+{
+    int fetchLimit = [fetchDescription limit];
+    STKActivityItem *referenceActivity = [fetchDescription referenceObject];
+    STKQueryObjectPage direction = [fetchDescription direction];
+    
+    if (fetchLimit == 0) {
+        fetchLimit = 30;
+    }
+
     NSArray *cached = nil;
     if(!referenceActivity) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
         [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@", u]];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
-        [req setFetchLimit:30];
+        [req setFetchLimit:fetchLimit];
         cached = [[self context] executeFetchRequest:req error:nil];
     } else {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated > %@", u, [referenceActivity dateCreated]]];
+        if (direction == STKQueryObjectPageNewer) {
+            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated > %@", u, [referenceActivity dateCreated]]];
+        } else {
+            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated < %@", u, [referenceActivity dateCreated]]];
+        }
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
-        [req setFetchLimit:30];
+        [req setFetchLimit:fetchLimit];
         cached = [[self context] executeFetchRequest:req error:nil];
     }
     
-    STKActivityItem *topItem = referenceActivity;
+
     if([cached count] > 0) {
-        topItem = [cached firstObject];
+        if (direction == STKQueryObjectPageOlder) {
+            referenceActivity = [cached lastObject];
+        } else {
+            referenceActivity = [cached firstObject];
+        }
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             block(cached, nil);
         }];
     }
-    */
+
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -1052,11 +1147,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
         
-        if([fetchDescription referenceObject]) {
-            [q setPageDirection:[fetchDescription direction]];
-            [q setPageKey:@"create_date"];
-            [q setPageValue:[STKTimestampFormatter stringFromDate:[[fetchDescription referenceObject] dateCreated]]];
+        if(referenceActivity) {
+            [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceActivity dateCreated]]];
         }
+        [q setPageDirection:direction];
+        [q setPageKey:@"create_date"];
+        [q setLimit:fetchLimit];
         
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
         STKResolutionQuery *postResolve = [STKResolutionQuery resolutionQueryForField:@"post_id"];
@@ -1767,7 +1863,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         return;
     
     void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
-        if(!valErr) {
+        if(!valErr || [valErr code] == NSURLErrorNotConnectedToInternet) {
             [self authenticateUser:u];
             [[self context] save:nil];
         } else {
@@ -1792,6 +1888,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [self fetchFacebookAccountWithCompletion:^(ACAccount *acct, NSError *err) {
             if(!err) {
                 [[self accountStore] renewCredentialsForAccount:acct completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
+                    // can get this far without internet. if error is connection error, return existing user
                     if(!error) {
                         if([[acct identifier] isEqualToString:[u accountStoreID]]) {
                             [self validateWithFacebook:[[acct credential] oauthToken] completion:^(STKUser *u, NSError *err) {
@@ -1801,7 +1898,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                             validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
                         }
                     } else {
-                        validationBlock(nil, error);
+                        if ([error code] == NSURLErrorNotConnectedToInternet) {
+                            validationBlock(u, error);
+                        } else {
+                            validationBlock(nil, error);
+                        }
                     }
                     
                 }];
@@ -1865,11 +1966,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         NSString *password = STKSecurityGetPassword(email);
         if(password) {
             [self validateWithEmail:email password:password completion:^(STKUser *user, NSError *err) {
-                if(!err) {
-                    validationBlock(user, nil);
-                } else {
-                    validationBlock(nil, err);
+                // can get this far without internet. if error is connection error, return existing user
+                if ([err code] == NSURLErrorNotConnectedToInternet) {
+                    user = u;
                 }
+                validationBlock(u, err);
             }];
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -1896,6 +1997,37 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [[Mixpanel sharedInstance] track:@"User un-followed" properties:@{@"Target User" : followedUserIdentifier,
                                                                    @"Target User Id" : [user uniqueID],
                                                                    @"Following Count" : @([user followingCount])}];
+}
+
+
+#pragma mark Database pruning to test caching mechanism
+
+- (void)pruneDatabase
+{
+    int postLifeInDays = 7;
+    int activityLifeInDays = 4;
+    
+    NSFetchRequest *activityRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    NSFetchRequest *postRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
+    
+    NSDate *postCutOff = [NSDate dateWithTimeIntervalSinceNow:-3600*24*postLifeInDays];
+    NSDate *activityCutOff = [NSDate dateWithTimeIntervalSinceNow:-3600*24*activityLifeInDays];
+    
+    [postRequest setPredicate:[NSPredicate predicateWithFormat:@"datePosted < %@", postCutOff]];
+    [activityRequest setPredicate:[NSPredicate predicateWithFormat:@"dateCreated < %@", activityCutOff]];
+    
+    NSArray *posts = [[self context] executeFetchRequest:postRequest error:nil];
+    NSArray *activities = [[self context] executeFetchRequest:activityRequest error:nil];
+    
+    [posts enumerateObjectsUsingBlock:^(STKPost *p, NSUInteger idx, BOOL *stop) {
+        [[STKImageStore store] deleteCachedImagesForURLString:[p imageURLString]];
+        [[self context] deleteObject:p];
+    }];
+    [activities enumerateObjectsUsingBlock:^(STKActivityItem *ai, NSUInteger idx, BOOL *stop) {
+        [[self context] deleteObject:ai];
+    }];
+    
+    return;
 }
 
 @end

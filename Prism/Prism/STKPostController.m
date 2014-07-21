@@ -86,6 +86,9 @@
     int capturedRequestCount = self.pendingRequestCount;
     [self fetchMechanism](desc, ^(NSArray *posts, NSError *err) {
         if ([self pendingRequestCount] == capturedRequestCount) {
+            if(!err && [self usesFreshReload]) {
+                [[self posts] removeAllObjects];
+            }
             [self addPosts:posts];
         }
         completion(posts, err);
@@ -330,17 +333,23 @@
         if([post isPostLikedByUser:[[STKUserStore store] currentUser]]) {
             [[STKContentStore store] unlikePost:post
                                      completion:^(STKPost *p, NSError *err) {
+                                         if (!err) {
+                                             [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
+                                             [[c likeButton] setSelected:NO];
+                                         } else {
+                                             [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                         }
                                      }];
-            [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
-            [[c likeButton] setSelected:NO];
-
         } else {
             [[STKContentStore store] likePost:post
                                    completion:^(STKPost *p, NSError *err) {
-
+                                       if (!err) {
+                                           [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
+                                           [[c likeButton] setSelected:YES];
+                                       } else {
+                                           [[STKErrorStore alertViewForError:err delegate:nil] show];
+                                       }
                                    }];
-            [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
-            [[c likeButton] setSelected:YES];
         }
         
     }

@@ -48,6 +48,8 @@
 @property (nonatomic, weak) STKUser *selectedUser;
 @property (nonatomic, strong) NSArray *trustTypes;
 
+@property (nonatomic) BOOL saveTrustSelection;
+
 - (IBAction)showList:(id)sender;
 - (IBAction)sendEmail:(id)sender;
 
@@ -145,6 +147,7 @@
 
 - (void)trustView:(STKTrustView *)tv didSelectCircleAtIndex:(int)idx
 {
+    [self setSaveTrustSelection:YES];
     [self selectUserAtIndex:idx];
 }
 
@@ -165,13 +168,20 @@
 
 - (void)configureInterface
 {
+    NSLog(@"configure interface trust count %u", [[[self trustView] users] count]);
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayTrustInstructions]];
     
     if([self selectedUser]) {
         NSUInteger idx = [[[self trustView] users] indexOfObject:[self selectedUser]];
+
         if(idx == NSNotFound) {
             [self setSelectedUser:nil];
         } else {
+            // select top trust when current selection falls off screen
+            if(idx >= [[self trusts] count] || idx >= 5) {
+                idx = 0;
+            }
+
             [[self selectedNameLabel] setText:[[self selectedUser] name]];
             [[self trustTypeLabel] setText:[STKTrust titleForTrustType:[[self selectedTrust] type]]];
             [[self trustView] setSelectedIndex:idx + 1];
@@ -241,23 +251,34 @@
     }
     
     [[STKUserStore store] fetchTopTrustsForUser:[[STKUserStore store] currentUser] completion:^(NSArray *trusts, NSError *err) {
-        [self setTrusts:trusts];
-        NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
-        for(STKTrust *t in [self trusts]) {
+        if (!err) {
+            [self setTrusts:trusts];
             
-            if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
-                [otherUsers addObject:[t recepient]];
-            } else {
-                [otherUsers addObject:[t creator]];
+            NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
+            for(STKTrust *t in [self trusts]) {
+                if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
+                    [otherUsers addObject:[t recepient]];
+                } else {
+                    [otherUsers addObject:[t creator]];
+                }
             }
+            [[self trustView] setUsers:otherUsers];
+            if([[self trusts] count] > 0) {
+                
+                if ([self trusts] > 0 && [self saveTrustSelection] == NO && [self selectedUser] != [[[self trustView] users] objectAtIndex:0]) {
+                    //overwrite selection with highest ranged
+                    [self selectUserAtIndex:0];
+                } else if ([self trusts] > 0 && [self selectedUser] == nil) {
+                    [self selectUserAtIndex:0];
+                }
+            }
+            [self configureInterface];
+        } else {
+            if ([err code] == NSURLErrorNotConnectedToInternet) {
+#pragma warning warn user they are looking at stale data
+            }
+            [self configureInterface];
         }
-        [[self trustView] setUsers:otherUsers];
-        
-        if(![self selectedUser] && [[self trusts] count] > 0) {
-            [self selectUserAtIndex:0];
-        }
-        
-        [self configureInterface];
     }];
     
     [self configureInterface];
@@ -361,7 +382,7 @@
     STKFetchDescription *fd = [[STKFetchDescription alloc] init];
     [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
     [fd setDirection:STKQueryObjectPageNewer];
-
+    
     [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
         NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
         for(STKTrust *t in trusts) {
@@ -371,12 +392,17 @@
                 [otherUsers addObject:[t creator]];
             }
         }
-        
         NSSortDescriptor *alphabetic = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
         NSArray *sortedUsers = [otherUsers sortedArrayUsingDescriptors:@[alphabetic]];
-        [lvc setUsers:sortedUsers];
+        if (err) {
+            if ([err code] == NSURLErrorNotConnectedToInternet) {
+#pragma warning warn user they are looking at stale data
+                [lvc setUsers:sortedUsers];
+            }
+        } else {
+            [lvc setUsers:sortedUsers];
+        }
     }];
-
 }
 
 - (IBAction)sendEmail:(id)sender
@@ -424,7 +450,9 @@
     [[self trustTypeCollectionView] reloadData];
     [self configureInterface];
     [[STKUserStore store] updateTrust:[self selectedTrust] toType:type completion:^(STKTrust *requestItem, NSError *err) {
-        
+        if (err) {
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
+        }
     }];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self dismissTrustMenu:nil];

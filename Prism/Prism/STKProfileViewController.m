@@ -159,33 +159,29 @@ typedef enum {
         }];
         
         [[STKUserStore store] fetchUserDetails:[self profile] additionalFields:additionalFields completion:^(STKUser *u, NSError *err) {
-            if(!err) {
-                if([[self profile] isInstitution]) {
-                    STKFetchDescription *fd = [[STKFetchDescription alloc] init];
-                    [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
-                    [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
-                        [self determineLuminariesFromTrusts:trusts];
-                        [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
-                                                     completion:^(STKTrust *t, NSError *err) {
-                                                         [self fetchNewPosts];
-                                                         [self refreshProfileViews];
-                                                     }];
-                    }];
-                } else {
-                    if(![[self profile] isEqual:[[STKUserStore store] currentUser]]) {
-                        [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
-                                                     completion:^(STKTrust *t, NSError *err) {
-                                                         [self fetchNewPosts];
-                                                         [self refreshProfileViews];
-                                                     }];
-                    } else {
-                        [self fetchNewPosts];
-                    }
-                }
-            }
-            
             [self refreshProfileViews];
         }];
+        
+        if([[self profile] isInstitution]) {
+            STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+            [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
+            [[STKUserStore store] fetchTrustsForUser:[self profile] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+                [self determineLuminariesFromTrusts:trusts];
+                [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
+                                             completion:^(STKTrust *t, NSError *err) {
+                                                 [self refreshProfileViews];
+                                             }];
+            }];
+        } else {
+            if(![[self profile] isEqual:[[STKUserStore store] currentUser]]) {
+                [[STKUserStore store] fetchTrustForUser:[self profile] otherUser:[[STKUserStore store] currentUser]
+                                             completion:^(STKTrust *t, NSError *err) {
+                                                 [self refreshProfileViews];
+                                             }];
+            }
+        }
+        
+        [self fetchNewPosts];
     }
 
     [self refreshProfileViews];
@@ -213,6 +209,22 @@ typedef enum {
     [vc setUsers:[self luminaries]];
     [vc setTitle:@"Luminary"];
     [[self navigationController] pushViewController:vc animated:YES];
+    
+    STKFetchDescription *fd = [[STKFetchDescription alloc] init];
+    [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
+    [fd setDirection:STKQueryObjectPageNewer];
+    
+    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+        NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
+        for(STKTrust *t in trusts) {
+            if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
+                [otherUsers addObject:[t recepient]];
+            } else {
+                [otherUsers addObject:[t creator]];
+            }
+        }
+        [vc setUsers:otherUsers];
+    }];
 }
 
 - (void)websiteTapped:(id)sender atIndexPath:(NSIndexPath *)indexPath
@@ -514,10 +526,16 @@ typedef enum {
         if([[t recepient] isEqual:[[STKUserStore store] currentUser]]) {
             // Accept
             [[STKUserStore store] acceptTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [self refreshProfileViews];
             }];
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [self refreshProfileViews];
             }];
         }
@@ -526,6 +544,9 @@ typedef enum {
             // Do nothing, is rejected
         } else {
             [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
+                if (err) {
+                    [[STKErrorStore alertViewForError:err delegate:nil] show];
+                }
                 [self refreshProfileViews];
             }];
         }
@@ -546,11 +567,17 @@ typedef enum {
 {
     if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
         [[STKUserStore store] unfollowUser:[self profile] completion:^(id obj, NSError *err) {
+            if (err) {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }
             [self refreshProfileViews];
         }];
         
     } else {
         [[STKUserStore store] followUser:[self profile] completion:^(id obj, NSError *err) {
+            if (err) {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }
             [self refreshProfileViews];
         }];
     }

@@ -110,7 +110,7 @@ typedef enum {
 {
     STKFetchDescription *fd = [[STKFetchDescription alloc] init];
     [fd setDirection:STKQueryObjectPageOlder];
-
+    
     if([self currentType] == STKActivityViewControllerTypeActivity) {
         if ([self activityFetchInProgress]) {
             return;
@@ -122,15 +122,35 @@ typedef enum {
         [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser]
                                  fetchDescription:fd
                                         completion:^(NSArray *activities, NSError *err) {
-                                            [self setActivityFetchInProgress:NO];
-                                            [[self activities] addObjectsFromArray:activities];
-                                            
-                                            [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+                                            if(!err || [err code] == NSURLErrorNotConnectedToInternet) {
+                                                [self setActivityFetchInProgress:NO];
+                                                NSMutableSet *activitySet = [NSMutableSet setWithArray:[self activities]];
+                                                [activitySet addObjectsFromArray:activities];
+                                                [self setActivities:[[activitySet allObjects] mutableCopy]];
+                                                
+                                                [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+                                            }
                                             [[self tableView] reloadData];
                                         }];
         
     } else if([self currentType] == STKActivityViewControllerTypeRequest) {
-       // No older reqeusts
+        if ([self requestFetchInProgress]) {
+            return;
+        }
+        [self setRequestFetchInProgress:YES];
+        
+        [fd setReferenceObject:[[self requests] lastObject]];
+        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:fd completion:^(NSArray *requests, NSError *err) {
+            if(!err || [err code] == NSURLErrorNotConnectedToInternet) {
+                [self setRequestFetchInProgress:NO];
+                NSMutableSet *requestSet = [NSMutableSet setWithArray:[self requests]];
+                [requestSet addObjectsFromArray:requests];
+                [self setRequests:[[requestSet allObjects] mutableCopy]];
+                [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
+                [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
+            }
+            [[self tableView] reloadData];
+        }];
     }
     [[self tableView] reloadData];
 }
@@ -152,11 +172,15 @@ typedef enum {
         [[STKUserStore store] fetchActivityForUser:[[STKUserStore store] currentUser]
                                   fetchDescription:fd
                                         completion:^(NSArray *activities, NSError *err) {
-                                            [self setActivityFetchInProgress:NO];
-                                            [[self luminatingBar] setLuminating:NO];
-                                            [[self activities] addObjectsFromArray:activities];
-                                            
-                                            [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+                                            if(!err || [err code] == NSURLErrorNotConnectedToInternet) {
+                                                [self setActivityFetchInProgress:NO];
+                                                [[self luminatingBar] setLuminating:NO];
+                                                NSMutableSet *activitySet = [NSMutableSet setWithArray:[self activities]];
+                                                [activitySet addObjectsFromArray:activities];
+                                                [self setActivities:[[activitySet allObjects] mutableCopy]];
+                                                
+                                                [[self activities] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
+                                            }
                                             [[self tableView] reloadData];
                                         }];
         
@@ -166,12 +190,15 @@ typedef enum {
         }
         [self setRequestFetchInProgress:YES];
         [[self luminatingBar] setLuminating:YES];
-
-        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:[[self requests] firstObject] completion:^(NSArray *requests, NSError *err) {
+        
+        [fd setReferenceObject:[[self requests] firstObject]];
+        [[STKUserStore store] fetchRequestsForCurrentUserWithReferenceRequest:fd completion:^(NSArray *requests, NSError *err) {
             [[self luminatingBar] setLuminating:NO];
-            if(!err) {
+            if(!err || [err code] == NSURLErrorNotConnectedToInternet) {
                 [self setRequestFetchInProgress:NO];
-                [[self requests] addObjectsFromArray:requests];
+                NSMutableSet *requestSet = [NSMutableSet setWithArray:[self requests]];
+                [requestSet addObjectsFromArray:requests];
+                [self setRequests:[[requestSet allObjects] mutableCopy]];
                 [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
                 [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
             }
@@ -184,6 +211,9 @@ typedef enum {
 - (void)acceptRequest:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [[STKUserStore store] acceptTrustRequest:[[self requests] objectAtIndex:[ip row]] completion:^(STKTrust *requestItem, NSError *err) {
+        if (err) {
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
+        }
         [[self tableView] reloadData];
     }];
     [[self tableView] reloadData];
@@ -192,6 +222,9 @@ typedef enum {
 - (void)rejectRequest:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     [[STKUserStore store] rejectTrustRequest:[[self requests] objectAtIndex:[ip row]] completion:^(STKTrust *requestItem, NSError *err) {
+        if (err) {
+            [[STKErrorStore alertViewForError:err delegate:nil] show];
+        }
         [[self tableView] reloadData];
     }];
     [[self tableView] reloadData];

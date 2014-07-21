@@ -135,3 +135,11 @@ extern BOOL const STKUserStatusInActive;
 
 @end
 
+@interface STKUser (CoreDataGeneratedAccessors)
+
+- (void)addFFeedPostsObject:(STKPost *)object;
+- (void)addFFeedPosts:(NSSet *)objects;
+
+@end
+
+

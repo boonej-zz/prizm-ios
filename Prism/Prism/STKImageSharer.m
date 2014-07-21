@@ -262,6 +262,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     [[STKContentStore store] flagPost:_currentPost completion:^(STKPost *p, NSError *err) {
         if(err){
             //user must have already reported it -- need some sort of ui action?
+            if ([err code] == NSURLErrorNotConnectedToInternet) {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }
         }
         [self activityDidFinish:YES];
     }];

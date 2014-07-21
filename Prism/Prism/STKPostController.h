@@ -33,6 +33,7 @@
 
 @property (nonatomic, weak) UIViewController *viewController;
 
+@property (nonatomic) BOOL usesFreshReload;
 @property (nonatomic, strong) NSMutableArray *posts;
 @property (nonatomic, strong) NSArray *sortDescriptors;
 @property (nonatomic, strong) NSDictionary *filterMap;

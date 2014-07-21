@@ -401,7 +401,7 @@
         [[[self selectedViewController] presentedViewController] dismissViewControllerAnimated:NO completion:^{
             createPost();
         }];
-    }else{
+    } else {
         createPost();
     }
 }

@@ -366,6 +366,7 @@
     STKPostController *pc = [self activePostController];
     NSDictionary *filterMap = [self filterMap];
     [pc setFilterMap:filterMap];
+    [pc setUsesFreshReload:YES];
     
     [[self luminatingBar] setLuminating:YES];
     [pc reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
