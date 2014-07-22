@@ -31,6 +31,7 @@
 @property (nonatomic, weak) UIButton *logoutButton;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (nonatomic, strong) UILabel *versionLabel;
+@property (nonatomic, weak) UIAlertView *confirmDisableAlertView;
 @end
 
 @implementation STKSettingsViewController
@@ -193,39 +194,46 @@
 
 - (void)disableAccount:(id)sender
 {
-    STKUser *user = [[STKUserStore store] currentUser];
-    [[STKUserStore store] disableUser:user completion:^(STKUser *u, NSError *err) {
-        UIAlertView *av = nil;
-
-        NSString *title, *message;
-        if(err) {
-            if ([err isConnectionError]) {
-                av = [STKErrorStore alertViewForError:err delegate:nil];
-            } else {
-                title = @"Disable Account Error";
-                message = err.description;
-            }
-        } else {
-            title = @"Disable Account Success";
-            message = @"Your account is now inactive";
-        }
-        
-        if (av == nil) {
-            av = [[UIAlertView alloc] initWithTitle:title
-                                                     message:message
-                                                    delegate:self
-                                           cancelButtonTitle:@"Dismiss"
-                                           otherButtonTitles:nil , nil];
-        }
-        [av show];
-        
-    }];
+    UIAlertView *confirmAlertView = [[UIAlertView alloc] initWithTitle:@"Are you sure?" message:@"You will no longer be able to log in to Prizm with this account."
+                                                              delegate:self
+                                                     cancelButtonTitle:@"Cancel" otherButtonTitles:@"Disable Account", nil];
+    [confirmAlertView show];
+    [self setConfirmDisableAlertView:confirmAlertView];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 0) {
-        [[STKUserStore store] logout];
+    if(alertView == [self confirmDisableAlertView]) {
+        if(buttonIndex == 1) {
+            STKUser *user = [[STKUserStore store] currentUser];
+            [[STKUserStore store] disableUser:user completion:^(STKUser *u, NSError *err) {
+                UIAlertView *av = nil;
+                
+                NSString *title, *message;
+                if(err) {
+                    title = @"Disable Account Error";
+                    message = err.description;
+                } else {
+                    title = @"Disable Account Success";
+                    message = @"Your account is now inactive";
+                    [[STKUserStore store] logout];
+                }
+                
+                av = [[UIAlertView alloc] initWithTitle:title
+                                                message:message
+                                               delegate:self
+                                      cancelButtonTitle:@"Dismiss"
+                                      otherButtonTitles:nil , nil];
+
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [av show];
+                }];
+            }];
+        }
+    } else {
+        if (buttonIndex == 0) {
+            [[STKUserStore store] logout];
+        }
     }
 }
 

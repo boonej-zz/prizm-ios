@@ -100,6 +100,9 @@
 - (IBAction)connectWithGoogle:(id)sender
 {
     [STKProcessingView present];
+    
+    
+    
     [[STKUserStore store] connectWithGoogle:^(STKUser *u, STKUser *googleData, NSError *err) {
         [STKProcessingView dismiss];
         

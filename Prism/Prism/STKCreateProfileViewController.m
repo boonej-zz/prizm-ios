@@ -846,7 +846,7 @@ const long STKCreateProgressGeocoding = 4;
 - (IBAction)showTOS:(id)sender
 {
     STKWebViewController *vc = [[STKWebViewController alloc] init];
-    [vc setUrl:[NSURL URLWithString:@"http://higheraltitude.co"]];
+    [vc setUrl:[NSURL URLWithString:@"http://prizmapp.com/terms"]];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
 
     [self presentViewController:nvc animated:YES completion:nil];
