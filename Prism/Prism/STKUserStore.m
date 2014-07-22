@@ -55,6 +55,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 @property (nonatomic, strong) NSTimer *activityUpdateTimer;
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
+@property (nonatomic, copy) void (^googlePlusProcessingBlock)();
+@property (nonatomic) BOOL attemptingTransparentLogin;
 
 @end
 
@@ -1604,8 +1606,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 #pragma mark Google
 
-- (void)connectWithGoogle:(void (^)(STKUser *, STKUser *, NSError *))block
+- (void)connectWithGoogle:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))completionBlock processing:(void (^)())processingBlock
 {
+    [self setGooglePlusProcessingBlock:processingBlock];
     [self fetchGoogleAccount:^(GTMOAuth2Authentication *auth, NSError *err) {
         if(!err) {
             [self validateWithGoogle:[auth accessToken] completion:^(STKUser *u, NSError *err) {
@@ -1614,22 +1617,22 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
                     [self authenticateUser:u];
                     
-                    block(u, nil, nil);
+                    completionBlock(u, nil, nil);
                 } else {
                     if([err isConnectionError]) {
-                        block(nil, nil, err);
+                        completionBlock(nil, nil, err);
                     } else {
                         [self fetchGoogleDataForAuth:auth completion:^(STKUser *pi, NSError *err) {
                             if(!err)
-                                block(nil, pi, nil);
+                                completionBlock(nil, pi, nil);
                             else
-                                block(nil, nil, err);
+                                completionBlock(nil, nil, err);
                         }];
                     }
                 }
             }];
         } else {
-            block(nil, nil, err);
+            completionBlock(nil, nil, err);
         }
     }];
 }
@@ -1645,7 +1648,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [[GPPSignIn sharedInstance] setClientID:STKUserStoreExternalCredentialGoogleClientID];
     [[GPPSignIn sharedInstance] setDelegate:self];
     
-    if ([[GPPSignIn sharedInstance] authentication]) {
+    if ([[GPPSignIn sharedInstance] hasAuthInKeychain]) {
         [[GPPSignIn sharedInstance] trySilentAuthentication];
     } else {
         GPPSignInButton *b = [[GPPSignInButton alloc] init];
@@ -1704,19 +1707,32 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                    error:(NSError *)error
 {
     if (!error) {
+        if ([self googlePlusProcessingBlock]) {
+            [self googlePlusProcessingBlock]();
+        }
         [self googlePlusAuthenticationBlock](auth, error);
         [self setGooglePlusAuthenticationBlock:nil];
-    } else {
+        [self setGooglePlusProcessingBlock:nil];
+        [self setAttemptingTransparentLogin:NO];
+        return;
+    }
+    
+    if ([self attemptingTransparentLogin]) {
+        [self setAttemptingTransparentLogin:NO];
         if ([error isConnectionError]) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [self authenticateUser:[self currentUser]];
                 [[self context] save:nil];
             }];
         } else {
+            [self setAttemptingTransparentLogin:NO];
             GPPSignInButton *b = [[GPPSignInButton alloc] init];
             [b sendActionsForControlEvents:UIControlEventTouchUpInside];
         }
     }
+    
+    [self setGooglePlusProcessingBlock:nil];
+    [self setGooglePlusAuthenticationBlock:nil];
 }
 
 #pragma mark Standard
@@ -1888,7 +1904,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     if(!u)
         return;
     
+    [self setAttemptingTransparentLogin:YES];
+
     void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
+        [self setAttemptingTransparentLogin:NO];
         if(!valErr || [[valErr domain] isEqualToString:NSURLErrorDomain]) {
             [self authenticateUser:u];
             [[self context] save:nil];
