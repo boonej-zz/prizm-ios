@@ -1645,8 +1645,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [[GPPSignIn sharedInstance] setClientID:STKUserStoreExternalCredentialGoogleClientID];
     [[GPPSignIn sharedInstance] setDelegate:self];
     
-    GPPSignInButton *b = [[GPPSignInButton alloc] init];
-    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+    if ([[GPPSignIn sharedInstance] authentication]) {
+        [[GPPSignIn sharedInstance] trySilentAuthentication];
+    } else {
+        GPPSignInButton *b = [[GPPSignInButton alloc] init];
+        [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
 }
 
 
@@ -1699,8 +1703,20 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth
                    error:(NSError *)error
 {
-    [self googlePlusAuthenticationBlock](auth, error);
-    [self setGooglePlusAuthenticationBlock:nil];
+    if (!error) {
+        [self googlePlusAuthenticationBlock](auth, error);
+        [self setGooglePlusAuthenticationBlock:nil];
+    } else {
+        if ([error isConnectionError]) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self authenticateUser:[self currentUser]];
+                [[self context] save:nil];
+            }];
+        } else {
+            GPPSignInButton *b = [[GPPSignInButton alloc] init];
+            [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }
 }
 
 #pragma mark Standard
@@ -1873,7 +1889,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         return;
     
     void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
-        if(!valErr || [valErr code] == NSURLErrorNotConnectedToInternet) {
+        if(!valErr || [[valErr domain] isEqualToString:NSURLErrorDomain]) {
             [self authenticateUser:u];
             [[self context] save:nil];
         } else {
@@ -1908,7 +1924,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                             validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
                         }
                     } else {
-                        if ([error code] == NSURLErrorNotConnectedToInternet) {
+                        if ([error isConnectionError]) {
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                 validationBlock(u,nil);
                             }];
@@ -1959,7 +1975,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                 }
                             }];
                         } else {
-                            if ([err code] == NSURLErrorNotConnectedToInternet) {
+                            if ([err isConnectionError]) {
                                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                     validationBlock(u,nil);
                                 }];
@@ -1984,7 +2000,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(password) {
             [self validateWithEmail:email password:password completion:^(STKUser *user, NSError *err) {
                 // can get this far without internet. if error is connection error, return existing user
-                if ([err code] == NSURLErrorNotConnectedToInternet) {
+                if ([err isConnectionError]) {
                     user = u;
                 }
                 validationBlock(u, err);
@@ -2021,8 +2037,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)pruneDatabase
 {
-    int postLifeInDays = 28;//7;
+    
+    int postLifeInDays = 7;
     int activityLifeInDays = 4;
+    
+#ifdef DEBUG
+    postLifeInDays = 28;
+    activityLifeInDays = 28;
+#endif
     
     NSFetchRequest *activityRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     NSFetchRequest *postRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];

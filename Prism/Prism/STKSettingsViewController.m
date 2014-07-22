@@ -199,7 +199,7 @@
 
         NSString *title, *message;
         if(err) {
-            if ([err code] == NSURLErrorNotConnectedToInternet) {
+            if ([err isConnectionError]) {
                 av = [STKErrorStore alertViewForError:err delegate:nil];
             } else {
                 title = @"Disable Account Error";
