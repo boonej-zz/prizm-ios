@@ -28,7 +28,7 @@
 #import "STKExploreFilterViewController.h"
 
 @interface STKExploreViewController ()
-    <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate, STKExploreFilterDelegate>
+    <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate, STKExploreFilterDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UINavigationController *searchNavController;
 @property (nonatomic, strong) UINavigationController *filterNavController;
@@ -288,7 +288,10 @@
 
     [[self tableView] setContentInset:UIEdgeInsetsMake([[self exploreTypeControl] frame].origin.y + [[self exploreTypeControl] frame].size.height, 0, 0, 0)];
 
-    [self reloadPosts];
+    if ([[[self activePostController] posts] count] == 0) {
+        [self reloadPosts];
+    }
+    
     [self configureInterface];
     [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:@{@"Explore Type" : [self exploreTypeString]}];
 }
@@ -482,7 +485,6 @@
         [self reloadPosts];
     }
 }
-
 
 @end
 
