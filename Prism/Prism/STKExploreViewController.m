@@ -301,6 +301,23 @@
         [self setFilterScreenActive:NO];
         [self reloadPosts];
     }
+    [self configureNavigationTitle];
+}
+
+- (void)configureNavigationTitle
+{
+    NSString *title = nil;
+    if([self.activeFilter objectForKey:@"type"] || [self.activeFilter objectForKey:@"subtype"]  ) {
+        if ([self.activeFilter objectForKey:@"type"]) {
+            title = [[self.activeFilter objectForKey:@"type"] capitalizedString];
+        } else if ([self.activeFilter objectForKey:@"subtype"]) {
+            title = [[self.activeFilter objectForKey:@"subtype"] capitalizedString];
+        }
+    } else {
+        title = @"Explore";
+    }
+    [self.navigationItem setTitle:title];
+
 }
 
 - (void)configureInterface
@@ -331,7 +348,7 @@
         [self setFilterButton:filterView];
     }
     
-    [[self navigationItem] setTitle:@"Explore"];
+    [self configureNavigationTitle];
 
     
     if([self isFilterScreenActive]) {
