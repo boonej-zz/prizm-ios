@@ -199,7 +199,6 @@
                                                      cancelButtonTitle:@"Cancel" otherButtonTitles:@"Disable Account", nil];
     [confirmAlertView show];
     [self setConfirmDisableAlertView:confirmAlertView];
-
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -212,25 +211,20 @@
                 
                 NSString *title, *message;
                 if(err) {
-                    if ([err code] == NSURLErrorNotConnectedToInternet) {
-                        av = [STKErrorStore alertViewForError:err delegate:nil];
-                    } else {
-                        title = @"Disable Account Error";
-                        message = err.description;
-                    }
+                    title = @"Disable Account Error";
+                    message = err.description;
                 } else {
                     title = @"Disable Account Success";
                     message = @"Your account is now inactive";
                     [[STKUserStore store] logout];
                 }
                 
-                if (av == nil) {
-                    av = [[UIAlertView alloc] initWithTitle:title
-                                                    message:message
-                                                   delegate:self
-                                          cancelButtonTitle:@"Dismiss"
-                                          otherButtonTitles:nil , nil];
-                }
+                av = [[UIAlertView alloc] initWithTitle:title
+                                                message:message
+                                               delegate:self
+                                      cancelButtonTitle:@"Dismiss"
+                                      otherButtonTitles:nil , nil];
+
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     [av show];
                 }];

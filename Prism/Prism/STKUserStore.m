@@ -55,6 +55,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 @property (nonatomic, strong) NSTimer *activityUpdateTimer;
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
+@property (nonatomic, copy) void (^googlePlusProcessingBlock)();
+@property (nonatomic) BOOL attemptingTransparentLogin;
 
 @end
 
@@ -1604,8 +1606,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 #pragma mark Google
 
-- (void)connectWithGoogle:(void (^)(STKUser *, STKUser *, NSError *))block
+- (void)connectWithGoogle:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))completionBlock processing:(void (^)())processingBlock
 {
+    [self setGooglePlusProcessingBlock:processingBlock];
     [self fetchGoogleAccount:^(GTMOAuth2Authentication *auth, NSError *err) {
         if(!err) {
             [self validateWithGoogle:[auth accessToken] completion:^(STKUser *u, NSError *err) {
@@ -1614,22 +1617,22 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
                     [self authenticateUser:u];
                     
-                    block(u, nil, nil);
+                    completionBlock(u, nil, nil);
                 } else {
                     if([err isConnectionError]) {
-                        block(nil, nil, err);
+                        completionBlock(nil, nil, err);
                     } else {
                         [self fetchGoogleDataForAuth:auth completion:^(STKUser *pi, NSError *err) {
                             if(!err)
-                                block(nil, pi, nil);
+                                completionBlock(nil, pi, nil);
                             else
-                                block(nil, nil, err);
+                                completionBlock(nil, nil, err);
                         }];
                     }
                 }
             }];
         } else {
-            block(nil, nil, err);
+            completionBlock(nil, nil, err);
         }
     }];
 }
@@ -1645,8 +1648,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [[GPPSignIn sharedInstance] setClientID:STKUserStoreExternalCredentialGoogleClientID];
     [[GPPSignIn sharedInstance] setDelegate:self];
     
-    GPPSignInButton *b = [[GPPSignInButton alloc] init];
-    [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+    if ([[GPPSignIn sharedInstance] hasAuthInKeychain]) {
+        [[GPPSignIn sharedInstance] trySilentAuthentication];
+    } else {
+        GPPSignInButton *b = [[GPPSignInButton alloc] init];
+        [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
 }
 
 
@@ -1699,7 +1706,32 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth
                    error:(NSError *)error
 {
-    [self googlePlusAuthenticationBlock](auth, error);
+    if (!error) {
+        if ([self googlePlusProcessingBlock]) {
+            [self googlePlusProcessingBlock]();
+        }
+        [self googlePlusAuthenticationBlock](auth, error);
+        [self setGooglePlusAuthenticationBlock:nil];
+        [self setGooglePlusProcessingBlock:nil];
+        [self setAttemptingTransparentLogin:NO];
+        return;
+    }
+    
+    if ([self attemptingTransparentLogin]) {
+        [self setAttemptingTransparentLogin:NO];
+        if ([error isConnectionError]) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self authenticateUser:[self currentUser]];
+                [[self context] save:nil];
+            }];
+        } else {
+            [self setAttemptingTransparentLogin:NO];
+            GPPSignInButton *b = [[GPPSignInButton alloc] init];
+            [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+        }
+    }
+    
+    [self setGooglePlusProcessingBlock:nil];
     [self setGooglePlusAuthenticationBlock:nil];
 }
 
@@ -1872,8 +1904,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     if(!u)
         return;
     
+    [self setAttemptingTransparentLogin:YES];
+
     void (^validationBlock)(STKUser *, NSError *) = ^(STKUser *u, NSError *valErr) {
-        if(!valErr || [valErr code] == NSURLErrorNotConnectedToInternet) {
+        [self setAttemptingTransparentLogin:NO];
+        if(!valErr || [[valErr domain] isEqualToString:NSURLErrorDomain]) {
             [self authenticateUser:u];
             [[self context] save:nil];
         } else {
@@ -1908,7 +1943,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                             validationBlock(nil, [self errorForCode:STKUserStoreErrorCodeWrongAccount data:nil]);
                         }
                     } else {
-                        if ([error code] == NSURLErrorNotConnectedToInternet) {
+                        if ([error isConnectionError]) {
                             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                 validationBlock(u,nil);
                             }];
@@ -1959,7 +1994,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                 }
                             }];
                         } else {
-                            if ([err code] == NSURLErrorNotConnectedToInternet) {
+                            if ([err isConnectionError]) {
                                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                                     validationBlock(u,nil);
                                 }];
@@ -1984,7 +2019,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(password) {
             [self validateWithEmail:email password:password completion:^(STKUser *user, NSError *err) {
                 // can get this far without internet. if error is connection error, return existing user
-                if ([err code] == NSURLErrorNotConnectedToInternet) {
+                if ([err isConnectionError]) {
                     user = u;
                 }
                 validationBlock(u, err);
@@ -2021,8 +2056,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)pruneDatabase
 {
-    int postLifeInDays = 28;//7;
+    
+    int postLifeInDays = 7;
     int activityLifeInDays = 4;
+    
+#ifdef DEBUG
+    postLifeInDays = 28;
+    activityLifeInDays = 28;
+#endif
     
     NSFetchRequest *activityRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     NSFetchRequest *postRequest = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
