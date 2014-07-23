@@ -10,6 +10,7 @@
 #import "STKPost.h"
 #import "STKImageStore.h"
 #import "STKContentStore.h"
+#import <MessageUI/MessageUI.h>
 
 NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
 NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
@@ -21,6 +22,8 @@ NSString * const STKActivityTypeWhatsapp = @"STKActivityWhatsapp";
 
 - (void)activity:(STKActivity *)activity
 wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
+- (void)activity:(STKActivity *)activity
+wantsToPresentViewController:(UIViewController *)vc;
 
 @end
 
@@ -222,6 +225,59 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 @end
 
+@interface STKActivityMail : STKActivity
+@end
+
+@implementation STKActivityMail
+
+- (NSString *)activityType
+{
+    return @"STKActivityMail";
+}
+
+- (NSString *)activityTitle
+{
+    return @"Mail";
+}
+
+- (UIImage *)activityImage
+{
+    return [UIImage imageNamed:@"btn_email"];
+}
+
+- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
+{
+     if (![MFMailComposeViewController canSendMail]){
+         return NO;
+     }
+    for(id obj in activityItems) {
+        if([obj isKindOfClass:[UIImage class]]) {
+            [self setImage:obj];
+        }
+        if([obj isKindOfClass:[NSString class]]) {
+            [self setText:obj];
+        }
+    }
+    
+    if(![self image])
+        return NO;
+    return YES;
+}
+
+- (void)performActivity
+{
+    MFMailComposeViewController *mvc = [[MFMailComposeViewController alloc] init];
+    [mvc setMailComposeDelegate:(id<MFMailComposeViewControllerDelegate>)self.delegate];
+    [mvc setSubject:self.text];
+    [mvc addAttachmentData:UIImageJPEGRepresentation(self.image, 8.0f) mimeType:@"image/jpeg" fileName:@"prizm.jpg"];
+    [self.delegate activity:self wantsToPresentViewController:mvc];
+    
+}
+
+
+
+@end
+
 @interface STKActivityReport : STKActivity
 @property (nonatomic, strong) STKPost *currentPost;
 @end
@@ -343,7 +399,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     if([object valueForKey:@"text"])
         [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", [object valueForKey:@"text"]]];
     else
-        if (![object valueForKey:@"hidePrizmatic"]){
+        if (![object objectForKey:@"hidePrizmatic"]){
             [a addObject:@"@beprizmatic"];
         }
     
@@ -352,11 +408,25 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     
     
     [self setFinishHandler:block];
+    NSArray *activities = nil;
     
-    NSArray *activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
-                            [[STKActivityReport alloc] initWithDelegate:self],
-                            [[STKActivityTumblr alloc] initWithDelegate:self],
-                            [[STKActivityWhatsapp alloc] initWithDelegate:self]];
+    if ([object isKindOfClass:[STKPost class]]){
+        activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
+                       [[STKActivityReport alloc] initWithDelegate:self],
+                       [[STKActivityTumblr alloc] initWithDelegate:self],
+                       [[STKActivityWhatsapp alloc] initWithDelegate:self]];
+    } else {
+        activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
+                       [[STKActivityReport alloc] initWithDelegate:self],
+                       [[STKActivityTumblr alloc] initWithDelegate:self],
+                       [[STKActivityWhatsapp alloc] initWithDelegate:self],
+  
+    
+                       [[STKActivityMail alloc] initWithDelegate:self]];
+    }
+    
+    
+    
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:a
                                                                                          applicationActivities:activities];
     [activityViewController setExcludedActivityTypes:
@@ -412,11 +482,28 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc
     
 }
 
+- (void)activity:(STKActivity *)activity
+wantsToPresentViewController:(UIViewController *)vc
+{
+    [self.viewController presentViewController:vc animated:NO completion:^{
+    }];
+}
+
 - (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application
 {
     [[self continuingActivity] activityDidFinish:YES];
     [self setContinuingActivity:nil];
     [self setDocumentControllerRef:nil];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    if (error){
+        [STKErrorStore alertViewForError:error delegate:nil];
+    }
+
+    [controller dismissViewControllerAnimated:YES completion:^{
+        [self.viewController dismissViewControllerAnimated:YES completion:nil];
+    }];
 }
 
 @end
