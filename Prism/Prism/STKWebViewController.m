@@ -126,7 +126,6 @@
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [[STKErrorStore alertViewForError:error delegate:nil] show];
-    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 @end

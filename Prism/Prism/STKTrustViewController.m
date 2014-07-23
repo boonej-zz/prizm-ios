@@ -390,12 +390,7 @@
         }
         NSSortDescriptor *alphabetic = [[NSSortDescriptor alloc] initWithKey:@"firstName" ascending:YES selector:@selector(caseInsensitiveCompare:)];
         NSArray *sortedUsers = [otherUsers sortedArrayUsingDescriptors:@[alphabetic]];
-        if (err) {
-            if ([err code] == NSURLErrorNotConnectedToInternet) {
-#pragma warning warn user they are looking at stale data
-                [lvc setUsers:sortedUsers];
-            }
-        } else {
+        if (!err) {
             [lvc setUsers:sortedUsers];
         }
     }];

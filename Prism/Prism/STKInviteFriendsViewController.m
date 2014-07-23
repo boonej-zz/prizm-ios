@@ -55,6 +55,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
                                                   landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                                target:self action:@selector(back:)];
         [[self navigationItem] setLeftBarButtonItem:bbi];
+        [[self navigationItem] setTitle:@"Invite"];
     }
     
     return self;
