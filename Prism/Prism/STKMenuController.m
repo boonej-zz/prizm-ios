@@ -26,19 +26,25 @@
 #import "STKImageStore.h"
 #import "STKResolvingImageView.h"
 #import "STKPost.h"
+#import "STKMessageBanner.h"
 
 @import QuartzCore;
+
+static NSTimeInterval const STKMessageBannerDisplayDuration = 3.5;
+static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 
 @interface STKMenuController () <UINavigationControllerDelegate, STKMenuViewDelegate, UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, strong) STKMenuView *menuView;
+@property (nonatomic, strong) STKMessageBanner *messageBanner;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSLayoutConstraint *menuTopConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *messageBannerTopConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *messageBannerHeightConstraint;
+@property (nonatomic, strong) NSTimer *messageBannerDuration;
 
 @property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
-
-//@property (nonatomic, strong) NSMutableDictionary *transitionMap;
 
 @end
 
@@ -53,10 +59,21 @@
                                                  selector:@selector(userBecameUnauthorized:)
                                                      name:STKSessionEndedNotification
                                                    object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveNetworkError:)
+                                                     name:@"STKConnectionNetworkError"
+                                                   object:nil];
     }
+    
     return self;
 }
 
+- (void)didReceiveNetworkError:(NSNotification *)note
+{
+    [self displayBannerWithMessage:@"Internet Connection Offline"
+                           forType:STKMessageBannerTypeError];
+}
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
@@ -163,10 +180,10 @@
         
         UIImage *bgImage = [[STKRenderServer renderServer] instantBlurredImageForView:[self view]
                                                                             inSubrect:blurRect];
-
-        [[self menuView] setBackgroundImage:bgImage];
         
+        [[self menuView] setBackgroundImage:bgImage];
         [[self menuView] layoutIfNeeded];
+        
     } else {
         [[self selectedViewController] menuWillDisappear:animated];
     }
@@ -178,10 +195,71 @@
     return [[self menuView] isVisible];
 }
 
+- (CGFloat)navBarOffset
+{
+    if([[self selectedViewController] isKindOfClass:[UINavigationController class]]) {
+        UINavigationBar *bar = [(UINavigationController *)[self selectedViewController] navigationBar];
+        CGRect frame = [bar frame];
+        return frame.origin.y + frame.size.height;
+    }
+    return 0;
+}
+
 - (STKMenuView *)menuView
 {
     [self loadMenuIfRequired];
     return _menuView;
+}
+
+- (STKMessageBanner *)messageBanner
+{
+    [self loadMessageBannerIfRequired];
+    return _messageBanner;
+}
+
+- (void)displayBannerWithMessage:(NSString *)message forType:(STKMessageBannerType)type
+{
+    if(![[self messageBanner] isVisible]) {
+        [[self messageBanner] setLabelText:message];
+        [[self messageBanner] setType:type];
+        [self displayMessageBanner];
+    }
+    
+    [[self messageBannerDuration] invalidate];
+    [self setMessageBannerDuration:[NSTimer scheduledTimerWithTimeInterval:STKMessageBannerDisplayDuration
+                                                                    target:self
+                                                                  selector:@selector(dismissMessageBanner)
+                                                                  userInfo:nil
+                                                                   repeats:NO]];
+}
+
+- (void)displayMessageBanner
+{
+    [[self view] bringSubviewToFront:[self messageBanner]];
+    [UIView animateWithDuration:.5
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         [[self messageBanner] setVisible:YES];
+                         [[self messageBanner] layoutIfNeeded];
+                         [[self messageBannerHeightConstraint] setConstant:STKMessageBannerHeight];
+                     } completion:^(BOOL finished) {
+                     }];
+}
+
+- (void)dismissMessageBanner
+{
+    [UIView animateWithDuration:STKMessageBannerAnimationDuration
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         [[self messageBanner] layoutIfNeeded];
+                         [[self messageBannerHeightConstraint] setConstant:0];
+                     } completion:^(BOOL finished) {
+                         if(finished) {
+                             [[self messageBanner] setVisible:NO];
+                         }
+                     }];
 }
 
 - (void)menuView:(STKMenuView *)menuView didSelectItemAtIndex:(int)idx
@@ -194,7 +272,6 @@
         [self setSelectedViewController:vc];
     else {
         [(UINavigationController *)[self selectedViewController] popToRootViewControllerAnimated:NO];
-
     }
 }
 
@@ -206,13 +283,12 @@
     [(UINavigationController *)_selectedViewController popToRootViewControllerAnimated:NO];
     
     if([self isViewLoaded]) {
+
         UIView *v = [[self selectedViewController] view];
         [[self view] addSubview:v];
 
         [v setFrame:[[self view] bounds]];
-        
         [[self menuView] setSelectedIndex:(int)[[self viewControllers] indexOfObject:_selectedViewController]];
-        
     }
 }
 
@@ -249,6 +325,55 @@
                                                            multiplier:1 constant:0]];
 }
 
+- (void)loadMessageBannerIfRequired
+{
+    if(_messageBanner)
+        return;
+    
+    [self setMessageBanner:[[STKMessageBanner alloc] init]];
+    [[self view] addSubview:[self messageBanner]];
+    
+    CGFloat bannerOffSet = -([self navBarOffset]);
+    NSLayoutConstraint *bannerTop = [NSLayoutConstraint constraintWithItem:[self view]
+                                                                 attribute:NSLayoutAttributeTop
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:[self messageBanner]
+                                                                 attribute:NSLayoutAttributeTop
+                                                                multiplier:1.0
+                                                                  constant:bannerOffSet];
+    
+    NSLayoutConstraint *bannerHeight = [NSLayoutConstraint constraintWithItem:[self messageBanner]
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:nil
+                                                                    attribute:NSLayoutAttributeNotAnAttribute
+                                                                   multiplier:1
+                                                                     constant:0];
+    
+    [[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view]
+                                                            attribute:NSLayoutAttributeWidth
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:[self messageBanner]
+                                                            attribute:NSLayoutAttributeWidth
+                                                           multiplier:1
+                                                             constant:0]];
+    
+    [[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view]
+                                                            attribute:NSLayoutAttributeLeft
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:[self messageBanner]
+                                                            attribute:NSLayoutAttributeLeft
+                                                           multiplier:1
+                                                             constant:0]];
+
+
+    [[self view] addConstraint:bannerTop];
+    [[self messageBanner] addConstraint:bannerHeight];
+    [self setMessageBannerTopConstraint:bannerTop];
+    [self setMessageBannerHeightConstraint:bannerHeight];
+    [[self messageBanner] layoutIfNeeded];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -267,7 +392,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
 }
 
 - (void)toggleMenu:(id)sender
@@ -338,6 +462,7 @@
     
     
     _backgroundImageView = imageView;
+    
 }
 
 - (void)viewDidLoad

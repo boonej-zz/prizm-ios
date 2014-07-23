@@ -30,5 +30,4 @@
 
 - (void)performInAnimation;
 - (void)performOutAnimationWithCompletion:(void (^)(void))block;
-
 @end
