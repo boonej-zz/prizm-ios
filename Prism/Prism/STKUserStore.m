@@ -1724,15 +1724,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 [self authenticateUser:[self currentUser]];
                 [[self context] save:nil];
             }];
+            [self setGooglePlusProcessingBlock:nil];
+            [self setGooglePlusAuthenticationBlock:nil];
         } else {
             [self setAttemptingTransparentLogin:NO];
             GPPSignInButton *b = [[GPPSignInButton alloc] init];
             [b sendActionsForControlEvents:UIControlEventTouchUpInside];
         }
     }
-    
-    [self setGooglePlusProcessingBlock:nil];
-    [self setGooglePlusAuthenticationBlock:nil];
 }
 
 #pragma mark Standard
