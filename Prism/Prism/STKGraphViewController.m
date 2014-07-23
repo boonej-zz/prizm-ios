@@ -16,6 +16,11 @@
 #import "STKGraphCell.h"
 #import "STKNavigationButton.h"
 
+static float const STKGraphViewControllerPercentageLabelCenterXConstant4Inch = -3.0;
+static float const STKGraphViewControllerPercentageLabelCenterYConstant4Inch = 0;
+static float const STKGraphViewControllerPercentageLabelCenterXConstant3Point5Inch = 8.0;
+static float const STKGraphViewControllerPercentageLabelCenterYConstant3Point5Inch = -10;
+
 @interface STKGraphViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *aspirationButton;
@@ -46,6 +51,8 @@
 @property (nonatomic, strong) NSDictionary *typeHashTags;
 
 @property (nonatomic, strong) NSString *currentFilter;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pieChartPercentageLabelCenterXConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pieChartPercentageLabelCenterYConstraint;
 
 @end
 
@@ -193,6 +200,14 @@
 {
     [super viewWillAppear:animated];
     
+    if([UIScreen mainScreen].bounds.size.height > 500){
+        [[self pieChartPercentageLabelCenterXConstraint] setConstant:STKGraphViewControllerPercentageLabelCenterXConstant4Inch];
+        [[self pieChartPercentageLabelCenterYConstraint] setConstant:STKGraphViewControllerPercentageLabelCenterYConstant4Inch];
+    } else {
+        [[self pieChartPercentageLabelCenterXConstraint] setConstant:STKGraphViewControllerPercentageLabelCenterXConstant3Point5Inch];
+        [[self pieChartPercentageLabelCenterYConstraint] setConstant:STKGraphViewControllerPercentageLabelCenterYConstant3Point5Inch];
+    }
+    
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
     
@@ -229,7 +244,6 @@
 
     [self configureGraphArea];
     [[self percentTableView] reloadData];
-
 }
 
 - (void)addWeeklyEntries:(NSDictionary *)weeklyEntries

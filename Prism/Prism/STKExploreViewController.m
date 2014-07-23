@@ -28,7 +28,7 @@
 #import "STKExploreFilterViewController.h"
 
 @interface STKExploreViewController ()
-    <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate, STKExploreFilterDelegate, UINavigationControllerDelegate>
+    <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate, STKExploreFilterDelegate>
 
 @property (nonatomic, strong) UINavigationController *searchNavController;
 @property (nonatomic, strong) UINavigationController *filterNavController;
