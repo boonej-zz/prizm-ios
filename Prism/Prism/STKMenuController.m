@@ -27,6 +27,7 @@
 #import "STKResolvingImageView.h"
 #import "STKPost.h"
 #import "STKMessageBanner.h"
+#import "STKUserStore.h"
 
 @import QuartzCore;
 
@@ -235,16 +236,18 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 
 - (void)displayMessageBanner
 {
-    [[self view] bringSubviewToFront:[self messageBanner]];
-    [UIView animateWithDuration:.5
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseIn
-                     animations:^{
-                         [[self messageBanner] setVisible:YES];
-                         [[self messageBanner] layoutIfNeeded];
-                         [[self messageBannerHeightConstraint] setConstant:STKMessageBannerHeight];
-                     } completion:^(BOOL finished) {
-                     }];
+    if([[STKUserStore store] currentUser]) {
+        [[self view] bringSubviewToFront:[self messageBanner]];
+        [UIView animateWithDuration:.5
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseIn
+                         animations:^{
+                             [[self messageBanner] setVisible:YES];
+                             [[self messageBanner] layoutIfNeeded];
+                             [[self messageBannerHeightConstraint] setConstant:STKMessageBannerHeight];
+                         } completion:^(BOOL finished) {
+                         }];
+    }
 }
 
 - (void)dismissMessageBanner
