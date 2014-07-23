@@ -16,11 +16,6 @@
 #import "STKGraphCell.h"
 #import "STKNavigationButton.h"
 
-static float const STKGraphViewControllerPercentageLabelCenterXConstant4Inch = -3.0;
-static float const STKGraphViewControllerPercentageLabelCenterYConstant4Inch = 0;
-static float const STKGraphViewControllerPercentageLabelCenterXConstant3Point5Inch = 8.0;
-static float const STKGraphViewControllerPercentageLabelCenterYConstant3Point5Inch = -10;
-
 @interface STKGraphViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *aspirationButton;
@@ -38,7 +33,6 @@ static float const STKGraphViewControllerPercentageLabelCenterYConstant3Point5In
 @property (weak, nonatomic) IBOutlet UILabel *lifetimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *leftDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *rightDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *pieChartPercentageLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *lifetimeActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *graphActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *instructionsView;
@@ -51,8 +45,6 @@ static float const STKGraphViewControllerPercentageLabelCenterYConstant3Point5In
 @property (nonatomic, strong) NSDictionary *typeHashTags;
 
 @property (nonatomic, strong) NSString *currentFilter;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pieChartPercentageLabelCenterXConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *pieChartPercentageLabelCenterYConstraint;
 
 @end
 
@@ -200,14 +192,6 @@ static float const STKGraphViewControllerPercentageLabelCenterYConstant3Point5In
 {
     [super viewWillAppear:animated];
     
-    if([UIScreen mainScreen].bounds.size.height > 500){
-        [[self pieChartPercentageLabelCenterXConstraint] setConstant:STKGraphViewControllerPercentageLabelCenterXConstant4Inch];
-        [[self pieChartPercentageLabelCenterYConstraint] setConstant:STKGraphViewControllerPercentageLabelCenterYConstant4Inch];
-    } else {
-        [[self pieChartPercentageLabelCenterXConstraint] setConstant:STKGraphViewControllerPercentageLabelCenterXConstant3Point5Inch];
-        [[self pieChartPercentageLabelCenterYConstraint] setConstant:STKGraphViewControllerPercentageLabelCenterYConstant3Point5Inch];
-    }
-    
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
     
@@ -282,8 +266,6 @@ static float const STKGraphViewControllerPercentageLabelCenterYConstant3Point5In
     
     [[self graphView] setXLabels:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7"]];
     [[self graphView] setYLabels:@[@"", @"25%", @"50%", @"75%", @"100%"]];
-    
-    [[self pieChartPercentageLabel] setFont:STKFont(22)];
 }
 
 
@@ -395,8 +377,7 @@ static float const STKGraphViewControllerPercentageLabelCenterYConstant3Point5In
         [orderedValues addObject:@(1.0 - v)];
         [orderedColors addObject:[UIColor colorWithRed:.29 green:.35 blue:.54 alpha:1]];
         
-        [[self pieChartPercentageLabel] setHidden:NO];
-        [[self pieChartPercentageLabel] setText:[NSString stringWithFormat:@"%d%%",(int)(v*100)]];
+        [[self pieChartView] setPercentText:[NSString stringWithFormat:@"%d%%",(int)(v*100)]];
     } else {
         for(NSString *key in [self orderArray]) {
             [orderedColors addObject:[[self typeColors] objectForKey:key]];
@@ -406,8 +387,7 @@ static float const STKGraphViewControllerPercentageLabelCenterYConstant3Point5In
                 percent = @0;
             [orderedValues addObject:percent];
         }
-        
-        [[self pieChartPercentageLabel] setHidden:YES];
+        [[self pieChartView] setPercentText:nil];
     }
     [[self pieChartView] setColors:orderedColors];
     [[self pieChartView] setValues:orderedValues];

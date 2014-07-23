@@ -41,18 +41,41 @@
     float w, h, lineWidth, diameter;
     CGPoint center;
     
-    if([UIScreen mainScreen].bounds.size.height > 500){
+    if([UIScreen mainScreen].bounds.size.height > 500) {
         w = [self bounds].size.width;
         h = [self bounds].size.height;
         lineWidth = 16;
         diameter = w;
         center = CGPointMake(w / 2.0, h / 2.0);
-    }else{
+    } else{
         w = [self bounds].size.width - 35;
         h = [self bounds].size.height + 35;
         lineWidth = 12;
         diameter = w;
         center = CGPointMake(w / 2.0 + 10, h / 2.0 - 7);
+    }
+    
+    if ([[self percentText] length]) {
+        float fontSize = 22;
+        NSDictionary *attributes = @{NSFontAttributeName : STKFont(fontSize),
+                                     NSForegroundColorAttributeName : [UIColor whiteColor]
+                                     };
+        CGSize s = [[self percentText] sizeWithAttributes:@{NSFontAttributeName : STKFont(fontSize),
+                                                            NSForegroundColorAttributeName : [UIColor whiteColor]
+                                                            }];
+        // 34 here makes sure that the 100% label doesn't get too close to the pie chart on 3.5" screens
+        while (s.width > diameter - 34) {
+            fontSize -= 2;
+            attributes = @{NSFontAttributeName : STKFont(fontSize),
+                                         NSForegroundColorAttributeName : [UIColor whiteColor]
+                                         };
+            s = [[self percentText] sizeWithAttributes:@{NSFontAttributeName : STKFont(fontSize),
+                                                                NSForegroundColorAttributeName : [UIColor whiteColor]
+                                                                }];
+        }
+        
+        CGPoint drawPoint = CGPointMake(center.x - s.width/2, center.y - s.height/2);
+        [[self percentText] drawAtPoint:drawPoint withAttributes:attributes];
     }
     
     float arcRadius = diameter / 2.0 - 8.0;
@@ -72,4 +95,9 @@
     
 }
 
+- (void)setPercentText:(NSString *)percentText
+{
+    _percentText = percentText;
+    [self setNeedsDisplay];
+}
 @end
