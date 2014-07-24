@@ -161,7 +161,12 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(nil, err);
             return;
         }
-                
+        
+#warning Do we keep this in after the "empty request queue upon logout fix"?
+        if (u == nil) {
+            block(nil, err);
+        }
+        
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [u uniqueID], @"feed"]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];

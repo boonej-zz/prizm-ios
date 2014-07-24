@@ -22,6 +22,7 @@ NSString * const STKActivityTypeWhatsapp = @"STKActivityWhatsapp";
 - (void)activity:(STKActivity *)activity
 wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
+
 @end
 
 @interface STKImageSharer () <STKActivityDelegate>
@@ -340,27 +341,32 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     NSMutableArray *a = [NSMutableArray array];
     if(image)
         [a addObject:image];
-    if([object valueForKey:@"text"])
+    if([object isKindOfClass:[STKPost class]])
         [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", [object valueForKey:@"text"]]];
     else
-        if (![object valueForKey:@"hidePrizmatic"]){
-            [a addObject:@"@beprizmatic"];
-        }
-    
-    if(object)
         [a addObject:object];
     
     
     [self setFinishHandler:block];
+    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
+                             [[STKActivityReport alloc] initWithDelegate:self],
+                             [[STKActivityTumblr alloc] initWithDelegate:self],
+                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
+    NSArray *excludedActivities = nil;
+    if ([object isKindOfClass:[STKPost class]]){
+        excludedActivities = @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];
+    } else {
+        excludedActivities = @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard];
+    }
     
-    NSArray *activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
-                            [[STKActivityReport alloc] initWithDelegate:self],
-                            [[STKActivityTumblr alloc] initWithDelegate:self],
-                            [[STKActivityWhatsapp alloc] initWithDelegate:self]];
+    
+    
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:a
                                                                                          applicationActivities:activities];
-    [activityViewController setExcludedActivityTypes:
-     @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail]];
+    [activityViewController setExcludedActivityTypes:excludedActivities];
+    if (![object isKindOfClass:[STKPost class]]) {
+        [activityViewController setTitle:@"Look who's on Prizm!"];
+    }
     
 #warning smelly, but we do not have direct access to system provided activities and their navigation controllers
     // revert appearance proxies to get default iOS behavior when sharing through Messages
@@ -375,7 +381,6 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                                            forBarMetrics:UIBarMetricsDefault];
         [[UITextField appearance] setTintColor:tintColor];
     };
-    
     [activityViewController setCompletionHandler:handler];
     [self setViewController:activityViewController];
     
@@ -412,12 +417,14 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc
     
 }
 
+
 - (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application
 {
     [[self continuingActivity] activityDidFinish:YES];
     [self setContinuingActivity:nil];
     [self setDocumentControllerRef:nil];
 }
+
 
 @end
 

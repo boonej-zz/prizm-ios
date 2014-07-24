@@ -11,4 +11,5 @@
 @interface STKPieChartView : UIView
 @property (nonatomic, strong) NSArray *colors;
 @property (nonatomic, strong) NSArray *values;
+@property (nonatomic, strong) NSString *percentText;
 @end
