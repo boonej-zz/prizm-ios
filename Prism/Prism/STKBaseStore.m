@@ -87,6 +87,10 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
 
 - (void)cancelAllQueuedRequests
 {
+    NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorCancelled userInfo:nil];
+    for(void (^req)(NSError *err) in [self authorizedRequestQueue]) {
+        req(error);
+    }
     [[self authorizedRequestQueue] removeAllObjects];
 }
 
