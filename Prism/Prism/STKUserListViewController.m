@@ -115,8 +115,7 @@
         STKTrust *t = [[[STKUserStore store] currentUser] trustForUser:[self deletingUser]];
         [[STKUserStore store] cancelTrustRequest:t completion:^(STKTrust *requestItem, NSError *err) {
             if(err) {
-                UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-                [av show];
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
                 [self setUsers:prevUsers];
             }
             [[self tableView] reloadData];

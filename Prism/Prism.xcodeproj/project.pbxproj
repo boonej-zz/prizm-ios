@@ -241,6 +241,7 @@
 		D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */; };
 		D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E5076A1914251A0011DB63 /* STKLoginResetViewController.m */; };
 		D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E5076B1914251A0011DB63 /* STKLoginResetViewController.xib */; };
+		D0E85B12197D7910001A5333 /* STKMessageBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E85B11197D7910001A5333 /* STKMessageBanner.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2335,6 +2336,8 @@
 		D0E507691914251A0011DB63 /* STKLoginResetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLoginResetViewController.h; sourceTree = "<group>"; };
 		D0E5076A1914251A0011DB63 /* STKLoginResetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLoginResetViewController.m; sourceTree = "<group>"; };
 		D0E5076B1914251A0011DB63 /* STKLoginResetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLoginResetViewController.xib; sourceTree = "<group>"; };
+		D0E85B10197D7910001A5333 /* STKMessageBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMessageBanner.h; sourceTree = "<group>"; };
+		D0E85B11197D7910001A5333 /* STKMessageBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMessageBanner.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2663,6 +2666,8 @@
 				BE7B485C192BA02E00BDCE15 /* STKSegmentedPanel.m */,
 				BEE84F5B192BFB2200820A19 /* STKLuminatingBar.h */,
 				BEE84F5C192BFB2200820A19 /* STKLuminatingBar.m */,
+				D0E85B10197D7910001A5333 /* STKMessageBanner.h */,
+				D0E85B11197D7910001A5333 /* STKMessageBanner.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4922,6 +4927,7 @@
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
+				D0E85B12197D7910001A5333 /* STKMessageBanner.m in Sources */,
 				883D87D519463E7F00195B11 /* MPSurvey.m in Sources */,
 				883D87D719463E7F00195B11 /* MPSurveyNavigationController.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
@@ -5172,6 +5178,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Staging)";
@@ -5202,6 +5209,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -5308,6 +5316,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (Staging)";
@@ -5397,6 +5406,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (User Testing)";
@@ -5573,6 +5583,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Dev)";
