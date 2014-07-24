@@ -21,8 +21,7 @@ NSString * const STKActivityTypeWhatsapp = @"STKActivityWhatsapp";
 
 - (void)activity:(STKActivity *)activity
 wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
-- (void)activity:(STKActivity *)activity
-wantsToPresentViewController:(UIViewController *)vc;
+
 
 @end
 
@@ -418,13 +417,6 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc
     
 }
 
-
-- (void)activity:(STKActivity *)activity
-wantsToPresentViewController:(UIViewController *)vc
-{
-    [self.viewController presentViewController:vc animated:NO completion:^{
-    }];
-}
 
 - (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application
 {
