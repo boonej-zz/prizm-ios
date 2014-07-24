@@ -5484,6 +5484,14 @@
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
 				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(PROJECT_DIR)",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
