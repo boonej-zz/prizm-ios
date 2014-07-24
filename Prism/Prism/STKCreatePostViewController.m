@@ -456,6 +456,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     if(![[self postInfo] objectForKey:STKPostTextKey] && ![[self postInfo] objectForKey:STKPostURLKey] && ![self isUploadingImage]) {
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Missing Information" message:@"A post must contain an image, text or both." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [av show];
+        return;
     }
     
     [self createPost];

@@ -94,13 +94,14 @@ NSString * const STKErrorStoreServerError = @"server_error";
             @(STKConnectionErrorCodeRequestFailed) : @"The requested information was not accessed successfully.",
             STKErrorUserDoesNotExist : @"Invalid user or password.",
             STKErrorBadPassword : @"Invalid user or password.",
-            STKErrorInvalidRequest : @"There was a problem communcating with the server.",
+            STKErrorInvalidRequest : @"There was a problem communicating with the server.",
             STKErrorInvalidRegistration : @"An account with this e-mail address already exists.",
             STKErrorStoreInvalidUserRequest : @"Invalid user.",
             STKErrorStoreServerError : @"There was a problem with the server. Please contact customer support."
         } forKey:STKConnectionServiceErrorDomain];
         [errorMap setObject:@{
-            @"Any" : @"There was a problem communicating with the server. Ensure you have internet access and try again."
+            @"Any" : @"There was a problem communicating with the server. Ensure you have internet access and try again.",
+            @(NSURLErrorCancelled) : @"Your request was cancelled."
         } forKey:NSURLErrorDomain];
         [errorMap setObject:@{
             @(kCLErrorDenied) : @"Prizm doesn't have access to your location. Please change this in the Settings application."

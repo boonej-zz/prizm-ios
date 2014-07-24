@@ -406,15 +406,8 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     [self clearCache:nil];
     
     NSFileManager *fm = [NSFileManager defaultManager];
-    
-    NSArray *imagePaths = [fm contentsOfDirectoryAtPath:[self cachePath] error:nil];
-    
-    [imagePaths enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj length] > 0) {
-            NSString *path = [[self cachePath] stringByAppendingPathComponent:obj];
-            [fm removeItemAtPath:path error:nil];
-        }
-    }];
+    [fm removeItemAtPath:[self cachePath] error:nil];
+    [[NSFileManager defaultManager] createDirectoryAtPath:_cachePath withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 @end

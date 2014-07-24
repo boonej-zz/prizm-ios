@@ -303,14 +303,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [[Mixpanel sharedInstance] registerSuperProperties:@{@"Current user" : analyticsIdentifier}];
         [[Mixpanel sharedInstance] startSession];
     } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
-        [self setContext:nil];
-        [[NSFileManager defaultManager] removeItemAtPath:[self cachePathForDatabase] error:nil];
-        [self establishDatabaseAndCurrentUser];
         [[Mixpanel sharedInstance] endSession];
         [[Mixpanel sharedInstance] registerSuperProperties:@{}];
-        
-        [[STKImageStore store] deleteAllCachedImages];
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:STKUserStoreCurrentUserKey];
+            [self setContext:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:[self cachePathForDatabase] error:nil];
+            [self establishDatabaseAndCurrentUser];
+            [[STKImageStore store] deleteAllCachedImages];
+        }];
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreCurrentUserChangedNotification object:self];
