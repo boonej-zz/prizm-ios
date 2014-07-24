@@ -10,7 +10,6 @@
 #import "STKPost.h"
 #import "STKImageStore.h"
 #import "STKContentStore.h"
-#import <MessageUI/MessageUI.h>
 
 NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
 NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
@@ -225,59 +224,6 @@ wantsToPresentViewController:(UIViewController *)vc;
 
 @end
 
-@interface STKActivityMail : STKActivity
-@end
-
-@implementation STKActivityMail
-
-- (NSString *)activityType
-{
-    return @"STKActivityMail";
-}
-
-- (NSString *)activityTitle
-{
-    return @"Mail";
-}
-
-- (UIImage *)activityImage
-{
-    return [UIImage imageNamed:@"btn_email"];
-}
-
-- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
-{
-     if (![MFMailComposeViewController canSendMail]){
-         return NO;
-     }
-    for(id obj in activityItems) {
-        if([obj isKindOfClass:[UIImage class]]) {
-            [self setImage:obj];
-        }
-        if([obj isKindOfClass:[NSString class]]) {
-            [self setText:obj];
-        }
-    }
-    
-    if(![self image])
-        return NO;
-    return YES;
-}
-
-- (void)performActivity
-{
-    MFMailComposeViewController *mvc = [[MFMailComposeViewController alloc] init];
-    [mvc setMailComposeDelegate:(id<MFMailComposeViewControllerDelegate>)self.delegate];
-    [mvc setSubject:self.text];
-    [mvc addAttachmentData:UIImageJPEGRepresentation(self.image, 8.0f) mimeType:@"image/jpeg" fileName:@"prizm.jpg"];
-    [self.delegate activity:self wantsToPresentViewController:mvc];
-    
-}
-
-
-
-@end
-
 @interface STKActivityReport : STKActivity
 @property (nonatomic, strong) STKPost *currentPost;
 @end
@@ -396,41 +342,32 @@ wantsToPresentViewController:(UIViewController *)vc;
     NSMutableArray *a = [NSMutableArray array];
     if(image)
         [a addObject:image];
-    if([object valueForKey:@"text"])
+    if([object isKindOfClass:[STKPost class]])
         [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic", [object valueForKey:@"text"]]];
     else
-        if (![object objectForKey:@"hidePrizmatic"]){
-            [a addObject:@"@beprizmatic"];
-        }
-    
-    if(object)
         [a addObject:object];
     
     
     [self setFinishHandler:block];
-    NSArray *activities = nil;
-    
+    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
+                             [[STKActivityReport alloc] initWithDelegate:self],
+                             [[STKActivityTumblr alloc] initWithDelegate:self],
+                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
+    NSArray *excludedActivities = nil;
     if ([object isKindOfClass:[STKPost class]]){
-        activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
-                       [[STKActivityReport alloc] initWithDelegate:self],
-                       [[STKActivityTumblr alloc] initWithDelegate:self],
-                       [[STKActivityWhatsapp alloc] initWithDelegate:self]];
+        excludedActivities = @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];
     } else {
-        activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
-                       [[STKActivityReport alloc] initWithDelegate:self],
-                       [[STKActivityTumblr alloc] initWithDelegate:self],
-                       [[STKActivityWhatsapp alloc] initWithDelegate:self],
-  
-    
-                       [[STKActivityMail alloc] initWithDelegate:self]];
+        excludedActivities = @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard];
     }
     
     
     
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:a
                                                                                          applicationActivities:activities];
-    [activityViewController setExcludedActivityTypes:
-     @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail]];
+    [activityViewController setExcludedActivityTypes:excludedActivities];
+    if (![object isKindOfClass:[STKPost class]]) {
+        [activityViewController setTitle:@"Look who's on Prizm!"];
+    }
     
 #warning smelly, but we do not have direct access to system provided activities and their navigation controllers
     // revert appearance proxies to get default iOS behavior when sharing through Messages
@@ -445,7 +382,6 @@ wantsToPresentViewController:(UIViewController *)vc;
                                            forBarMetrics:UIBarMetricsDefault];
         [[UITextField appearance] setTintColor:tintColor];
     };
-    
     [activityViewController setCompletionHandler:handler];
     [self setViewController:activityViewController];
     
@@ -482,6 +418,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc
     
 }
 
+
 - (void)activity:(STKActivity *)activity
 wantsToPresentViewController:(UIViewController *)vc
 {
@@ -496,15 +433,6 @@ wantsToPresentViewController:(UIViewController *)vc
     [self setDocumentControllerRef:nil];
 }
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    if (error){
-        [STKErrorStore alertViewForError:error delegate:nil];
-    }
-
-    [controller dismissViewControllerAnimated:YES completion:^{
-        [self.viewController dismissViewControllerAnimated:YES completion:nil];
-    }];
-}
 
 @end
 
