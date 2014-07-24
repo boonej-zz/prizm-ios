@@ -130,8 +130,7 @@
     if([activating boolValue]) {
         [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
             if(err) {
-                UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-                [av show];
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
                 return;
             }
             

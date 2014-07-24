@@ -31,7 +31,7 @@
 
 @import QuartzCore;
 
-static NSTimeInterval const STKMessageBannerDisplayDuration = 3.5;
+static NSTimeInterval const STKMessageBannerDisplayDuration = 3.0;
 static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 
 @interface STKMenuController () <UINavigationControllerDelegate, STKMenuViewDelegate, UIViewControllerAnimatedTransitioning>
@@ -167,17 +167,14 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
         UIViewController *selected = [self selectedViewController];
         [selected menuWillAppear:animated];
         
+        float topOffset = [self navBarOffset];
         
-        if([selected isKindOfClass:[UINavigationController class]]) {
-            UINavigationBar *bar = [(UINavigationController *)selected navigationBar];
-            CGRect barFrame = [bar frame];
-            float topOffset = barFrame.origin.y + barFrame.size.height;
-            [[self menuTopConstraint] setConstant:topOffset];
+        if(topOffset > 0) {
             blurRect.origin.y += topOffset;
             blurRect.size.height -= topOffset;
-        } else {
-            [[self menuTopConstraint] setConstant:0];
         }
+        
+        [[self menuTopConstraint] setConstant:topOffset];
         
         UIImage *bgImage = [[STKRenderServer renderServer] instantBlurredImageForView:[self view]
                                                                             inSubrect:blurRect];
@@ -276,6 +273,10 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
     else {
         [(UINavigationController *)[self selectedViewController] popToRootViewControllerAnimated:NO];
     }
+    
+    if([[self messageBanner] isVisible]) {
+        [[self view] bringSubviewToFront:[self messageBanner]];
+    }
 }
 
 - (void)setSelectedViewController:(UIViewController *)selectedViewController
@@ -291,6 +292,7 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
         [[self view] addSubview:v];
 
         [v setFrame:[[self view] bounds]];
+        
         [[self menuView] setSelectedIndex:(int)[[self viewControllers] indexOfObject:_selectedViewController]];
     }
 }

@@ -28,9 +28,16 @@ CGFloat const STKMessageBannerHeight = 20.0f;
         [self setHidden:YES];
         
         _label = [[UILabel alloc] initWithFrame:[self frame]];
-        [_label setAlpha:0.8];
+        [_label setClipsToBounds:YES];
         [_label setBackgroundColor:[self colorForBannerType:STKMessageBannerTypeError]];
+        [_label setAlpha:0.8];
+        [_label setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:13.f]];
         [_label setTextAlignment:NSTextAlignmentCenter];
+        [_label setTextColor:[UIColor colorWithWhite:1.f alpha:0.9f]];
+        [[_label layer] setShadowColor:[UIColor blackColor].CGColor];
+        [[_label layer] setShadowOffset:CGSizeMake(0.f, -1.f)];
+        [[_label layer] setShadowOpacity:0.3f];
+        [[_label layer] setShadowRadius:0.f];
         
         [self addSubview:_label];
         
