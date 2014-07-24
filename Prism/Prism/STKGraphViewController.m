@@ -33,7 +33,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *lifetimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *leftDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *rightDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *pieChartPercentageLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *lifetimeActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *graphActivityIndicator;
 @property (weak, nonatomic) IBOutlet UIView *instructionsView;
@@ -229,7 +228,6 @@
 
     [self configureGraphArea];
     [[self percentTableView] reloadData];
-
 }
 
 - (void)addWeeklyEntries:(NSDictionary *)weeklyEntries
@@ -268,8 +266,6 @@
     
     [[self graphView] setXLabels:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7"]];
     [[self graphView] setYLabels:@[@"", @"25%", @"50%", @"75%", @"100%"]];
-    
-    [[self pieChartPercentageLabel] setFont:STKFont(22)];
 }
 
 
@@ -381,8 +377,7 @@
         [orderedValues addObject:@(1.0 - v)];
         [orderedColors addObject:[UIColor colorWithRed:.29 green:.35 blue:.54 alpha:1]];
         
-        [[self pieChartPercentageLabel] setHidden:NO];
-        [[self pieChartPercentageLabel] setText:[NSString stringWithFormat:@"%d%%",(int)(v*100)]];
+        [[self pieChartView] setPercentText:[NSString stringWithFormat:@"%d%%",(int)(v*100)]];
     } else {
         for(NSString *key in [self orderArray]) {
             [orderedColors addObject:[[self typeColors] objectForKey:key]];
@@ -392,8 +387,7 @@
                 percent = @0;
             [orderedValues addObject:percent];
         }
-        
-        [[self pieChartPercentageLabel] setHidden:YES];
+        [[self pieChartView] setPercentText:nil];
     }
     [[self pieChartView] setColors:orderedColors];
     [[self pieChartView] setValues:orderedValues];

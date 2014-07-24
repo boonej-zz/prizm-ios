@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -20,8 +20,7 @@
                 <outlet property="passionButton" destination="3kD-xS-BfU" id="sBc-bP-WyK"/>
                 <outlet property="percentTableView" destination="k7u-Cp-1Um" id="DcB-yq-kf2"/>
                 <outlet property="personalButton" destination="z6p-OR-5Ld" id="Z2d-Fy-GAg"/>
-                <outlet property="pieChartPercentageLabel" destination="WPc-Un-RL7" id="LVh-76-WOv"/>
-                <outlet property="pieChartView" destination="bbw-nr-E7X" id="jQP-JU-Geb"/>
+                <outlet property="pieChartView" destination="bbw-nr-E7X" id="iZr-fX-QsW"/>
                 <outlet property="rightDateLabel" destination="W53-H2-bAG" id="1wE-hQ-QNY"/>
                 <outlet property="underlayView" destination="eyr-wJ-YQY" id="5MB-rd-HY1"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -60,17 +59,6 @@
                     <rect key="frame" x="0.0" y="290" width="320" height="228"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WPc-Un-RL7" userLabel="percentage label">
-                            <rect key="frame" x="58" y="112" width="50" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="50" id="TXK-C8-gJy"/>
-                                <constraint firstAttribute="height" constant="21" id="TZj-lJ-4rd"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bbw-nr-E7X" customClass="STKPieChartView">
                             <rect key="frame" x="20" y="26" width="120" height="194"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -112,8 +100,6 @@
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="bbw-nr-E7X" firstAttribute="centerX" secondItem="4p7-9Z-b8g" secondAttribute="centerX" id="6tw-kf-8rY"/>
-                        <constraint firstItem="bbw-nr-E7X" firstAttribute="centerX" secondItem="WPc-Un-RL7" secondAttribute="centerX" constant="-3" id="Dq5-8h-al5"/>
-                        <constraint firstItem="bbw-nr-E7X" firstAttribute="centerY" secondItem="WPc-Un-RL7" secondAttribute="centerY" constant="0.5" id="PXd-zh-94d"/>
                         <constraint firstAttribute="trailing" secondItem="k7u-Cp-1Um" secondAttribute="trailing" constant="8" id="VWF-T7-UN6"/>
                         <constraint firstAttribute="centerY" secondItem="k7u-Cp-1Um" secondAttribute="centerY" id="aa5-yW-tPM"/>
                         <constraint firstItem="bbw-nr-E7X" firstAttribute="top" secondItem="v2G-FQ-bL3" secondAttribute="top" constant="8" id="aiG-sQ-InP"/>

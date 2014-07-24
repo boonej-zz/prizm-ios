@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -97,6 +97,7 @@
                     <constraint firstItem="7et-gZ-jKt" firstAttribute="top" secondItem="uR9-RN-UhF" secondAttribute="top" constant="4" id="cv8-yQ-1NK"/>
                     <constraint firstAttribute="trailing" secondItem="wSu-8r-2na" secondAttribute="trailing" id="j3W-Hp-xov"/>
                     <constraint firstItem="7et-gZ-jKt" firstAttribute="leading" secondItem="uR9-RN-UhF" secondAttribute="leading" constant="10" id="lpx-Fv-F64"/>
+                    <constraint firstItem="p2G-E8-bZk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DLx-wG-Oym" secondAttribute="trailing" id="reg-IY-BMn"/>
                     <constraint firstItem="IZj-1a-VE0" firstAttribute="leading" secondItem="DLx-wG-Oym" secondAttribute="trailing" constant="6" id="wdX-3V-ZJs"/>
                 </constraints>
             </tableViewCellContentView>
