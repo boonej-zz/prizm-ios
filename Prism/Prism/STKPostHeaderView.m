@@ -63,6 +63,7 @@
     
     [_avatarButton setBackgroundColor:[UIColor clearColor]];
     [_sourceButton setBackgroundColor:[UIColor clearColor]];
+    [_sourceLabel setTextAlignment:NSTextAlignmentRight];
     
     [self addSubview:_backdropFadeView];
     [self addSubview:_avatarView];
@@ -119,7 +120,7 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_posterLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual
                                                         toItem:_timeImageView attribute:NSLayoutAttributeLeading multiplier:1 constant:0]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[tiv(==10.5)]-4-[time(==100)]-8-[source]-9-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[tiv(==10.5)]-4-[time(==100)]-8-[source]-10-|"
                                                                  options:NSLayoutFormatAlignAllCenterY metrics:nil views:@{@"tiv" : _timeImageView, @"time" : _timeLabel, @"source" : _sourceLabel}]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual

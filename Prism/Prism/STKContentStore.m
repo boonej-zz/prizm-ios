@@ -108,8 +108,10 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [req setPredicate:predicate];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
         [req setFetchLimit:[desc limit]];
-        
-        return [[[STKUserStore store] context] executeFetchRequest:req error:nil];
+
+        NSArray *results = [[[STKUserStore store] context] executeFetchRequest:req error:nil];
+        NSLog(@"%d", [results count]);
+        return results;
     } else {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO]]];
@@ -138,12 +140,13 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 
     if (fetchLimit == 0) {
         fetchLimit = 30;
+        [desc setLimit:30];
     }
 
     
     NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
                                    fetchDescription:desc];
-    
+
     if([cached count] > 0) {
         if(direction == STKQueryObjectPageNewer) {
             referencePost = [cached firstObject];
@@ -195,8 +198,11 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *posts, NSError *err) {
             if(!err) {
-                //[[[[STKUserStore store] currentUser] mutableSetValueForKeyPath:@"fFeedPosts"] addObjectsFromArray:posts];
-                [[[STKUserStore store] currentUser] addFFeedPosts:[NSSet setWithArray:posts]];
+//                [[[[STKUserStore store] currentUser] mutableSetValueForKeyPath:@"fFeedPosts"] addObjectsFromArray:posts];
+//                [[[STKUserStore store] currentUser] addFFeedPosts:[NSSet setWithArray:posts]];
+                for(STKPost *p in posts) {
+                    [p setFInverseFeed:[[STKUserStore store] currentUser]];
+                }
                 [[[STKUserStore store] context] save:nil];
                 block(posts, nil);
             } else {
