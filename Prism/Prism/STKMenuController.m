@@ -90,18 +90,18 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
     NSString *reasonValue = [[note userInfo] objectForKey:STKSessionEndedReasonKey];
     NSString *msg = nil;
     if([reasonValue isEqualToString:STKSessionEndedConnectionValue]) {
-        msg = @"There was an issue with your connection and you could not be authenticated with the server. Please make sure you have an internet connection and log in again.";
+        msg = NSLocalizedString(@"There was an issue with your connection and you could not be authenticated with the server. Please make sure you have an internet connection and log in again.", @"session ended connection message");
     } else if ([reasonValue isEqualToString:STKSessionEndedAuthenticationValue]) {
-        msg = @"Your session has ended. Please try to login again.";
+        msg = NSLocalizedString(@"Your session has ended. Please try to login again.", @"session ended, try again message");
     }
     
     // Only if we need a message do we show the alert view
     UIAlertView *av = nil;
     if(msg) {
-        av = [[UIAlertView alloc] initWithTitle:@"Session Ended"
+        av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Session Ended", "session ended title")
                                         message:msg
                                        delegate:nil
-                              cancelButtonTitle:@"OK"
+                              cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                               otherButtonTitles:nil];
     }
     

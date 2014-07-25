@@ -206,10 +206,11 @@
 - (IBAction)deleteMainPost:(id)sender
 {
     [self setEditMenuVisible:NO];
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Delete Post"
-                                                 message:@"Are you sure you want to delete this post?"
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Delete Post", @"delete post confirmation title")
+                                                 message:NSLocalizedString(@"Are you sure you want to delete this post?", @"delete post confirmation message")
                                                 delegate:self
-                                       cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
+                                       cancelButtonTitle:NSLocalizedString(@"Cancel", @"cancel confirmed action button title")
+                                       otherButtonTitles:NSLocalizedString(@"Delete", @"delete button title"), nil];
 
     [av show];
 }

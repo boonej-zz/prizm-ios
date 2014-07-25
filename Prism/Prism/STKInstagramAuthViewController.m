@@ -79,8 +79,11 @@
         NSString *accessToken = [string substringWithRange:[result rangeAtIndex:1]];
         if([self tokenFound]) {
             [self tokenFound](accessToken);
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Your Instagram account is now connected to your Prizm account. Use #prizm in your Instagram posts and they will automatically be added to your Prizm profile."
-                                                        delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Success", "success title")
+                                                         message:NSLocalizedString(@"Your Instagram account is now connected to your Prizm account. Use #prizm in your Instagram posts and they will automatically be added to your Prizm profile.", "instagram now connected")
+                                                        delegate:self
+                                               cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                               otherButtonTitles:nil];
             [av show];
 
             //[[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/accounts/manage_access"]]];

@@ -87,9 +87,11 @@
 {
     STKUser *u = [[self users] objectAtIndex:[ip row]];
     [self setDeletingUser:u];
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Are you sure?"
-                                                 message:[NSString stringWithFormat:@"Confirming this action will remove %@ from your trust.", [u name]]
-                                                delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Are you sure?", "confirm cancel trust title")
+                                                 message:[NSString stringWithFormat:NSLocalizedString(@"Confirming this action will remove %@ from your trust.", "confirm cancel trust message"), [u name]]
+                                                delegate:self
+                                       cancelButtonTitle:NSLocalizedString(@"Cancel", @"cancel confirmed action button title")
+                                       otherButtonTitles:NSLocalizedString(@"Confirm", @"confirm button"), nil];
     [av show];
 }
 
@@ -157,7 +159,11 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
     if(error) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Send Error", @"send error title")
+                                                     message:[error localizedDescription]
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
         [av show];
     }
 }

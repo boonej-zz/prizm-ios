@@ -465,9 +465,10 @@ const long STKCreateProgressGeocoding = 4;
         if(![self verifyValue:val forKey:key errorMessage:&outMsg]) {
             
             if(displayFailures) {
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Registration Incomplete" message:outMsg
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Registration Incomplete", @"registration incomplete title")
+                                                             message:outMsg
                                                             delegate:nil
-                                                   cancelButtonTitle:@"OK"
+                                                   cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                                    otherButtonTitles:nil];
                 [av show];
             }
@@ -478,7 +479,11 @@ const long STKCreateProgressGeocoding = 4;
     
     if([[self requiredKeys] containsObject:@"password"]) {
         if(![[[self user] password] isEqualToString:[self confirmedPassword]]) {
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Confirm Password" message:@"The password and confirmation password don't match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Confirm Password", @"confirm password title - create profile")
+                                                         message:NSLocalizedString(@"The password and confirmation password don't match.", @"confirm password message - create profile")
+                                                        delegate:nil
+                                               cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                               otherButtonTitles:nil];
             [av show];
             return NO;
         }
@@ -782,10 +787,10 @@ const long STKCreateProgressGeocoding = 4;
                     [[self user] setProfilePhoto:nil];
                 }
                 
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Profile Image Upload Failed"
-                                                             message:@"The profile image failed to upload. Ensure you have an internet connection and try again."
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Profile Image Upload Failed", @"profile image upload failed title")
+                                                             message:NSLocalizedString(@"The profile image failed to upload. Ensure you have an internet connection and try again.", @"profile image upload failed message")
                                                             delegate:nil
-                                                   cancelButtonTitle:@"OK"
+                                                   cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                                    otherButtonTitles:nil];
                 [av show];
                 
@@ -813,10 +818,10 @@ const long STKCreateProgressGeocoding = 4;
                     [[self user] setCoverPhotoPath:nil];
                     [self setCoverImage:nil];
                 }
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Cover Image Upload Failed"
-                                                             message:@"The cover image failed to upload. Ensure you have an internet connection and try again."
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Cover Image Upload Failed", @"cover image upload failed title")
+                                                             message:NSLocalizedString(@"The cover image failed to upload. Ensure you have an internet connection and try again.", @"cover image upload failed message")
                                                             delegate:nil
-                                                   cancelButtonTitle:@"OK"
+                                                   cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                                    otherButtonTitles:nil];
                 [av show];
             }
@@ -927,10 +932,10 @@ const long STKCreateProgressGeocoding = 4;
                                registerBlock();
                            } else {
                                [STKProcessingView dismiss];
-                               UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Zip Code Error"
-                                                                            message:@"There was a problem determining your location from the provided zip code. Ensure you have an internet connection and a valid zip code and try again."
+                               UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Zip Code Error", @"zip code error title")
+                                                                            message:NSLocalizedString(@"There was a problem determining your location from the provided zip code. Ensure you have an internet connection and a valid zip code and try again.", @"zip code error message")
                                                                            delegate:nil
-                                                                  cancelButtonTitle:@"OK"
+                                                                  cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                                                   otherButtonTitles:nil];
                                [av show];
                            }

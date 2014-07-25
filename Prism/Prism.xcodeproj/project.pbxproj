@@ -31,6 +31,7 @@
 		883D87DC19463E7F00195B11 /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 883D87C919463E7F00195B11 /* UIImage+MPAverageColor.m */; };
 		883D87DD19463E7F00195B11 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 883D87CB19463E7F00195B11 /* UIImage+MPImageEffects.m */; };
 		883D87DE19463E7F00195B11 /* UIView+MPSnapshotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 883D87CD19463E7F00195B11 /* UIView+MPSnapshotImage.m */; };
+		884E6D7B1982D12100E5D332 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 884E6D7A1982D12100E5D332 /* Localizable.strings */; };
 		886FBD21195A035F0007188B /* STKInviteFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 886FBD20195A035F0007188B /* STKInviteFriendsViewController.m */; };
 		886FBD23195A094F0007188B /* STKInviteFriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */; };
 		88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */; };
@@ -295,6 +296,7 @@
 		883D87CB19463E7F00195B11 /* UIImage+MPImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MPImageEffects.m"; sourceTree = "<group>"; };
 		883D87CC19463E7F00195B11 /* UIView+MPSnapshotImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MPSnapshotImage.h"; sourceTree = "<group>"; };
 		883D87CD19463E7F00195B11 /* UIView+MPSnapshotImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPSnapshotImage.m"; sourceTree = "<group>"; };
+		884E6D7A1982D12100E5D332 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		886FBD1F195A035F0007188B /* STKInviteFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInviteFriendsViewController.h; sourceTree = "<group>"; };
 		886FBD20195A035F0007188B /* STKInviteFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInviteFriendsViewController.m; sourceTree = "<group>"; };
 		886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInviteFriendsViewController.xib; sourceTree = "<group>"; };
@@ -2472,6 +2474,7 @@
 		BE02EAA9182A80A200A5505A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				884E6D7A1982D12100E5D332 /* Localizable.strings */,
 				BE654EA6188841C5006DCA5C /* lookup.sqlite */,
 				BE02EAAA182A80A200A5505A /* Prism-Info.plist */,
 				BE02EAAB182A80A200A5505A /* InfoPlist.strings */,
@@ -4839,6 +4842,7 @@
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
 				88053313193E6F2300A8E44D /* STKSearchTrustCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
+				884E6D7B1982D12100E5D332 /* Localizable.strings in Resources */,
 				BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */,
 				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
