@@ -57,6 +57,10 @@
                                       [STKProcessingView dismiss];
                                       if(!err) {
                                           [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                          
+                                          
+                                          
+                                          
                                       } else {
                                           [[STKErrorStore alertViewForError:err delegate:nil] show];
                                       }
@@ -70,6 +74,7 @@
     return YES;
 }
 
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -82,10 +87,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
 - (IBAction)forgotPassword:(id)sender
 {
     STKLoginResetViewController *rvc = [[STKLoginResetViewController alloc] init];
     [[self navigationController] pushViewController:rvc animated:YES];
 }
+
+
 
 @end

@@ -59,7 +59,9 @@
                           @{@"title" : @"Friends", @"type" : @"STKLabelCell", @"next" : [self friendsSettings]},
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
                           @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]},
-                          @{@"title" : @"Send Feedback", @"type" : @"STKLabelCell", @"selectionSelector" : @"sendFeedbackEmail:"}
+                          @{@"title" : @"Send Feedback", @"type" : @"STKLabelCell", @"selectionSelector" : @"sendFeedbackEmail:"},
+                          @{@"title" : @"Like Us On Facebook", @"type":@"STKLabelCell", @"selectionSelector":@"likeUsOnFacebook:"},
+                          @{@"title" : @"Follow Us On Twitter", @"type":@"STKLabelCell", @"selectionSelector":@"followUsOnTwitter:"}
                         ];
         }
     }
@@ -200,6 +202,17 @@
     [confirmAlertView show];
     [self setConfirmDisableAlertView:confirmAlertView];
 }
+
+- (void)likeUsOnFacebook:(id)sender
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/prizmapp"]];
+}
+
+- (void)followUsOnTwitter:(id)sender
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/beprizmatic"]];
+}
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */; };
+		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
+		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
 		8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */; };
 		8805330E193E5FD900A8E44D /* STKSearchUsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */; };
 		88053311193E6F0000A8E44D /* STKSearchTrustCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 88053310193E6F0000A8E44D /* STKSearchTrustCell.m */; };
@@ -256,6 +258,9 @@
 /* Begin PBXFileReference section */
 		2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+STKLocation.h"; sourceTree = "<group>"; };
 		2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+STKLocation.m"; sourceTree = "<group>"; };
+		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
+		2C6969271982A71900E4B9FD /* STKIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKIntroViewController.m; sourceTree = "<group>"; };
+		2C6969281982A71900E4B9FD /* STKIntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKIntroViewController.xib; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -2606,6 +2611,9 @@
 				BECA6B47197588670026FEEC /* STKCreateCommentViewController.h */,
 				BECA6B48197588670026FEEC /* STKCreateCommentViewController.m */,
 				BECA6B49197588670026FEEC /* STKCreateCommentViewController.xib */,
+				2C6969261982A71900E4B9FD /* STKIntroViewController.h */,
+				2C6969271982A71900E4B9FD /* STKIntroViewController.m */,
+				2C6969281982A71900E4B9FD /* STKIntroViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -4827,6 +4835,7 @@
 				BE7391C91901A58200AD81AB /* STKHashtagPostsViewController.xib in Resources */,
 				D073F6E8195B4A590049E573 /* STKExploreFilterViewController.xib in Resources */,
 				88384078195B3275006750FC /* STKInviteFriendsShareCell.xib in Resources */,
+				2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */,
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
 				D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */,
 				D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */,
@@ -4899,6 +4908,7 @@
 				BE1A73C518D8BFB8004A3BB3 /* STKLockCell.m in Sources */,
 				BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
+				2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */,
 				883D87DB19463E7F00195B11 /* UIColor+MPColor.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,

@@ -13,6 +13,7 @@
 #import "STKProcessingView.h"
 #import "STKErrorStore.h"
 #import "STKAccountChooserViewController.h"
+#import "STKIntroViewController.h"
 
 @import Accounts;
 @import Social;
@@ -33,6 +34,12 @@
         // Custom initialization
     }
     return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self presentIntroIfNeccessary];
 }
 
 - (void)viewDidLoad
@@ -147,6 +154,15 @@
 {
     STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:nil];
     [[self navigationController] pushViewController:pvc animated:YES];
+}
+
+- (void)presentIntroIfNeccessary
+{
+    BOOL introComplete = [[NSUserDefaults standardUserDefaults] boolForKey:STKIntroCompletedKey];
+    if (!introComplete) {
+        STKIntroViewController *ivc = [[STKIntroViewController alloc] initWithNibName:@"STKIntroViewController" bundle:nil];
+        [self presentViewController:ivc animated:NO completion:nil];
+    }
 }
 
 @end

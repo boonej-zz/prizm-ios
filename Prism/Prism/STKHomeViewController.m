@@ -339,7 +339,9 @@
     }
     
     [self configureInterface];
+   
 }
+
 
 - (void)configureInterface
 {
@@ -374,6 +376,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    
     [super viewDidAppear:animated];
 }
 

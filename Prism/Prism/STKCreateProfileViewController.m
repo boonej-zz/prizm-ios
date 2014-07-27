@@ -510,6 +510,7 @@ const long STKCreateProgressGeocoding = 4;
     }
     
     [[[self blurView] displayLink] setPaused:YES];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
