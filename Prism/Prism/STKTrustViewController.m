@@ -399,21 +399,31 @@
 - (IBAction)sendEmail:(id)sender
 {
     if(![self selectedUser]) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Select a User" message:@"Select a user from your trust to send them a message." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select a User", @"select a user title")
+                                                     message:NSLocalizedString(@"Select a user from your trust to send them a message.", @"select a user message")
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
         [av show];
         return;
     }
     
     if(![MFMailComposeViewController canSendMail]) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Configure Mail"
-                                                     message:[NSString stringWithFormat:@"To send an e-mail to %@, configure a mail account in your device's settings.", [[self selectedUser] name]]
-                                                    delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Configure Mail", @"configure mail title")
+                                                     message:[NSString stringWithFormat:NSLocalizedString(@"To send an e-mail to %@, configure a mail account in your device's settings.", @"configure mail message"), [[self selectedUser] name]]
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
         [av show];
         return;
     }
 
     if(![[self selectedUser] email]) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"No E-mail" message:@"This user doesn't have an e-mail account available in Prizm." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No E-mail", @"no email title")
+                                                     message:NSLocalizedString(@"This user doesn't have an e-mail account available in Prizm.", @"no email message")
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
         [av show];
         return;
     }
@@ -429,7 +439,11 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
     if(error) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Send Error", @"send error title")
+                                                     message:[error localizedDescription]
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
         [av show];
     }
 }

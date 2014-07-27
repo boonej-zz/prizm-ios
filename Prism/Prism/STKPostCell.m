@@ -65,7 +65,6 @@
         [[[self headerView] sourceLabel] setText:nil];
     }
     
-    
     if([p commentCount] == 0) {
         [[self commentCountLabel] setText:@""];
     } else {

@@ -132,16 +132,16 @@
     if([activating boolValue]) {
         [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
             if(err) {
-                UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-                [av show];
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
                 return;
             }
             
             if([accounts count] == 0) {
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"No Twitter Account"
-                                                             message:@"You do not have a Twitter account configured for this device. Use the Settings application to securely enter your Twitter credentials before giving Prizm access."
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Twitter Account", @"no twitter account title")
+                                                             message:NSLocalizedString(@"You do not have a Twitter account configured for this device. Use the Settings application to securely enter your Twitter credentials before giving Prizm access.", @"no twitter account message")
                                                             delegate:nil
-                                                   cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                                   cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                                   otherButtonTitles:nil];
                 [av show];
                 return;
             }
@@ -176,7 +176,11 @@
         [self presentViewController:mvc animated:YES completion:nil];
         
     } else {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"No E-mail setup" message:@"Please set up an e-mail account in your device's settings." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No E-mail setup", @"no email title")
+                                                     message:NSLocalizedString(@"Please set up an e-mail account in your device's settings.", @"no email message")
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
         [av show];
     }
 }
@@ -196,9 +200,11 @@
 
 - (void)disableAccount:(id)sender
 {
-    UIAlertView *confirmAlertView = [[UIAlertView alloc] initWithTitle:@"Are you sure?" message:@"You will no longer be able to log in to Prizm with this account."
+    UIAlertView *confirmAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Are you sure?", @"disable account confirm title")
+                                                               message:NSLocalizedString(@"You will no longer be able to log in to Prizm with this account.", @"disable account confirm message")
                                                               delegate:self
-                                                     cancelButtonTitle:@"Cancel" otherButtonTitles:@"Disable Account", nil];
+                                                     cancelButtonTitle:NSLocalizedString(@"Cancel", @"cancel confirmed action button title")
+                                                     otherButtonTitles:NSLocalizedString(@"Disable Account", @"disable account confirm button title"), nil];
     [confirmAlertView show];
     [self setConfirmDisableAlertView:confirmAlertView];
 }
@@ -224,19 +230,19 @@
                 
                 NSString *title, *message;
                 if(err) {
-                    title = @"Disable Account Error";
+                    title = NSLocalizedString(@"Disable Account Error", @"disabled account error title");
                     message = err.description;
                 } else {
-                    title = @"Disable Account Success";
-                    message = @"Your account is now inactive";
+                    title = NSLocalizedString(@"Disable Account Success", @"disabled account success title");
+                    message = NSLocalizedString(@"Your account is now inactive", @"disabled account success message");
                     [[STKUserStore store] logout];
                 }
                 
                 av = [[UIAlertView alloc] initWithTitle:title
                                                 message:message
                                                delegate:self
-                                      cancelButtonTitle:@"Dismiss"
-                                      otherButtonTitles:nil , nil];
+                                      cancelButtonTitle:NSLocalizedString(@"Dismiss", "dismiss button title")
+                                      otherButtonTitles:nil];
 
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     [av show];

@@ -147,6 +147,7 @@
 		BE7D5AE918D382E5005D3893 /* STKTextInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7D5AE718D382E5005D3893 /* STKTextInputViewController.m */; };
 		BE7D5AEA18D382E5005D3893 /* STKTextInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */; };
 		BE8076061923F48F00D558E0 /* STKMarkupUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8076051923F48F00D558E0 /* STKMarkupUtilities.m */; };
+		BE8150D31982D3860094C7A8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BE8150D51982D3860094C7A8 /* Localizable.strings */; };
 		BE8368FB18DA186300526637 /* STKTrust.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8368FA18DA186300526637 /* STKTrust.m */; };
 		BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BE893600186CD05E00FE8263 /* STKContentStore.m */; };
 		BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8BBF0218C7B1F500D53BF5 /* STKImageSharer.m */; };
@@ -243,6 +244,7 @@
 		D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E3508218FF30A40006B992 /* STKSearchHashTagsCell.xib */; };
 		D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E5076A1914251A0011DB63 /* STKLoginResetViewController.m */; };
 		D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D0E5076B1914251A0011DB63 /* STKLoginResetViewController.xib */; };
+		D0E85B12197D7910001A5333 /* STKMessageBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E85B11197D7910001A5333 /* STKMessageBanner.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2189,6 +2191,7 @@
 		BE7D5AE818D382E5005D3893 /* STKTextInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKTextInputViewController.xib; sourceTree = "<group>"; };
 		BE8076041923F48F00D558E0 /* STKMarkupUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMarkupUtilities.h; sourceTree = "<group>"; };
 		BE8076051923F48F00D558E0 /* STKMarkupUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMarkupUtilities.m; sourceTree = "<group>"; };
+		BE8150D41982D3860094C7A8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BE8368F918DA186300526637 /* STKTrust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTrust.h; sourceTree = "<group>"; };
 		BE8368FA18DA186300526637 /* STKTrust.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTrust.m; sourceTree = "<group>"; };
 		BE8935FF186CD05E00FE8263 /* STKContentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKContentStore.h; sourceTree = "<group>"; };
@@ -2340,6 +2343,8 @@
 		D0E507691914251A0011DB63 /* STKLoginResetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLoginResetViewController.h; sourceTree = "<group>"; };
 		D0E5076A1914251A0011DB63 /* STKLoginResetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLoginResetViewController.m; sourceTree = "<group>"; };
 		D0E5076B1914251A0011DB63 /* STKLoginResetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLoginResetViewController.xib; sourceTree = "<group>"; };
+		D0E85B10197D7910001A5333 /* STKMessageBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMessageBanner.h; sourceTree = "<group>"; };
+		D0E85B11197D7910001A5333 /* STKMessageBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMessageBanner.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2474,6 +2479,7 @@
 		BE02EAA9182A80A200A5505A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				BE8150D51982D3860094C7A8 /* Localizable.strings */,
 				BE654EA6188841C5006DCA5C /* lookup.sqlite */,
 				BE02EAAA182A80A200A5505A /* Prism-Info.plist */,
 				BE02EAAB182A80A200A5505A /* InfoPlist.strings */,
@@ -2671,6 +2677,8 @@
 				BE7B485C192BA02E00BDCE15 /* STKSegmentedPanel.m */,
 				BEE84F5B192BFB2200820A19 /* STKLuminatingBar.h */,
 				BEE84F5C192BFB2200820A19 /* STKLuminatingBar.m */,
+				D0E85B10197D7910001A5333 /* STKMessageBanner.h */,
+				D0E85B11197D7910001A5333 /* STKMessageBanner.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4843,6 +4851,7 @@
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
 				88053313193E6F2300A8E44D /* STKSearchTrustCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
+				BE8150D31982D3860094C7A8 /* Localizable.strings in Resources */,
 				BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */,
 				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
@@ -4932,6 +4941,7 @@
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
+				D0E85B12197D7910001A5333 /* STKMessageBanner.m in Sources */,
 				883D87D519463E7F00195B11 /* MPSurvey.m in Sources */,
 				883D87D719463E7F00195B11 /* MPSurveyNavigationController.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
@@ -5077,6 +5087,14 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		BE8150D51982D3860094C7A8 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BE8150D41982D3860094C7A8 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -5182,6 +5200,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Staging)";
@@ -5212,6 +5231,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -5318,6 +5338,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (Staging)";
@@ -5407,6 +5428,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Release (User Testing)";
@@ -5469,8 +5491,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Joseph Conway III (NBRAUWJ72Y)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -5484,13 +5506,21 @@
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
 				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(PROJECT_DIR)",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0D6764B7-78C6-473E-91EC-D0C618AAC21F";
+				PROVISIONING_PROFILE = "D65B441B-313E-4E4A-9D80-BEAE2927A420";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "App Store";
@@ -5538,8 +5568,8 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
-					"$(inherited)",
 					BASE_URL_DEV,
+					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -5583,6 +5613,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Debug (Dev)";

@@ -22,6 +22,9 @@ NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.comp
 #elif BASE_URL_USERTESTING
 NSString * const STKUserBaseURLString = @"https://ec2-54-187-131-68.us-west-2.compute.amazonaws.com";
 NSString * const STKPrismRedirectURI = @"https://ec2-54-200-41-62.us-west-2.compute.amazonaws.com/callback";
+#elif BASE_URL_PRODUCTION
+NSString * const STKUserBaseURLString = @"https://prizm-fe-prd-1163268161.us-west-2.elb.amazonaws.com";
+NSString * const STKPrismRedirectURI = @"https://prizm-fe-prd-1163268161.us-west-2.elb.amazonaws.com/callback";
 #endif
 
 NSString * const STKPrismClientSecret = @"f27198fb-689d-4965-acb0-0e9c5f61ddec";
@@ -87,6 +90,10 @@ NSString * const STKAuthenticationErrorDomain = @"STKAuthenticationErrorDomain";
 
 - (void)cancelAllQueuedRequests
 {
+    NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorCancelled userInfo:nil];
+    for(void (^req)(NSError *err) in [self authorizedRequestQueue]) {
+        req(error);
+    }
     [[self authorizedRequestQueue] removeAllObjects];
 }
 

@@ -30,7 +30,7 @@ NSString * const STKErrorStoreServerError = @"server_error";
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:[self errorTitleStringForError:err]
                                                  message:[self errorStringForError:err]
                                                 delegate:delegate
-                                       cancelButtonTitle:@"OK"
+                                       cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                        otherButtonTitles:nil];
     return av;
 }
@@ -41,7 +41,7 @@ NSString * const STKErrorStoreServerError = @"server_error";
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:[self errorTitleStringForError:err]
                                                  message:[self errorStringFromError:err]
                                                 delegate:delegate
-                                       cancelButtonTitle:@"OK"
+                                       cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                        otherButtonTitles:nil];
     return av;
 }
@@ -51,7 +51,7 @@ NSString * const STKErrorStoreServerError = @"server_error";
     static NSMutableDictionary *errorMap = nil;
     if(!errorMap) {
         errorMap = [[NSMutableDictionary alloc] init];
-        [errorMap setObject:@"Connection Error" forKey:NSURLErrorDomain];
+        [errorMap setObject:NSLocalizedString(@"Connection Error", @"Connection error title") forKey:NSURLErrorDomain];
     }
     
     return errorMap;
@@ -64,46 +64,47 @@ NSString * const STKErrorStoreServerError = @"server_error";
         errorMap = [[NSMutableDictionary alloc] init];
         
         [errorMap setObject:@{
-            @(STKUserStoreErrorCodeMissingArguments) : @"The required data was not supplied.",
-            @(STKUserStoreErrorCodeNoAccount) : @"No account exists for this social network. Please fill out your credentials in the Settings application.",
-            @(STKUserStoreErrorCodeOAuth) : @"There was a problem authenticating your account.",
-            @(STKUserStoreErrorCodeWrongAccount) : @"The account you tried to login with does not match the Facebook account you have set up in Settings.",
-            @(STKUserStoreErrorCodeNoPassword) : @"The password for this account is unknown. Try logging in again."
+            @(STKUserStoreErrorCodeMissingArguments) : NSLocalizedString(@"The required data was not supplied.", @"missing data"),
+            @(STKUserStoreErrorCodeNoAccount) : NSLocalizedString(@"No account exists for this social network. Please fill out your credentials in the Settings application.", @"no account for social network"),
+            @(STKUserStoreErrorCodeOAuth) : NSLocalizedString(@"There was a problem authenticating your account.", @"problem authenticating account"),
+            @(STKUserStoreErrorCodeWrongAccount) : NSLocalizedString(@"The account you tried to login with does not match the Facebook account you have set up in Settings.", @"facebook accounts do not match"),
+            @(STKUserStoreErrorCodeNoPassword) : NSLocalizedString(@"The password for this account is unknown. Try logging in again.", @"cannot find password, please try again")
         } forKey:STKUserStoreErrorDomain];
         [errorMap setObject:@{
-            @(ACErrorUnknown) : @"Unknown issue relating your your account.",
-            @(ACErrorAccountMissingRequiredProperty) : @"Not enough information was provided to authenticate your account.",
-            @(ACErrorAccountAuthenticationFailed) : @"There was an issue authenticating your account.",
-            @(ACErrorAccountTypeInvalid) : @"The account provided is invalid.",
-            @(ACErrorAccountAlreadyExists) : @"This account already exists.",
-            @(ACErrorAccountNotFound) : @"No account exists for this service. Please sign into the account in the Settings application.",
-            @(ACErrorPermissionDenied) : @"Permission to access this information was denied.",
-            @(ACErrorAccessInfoInvalid) : @"The accessed information is invalid.",
-            @(ACErrorClientPermissionDenied) : @"Permission was denied.",
-            @(ACErrorAccessDeniedByProtectionPolicy) : @"The protection policy denied access.",
-            @(ACErrorCredentialNotFound) : @"The username and password for this account were not found.",
-            @(ACErrorFetchCredentialFailed) : @"The username and password failed to access this account.",
-            @(ACErrorStoreCredentialFailed) : @"This account could not be saved.",
-            @(ACErrorRemoveCredentialFailed) : @"This account could not be deleted.",
-            @(ACErrorUpdatingNonexistentAccount) : @"This account no longer exists.",
-            @(ACErrorInvalidClientBundleID) : @"The application bundle identifier does not match."
+            @(ACErrorUnknown) : NSLocalizedString(@"Unknown issue relating your your account.", @"unknown account issue"),
+            @(ACErrorAccountMissingRequiredProperty) : NSLocalizedString(@"Not enough information was provided to authenticate your account.", @"not enough auth information"),
+            @(ACErrorAccountAuthenticationFailed) : NSLocalizedString(@"There was an issue authenticating your account.", @"issue authenticating"),
+            @(ACErrorAccountTypeInvalid) : NSLocalizedString(@"The account provided is invalid.", @"invalid account"),
+            @(ACErrorAccountAlreadyExists) : NSLocalizedString(@"This account already exists.", @"account already exists"),
+            @(ACErrorAccountNotFound) : NSLocalizedString(@"No account exists for this service. Please sign into the account in the Settings application.", @"no account for service"),
+            @(ACErrorPermissionDenied) : NSLocalizedString(@"Permission to access this information was denied.", @"permission denied to access information"),
+            @(ACErrorAccessInfoInvalid) : NSLocalizedString(@"The accessed information is invalid.", @"invalid information"),
+            @(ACErrorClientPermissionDenied) : NSLocalizedString(@"Permission was denied.", @"permission denied"),
+            @(ACErrorAccessDeniedByProtectionPolicy) : NSLocalizedString(@"The protection policy denied access.", @"permission denied by protection policy"),
+            @(ACErrorCredentialNotFound) : NSLocalizedString(@"The username and password for this account were not found.", @"no username or password found"),
+            @(ACErrorFetchCredentialFailed) : NSLocalizedString(@"The username and password failed to access this account.", @"username or password failed to get access to account"),
+            @(ACErrorStoreCredentialFailed) : NSLocalizedString(@"This account could not be saved.", @"could not save account"),
+            @(ACErrorRemoveCredentialFailed) : NSLocalizedString(@"This account could not be deleted.", @"could not delete account"),
+            @(ACErrorUpdatingNonexistentAccount) : NSLocalizedString(@"This account no longer exists.", @"account no longer exists"),
+            @(ACErrorInvalidClientBundleID) : NSLocalizedString(@"The application bundle identifier does not match.", @"app bundle identifier does not match")
         } forKey:ACErrorDomain];
         [errorMap setObject:@{
-            @(STKConnectionErrorCodeBadRequest) : @"There was a problem with the server.",
-            @(STKConnectionErrorCodeParseFailed) : @"The response from the server didn't make sense.",
-            @(STKConnectionErrorCodeRequestFailed) : @"The requested information was not accessed successfully.",
-            STKErrorUserDoesNotExist : @"Invalid user or password.",
-            STKErrorBadPassword : @"Invalid user or password.",
-            STKErrorInvalidRequest : @"There was a problem communcating with the server.",
-            STKErrorInvalidRegistration : @"An account with this e-mail address already exists.",
-            STKErrorStoreInvalidUserRequest : @"Invalid user.",
-            STKErrorStoreServerError : @"There was a problem with the server. Please contact customer support."
+            @(STKConnectionErrorCodeBadRequest) : NSLocalizedString(@"There was a problem with the server.", @"bad request"),
+            @(STKConnectionErrorCodeParseFailed) : NSLocalizedString(@"The response from the server didn't make sense.", @"bad response"),
+            @(STKConnectionErrorCodeRequestFailed) : NSLocalizedString(@"The requested information was not accessed successfully.", @"unable to access information"),
+            STKErrorUserDoesNotExist : NSLocalizedString(@"Invalid user or password.", @"invalid user or password"),
+            STKErrorBadPassword : NSLocalizedString(@"Invalid user or password.", @"invalid user or password"),
+            STKErrorInvalidRequest : NSLocalizedString(@"There was a problem communicating with the server.", @"problem communicating with server"),
+            STKErrorInvalidRegistration : NSLocalizedString(@"An account with this e-mail address already exists.", @"email address already being used"),
+            STKErrorStoreInvalidUserRequest : NSLocalizedString(@"Invalid user.", @"invalid user"),
+            STKErrorStoreServerError : NSLocalizedString(@"There was a problem with the server. Please contact customer support.", @"server issue, contact support")
         } forKey:STKConnectionServiceErrorDomain];
         [errorMap setObject:@{
-            @"Any" : @"There was a problem communicating with the server. Ensure you have internet access and try again."
+            @"Any" : NSLocalizedString(@"There was a problem communicating with the server. Ensure you have internet access and try again.", @"server issue, check connection"),
+            @(NSURLErrorCancelled) : NSLocalizedString(@"Your request was cancelled.", @"request cancelled")
         } forKey:NSURLErrorDomain];
         [errorMap setObject:@{
-            @(kCLErrorDenied) : @"Prizm doesn't have access to your location. Please change this in the Settings application."
+            @(kCLErrorDenied) : NSLocalizedString(@"Prizm doesn't have access to your location. Please change this in the Settings application.", @"location services off")
             } forKey:kCLErrorDomain];
 
     }
@@ -120,7 +121,7 @@ NSString * const STKErrorStoreServerError = @"server_error";
 {
     NSString *title = [[self errorTitleMap] objectForKey:[err domain]];
     if(!title) {
-        title = @"Error";
+        title = NSLocalizedString(@"Error", @"generic error title");
     }
     return title;
 }

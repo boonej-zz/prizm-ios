@@ -49,14 +49,22 @@
        && [[[self passwordField] text] length] > 0
        && [[[self confirmField] text] length] > 0))
     {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Enter all fields" message:@"Enter all fields to reset your password." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Enter all fields", @"enter all fields title")
+                                                     message:NSLocalizedString(@"Enter all fields to reset your password.", @"enter all fields message")
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
         [av show];
         return NO;
 
     }
     
     if(![[[self confirmField] text] isEqualToString:[[self passwordField] text]]) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Passwords do no match" message:@"Ensure the password and confirm password field match" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Passwords do no match", @"reset login passwords do not match title")
+                                                     message:NSLocalizedString(@"Ensure the password and confirm password field match", @"reset login passwords do not match message")
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
         [av show];
         return NO;
     }
@@ -71,7 +79,11 @@
                                              UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
                                              [av show];
                                          } else {
-                                             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Confirm Reset" message:@"An e-mail will be sent to you. Click the link on that e-mail to confirm this change." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                             UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Confirm Reset", @"confirm reset login")
+                                                                                          message:NSLocalizedString(@"An e-mail will be sent to you. Click the link on that e-mail to confirm this change.", @"confirm reset message")
+                                                                                         delegate:nil
+                                                                                cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                                                                otherButtonTitles:nil];
                                              [av show];
                                              [[self navigationController] popViewControllerAnimated:YES];
                                          }

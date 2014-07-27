@@ -267,6 +267,11 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
 - (void)reportFailureWithError:(NSError *)err
 {
+    if([err isConnectionError]) {
+        NSNotificationCenter *connectionNotification = [NSNotificationCenter defaultCenter];
+        [connectionNotification postNotificationName:@"STKConnectionNetworkError" object:nil];
+    }
+    
     if ([self completionBlock]) {
         [self completionBlock](nil, err);
     }
