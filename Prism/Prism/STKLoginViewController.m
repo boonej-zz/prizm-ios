@@ -10,12 +10,14 @@
 #import "STKUserStore.h"
 #import "STKProcessingView.h"
 #import "STKLoginResetViewController.h"
+#import "Mixpanel.h"
 
 @interface STKLoginViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *forgotPasswordButton;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (nonatomic, strong) Mixpanel *mixpanel;
 
 - (IBAction)forgotPassword:(id)sender;
 
@@ -35,7 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.mixpanel = [Mixpanel sharedInstance];
     NSDictionary *attrs = @{NSForegroundColorAttributeName : [UIColor colorWithWhite:1 alpha:.8],
                             NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle),
                             NSFontAttributeName : STKFont(14)};
@@ -43,6 +45,7 @@
                                                               attributes:attrs];
     [[self forgotPasswordButton] setAttributedTitle:str
                                            forState:UIControlStateNormal];
+    [self.mixpanel track:@"Login Page loaded" properties:@{@"status":@"begin"}];
     
 }
 
@@ -56,12 +59,14 @@
                                   completion:^(STKUser *u, NSError *err) {
                                       [STKProcessingView dismiss];
                                       if(!err) {
+                                          [self.mixpanel track:@"Login Success" properties:@{@"status":@"success"}];
                                           [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
                                           
                                           
                                           
                                           
                                       } else {
+                                          [self.mixpanel track:@"Login Failure" properties:@{@"status":@"failure"}];
                                           [[STKErrorStore alertViewForError:err delegate:nil] show];
                                       }
                                   }];

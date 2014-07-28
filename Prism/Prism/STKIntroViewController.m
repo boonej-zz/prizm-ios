@@ -7,6 +7,7 @@
 //
 
 #import "STKIntroViewController.h"
+#import "Mixpanel.h"
 
 NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
 
@@ -16,6 +17,7 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, strong) NSArray *imageNames;
+@property (nonatomic, strong) Mixpanel *mixpanel;
 
 - (IBAction)buttonTapped:(id)sender;
 
@@ -36,7 +38,9 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.mixpanel = [Mixpanel sharedInstance];
     self.imageNames = @[@"intro_1", @"intro_2"];
+    [self.mixpanel track:@"Intro Begin" properties:@{}];
     [self configure];
 }
 
@@ -52,8 +56,19 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.mixpanel track:@"Intro End" properties:@{}];
+    [super viewWillDisappear:animated];
+}
+
 - (void)configure
 {
+    UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    [backgroundImage setImage:[UIImage imageNamed:@"img_background"]];
+    [self.view insertSubview:backgroundImage atIndex:0];
+    [self.scrollView setBackgroundColor:[UIColor clearColor]];
+//    [self.scrollView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"img_background"]]];
     [self.scrollView setDelegate:self];
     NSArray *names = self.imageNames;
     for (NSInteger i = 0; i != [names count]; ++i) {

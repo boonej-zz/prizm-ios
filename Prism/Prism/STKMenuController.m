@@ -72,7 +72,7 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 
 - (void)didReceiveNetworkError:(NSNotification *)note
 {
-    [self displayBannerWithMessage:@"Internet Connection Offline"
+    [self displayBannerWithMessage:@"Network Offline"
                            forType:STKMessageBannerTypeError];
 }
 

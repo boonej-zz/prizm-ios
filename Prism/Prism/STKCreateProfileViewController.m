@@ -330,7 +330,7 @@ const long STKCreateProgressGeocoding = 4;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [[Mixpanel sharedInstance] track:@"Entered Profile Creation"];
     if(![self isEditingProfile]) {
         [[self tableView] setTableFooterView:[self footerView]];
     } else {
@@ -384,6 +384,7 @@ const long STKCreateProgressGeocoding = 4;
 {
     NSString *key = [[[self items] objectAtIndex:[ip row]] objectForKey:@"key"];
     [[self user] setValue:[sender date] forKey:key];
+    [[Mixpanel sharedInstance] track:@"Selected Birthday"];
 }
 
 - (BOOL)verifyValue:(id)val forKey:(NSString *)key errorMessage:(NSString **)msg
@@ -911,7 +912,7 @@ const long STKCreateProgressGeocoding = 4;
                                                    NSString *val = [user externalServiceType];
                                                    if(!val)
                                                        val = @"email";
-                                                   [[Mixpanel sharedInstance] track:@"Profile Created" properties:@{@"type" : val}];
+                                                   [[Mixpanel sharedInstance] track:@"Profile Created"];
                                                } else {
                                                    [[STKErrorStore alertViewForError:err delegate:nil] show];
                                                }

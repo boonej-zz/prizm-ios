@@ -14,6 +14,7 @@
 #import "STKErrorStore.h"
 #import "STKAccountChooserViewController.h"
 #import "STKIntroViewController.h"
+#import "Mixpanel.h"
 
 @import Accounts;
 @import Social;
@@ -22,6 +23,7 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *gapConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *connectLabel;
+@property (nonatomic, strong) Mixpanel *mixpanel;
 
 @end
 
@@ -42,9 +44,15 @@
     [self presentIntroIfNeccessary];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[Mixpanel sharedInstance] track:@"Registration" properties:@{@"status": @"exiting controller"}];
+    [super viewWillDisappear:animated];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.mixpanel track:@"Registration Begin"];
     float screenHeightDelta = 568.0 - [[UIScreen mainScreen] bounds].size.height;
     if(fabs(screenHeightDelta) > 0)
         [[self gapConstraint] setConstant:10];
@@ -55,6 +63,7 @@
       didChooseAccount:(ACAccount *)account
 {
     [STKProcessingView present];
+    [self.mixpanel track:@"Selected Twitter - Login"];
     [[STKUserStore store] connectWithTwitterAccount:account completion:^(STKUser *existingUser, STKUser *registrationData, NSError *err) {
         [STKProcessingView dismiss];
         if(!err) {
@@ -72,6 +81,7 @@
 
 - (IBAction)connectWithTwitter:(id)sender
 {
+    [self.mixpanel track:@"Social Registration" properties:@{@"status":@"Social Connect", @"provider": @"twitter"}];
     [STKProcessingView present];
     [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
         if(!err) {
@@ -106,6 +116,7 @@
 }
 - (IBAction)connectWithGoogle:(id)sender
 {
+    [self.mixpanel track:@"Social Registration" properties:@{@"status":@"Social Connect", @"provider": @"google"}];
     [[STKUserStore store] connectWithGoogle:^(STKUser *u, STKUser *googleData, NSError *err) {
         [STKProcessingView dismiss];
         
@@ -128,6 +139,7 @@
 
 - (IBAction)connectWithFacebook:(id)sender
 {
+    [self.mixpanel track:@"Social Registration" properties:@{@"status":@"Social Connect", @"provider": @"facebook"}];
     [STKProcessingView present];
     [[STKUserStore store] connectWithFacebook:^(STKUser *u, STKUser *facebookData, NSError *err) {
         [STKProcessingView dismiss];
@@ -152,6 +164,7 @@
 }
 - (IBAction)registerAccount:(id)sender
 {
+    [self.mixpanel track:@"Standard Registration"];
     STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:nil];
     [[self navigationController] pushViewController:pvc animated:YES];
 }

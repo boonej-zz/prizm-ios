@@ -24,6 +24,7 @@
 #import "STKLuminatingBar.h"
 #import "STKSearchUsersViewController.h"
 #import "STKExploreViewController.h"
+#import "STKInviteFriendsViewController.h"
 #import <Crashlytics/Crashlytics.h>
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
@@ -417,5 +418,10 @@
     [[self menuController] setSelectedViewController:nvc];
 }
 
+- (IBAction)inviteFriends:(id)sender
+{
+    STKInviteFriendsViewController *ifvc = [[STKInviteFriendsViewController alloc] init];
+    [[self navigationController] pushViewController:ifvc animated:YES];
+}
 
 @end
