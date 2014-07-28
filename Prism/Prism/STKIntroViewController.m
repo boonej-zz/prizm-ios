@@ -64,7 +64,8 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
 
 - (void)configure
 {
-    UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:bounds];
     [backgroundImage setImage:[UIImage imageNamed:@"img_background"]];
     [self.view insertSubview:backgroundImage atIndex:0];
     [self.scrollView setBackgroundColor:[UIColor clearColor]];
@@ -75,12 +76,12 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
         NSString *name = names[i];
         UIImage *img = [UIImage imageNamed:name];
         UIImageView *iv = [[UIImageView alloc] initWithImage:img];
-        CGRect frame = self.view.bounds;
+        CGRect frame = bounds;
         frame.origin.x = frame.size.width * i;
         [iv setFrame:frame];
         if (i == [names count] - 1) {
             CGPoint center = self.view.center;
-            center.y = self.view.bounds.size.height - 34;
+            center.y = bounds.size.height - 34;
             UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
             [iv setUserInteractionEnabled:YES];
             [button setBackgroundImage:[UIImage imageNamed:@"btn_lg"] forState:UIControlStateNormal];
@@ -95,9 +96,9 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
     
     [self.pageControl setNumberOfPages:[names count]];
     
-    NSInteger contentWidth = self.view.bounds.size.width;
+    NSInteger contentWidth = bounds.size.width;
     contentWidth = contentWidth * [names count];
-    [self.scrollView setContentSize:CGSizeMake(contentWidth, self.view.bounds.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(contentWidth, bounds.size.height)];
     [self.scrollView setContentMode:UIViewContentModeCenter];
 }
 
@@ -106,6 +107,13 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
     CGFloat pageWidth = scrollView.frame.size.width;
     NSInteger page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     [self.pageControl setCurrentPage:page];
+}
+
+- (IBAction)pageControlValueChanged:(UIPageControl *)sender
+{
+    CGRect frame = [[UIScreen mainScreen] bounds];
+    frame.origin.x = frame.size.width * (sender.currentPage - 1);
+    [self.scrollView scrollRectToVisible:frame animated:YES];
 }
 
 @end

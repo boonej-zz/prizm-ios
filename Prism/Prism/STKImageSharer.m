@@ -342,9 +342,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     if(image)
         [a addObject:image];
     if([object isKindOfClass:[STKPost class]])
-        [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic %@", [object valueForKey:@"text"], @"http://www.prizmapp.com"]];
+        [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"]];
     else
-        [a addObject:[NSString stringWithFormat:@"%@ %@", [object valueForKey:@"text"], @"http://www.prizmapp.com"]];
+        [a addObject:[NSString stringWithFormat:@"%@ %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"]];
     
     
     [self setFinishHandler:block];

@@ -420,7 +420,7 @@
 
     if(![[self selectedUser] email]) {
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No E-mail", @"no email title")
-                                                     message:NSLocalizedString(@"This user doesn't have an e-mail account available in Prizm.", @"no email message")
+                                                     message:NSLocalizedString(@"Oops! This user doesn't have an e-mail account available in Prizm.", @"no email message")
                                                     delegate:nil
                                            cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                            otherButtonTitles:nil];

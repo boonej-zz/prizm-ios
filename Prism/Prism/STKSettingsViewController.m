@@ -211,7 +211,12 @@
 
 - (void)likeUsOnFacebook:(id)sender
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/prizmapp"]];
+    NSURL *fbURL = [NSURL URLWithString:@"fb://page/877922338903107"];
+    if ([[UIApplication sharedApplication] canOpenURL:fbURL]){
+        [[UIApplication sharedApplication] openURL:fbURL];
+    } else {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/prizmapp"]];
+    }
 }
 
 - (void)followUsOnTwitter:(id)sender

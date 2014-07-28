@@ -197,7 +197,7 @@
     NSString *postType = [[self postInfo] objectForKey:STKPostTypeKey];
     if([postType isEqualToString:STKPostTypePersonal]) {
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Visibility", @"visibility title")
-                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your trust. However, you have selected that this is a 'Personal' post which is only viewable to you. You can select another category and then choose the visibility options for this post.", @"viibility message")
+                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your Trust. However, you have selected that this is a 'Personal' post which is only viewable to you. You can select another category and then choose the visibility options for this post.", @"viibility message")
                                                     delegate:nil
                                            cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                            otherButtonTitles:nil];
@@ -258,9 +258,9 @@
                 [[self imageView] setImage:nil];
                 
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Uploading Image", @"image upload error title")
-                                                             message:NSLocalizedString(@"The image you selected failed to upload. Make sure you have an internet connection and try again.", @"image upload error message")
+                                                             message:NSLocalizedString(@"Oops! The image you selected failed to upload. Make sure you have an internet connection and try again.", @"image upload error message")
                                                             delegate:self
-                                                   cancelButtonTitle:NSLocalizedString(@"Nevermind", @"cancel button title")
+                                                   cancelButtonTitle:NSLocalizedString(@"Never mind", @"cancel button title")
                                                    otherButtonTitles:NSLocalizedString(@"Try Again", @"try again button title"), nil];
                 [av show];
             }

@@ -65,20 +65,20 @@ NSString * const STKErrorStoreServerError = @"server_error";
         
         [errorMap setObject:@{
             @(STKUserStoreErrorCodeMissingArguments) : NSLocalizedString(@"The required data was not supplied.", @"missing data"),
-            @(STKUserStoreErrorCodeNoAccount) : NSLocalizedString(@"No account exists for this social network. Please fill out your credentials in the Settings application.", @"no account for social network"),
+            @(STKUserStoreErrorCodeNoAccount) : NSLocalizedString(@"Oops. Can’t find your account for this social network. Please fill out your credentials in the Settings application.", @"no account for social network"),
             @(STKUserStoreErrorCodeOAuth) : NSLocalizedString(@"There was a problem authenticating your account.", @"problem authenticating account"),
-            @(STKUserStoreErrorCodeWrongAccount) : NSLocalizedString(@"The account you tried to login with does not match the Facebook account you have set up in Settings.", @"facebook accounts do not match"),
-            @(STKUserStoreErrorCodeNoPassword) : NSLocalizedString(@"The password for this account is unknown. Try logging in again.", @"cannot find password, please try again")
+            @(STKUserStoreErrorCodeWrongAccount) : NSLocalizedString(@"Oops! The account you tried to login with does not match the Facebook account you have set up in Settings. Please make sure you’re logged into the correct Facebook account through the Settings application", @"facebook accounts do not match"),
+            @(STKUserStoreErrorCodeNoPassword) : NSLocalizedString(@"Oops. We’re not finding the password for this account. Try logging in again.", @"cannot find password, please try again")
         } forKey:STKUserStoreErrorDomain];
         [errorMap setObject:@{
-            @(ACErrorUnknown) : NSLocalizedString(@"Unknown issue relating your your account.", @"unknown account issue"),
-            @(ACErrorAccountMissingRequiredProperty) : NSLocalizedString(@"Not enough information was provided to authenticate your account.", @"not enough auth information"),
-            @(ACErrorAccountAuthenticationFailed) : NSLocalizedString(@"There was an issue authenticating your account.", @"issue authenticating"),
-            @(ACErrorAccountTypeInvalid) : NSLocalizedString(@"The account provided is invalid.", @"invalid account"),
+            @(ACErrorUnknown) : NSLocalizedString(@"Uh oh. We don’t know what happened, but please quit Prizm and relaunch.", @"unknown account issue"),
+            @(ACErrorAccountMissingRequiredProperty) : NSLocalizedString(@"Not enough information was provided to authenticate your account. Please check the Settings application to make sure all of your information is complete.", @"not enough auth information"),
+            @(ACErrorAccountAuthenticationFailed) : NSLocalizedString(@"There was an issue authenticating your account. Ensure that your information is correct in the Settings application and try again.", @"issue authenticating"),
+            @(ACErrorAccountTypeInvalid) : NSLocalizedString(@"Oops. The account provided is invalid. Please ensure that all information is correct in the Settings application.", @"invalid account"),
             @(ACErrorAccountAlreadyExists) : NSLocalizedString(@"This account already exists.", @"account already exists"),
-            @(ACErrorAccountNotFound) : NSLocalizedString(@"No account exists for this service. Please sign into the account in the Settings application.", @"no account for service"),
-            @(ACErrorPermissionDenied) : NSLocalizedString(@"Permission to access this information was denied.", @"permission denied to access information"),
-            @(ACErrorAccessInfoInvalid) : NSLocalizedString(@"The accessed information is invalid.", @"invalid information"),
+            @(ACErrorAccountNotFound) : NSLocalizedString(@"Oops. Can’t find your account for this service. Please make sure you’ve signed into the account in the Settings application.", @"no account for service"),
+            @(ACErrorPermissionDenied) : NSLocalizedString(@"Permission to access this information was denied. Please check the Settings application to make sure that Prizm has permission.", @"permission denied to access information"),
+            @(ACErrorAccessInfoInvalid) : NSLocalizedString(@"Oops. The accessed information is invalid. Please ensure that all information is correct in the Settings application.", @"invalid information"),
             @(ACErrorClientPermissionDenied) : NSLocalizedString(@"Permission was denied.", @"permission denied"),
             @(ACErrorAccessDeniedByProtectionPolicy) : NSLocalizedString(@"The protection policy denied access.", @"permission denied by protection policy"),
             @(ACErrorCredentialNotFound) : NSLocalizedString(@"The username and password for this account were not found.", @"no username or password found"),
@@ -92,15 +92,15 @@ NSString * const STKErrorStoreServerError = @"server_error";
             @(STKConnectionErrorCodeBadRequest) : NSLocalizedString(@"There was a problem with the server.", @"bad request"),
             @(STKConnectionErrorCodeParseFailed) : NSLocalizedString(@"The response from the server didn't make sense.", @"bad response"),
             @(STKConnectionErrorCodeRequestFailed) : NSLocalizedString(@"The requested information was not accessed successfully.", @"unable to access information"),
-            STKErrorUserDoesNotExist : NSLocalizedString(@"Invalid user or password.", @"invalid user or password"),
-            STKErrorBadPassword : NSLocalizedString(@"Invalid user or password.", @"invalid user or password"),
+            STKErrorUserDoesNotExist : NSLocalizedString(@"Oops! Invalid user or password.", @"invalid user or password"),
+            STKErrorBadPassword : NSLocalizedString(@"Oops! Invalid user or password.", @"invalid user or password"),
             STKErrorInvalidRequest : NSLocalizedString(@"There was a problem communicating with the server.", @"problem communicating with server"),
-            STKErrorInvalidRegistration : NSLocalizedString(@"An account with this e-mail address already exists.", @"email address already being used"),
-            STKErrorStoreInvalidUserRequest : NSLocalizedString(@"Invalid user.", @"invalid user"),
-            STKErrorStoreServerError : NSLocalizedString(@"There was a problem with the server. Please contact customer support.", @"server issue, contact support")
+            STKErrorInvalidRegistration : NSLocalizedString(@"Oops! An account with this e-mail address already exists.", @"email address already being used"),
+            STKErrorStoreInvalidUserRequest : NSLocalizedString(@"We don’t have a record of this user name.", @"invalid user"),
+            STKErrorStoreServerError : NSLocalizedString(@"Oops. There was a problem with the server. Please contact us at support@prizmapp.com.", @"server issue, contact support")
         } forKey:STKConnectionServiceErrorDomain];
         [errorMap setObject:@{
-            @"Any" : NSLocalizedString(@"There was a problem communicating with the server. Ensure you have internet access and try again.", @"server issue, check connection"),
+            @"Any" : NSLocalizedString(@"Oops. There was a problem communicating with the server. Ensure you have internet access and try again.", @"server issue, check connection"),
             @(NSURLErrorCancelled) : NSLocalizedString(@"Your request was cancelled.", @"request cancelled")
         } forKey:NSURLErrorDomain];
         [errorMap setObject:@{

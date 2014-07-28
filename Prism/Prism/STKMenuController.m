@@ -90,7 +90,7 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
     NSString *reasonValue = [[note userInfo] objectForKey:STKSessionEndedReasonKey];
     NSString *msg = nil;
     if([reasonValue isEqualToString:STKSessionEndedConnectionValue]) {
-        msg = NSLocalizedString(@"There was an issue with your connection and you could not be authenticated with the server. Please make sure you have an internet connection and log in again.", @"session ended connection message");
+        msg = NSLocalizedString(@"Oops. There was an issue with your connection and you could not be authenticated with the server. Please make sure you have an internet connection and log in again.", @"session ended connection message");
     } else if ([reasonValue isEqualToString:STKSessionEndedAuthenticationValue]) {
         msg = NSLocalizedString(@"Your session has ended. Please try to login again.", @"session ended, try again message");
     }

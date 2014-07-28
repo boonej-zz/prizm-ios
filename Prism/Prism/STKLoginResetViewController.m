@@ -49,8 +49,8 @@
        && [[[self passwordField] text] length] > 0
        && [[[self confirmField] text] length] > 0))
     {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Enter all fields", @"enter all fields title")
-                                                     message:NSLocalizedString(@"Enter all fields to reset your password.", @"enter all fields message")
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Enter All Fields", @"enter all fields title")
+                                                     message:NSLocalizedString(@"Please enter all fields to reset your password.", @"enter all fields message")
                                                     delegate:nil
                                            cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                            otherButtonTitles:nil];
@@ -61,7 +61,7 @@
     
     if(![[[self confirmField] text] isEqualToString:[[self passwordField] text]]) {
         UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Passwords do no match", @"reset login passwords do not match title")
-                                                     message:NSLocalizedString(@"Ensure the password and confirm password field match", @"reset login passwords do not match message")
+                                                     message:NSLocalizedString(@"Oops. Ensure the ‘password’ and ‘confirm password’ fields match", @"reset login passwords do not match message")
                                                     delegate:nil
                                            cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                            otherButtonTitles:nil];

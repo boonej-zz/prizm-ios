@@ -17,7 +17,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8r8-tS-fOa">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8r8-tS-fOa">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </scrollView>
@@ -32,12 +32,24 @@
                         <action selector="buttonTapped:" destination="-1" eventType="touchUpInside" id="q66-LF-hvG"/>
                     </connections>
                 </button>
-                <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Pcy-S9-Bqa">
+                <pageControl opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Pcy-S9-Bqa">
                     <rect key="frame" x="20" y="20" width="280" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="pageControlValueChanged:" destination="-1" eventType="valueChanged" id="5pW-7U-hhZ"/>
+                    </connections>
                 </pageControl>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="8r8-tS-fOa" secondAttribute="trailing" id="LtB-ds-ibx"/>
+                <constraint firstItem="Pcy-S9-Bqa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="UGc-o1-khU"/>
+                <constraint firstItem="8r8-tS-fOa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Web-bQ-bwg"/>
+                <constraint firstAttribute="trailing" secondItem="Pcy-S9-Bqa" secondAttribute="trailing" constant="20" id="gTG-Cv-7Ot"/>
+                <constraint firstItem="Pcy-S9-Bqa" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="hUO-kk-3Zq"/>
+                <constraint firstAttribute="bottom" secondItem="8r8-tS-fOa" secondAttribute="bottom" id="kSR-Db-zFr"/>
+                <constraint firstItem="8r8-tS-fOa" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="zBi-tw-gVE"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>

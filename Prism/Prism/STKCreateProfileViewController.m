@@ -481,7 +481,7 @@ const long STKCreateProgressGeocoding = 4;
     if([[self requiredKeys] containsObject:@"password"]) {
         if(![[[self user] password] isEqualToString:[self confirmedPassword]]) {
             UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Confirm Password", @"confirm password title - create profile")
-                                                         message:NSLocalizedString(@"The password and confirmation password don't match.", @"confirm password message - create profile")
+                                                         message:NSLocalizedString(@"Oops. The password and confirmation password don't match.", @"confirm password message - create profile")
                                                         delegate:nil
                                                cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                                otherButtonTitles:nil];
@@ -790,7 +790,7 @@ const long STKCreateProgressGeocoding = 4;
                 }
                 
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Profile Image Upload Failed", @"profile image upload failed title")
-                                                             message:NSLocalizedString(@"The profile image failed to upload. Ensure you have an internet connection and try again.", @"profile image upload failed message")
+                                                             message:NSLocalizedString(@"Oops. The profile image failed to upload. Ensure you have an internet connection and try again.", @"profile image upload failed message")
                                                             delegate:nil
                                                    cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                                    otherButtonTitles:nil];
@@ -821,7 +821,7 @@ const long STKCreateProgressGeocoding = 4;
                     [self setCoverImage:nil];
                 }
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Cover Image Upload Failed", @"cover image upload failed title")
-                                                             message:NSLocalizedString(@"The cover image failed to upload. Ensure you have an internet connection and try again.", @"cover image upload failed message")
+                                                             message:NSLocalizedString(@"Oops. The cover image failed to upload. Ensure you have an internet connection and try again.", @"cover image upload failed message")
                                                             delegate:nil
                                                    cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                                    otherButtonTitles:nil];
@@ -935,7 +935,7 @@ const long STKCreateProgressGeocoding = 4;
                            } else {
                                [STKProcessingView dismiss];
                                UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Zip Code Error", @"zip code error title")
-                                                                            message:NSLocalizedString(@"There was a problem determining your location from the provided zip code. Ensure you have an internet connection and a valid zip code and try again.", @"zip code error message")
+                                                                            message:NSLocalizedString(@"Oops. There was a problem determining your location from the provided zip code. Ensure you have an internet connection and a valid zip code and try again.", @"zip code error message")
                                                                            delegate:nil
                                                                   cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                                                   otherButtonTitles:nil];
