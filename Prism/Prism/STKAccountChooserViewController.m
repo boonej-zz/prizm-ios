@@ -64,6 +64,8 @@
 {
     ACAccount *acct = [[self accounts] objectAtIndex:[indexPath row]];
     [[self delegate] accountChooser:self didChooseAccount:acct];
+    
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

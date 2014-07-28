@@ -372,7 +372,9 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
             }
         }
         @catch (AmazonServiceException *e) {
-            NSLog(@"caught amazon exception");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(nil, [NSError errorWithDomain:@"AmazonErrorDomain" code:-1 userInfo:nil]);
+            });
         }
     });
 }
