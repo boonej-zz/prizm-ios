@@ -1709,31 +1709,28 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                    error:(NSError *)error
 {
     if (!error) {
-        if ([self googlePlusProcessingBlock]) {
-            [self googlePlusProcessingBlock]();
+        if ([self googlePlusAuthenticationBlock]) {
+            if ([self googlePlusProcessingBlock]) {
+                [self googlePlusProcessingBlock]();
+            }
+            [self googlePlusAuthenticationBlock](auth, error);
         }
-        [self googlePlusAuthenticationBlock](auth, error);
-        [self setGooglePlusAuthenticationBlock:nil];
-        [self setGooglePlusProcessingBlock:nil];
-        [self setAttemptingTransparentLogin:NO];
-        return;
-    }
-    
-    if ([self attemptingTransparentLogin]) {
-        [self setAttemptingTransparentLogin:NO];
-        if ([error isConnectionError]) {
+    } else {
+        if ([self attemptingTransparentLogin] && [error isConnectionError]) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [self authenticateUser:[self currentUser]];
                 [[self context] save:nil];
             }];
-            [self setGooglePlusProcessingBlock:nil];
-            [self setGooglePlusAuthenticationBlock:nil];
         } else {
-            [self setAttemptingTransparentLogin:NO];
-            GPPSignInButton *b = [[GPPSignInButton alloc] init];
-            [b sendActionsForControlEvents:UIControlEventTouchUpInside];
+            // g+ returns "unknown error" when user hits cancel during the signin process
+            // we'll report our authorization error
+            NSError *err = [NSError errorWithDomain:STKUserStoreErrorDomain code:STKUserStoreErrorCodeOAuth userInfo:nil];
+            [self googlePlusAuthenticationBlock](auth, err);
         }
     }
+    [self setGooglePlusAuthenticationBlock:nil];
+    [self setGooglePlusProcessingBlock:nil];
+    [self setAttemptingTransparentLogin:NO];
 }
 
 #pragma mark Standard

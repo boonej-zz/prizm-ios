@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *gapConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *connectLabel;
 @property (nonatomic, strong) Mixpanel *mixpanel;
+@property (nonatomic) BOOL attemptingGoogleLogin;
 
 @end
 
@@ -116,9 +117,11 @@
 }
 - (IBAction)connectWithGoogle:(id)sender
 {
-    [self.mixpanel track:@"Social Registration" properties:@{@"status":@"Social Connect", @"provider": @"google"}];
+    [STKProcessingView present];
+    [self setAttemptingGoogleLogin:YES];
     [[STKUserStore store] connectWithGoogle:^(STKUser *u, STKUser *googleData, NSError *err) {
         [STKProcessingView dismiss];
+        [self setAttemptingGoogleLogin:NO];
         
         if(!err) {
             if(u) {
@@ -178,4 +181,25 @@
     }
 }
 
+- (void)applicationDidBecomeActive:(NSNotification *)note
+{
+    if ([self attemptingGoogleLogin] == YES) {
+        [STKProcessingView dismiss];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+     
 @end
