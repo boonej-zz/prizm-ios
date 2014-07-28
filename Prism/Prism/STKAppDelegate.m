@@ -30,7 +30,8 @@
 #ifdef DEBUG 
     static NSString * const STKMixpanelKey = @"";//@"73c8b5e42732b21ff8b74d73aabc8f79";
 #else
-    static NSString * const STKMixpanelKey = @"4a0537b6af3aacf933fa10bc70050237";
+//    static NSString * const STKMixpanelKey = @"4a0537b6af3aacf933fa10bc70050237";
+    static NSString * const STKMixpanelKey = @"831cd11c7aedb1175765d2a9583c5cff";
 #endif
 
 @interface STKAppDelegate ()

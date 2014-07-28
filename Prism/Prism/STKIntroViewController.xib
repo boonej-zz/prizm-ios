@@ -6,7 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKIntroViewController">
             <connections>
-                <outlet property="button" destination="lQh-jt-yG5" id="atr-xn-htx"/>
+                <outlet property="button" destination="lQh-jt-yG5" id="4Hm-lP-OSS"/>
                 <outlet property="pageControl" destination="Pcy-S9-Bqa" id="igT-Oy-Ud8"/>
                 <outlet property="scrollView" destination="8r8-tS-fOa" id="hvc-HA-29E"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -22,9 +22,10 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </scrollView>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lQh-jt-yG5">
-                    <rect key="frame" x="110" y="504" width="100" height="44"/>
+                    <rect key="frame" x="20" y="504" width="280" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Button">
+                    <state key="normal" title="Get Started" backgroundImage="btn_lg">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -32,7 +33,7 @@
                     </connections>
                 </button>
                 <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Pcy-S9-Bqa">
-                    <rect key="frame" x="141" y="140" width="38" height="36"/>
+                    <rect key="frame" x="20" y="20" width="280" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </pageControl>
             </subviews>
@@ -41,4 +42,7 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
+    <resources>
+        <image name="btn_lg" width="303" height="44"/>
+    </resources>
 </document>

@@ -39,7 +39,7 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.mixpanel = [Mixpanel sharedInstance];
-    self.imageNames = @[@"intro_1", @"intro_2"];
+    self.imageNames = @[@"intro_1", @"intro_2", @"intro_3"];
     [self.mixpanel track:@"Intro Begin" properties:@{}];
     [self configure];
 }
@@ -80,11 +80,13 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
         [iv setFrame:frame];
         if (i == [names count] - 1) {
             CGPoint center = self.view.center;
-            center.y = self.view.bounds.size.height - 80;
-            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 150, 44)];
+            center.y = self.view.bounds.size.height - 34;
+            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
             [iv setUserInteractionEnabled:YES];
+            [button setBackgroundImage:[UIImage imageNamed:@"btn_lg"] forState:UIControlStateNormal];
             [button setCenter:center];
-            [button setTitle:@"Begin" forState:UIControlStateNormal];
+            [button setTitle:@"Let's Go" forState:UIControlStateNormal];
+            [[button titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f]];
             [button addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
             [iv addSubview:button];
         }
