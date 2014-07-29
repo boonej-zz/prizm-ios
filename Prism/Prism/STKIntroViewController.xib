@@ -50,7 +50,7 @@
                 <constraint firstAttribute="bottom" secondItem="8r8-tS-fOa" secondAttribute="bottom" id="kSR-Db-zFr"/>
                 <constraint firstItem="8r8-tS-fOa" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="zBi-tw-gVE"/>
             </constraints>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>

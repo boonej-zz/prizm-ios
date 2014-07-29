@@ -116,4 +116,9 @@ NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
     [self.scrollView scrollRectToVisible:frame animated:YES];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 @end

@@ -89,6 +89,7 @@ typedef enum {
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [self fetchOlderPosts];
     [super viewDidAppear:animated];
 }
 
@@ -361,8 +362,8 @@ typedef enum {
         [[self luminatingBar] setLuminating:YES];
         [[self postController] setFilterMap:[self filterDictionary]];
         [[self postController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-            [[self luminatingBar] setLuminating:NO];
-            [[self tableView] reloadData];
+                [[self luminatingBar] setLuminating:NO];
+                [[self tableView] reloadData];
         }];
     }
 }

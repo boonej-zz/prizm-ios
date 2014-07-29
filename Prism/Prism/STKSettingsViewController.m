@@ -60,8 +60,8 @@
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
                           @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]},
                           @{@"title" : @"Send Feedback", @"type" : @"STKLabelCell", @"selectionSelector" : @"sendFeedbackEmail:"},
-                          @{@"title" : @"Like Us On Facebook", @"type":@"STKLabelCell", @"selectionSelector":@"likeUsOnFacebook:"},
-                          @{@"title" : @"Follow Us On Twitter", @"type":@"STKLabelCell", @"selectionSelector":@"followUsOnTwitter:"}
+                          @{@"title" : @"Like us on Facebook", @"type":@"STKLabelCell", @"selectionSelector":@"likeUsOnFacebook:"},
+                          @{@"title" : @"Follow us on Twitter", @"type":@"STKLabelCell", @"selectionSelector":@"followUsOnTwitter:"}
                         ];
         }
     }
@@ -211,7 +211,7 @@
 
 - (void)likeUsOnFacebook:(id)sender
 {
-    NSURL *fbURL = [NSURL URLWithString:@"fb://page/877922338903107"];
+    NSURL *fbURL = [NSURL URLWithString:@"fb://profile/877922338903107"];
     if ([[UIApplication sharedApplication] canOpenURL:fbURL]){
         [[UIApplication sharedApplication] openURL:fbURL];
     } else {
@@ -221,7 +221,12 @@
 
 - (void)followUsOnTwitter:(id)sender
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/beprizmatic"]];
+    NSURL *twitURL = [NSURL URLWithString:@"twitter://user?screen_name=beprizmatic"];
+    if ([[UIApplication sharedApplication] canOpenURL:twitURL]){
+        [[UIApplication sharedApplication] openURL:twitURL];
+    } else {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/beprizmatic"]];
+    }
 }
 
 

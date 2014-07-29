@@ -19,7 +19,7 @@
 @import Social;
 @import MessageUI;
 
-NSString * const STKInviteFriendsShareText = @"Prizm app store link";
+NSString * const STKInviteFriendsShareText = @"http://prizmapp.com/download";
 NSString * const STKInviteFriendsEmailSubject = @"Find me on Prizm";
 
 @interface STKInviteFriendsViewController ()
