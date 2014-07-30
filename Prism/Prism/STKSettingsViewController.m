@@ -19,6 +19,8 @@
 #import "UIERealTimeBlurView.h"
 #import "STKSearchUsersViewController.h"
 #import "STKInviteFriendsViewController.h"
+#import "STKWebViewController.h"
+
 //#import "TMAPIClient.h"
 
 @import Social;
@@ -211,22 +213,28 @@
 
 - (void)likeUsOnFacebook:(id)sender
 {
-    NSURL *fbURL = [NSURL URLWithString:@"fb://profile/877922338903107"];
-    if ([[UIApplication sharedApplication] canOpenURL:fbURL]){
-        [[UIApplication sharedApplication] openURL:fbURL];
-    } else {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/prizmapp"]];
-    }
+//    NSURL *fbURL = [NSURL URLWithString:@"fb://profile/877922338903107"];
+//    if ([[UIApplication sharedApplication] canOpenURL:fbURL]){
+//        [[UIApplication sharedApplication] openURL:fbURL];
+//    } else {
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.facebook.com/prizmapp"]];
+//    }
+    NSURL *url = [NSURL URLWithString:@"https://www.facebook.com/prizmapp"];
+    [self openWebViewWithURL:url];
 }
 
 - (void)followUsOnTwitter:(id)sender
 {
-    NSURL *twitURL = [NSURL URLWithString:@"twitter://user?screen_name=beprizmatic"];
-    if ([[UIApplication sharedApplication] canOpenURL:twitURL]){
-        [[UIApplication sharedApplication] openURL:twitURL];
-    } else {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/beprizmatic"]];
-    }
+    NSURL *url = [NSURL URLWithString:@"https://www.twitter.com/beprizmatic"];
+    [self openWebViewWithURL:url];
+}
+
+- (void)openWebViewWithURL:(NSURL *)url
+{
+    STKWebViewController *wvc = [[STKWebViewController alloc] init];
+    [wvc setUrl:url];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
+    [self presentViewController:nvc animated:YES completion:nil];
 }
 
 
