@@ -678,7 +678,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
     STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
     NSString *revertVisibility = [p visibility];
-    __block int revertIndex = NSNotFound;
+    __block long revertIndex = NSNotFound;
     [visibilityMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([obj isEqualToString:revertVisibility]) {
             revertIndex = [key integerValue];
@@ -693,6 +693,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         [p setType:STKPostTypePersonal];
         [[self categoryCollectionView] reloadData];
     }
+    
+    [p setVisibility:[visibilityMap objectForKey:[NSNumber numberWithInteger:sender.selectedSegmentIndex]]];
     
     [[STKContentStore store] editPost:p
                            completion:^(STKPost *result, NSError *err) {

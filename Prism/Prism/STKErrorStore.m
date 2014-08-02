@@ -87,6 +87,7 @@ NSString * const STKErrorStoreServerError = @"server_error";
             @(ACErrorRemoveCredentialFailed) : NSLocalizedString(@"This account could not be deleted.", @"could not delete account"),
             @(ACErrorUpdatingNonexistentAccount) : NSLocalizedString(@"This account no longer exists.", @"account no longer exists"),
             @(ACErrorInvalidClientBundleID) : NSLocalizedString(@"The application bundle identifier does not match.", @"app bundle identifier does not match")
+            
         } forKey:ACErrorDomain];
         [errorMap setObject:@{
             @(STKConnectionErrorCodeBadRequest) : NSLocalizedString(@"There was a problem with the server.", @"bad request"),
