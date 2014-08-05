@@ -247,7 +247,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
-        if([obj isKindOfClass:[STKPost class]] && [obj respondsToSelector:@selector(uniqueID)]) {
+        if([obj isKindOfClass:[STKPost class]]) {
             [self setCurrentPost:(STKPost *)obj];
         }
     }
@@ -339,17 +339,22 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     }
     
     NSMutableArray *a = [NSMutableArray array];
+    STKActivityReport *report = [[STKActivityReport alloc] initWithDelegate:self];
     if(image)
         [a addObject:image];
-    if([object isKindOfClass:[STKPost class]])
+    if([object isKindOfClass:[STKPost class]]) {
         [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"]];
+        report.currentPost = object;
+    }
     else
         [a addObject:[NSString stringWithFormat:@"%@ %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"]];
     
     
     [self setFinishHandler:block];
+    
+    
     NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
-                             [[STKActivityReport alloc] initWithDelegate:self],
+                             report,
                              [[STKActivityTumblr alloc] initWithDelegate:self],
                              [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
     NSArray *excludedActivities = nil;

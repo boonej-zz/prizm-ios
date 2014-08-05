@@ -76,6 +76,7 @@
         [self setDefaultFeaturedFilter:@{@"key" : @"creatorType", @"filter" : STKUserTypeInstitution}];
         
         _recentPostsController = [[STKPostController alloc] initWithViewController:self];
+//        NSSortDescriptor *recent = [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO];
         [[self recentPostsController] setSortDescriptors:@[]];
         [[self recentPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
@@ -435,7 +436,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int postCount = [[[self activePostController] posts] count];
+    long postCount = [[[self activePostController] posts] count];
     if(postCount % 3 > 0)
         return postCount / 3 + 1;
     return postCount / 3;
