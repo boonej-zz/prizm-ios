@@ -553,7 +553,9 @@
     }
     if([cellType isEqualToString:@"STKSettingsShareCell"]) {
         STKSettingsShareCell *cell = [STKSettingsShareCell cellForTableView:tableView target:self];
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+//        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+        UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_right"]];
+        [cell setAccessoryView:iv];
         [[cell networkTitleLabel] setText:[self titleForIndexPath:indexPath]];
         [[cell networkImageView] setImage:[self imageForIndexPath:indexPath]];
         [cell setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
@@ -583,7 +585,8 @@
     }
     
     if([self nextItemsForIndexPath:indexPath] || [self urlForIndexPath:indexPath]) {
-        [returnCell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+        UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_right"]];
+        [returnCell setAccessoryView:iv];
     } else {
         [returnCell setAccessoryType:UITableViewCellAccessoryNone];
     }
