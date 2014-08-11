@@ -31,6 +31,9 @@ NSString * const STKUserSubTypeCommunity = @"community";
 NSString * const STKUserSubTypeEducation = @"education";
 NSString * const STKUserSubTypeLuminary = @"luminary";
 
+NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
+NSString *const STKPrivacyInstructionsDismissedKey = @"STKPrivacyInstructionsDismissed";
+
 BOOL const STKUserStatusActive = YES;
 BOOL const STKUserStatusInActive = NO;
 
@@ -170,6 +173,16 @@ tumblrTokenSecret, tumblrLastMinID;
 - (BOOL)shouldDisplayTrustInstructions
 {
     return [self trustCount] == 0;
+}
+
+- (BOOL)shouldDisplayIntroScreen
+{
+    return ![[NSUserDefaults standardUserDefaults] boolForKey:STKIntroCompletedKey];
+}
+
+- (BOOL)shouldDisplayPostInstructions
+{
+    return ![[NSUserDefaults standardUserDefaults] boolForKey:STKPrivacyInstructionsDismissedKey];
 }
 
 - (BOOL)hasTrusts

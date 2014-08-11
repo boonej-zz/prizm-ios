@@ -9,7 +9,7 @@
 #import "STKIntroViewController.h"
 #import "Mixpanel.h"
 
-NSString *const STKIntroCompletedKey = @"STKIntroCompletedKey";
+
 
 @interface STKIntroViewController () <UIScrollViewDelegate>
 

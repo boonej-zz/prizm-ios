@@ -308,7 +308,7 @@
 		88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagToolbar.m; sourceTree = "<group>"; };
 		88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+STKHashtagDetector.h"; sourceTree = "<group>"; };
 		88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+STKHashtagDetector.m"; sourceTree = "<group>"; };
-		BE02EA9F182A80A200A5505A /* Prism.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prism.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE02EA9F182A80A200A5505A /* Prizm β.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prizm β.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE02EAA2182A80A200A5505A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE02EAA4182A80A200A5505A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		BE02EAA6182A80A200A5505A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -2436,7 +2436,7 @@
 		BE02EAA0182A80A200A5505A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BE02EA9F182A80A200A5505A /* Prism.app */,
+				BE02EA9F182A80A200A5505A /* Prizm β.app */,
 				BE02EABA182A80A200A5505A /* PrismTests.xctest */,
 			);
 			name = Products;
@@ -4733,7 +4733,7 @@
 			);
 			name = Prism;
 			productName = Prism;
-			productReference = BE02EA9F182A80A200A5505A /* Prism.app */;
+			productReference = BE02EA9F182A80A200A5505A /* Prizm β.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BE02EAB9182A80A200A5505A /* PrismTests */ = {
@@ -4772,7 +4772,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BE02EA9A182A80A200A5505A /* Build configuration list for PBXProject "Prism" */;
+			buildConfigurationList = BE02EA9A182A80A200A5505A /* Build configuration list for PBXProject "Prizm" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -5177,6 +5177,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
+				BUNDLE_NAME = "Prizm β";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5199,7 +5201,7 @@
 					"-lS3",
 					"-lRuntime",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "${BUNDLE_NAME}";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -5211,6 +5213,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_IDENTIFIER_SUFFIX = "";
+				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
+				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5232,8 +5237,8 @@
 					"-lS3",
 					"-lRuntime",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "87E82758-3778-419E-A8D5-F5ABC214DC71";
+				PRODUCT_NAME = "${BUNDLE_NAME}";
+				PROVISIONING_PROFILE = "EDBD99DD-3EB9-45F7-9580-DB578F16753F";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -5320,6 +5325,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_IDENTIFIER_SUFFIX = "";
+				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
+				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5340,8 +5348,8 @@
 					"-lS3",
 					"-lRuntime",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PRODUCT_NAME = "${BUNDLE_NAME}";
+				PROVISIONING_PROFILE = "EDBD99DD-3EB9-45F7-9580-DB578F16753F";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -5405,6 +5413,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_IDENTIFIER_SUFFIX = "";
+				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
+				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5431,8 +5442,8 @@
 					"-lS3",
 					"-lRuntime",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PRODUCT_NAME = "${BUNDLE_NAME}";
+				PROVISIONING_PROFILE = "EDBD99DD-3EB9-45F7-9580-DB578F16753F";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -5496,6 +5507,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_IDENTIFIER_SUFFIX = "";
+				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm;
+				BUNDLE_NAME = Prizm;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5524,7 +5538,7 @@
 					"-lS3",
 					"-lRuntime",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "${BUNDLE_NAME}";
 				PROVISIONING_PROFILE = "296594B0-9417-4F3C-B190-92AA4D0A6BAB";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -5595,6 +5609,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_IDENTIFIER_SUFFIX = "";
+				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm;
+				BUNDLE_NAME = "Prizm β";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5618,7 +5635,7 @@
 					"-lS3",
 					"-lRuntime",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "${BUNDLE_NAME}";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -5651,7 +5668,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BE02EA9A182A80A200A5505A /* Build configuration list for PBXProject "Prism" */ = {
+		BE02EA9A182A80A200A5505A /* Build configuration list for PBXProject "Prizm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BE02EAC9182A80A200A5505A /* Debug (Staging) */,

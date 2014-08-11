@@ -127,6 +127,16 @@
 
         [[GPPSignIn sharedInstance] handleURL:url sourceApplication:sourceApplication annotation:annotation];
         return YES;
+    } else if ([[url scheme] isEqualToString:@"prizmapp"]) {
+        NSString *task = [url query];
+        if (task) {
+            NSArray *taskArray = [task componentsSeparatedByString:@"="];
+            if (taskArray.count == 2) {
+                if ([taskArray[0] isEqualToString:@"post_id"]) {
+                    
+                }
+            }
+        }
     }
     
     UIImage *passedUrlImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];

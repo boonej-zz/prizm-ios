@@ -42,6 +42,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *optionCollectionView;
 @property (weak, nonatomic) IBOutlet UILabel *locationField;
+@property (nonatomic, weak) IBOutlet UIView *privacyInstructions;
 @property (nonatomic, strong) STKMarkupController *markupController;
 
 
@@ -57,6 +58,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (void)changeImage:(id)sender;
 - (IBAction)adjustImage:(id)sender;
+- (IBAction)closePrivacy:(id)sender;
 
 @end
 
@@ -113,7 +115,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
     [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                           NSFontAttributeName : STKFont(22)}];
@@ -140,6 +142,13 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[self optionHeightConstraint] setConstant:47];
     
     [[self optionCollectionView] reloadData];
+    if ([[[STKUserStore store] currentUser] shouldDisplayPostInstructions]) {
+        [self.postTextView setHidden:YES];
+        [self.privacyInstructions setHidden:NO];
+    } else {
+        [self.postTextView setHidden:NO];
+        [self.privacyInstructions setHidden:YES];
+    }
 }
 
 - (void)setPostImage:(UIImage *)postImage
@@ -550,6 +559,11 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 }
 
 
-
+- (IBAction)closePrivacy:(id)sender
+{
+    [self.privacyInstructions setHidden:YES];
+    [self.postTextView setHidden:NO];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:STKPrivacyInstructionsDismissedKey];
+}
 
 @end

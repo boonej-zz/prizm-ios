@@ -37,6 +37,8 @@ extern NSString * const STKUserSubTypeCompany;
 extern NSString * const STKUserSubTypeCommunity;
 extern NSString * const STKUserSubTypeEducation;
 extern NSString * const STKUserSubTypeLuminary;
+extern NSString *const STKIntroCompletedKey;
+extern NSString *const STKPrivacyInstructionsDismissedKey;
 
 extern BOOL const STKUserStatusActive;
 extern BOOL const STKUserStatusInActive;
@@ -115,6 +117,8 @@ extern BOOL const STKUserStatusInActive;
 - (BOOL)shouldDisplayGraphInstructions;
 - (BOOL)shouldDisplayHomeFeedInstructions;
 - (BOOL)shouldDisplayTrustInstructions;
+- (BOOL)shouldDisplayIntroScreen;
+- (BOOL)shouldDisplayPostInstructions;
 
 - (BOOL)isInstitution;
 - (BOOL)isLuminary;

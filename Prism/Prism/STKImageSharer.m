@@ -25,6 +25,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 @end
 
+
 @interface STKImageSharer () <STKActivityDelegate>
 
 @end
@@ -36,6 +37,67 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @property (nonatomic, weak) id <STKActivityDelegate> delegate;
 
 - (id)initWithDelegate:(id <STKActivityDelegate>)delegate;
+
+@end
+
+@interface HAItemSource:NSObject <UIActivityItemSource>
+
+@property (nonatomic, strong) NSString * text;
+@property (nonatomic, strong) UIImage * image;
+@property (nonatomic, strong) STKPost *post;
+
+@end
+
+
+@implementation HAItemSource
+
+#pragma mark Activity Item Protocol
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController
+{
+    NSMutableArray *a = [NSMutableArray array];
+    if ([self image]) {
+        return self.image;
+    }
+    else if ([self text]) {
+        return self.text;
+    } else return @"";
+    
+    return a;
+}
+
+- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
+{
+    NSMutableDictionary *obj = [NSMutableDictionary dictionary];
+    if (![activityType isEqualToString:UIActivityTypePostToTwitter]) {
+        [obj setObject:self.image forKey:@"image"];
+        if ([self post]) {
+            NSString *t =[NSString stringWithFormat:@"%@ @beprizmatic %@", [self.post text], @"http://www.prizmapp.com/download"];
+            [obj setValue:t forKey:@"text"];
+        } else {
+            [obj setValue:self.text forKey:@"text"];
+        }
+        
+    } else {
+        if ([self post]) {
+            NSString *t= [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
+            if ([self.post hashTags]){
+                __block NSString *tags = @"";
+                [self.post.hashTags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                    tags = [tags stringByAppendingString:[NSString stringWithFormat:@"#%@ ", [obj valueForKey:@"title"]]];
+                }];
+                t = [NSString stringWithFormat:@"%@ %@", t, tags];
+            }
+            [obj setValue:t forKey:@"text"];
+            
+        } else {
+            [obj setValue:self.image forKey:@"image"];
+            [obj setValue:self.text forKey:@"text"];
+        }
+    }
+//    NSString *post = [NSString stringWithFormat:@"%@ @beprizmatic %@", [self.post text], @"http://www.prizmapp.com/download"];
+//    return @{@"text": post};
+    return obj;
+}
 
 @end
 
@@ -94,6 +156,10 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         if([obj isKindOfClass:[NSString class]]) {
             [self setText:obj];
         }
+        if([obj isKindOfClass:[NSDictionary class]]) {
+            [self setImage:[obj valueForKey:@"image"]];
+            [self setText:[obj valueForKey:@"text"]];
+        }
     }
     
     if(![self image])
@@ -146,6 +212,10 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         if([obj isKindOfClass:[NSString class]]) {
             [self setText:obj];
         }
+        if([obj isKindOfClass:[NSDictionary class]]) {
+            [self setImage:[obj valueForKey:@"image"]];
+            [self setText:[obj valueForKey:@"text"]];
+        }
     }
     
     if(![self image])
@@ -194,6 +264,10 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         return NO;
     
     for(id obj in activityItems) {
+        if([obj isKindOfClass:[NSDictionary class]]) {
+            [self setImage:[obj valueForKey:@"image"]];
+            [self setText:[obj valueForKey:@"text"]];
+        }
         if([obj isKindOfClass:[UIImage class]]) {
             [self setImage:obj];
         }
@@ -277,6 +351,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @property (nonatomic, strong) UIActivity *continuingActivity;
 @property (nonatomic, strong) UIDocumentInteractionController *documentControllerRef;
 @property (nonatomic, weak) STKPost *currentPost;
+@property (nonatomic, strong) id currentObject;
 @property (nonatomic, strong) void (^finishHandler)(UIDocumentInteractionController *);
 
 @property (nonatomic, strong) UIViewController *viewController;
@@ -323,8 +398,25 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (UIActivityViewController *)activityViewControllerForPost:(STKPost *)post
                                               finishHandler:(void (^)(UIDocumentInteractionController *))block
 {
+    HAItemSource *is = [[HAItemSource alloc] init];
     UIImage *image = [[STKImageStore store] cachedImageForURLString:[post imageURLString]];
-    UIActivityViewController *controller = [self activityViewControllerForImage:image object:post finishHandler:block];
+    NSString *text = [NSString stringWithFormat:@"%@ @beprizmatic %@", [post text], @"http://www.prizmapp.com/download"];
+    [is setPost:post];
+    [is setImage:image];
+    [is setText: text];
+    
+    STKActivityReport *report = [[STKActivityReport alloc] initWithDelegate:self];
+   
+    report.currentPost = post;
+    [self setFinishHandler:block];
+    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
+                             report,
+                             [[STKActivityTumblr alloc] initWithDelegate:self],
+                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
+    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];;
+    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
+                                                                                         applicationActivities:activities];
+    [controller setExcludedActivityTypes:excludedActivities];
     if (! controller) return nil;
     [self setViewController:controller];
     
@@ -337,17 +429,22 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     if(!image) {
         return nil;
     }
+
     
     NSMutableArray *a = [NSMutableArray array];
     STKActivityReport *report = [[STKActivityReport alloc] initWithDelegate:self];
-    if(image)
+    if(image) {
         [a addObject:image];
+    }
     if([object isKindOfClass:[STKPost class]]) {
-        [a addObject:[NSString stringWithFormat:@"%@ @beprizmatic %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"]];
+        NSString *t =[NSString stringWithFormat:@"%@ @beprizmatic %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"];
+        [a addObject:t];
         report.currentPost = object;
     }
-    else
-        [a addObject:[NSString stringWithFormat:@"%@ %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"]];
+    else {
+        NSString *t =[NSString stringWithFormat:@"%@ %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"];
+        [a addObject:t];
+    }
     
     
     [self setFinishHandler:block];
@@ -429,6 +526,8 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc
     [self setContinuingActivity:nil];
     [self setDocumentControllerRef:nil];
 }
+
+
 
 
 @end

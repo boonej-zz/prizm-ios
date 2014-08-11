@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BE02EA9E182A80A200A5505A"
-               BuildableName = "Prism.app"
+               BuildableName = "Prizm &#x3b8;.app"
                BlueprintName = "Prism"
-               ReferencedContainer = "container:Prism.xcodeproj">
+               ReferencedContainer = "container:Prizm.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "BE02EAB9182A80A200A5505A"
                BuildableName = "PrismTests.xctest"
                BlueprintName = "PrismTests"
-               ReferencedContainer = "container:Prism.xcodeproj">
+               ReferencedContainer = "container:Prizm.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BE02EA9E182A80A200A5505A"
-            BuildableName = "Prism.app"
+            BuildableName = "Prizm &#x3b8;.app"
             BlueprintName = "Prism"
-            ReferencedContainer = "container:Prism.xcodeproj">
+            ReferencedContainer = "container:Prizm.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BE02EA9E182A80A200A5505A"
-            BuildableName = "Prism.app"
+            BuildableName = "Prizm &#x3b8;.app"
             BlueprintName = "Prism"
-            ReferencedContainer = "container:Prism.xcodeproj">
+            ReferencedContainer = "container:Prizm.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -85,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BE02EA9E182A80A200A5505A"
-            BuildableName = "Prism.app"
+            BuildableName = "Prizm &#x3b8;.app"
             BlueprintName = "Prism"
-            ReferencedContainer = "container:Prism.xcodeproj">
+            ReferencedContainer = "container:Prizm.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
