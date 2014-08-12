@@ -80,12 +80,12 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     } else {
         if ([self post]) {
             NSString *t= [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
-            if ([self.post hashTags]){
-                __block NSString *tags = @"";
-                [self.post.hashTags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-                    tags = [tags stringByAppendingString:[NSString stringWithFormat:@"#%@ ", [obj valueForKey:@"title"]]];
-                }];
-                t = [NSString stringWithFormat:@"%@ %@", t, tags];
+            if ([self.post text]){
+//                __block NSString *tags = @"";
+//                [self.post.hashTags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+//                    tags = [tags stringByAppendingString:[NSString stringWithFormat:@"#%@ ", [obj valueForKey:@"title"]]];
+//                }];
+                t = [self.post text];
             }
             [obj setValue:t forKey:@"text"];
             

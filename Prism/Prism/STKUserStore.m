@@ -667,6 +667,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKResolutionQuery *q = [STKResolutionQuery resolutionQueryForField:@"following"];
         [q setFormat:STKQueryObjectFormatShort];
+        
         [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
         [c setQueryObject:q];
 

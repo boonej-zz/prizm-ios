@@ -37,6 +37,7 @@
 #import "STKLuminatingBar.h"
 #import "STKAccoladeViewController.h"
 #import "STKMarkupUtilities.h"
+#import "NSArray+Reverse.h"
 
 @import MessageUI;
 @import AddressBook;
@@ -252,7 +253,7 @@ typedef enum {
             [vc setTitle:@"Followers"];
             [[self navigationController] pushViewController:vc animated:YES];
             [[STKUserStore store] fetchFollowersOfUser:[self profile] completion:^(NSArray *followers, NSError *err) {
-                [vc setUsers:[followers filteredArrayUsingPredicate:activeUsersOnly]];
+                [vc setUsers:[[followers filteredArrayUsingPredicate:activeUsersOnly] reversedArray]];
             }];
         } break;
         case 1: {
@@ -260,7 +261,7 @@ typedef enum {
             [vc setTitle:@"Following"];
             [[self navigationController] pushViewController:vc animated:YES];
             [[STKUserStore store] fetchUsersFollowingOfUser:[self profile] completion:^(NSArray *followers, NSError *err) {
-                [vc setUsers:[followers filteredArrayUsingPredicate:activeUsersOnly]];
+                [vc setUsers:[[followers filteredArrayUsingPredicate:activeUsersOnly] reversedArray]];
             }];
         } break;
         case 2: {
