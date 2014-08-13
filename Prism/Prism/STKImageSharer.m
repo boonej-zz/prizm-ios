@@ -68,10 +68,28 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
     NSMutableDictionary *obj = [NSMutableDictionary dictionary];
+    NSString *text = @"";
+    if ([self post]) {
+        NSMutableArray *textArr = [[self.post.text componentsSeparatedByString:@" "] mutableCopy];
+        __block NSInteger i = 0;
+        NSArray *hashTags = [self.post.tags allObjects];
+        [textArr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([(NSString *)obj rangeOfString:@"@"].location != NSNotFound) {
+                if ([hashTags count] >= i + 1) {
+                    STKUser *user = [hashTags objectAtIndex:i];
+                    NSString *newObj = user.name;
+                    ++i;
+                    [textArr replaceObjectAtIndex:idx withObject:newObj];
+                }
+                
+            }
+        }];
+        text = [textArr componentsJoinedByString:@" "];
+    }
     if (![activityType isEqualToString:UIActivityTypePostToTwitter]) {
         [obj setObject:self.image forKey:@"image"];
         if ([self post]) {
-            NSString *t =[NSString stringWithFormat:@"%@ @beprizmatic %@", [self.post text], @"http://www.prizmapp.com/download"];
+            NSString *t =[NSString stringWithFormat:@"%@ @beprizmatic %@", text, @"http://www.prizmapp.com/download"];
             [obj setValue:t forKey:@"text"];
         } else {
             [obj setValue:self.text forKey:@"text"];
@@ -85,7 +103,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 //                [self.post.hashTags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
 //                    tags = [tags stringByAppendingString:[NSString stringWithFormat:@"#%@ ", [obj valueForKey:@"title"]]];
 //                }];
-                t = [self.post text];
+                t = [NSString stringWithFormat:@"%@ %@", text, t];
             }
             [obj setValue:t forKey:@"text"];
             
