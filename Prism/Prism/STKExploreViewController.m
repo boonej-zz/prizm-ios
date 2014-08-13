@@ -26,6 +26,7 @@
 #import "STKLuminatingBar.h"
 #import "Mixpanel.h"
 #import "STKExploreFilterViewController.h"
+#import "STKImageSharer.h"
 
 @interface STKExploreViewController ()
     <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate, UIGestureRecognizerDelegate, STKExploreFilterDelegate>
@@ -58,6 +59,7 @@
 @end
 
 @implementation STKExploreViewController
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -264,7 +266,14 @@
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadPosts) name:HANotificationReportInappropriate object:nil];
 
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super didReceiveMemoryWarning];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

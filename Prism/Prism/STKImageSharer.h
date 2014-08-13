@@ -11,6 +11,7 @@
 extern NSString * const STKActivityTypeInstagram;
 extern NSString * const STKActivityTypeTumblr;
 extern NSString * const STKActivityTypeWhatsapp;
+extern NSString * const HANotificationReportInappropriate;
 
 @class STKPost;
 

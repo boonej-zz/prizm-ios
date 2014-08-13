@@ -14,6 +14,7 @@
 NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
 NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
 NSString * const STKActivityTypeWhatsapp = @"STKActivityWhatsapp";
+NSString * const HANotificationReportInappropriate = @"HANotificationReportInappropriate";
 
 @class STKActivity;
 
@@ -359,6 +360,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                 [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:HANotificationReportInappropriate object:nil];
         [self activityDidFinish:YES];
     }];
 }
