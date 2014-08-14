@@ -756,6 +756,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         }
     }];
     
+    if (![category isEqualToString:STKPostTypePersonal]) {
+        [[self visibilityControl] setEnabled:YES forSegmentAtIndex:0];
+        [[self visibilityControl] setEnabled:YES forSegmentAtIndex:1];
+    }
+    
     void (^reversal)(void) = ^{
         [[self visibilityControl] setSelectedSegmentIndex:revertIndex];
         [[self post] setType:prevType];
@@ -771,12 +776,16 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             [[self post] setVisibility:STKPostVisibilityTrust];
         }
     }
-    if([[[self post] visibility] isEqualToString:STKPostVisibilityTrust])
+    if([[[self post] visibility] isEqualToString:STKPostVisibilityTrust]) {
         [[self visibilityControl] setSelectedSegmentIndex:1];
+        
+    }
     else if([[[self post] visibility] isEqualToString:STKPostVisibilityPublic]) {
         [[self visibilityControl] setSelectedSegmentIndex:0];
     } else {
         [[self visibilityControl] setSelectedSegmentIndex:2];
+        [[self visibilityControl] setEnabled:NO forSegmentAtIndex:0];
+        [[self visibilityControl] setEnabled:NO forSegmentAtIndex:1];
     }
     
     [collectionView reloadData];
