@@ -33,6 +33,7 @@ extern NSString * const STKContentStorePostDeletedKey;
 - (void)addPostWithInfo:(NSDictionary *)info completion:(void (^)(STKPost *p, NSError *err))block;
 - (void)editPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block;
 - (void)fetchPost:(STKPost *)p completion:(void (^)(STKPost *p, NSError *err))block;
+- (void)fetchPostWithUniqueId:(NSString *)uniqueId completion:(void (^)(STKPost *p, NSError *err))block;
 
 - (void)fetchFeedForUser:(STKUser *)u
         fetchDescription:(STKFetchDescription *)desc

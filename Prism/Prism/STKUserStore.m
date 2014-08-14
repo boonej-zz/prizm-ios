@@ -1124,16 +1124,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     NSArray *cached = nil;
     if(!referenceActivity) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@", u]];
+        [req setPredicate:[NSPredicate predicateWithFormat:@"(notifiedUser == %@) and !(action == %@ && post == nil)", u, @"like"]];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
         [req setFetchLimit:fetchLimit];
         cached = [[self context] executeFetchRequest:req error:nil];
     } else {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
         if (direction == STKQueryObjectPageNewer) {
-            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated > %@", u, [referenceActivity dateCreated]]];
+            [req setPredicate:[NSPredicate predicateWithFormat:@"(notifiedUser == %@ and dateCreated > %@) and !(action == %@ && post == nil)", u, [referenceActivity dateCreated], @"like"]];
         } else {
-            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated < %@", u, [referenceActivity dateCreated]]];
+            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated < %@ and !(action == %@ && post == nil)", u, [referenceActivity dateCreated], @"like"]];
         }
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
         [req setFetchLimit:fetchLimit];

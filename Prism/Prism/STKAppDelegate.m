@@ -19,10 +19,12 @@
 #import "STKUserStore.h"
 #import "STKBaseStore.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKPostViewController.h"
 
 #import <GooglePlus/GooglePlus.h>
 #import <Crashlytics/Crashlytics.h>
 #import "Mixpanel.h"
+#import "STKContentStore.h"
 
 #import "STKAuthorizationToken.h"
 //#import "TMAPIClient.h"
@@ -133,7 +135,13 @@
             NSArray *taskArray = [task componentsSeparatedByString:@"="];
             if (taskArray.count == 2) {
                 if ([taskArray[0] isEqualToString:@"post_id"]) {
-                    
+                    [[STKContentStore store] fetchPostWithUniqueId:taskArray[1] completion:^(STKPost *p, NSError *err) {
+                        if (!err) {
+                            STKPostViewController *pvc = [[STKPostViewController alloc] init];
+                            [pvc setPost:p];
+                            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:pvc animated:NO completion:nil];
+                        }
+                    }];
                 }
             }
         }

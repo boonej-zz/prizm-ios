@@ -84,6 +84,37 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     }];
 }
 
+- (void)fetchPostWithUniqueId:(NSString *)uniqueId completion:(void (^)(STKPost *p, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/posts", uniqueId]];
+        
+//        STKQueryObject *q = [[STKQueryObject alloc] init];
+//        STKSearchQuery *sq = [STKSearchQuery searchQueryForField:@"_id" value:uniqueId];
+//        STKContainQuery *cq = [STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]];
+//        [q addSubquery:cq];
+//        [q addSubquery:sq];
+//        [c setQueryObject:q];
+        
+        [c setModelGraph:@[@"STKPost"]];
+        [c setContext:[[STKUserStore store] context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(STKPost *post, NSError *err) {
+            if(!err) {
+                block(post, nil);
+            } else {
+                block(nil, err);
+            }
+        }];
+    }];
+}
+
 - (NSArray *)cachedPostsForPredicate:(NSPredicate *)predicate
                     fetchDescription:(STKFetchDescription *)desc
 {

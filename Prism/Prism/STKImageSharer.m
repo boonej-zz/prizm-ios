@@ -115,6 +115,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     }
 //    NSString *post = [NSString stringWithFormat:@"%@ @beprizmatic %@", [self.post text], @"http://www.prizmapp.com/download"];
 //    return @{@"text": post};
+    if ([activityType isEqualToString:@"STKActivityReport"]) {
+        return [self post];
+    }
     return obj;
 }
 

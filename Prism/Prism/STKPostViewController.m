@@ -252,7 +252,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-        
+    
+   
     [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];
     [[self categoryCollectionView] setBackgroundColor:[UIColor clearColor]];
