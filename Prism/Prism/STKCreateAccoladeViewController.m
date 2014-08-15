@@ -196,8 +196,8 @@
 {
     NSString *postType = [[self postInfo] objectForKey:STKPostTypeKey];
     if([postType isEqualToString:STKPostTypePersonal]) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Visibility", @"visibility title")
-                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your Trust. However, you have selected that this is a 'Personal' post which is only viewable to you. You can select another category and then choose the visibility options for this post.", @"viibility message")
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sharing", @"visibility title")
+                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your Trust. Right now this post is marked as \"Personal\" which will only be seen by you. If you want to share this post with others, select a new category and then choose the sharing options.", @"viibility message")
                                                     delegate:nil
                                            cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                            otherButtonTitles:nil];
