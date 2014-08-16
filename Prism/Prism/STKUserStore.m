@@ -36,7 +36,7 @@ NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.current
 
 NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurrentUserChangedNotification";
 
-NSString * const STKUserStoreExternalCredentialGoogleClientID = @"657032544324-5ijt9s2qqo1sh05gobelp90703vhmpj3.apps.googleusercontent.com";
+NSString * const STKUserStoreExternalCredentialGoogleClientID = @"657032544324-o1sm1esga2qtcgcggtaabmqb5rjfkkic.apps.googleusercontent.com";
 NSString * const STKUserStoreExternalCredentialFacebookAppID = @"1408826952716972";
 
 NSString * const STKUserStoreExternalCredentialTwitterConsumerKey = @"MzIoqUFCk7BYUNpCNxtGuhuLu";

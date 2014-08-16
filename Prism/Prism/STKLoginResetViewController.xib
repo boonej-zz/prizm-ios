@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -22,7 +22,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Prismlogo" translatesAutoresizingMaskIntoConstraints="NO" id="7Ro-Qh-58a">
-                            <rect key="frame" x="102" y="76" width="116" height="116"/>
+                            <rect key="frame" x="102" y="36" width="116" height="116"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="116" id="EMt-jY-fMV"/>
@@ -30,7 +30,7 @@
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gec-XF-W2G" userLabel="email row">
-                            <rect key="frame" x="0.0" y="200" width="320" height="44"/>
+                            <rect key="frame" x="0.0" y="194" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="j8J-Ro-xDA">
@@ -63,7 +63,7 @@
                             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1r0-mH-745" userLabel="password row">
-                            <rect key="frame" x="0.0" y="245" width="320" height="44"/>
+                            <rect key="frame" x="0.0" y="239" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pqo-z4-BiN">
@@ -96,7 +96,7 @@
                             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vqi-QD-JBe" userLabel="confirm row">
-                            <rect key="frame" x="0.0" y="290" width="320" height="44"/>
+                            <rect key="frame" x="0.0" y="284" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TaO-g7-Q3A">
@@ -128,19 +128,32 @@
                             </constraints>
                             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                         </view>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please fill out below to reset your password." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="320" translatesAutoresizingMaskIntoConstraints="NO" id="rfv-T1-JXf">
+                            <rect key="frame" x="0.0" y="160" width="320" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="LKk-pR-4Bq"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <constraints>
                         <constraint firstItem="vqi-QD-JBe" firstAttribute="centerX" secondItem="1r0-mH-745" secondAttribute="centerX" id="1nE-SL-Gsa"/>
-                        <constraint firstItem="Gec-XF-W2G" firstAttribute="top" secondItem="7Ro-Qh-58a" secondAttribute="bottom" constant="8" id="6fz-mG-yEv"/>
+                        <constraint firstAttribute="trailing" secondItem="rfv-T1-JXf" secondAttribute="trailing" id="6TR-Rg-zgU"/>
+                        <constraint firstItem="Gec-XF-W2G" firstAttribute="top" secondItem="7Ro-Qh-58a" secondAttribute="bottom" constant="42" id="6fz-mG-yEv"/>
                         <constraint firstItem="7Ro-Qh-58a" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" constant="102" id="6mq-un-p0P"/>
-                        <constraint firstItem="7Ro-Qh-58a" firstAttribute="top" secondItem="Lgm-yn-dzf" secondAttribute="top" constant="76" id="Ag9-ww-STm"/>
+                        <constraint firstItem="7Ro-Qh-58a" firstAttribute="top" secondItem="Lgm-yn-dzf" secondAttribute="top" constant="36" id="Ag9-ww-STm"/>
                         <constraint firstItem="vqi-QD-JBe" firstAttribute="top" secondItem="1r0-mH-745" secondAttribute="bottom" constant="1" id="B4z-Ke-s1s"/>
                         <constraint firstAttribute="trailing" secondItem="7Ro-Qh-58a" secondAttribute="trailing" constant="102" id="BCH-7C-f9T"/>
                         <constraint firstItem="1r0-mH-745" firstAttribute="top" secondItem="Gec-XF-W2G" secondAttribute="bottom" constant="1" id="E9U-24-epC"/>
+                        <constraint firstItem="rfv-T1-JXf" firstAttribute="top" secondItem="7Ro-Qh-58a" secondAttribute="bottom" constant="8" id="RTL-d8-oOC"/>
                         <constraint firstItem="Gec-XF-W2G" firstAttribute="centerX" secondItem="1r0-mH-745" secondAttribute="centerX" id="Tzd-Ro-kYb"/>
                         <constraint firstItem="Gec-XF-W2G" firstAttribute="centerX" secondItem="7Ro-Qh-58a" secondAttribute="centerX" id="UZm-Yg-2b7"/>
                         <constraint firstAttribute="trailing" secondItem="1r0-mH-745" secondAttribute="trailing" id="VD0-aN-ZL6"/>
-                        <constraint firstAttribute="bottom" secondItem="vqi-QD-JBe" secondAttribute="bottom" constant="234" id="VDe-V9-Rsw"/>
+                        <constraint firstAttribute="bottom" secondItem="vqi-QD-JBe" secondAttribute="bottom" constant="190" id="VDe-V9-Rsw"/>
+                        <constraint firstItem="rfv-T1-JXf" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" id="acG-qR-xP0"/>
                         <constraint firstItem="vqi-QD-JBe" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" id="b0u-7x-4Eo"/>
                         <constraint firstItem="1r0-mH-745" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" id="iyi-O1-5ua"/>
                         <constraint firstAttribute="trailing" secondItem="vqi-QD-JBe" secondAttribute="trailing" id="ln0-uW-vOK"/>

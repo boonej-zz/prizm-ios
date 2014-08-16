@@ -49,6 +49,7 @@
 			<array>
 				<string>prizmapp</string>
 				<string>com.higheraltitude.prism</string>
+				<string>com.higheraltitude.prizm.staging</string>
 			</array>
 		</dict>
 	</array>
