@@ -128,11 +128,11 @@
                             </constraints>
                             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                         </view>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please fill out below to reset your password." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="320" translatesAutoresizingMaskIntoConstraints="NO" id="rfv-T1-JXf">
-                            <rect key="frame" x="0.0" y="160" width="320" height="21"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please fill out the lines below to reset your password." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="199" translatesAutoresizingMaskIntoConstraints="NO" id="rfv-T1-JXf">
+                            <rect key="frame" x="61" y="151" width="199" height="35"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="21" id="LKk-pR-4Bq"/>
+                                <constraint firstAttribute="height" constant="35" id="LKk-pR-4Bq"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
@@ -141,19 +141,19 @@
                     </subviews>
                     <constraints>
                         <constraint firstItem="vqi-QD-JBe" firstAttribute="centerX" secondItem="1r0-mH-745" secondAttribute="centerX" id="1nE-SL-Gsa"/>
-                        <constraint firstAttribute="trailing" secondItem="rfv-T1-JXf" secondAttribute="trailing" id="6TR-Rg-zgU"/>
+                        <constraint firstAttribute="trailing" secondItem="rfv-T1-JXf" secondAttribute="trailing" constant="60" id="6TR-Rg-zgU"/>
                         <constraint firstItem="Gec-XF-W2G" firstAttribute="top" secondItem="7Ro-Qh-58a" secondAttribute="bottom" constant="42" id="6fz-mG-yEv"/>
                         <constraint firstItem="7Ro-Qh-58a" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" constant="102" id="6mq-un-p0P"/>
                         <constraint firstItem="7Ro-Qh-58a" firstAttribute="top" secondItem="Lgm-yn-dzf" secondAttribute="top" constant="36" id="Ag9-ww-STm"/>
                         <constraint firstItem="vqi-QD-JBe" firstAttribute="top" secondItem="1r0-mH-745" secondAttribute="bottom" constant="1" id="B4z-Ke-s1s"/>
                         <constraint firstAttribute="trailing" secondItem="7Ro-Qh-58a" secondAttribute="trailing" constant="102" id="BCH-7C-f9T"/>
                         <constraint firstItem="1r0-mH-745" firstAttribute="top" secondItem="Gec-XF-W2G" secondAttribute="bottom" constant="1" id="E9U-24-epC"/>
-                        <constraint firstItem="rfv-T1-JXf" firstAttribute="top" secondItem="7Ro-Qh-58a" secondAttribute="bottom" constant="8" id="RTL-d8-oOC"/>
+                        <constraint firstItem="rfv-T1-JXf" firstAttribute="top" secondItem="7Ro-Qh-58a" secondAttribute="bottom" constant="-1" id="RTL-d8-oOC"/>
                         <constraint firstItem="Gec-XF-W2G" firstAttribute="centerX" secondItem="1r0-mH-745" secondAttribute="centerX" id="Tzd-Ro-kYb"/>
                         <constraint firstItem="Gec-XF-W2G" firstAttribute="centerX" secondItem="7Ro-Qh-58a" secondAttribute="centerX" id="UZm-Yg-2b7"/>
                         <constraint firstAttribute="trailing" secondItem="1r0-mH-745" secondAttribute="trailing" id="VD0-aN-ZL6"/>
                         <constraint firstAttribute="bottom" secondItem="vqi-QD-JBe" secondAttribute="bottom" constant="190" id="VDe-V9-Rsw"/>
-                        <constraint firstItem="rfv-T1-JXf" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" id="acG-qR-xP0"/>
+                        <constraint firstItem="rfv-T1-JXf" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" constant="61" id="acG-qR-xP0"/>
                         <constraint firstItem="vqi-QD-JBe" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" id="b0u-7x-4Eo"/>
                         <constraint firstItem="1r0-mH-745" firstAttribute="leading" secondItem="Lgm-yn-dzf" secondAttribute="leading" id="iyi-O1-5ua"/>
                         <constraint firstAttribute="trailing" secondItem="vqi-QD-JBe" secondAttribute="trailing" id="ln0-uW-vOK"/>
