@@ -88,9 +88,14 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         text = [textArr componentsJoinedByString:@" "];
     }
     if (![activityType isEqualToString:UIActivityTypePostToTwitter]) {
+        NSString *link = @"http://www.prizmapp.com/download";
         [obj setObject:self.image forKey:@"image"];
         if ([self post]) {
-            NSString *t =[NSString stringWithFormat:@"%@ @beprizmatic %@", text, @"http://www.prizmapp.com/download"];
+            NSString *t = text;
+            if (![activityType isEqualToString:UIActivityTypePostToFacebook]) {
+                t = [t stringByAppendingString:@" @beprizmatic"];
+            }
+            t = [t stringByAppendingString:[NSString stringWithFormat:@" %@", link]];
             [obj setValue:t forKey:@"text"];
         } else {
             [obj setValue:self.text forKey:@"text"];
@@ -104,7 +109,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 //                [self.post.hashTags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
 //                    tags = [tags stringByAppendingString:[NSString stringWithFormat:@"#%@ ", [obj valueForKey:@"title"]]];
 //                }];
-                t = [NSString stringWithFormat:@"%@ %@", text, t];
+                t = [NSString stringWithFormat:@"%@ @beprizmatic %@", text, t];
             }
             [obj setValue:t forKey:@"text"];
             
