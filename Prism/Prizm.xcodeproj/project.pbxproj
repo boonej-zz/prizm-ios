@@ -266,6 +266,7 @@
 		2C6969281982A71900E4B9FD /* STKIntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKIntroViewController.xib; sourceTree = "<group>"; };
 		2C6B263E199AA7E900A14BD8 /* NSArray+Reverse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Reverse.h"; sourceTree = "<group>"; };
 		2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Reverse.m"; sourceTree = "<group>"; };
+		2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 2.xcdatamodel"; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -5219,8 +5220,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				BUNDLE_IDENTIFIER_SUFFIX = "";
-				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
+				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -5244,7 +5245,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "EDBD99DD-3EB9-45F7-9580-DB578F16753F";
+				PROVISIONING_PROFILE = "87E82758-3778-419E-A8D5-F5ABC214DC71";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -5729,6 +5730,7 @@
 		BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */,
 				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
 			);
 			currentVersion = BEFAC198183D4DCF005E8933 /* User.xcdatamodel */;

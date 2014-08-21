@@ -216,19 +216,19 @@ typedef enum {
     [fd setFilterDictionary:@{@"status" : STKRequestStatusAccepted}];
     [fd setDirection:STKQueryObjectPageNewer];
     
-    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
-        NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
-        for(STKTrust *t in trusts) {
-            if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
-                [otherUsers addObject:[t recepient]];
-            } else {
-                [otherUsers addObject:[t creator]];
-            }
-        }
-        NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-        [otherUsers sortUsingDescriptors:@[sd]];
-        [vc setUsers:otherUsers];
-    }];
+//    [[STKUserStore store] fetchTrustsForUser:[[STKUserStore store] currentUser] fetchDescription:fd completion:^(NSArray *trusts, NSError *err) {
+//        NSMutableArray *otherUsers = [[NSMutableArray alloc] init];
+//        for(STKTrust *t in trusts) {
+//            if([[t creator] isEqual:[[STKUserStore store] currentUser]]) {
+//                [otherUsers addObject:[t recepient]];
+//            } else {
+//                [otherUsers addObject:[t creator]];
+//            }
+//        }
+//        NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+//        [otherUsers sortUsingDescriptors:@[sd]];
+//        [vc setUsers:otherUsers];
+//    }];
 }
 
 - (void)websiteTapped:(id)sender atIndexPath:(NSIndexPath *)indexPath

@@ -141,7 +141,6 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         [req setFetchLimit:[desc limit]];
 
         NSArray *results = [[[STKUserStore store] context] executeFetchRequest:req error:nil];
-        NSLog(@"%d", [results count]);
         return results;
     } else {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKPost"];

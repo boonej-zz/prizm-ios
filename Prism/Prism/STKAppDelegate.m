@@ -101,6 +101,9 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     NSLog(@"%@", userInfo);
+    NSString *alertValue = [[userInfo valueForKeyPath:@"aps"] valueForKey:@"badge"];
+    int badgeValue= [alertValue intValue];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeValue];
 }
 
 

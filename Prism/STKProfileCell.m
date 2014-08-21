@@ -19,6 +19,7 @@
 
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 @property (weak, nonatomic) IBOutlet UIView *profileGradient;
+@property (weak, nonatomic) IBOutlet UIControl *pageRight;
 
 
 @property (weak, nonatomic) IBOutlet UILabel *luminaryLabel;
@@ -62,7 +63,9 @@
 //    [gradient setLocations:@[@(0.4), @(1)]];
     [[[self profileGradient] layer] insertSublayer:gradient atIndex:0];
     [self setGradientLayer:gradient];
+    
 }
+
 
 - (void)layoutContent
 {
@@ -146,10 +149,13 @@
     
     if (offset > 480) {
         [[self pageControl] setCurrentPage:2];
+        [self.pageRight setHidden:YES];
     } else if (offset < 160) {
         [[self pageControl] setCurrentPage:0];
+        [self.pageRight setHidden:NO];
     } else {
         [[self pageControl] setCurrentPage:1];
+        [self.pageRight setHidden:NO];
     }
 }
 
