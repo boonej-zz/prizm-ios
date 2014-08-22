@@ -2034,20 +2034,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)trackFollow:(STKUser *)user
 {
-    NSString *followedUserIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
 
-    [[Mixpanel sharedInstance] track:@"User followed" properties:@{@"Target User" : followedUserIdentifier,
-                                                                   @"Target User Id" : [user uniqueID],
-                                                                   @"Following Count" : @([user followingCount])}];
+    [[Mixpanel sharedInstance] track:@"User followed" properties:mixpanelDataForObject(@{@"Target User" : user.email,
+                                                                   @"Following Count" : @([user followingCount])})];
 }
 
 - (void)trackUnfollow:(STKUser *)user
 {
-    NSString *followedUserIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
-    
-    [[Mixpanel sharedInstance] track:@"User un-followed" properties:@{@"Target User" : followedUserIdentifier,
-                                                                   @"Target User Id" : [user uniqueID],
-                                                                   @"Following Count" : @([user followingCount])}];
+    [[Mixpanel sharedInstance] track:@"User un-followed" properties:mixpanelDataForObject(@{@"Target User" : user.email,
+                                                                   @"Following Count" : @([user followingCount])})];
 }
 
 

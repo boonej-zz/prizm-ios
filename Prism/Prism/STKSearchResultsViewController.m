@@ -332,39 +332,39 @@ typedef enum {
 
 - (void)trackViewUser:(STKUser *)user
 {
-    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+    NSString *userIdentifier = user.email;
 
-    [[Mixpanel sharedInstance] track:@"Search result - view user" properties:@{@"Search filter" : [self searchTypeString],
+    [[Mixpanel sharedInstance] track:@"Search result - view user" properties:mixpanelDataForObject(@{@"Search filter" : [self searchTypeString],
                                                                                    @"Search term" : [[self searchTextField] text],
                                                                                    @"Found user" : userIdentifier
-                                                                                   }];
+                                                                                   })];
 }
 
 - (void)trackViewHashTag:(NSString *)hashtag
 {
-    [[Mixpanel sharedInstance] track:@"Search result - view hashtag" properties:@{@"Search filter" : [self searchTypeString],
+    [[Mixpanel sharedInstance] track:@"Search result - view hashtag" properties:mixpanelDataForObject(@{@"Search filter" : [self searchTypeString],
                                                                                    @"Search term" : [[self searchTextField] text],
-                                                                                   @"Hashtag" : hashtag}];
+                                                                                   @"Hashtag" : hashtag})];
 }
 
 - (void)trackUnfollow:(STKUser *)user
 {
-    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+    NSString *userIdentifier = user.email;
 
-    [[Mixpanel sharedInstance] track:@"Search result - unfollow user" properties:@{@"Search filter" : [self searchTypeString],
+    [[Mixpanel sharedInstance] track:@"Search result - unfollow user" properties:mixpanelDataForObject(@{@"Search filter" : [self searchTypeString],
                                                                                  @"Search term" : [[self searchTextField] text],
                                                                                  @"Found user" : userIdentifier
-                                                                                 }];
+                                                                                 })];
 }
 
 - (void)trackFollow:(STKUser *)user
 {
-    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
+    NSString *userIdentifier = user.email;
     
-    [[Mixpanel sharedInstance] track:@"Search result - follow user" properties:@{@"Search filter" : [self searchTypeString],
+    [[Mixpanel sharedInstance] track:@"Search result - follow user" properties:mixpanelDataForObject(@{@"Search filter" : [self searchTypeString],
                                                                                    @"Search term" : [[self searchTextField] text],
                                                                                    @"Found user" : userIdentifier
-                                                                                   }];
+                                                                                   })];
 }
 
 - (NSString *)searchTypeString  

@@ -89,7 +89,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     }
     if (![activityType isEqualToString:UIActivityTypePostToTwitter]) {
         NSString *link = @"http://www.prizmapp.com/download";
-        [obj setObject:self.image forKey:@"image"];
+        if (self.image)  {
+            [obj setObject:self.image forKey:@"image"];
+        }
         if ([self post]) {
             NSString *t = text;
             if (![activityType isEqualToString:UIActivityTypePostToFacebook]) {
@@ -114,7 +116,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
             [obj setValue:t forKey:@"text"];
             
         } else {
-            [obj setValue:self.image forKey:@"image"];
+            if (self.image) {
+                [obj setValue:self.image forKey:@"image"];
+            }
             [obj setValue:self.text forKey:@"text"];
         }
     }
@@ -350,6 +354,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     for(id obj in activityItems) {
         if([obj isKindOfClass:[STKPost class]]) {
             [self setCurrentPost:(STKPost *)obj];
+            self.image = [UIImage imageNamed:@"warning"];
         }
     }
     
@@ -368,6 +373,8 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                 [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
         }
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Thank You" message:@"Thank you for your report. We will remove this photo if it violates our Community Guidelines." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
         [[NSNotificationCenter defaultCenter] postNotificationName:HANotificationReportInappropriate object:nil];
         [self activityDidFinish:YES];
     }];

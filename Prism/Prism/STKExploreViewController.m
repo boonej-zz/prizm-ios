@@ -303,7 +303,7 @@
     }
     
     [self configureInterface];
-    [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:@{@"Explore Type" : [self exploreTypeString]}];
+    [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:mixpanelDataForObject(@{@"Explore Type" : [self exploreTypeString]})];
 }
 
 - (void)dismissOverlay:(id)sender
@@ -472,7 +472,7 @@
     [[self tableView] reloadData];
     [self reloadPosts];
     
-    [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:@{@"Explore Type" : [self exploreTypeString]}];
+    [[Mixpanel sharedInstance] track:@"Explore Viewed" properties:mixpanelDataForObject(@{@"Explore Type" : [self exploreTypeString]})];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

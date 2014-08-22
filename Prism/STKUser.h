@@ -143,6 +143,7 @@ extern BOOL const STKUserStatusInActive;
 
 - (void)addFFeedPostsObject:(STKPost *)object;
 - (void)addFFeedPosts:(NSSet *)objects;
+- (NSDictionary *)mixpanelProperties;
 
 @end
 

@@ -298,5 +298,18 @@ tumblrTokenSecret, tumblrLastMinID;
     [self setCoverPhotoPath:[[[vals cover] coverPhoto] url]];
 }
 
+- (NSDictionary *)mixpanelProperties
+{
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"YYYY-MM-dd"];
+    return @{
+             @"email": self.email,
+             @"birthday": [df stringFromDate:self.birthday],
+             @"gender": self.gender,
+             @"city": self.city,
+             @"state": self.state,
+             @"zip": self.zipCode
+             };
+}
 
 @end

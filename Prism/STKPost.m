@@ -10,6 +10,7 @@
 #import "STKUser.h"
 #import "STKUserStore.h"
 #import "STKPostComment.h"
+#import "STKHashTag.h"
 
 
 
@@ -175,6 +176,25 @@ subtype;
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"0x%x %@ %@", (int)self, [self uniqueID], [self text]];
+}
+
+- (NSDictionary *)mixpanelProperties
+{
+    STKUser *op = [self creator];
+    if (self.originalPost) {
+        op = [self.originalPost creator];
+    }
+    NSMutableString *hashTags = [NSMutableString string];
+    for (STKHashTag *ht in self.hashTags) {
+        [hashTags appendString:ht.title];
+    }
+    return @{
+             @"repost": self.originalPost?@YES:@NO,
+             @"source": self.externalProvider?self.externalProvider:@"prizm",
+             @"original creator":op.email,
+             @"hashtags": hashTags
+             
+             };
 }
 
 @end

@@ -935,25 +935,21 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 
 - (void)trackPostCreation:(STKPost *)post
 {
-    BOOL repost = NO;
-    STKUser *originalPoster = [post creator];
-    NSString *source = ([post externalProvider]) ? [post externalProvider] : @"prizm";
-    if ([post originalPost] != nil) {
-        repost = YES;
-        originalPoster = [[post originalPost] creator];
-    }
-    NSString *originalPosterIdentifier = [NSString stringWithFormat:@"%@ %@", [originalPoster name], [originalPoster uniqueID]];
-    
-    NSMutableString *hashTags = [[NSMutableString alloc] init];
-    
-    for (STKHashTag *ht in [post hashTags]) {
-        [hashTags appendString:[ht title]];
-    }
-    [[Mixpanel sharedInstance] track:@"Post added" properties:@{@"Repost" : @(repost),
-                                                                @"Source" : source,
-                                                                @"Original Creator" : originalPosterIdentifier,
-                                                                @"Hashtags" : hashTags
-                                                                }];
+//    BOOL repost = NO;
+//    STKUser *originalPoster = [post creator];
+//    NSString *source = ([post externalProvider]) ? [post externalProvider] : @"prizm";
+//    if ([post originalPost] != nil) {
+//        repost = YES;
+//        originalPoster = [[post originalPost] creator];
+//    }
+//    NSString *originalPosterIdentifier = [NSString stringWithFormat:@"%@ %@", [originalPoster name], [originalPoster uniqueID]];
+//    
+//    NSMutableString *hashTags = [[NSMutableString alloc] init];
+//    
+//    for (STKHashTag *ht in [post hashTags]) {
+//        [hashTags appendString:[ht title]];
+//    }
+    [[Mixpanel sharedInstance] track:@"Post added" properties:mixpanelDataForObject(post)];
 }
 
 - (void)trackLikePost:(STKPost *)post
@@ -961,24 +957,21 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     NSString *targetUserIdentifier = [NSString stringWithFormat:@"%@ %@", [[post creator] name], [[post creator] uniqueID]];
 
     BOOL followingCreator = [[[[STKUserStore store] currentUser] following] containsObject:[post creator]];
+    NSDictionary *p = @{@"post creator": targetUserIdentifier, @"following creator": @(followingCreator)};
     
-    [[Mixpanel sharedInstance] track:@"Post liked" properties:@{@"Post creator" : targetUserIdentifier,
-                                                                @"Following creator" : @(followingCreator)
-                                                                }];
+    [[Mixpanel sharedInstance] track:@"Post liked" properties:mixpanelDataForObject(p)];
 }
 
 - (void)trackLikeComment:(STKPostComment *)postComment
 {
-    NSString *posterIdentifier = [NSString stringWithFormat:@"%@ %@", [[[postComment post] creator] name], [[[postComment post] creator] uniqueID]];
-
-    [[Mixpanel sharedInstance] track:@"Comment liked" properties:@{@"Post creator" : posterIdentifier}];
+    [[Mixpanel sharedInstance] track:@"Comment liked" properties:mixpanelDataForObject(postComment)];
 }
 
 - (void)trackComment:(STKPost *)post
 {
     NSString *posterIdentifier = [NSString stringWithFormat:@"%@ %@", [[post creator] name], [[post creator] uniqueID]];
     
-    [[Mixpanel sharedInstance] track:@"Commented on post" properties:@{@"Post creator" : posterIdentifier}];
+    [[Mixpanel sharedInstance] track:@"Commented on post" properties:mixpanelDataForObject(@{@"Post creator" : posterIdentifier})];
 }
 
 @end

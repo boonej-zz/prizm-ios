@@ -15,6 +15,7 @@
     #import <Foundation/Foundation.h>
     #import "STKVerticalNavigationController.h"
     #import "STK.h"
+    #import "HAUtilityFunctions.h"
 
     #define STKTextColor [UIColor colorWithRed:192.0/255.0 green:193.0/255.0 blue:213.0/255.0 alpha:1]
     #define STKTextTransparentColor [UIColor colorWithRed:192.0/255.0 green:193.0/255.0 blue:213.0/255.0 alpha:0.4]

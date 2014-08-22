@@ -25,7 +25,7 @@
 - (IBAction)controlChanged:(id)sender
 {
     NSString *event = [NSString stringWithFormat:@"Segment %@ tapped", [self.control titleForSegmentAtIndex:self.control.selectedSegmentIndex]];
-    [[Mixpanel sharedInstance] track:event];
+    [[Mixpanel sharedInstance] track:event properties:mixpanelDataForObject(nil)];
     ROUTE(sender);
 }
 @end

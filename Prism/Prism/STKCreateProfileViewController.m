@@ -687,7 +687,7 @@ const long STKCreateProgressGeocoding = 4;
         [[self user] setPhoneNumber:convertedPhoneNumber];
         return;
     }
-    
+    [[Mixpanel sharedInstance] track:[NSString stringWithFormat:@"%@ entered", [item objectForKey:@"key"]]];
     [[self user] setValue:text forKey:[item objectForKey:@"key"]];
 }
 

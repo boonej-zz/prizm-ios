@@ -43,4 +43,10 @@
     return [[self likes] member:u] != nil;
 }
 
+- (NSDictionary *)mixpanelProperties
+{
+    return @{
+             };
+}
+
 @end

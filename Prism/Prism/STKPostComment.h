@@ -25,4 +25,6 @@
 
 - (BOOL)isLikedByUser:(STKUser *)u;
 
+- (NSDictionary *)mixpanelProperties;
+
 @end

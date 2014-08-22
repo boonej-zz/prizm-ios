@@ -365,32 +365,29 @@
 
 - (void)trackViewUser:(STKUser *)user
 {
-    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
     
-    [[Mixpanel sharedInstance] track:@"Search result - view user" properties:@{@"Search filter" : [self searchTypeString],
+    [[Mixpanel sharedInstance] track:@"Search result - view user" properties:mixpanelDataForObject(@{@"Search filter" : [self searchTypeString],
                                                                                    @"Search term" : [[self searchTextField] text],
-                                                                                   @"Found user" : userIdentifier
-                                                                                   }];
+                                                                                   @"Found user" : user.email
+                                                                                   })];
 }
 
 - (void)trackUnfollow:(STKUser *)user
 {
-    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
     
-    [[Mixpanel sharedInstance] track:@"Search result - unfollow user" properties:@{@"Search filter" : [self searchTypeString],
+    [[Mixpanel sharedInstance] track:@"Search result - unfollow user" properties:mixpanelDataForObject(@{@"Search filter" : [self searchTypeString],
                                                                                    @"Search term" : [[self searchTextField] text],
-                                                                                   @"Found user" : userIdentifier
-                                                                                   }];
+                                                                                   @"Found user" : user.email
+                                                                                   })];
 }
 
 - (void)trackFollow:(STKUser *)user
 {
-    NSString *userIdentifier = [NSString stringWithFormat:@"%@ %@", [user name], [user uniqueID]];
     
-    [[Mixpanel sharedInstance] track:@"Search result - follow user" properties:@{@"Search filter" : [self searchTypeString],
+    [[Mixpanel sharedInstance] track:@"Search result - follow user" properties:mixpanelDataForObject(@{@"Search filter" : [self searchTypeString],
                                                                                    @"Search term" : [[self searchTextField] text],
-                                                                                   @"Found user" : userIdentifier
-                                                                                   }];
+                                                                                   @"Found user" : user.email
+                                                                                   })];
 }
 
 - (NSString *)searchTypeString
