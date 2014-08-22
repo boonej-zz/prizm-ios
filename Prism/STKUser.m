@@ -298,17 +298,29 @@ tumblrTokenSecret, tumblrLastMinID;
     [self setCoverPhotoPath:[[[vals cover] coverPhoto] url]];
 }
 
+- (NSString *)age
+{
+    NSInteger age = 0;
+    if (self.birthday){
+        NSDateComponents *ageComponents = [[NSCalendar currentCalendar] components:NSCalendarCalendarUnit fromDate:self.birthday toDate:[NSDate date] options:0];
+        age = [ageComponents year];
+    }
+    
+    return [NSString stringWithFormat:@"%u", age];
+}
+
 - (NSDictionary *)mixpanelProperties
 {
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"YYYY-MM-dd"];
     return @{
-             @"email": self.email,
-             @"birthday": [df stringFromDate:self.birthday],
-             @"gender": self.gender,
-             @"city": self.city,
-             @"state": self.state,
-             @"zip": self.zipCode
+             @"email": self.email?self.email:@"none",
+             @"birthday": self.birthday?[df stringFromDate:self.birthday]:@"unknown",
+             @"age": [self age],
+             @"gender": self.gender?self.gender:@"unknown",
+             @"city": self.city?self.city:@"unknown",
+             @"state": self.state?self.state:@"unknown",
+             @"zip": self.zipCode?self.zipCode:@"unknown"
              };
 }
 

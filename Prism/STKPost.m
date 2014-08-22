@@ -191,7 +191,7 @@ subtype;
     return @{
              @"repost": self.originalPost?@YES:@NO,
              @"source": self.externalProvider?self.externalProvider:@"prizm",
-             @"original creator":op.email,
+             @"original creator":op.email?op.email:@"",
              @"hashtags": hashTags
              
              };
