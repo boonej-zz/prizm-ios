@@ -300,19 +300,20 @@ tumblrTokenSecret, tumblrLastMinID;
 
 - (NSString *)age
 {
-    NSInteger age = 0;
+    long age = 0;
     if (self.birthday){
-        NSDateComponents *ageComponents = [[NSCalendar currentCalendar] components:NSCalendarCalendarUnit fromDate:self.birthday toDate:[NSDate date] options:0];
+        NSDateComponents *ageComponents = [[NSCalendar currentCalendar] components:NSYearCalendarUnit fromDate:self.birthday toDate:[NSDate date] options:0];
         age = [ageComponents year];
     }
     
-    return [NSString stringWithFormat:@"%u", age];
+    return [NSString stringWithFormat:@"%ld", age];
 }
 
 - (NSDictionary *)mixpanelProperties
 {
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"YYYY-MM-dd"];
+    NSLog(@"%@", [self age]);
     return @{
              @"email": self.email?self.email:@"none",
              @"birthday": self.birthday?[df stringFromDate:self.birthday]:@"unknown",
