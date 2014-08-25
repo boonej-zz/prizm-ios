@@ -141,8 +141,18 @@
                     [[STKContentStore store] fetchPostWithUniqueId:taskArray[1] completion:^(STKPost *p, NSError *err) {
                         if (!err) {
                             STKPostViewController *pvc = [[STKPostViewController alloc] init];
+                            if ([p isKindOfClass:[NSArray class]]){
+                                p = ((NSArray *)p)[0] ;
+                            }
+    
                             [pvc setPost:p];
-                            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:pvc animated:NO completion:nil];
+                            
+                            STKMenuController *rvc = (STKMenuController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+//                            UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
+//                            [[nvc navigationBar] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+                            if (rvc.selectedViewController && [rvc.selectedViewController isKindOfClass:[UINavigationController class]]){
+                                [(UINavigationController *)rvc.selectedViewController pushViewController:pvc animated:NO];
+                            }
                         }
                     }];
                 }
