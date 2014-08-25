@@ -131,7 +131,7 @@
 + (UIImage *)imageForText:(NSString *)text
 {
     NSMutableDictionary *found = [NSMutableDictionary dictionary];
-    NSRegularExpression *tagFinder = [[NSRegularExpression alloc] initWithPattern:@"@([A-Za-z0-9]*)" options:0 error:nil];
+    NSRegularExpression *tagFinder = [[NSRegularExpression alloc] initWithPattern:@"@([A-Za-z0-9]{24})" options:0 error:nil];
     [tagFinder enumerateMatchesInString:text options:0 range:NSMakeRange(0, [text length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
         if([result range].location != NSNotFound) {
             NSRange idRange = [result rangeAtIndex:1];
@@ -220,7 +220,7 @@
         }
     }
     
-    NSRegularExpression *userTagExpression = [[NSRegularExpression alloc] initWithPattern:@"@(\\S*)" options:0 error:nil];
+    NSRegularExpression *userTagExpression = [[NSRegularExpression alloc] initWithPattern:@"@(\\S{24})" options:0 error:nil];
     matches = [userTagExpression matchesInString:[str string] options:0 range:NSMakeRange(0, [[str string] length])];
     for(int i = [matches count] - 1; i >= 0; i--) {
         NSTextCheckingResult *result = [matches objectAtIndex:i];
@@ -252,7 +252,7 @@
     [replacement addAttribute:NSLinkAttributeName value:[NSURL URLWithString:[NSString stringWithFormat:@"%@://%@", STKPostUserURLScheme, [user uniqueID]]]
                         range:NSMakeRange(0, [replacement length])];
     
-    return replacement;
+    return [replacement copy];
 }
 
 + (UIImage *)imageForUserTag:(NSString *)name attributes:(NSDictionary *)attributes

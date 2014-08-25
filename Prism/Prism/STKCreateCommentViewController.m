@@ -411,9 +411,11 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
     [[self markupController] textView:textView updatedWithText:[textView text]];
-
+    [textView setFont:STKFont(14)];
+    [textView setTintColor:STKTextColor];
     [self resizeTextArea];
 }
+
 
 
 
@@ -430,7 +432,8 @@
     [[[self textView] textStorage] replaceCharactersInRange:range
                                               withAttributedString:str];
     [[[self textView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                                 attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+                                                                                                 attributes:@{NSFontAttributeName : STKFont(14),
+                                                                                                              NSForegroundColorAttributeName: STKTextColor}]];
     
     NSInteger newIndex = range.location + [str length] + 2;
     [[self textView] setSelectedRange:NSMakeRange(newIndex, 0)];
