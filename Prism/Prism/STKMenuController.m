@@ -34,6 +34,11 @@
 static NSTimeInterval const STKMessageBannerDisplayDuration = 3.0;
 static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 
+static int HALikeNotificationCount = 0;
+static int HAUserNotificationCount = 0;
+static int HATrustNotificationCount = 0;
+static BOOL HAActivityIsAnimating = NO;
+
 @interface STKMenuController () <UINavigationControllerDelegate, STKMenuViewDelegate, UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, strong) STKMenuView *menuView;
@@ -43,6 +48,10 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 @property (nonatomic, strong) NSLayoutConstraint *messageBannerTopConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *messageBannerHeightConstraint;
 @property (nonatomic, strong) NSTimer *messageBannerDuration;
+//@property (nonatomic, strong) HANotificationViewController *nvc;
+@property (nonatomic, strong) UIImageView *leftNotificationView;
+@property (nonatomic, strong) UIImageView *centerNotificationView;
+@property (nonatomic, strong) UIImageView *rightNotificationView;
 
 @property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
@@ -390,8 +399,81 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 
 - (void)notificationUpdate:(NSNotification *)note
 {
+    NSDictionary *userInfo = [note userInfo];
     int count = [[[note userInfo] objectForKey:STKUserStoreActivityUpdateCountKey] intValue];
+    
+    
+    [self displayNotificationButtons:userInfo];
+
     [[self menuView] setNotificationCount:count];
+}
+
+- (void)displayNotificationButtons:(NSDictionary *)userInfo
+{
+    long trustCount = [[userInfo valueForKey:HAUserStoreActivityTrustKey] longValue];
+    long likeCount = [[userInfo valueForKey:HAUserStoreActivityLikeKey] longValue];
+    long userCount = [[userInfo valueForKey:HAUserStoreActivityUserKey] longValue];
+    BOOL hasTrustNotifications = trustCount > HATrustNotificationCount;
+    BOOL hasUserNotifications = userCount > HAUserNotificationCount;
+    BOOL hasLikeNotifications = likeCount > HALikeNotificationCount;
+    HATrustNotificationCount = trustCount;
+    HALikeNotificationCount = likeCount;
+    HAUserNotificationCount = userCount;
+    if (!HAActivityIsAnimating) {
+        if (hasLikeNotifications) {
+            [self.leftNotificationView setImage:[UIImage imageNamed:@"like_notification"]];
+            if (hasUserNotifications) {
+                [self.centerNotificationView setImage:[UIImage imageNamed:@"user_notification"]];
+                if (hasTrustNotifications){
+                    [self.rightNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+                } else {
+                    [self.rightNotificationView setImage:nil];
+                }
+            } else if (hasTrustNotifications) {
+                [self.centerNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+                [self.rightNotificationView setImage:nil];
+            } else {
+                [self.centerNotificationView setImage:nil];
+                [self.rightNotificationView setImage:nil];
+            }
+        } else if (hasUserNotifications) {
+            [self.leftNotificationView setImage:[UIImage imageNamed:@"user_notification"]];
+            [self.rightNotificationView setImage:nil];
+            if (hasTrustNotifications) {
+                [self.centerNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+            } else {
+                [self.centerNotificationView setImage:nil];
+            }
+        } else if (hasTrustNotifications){
+            [self.leftNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+            [self.centerNotificationView setImage:nil];
+            [self.rightNotificationView setImage:nil];
+        } else {
+            [self.leftNotificationView setImage:nil];
+            [self.centerNotificationView setImage:nil];
+            [self.rightNotificationView setImage:nil];
+        }
+        [self.view bringSubviewToFront:self.rightNotificationView];
+        [self.view bringSubviewToFront:self.centerNotificationView];
+        [self.view bringSubviewToFront:self.leftNotificationView];
+        if ((hasLikeNotifications || hasTrustNotifications || hasUserNotifications )) {
+            HAActivityIsAnimating = YES;
+            [UIView animateWithDuration:1.0 animations:^{
+                [self.centerNotificationView setAlpha:1];
+                [self.leftNotificationView setAlpha:1];
+                [self.rightNotificationView setAlpha:1];
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:2.0 animations:^{
+                    [self.centerNotificationView setAlpha:0];
+                    [self.leftNotificationView setAlpha:0];
+                    [self.rightNotificationView setAlpha:0];
+                } completion:^(BOOL finished) {
+                    HAActivityIsAnimating = NO;
+                }];
+            }];
+            
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -474,11 +556,21 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 {
     [super viewDidLoad];
     
-    
     if([[self viewControllers] count] > 0)
         [self setSelectedViewController:[[self viewControllers] objectAtIndex:0]];
     [[self menuView] setVisible:NO];
     [[self backgroundImageView] setImage:[self backgroundImage]];
+    
+    self.leftNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(45.f, 32.f, 28.f, 19.f)];
+    self.centerNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(65.f, 32.f, 28.f, 19.f)];
+    self.rightNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(85.f, 32.f, 28.f, 19.f)];
+    [self.leftNotificationView setAlpha:0.f];
+    [self.rightNotificationView setAlpha:0.f];
+    [self.centerNotificationView setAlpha:0.f];
+    [self.view addSubview:self.rightNotificationView];
+    [self.view addSubview:self.centerNotificationView];
+    [self.view addSubview:self.leftNotificationView];
+    
 }
 
 - (UIViewController *)childViewControllerForType:(Class)cls

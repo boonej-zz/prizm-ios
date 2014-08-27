@@ -17,6 +17,10 @@ extern NSString * const STKUserStoreActivityUpdateCountKey;
 
 extern NSString * const STKUserStoreCurrentUserChangedNotification;
 extern NSString * const STKUserStoreErrorDomain;
+extern NSString * const HAUserStoreActivityUserKey;
+extern NSString * const HAUserStoreActivityLikeKey;
+extern NSString * const HAUserStoreActivityTrustKey;
+
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]
     STKUserStoreErrorCodeNoAccount,

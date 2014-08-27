@@ -32,6 +32,9 @@
 NSString * const STKUserStoreErrorDomain = @"STKUserStoreErrorDomain";
 NSString * const STKUserStoreActivityUpdateNotification = @"STKUserStoreActivityUpdateNotification";
 NSString * const STKUserStoreActivityUpdateCountKey = @"STKUSerStoreActivityUpdateCountKey";
+NSString * const HAUserStoreActivityUserKey = @"HAUserStoreActivityUserKey";
+NSString * const HAUserStoreActivityLikeKey = @"HAUserStoreActivityLikeKey";
+NSString * const HAUserStoreActivityTrustKey = @"HAUserStoreActivityTrustKey";
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 
 NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurrentUserChangedNotification";
@@ -145,14 +148,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)notifyNotificationCount
 {
     NSFetchRequest *aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [aReq setPredicate:[NSPredicate predicateWithFormat:@"hasBeenViewed == NO"]];
-    int actCount = [[self context] countForFetchRequest:aReq error:nil];
-    
+    [aReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action <> %@)", @"like"]];
+    NSFetchRequest *bReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"like"]];
+    long actCount = [[self context] countForFetchRequest:aReq error:nil];
+    long likeCount = [[self context] countForFetchRequest:bReq error:nil];
     aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
     [aReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
-    int trustCount = [[self context] countForFetchRequest:aReq error:nil];
+    long trustCount = [[self context] countForFetchRequest:aReq error:nil];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount)}];
 }
 
 - (void)markActivitiesAsRead
