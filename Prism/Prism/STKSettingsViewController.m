@@ -20,6 +20,7 @@
 #import "STKSearchUsersViewController.h"
 #import "STKInviteFriendsViewController.h"
 #import "STKWebViewController.h"
+#import "HAFollowViewController.h"
 
 //#import "TMAPIClient.h"
 
@@ -58,7 +59,9 @@
         [self setSettings:items];
         if(![self settings]) {
             _settings = @[
+                          @{@"title" : @"Who to Follow", @"type" : @"STKLabelCell", @"selectionSelector": @"whoToFollow:"},
                           @{@"title" : @"Friends", @"type" : @"STKLabelCell", @"next" : [self friendsSettings]},
+                          
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
                           @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]},
                           @{@"title" : @"Send Feedback", @"type" : @"STKLabelCell", @"selectionSelector" : @"sendFeedbackEmail:"},
@@ -78,6 +81,12 @@
              @{@"title" : @"Version", @"type" : @"STKDetailCell", @"value" : [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge id)kCFBundleVersionKey]},
              @{@"title" : @"Disable Account", @"type" : @"STKLabelCell", @"selectionSelector" : @"disableAccount:"}
              ];
+}
+
+- (void)whoToFollow:(id)sender
+{
+    HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
+    [self.navigationController pushViewController:fvc animated:YES];
 }
 
 - (NSArray *)friendsSettings
@@ -386,7 +395,7 @@
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 20, 0, 0)];
     [[self tableView] setSeparatorColor:STKTextTransparentColor];
 
-    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 200)];
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 180)];
     UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
     [[b titleLabel] setFont:STKFont(18)];
     [[b titleLabel] setTextColor:STKTextColor];
@@ -549,6 +558,11 @@
         [[cell overlayView] setBackgroundColor:[UIColor clearColor]];
         [[cell label] setText:[self titleForIndexPath:indexPath]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        if ([[cell label].text isEqualToString:@"Who to Follow"]) {
+            UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_right"]];
+            [cell setAccessoryView:iv];
+        }
+        
         returnCell = cell;
     }
     if([cellType isEqualToString:@"STKSettingsShareCell"]) {
@@ -574,6 +588,7 @@
         }
         
         [[c textLabel] setText:[self titleForIndexPath:indexPath]];
+      
         [[c detailTextLabel] setText:[self valueForIndexPath:indexPath]];
         
         return c;

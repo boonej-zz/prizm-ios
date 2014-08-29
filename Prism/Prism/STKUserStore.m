@@ -525,6 +525,37 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)searchUsersWithType:(NSString *)type completion:(void (^)(NSArray *profiles, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/search", @"users"]];
+        
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+        STKSearchQuery *sq = [STKSearchQuery searchQueryForField:@"subtype" value:type];
+        STKContainQuery *cq = [STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]];
+        [q addSubquery:cq];
+        [q addSubquery:sq];
+        [c setQueryObject:q];
+        
+        [c setModelGraph:@[@"STKUser"]];
+        [c setContext:[self context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(NSArray *profiles, NSError *err) {
+            if(!err) {
+                block(profiles, nil);
+            } else {
+                block(nil, err);
+            }
+        }];
+    }];
+}
+
 - (void)searchUsersWithName:(NSString *)name completion:(void (^)(NSArray *profiles, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){

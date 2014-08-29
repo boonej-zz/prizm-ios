@@ -12,6 +12,10 @@
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
 		2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */; };
 		2CB0126119A693D800B07C96 /* HAUtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */; };
+		2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB073D819AE634A00F70B7E /* HAFollowCell.m */; };
+		2CB073DB19AE634A00F70B7E /* HAFollowCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CB073D919AE634A00F70B7E /* HAFollowCell.xib */; };
+		2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB073DD19AF96C900F70B7E /* HAFollowViewController.m */; };
+		2CB073E019AF96C900F70B7E /* HAFollowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CB073DE19AF96C900F70B7E /* HAFollowViewController.xib */; };
 		2CBA45C819AC275D00A5BCD6 /* HANotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBA45C619AC275D00A5BCD6 /* HANotificationViewController.m */; };
 		2CBA45C919AC275D00A5BCD6 /* HANotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CBA45C719AC275D00A5BCD6 /* HANotificationViewController.xib */; };
 		8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */; };
@@ -271,6 +275,12 @@
 		2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Reverse.m"; sourceTree = "<group>"; };
 		2CB0125F19A693D800B07C96 /* HAUtilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAUtilityFunctions.h; sourceTree = "<group>"; };
 		2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAUtilityFunctions.m; sourceTree = "<group>"; };
+		2CB073D719AE634A00F70B7E /* HAFollowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAFollowCell.h; sourceTree = "<group>"; };
+		2CB073D819AE634A00F70B7E /* HAFollowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAFollowCell.m; sourceTree = "<group>"; };
+		2CB073D919AE634A00F70B7E /* HAFollowCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAFollowCell.xib; sourceTree = "<group>"; };
+		2CB073DC19AF96C900F70B7E /* HAFollowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAFollowViewController.h; sourceTree = "<group>"; };
+		2CB073DD19AF96C900F70B7E /* HAFollowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAFollowViewController.m; sourceTree = "<group>"; };
+		2CB073DE19AF96C900F70B7E /* HAFollowViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAFollowViewController.xib; sourceTree = "<group>"; };
 		2CBA45C519AC275D00A5BCD6 /* HANotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HANotificationViewController.h; sourceTree = "<group>"; };
 		2CBA45C619AC275D00A5BCD6 /* HANotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HANotificationViewController.m; sourceTree = "<group>"; };
 		2CBA45C719AC275D00A5BCD6 /* HANotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HANotificationViewController.xib; sourceTree = "<group>"; };
@@ -2635,6 +2645,9 @@
 				2CBA45C519AC275D00A5BCD6 /* HANotificationViewController.h */,
 				2CBA45C619AC275D00A5BCD6 /* HANotificationViewController.m */,
 				2CBA45C719AC275D00A5BCD6 /* HANotificationViewController.xib */,
+				2CB073DC19AF96C900F70B7E /* HAFollowViewController.h */,
+				2CB073DD19AF96C900F70B7E /* HAFollowViewController.m */,
+				2CB073DE19AF96C900F70B7E /* HAFollowViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2779,6 +2792,9 @@
 				88384074195B3275006750FC /* STKInviteFriendsShareCell.h */,
 				88384075195B3275006750FC /* STKInviteFriendsShareCell.m */,
 				88384076195B3275006750FC /* STKInviteFriendsShareCell.xib */,
+				2CB073D719AE634A00F70B7E /* HAFollowCell.h */,
+				2CB073D819AE634A00F70B7E /* HAFollowCell.m */,
+				2CB073D919AE634A00F70B7E /* HAFollowCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4841,6 +4857,7 @@
 				BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */,
 				BEF361CC18B2C3700085A38B /* STKTriImageCell.xib in Resources */,
 				BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */,
+				2CB073DB19AE634A00F70B7E /* HAFollowCell.xib in Resources */,
 				BEF7A08218439E0800A3AFFB /* STKRegisterViewController.xib in Resources */,
 				BE7D5AE518D37327005D3893 /* STKUserPostListViewController.xib in Resources */,
 				BEC01A0F182AF42600080601 /* STKTrustViewController.xib in Resources */,
@@ -4876,6 +4893,7 @@
 				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
 				BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */,
+				2CB073E019AF96C900F70B7E /* HAFollowViewController.xib in Resources */,
 				BE1C7083192F8E7400223BDC /* STKAccoladeViewController.xib in Resources */,
 				BE13648F18689F39003D9D5C /* STKAccountChooserViewController.xib in Resources */,
 				BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */,
@@ -4962,6 +4980,8 @@
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
+				2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */,
+				2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
 				D0E85B12197D7910001A5333 /* STKMessageBanner.m in Sources */,
 				883D87D519463E7F00195B11 /* MPSurvey.m in Sources */,

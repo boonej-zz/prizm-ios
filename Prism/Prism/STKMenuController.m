@@ -416,9 +416,9 @@ static BOOL HAActivityIsAnimating = NO;
     BOOL hasTrustNotifications = trustCount > HATrustNotificationCount;
     BOOL hasUserNotifications = userCount > HAUserNotificationCount;
     BOOL hasLikeNotifications = likeCount > HALikeNotificationCount;
-    HATrustNotificationCount = trustCount;
-    HALikeNotificationCount = likeCount;
-    HAUserNotificationCount = userCount;
+    HATrustNotificationCount = (int)trustCount;
+    HALikeNotificationCount = (int)likeCount;
+    HAUserNotificationCount = (int)userCount;
     if (!HAActivityIsAnimating) {
         if (hasLikeNotifications) {
             [self.leftNotificationView setImage:[UIImage imageNamed:@"like_notification"]];
