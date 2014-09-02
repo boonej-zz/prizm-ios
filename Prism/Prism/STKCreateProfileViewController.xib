@@ -221,7 +221,7 @@
                     <color key="tintColor" red="0.0078431372549019607" green="0.32549019607843138" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal">
                         <attributedString key="attributedTitle">
-                            <fragment content="Prism Terms of Service">
+                            <fragment content="Prizm Terms of Service">
                                 <attributes>
                                     <font key="NSFont" size="14" name="HelveticaNeue-Light"/>
                                 </attributes>
