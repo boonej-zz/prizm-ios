@@ -10,6 +10,7 @@
 @interface STKGenderCell ()
 - (IBAction)maleButtonTapped:(id)sender;
 - (IBAction)femaleButtonTapped:(id)sender;
+- (IBAction)notSetButtonTapped:(id)sender;
 @property (weak, nonatomic) IBOutlet UIView *backdropView;
 @end
 
@@ -25,6 +26,7 @@
 {
     [[self maleButton] setSelected:YES];
     [[self femaleButton] setSelected:NO];
+    [[self notSetButton] setSelected:NO];
     ROUTE(sender);
 
 }
@@ -33,6 +35,15 @@
 {
     [[self maleButton] setSelected:NO];
     [[self femaleButton] setSelected:YES];
+    [[self notSetButton] setSelected:NO];
+    ROUTE(sender);
+}
+
+- (IBAction)notSetButtonTapped:(id)sender
+{
+    [[self maleButton] setSelected:NO];
+    [[self femaleButton] setSelected:NO];
+    [[self notSetButton] setSelected:YES];
     ROUTE(sender);
 }
 
@@ -41,6 +52,7 @@
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     [[self femaleButton] setTintColor:[UIColor clearColor]];
     [[self maleButton] setTintColor:[UIColor clearColor]];
+    [[self notSetButton] setTintColor:[UIColor clearColor]];
 
 }
 

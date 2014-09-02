@@ -18,6 +18,7 @@
 
 extern NSString * const STKUserGenderMale;
 extern NSString * const STKUserGenderFemale;
+extern NSString * const STKUserGenderUnknown;
 
 extern NSString * const STKUserExternalSystemFacebook;
 extern NSString * const STKUserExternalSystemTwitter;

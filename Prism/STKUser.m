@@ -15,6 +15,8 @@
 NSString * const STKUserGenderMale = @"male";
 NSString * const STKUserGenderFemale = @"female";
 
+NSString * const STKUserGenderUnknown = @"unknown";
+
 NSString * const STKUserExternalSystemFacebook = @"facebook";
 NSString * const STKUserExternalSystemTwitter = @"twitter";
 NSString * const STKUserExternalSystemGoogle = @"google";

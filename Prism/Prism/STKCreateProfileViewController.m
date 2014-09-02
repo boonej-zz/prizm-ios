@@ -146,7 +146,7 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Website", @"key" : @"website", @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
                    ];
         
-        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"website", @"subtype", @"phoneNumber", @"zipCode"];
+        _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"website", @"subtype", @"phoneNumber"];
     } else {
         _items = @[
                    @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Partner", @"Individual"]},
@@ -165,14 +165,15 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Last Name", @"key" : @"lastName",
                      @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
                    
-                   @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
+                   
                    
                    @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
+                   @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
                    @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
                    ];
         
-        _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode"];
+        _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday"];
    
     }
     if([[self user] externalServiceType]) {
@@ -256,7 +257,7 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
                        ];
-            _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday", @"zipCode"];
+            _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday"];
         }
         
         
@@ -540,7 +541,7 @@ const long STKCreateProgressGeocoding = 4;
     
     
     if(![[self user] gender]) {
-        [[self user] setGender:STKUserGenderFemale];
+        [[self user] setGender:STKUserGenderUnknown];
     }
   
     // If we got the profile/cover photo from ane external service, upload it to our server
@@ -920,7 +921,7 @@ const long STKCreateProgressGeocoding = 4;
             };
         }
         
-        if(![[self user] city] || [[[self user] changedValues] objectForKey:@"zipCode"]) {
+        if((![[self user] city] || [[[self user] changedValues] objectForKey:@"zipCode"]) && [[self user] zipCode]) {
             CLGeocoder *gc = [[CLGeocoder alloc] init];
             [gc geocodeAddressDictionary:@{(__bridge NSString *)kABPersonAddressZIPKey : [[self user] zipCode]}
                        completionHandler:^(NSArray *placemarks, NSError *error) {
@@ -958,6 +959,12 @@ const long STKCreateProgressGeocoding = 4;
 {
     [[self user] setGender:STKUserGenderFemale];
 }
+
+- (void)notSetButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    [[self user] setGender:STKUserGenderUnknown];
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1010,11 +1017,17 @@ const long STKCreateProgressGeocoding = 4;
         if([cellType isEqualToString:@"gender"]) {
             STKGenderCell *c = [STKGenderCell cellForTableView:tableView target:self];
             if([[[self user] gender] isEqualToString:STKUserGenderFemale]) {
+                [[c notSetButton] setSelected:NO];
                 [[c femaleButton] setSelected:YES];
                 [[c maleButton] setSelected:NO];
-            } else {
+            } else  if ([self.user.gender isEqualToString:STKUserGenderMale]){
                 [[c femaleButton] setSelected:NO];
                 [[c maleButton] setSelected:YES];
+                [[c notSetButton] setSelected:NO];
+            } else {
+                [[c femaleButton] setSelected:NO];
+                [[c maleButton] setSelected:NO];
+                [[c notSetButton] setSelected:YES];
             }
             return c;
         } else if([cellType isEqualToString:@"date"]) {

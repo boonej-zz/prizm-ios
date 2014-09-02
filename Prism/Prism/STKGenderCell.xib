@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -16,26 +16,73 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oun-JR-z7c">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JHR-cX-5Jh">
+                                <rect key="frame" x="125" y="6" width="50" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="a88-OV-DSV"/>
+                                    <constraint firstAttribute="height" constant="32" id="h4o-Br-k8d"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                                <inset key="titleEdgeInsets" minX="-65" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="M" image="btn_malefamale">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="btn_male_selected"/>
+                                <connections>
+                                    <action selector="maleButtonTapped:" destination="2" eventType="touchUpInside" id="wSb-um-YHN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJY-cD-GJS">
+                                <rect key="frame" x="183" y="6" width="50" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="MQx-Sr-alF"/>
+                                    <constraint firstAttribute="height" constant="32" id="i2S-8m-Fod"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                                <inset key="titleEdgeInsets" minX="-60" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="F" image="btn_malefamale">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="btn_female_selected"/>
+                                <connections>
+                                    <action selector="femaleButtonTapped:" destination="2" eventType="touchUpInside" id="fHQ-Tu-AnA"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5sW-AT-Z92">
+                                <rect key="frame" x="241" y="6" width="71" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="71" id="SAN-lb-RyV"/>
+                                    <constraint firstAttribute="height" constant="32" id="xgy-CG-YlP"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="-34" maxY="0.0"/>
+                                <inset key="titleEdgeInsets" minX="-100" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="NS" image="btn_malefamale">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="btn_unknown_selected"/>
+                                <connections>
+                                    <action selector="notSetButtonTapped:" destination="2" eventType="touchUpInside" id="a1b-uG-ZPS"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
-                    </view>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJY-cD-GJS">
-                        <rect key="frame" x="250" y="6" width="50" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="50" id="MQx-Sr-alF"/>
-                            <constraint firstAttribute="height" constant="32" id="i2S-8m-Fod"/>
+                            <constraint firstItem="5sW-AT-Z92" firstAttribute="leading" secondItem="cJY-cD-GJS" secondAttribute="trailing" constant="8" id="1GE-TO-Vb4"/>
+                            <constraint firstItem="JHR-cX-5Jh" firstAttribute="top" secondItem="oun-JR-z7c" secondAttribute="top" constant="6" id="6Nf-L8-btP"/>
+                            <constraint firstItem="5sW-AT-Z92" firstAttribute="top" secondItem="oun-JR-z7c" secondAttribute="top" constant="6" id="EPI-dg-gw2"/>
+                            <constraint firstItem="cJY-cD-GJS" firstAttribute="leading" secondItem="JHR-cX-5Jh" secondAttribute="trailing" constant="8" id="mR2-rs-4eq"/>
+                            <constraint firstItem="cJY-cD-GJS" firstAttribute="top" secondItem="oun-JR-z7c" secondAttribute="top" constant="6" id="r3L-zF-WA9"/>
+                            <constraint firstAttribute="trailing" secondItem="5sW-AT-Z92" secondAttribute="trailing" constant="8" id="vAD-Te-Zbc"/>
                         </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                        <inset key="titleEdgeInsets" minX="-60" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <inset key="imageEdgeInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <state key="normal" title="F" image="btn_malefamale">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <state key="selected" image="btn_female_selected"/>
-                        <connections>
-                            <action selector="femaleButtonTapped:" destination="2" eventType="touchUpInside" id="fHQ-Tu-AnA"/>
-                        </connections>
-                    </button>
+                    </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gender" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfr-Op-AgN">
                         <rect key="frame" x="22" y="12" width="57" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -46,36 +93,14 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JHR-cX-5Jh">
-                        <rect key="frame" x="170" y="6" width="50" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="50" id="a88-OV-DSV"/>
-                            <constraint firstAttribute="height" constant="32" id="h4o-Br-k8d"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                        <inset key="titleEdgeInsets" minX="-65" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <inset key="imageEdgeInsets" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <state key="normal" title="M" image="btn_malefamale">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <state key="selected" image="btn_male_selected"/>
-                        <connections>
-                            <action selector="maleButtonTapped:" destination="2" eventType="touchUpInside" id="wSb-um-YHN"/>
-                        </connections>
-                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="oun-JR-z7c" firstAttribute="leading" secondItem="scj-wl-GXH" secondAttribute="leading" id="3Bt-uL-Kwl"/>
                     <constraint firstAttribute="centerY" secondItem="lfr-Op-AgN" secondAttribute="centerY" id="4Zr-sx-qCn"/>
                     <constraint firstItem="lfr-Op-AgN" firstAttribute="leading" secondItem="scj-wl-GXH" secondAttribute="leading" constant="21.5" id="5yk-ha-UtA"/>
-                    <constraint firstAttribute="centerY" secondItem="cJY-cD-GJS" secondAttribute="centerY" id="KIr-yK-6fV"/>
                     <constraint firstAttribute="bottom" secondItem="oun-JR-z7c" secondAttribute="bottom" constant="0.5" id="PUU-tp-XQt"/>
                     <constraint firstAttribute="trailing" secondItem="oun-JR-z7c" secondAttribute="trailing" id="UlR-JZ-Bf1"/>
-                    <constraint firstItem="JHR-cX-5Jh" firstAttribute="leading" secondItem="lfr-Op-AgN" secondAttribute="trailing" constant="91" id="Zev-bN-z7l"/>
-                    <constraint firstAttribute="centerY" secondItem="JHR-cX-5Jh" secondAttribute="centerY" id="eRK-sb-HQe"/>
                     <constraint firstItem="oun-JR-z7c" firstAttribute="top" secondItem="scj-wl-GXH" secondAttribute="top" id="hWJ-jM-IGu"/>
-                    <constraint firstAttribute="trailing" secondItem="cJY-cD-GJS" secondAttribute="trailing" constant="20" id="w8l-tQ-oQR"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.66992608241213158" green="0.66618347859977334" blue="0.67366868622448983" alpha="1" colorSpace="calibratedRGB"/>
@@ -83,6 +108,7 @@
                 <outlet property="backdropView" destination="oun-JR-z7c" id="s4e-47-0Bh"/>
                 <outlet property="femaleButton" destination="cJY-cD-GJS" id="m2Z-bf-cod"/>
                 <outlet property="maleButton" destination="JHR-cX-5Jh" id="G0A-2k-nPJ"/>
+                <outlet property="notSetButton" destination="5sW-AT-Z92" id="lrF-3C-eeg"/>
             </connections>
         </tableViewCell>
     </objects>
@@ -90,5 +116,6 @@
         <image name="btn_female_selected" width="32" height="32"/>
         <image name="btn_male_selected" width="32" height="32"/>
         <image name="btn_malefamale" width="32" height="32"/>
+        <image name="btn_unknown_selected" width="32" height="32"/>
     </resources>
 </document>
