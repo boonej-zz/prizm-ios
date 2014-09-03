@@ -26,7 +26,12 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    [STKProcessingView present];
+    NSString *currentUrl = webView.request.URL.absoluteString;
+    int location = [currentUrl rangeOfString:@"prismoauth.com"].location;
+    if (location != NSNotFound && location < 168) {
+        [STKProcessingView present];
+    }
+//    [STKProcessingView present];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
