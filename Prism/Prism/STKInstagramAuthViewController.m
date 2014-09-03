@@ -37,8 +37,8 @@
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [STKProcessingView dismiss];
-    [[STKErrorStore alertViewForError:error delegate:nil] show];
-    [[self navigationController] popViewControllerAnimated:YES];
+//    [[STKErrorStore alertViewForError:error delegate:nil] show];
+//    [[self navigationController] popViewControllerAnimated:YES];
 }
 
 - (void)loadView
@@ -86,8 +86,9 @@
                                                otherButtonTitles:nil];
             [av show];
 
-            //[[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/accounts/manage_access"]]];
+//            [[self webView] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://instagram.com/accounts/manage_access"]]];
         }
+        return NO;
     }
     
     return YES;

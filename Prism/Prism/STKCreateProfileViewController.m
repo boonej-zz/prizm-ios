@@ -169,8 +169,8 @@ const long STKCreateProgressGeocoding = 4;
                    
                    @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                    @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
-                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
-                   @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}}
+                   @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
+                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
                    ];
         
         _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday"];

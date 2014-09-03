@@ -457,7 +457,7 @@ typedef enum {
 {
     [STKMarkupUtilities imageForShareCard:self.profile withCompletion:^(UIImage *img) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            id obj = @{@"hidePrizmatic": @YES, @"text":@"Look who's on Prizm! Download it so you can check it out: "};
+            id obj = @{@"hidePrizmatic": @YES, @"text":@"Look who's on Prizm!  Download it now: "};
             UIActivityViewController *vc = [[STKImageSharer defaultSharer] activityViewControllerForImage:img  object:obj finishHandler:^(UIDocumentInteractionController *doc) {
                 [doc presentOpenInMenuFromRect:[[self view] bounds]
                                         inView:[self view]

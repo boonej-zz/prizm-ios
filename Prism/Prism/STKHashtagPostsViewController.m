@@ -126,7 +126,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int postCount = [[[self hashTagPostsController] posts] count];
+    long postCount = [[[self hashTagPostsController] posts] count];
 
     if([self showPostsInSingleLayout]) {
         return postCount;

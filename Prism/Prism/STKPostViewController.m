@@ -754,7 +754,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     NSString *prevVisibility = [[self post] visibility];
     
     NSDictionary *visibilityMap = @{@0 : STKPostVisibilityPublic, @1 : STKPostVisibilityTrust, @2: STKPostVisibilityPrivate};
-    __block int revertIndex = NSNotFound;
+    __block long revertIndex = NSNotFound;
     [visibilityMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if ([obj isEqualToString:prevVisibility]) {
             revertIndex = [key integerValue];
