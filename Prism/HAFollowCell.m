@@ -27,10 +27,12 @@
 - (IBAction)leftPostTapped:(id)sender;
 - (IBAction)centerPostTapped:(id)sender;
 - (IBAction)rightPostTapped:(id)sender;
+- (IBAction)avatarTapped:(id)sender;
 
 @end
 
 @implementation HAFollowCell
+
 
 - (void)awakeFromNib
 {
@@ -44,6 +46,7 @@
     [self.leftImage setPreferredSize:STKImageStoreThumbnailMedium];
     [self.centerImage setPreferredSize:STKImageStoreThumbnailMedium];
     [self.rightImage setPreferredSize:STKImageStoreThumbnailMedium];
+   
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -130,6 +133,11 @@
 }
 
 - (IBAction)rightPostTapped:(id)sender
+{
+    ROUTE(sender);
+}
+
+- (void)avatarTapped:(id)sender
 {
     ROUTE(sender);
 }

@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JHR-cX-5Jh">
-                                <rect key="frame" x="125" y="6" width="50" height="32"/>
+                                <rect key="frame" x="121" y="6" width="50" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="a88-OV-DSV"/>
@@ -36,7 +36,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJY-cD-GJS">
-                                <rect key="frame" x="183" y="6" width="50" height="32"/>
+                                <rect key="frame" x="179" y="6" width="50" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="MQx-Sr-alF"/>
@@ -54,7 +54,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5sW-AT-Z92">
-                                <rect key="frame" x="241" y="6" width="71" height="32"/>
+                                <rect key="frame" x="229" y="6" width="71" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="71" id="SAN-lb-RyV"/>
@@ -75,16 +75,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="5sW-AT-Z92" firstAttribute="leading" secondItem="cJY-cD-GJS" secondAttribute="trailing" constant="8" id="1GE-TO-Vb4"/>
+                            <constraint firstItem="5sW-AT-Z92" firstAttribute="leading" secondItem="cJY-cD-GJS" secondAttribute="trailing" id="1GE-TO-Vb4"/>
                             <constraint firstItem="JHR-cX-5Jh" firstAttribute="top" secondItem="oun-JR-z7c" secondAttribute="top" constant="6" id="6Nf-L8-btP"/>
                             <constraint firstItem="5sW-AT-Z92" firstAttribute="top" secondItem="oun-JR-z7c" secondAttribute="top" constant="6" id="EPI-dg-gw2"/>
                             <constraint firstItem="cJY-cD-GJS" firstAttribute="leading" secondItem="JHR-cX-5Jh" secondAttribute="trailing" constant="8" id="mR2-rs-4eq"/>
                             <constraint firstItem="cJY-cD-GJS" firstAttribute="top" secondItem="oun-JR-z7c" secondAttribute="top" constant="6" id="r3L-zF-WA9"/>
-                            <constraint firstAttribute="trailing" secondItem="5sW-AT-Z92" secondAttribute="trailing" constant="8" id="vAD-Te-Zbc"/>
+                            <constraint firstAttribute="trailing" secondItem="5sW-AT-Z92" secondAttribute="trailing" constant="20" id="vAD-Te-Zbc"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gender" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfr-Op-AgN">
-                        <rect key="frame" x="22" y="12" width="57" height="19"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Gender" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfr-Op-AgN">
+                        <rect key="frame" x="23" y="12" width="57" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="57" id="Dry-mA-mN3"/>

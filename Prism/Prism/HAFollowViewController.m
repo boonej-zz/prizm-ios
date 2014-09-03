@@ -13,7 +13,8 @@
 #import "STKFetchDescription.h"
 #import "UIERealTimeBlurView.h"
 #import "STKPostViewController.h"
-
+#import "STKLocationViewController.h"
+#import "STKProfileViewController.h"
 
 @interface HAFollowViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -201,5 +202,15 @@
     }
     return nil;
 }
+
+
+- (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKUser *user = [[self users] objectAtIndex:ip.row];
+    STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+    [vc setProfile:user];
+    [[self navigationController] pushViewController:vc animated:YES];
+}
+
 
 @end
