@@ -179,6 +179,19 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
+    for(id obj in activityItems) {
+        NSLog(@"Object: %@", [obj class]);
+        if([obj isKindOfClass:[UIImage class]]) {
+            [self setImage:obj];
+        }
+        if([obj isKindOfClass:[NSString class]]) {
+            [self setText:obj];
+        }
+        if([obj isKindOfClass:[NSDictionary class]]) {
+            [self setImage:[obj valueForKey:@"image"]];
+            [self setText:[obj valueForKey:@"text"]];
+        }
+    }
     return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"instagram://app"]];
 }
 
@@ -206,10 +219,8 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
     UIDocumentInteractionController *doc = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:tempPath]];
     [doc setUTI:@"com.instagram.exclusivegram"];
-    [doc setAnnotation:@{@"InstagramCaption" : [self text]}];
-
-    if([self text]) {
-        
+    if ([self text]) {
+        [doc setAnnotation:@{@"InstagramCaption" : [self text]}];
     }
 
     [[self delegate] activity:self wantsToPresentDocumentController:doc];
@@ -234,9 +245,20 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 }
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
+    for(id obj in activityItems) {
+        NSLog(@"Object: %@", [obj class]);
+        if([obj isKindOfClass:[UIImage class]]) {
+            [self setImage:obj];
+        }
+        if([obj isKindOfClass:[NSString class]]) {
+            [self setText:obj];
+        }
+        if([obj isKindOfClass:[NSDictionary class]]) {
+            [self setImage:[obj valueForKey:@"image"]];
+            [self setText:[obj valueForKey:@"text"]];
+        }
+    }
     return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tumblr://"]];
-    
-    return YES;
 }
 
 - (void)prepareWithActivityItems:(NSArray *)activityItems
@@ -291,7 +313,19 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 }
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
-    
+    for(id obj in activityItems) {
+        NSLog(@"Object: %@", [obj class]);
+        if([obj isKindOfClass:[UIImage class]]) {
+            [self setImage:obj];
+        }
+        if([obj isKindOfClass:[NSString class]]) {
+            [self setText:obj];
+        }
+        if([obj isKindOfClass:[NSDictionary class]]) {
+            [self setImage:[obj valueForKey:@"image"]];
+            [self setText:[obj valueForKey:@"text"]];
+        }
+    }
     return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"whatsapp://"]];
     
 }
