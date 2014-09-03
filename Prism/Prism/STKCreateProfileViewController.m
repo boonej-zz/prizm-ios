@@ -848,6 +848,10 @@ const long STKCreateProgressGeocoding = 4;
         [[self user] setType:t];
         [self configureItemsForCreation];
         [[self tableView] reloadData];
+        if ([t isEqualToString:@"institution"]) {
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:@"This is the signup page for education, military, community organizations, foundations and corporate partners to engage with students on Prizm.  You will receive a confirmation email once we have verified your entity and approved your status.  Thank you!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+        }
     }
 }
 

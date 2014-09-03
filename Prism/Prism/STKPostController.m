@@ -331,22 +331,26 @@
         }
 
         if([post isPostLikedByUser:[[STKUserStore store] currentUser]]) {
+            [[c likeButton] setSelected:NO];
             [[STKContentStore store] unlikePost:post
                                      completion:^(STKPost *p, NSError *err) {
                                          if (!err) {
                                              [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
-                                             [[c likeButton] setSelected:NO];
+                                             
                                          } else {
+                                             [[c likeButton] setSelected:YES];
                                              [[STKErrorStore alertViewForError:err delegate:nil] show];
                                          }
                                      }];
         } else {
+            [[c likeButton] setSelected:YES];
             [[STKContentStore store] likePost:post
                                    completion:^(STKPost *p, NSError *err) {
                                        if (!err) {
                                            [[c likeCountLabel] setText:[NSString stringWithFormat:@"%d", [post likeCount]]];
-                                           [[c likeButton] setSelected:YES];
+                                           
                                        } else {
+                                           [[c likeButton] setSelected:NO];
                                            [[STKErrorStore alertViewForError:err delegate:nil] show];
                                        }
                                    }];
