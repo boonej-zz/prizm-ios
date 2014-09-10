@@ -199,8 +199,10 @@ typedef enum {
                 NSMutableSet *requestSet = [NSMutableSet setWithArray:[self requests]];
                 [requestSet addObjectsFromArray:requests];
                 [self setRequests:[[requestSet allObjects] mutableCopy]];
-                [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
-                [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
+                [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@ && status != %@", STKRequestStatusCancelled, STKRequestStatusRejected]];
+                NSSortDescriptor *trustAccepted = [NSSortDescriptor sortDescriptorWithKey:@"status" ascending:NO];
+                NSSortDescriptor *dateCreated =[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO];
+                [[self requests] sortUsingDescriptors:@[trustAccepted, dateCreated]];
             }
             [[self tableView] reloadData];
         }];
