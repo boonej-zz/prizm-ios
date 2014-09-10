@@ -32,6 +32,7 @@
 @property (nonatomic, strong, readonly) UIView *view;
 @property (nonatomic) BOOL hidesDoneButton;
 @property (nonatomic) BOOL preventsUserTagging;
+@property (nonatomic) BOOL allowsAllUserTagging;
 
 - (void)textView:(UITextView *)textView updatedWithText:(NSString *)text;
 

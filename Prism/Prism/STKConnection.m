@@ -66,6 +66,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
                                                resolvingAgainstBaseURL:NO];
     if([self identifiers]) {
         NSString *pathIdentifier = [[self identifiers] componentsJoinedByString:@"/"];
+        NSLog(@"Path: %@", pathIdentifier);
         [components setPath:pathIdentifier];
     }
     

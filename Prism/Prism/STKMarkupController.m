@@ -44,6 +44,7 @@ typedef enum {
         [self setDelegate:delegate];
         
         _userTags = [[NSMutableArray alloc] init];
+        _allowsAllUserTagging = NO;
         
         [self loadView];
     }
@@ -235,12 +236,20 @@ typedef enum {
             }];
         } else {
             if(![self preventsUserTagging]) {
-                if([textBasis length] > 1) {
-                    [[STKUserStore store] searchUserTrustsWithName:textBasis
-                                                        completion:^(NSArray *users, NSError *error) {
-                                                            [self setUserTags:users];
-                                                            [self updateView];
-                                                        }];
+                if([textBasis length] > 1 ){
+                    if ([self allowsAllUserTagging]) {
+                        [[STKUserStore store] searchUsersWithName:textBasis completion:^(NSArray *users, NSError *err) {
+                            [self setUserTags:users];
+                            [self updateView];
+                        }];
+                    } else {
+                        [[STKUserStore store] searchUserTrustsWithName:textBasis
+                                                            completion:^(NSArray *users, NSError *error) {
+                                                                [self setUserTags:users];
+                                                                [self updateView];
+                                                            }];
+                    }
+                    
                 } else {
                     [self setUserTags:nil];
                     [self updateView];

@@ -70,6 +70,7 @@
     
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
     [_markupController setHidesDoneButton:YES];
+    [_markupController setAllowsAllUserTagging:YES];
     [[self view] addSubview:[[self markupController] view]];
     
     if([self editingPostText]) {
@@ -159,7 +160,7 @@
         [self resizeTextArea];
         [self extractComments];
         
-        int index = [[self comments] count] - 1;
+        long index = [[self comments] count] - 1;
         if([self postHasText]) {
             index ++;
         }
