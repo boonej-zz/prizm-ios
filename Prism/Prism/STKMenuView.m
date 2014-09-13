@@ -94,6 +94,8 @@
           forControlEvents:UIControlEventTouchUpInside];
             [ctl setTranslatesAutoresizingMaskIntoConstraints:NO];
             [_buttonContainerView addSubview:ctl];
+            UILongPressGestureRecognizer *lpr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(buttonLongPress:)];
+            [ctl addGestureRecognizer:lpr];
         }
         [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
                                                                      options:0
@@ -266,5 +268,14 @@
     [[self delegate] menuView:self didSelectItemAtIndex:(int)[[self buttons] indexOfObject:sender]];
 }
 
+- (void)buttonLongPress:(UILongPressGestureRecognizer *)sender
+{
+    
+    if ([sender state] == UIGestureRecognizerStateBegan) {
+        [[self delegate] menuView:self didLongPressItemAtIndex:(int)[[self buttons] indexOfObject:sender.view]];
+    } else {
+        return;
+    }
+}
 
 @end

@@ -13,6 +13,7 @@
 @protocol STKMenuViewDelegate <NSObject>
 
 - (void)menuView:(STKMenuView *)menuView didSelectItemAtIndex:(int)idx;
+- (void)menuView:self didLongPressItemAtIndex:(int)idx;
 
 @end
 

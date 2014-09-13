@@ -394,12 +394,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(dbPath && [[NSFileManager defaultManager] fileExistsAtPath:dbPath]) {
             NSManagedObjectContext *ctx = [self userContextForPath:dbPath];
             
-//            NSPredicate *p = [NSPredicate predicateWithFormat:@"uniqueID == %@", currentuniqueID];
-//            NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
-//            [req setPredicate:p];
-//            NSArray *results = [ctx executeFetchRequest:req error:nil];
+            NSPredicate *p = [NSPredicate predicateWithFormat:@"uniqueID == %@", currentuniqueID];
+            NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
+            [req setPredicate:p];
+            NSArray *results = [ctx executeFetchRequest:req error:nil];
             
-            STKUser *u = [self userForID:currentuniqueID];
+            STKUser *u = [results objectAtIndex:0];
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];

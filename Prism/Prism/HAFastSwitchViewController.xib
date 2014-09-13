@@ -24,10 +24,22 @@
                         <outlet property="delegate" destination="-1" id="0mY-cA-dHQ"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ao9-7j-3s7" customClass="UIERealTimeBlurView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="NP4-pS-sjS"/>
+                        <constraint firstAttribute="height" constant="64" id="kmw-Fa-xzW"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="vZo-Rl-p6u"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="BAr-kk-Ael" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="2Jv-q2-NGv"/>
+                <constraint firstItem="ao9-7j-3s7" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="5F6-DO-HpC"/>
+                <constraint firstItem="ao9-7j-3s7" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="7rq-4a-rXy"/>
                 <constraint firstAttribute="trailing" secondItem="BAr-kk-Ael" secondAttribute="trailing" id="WTc-c9-vlb"/>
                 <constraint firstAttribute="bottom" secondItem="BAr-kk-Ael" secondAttribute="bottom" id="Xie-Ed-Nqw"/>
                 <constraint firstItem="BAr-kk-Ael" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="uSn-bw-BpM"/>

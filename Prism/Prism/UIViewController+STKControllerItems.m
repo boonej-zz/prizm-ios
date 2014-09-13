@@ -86,16 +86,16 @@
     STKNavigationButton *view = [[STKNavigationButton alloc] init];
     [view addTarget:self action:@selector(toggleMenu:) forControlEvents:UIControlEventTouchUpInside];
     
-    BOOL longPressExists = NO;
-    for (id obj in view.gestureRecognizers) {
-        if ([obj isKindOfClass:[UILongPressGestureRecognizer class]]) {
-            longPressExists = YES;
-        }
-    }
-    if (! longPressExists){
-        UIGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showFastSwitchMenu:)];
-        [view addGestureRecognizer:longPressRecognizer];
-    }
+//    BOOL longPressExists = NO;
+//    for (id obj in view.gestureRecognizers) {
+//        if ([obj isKindOfClass:[UILongPressGestureRecognizer class]]) {
+//            longPressExists = YES;
+//        }
+//    }
+//    if (! longPressExists){
+//        UIGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showFastSwitchMenu:)];
+//        [view addGestureRecognizer:longPressRecognizer];
+//    }
     
     [view setImage:[UIImage imageNamed:@"btn_menu"]];
     [view setHighlightedImage:[UIImage imageNamed:@"btn_menu_active"]];
@@ -117,14 +117,7 @@
     }];
 }
 
-- (void)showFastSwitchMenu:(id)sender
-{
-    if ([sender state] == UIGestureRecognizerStateBegan) {
-        HAFastSwitchViewController *fsvc = [[HAFastSwitchViewController alloc] init];
-        [self.navigationController pushViewController:fsvc animated:NO];
-    }
-    
-}
+
 
 - (void)toggleMenu:(id)sender
 {

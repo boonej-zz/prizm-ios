@@ -28,6 +28,7 @@
 #import "STKPost.h"
 #import "STKMessageBanner.h"
 #import "STKUserStore.h"
+#import "HAFastSwitchViewController.h"
 
 @import QuartzCore;
 
@@ -295,6 +296,24 @@ static BOOL HAActivityIsAnimating = NO;
     }
 }
 
+- (void)menuView:(STKMenuView *)menuView didLongPressItemAtIndex:(int)idx
+{
+    if (idx == 3) {
+        [self showFastSwitchMenu:nil];
+    }
+}
+
+- (void)showFastSwitchMenu:(id)sender
+{
+    [self setMenuVisible:NO animated:YES];
+//    STKMenuController *rvc = (STKMenuController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+    HAFastSwitchViewController *fsvc = [[HAFastSwitchViewController alloc] init];
+    if ([[self selectedViewController] isKindOfClass:[UINavigationController class]]) {
+        [(UINavigationController *)self.selectedViewController pushViewController:fsvc animated:NO];
+    }
+    
+}
+
 - (void)setSelectedViewController:(UIViewController *)selectedViewController
 {
     [[[self selectedViewController] view] removeFromSuperview];
@@ -470,13 +489,15 @@ static BOOL HAActivityIsAnimating = NO;
                 [self.leftNotificationView setAlpha:1];
                 [self.rightNotificationView setAlpha:1];
             } completion:^(BOOL finished) {
-                [UIView animateWithDuration:2.0 animations:^{
-                    [self.centerNotificationView setAlpha:0];
-                    [self.leftNotificationView setAlpha:0];
-                    [self.rightNotificationView setAlpha:0];
-                } completion:^(BOOL finished) {
-                    HAActivityIsAnimating = NO;
-                }];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [UIView animateWithDuration:2.0 animations:^{
+                        [self.centerNotificationView setAlpha:0];
+                        [self.leftNotificationView setAlpha:0];
+                        [self.rightNotificationView setAlpha:0];
+                    } completion:^(BOOL finished) {
+                        HAActivityIsAnimating = NO;
+                    }];
+                });
             }];
             
         }
