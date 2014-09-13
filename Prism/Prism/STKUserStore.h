@@ -20,6 +20,7 @@ extern NSString * const STKUserStoreErrorDomain;
 extern NSString * const HAUserStoreActivityUserKey;
 extern NSString * const HAUserStoreActivityLikeKey;
 extern NSString * const HAUserStoreActivityTrustKey;
+extern NSString * const HAUserStoreActivityCommentKey;
 extern NSString * const HANotificationKeyUserLoggedOut;
 
 typedef enum {

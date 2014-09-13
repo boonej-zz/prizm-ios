@@ -38,6 +38,7 @@ static NSTimeInterval const STKMessageBannerAnimationDuration = .5;
 static int HALikeNotificationCount = 0;
 static int HAUserNotificationCount = 0;
 static int HATrustNotificationCount = 0;
+static int HACommentNotificationCount = 0;
 static BOOL HAActivityIsAnimating = NO;
 
 @interface STKMenuController () <UINavigationControllerDelegate, STKMenuViewDelegate, UIViewControllerAnimatedTransitioning>
@@ -53,6 +54,7 @@ static BOOL HAActivityIsAnimating = NO;
 @property (nonatomic, strong) UIImageView *leftNotificationView;
 @property (nonatomic, strong) UIImageView *centerNotificationView;
 @property (nonatomic, strong) UIImageView *rightNotificationView;
+@property (nonatomic, strong) UIImageView *extendedNotificationView;
 
 @property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
@@ -442,12 +444,23 @@ static BOOL HAActivityIsAnimating = NO;
     long trustCount = [[userInfo valueForKey:HAUserStoreActivityTrustKey] longValue];
     long likeCount = [[userInfo valueForKey:HAUserStoreActivityLikeKey] longValue];
     long userCount = [[userInfo valueForKey:HAUserStoreActivityUserKey] longValue];
+    long commentCount = [[userInfo valueForKey:HAUserStoreActivityCommentKey] longValue];
     BOOL hasTrustNotifications = trustCount > HATrustNotificationCount;
     BOOL hasUserNotifications = userCount > HAUserNotificationCount;
     BOOL hasLikeNotifications = likeCount > HALikeNotificationCount;
+    BOOL hasCommentNotification = commentCount > HACommentNotificationCount;
+    
+//    
+//    BOOL hasTrustNotifications = YES;
+//    BOOL hasUserNotifications = NO;
+//    BOOL hasLikeNotifications = YES;
+//    BOOL hasCommentNotification = YES;
+    
     HATrustNotificationCount = (int)trustCount;
     HALikeNotificationCount = (int)likeCount;
     HAUserNotificationCount = (int)userCount;
+    HACommentNotificationCount = (int)commentCount;
+    
     if (!HAActivityIsAnimating) {
         if (hasLikeNotifications) {
             [self.leftNotificationView setImage:[UIImage imageNamed:@"like_notification"]];
@@ -455,33 +468,74 @@ static BOOL HAActivityIsAnimating = NO;
                 [self.centerNotificationView setImage:[UIImage imageNamed:@"user_notification"]];
                 if (hasTrustNotifications){
                     [self.rightNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+                    if (hasCommentNotification) {
+                        [self.extendedNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+                    }
                 } else {
-                    [self.rightNotificationView setImage:nil];
+                    if (hasCommentNotification) {
+                        [self.rightNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+                    } else {
+                        [self.rightNotificationView setImage:nil];
+                    }
+                    [self.extendedNotificationView setImage:nil];
                 }
             } else if (hasTrustNotifications) {
                 [self.centerNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
-                [self.rightNotificationView setImage:nil];
+                if (hasCommentNotification) {
+                    [self.rightNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+                } else {
+                    [self.rightNotificationView setImage:nil];
+                }
+                [self.extendedNotificationView setImage:nil];
+                
             } else {
-                [self.centerNotificationView setImage:nil];
+                if (hasCommentNotification) {
+                    [self.centerNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+                } else {
+                    [self.centerNotificationView setImage:nil];
+                }
                 [self.rightNotificationView setImage:nil];
+                [self.extendedNotificationView setImage:nil];
             }
         } else if (hasUserNotifications) {
             [self.leftNotificationView setImage:[UIImage imageNamed:@"user_notification"]];
             [self.rightNotificationView setImage:nil];
+            [self.extendedNotificationView setImage:nil];
             if (hasTrustNotifications) {
                 [self.centerNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+                if (hasCommentNotification) {
+                    [self.rightNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+                } else {
+                    [self.rightNotificationView setImage:nil];
+                }
             } else {
-                [self.centerNotificationView setImage:nil];
+                if (hasCommentNotification) {
+                    [self.centerNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+                } else {
+                    [self.centerNotificationView setImage:nil];
+                }
+                [self.rightNotificationView setImage:nil];
             }
         } else if (hasTrustNotifications){
             [self.leftNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+            if (hasCommentNotification) {
+                [self.centerNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+            } else {
             [self.centerNotificationView setImage:nil];
+            }
             [self.rightNotificationView setImage:nil];
+            [self.extendedNotificationView setImage:nil];
         } else {
-            [self.leftNotificationView setImage:nil];
+            if (hasCommentNotification) {
+                [self.leftNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+            } else {
+                [self.leftNotificationView setImage:nil];
+            }
             [self.centerNotificationView setImage:nil];
             [self.rightNotificationView setImage:nil];
+            [self.extendedNotificationView setImage:nil];
         }
+        [self.view bringSubviewToFront:self.extendedNotificationView];
         [self.view bringSubviewToFront:self.rightNotificationView];
         [self.view bringSubviewToFront:self.centerNotificationView];
         [self.view bringSubviewToFront:self.leftNotificationView];
@@ -492,7 +546,7 @@ static BOOL HAActivityIsAnimating = NO;
                 [self.leftNotificationView setAlpha:1];
                 [self.rightNotificationView setAlpha:1];
             } completion:^(BOOL finished) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [UIView animateWithDuration:2.0 animations:^{
                         [self.centerNotificationView setAlpha:0];
                         [self.leftNotificationView setAlpha:0];
@@ -595,9 +649,12 @@ static BOOL HAActivityIsAnimating = NO;
     self.leftNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(45.f, 32.f, 28.f, 19.f)];
     self.centerNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(65.f, 32.f, 28.f, 19.f)];
     self.rightNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(85.f, 32.f, 28.f, 19.f)];
+    self.extendedNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(105.f, 32.f, 28.f, 19.f)];
     [self.leftNotificationView setAlpha:0.f];
     [self.rightNotificationView setAlpha:0.f];
     [self.centerNotificationView setAlpha:0.f];
+    [self.extendedNotificationView setAlpha:0.f];
+    [self.view addSubview:self.extendedNotificationView];
     [self.view addSubview:self.rightNotificationView];
     [self.view addSubview:self.centerNotificationView];
     [self.view addSubview:self.leftNotificationView];

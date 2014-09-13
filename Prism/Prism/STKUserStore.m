@@ -35,6 +35,7 @@ NSString * const STKUserStoreActivityUpdateCountKey = @"STKUSerStoreActivityUpda
 NSString * const HAUserStoreActivityUserKey = @"HAUserStoreActivityUserKey";
 NSString * const HAUserStoreActivityLikeKey = @"HAUserStoreActivityLikeKey";
 NSString * const HAUserStoreActivityTrustKey = @"HAUserStoreActivityTrustKey";
+NSString * const HAUserStoreActivityCommentKey = @"HAUserStoreActivityCommentKey";
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 NSString * const HAUserStoreLoggedInUsersKey = @"com.higheraltitude.prism.loggedInUsers";
 NSString * const HANotificationKeyUserLoggedOut = @"HANotificationKeyUserLoggedOut";
@@ -151,16 +152,19 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)notifyNotificationCount
 {
     NSFetchRequest *aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [aReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action <> %@)", @"like"]];
+    [aReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action <> %@ && action <> %@)", @"like", @"comment"]];
     NSFetchRequest *bReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"like"]];
+    NSFetchRequest *cReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"comment"]];
     long actCount = [[self context] countForFetchRequest:aReq error:nil];
     long likeCount = [[self context] countForFetchRequest:bReq error:nil];
+    long commentCount = [[self context] countForFetchRequest:cReq error:nil];
     aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
     [aReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
     long trustCount = [[self context] countForFetchRequest:aReq error:nil];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount), HAUserStoreActivityCommentKey: @(commentCount)}];
 }
 
 - (void)markActivitiesAsRead
