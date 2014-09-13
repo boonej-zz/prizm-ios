@@ -39,7 +39,7 @@
     self.users = @[];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [self loadData];
-    self.title = @"Accounts";
+    self.title = @"Switch";
     [self layoutViews];
     [self.tableView setContentInset:UIEdgeInsetsMake(4, 0, 0, 0)];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
@@ -72,7 +72,7 @@
     [[b titleLabel] setTextColor:STKTextColor];
     [b addTarget:self action:@selector(showSignIn:) forControlEvents:UIControlEventTouchUpInside];
     [b setBackgroundImage:[UIImage imageNamed:@"btn_lg"] forState:UIControlStateNormal];
-    [b setTitle:@"Sign In" forState:UIControlStateNormal];
+    [b setTitle:@"Add Profile" forState:UIControlStateNormal];
     [b setFrame:CGRectMake(10, 50, 300, 51)];
    
 

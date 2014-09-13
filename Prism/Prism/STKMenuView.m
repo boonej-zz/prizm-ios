@@ -86,6 +86,8 @@
         STKMenuButton *b3 = [[STKMenuButton alloc] init];
         STKMenuButton *b4 = [[STKMenuButton alloc] init];
         STKMenuButton *b5 = [[STKMenuButton alloc] init];
+        UILongPressGestureRecognizer *lpr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(buttonLongPress:)];
+        [b3 addGestureRecognizer:lpr];
         _buttons = @[b0, b1, b2, b3, b4, b5];
 
         for(UIControl *ctl in [self buttons]) {
@@ -94,8 +96,7 @@
           forControlEvents:UIControlEventTouchUpInside];
             [ctl setTranslatesAutoresizingMaskIntoConstraints:NO];
             [_buttonContainerView addSubview:ctl];
-            UILongPressGestureRecognizer *lpr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(buttonLongPress:)];
-            [ctl addGestureRecognizer:lpr];
+            
         }
         [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
                                                                      options:0

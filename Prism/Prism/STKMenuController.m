@@ -100,44 +100,47 @@ static BOOL HAActivityIsAnimating = NO;
 
 - (void)userBecameUnauthorized:(NSNotification *)note
 {
-    if([[self presentedViewController] isKindOfClass:[STKVerticalNavigationController class]]) {
-        return;
-    }
-    
-    NSString *reasonValue = [[note userInfo] objectForKey:STKSessionEndedReasonKey];
-    NSString *msg = nil;
-    if([reasonValue isEqualToString:STKSessionEndedConnectionValue]) {
-        msg = NSLocalizedString(@"Oops. There was an issue with your connection and you could not be authenticated with the server. Please make sure you have an internet connection and log in again.", @"session ended connection message");
-    } else if ([reasonValue isEqualToString:STKSessionEndedAuthenticationValue]) {
-        msg = NSLocalizedString(@"Your session has ended. Please try to login again.", @"session ended, try again message");
-    }
-    
-    // Only if we need a message do we show the alert view
-    UIAlertView *av = nil;
-    if(msg) {
-        av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Session Ended", "session ended title")
-                                        message:msg
-                                       delegate:nil
-                              cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
-                              otherButtonTitles:nil];
-    }
-    
-    [self recreateAllViewControllers];
-    
-    void (^presentRegistration)(void) = ^{
-        STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
-        STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
-        [self presentViewController:nvc animated:YES
-                         completion:^{
-                             
-                             [av show];
-                         }];
-    };
-    
-    if([self presentedViewController]) {
-        [self dismissViewControllerAnimated:YES completion:presentRegistration];
-    } else {
-        presentRegistration();
+    if ([[STKUserStore store] loggedInUsers].count == 0) {
+        [[STKUserStore store] setCurrentUser:nil];
+        if([[self presentedViewController] isKindOfClass:[STKVerticalNavigationController class]]) {
+            return;
+        }
+        
+        NSString *reasonValue = [[note userInfo] objectForKey:STKSessionEndedReasonKey];
+        NSString *msg = nil;
+        if([reasonValue isEqualToString:STKSessionEndedConnectionValue]) {
+            msg = NSLocalizedString(@"Oops. There was an issue with your connection and you could not be authenticated with the server. Please make sure you have an internet connection and log in again.", @"session ended connection message");
+        } else if ([reasonValue isEqualToString:STKSessionEndedAuthenticationValue]) {
+            msg = NSLocalizedString(@"Your session has ended. Please try to login again.", @"session ended, try again message");
+        }
+        
+        // Only if we need a message do we show the alert view
+        UIAlertView *av = nil;
+        if(msg) {
+            av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Session Ended", "session ended title")
+                                            message:msg
+                                           delegate:nil
+                                  cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                  otherButtonTitles:nil];
+        }
+        
+        [self recreateAllViewControllers];
+        
+        void (^presentRegistration)(void) = ^{
+            STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
+            STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
+            [self presentViewController:nvc animated:YES
+                             completion:^{
+                                 
+                                 [av show];
+                             }];
+        };
+        
+        if([self presentedViewController]) {
+            [self dismissViewControllerAnimated:YES completion:presentRegistration];
+        } else {
+            presentRegistration();
+        }
     }
     
 }

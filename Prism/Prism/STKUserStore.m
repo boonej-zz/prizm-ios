@@ -231,7 +231,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)connectionDidFailAuthorization:(NSNotification *)note
 {
-    [self setCurrentUser:nil];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
                                                         object:nil
@@ -398,8 +397,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
             [req setPredicate:p];
             NSArray *results = [ctx executeFetchRequest:req error:nil];
-            
-            STKUser *u = [results objectAtIndex:0];
+            STKUser *u = NO;
+            if (results.count > 0)
+                u = [results objectAtIndex:0];
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];

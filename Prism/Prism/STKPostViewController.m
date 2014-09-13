@@ -463,7 +463,7 @@
         [[STKContentStore store] unlikeComment:pc
                                     completion:^(STKPostComment *p, NSError *err) {
                                         if (err) {
-                                            [[STKErrorStore alertViewForError:err delegate:nil] show];
+//                                            [[STKErrorStore alertViewForError:err delegate:nil] show];
                                         }
                                         [[self tableView] reloadData];
                                     }];
@@ -472,7 +472,7 @@
         [[STKContentStore store] likeComment:pc
                                   completion:^(STKPostComment *p, NSError *err) {
                                       if (err) {
-                                          [[STKErrorStore alertViewForError:err delegate:nil] show];
+//                                          [[STKErrorStore alertViewForError:err delegate:nil] show];
                                       }
                                       [[self tableView] reloadData];
                                   }];
