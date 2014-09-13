@@ -36,6 +36,8 @@ NSString * const HAUserStoreActivityUserKey = @"HAUserStoreActivityUserKey";
 NSString * const HAUserStoreActivityLikeKey = @"HAUserStoreActivityLikeKey";
 NSString * const HAUserStoreActivityTrustKey = @"HAUserStoreActivityTrustKey";
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
+NSString * const HAUserStoreLoggedInUsersKey = @"com.higheraltitude.prism.loggedInUsers";
+NSString * const HANotificationKeyUserLoggedOut = @"HANotificationKeyUserLoggedOut";
 
 NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurrentUserChangedNotification";
 
@@ -60,6 +62,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 @property (nonatomic, copy) void (^googlePlusAuthenticationBlock)(GTMOAuth2Authentication *auth, NSError *err);
 @property (nonatomic, copy) void (^googlePlusProcessingBlock)();
 @property (nonatomic) BOOL attemptingTransparentLogin;
+@property (nonatomic, strong) NSMutableArray *signedInUsers;
 
 @end
 
@@ -187,12 +190,40 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)logout
 {
-    [self setCurrentUser:nil];
-    [[STKBaseStore store] cancelAllQueuedRequests];
-    [STKConnection cancelAllConnections];
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
-                                                        object:nil
-                                                      userInfo:@{STKSessionEndedReasonKey : STKSessionEndedLogoutValue}];
+    __block NSUInteger index;
+    
+    __block NSMutableArray *users  = [self.signedInUsers mutableCopy];
+    [self.signedInUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSMutableDictionary *mobj = [obj mutableCopy];
+        if ([[obj valueForKey:@"active"] boolValue]) {
+            [mobj setValue:@NO forKey:@"active"];
+            index = idx;
+        }
+        [users replaceObjectAtIndex:idx withObject:[mobj copy]];
+    }];
+    
+    
+    [users removeObjectAtIndex:index];
+    self.signedInUsers = users;
+    [[NSUserDefaults standardUserDefaults] setObject:self.signedInUsers forKey:HAUserStoreLoggedInUsersKey];
+    if (self.signedInUsers.count > 0) {
+        NSMutableDictionary *mobj = [[self.signedInUsers objectAtIndex:0] mutableCopy];
+        NSString *uid =[mobj valueForKey:@"id"];
+        STKUser *currentUser = [self userForID:uid];
+        [self switchToUser:currentUser];
+        [[NSNotificationCenter defaultCenter] postNotificationName:HANotificationKeyUserLoggedOut object:nil];
+    } else {
+        [self setCurrentUser:nil];
+        self.signedInUsers = users;
+        [[NSUserDefaults standardUserDefaults] setObject:self.signedInUsers forKey:HAUserStoreLoggedInUsersKey];
+        [[STKBaseStore store] cancelAllQueuedRequests];
+        [STKConnection cancelAllConnections];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
+                                                            object:nil
+                                                          userInfo:@{STKSessionEndedReasonKey : STKSessionEndedLogoutValue}];
+    }
+    
 
 }
 
@@ -294,8 +325,24 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)setCurrentUser:(STKUser *)currentUser
 {
     _currentUser = currentUser;
-    
+    __block BOOL userLoggedIn = NO;
     if(currentUser) {
+        __block NSMutableArray *users  = [self.signedInUsers mutableCopy];
+        [self.signedInUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSMutableDictionary *mobj = [obj mutableCopy];
+            if ([[obj valueForKey:@"id"] isEqualToString:currentUser.uniqueID]) {
+                [mobj setValue:@YES forKey:@"active"];
+                userLoggedIn = YES;
+            } else {
+                [mobj setValue:@NO forKey:@"active"];
+            }
+            [users replaceObjectAtIndex:idx withObject:[mobj copy]];
+        }];
+        if (!userLoggedIn) {
+            [users addObject:@{@"id": currentUser.uniqueID, @"active": @YES}];
+        }
+        self.signedInUsers = users;
+        [[NSUserDefaults standardUserDefaults] setObject:self.signedInUsers forKey:HAUserStoreLoggedInUsersKey];
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
         
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser uniqueID]
@@ -325,18 +372,34 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)establishDatabaseAndCurrentUser
 {
-    NSString *currentuniqueID = [[NSUserDefaults standardUserDefaults] objectForKey:STKUserStoreCurrentUserKey];
+    NSArray *signedInUsers = [[NSUserDefaults standardUserDefaults] objectForKey:HAUserStoreLoggedInUsersKey];
+    if (signedInUsers && signedInUsers.count > 0) {
+        self.signedInUsers = [signedInUsers mutableCopy];
+    } else {
+        self.signedInUsers = [NSMutableArray array];
+        NSString *currentuniqueID = [[NSUserDefaults standardUserDefaults] objectForKey:STKUserStoreCurrentUserKey];
+        if (currentuniqueID) {
+            [self.signedInUsers addObject:@{@"id": currentuniqueID, @"active": @YES}];
+        }
+        [[NSUserDefaults standardUserDefaults] setObject:[self.signedInUsers copy] forKey:HAUserStoreLoggedInUsersKey];
+    }
+    __block NSString *currentuniqueID = NO;
+    [self.signedInUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([[obj valueForKey:@"active"] boolValue]) {
+            currentuniqueID = [obj valueForKey:@"id"];
+        }
+    }];
     NSString *dbPath = [self cachePathForDatabase];
     if(currentuniqueID) {
         if(dbPath && [[NSFileManager defaultManager] fileExistsAtPath:dbPath]) {
             NSManagedObjectContext *ctx = [self userContextForPath:dbPath];
             
-            NSPredicate *p = [NSPredicate predicateWithFormat:@"uniqueID == %@", currentuniqueID];
-            NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
-            [req setPredicate:p];
-            NSArray *results = [ctx executeFetchRequest:req error:nil];
+//            NSPredicate *p = [NSPredicate predicateWithFormat:@"uniqueID == %@", currentuniqueID];
+//            NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
+//            [req setPredicate:p];
+//            NSArray *results = [ctx executeFetchRequest:req error:nil];
             
-            STKUser *u = [results firstObject];
+            STKUser *u = [self userForID:currentuniqueID];
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];
@@ -352,6 +415,36 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     
     NSManagedObjectContext *ctx = [self userContextForPath:dbPath];
     [self setContext:ctx];
+}
+
+- (void)switchToUser:(STKUser *)u
+{
+//    NSString *dbPath = [self cachePathForDatabase];
+//    NSManagedObjectContext *ctx = [self userContextForPath:dbPath];
+//    [self setContext:ctx];
+    [[STKBaseStore store] cancelAllQueuedRequests];
+    [STKConnection cancelAllConnections];
+    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:STKSessionEndedNotification
+//                                                        object:nil
+//                                                      userInfo:@{STKSessionEndedReasonKey : STKSessionEndedLogoutValue}];
+    [self setCurrentUser:u];
+    
+   
+//    [self attemptTransparentLoginWithUser:u];
+    
+    [self pruneDatabase];
+}
+
+- (NSArray *)loggedInUsers
+{
+    __block NSMutableArray *users = [NSMutableArray array];
+    
+    [self.signedInUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        STKUser *user = [self userForID:[obj valueForKey:@"id"]];
+        [users addObject:@{@"user": user, @"active": [obj valueForKey:@"active"]}];
+    }];
+    return [users copy];
 }
 
 - (void)fetchTrustPostsForTrust:(STKTrust *)t type:(STKTrustPostType)type completion:(void (^)(NSArray *posts, NSError *err))block
@@ -1815,10 +1908,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointLogin]];
         [c addQueryValue:[email lowercaseString] forKey:@"email"];
         [c addQueryValue:password forKey:@"password"];
-        
-        if([self currentUser])
-            [c setModelGraph:@[[self currentUser]]];
-        else
+//        
+//        if([self currentUser])
+//            [c setModelGraph:@[[self currentUser]]];
+//        else
             [c setModelGraph:@[@"STKUser"]];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];

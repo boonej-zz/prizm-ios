@@ -20,6 +20,7 @@ extern NSString * const STKUserStoreErrorDomain;
 extern NSString * const HAUserStoreActivityUserKey;
 extern NSString * const HAUserStoreActivityLikeKey;
 extern NSString * const HAUserStoreActivityTrustKey;
+extern NSString * const HANotificationKeyUserLoggedOut;
 
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]
@@ -38,15 +39,17 @@ typedef enum {
 @property (nonatomic, strong) NSManagedObjectContext *context;
 @property (nonatomic, strong) STKUser *currentUser;
 
+
 - (void)updateDeviceTokenForCurrentUser:(NSData *)deviceToken;
 - (void)markActivitiesAsRead;
+- (NSArray *)loggedInUsers;
 
 - (STKUser *)userForID:(NSString *)userID;
 
 - (void)transferPostsFromSocialNetworks;
 - (void)logout;
 
-
+- (void)switchToUser:(STKUser *)u;
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
 - (void)resetPasswordForEmail:(NSString *)email password:(NSString *)password completion:(void (^)(NSError *err))block;
 
@@ -56,6 +59,7 @@ typedef enum {
 - (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKUser *facebookData, NSError *err))block;
 - (void)connectWithTwitterAccount:(ACAccount *)acct completion:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))block;
 - (void)connectWithGoogle:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))completionBlock processing:(void (^)())processingBlock;
+
 
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
 - (void)fetchAvailableTwitterAccounts:(void (^)(NSArray *accounts, NSError *err))block;

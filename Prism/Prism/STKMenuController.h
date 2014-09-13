@@ -33,4 +33,5 @@
 
 // Pass another applications image to create a new post, dismissing any present modal view
 - (void)transitionToCreatePostWithImage:(UIImage *)image;
+- (void)recreateAllViewControllers;
 @end

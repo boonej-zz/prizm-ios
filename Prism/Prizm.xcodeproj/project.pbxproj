@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C0D730619C0E4BB0078A9B9 /* HAAccountSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */; };
+		2C0D730719C0E4BB0078A9B9 /* HAAccountSelectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */; };
+		2C0D730B19C392F90078A9B9 /* HAFastSwitchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D730919C392F90078A9B9 /* HAFastSwitchViewController.m */; };
+		2C0D730C19C392F90078A9B9 /* HAFastSwitchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D730A19C392F90078A9B9 /* HAFastSwitchViewController.xib */; };
 		2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
@@ -266,6 +270,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C0D730319C0E4BB0078A9B9 /* HAAccountSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAAccountSelectionCell.h; sourceTree = "<group>"; };
+		2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAAccountSelectionCell.m; sourceTree = "<group>"; };
+		2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAAccountSelectionCell.xib; sourceTree = "<group>"; };
+		2C0D730819C392F90078A9B9 /* HAFastSwitchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAFastSwitchViewController.h; sourceTree = "<group>"; };
+		2C0D730919C392F90078A9B9 /* HAFastSwitchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAFastSwitchViewController.m; sourceTree = "<group>"; };
+		2C0D730A19C392F90078A9B9 /* HAFastSwitchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAFastSwitchViewController.xib; sourceTree = "<group>"; };
 		2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+STKLocation.h"; sourceTree = "<group>"; };
 		2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+STKLocation.m"; sourceTree = "<group>"; };
 		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
@@ -2648,6 +2658,9 @@
 				2CB073DC19AF96C900F70B7E /* HAFollowViewController.h */,
 				2CB073DD19AF96C900F70B7E /* HAFollowViewController.m */,
 				2CB073DE19AF96C900F70B7E /* HAFollowViewController.xib */,
+				2C0D730819C392F90078A9B9 /* HAFastSwitchViewController.h */,
+				2C0D730919C392F90078A9B9 /* HAFastSwitchViewController.m */,
+				2C0D730A19C392F90078A9B9 /* HAFastSwitchViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2795,6 +2808,9 @@
 				2CB073D719AE634A00F70B7E /* HAFollowCell.h */,
 				2CB073D819AE634A00F70B7E /* HAFollowCell.m */,
 				2CB073D919AE634A00F70B7E /* HAFollowCell.xib */,
+				2C0D730319C0E4BB0078A9B9 /* HAAccountSelectionCell.h */,
+				2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */,
+				2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4881,6 +4897,7 @@
 				D073F6E8195B4A590049E573 /* STKExploreFilterViewController.xib in Resources */,
 				88384078195B3275006750FC /* STKInviteFriendsShareCell.xib in Resources */,
 				2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */,
+				2C0D730C19C392F90078A9B9 /* HAFastSwitchViewController.xib in Resources */,
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
 				D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */,
 				D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */,
@@ -4901,6 +4918,7 @@
 				BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */,
 				BE8F35E61833D48300C4ED03 /* STKPostCell.xib in Resources */,
 				BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */,
+				2C0D730719C0E4BB0078A9B9 /* HAAccountSelectionCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5061,6 +5079,7 @@
 				BEF96ADA186221340016E737 /* OAuthCore.m in Sources */,
 				BEFAC199183D4DCF005E8933 /* User.xcdatamodeld in Sources */,
 				BE52B13F18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.m in Sources */,
+				2C0D730B19C392F90078A9B9 /* HAFastSwitchViewController.m in Sources */,
 				BE13648E18689F39003D9D5C /* STKAccountChooserViewController.m in Sources */,
 				BE4C48001917E4A40091F40B /* STKFetchDescription.m in Sources */,
 				BE5324CB189075F4004AAC5C /* STKRelativeDateConverter.m in Sources */,
@@ -5080,6 +5099,7 @@
 				BE1C7082192F8E7400223BDC /* STKAccoladeViewController.m in Sources */,
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
 				883D87DC19463E7F00195B11 /* UIImage+MPAverageColor.m in Sources */,
+				2C0D730619C0E4BB0078A9B9 /* HAAccountSelectionCell.m in Sources */,
 				BE1FC3BD186CC966003464E1 /* STKBaseStore.m in Sources */,
 				BE8076061923F48F00D558E0 /* STKMarkupUtilities.m in Sources */,
 				BEC01A1D182AF44600080601 /* STKGraphViewController.m in Sources */,

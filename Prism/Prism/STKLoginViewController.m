@@ -11,6 +11,7 @@
 #import "STKProcessingView.h"
 #import "STKLoginResetViewController.h"
 #import "Mixpanel.h"
+#import "UIViewController+STKControllerItems.h"
 
 @interface STKLoginViewController () <UITextFieldDelegate>
 
@@ -46,7 +47,19 @@
     [[self forgotPasswordButton] setAttributedTitle:str
                                            forState:UIControlStateNormal];
     [self.mixpanel track:@"Login Page loaded" properties:@{@"status":@"begin"}];
-    
+    if (![self presentingViewController]) {
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                               target:self action:@selector(back:)];
+        [[self navigationItem] setLeftBarButtonItem:bbi];
+        self.title = @"Add";
+    }
+
+}
+
+- (void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -60,7 +73,13 @@
                                       [STKProcessingView dismiss];
                                       if(!err) {
                                           [self.mixpanel track:@"Login Success" properties:@{@"status":@"success"}];
-                                          [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                          if ([self presentingViewController]) {
+                                              [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                          } else {
+                                              [[STKUserStore store] switchToUser:u];
+                                              [self.menuController recreateAllViewControllers];
+                                              [self dismissViewControllerAnimated:YES completion:nil];
+                                          }
                                           
                                           
                                           
