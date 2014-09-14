@@ -12,12 +12,14 @@
 #import "STKLoginResetViewController.h"
 #import "Mixpanel.h"
 #import "UIViewController+STKControllerItems.h"
+#import "UIERealTimeBlurView.h"
 
 @interface STKLoginViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *forgotPasswordButton;
 @property (weak, nonatomic) IBOutlet UITextField *emailField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) Mixpanel *mixpanel;
 
 - (IBAction)forgotPassword:(id)sender;
@@ -38,6 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.mixpanel = [Mixpanel sharedInstance];
     NSDictionary *attrs = @{NSForegroundColorAttributeName : [UIColor colorWithWhite:1 alpha:.8],
                             NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle),
@@ -54,6 +57,18 @@
         [[self navigationItem] setLeftBarButtonItem:bbi];
         self.title = @"Add";
     }
+   
+    
+    if (!self.presentingViewController) {
+        UIImage *i = [UIImage imageNamed:@"img_background"];
+        UIImageView *iv = [[UIImageView alloc] initWithImage:i];
+        [self.view insertSubview:iv atIndex:0];
+        CGRect frame = [[UIScreen mainScreen] bounds];
+        frame.size.height = 64;
+        UIERealTimeBlurView *blurView = [[UIERealTimeBlurView alloc] initWithFrame:frame];
+        [self.view addSubview:blurView];
+    }
+
 
 }
 
@@ -102,6 +117,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     [[self emailField] becomeFirstResponder];
 }
 

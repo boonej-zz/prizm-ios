@@ -548,7 +548,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
-            reversal();
+//            reversal();
             
             block(nil, err);
             return;
@@ -590,7 +590,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if(err) {
-            reversal();
+//            reversal();
             
             block(nil, err);
             return;

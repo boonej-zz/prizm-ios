@@ -39,7 +39,7 @@
     self.users = @[];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [self loadData];
-    self.title = @"Switch";
+    self.title = @"Profiles";
     [self layoutViews];
     [self.tableView setContentInset:UIEdgeInsetsMake(4, 0, 0, 0)];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
@@ -89,12 +89,12 @@
 }
 
 
-- (int)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
 
-- (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.users.count;
 }
