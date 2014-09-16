@@ -90,7 +90,7 @@ typedef enum {
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self fetchOlderPosts];
+    [self fetchNewPosts];
     [super viewDidAppear:animated];
 }
 

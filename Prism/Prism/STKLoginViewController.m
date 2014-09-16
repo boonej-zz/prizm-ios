@@ -55,7 +55,7 @@
                                                   landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                                target:self action:@selector(back:)];
         [[self navigationItem] setLeftBarButtonItem:bbi];
-        self.title = @"Add";
+        self.title = @"Add Profile";
     }
    
     
