@@ -688,7 +688,7 @@ const long STKCreateProgressGeocoding = 4;
         [[self user] setPhoneNumber:convertedPhoneNumber];
         return;
     }
-    [[Mixpanel sharedInstance] track:[NSString stringWithFormat:@"%@ entered", [item objectForKey:@"key"]]];
+    
     [[self user] setValue:text forKey:[item objectForKey:@"key"]];
 }
 
@@ -703,6 +703,8 @@ const long STKCreateProgressGeocoding = 4;
     [self setEditingIndexPath:ip];
 }
 
+
+
 - (void)textFieldShouldReturn:(UITextField *)textField
                   atIndexPath:(NSIndexPath *)ip
 {/*
@@ -716,6 +718,8 @@ const long STKCreateProgressGeocoding = 4;
             }
         }
     }*/
+    NSDictionary *item = [[self items] objectAtIndex:[ip row]];
+    [[Mixpanel sharedInstance] track:[NSString stringWithFormat:@"%@ entered", [item objectForKey:@"key"]]];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations

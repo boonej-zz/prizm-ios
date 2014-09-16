@@ -70,10 +70,12 @@
     [style setAlignment:NSTextAlignmentCenter];
     
     NSString *name = [profile name];
+    UIImage *luminaryIcon = [UIImage imageNamed:@"luminary_icon"];
     
     int fontSizeToFit = nameTextSize;
     UIFont *f = STKFont(fontSizeToFit);
-    
+    CGSize size = [name sizeWithAttributes:@{NSFontAttributeName: f}];
+    CGRect luminaryRect = CGRectMake((nameRect.origin.x + nameRect.size.width)/2 + (size.width / 2) + 30, nameRect.origin.y + 3, 32, 32);
     CGRect sizeRect = nameRect;
     int iterations = 16;
     
@@ -94,6 +96,10 @@
     
     
     [name drawInRect:nameRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : textColor, NSParagraphStyleAttributeName : style}];
+    
+    if ([profile isLuminary]) {
+        [luminaryIcon drawInRect:luminaryRect];
+    }
     
     
     CGRect textRect = CGRectMake(48, 320+centerToPromptPadding, 640 - 48 * 2, 64);
