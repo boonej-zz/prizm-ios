@@ -534,6 +534,26 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     
 }
 
+- (void)updateInterests:(NSArray *)interests forUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID], @"interests"]];
+        NSDictionary *dataDictionary = @{@"interests": interests};
+        [c addQueryValues:dataDictionary];
+        [c setModelGraph:@[user]];
+        [c setContext:[user managedObjectContext]];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+        
+    }];
+}
+
 - (void)updateUserDetails:(STKUser *)user completion:(void (^)(STKUser *u, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
@@ -767,7 +787,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         STKResolutionQuery *q = [STKResolutionQuery resolutionQueryForField:@"followers"];
-        [q setFormat:STKQueryObjectFormatShort];
+        [q setFormat:STKQueryObjectFormatBasic];
         [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
         [c setQueryObject:q];
 

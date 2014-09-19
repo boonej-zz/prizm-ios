@@ -25,3 +25,15 @@ NSDictionary * mixpanelDataForObject(id obj)
     }
     return [d copy];
 }
+
+CGPoint randomPointWithinContainer(CGSize containerSize, CGSize viewSize) {
+    CGFloat xRange = containerSize.width - viewSize.width;
+    CGFloat yRange = containerSize.height - viewSize.height;
+    
+    CGFloat minX = (containerSize.width - xRange) / 2;
+    CGFloat minY = (containerSize.height - yRange) / 2;
+    
+    int randomX = (arc4random() % (int)floorf(xRange)) + minX;
+    int randomY = (arc4random() % (int)floorf(yRange)) + minY;
+    return CGPointMake(randomX, randomY);
+}

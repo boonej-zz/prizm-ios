@@ -30,6 +30,7 @@
 #import "UIERealTimeBlurView.h"
 #import "Mixpanel.h"
 #import "STKPhoneNumberFormatter.h"
+#import "HAInterestsViewController.h"
 
 @import AddressBook;
 @import Social;
@@ -914,7 +915,15 @@ const long STKCreateProgressGeocoding = 4;
                                                        STKMenuController *menuController = (STKMenuController *)[self presentingViewController];
                                                        [menuController setSelectedViewController:[[menuController viewControllers] objectAtIndex:1]];
                                                    }
-                                                   [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+//                                                   [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                                                   HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
+                                                   [ivc setUser:user];
+                                                   UIViewController *pvc = [self presentingViewController];
+                                                   [self dismissViewControllerAnimated:NO completion:^{
+                                                       [pvc presentViewController:ivc animated:NO completion:nil];
+                                                   }];
+                                                   
+                                                  
                                                    
                                                    // profile created
                                                    // report event and type of account created

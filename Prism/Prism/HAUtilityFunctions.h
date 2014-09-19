@@ -9,3 +9,4 @@
 #import <Foundation/Foundation.h>
 
 NSDictionary * mixpanelDataForObject(id obj);
+CGPoint randomPointWithinContainer(CGSize containerSize, CGSize viewSize);

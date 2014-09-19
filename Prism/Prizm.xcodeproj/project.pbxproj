@@ -11,6 +11,9 @@
 		2C0D730719C0E4BB0078A9B9 /* HAAccountSelectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */; };
 		2C0D730B19C392F90078A9B9 /* HAFastSwitchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D730919C392F90078A9B9 /* HAFastSwitchViewController.m */; };
 		2C0D730C19C392F90078A9B9 /* HAFastSwitchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D730A19C392F90078A9B9 /* HAFastSwitchViewController.xib */; };
+		2C0D735219CB2B7A0078A9B9 /* HAHashTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D735119CB2B7A0078A9B9 /* HAHashTagView.m */; };
+		2C0D735619CB346B0078A9B9 /* HAInterestsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D735419CB346B0078A9B9 /* HAInterestsViewController.m */; };
+		2C0D735719CB346B0078A9B9 /* HAInterestsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */; };
 		2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
@@ -276,6 +279,11 @@
 		2C0D730819C392F90078A9B9 /* HAFastSwitchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAFastSwitchViewController.h; sourceTree = "<group>"; };
 		2C0D730919C392F90078A9B9 /* HAFastSwitchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAFastSwitchViewController.m; sourceTree = "<group>"; };
 		2C0D730A19C392F90078A9B9 /* HAFastSwitchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAFastSwitchViewController.xib; sourceTree = "<group>"; };
+		2C0D735019CB2B7A0078A9B9 /* HAHashTagView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHashTagView.h; sourceTree = "<group>"; };
+		2C0D735119CB2B7A0078A9B9 /* HAHashTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHashTagView.m; sourceTree = "<group>"; };
+		2C0D735319CB346B0078A9B9 /* HAInterestsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAInterestsViewController.h; sourceTree = "<group>"; };
+		2C0D735419CB346B0078A9B9 /* HAInterestsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAInterestsViewController.m; sourceTree = "<group>"; };
+		2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAInterestsViewController.xib; sourceTree = "<group>"; };
 		2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+STKLocation.h"; sourceTree = "<group>"; };
 		2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+STKLocation.m"; sourceTree = "<group>"; };
 		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
@@ -2661,6 +2669,9 @@
 				2C0D730819C392F90078A9B9 /* HAFastSwitchViewController.h */,
 				2C0D730919C392F90078A9B9 /* HAFastSwitchViewController.m */,
 				2C0D730A19C392F90078A9B9 /* HAFastSwitchViewController.xib */,
+				2C0D735319CB346B0078A9B9 /* HAInterestsViewController.h */,
+				2C0D735419CB346B0078A9B9 /* HAInterestsViewController.m */,
+				2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2720,6 +2731,8 @@
 				BEE84F5C192BFB2200820A19 /* STKLuminatingBar.m */,
 				D0E85B10197D7910001A5333 /* STKMessageBanner.h */,
 				D0E85B11197D7910001A5333 /* STKMessageBanner.m */,
+				2C0D735019CB2B7A0078A9B9 /* HAHashTagView.h */,
+				2C0D735119CB2B7A0078A9B9 /* HAHashTagView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -4919,6 +4932,7 @@
 				BE8F35E61833D48300C4ED03 /* STKPostCell.xib in Resources */,
 				BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */,
 				2C0D730719C0E4BB0078A9B9 /* HAAccountSelectionCell.xib in Resources */,
+				2C0D735719CB346B0078A9B9 /* HAInterestsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4985,6 +4999,7 @@
 				BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */,
 				BE1FC3B5186C8C0A003464E1 /* STKImageCollectionViewCell.m in Sources */,
 				BEC01A13182AF43000080601 /* STKProfileViewController.m in Sources */,
+				2C0D735619CB346B0078A9B9 /* HAInterestsViewController.m in Sources */,
 				BE02EAAF182A80A200A5505A /* main.m in Sources */,
 				BE3FFDF918AE9744005B531E /* STKAuthorizationToken.m in Sources */,
 				BE7B485D192BA02E00BDCE15 /* STKSegmentedPanel.m in Sources */,
@@ -5063,6 +5078,7 @@
 				BE654EA5188841A6006DCA5C /* Lookup.xcdatamodeld in Sources */,
 				BEE5F041187DD01C00CB5325 /* NSCharacterSet+STKURL.m in Sources */,
 				BE7AFA7B18EC9FDC00DA30A7 /* STKInstagramAuthViewController.m in Sources */,
+				2C0D735219CB2B7A0078A9B9 /* HAHashTagView.m in Sources */,
 				BE2B7E82191AB3E300E6F408 /* STKGraphView.m in Sources */,
 				BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
@@ -5573,8 +5589,8 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -5602,7 +5618,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "296594B0-9417-4F3C-B190-92AA4D0A6BAB";
+				PROVISIONING_PROFILE = "799d9569-cde1-4243-8ba5-9c96928a4324";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
