@@ -87,7 +87,7 @@
     _homeCellNib = [UINib nibWithNibName:@"STKPostCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
 
-    [[self tableView] setDelaysContentTouches:NO];
+//    [[self tableView] setDelaysContentTouches:NO];
 
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setRowHeight:401];
