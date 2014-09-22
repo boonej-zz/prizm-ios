@@ -85,7 +85,7 @@
     [[[self blurView] displayLink] setPaused:NO];
     [[self textView] becomeFirstResponder];
 
-    if([self editingPostText]) {
+    if([self editingPostText] && [self postHasText]) {
         [[self textView] setAttributedText:[STKMarkupUtilities renderedTextForText:[[self post] text] attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self resizeTextArea];
@@ -249,7 +249,8 @@
 
 - (BOOL)postHasText
 {
-    return [[[self post] text] length] > 0;
+    
+    return [[self post] text] ? [[[self post] text] length] > 0 : NO;
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
