@@ -13,12 +13,13 @@
 #import "UIERealTimeBlurView.h"
 #import "STKUserStore.h"
 #import "STKErrorStore.h"
+#import "UIViewController+STKControllerItems.h"
 
 @import MessageUI;
 
 @interface STKUserListViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (nonatomic, strong) STKUser *deletingUser;
 @end
 
@@ -47,13 +48,13 @@
                                                            target:self action:@selector(back:)];
     [[self navigationItem] setLeftBarButtonItem:bbi];
     
-    [[[self blurView] displayLink] setPaused:NO];
+//    [[[self blurView] displayLink] setPaused:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[[self blurView] displayLink] setPaused:YES];
+//    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (void)back:(id)sender
@@ -136,6 +137,7 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     [v setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setTableFooterView:v];
+    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

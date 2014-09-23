@@ -285,6 +285,7 @@ typedef enum {
     
     [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
     [[[self filterView] gridViewButton] setSelected:YES];
+    [self addBlurViewWithHeight:64.f];
 }
 
 

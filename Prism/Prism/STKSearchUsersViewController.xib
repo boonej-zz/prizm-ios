@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKSearchUsersViewController">
             <connections>
-                <outlet property="blurView" destination="4s0-yf-wvq" id="vly-jX-Jmc"/>
                 <outlet property="searchResultsTableView" destination="i2W-9G-KzE" id="Waz-TO-jgw"/>
                 <outlet property="searchTextField" destination="Tq5-eT-nmf" id="CJm-AW-auj"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -19,32 +18,20 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="jg2-PJ-oVD">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="i2W-9G-KzE">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="n5R-T7-cen"/>
                         <outlet property="delegate" destination="-1" id="Zb7-be-HTK"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4s0-yf-wvq" customClass="UIERealTimeBlurView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="114" id="2OH-jU-o8M"/>
-                    </constraints>
-                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aa6-D6-gwL">
                     <rect key="frame" x="0.0" y="64" width="320" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="explore_search_blue" translatesAutoresizingMaskIntoConstraints="NO" id="dCd-rF-xQO">
                             <rect key="frame" x="15" y="10" width="30" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="6X3-qd-KpR"/>
                                 <constraint firstAttribute="width" constant="30" id="fc5-uE-nto"/>
@@ -52,7 +39,6 @@
                         </imageView>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search by name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Tq5-eT-nmf">
                             <rect key="frame" x="53" y="10" width="264" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="7IU-tc-T4V"/>
                                 <constraint firstAttribute="height" constant="30" id="ed1-d4-lcH"/>
@@ -78,28 +64,28 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="4s0-yf-wvq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="4xE-8h-EcE"/>
                 <constraint firstAttribute="bottom" secondItem="i2W-9G-KzE" secondAttribute="bottom" id="D5i-HW-WML"/>
                 <constraint firstAttribute="trailing" secondItem="jg2-PJ-oVD" secondAttribute="trailing" id="I3k-g6-OaV"/>
                 <constraint firstAttribute="bottom" secondItem="jg2-PJ-oVD" secondAttribute="bottom" id="O8h-ld-ZSk"/>
-                <constraint firstItem="4s0-yf-wvq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="RdH-Tc-Onx"/>
                 <constraint firstItem="aa6-D6-gwL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="XE4-fY-pl3"/>
                 <constraint firstItem="jg2-PJ-oVD" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="YRk-Ht-KaM"/>
                 <constraint firstItem="i2W-9G-KzE" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="bH5-Lt-Zr5"/>
                 <constraint firstAttribute="trailing" secondItem="aa6-D6-gwL" secondAttribute="trailing" id="bJQ-6T-9bR"/>
-                <constraint firstAttribute="trailing" secondItem="4s0-yf-wvq" secondAttribute="trailing" id="crj-jc-b8S"/>
                 <constraint firstItem="aa6-D6-gwL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gJc-5z-zxB"/>
                 <constraint firstItem="jg2-PJ-oVD" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="hKS-sX-lwH"/>
                 <constraint firstItem="i2W-9G-KzE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hoM-zD-zjD"/>
                 <constraint firstAttribute="trailing" secondItem="i2W-9G-KzE" secondAttribute="trailing" id="ulD-VI-EfU"/>
             </constraints>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
         <image name="explore_search_blue" width="22" height="22"/>
         <image name="img_background" width="320" height="568"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

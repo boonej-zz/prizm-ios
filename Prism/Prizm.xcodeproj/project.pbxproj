@@ -18,6 +18,7 @@
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
 		2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */; };
+		2CA39E7D19D0A8CE001F9F0C /* STKHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */; };
 		2CB0126119A693D800B07C96 /* HAUtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */; };
 		2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB073D819AE634A00F70B7E /* HAFollowCell.m */; };
 		2CB073DB19AE634A00F70B7E /* HAFollowCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CB073D919AE634A00F70B7E /* HAFollowCell.xib */; };
@@ -183,7 +184,6 @@
 		BEB1687C190700F900CED5F7 /* STKSegmentedControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB1687A190700F900CED5F7 /* STKSegmentedControlCell.m */; };
 		BEB1687D190700F900CED5F7 /* STKSegmentedControlCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEB1687B190700F900CED5F7 /* STKSegmentedControlCell.xib */; };
 		BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A02182AF40800080601 /* STKHomeViewController.m */; };
-		BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A03182AF40800080601 /* STKHomeViewController.xib */; };
 		BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A07182AF41C00080601 /* STKExploreViewController.m */; };
 		BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BEC01A08182AF41C00080601 /* STKExploreViewController.xib */; };
 		BEC01A0E182AF42600080601 /* STKTrustViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC01A0C182AF42600080601 /* STKTrustViewController.m */; };
@@ -291,6 +291,7 @@
 		2C6969281982A71900E4B9FD /* STKIntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKIntroViewController.xib; sourceTree = "<group>"; };
 		2C6B263E199AA7E900A14BD8 /* NSArray+Reverse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Reverse.h"; sourceTree = "<group>"; };
 		2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Reverse.m"; sourceTree = "<group>"; };
+		2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeViewController.xib; sourceTree = "<group>"; };
 		2CB0125F19A693D800B07C96 /* HAUtilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAUtilityFunctions.h; sourceTree = "<group>"; };
 		2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAUtilityFunctions.m; sourceTree = "<group>"; };
 		2CB073D719AE634A00F70B7E /* HAFollowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAFollowCell.h; sourceTree = "<group>"; };
@@ -2266,7 +2267,6 @@
 		BEB1687B190700F900CED5F7 /* STKSegmentedControlCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSegmentedControlCell.xib; sourceTree = "<group>"; };
 		BEC01A01182AF40800080601 /* STKHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKHomeViewController.h; sourceTree = "<group>"; };
 		BEC01A02182AF40800080601 /* STKHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHomeViewController.m; sourceTree = "<group>"; };
-		BEC01A03182AF40800080601 /* STKHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeViewController.xib; sourceTree = "<group>"; };
 		BEC01A06182AF41C00080601 /* STKExploreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKExploreViewController.h; sourceTree = "<group>"; };
 		BEC01A07182AF41C00080601 /* STKExploreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKExploreViewController.m; sourceTree = "<group>"; };
 		BEC01A08182AF41C00080601 /* STKExploreViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKExploreViewController.xib; sourceTree = "<group>"; };
@@ -2550,6 +2550,7 @@
 		BE02EAD4182A81B000A5505A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */,
 				BE02EAB1182A80A200A5505A /* STKAppDelegate.h */,
 				BE02EAB2182A80A200A5505A /* STKAppDelegate.m */,
 				BEF7A08A1843AEAB00A3AFFB /* STKPanelViewController.h */,
@@ -2559,7 +2560,6 @@
 				BE02EAD2182A81AC00A5505A /* STKMenuController.m */,
 				BEC01A01182AF40800080601 /* STKHomeViewController.h */,
 				BEC01A02182AF40800080601 /* STKHomeViewController.m */,
-				BEC01A03182AF40800080601 /* STKHomeViewController.xib */,
 				BEC01A06182AF41C00080601 /* STKExploreViewController.h */,
 				BEC01A07182AF41C00080601 /* STKExploreViewController.m */,
 				BEC01A08182AF41C00080601 /* STKExploreViewController.xib */,
@@ -4877,7 +4877,6 @@
 				BED773FF1890A5BB008770F0 /* STKCaptureViewController.xib in Resources */,
 				BECA9F1F1937CAF600AABA20 /* STKAccoladeUserListViewController.xib in Resources */,
 				883D87D019463E7F00195B11 /* MPCloseBtn.png in Resources */,
-				BEC01A05182AF40800080601 /* STKHomeViewController.xib in Resources */,
 				BE1FC3B7186C8C22003464E1 /* STKImageCollectionViewCell.xib in Resources */,
 				BE778C4618BBF82000DA5EDD /* STKFilterCell.xib in Resources */,
 				BE9CC7A718FDFF480097D308 /* STKLuminariesCell.xib in Resources */,
@@ -4918,6 +4917,7 @@
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
 				88053313193E6F2300A8E44D /* STKSearchTrustCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
+				2CA39E7D19D0A8CE001F9F0C /* STKHomeViewController.xib in Resources */,
 				BE8150D31982D3860094C7A8 /* Localizable.strings in Resources */,
 				BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */,
 				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,

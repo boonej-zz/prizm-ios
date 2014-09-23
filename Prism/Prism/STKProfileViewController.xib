@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKProfileViewController">
             <connections>
-                <outlet property="blurView" destination="Xxc-HM-7qT" id="dAB-Xm-9bx"/>
                 <outlet property="luminatingBar" destination="I98-XS-S6S" id="WXO-sh-fGF"/>
                 <outlet property="tableView" destination="rRt-hT-A27" id="Uad-dm-g6j"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -19,15 +18,12 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="ist-ZS-7cO">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dgj-jg-mYk" userLabel="Profile Deactivated View">
                     <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This profile has been deactivated." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y54-fJ-7MW">
                             <rect key="frame" x="20" y="274" width="280" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -37,37 +33,24 @@
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="rRt-hT-A27">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="UKN-xi-D5m"/>
                         <outlet property="delegate" destination="-1" id="veQ-dl-7LR"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I98-XS-S6S" customClass="STKLuminatingBar">
+                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I98-XS-S6S" customClass="STKLuminatingBar">
                     <rect key="frame" x="0.0" y="64" width="320" height="4"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="4" id="cvu-Hg-Kgi"/>
-                    </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xxc-HM-7qT" customClass="UIERealTimeBlurView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="64" id="cYu-gE-Iql"/>
                     </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.77970023777173914" green="0.77970023777173914" blue="0.77970023777173914" alpha="0.0" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="rRt-hT-A27" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="4uz-wy-rNa"/>
-                <constraint firstItem="Xxc-HM-7qT" firstAttribute="top" secondItem="1" secondAttribute="top" id="6IK-de-lNi"/>
-                <constraint firstItem="Xxc-HM-7qT" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="7NX-WT-3dG"/>
                 <constraint firstAttribute="trailing" secondItem="rRt-hT-A27" secondAttribute="trailing" id="EPV-9t-ohX"/>
-                <constraint firstItem="I98-XS-S6S" firstAttribute="top" secondItem="Xxc-HM-7qT" secondAttribute="bottom" id="FOt-5h-Nuq"/>
                 <constraint firstAttribute="bottom" secondItem="rRt-hT-A27" secondAttribute="bottom" id="Fhy-vb-PeS"/>
                 <constraint firstItem="Dgj-jg-mYk" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="Sdm-FT-wcV"/>
                 <constraint firstAttribute="trailing" secondItem="Dgj-jg-mYk" secondAttribute="trailing" id="Vwo-o2-Uzm"/>
@@ -75,15 +58,17 @@
                 <constraint firstItem="rRt-hT-A27" firstAttribute="top" secondItem="1" secondAttribute="top" id="lmC-tC-pRm"/>
                 <constraint firstItem="I98-XS-S6S" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="n90-Hu-hg3"/>
                 <constraint firstItem="Dgj-jg-mYk" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="nYQ-Do-Ejc"/>
-                <constraint firstAttribute="trailing" secondItem="Xxc-HM-7qT" secondAttribute="trailing" id="yxb-IK-ehc"/>
                 <constraint firstAttribute="trailing" secondItem="I98-XS-S6S" secondAttribute="trailing" id="zqj-ar-7dm"/>
             </constraints>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
         <image name="img_background" width="320" height="568"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

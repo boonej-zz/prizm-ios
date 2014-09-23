@@ -21,5 +21,6 @@
 
 - (void)menuWillAppear:(BOOL)animated;
 - (void)menuWillDisappear:(BOOL)animated;
+- (void)addBlurViewWithHeight:(double)height;
 
 @end

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKUserPostListViewController">
@@ -10,8 +10,6 @@
                 <outlet property="achivementButton" destination="qAP-Qu-4Rj" id="XKk-hu-GY4"/>
                 <outlet property="aspirationButton" destination="MQx-zI-aQv" id="Tyb-ka-TD2"/>
                 <outlet property="aspirationExperienceConstraint" destination="PP3-ER-Ooi" id="nsH-2W-GDk"/>
-                <outlet property="blurView" destination="Xc3-2h-k1Z" id="PvX-rM-kyl"/>
-                <outlet property="blurViewHeightConstraint" destination="Il0-7U-xDb" id="gxW-5k-lN7"/>
                 <outlet property="experienceAchievementConstraint" destination="v9w-8D-orp" id="jk2-rA-Y4X"/>
                 <outlet property="experienceButton" destination="DGT-3s-4Nk" id="UFU-vd-0T7"/>
                 <outlet property="filterBar" destination="JUn-fv-37I" id="EVL-q0-Oin"/>
@@ -35,36 +33,24 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="TCM-Ns-ZEc">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="p2O-ze-zq3"/>
                         <outlet property="delegate" destination="-1" id="O52-C7-rFc"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nt0-Bx-rU5" customClass="STKLuminatingBar">
-                    <rect key="frame" x="-0.5" y="115" width="320" height="4"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nt0-Bx-rU5" customClass="STKLuminatingBar">
+                    <rect key="frame" x="-1" y="115" width="320" height="4"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="4" id="EnW-yv-8l2"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xc3-2h-k1Z" customClass="UIERealTimeBlurView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="115"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="115" id="Il0-7U-xDb"/>
-                    </constraints>
-                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JUn-fv-37I">
                     <rect key="frame" x="0.0" y="65" width="320" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQx-zI-aQv">
                             <rect key="frame" x="6" y="0.0" width="48" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="48" id="NYd-o0-Rwb"/>
                                 <constraint firstAttribute="height" constant="48" id="die-pM-19r"/>
@@ -79,7 +65,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u3g-QQ-nyU">
                             <rect key="frame" x="58" y="0.0" width="48" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="48" id="22c-w9-QB4"/>
                                 <constraint firstAttribute="width" constant="48" id="oQ9-Lr-xvX"/>
@@ -94,7 +79,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGT-3s-4Nk">
                             <rect key="frame" x="110" y="0.0" width="48" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="48" id="251-Cl-VGm"/>
                                 <constraint firstAttribute="width" constant="48" id="hcW-1t-ba0"/>
@@ -109,7 +93,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAP-Qu-4Rj">
                             <rect key="frame" x="162" y="0.0" width="48" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="48" id="Bu6-nW-zaF"/>
                                 <constraint firstAttribute="height" constant="48" id="KbW-pZ-iRL"/>
@@ -124,7 +107,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H5K-Hv-SNX">
                             <rect key="frame" x="214" y="0.0" width="48" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="48" id="JtI-Da-XgD"/>
                                 <constraint firstAttribute="width" constant="48" id="Uiq-1y-G1g"/>
@@ -139,7 +121,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="THA-mD-uDP">
                             <rect key="frame" x="266" y="0.0" width="48" height="48"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="48" id="Lqw-eF-6yH"/>
                                 <constraint firstAttribute="width" constant="48" id="S9X-rm-Wt7"/>
@@ -176,21 +157,16 @@
             <constraints>
                 <constraint firstItem="JUn-fv-37I" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="65" id="1sy-Ut-FHn"/>
                 <constraint firstItem="TCM-Ns-ZEc" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="236-Wb-YCf"/>
-                <constraint firstItem="Xc3-2h-k1Z" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="54d-AK-krL"/>
                 <constraint firstItem="JUn-fv-37I" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="80H-8z-tTw"/>
                 <constraint firstAttribute="trailing" secondItem="nt0-Bx-rU5" secondAttribute="trailing" id="9b2-84-Qz3"/>
-                <constraint firstAttribute="trailing" secondItem="Xc3-2h-k1Z" secondAttribute="trailing" id="AVZ-Hn-bMS"/>
                 <constraint firstAttribute="trailing" secondItem="JUn-fv-37I" secondAttribute="trailing" id="EzE-5I-pol"/>
                 <constraint firstItem="nt0-Bx-rU5" firstAttribute="top" secondItem="JUn-fv-37I" secondAttribute="bottom" id="ace-6W-Woh"/>
                 <constraint firstAttribute="bottom" secondItem="TCM-Ns-ZEc" secondAttribute="bottom" id="gXF-fV-MrL"/>
                 <constraint firstAttribute="trailing" secondItem="TCM-Ns-ZEc" secondAttribute="trailing" id="k5f-S4-K6E"/>
                 <constraint firstItem="TCM-Ns-ZEc" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="mnr-k8-dvh"/>
-                <constraint firstItem="Xc3-2h-k1Z" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="sTs-RL-78b"/>
                 <constraint firstItem="nt0-Bx-rU5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="z8U-Vc-Vnu"/>
             </constraints>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
@@ -207,4 +183,9 @@
         <image name="category_personal_disabled" width="24" height="23"/>
         <image name="category_personal_selected" width="24" height="23"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

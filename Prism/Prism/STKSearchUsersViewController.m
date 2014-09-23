@@ -22,7 +22,7 @@
 
 @property (nonatomic, assign) STKSearchUsersType searchType;
 @property (nonatomic, strong) NSArray *filterPostOptions;
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 @property (weak, nonatomic) IBOutlet UITableView *searchResultsTableView;
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
@@ -70,8 +70,10 @@
     [v setBackgroundColor:[UIColor clearColor]];
     [[self searchResultsTableView] setTableFooterView:v];
     
-    CGFloat tableContentInsetTop = [[self blurView] frame].size.height;
+    CGFloat tableContentInsetTop = 114.f;
     [[self searchResultsTableView] setContentInset:UIEdgeInsetsMake(tableContentInsetTop, 0, 0, 0)];
+    [self addBlurViewWithHeight:114.f];
+    [self.view bringSubviewToFront:self.searchTextField];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -84,7 +86,7 @@
 {
     [super viewWillAppear:animated];
     
-    [[[self blurView] displayLink] setPaused:NO];
+//    [[[self blurView] displayLink] setPaused:NO];
     [self reloadSearchResults];
     
     if ([self searchType] == STKSearchUsersTypeNotInTrust) {
@@ -100,7 +102,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[[self blurView] displayLink] setPaused:NO];
+//    [[[self blurView] displayLink] setPaused:NO];
     
     [[self searchTextField] setText:nil];
 }

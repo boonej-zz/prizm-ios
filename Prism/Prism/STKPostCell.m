@@ -206,6 +206,22 @@
     
     [[self contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
     [[self contentImageView] setLoadingContentMode:UIViewContentModeCenter];
+    
+    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    //        UIView *bg = [[UIView alloc] initWithCoder:frame];
+    CGRect frame = [self.headerView frame];
+    UIVisualEffectView  *blurview = [[UIVisualEffectView alloc] initWithEffect:blur];
+//    UIVibrancyEffect *vib = [UIVibrancyEffect effectForBlurEffect:blur];
+//    [blurview setFrame:frame];
+//    [self.headerView insertSubview:blurview atIndex:0];
+    //        [[vibView contentView] addSubview:self.tableView];
+//    [[(UIVisualEffectView *)view contentView] addSubview:vibView];
+    
+    
+    //        [view setBackgroundColor:[UIColor clearColor]];
+    //        [view setTintColor:[UIColor clearColor]];
+//    [view setFrame:frame];
+
 }
 
 @end

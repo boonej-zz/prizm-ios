@@ -26,6 +26,7 @@
 #import "STKExploreViewController.h"
 #import "STKInviteFriendsViewController.h"
 #import <Crashlytics/Crashlytics.h>
+#import "UIERealTimeBlurView.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
@@ -104,7 +105,10 @@
     
     
     [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
+    [self addBlurViewWithHeight:64.f];
 }
+
+
 
 - (STKPostCell *)cardCellForIndexPath:(NSIndexPath *)ip
 {

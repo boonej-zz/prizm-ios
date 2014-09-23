@@ -33,7 +33,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *filterViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *filterBar;
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (nonatomic, strong) STKPostController *postController;
 @property (nonatomic) BOOL allowPersonalFilter;
 @property (weak, nonatomic) IBOutlet UIButton *passionButton;
@@ -164,7 +164,7 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
     [[self filterBar] setHidden:![self showsFilterBar]];
     if(![self showsFilterBar]) {
         [[self filterViewHeightConstraint] setConstant:0];
-        [[self blurViewHeightConstraint] setConstant:[[self blurViewHeightConstraint] constant] - [[self filterBar] bounds].size.height];
+//        [[self blurViewHeightConstraint] setConstant:[[self blurViewHeightConstraint] constant] - [[self filterBar] bounds].size.height];
     } else {
         [[self filterViewHeightConstraint] setConstant:STKUserPostListFilterViewHeight];
     }
@@ -172,12 +172,13 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self addBlurViewWithHeight:115.f];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[[self blurView] displayLink] setPaused:NO];
+//    [[[self blurView] displayLink] setPaused:NO];
     if([self showsFilterBar]) {
         [[self filterViewHeightConstraint] setConstant:STKUserPostListFilterViewHeight];
         [[self tableView] setContentInset:UIEdgeInsetsMake([[self filterBar] bounds].size.height + [[self filterBar] frame].origin.y, 0, 0, 0)];
@@ -278,7 +279,7 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[[self blurView] displayLink] setPaused:YES];
+//    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (void)back:(id)sender

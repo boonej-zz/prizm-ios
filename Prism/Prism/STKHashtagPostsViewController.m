@@ -86,6 +86,7 @@
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setContentInset:UIEdgeInsetsMake(109, 0, 0, 0)];
+    [self addBlurViewWithHeight:109.f];
     
 }
 

@@ -68,7 +68,7 @@
 @property (nonatomic, strong) NSMutableArray *comments;
 
 @property (strong, nonatomic) IBOutlet UIView *editView;
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *fakeHeaderContainerTopConstraint;
 
 - (IBAction)transitionToCommentScreen:(id)sender;
@@ -285,13 +285,14 @@
     [footerView setBackgroundColor:[UIColor clearColor]];
     
     [[self tableView] setTableFooterView:footerView];
+    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [[[self blurView] displayLink] setPaused:NO];
+//    [[[self blurView] displayLink] setPaused:NO];
     
     STKPostCell *c = [STKPostCell cellForTableView:[self tableView] target:[self postController]];
     [c setOverrideLoadingImage:[[self menuController] transitioningImage]];
@@ -385,7 +386,7 @@
 {
     [super viewWillDisappear:animated];
     
-    [[[self blurView] displayLink] setPaused:YES];
+//    [[[self blurView] displayLink] setPaused:YES];
     
     [[self navigationController] setNavigationBarHidden:NO];
     
