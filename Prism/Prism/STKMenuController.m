@@ -29,6 +29,7 @@
 #import "STKMessageBanner.h"
 #import "STKUserStore.h"
 #import "HAFastSwitchViewController.h"
+#import "HAInterestsViewController.h"
 
 @import QuartzCore;
 
@@ -658,7 +659,16 @@ static BOOL HAActivityIsAnimating = NO;
     [self.view addSubview:self.rightNotificationView];
     [self.view addSubview:self.centerNotificationView];
     [self.view addSubview:self.leftNotificationView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newUserRegistered:) name:@"didRegisterNewAccount" object:nil];
     
+}
+
+- (void)newUserRegistered:(NSNotification *)note
+{
+    HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
+    STKUser *user = [[note userInfo] objectForKey:@"user"];
+    [ivc setUser:user];
+    [self.navigationController pushViewController:ivc animated:NO];
 }
 
 - (UIViewController *)childViewControllerForType:(Class)cls

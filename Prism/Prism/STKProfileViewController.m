@@ -150,9 +150,9 @@ typedef enum {
     
     
     if([self profile]) {
-        NSArray *additionalFields = @[@"zip_postal"];
+        NSArray *additionalFields = @[@"zip_postal", @"interests"];
         if([[self profile] isInstitution]) {
-            additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email", @"zip_postal"];
+            additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email", @"zip_postal", @"interests"];
         }
 
         __weak id ws = self;

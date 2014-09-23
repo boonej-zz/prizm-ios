@@ -24,6 +24,8 @@
 @property (nonatomic, getter = isSelected) BOOL selected;
 @property (nonatomic, strong) UILabel * textLabel;
 
+
 - (void)presentAndDismiss;
+- (void)markSelected;
 
 @end

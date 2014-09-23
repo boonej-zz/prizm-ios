@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKSettingsViewController">
             <connections>
-                <outlet property="blurView" destination="bO3-Aq-BAf" id="hw8-vo-zM1"/>
                 <outlet property="tableView" destination="X5o-c3-ekW" id="LIP-y2-X9W"/>
                 <outlet property="view" destination="iN0-l3-epB" id="Zhz-xz-a2o"/>
             </connections>
@@ -25,26 +24,14 @@
                         <outlet property="delegate" destination="-1" id="QsE-X0-hAN"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bO3-Aq-BAf" customClass="UIERealTimeBlurView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="64" id="FGx-6z-1Qb"/>
-                    </constraints>
-                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="bO3-Aq-BAf" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="1pp-z1-0m1"/>
-                <constraint firstAttribute="trailing" secondItem="bO3-Aq-BAf" secondAttribute="trailing" id="88D-gV-B4U"/>
-                <constraint firstItem="bO3-Aq-BAf" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="M02-Bn-rLH"/>
+                <constraint firstItem="X5o-c3-ekW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="PqX-1t-4uD"/>
                 <constraint firstAttribute="bottom" secondItem="X5o-c3-ekW" secondAttribute="bottom" id="PyV-2f-Oa6"/>
-                <constraint firstItem="X5o-c3-ekW" firstAttribute="trailing" secondItem="bO3-Aq-BAf" secondAttribute="trailing" id="QoJ-CW-Jbn"/>
-                <constraint firstItem="bO3-Aq-BAf" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Wgs-gP-0eA"/>
-                <constraint firstItem="X5o-c3-ekW" firstAttribute="leading" secondItem="bO3-Aq-BAf" secondAttribute="leading" id="anr-x2-kNF"/>
-                <constraint firstItem="X5o-c3-ekW" firstAttribute="top" secondItem="bO3-Aq-BAf" secondAttribute="top" id="d5f-wH-IV5"/>
-                <constraint firstAttribute="trailing" secondItem="bO3-Aq-BAf" secondAttribute="trailing" id="gIG-iB-Wzc"/>
-                <constraint firstItem="bO3-Aq-BAf" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="yt6-xW-vT3"/>
+                <constraint firstAttribute="trailing" secondItem="X5o-c3-ekW" secondAttribute="trailing" id="WpS-M4-DGN"/>
+                <constraint firstItem="X5o-c3-ekW" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Zub-Re-Hcj"/>
+                <constraint firstAttribute="bottom" secondItem="X5o-c3-ekW" secondAttribute="bottom" id="fDT-To-Qcr"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
         </view>

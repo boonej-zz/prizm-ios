@@ -5805,7 +5805,7 @@
 				2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */,
 				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
 			);
-			currentVersion = BEFAC198183D4DCF005E8933 /* User.xcdatamodel */;
+			currentVersion = 2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */;
 			path = User.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

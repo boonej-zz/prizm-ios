@@ -93,6 +93,14 @@
     }
 }
 
+- (void)markSelected
+{
+    self.center = randomPointWithinContainer(self.superview.bounds.size, self.bounds.size);
+    [self setAlpha:1.f];
+    self.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    [self.textLabel setTextColor:[UIColor whiteColor]];
+}
+
 
 
 /*

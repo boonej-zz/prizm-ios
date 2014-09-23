@@ -289,7 +289,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     if(![psc addPersistentStoreWithType:NSSQLiteStoreType
                           configuration:nil
                                     URL:[NSURL fileURLWithPath:path]
-                                options:nil
+                                options:@{NSMigratePersistentStoresAutomaticallyOption: @YES, NSInferMappingModelAutomaticallyOption: @YES}
                                   error:&error]) {
         [NSException raise:@"Open failed" format:@"Reason %@", [error localizedDescription]];
     }
@@ -415,6 +415,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 return;
             }
         }
+    } else {
+        [self setSignedInUsers:[NSMutableArray array]];
+        [[NSUserDefaults standardUserDefaults] setObject:[self.signedInUsers copy] forKey:HAUserStoreLoggedInUsersKey];
     }
     
     NSManagedObjectContext *ctx = [self userContextForPath:dbPath];
