@@ -15,13 +15,13 @@
 #import "STKPostViewController.h"
 #import "STKLocationViewController.h"
 #import "STKProfileViewController.h"
+#import "UIViewController+STKControllerItems.h"
 
 @interface HAFollowViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *users;
 @property (nonatomic, strong) NSMutableArray *posts;
-@property (nonatomic, weak) IBOutlet UIERealTimeBlurView *blurView;
 
 @end
 
@@ -38,7 +38,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [[[self blurView] displayLink] setPaused:NO];
+
 //    [[self blurView] setAlpha:0.0f];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
                                               landscapeImagePhone:nil style:UIBarButtonItemStylePlain
@@ -50,7 +50,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (void)back:(id)sender
@@ -67,6 +66,7 @@
     UIView *blankView = [[UIView alloc] init];
     [blankView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self addBlurViewWithHeight:64.f];
     [[STKUserStore store] searchUsersWithType:@"luminary" completion:^(NSArray *profiles, NSError *err) {
         NSPredicate *notFollowing = [NSPredicate predicateWithBlock:^BOOL(STKUser *user, NSDictionary *bindings) {
             return (![user isFollowedByUser:[[STKUserStore store] currentUser]]) && user.postCount > 2;
@@ -89,6 +89,7 @@
            }];
         }];
     }];
+    
     
     
 }

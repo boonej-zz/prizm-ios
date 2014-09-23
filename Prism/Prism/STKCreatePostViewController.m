@@ -237,10 +237,13 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }
 }
 
+
 - (void)textViewDidChange:(UITextView *)textView
 {
     [[self markupController] textView:textView updatedWithText:[textView text]];
-
+    [textView setFont:STKFont(14)];
+    [textView setTintColor:STKTextColor];
+//    [self resizeTextArea];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView
@@ -287,6 +290,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     
     [[self postTextView] setText:STKCreatePostPlaceholderText];
     [[self postTextView] setInputAccessoryView:[[self markupController] view]];
+    [self.postTextView setFont:STKFont(14)];
+    [self.postTextView setTintColor:STKTextColor];
     
     [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];

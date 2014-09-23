@@ -21,6 +21,8 @@
 #import "STKInviteFriendsViewController.h"
 #import "STKWebViewController.h"
 #import "HAFollowViewController.h"
+#import "HAInterestsViewController.h"
+#import "UIViewController+STKControllerItems.h"
 
 //#import "TMAPIClient.h"
 
@@ -55,12 +57,13 @@
 
 //        [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Settings"];
-        [self setAutomaticallyAdjustsScrollViewInsets:NO];
+        [self setAutomaticallyAdjustsScrollViewInsets:YES];
         [self setSettings:items];
         if(![self settings]) {
             _settings = @[
                           @{@"title" : @"Who to Follow", @"type" : @"STKLabelCell", @"selectionSelector": @"whoToFollow:"},
                           @{@"title" : @"Friends", @"type" : @"STKLabelCell", @"next" : [self friendsSettings]},
+                          @{@"title" : @"Interests", @"type" : @"STKLabelCell", @"selectionSelector" : @"showInterests:"},
                           
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
                           @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]},
@@ -87,6 +90,13 @@
 {
     HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
     [self.navigationController pushViewController:fvc animated:YES];
+}
+
+- (void)showInterests:(id)sender
+{
+    HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
+    [ivc setUser:[[STKUserStore store] currentUser]];
+    [self.navigationController pushViewController:ivc animated:YES];
 }
 
 - (NSArray *)friendsSettings
@@ -409,7 +419,9 @@
     [self setLogoutButton:b];
     
     [[self tableView] setTableFooterView:v];
-    [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
+//    [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
+    [self addBlurViewWithHeight:65.f];
+
 }
 
 - (void)logout:(id)sender
@@ -558,7 +570,7 @@
         [[cell overlayView] setBackgroundColor:[UIColor clearColor]];
         [[cell label] setText:[self titleForIndexPath:indexPath]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        if ([[cell label].text isEqualToString:@"Who to Follow"]) {
+        if ([[cell label].text isEqualToString:@"Who to Follow"] || [[cell label].text isEqualToString:@"Interests"]) {
             UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_right"]];
             [cell setAccessoryView:iv];
         }

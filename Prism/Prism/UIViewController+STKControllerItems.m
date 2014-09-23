@@ -12,6 +12,7 @@
 #import "STKNavigationButton.h"
 #import "STKUserStore.h"
 #import "HAFastSwitchViewController.h"
+#import "UIERealTimeBlurView.h"
 
 @implementation UIViewController (STKMenuControllerExtensions)
 
@@ -133,6 +134,25 @@
 - (void)showSettings:(id)sender
 {
     
+}
+
+- (void)addBlurViewWithHeight:(double)height
+{
+    CGRect frame = self.view.bounds;
+    frame.size.height = height;
+    UIView *view = nil;
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        view = [[UIERealTimeBlurView alloc] initWithFrame:frame];
+    } else {
+        UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        view = [[UIVisualEffectView alloc] initWithEffect:blur];
+        UIView *dv = [[UIView alloc] initWithFrame:frame];
+        [dv setBackgroundColor:[UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.35f]];
+        [[(UIVisualEffectView *)view contentView] addSubview:dv];
+        
+        [view setFrame:frame];
+    }
+    [self.view addSubview:view];
 }
 
 @end

@@ -15,6 +15,7 @@
 #import "UIERealTimeBlurView.h"
 #import "STKInviteFriendsShareCell.h"
 #import "STKProcessingView.h"
+#import "UIViewController+STKControllerItems.h"
 
 @import Social;
 @import MessageUI;
@@ -28,7 +29,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
     UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 
 @property (nonatomic, strong) UIImage *shareCard;
@@ -70,7 +71,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
 {
     [super viewWillAppear:animated];
     
-    [[[self blurView] displayLink] setPaused:NO];
+//    [[[self blurView] displayLink] setPaused:NO];
     
     NSMutableArray *serviceTypes = [NSMutableArray array];
     if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
@@ -100,7 +101,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
 {
     [super viewWillDisappear:animated];
     
-    [[[self blurView] displayLink] setPaused:YES];
+//    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (void)setShareCard:(UIImage *)shareCard
@@ -122,6 +123,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setSeparatorColor:STKTextTransparentColor];
+    [self addBlurViewWithHeight:44.f];
 }
 
 - (void)configureInterface

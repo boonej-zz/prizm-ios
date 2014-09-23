@@ -22,6 +22,7 @@
 #import "STKUserListViewController.h"
 #import "STKWebViewController.h"
 #import "STKHashtagPostsViewController.h"
+#import "UIViewController+STKControllerItems.h"
 
 @interface STKCreateCommentViewController ()
     <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, STKMarkupControllerDelegate, UITextViewDelegate>
@@ -32,7 +33,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *heightContainerConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomTableConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *postButton;
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 @property (nonatomic, strong) NSMutableArray *comments;
 @property (nonatomic, strong) STKMarkupController *markupController;
@@ -72,17 +73,16 @@
     [_markupController setHidesDoneButton:YES];
     [_markupController setAllowsAllUserTagging:YES];
     [[self view] addSubview:[[self markupController] view]];
-    
+    [self addBlurViewWithHeight:64.f];
     if([self editingPostText]) {
         [[self postButton] setTitle:@"Edit" forState:UIControlStateNormal];
     }
-    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[[self blurView] displayLink] setPaused:NO];
     [[self textView] becomeFirstResponder];
 
     if([self editingPostText] && [self postHasText]) {
@@ -108,7 +108,6 @@
 {
     [super viewWillDisappear:animated];
     
-    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (IBAction)postComment:(id)sender

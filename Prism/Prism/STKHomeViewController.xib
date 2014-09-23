@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKHomeViewController">
             <connections>
-                <outlet property="blurView" destination="nSw-v7-q76" id="mJE-cZ-AYE"/>
                 <outlet property="cardView" destination="zG8-p2-yL4" id="Mud-bI-fhi"/>
                 <outlet property="cardViewTopOffset" destination="1oo-KL-GCl" id="XeP-hY-33H"/>
                 <outlet property="instructionView" destination="dhA-RV-lrR" id="MEm-AC-Qb7"/>
@@ -43,13 +43,6 @@
                     <color key="backgroundColor" red="0.70119720810596342" green="0.49681844822052179" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="98" id="IoE-m0-0LT"/>
-                    </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nSw-v7-q76" customClass="UIERealTimeBlurView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="64" id="zqI-ke-EYD"/>
                     </constraints>
                 </view>
                 <view hidden="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dhA-RV-lrR" userLabel="Instruction View">
@@ -170,10 +163,7 @@
                 <constraint firstItem="Mbq-bp-RoN" firstAttribute="top" secondItem="1" secondAttribute="top" id="U9M-p7-tZu"/>
                 <constraint firstItem="yEA-J2-5KI" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="UTS-MK-4XN"/>
                 <constraint firstAttribute="trailing" secondItem="zG8-p2-yL4" secondAttribute="trailing" constant="10" id="VwV-My-DFI"/>
-                <constraint firstItem="nSw-v7-q76" firstAttribute="top" secondItem="1" secondAttribute="top" id="WNq-vA-s3E"/>
                 <constraint firstAttribute="trailing" secondItem="dhA-RV-lrR" secondAttribute="trailing" id="Ypr-aS-dvj"/>
-                <constraint firstAttribute="trailing" secondItem="nSw-v7-q76" secondAttribute="trailing" id="Z8S-Hh-m6y"/>
-                <constraint firstItem="nSw-v7-q76" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="exS-f0-IDB"/>
                 <constraint firstAttribute="bottom" secondItem="Mbq-bp-RoN" secondAttribute="bottom" id="lSe-zX-iaq"/>
                 <constraint firstAttribute="trailing" secondItem="Wsg-NP-6jI" secondAttribute="trailing" id="lbF-Uk-qf9"/>
                 <constraint firstItem="yEA-J2-5KI" firstAttribute="top" secondItem="1" secondAttribute="top" id="lyr-Di-eWR"/>

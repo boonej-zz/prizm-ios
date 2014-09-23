@@ -44,7 +44,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 
 
 @implementation STKUser
-@dynamic uniqueID, birthday, city, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
+@dynamic uniqueID, birthday, city, interests, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
@@ -74,6 +74,13 @@ tumblrTokenSecret, tumblrLastMinID;
              @"state" : @"state",
              @"zip_postal" : @"zipCode",
              @"gender" : @"gender",
+             @"interests" : [STKBind bindMapForKey:@"interests" transform:^id(id inValue, STKTransformDirection direction) {
+                 if ([inValue isKindOfClass:[NSArray class]]) {
+                     return [inValue componentsJoinedByString:@","];
+                 } else {
+                     return @"";
+                 }
+             }],
              
              @"info" : @"blurb",
              @"website" : @"website",

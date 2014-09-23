@@ -46,6 +46,7 @@
                                               landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                            target:self action:@selector(back:)];
     [[self navigationItem] setLeftBarButtonItem:bbi];
+    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)back:(id)sender

@@ -359,6 +359,7 @@ const long STKCreateProgressGeocoding = 4;
     
     [[self avatarView] setOutlineWidth:3];
     [[self avatarView] setOutlineColor:STKTextColor];
+    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -600,7 +601,7 @@ const long STKCreateProgressGeocoding = 4;
             [STKProcessingView present];
             NSArray *additionalFields = nil;
             if([[self user] isInstitution]) {
-                additionalFields = @[@"zip_postal", @"date_founded", @"mascot", @"enrollment", @"phone_number"];
+                additionalFields = @[@"zip_postal", @"date_founded", @"mascot", @"enrollment", @"phone_number", @"interests"];
             } else {
                 additionalFields = @[@"zip_postal", @"birthday", @"gender"];
             }
@@ -656,7 +657,7 @@ const long STKCreateProgressGeocoding = 4;
 {
     NSArray *visibleCells = [[self tableView] visibleCells];
     
-    __block int zipIndex = -1;
+    __block long zipIndex = -1;
     [[self items] enumerateObjectsUsingBlock:^(NSDictionary *d, NSUInteger idx, BOOL *stop) {
         if([[d objectForKey:@"key"] isEqualToString:key]) {
             zipIndex = idx;
@@ -912,15 +913,21 @@ const long STKCreateProgressGeocoding = 4;
                                                [STKProcessingView dismiss];
                                                if(!err) {
                                                    if([[self presentingViewController] isKindOfClass:[STKMenuController class]]){
+                                                      
                                                        STKMenuController *menuController = (STKMenuController *)[self presentingViewController];
+                                        
                                                        [menuController setSelectedViewController:[[menuController viewControllers] objectAtIndex:1]];
+                                                       
+                                                     
                                                    }
-//                                                   [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-                                                   HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
-                                                   [ivc setUser:user];
-                                                   UIViewController *pvc = [self presentingViewController];
+
+                                                   UIViewController *menuController = [self presentingViewController];
                                                    [self dismissViewControllerAnimated:NO completion:^{
-                                                       [pvc presentViewController:ivc animated:NO completion:nil];
+                                                       HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
+                                                       [ivc setUser:user];
+                                                       UINavigationController *nvc = [[UINavigationController alloc] init];
+                                                       [nvc addChildViewController:ivc];
+                                                       [menuController presentViewController:nvc animated:NO completion:nil];
                                                    }];
                                                    
                                                   

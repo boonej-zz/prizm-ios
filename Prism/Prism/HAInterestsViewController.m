@@ -19,8 +19,11 @@ static int currentTag = 0;
 @property (nonatomic, strong) NSArray * tagList;
 @property (nonatomic, strong) NSMutableArray * tagObjects;
 @property (nonatomic, strong) NSMutableArray * selectedHashTags;
+@property (nonatomic, weak) IBOutlet UIView * overlayView;
+@property (nonatomic, strong) UIBarButtonItem * doneButton;
 
 - (IBAction)doneButtonTapped:(id)sender;
+- (IBAction)overlayCloseTapped:(id)sender;
 
 @end
 
@@ -38,10 +41,23 @@ static int currentTag = 0;
     return self;
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
+    [self.doneButton setEnabled:NO];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+                                                                      NSFontAttributeName : STKFont(22)}];
+    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor lightTextColor],
+                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];
+    
+    [self.navigationItem setRightBarButtonItem:self.doneButton];
+    
     self.title = @"Interests";
     UIImage *backgroundImage = [UIImage imageNamed:@"img_background"];
     self.tagList = @[@"fitness", @"beauty", @"sports", @"technology", @"business", @"design", @"photography", @"style", @"politics", @"arts", @"food", @"music", @"movies", @"gaming", @"auto", @"science", @"travel", @"medicine", @"legal", @"hunting", @"fishing"];
@@ -55,7 +71,7 @@ static int currentTag = 0;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self animateNextTag];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,6 +95,12 @@ static int currentTag = 0;
     }];
 }
 
+- (IBAction)overlayCloseTapped:(id)sender
+{
+    [self.overlayView setHidden:YES];
+    [self animateNextTag];
+}
+
 #pragma mark Hashtag Methods
 - (void)createTags
 {
@@ -87,6 +109,37 @@ static int currentTag = 0;
         [self.tagObjects addObject:hv];
         [self.tagView addSubview:hv];
     }];
+    if (self.user.interests && ![self.user.interests isEqualToString:@""]){
+        NSArray *interests = [self.user.interests componentsSeparatedByString:@","];
+        [interests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+           NSArray *foundTags = [self.tagObjects filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(HAHashTagView *evaluatedObject, NSDictionary *bindings) {
+               if ([evaluatedObject.text isEqualToString:obj]) {
+                   return YES;
+               } else {
+                   return NO;
+               }
+               
+           }]];
+            if (foundTags.count > 0) {
+                [foundTags enumerateObjectsUsingBlock:^(HAHashTagView *obj, NSUInteger idx, BOOL *stop) {
+                    [self.tagObjects removeObject:obj];
+                    [self.selectedHashTags addObject:obj];
+                    [obj markSelected];
+                }];
+            }
+        }];
+        [self.overlayView setHidden:YES];
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                               target:self action:@selector(back:)];
+        [self.navigationItem setLeftBarButtonItem:bbi];
+        [self animateNextTag];
+    }
+}
+
+- (void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (HAHashTagView *)createViewForTag:(NSString *)tag
@@ -102,7 +155,7 @@ static int currentTag = 0;
 {
     HAHashTagView *hv = [self.tagObjects objectAtIndex:[self nextTag]];
     [hv presentAndDismiss];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self animateNextTag];
     });
 }
@@ -132,6 +185,7 @@ static int currentTag = 0;
             [self.tagObjects addObject:ht];
         }
     }
+    [self.doneButton setEnabled:(self.selectedHashTags.count > 2)];
 }
 
 @end

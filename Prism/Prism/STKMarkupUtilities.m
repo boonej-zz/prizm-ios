@@ -210,7 +210,7 @@
     NSRegularExpression *hashTagExpression = [[NSRegularExpression alloc] initWithPattern:@"#(\\S*)" options:0 error:nil];
     
     NSArray *matches = [hashTagExpression matchesInString:[str string] options:0 range:NSMakeRange(0, [[str string] length])];
-    for(int i = [matches count] - 1; i >= 0; i--) {
+    for(long i = [matches count] - 1; i >= 0; i--) {
         NSTextCheckingResult *result = [matches objectAtIndex:i];
         if([result numberOfRanges] == 2) {
             NSRange fullRange = [result range];
@@ -228,7 +228,7 @@
     
     NSRegularExpression *userTagExpression = [[NSRegularExpression alloc] initWithPattern:@"@(\\S{24})" options:0 error:nil];
     matches = [userTagExpression matchesInString:[str string] options:0 range:NSMakeRange(0, [[str string] length])];
-    for(int i = [matches count] - 1; i >= 0; i--) {
+    for(long i = [matches count] - 1; i >= 0; i--) {
         NSTextCheckingResult *result = [matches objectAtIndex:i];
         if([result numberOfRanges] == 2) {
             NSRange fullRange = [result range];

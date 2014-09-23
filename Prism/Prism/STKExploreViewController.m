@@ -42,7 +42,7 @@
 @property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *exploreTypeControl;
-@property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
+//@property (nonatomic, strong) IBOutlet UIERealTimeBlurView *blurView;
 
 @property (nonatomic, strong) STKNavigationButton *searchButton;
 @property (nonatomic, strong) STKNavigationButton *filterButton;
@@ -183,13 +183,11 @@
 
 - (void)menuWillAppear:(BOOL)animated
 {
-    [[self blurView] setOverlayOpacity:0.5];
     [[self navigationItem] setRightBarButtonItems:nil];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
-    [[self blurView] setOverlayOpacity:0.0];
     [self configureInterface];
 }
 
@@ -267,6 +265,8 @@
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadPosts) name:HANotificationReportInappropriate object:nil];
+    [self addBlurViewWithHeight:114.0];
+    [self.view bringSubviewToFront:self.exploreTypeControl];
 
 }
 
@@ -279,7 +279,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[[self blurView] displayLink] setPaused:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -294,7 +293,6 @@
         [self setActivePostController:[self featuredPostsController]];
 
     
-    [[[self blurView] displayLink] setPaused:NO];
 
     [[self tableView] setContentInset:UIEdgeInsetsMake([[self exploreTypeControl] frame].origin.y + [[self exploreTypeControl] frame].size.height, 0, 0, 0)];
 

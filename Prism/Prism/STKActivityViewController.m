@@ -30,7 +30,6 @@ typedef enum {
 } STKActivityViewControllerType;
 
 @interface STKActivityViewController () <UITableViewDataSource, UITableViewDelegate>
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
@@ -83,19 +82,21 @@ typedef enum {
     [[self tableView] setTableFooterView:v];
 
     [[self tableView] setContentInset:UIEdgeInsetsMake(64 + 50, 0, 0, 0)];
+    [self addBlurViewWithHeight:114.f];
+    [self.view bringSubviewToFront:self.activityTypeControl];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[[self blurView] displayLink] setPaused:NO];
+//    [[[self blurView] displayLink] setPaused:NO];
     [self fetchNewItems];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[[self blurView] displayLink] setPaused:YES];
+//    [[[self blurView] displayLink] setPaused:YES];
 
     [[STKUserStore store] markActivitiesAsRead];
 }
@@ -327,12 +328,12 @@ typedef enum {
 
 - (void)menuWillAppear:(BOOL)animated
 {
-    [[self blurView] setOverlayOpacity:0.5];
+//    [[self blurView] setOverlayOpacity:0.5];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
-    [[self blurView] setOverlayOpacity:0.0];
+//    [[self blurView] setOverlayOpacity:0.0];
 }
 
 - (IBAction)typeChanged:(id)sender
