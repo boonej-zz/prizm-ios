@@ -31,6 +31,15 @@ static int currentTag = 0;
 
 #pragma mark View Lifecycle
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        [self setStandalone:NO];
+    }
+    return self;
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -46,13 +55,19 @@ static int currentTag = 0;
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if ([self isStandalone]){
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                               target:self action:@selector(back:)];
+        [self.navigationItem setLeftBarButtonItem:bbi];
+    }
     
     self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
     [self.doneButton setEnabled:NO];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                       NSFontAttributeName : STKFont(22)}];
-    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
-                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
+                                              NSFontAttributeName : STKBoldFont(16)} forState:UIControlStateNormal];
     [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor lightTextColor],
                                               NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];
     
@@ -61,6 +76,8 @@ static int currentTag = 0;
     self.title = @"Interests";
     UIImage *backgroundImage = [UIImage imageNamed:@"img_background"];
     self.tagList = @[@"fitness", @"beauty", @"sports", @"technology", @"business", @"design", @"photography", @"style", @"politics", @"arts", @"food", @"music", @"movies", @"gaming", @"auto", @"science", @"travel", @"medicine", @"legal", @"hunting", @"fishing"];
+//    self.tagList = [[NSUserDefaults standardUserDefaults] objectForKey:HAUserStoreInterestsKey];
+    
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
     [backgroundView setFrame:self.view.bounds];
     [self.view insertSubview:backgroundView atIndex:0];
@@ -91,7 +108,11 @@ static int currentTag = 0;
     [STKProcessingView present];
     [[STKUserStore store] updateInterests:hashtags forUser:self.user completion:^(STKUser *u, NSError *err) {
         [STKProcessingView dismiss];
-        [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+        if ([self isStandalone]){
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+        }
     }];
 }
 
@@ -105,7 +126,9 @@ static int currentTag = 0;
 - (void)createTags
 {
     [self.tagList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        HAHashTagView *hv = [self createViewForTag:obj];
+//        NSString *tag = [obj objectForKey:@"name"];
+        NSString *tag = obj;
+        HAHashTagView *hv = [self createViewForTag:tag];
         [self.tagObjects addObject:hv];
         [self.tagView addSubview:hv];
     }];
@@ -129,10 +152,7 @@ static int currentTag = 0;
             }
         }];
         [self.overlayView setHidden:YES];
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
-                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
-                                                               target:self action:@selector(back:)];
-        [self.navigationItem setLeftBarButtonItem:bbi];
+        
         [self animateNextTag];
     }
 }

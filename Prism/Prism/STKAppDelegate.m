@@ -54,7 +54,7 @@
     [Crashlytics startWithAPIKey:@"e70b092ac5acf46c6e8a86bc59e79c34df550f5f"];
     [Mixpanel sharedInstanceWithToken:STKMixpanelKey];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
+//    [[STKUserStore store] syncInterests];
     [self configureAppearanceProxies];
     
     STKUser *u = [[STKUserStore store] currentUser];
@@ -109,6 +109,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    
     [[STKUserStore store] transferPostsFromSocialNetworks];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     

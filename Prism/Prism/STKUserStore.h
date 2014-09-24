@@ -22,6 +22,7 @@ extern NSString * const HAUserStoreActivityLikeKey;
 extern NSString * const HAUserStoreActivityTrustKey;
 extern NSString * const HAUserStoreActivityCommentKey;
 extern NSString * const HANotificationKeyUserLoggedOut;
+extern NSString * const HAUserStoreInterestsKey;
 
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]
@@ -49,6 +50,7 @@ typedef enum {
 
 - (void)transferPostsFromSocialNetworks;
 - (void)logout;
+- (void)syncInterests;
 
 - (void)switchToUser:(STKUser *)u;
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;

@@ -39,6 +39,7 @@ NSString * const HAUserStoreActivityCommentKey = @"HAUserStoreActivityCommentKey
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 NSString * const HAUserStoreLoggedInUsersKey = @"com.higheraltitude.prism.loggedInUsers";
 NSString * const HANotificationKeyUserLoggedOut = @"HANotificationKeyUserLoggedOut";
+NSString * const HAUserStoreInterestsKey = @"HAUserStoreInterestsKey";
 
 NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurrentUserChangedNotification";
 
@@ -156,7 +157,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     NSFetchRequest *bReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"like"]];
     NSFetchRequest *cReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"comment"]];
+    [cReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (comment <> NULL)"]];
     long actCount = [[self context] countForFetchRequest:aReq error:nil];
     long likeCount = [[self context] countForFetchRequest:bReq error:nil];
     long commentCount = [[self context] countForFetchRequest:cReq error:nil];
@@ -170,7 +171,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)markActivitiesAsRead
 {
     NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [req setPredicate:[NSPredicate predicateWithFormat:@"hasBeenViewed == %@", @(NO)]];
+    [req setPredicate:[NSPredicate predicateWithFormat:@"hasBeenViewed == NO"]];
     NSArray *results = [[self context] executeFetchRequest:req error:nil];
     for(STKActivityItem *i in results) {
         [i setHasBeenViewed:YES];
@@ -453,6 +454,17 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
     return [users copy];
 }
+
+//- (void)syncInterests
+//{
+//    NSURL *plistUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@/files/interests.plist", STKUserBaseURLString]];
+//    NSData *data = [NSData dataWithContentsOfURL:plistUrl];
+//    
+//    NSArray *interests = [[NSArray alloc] initWithContentsOfURL:plistUrl];
+//    if (interests && [interests count] > 0) {
+//        [[NSUserDefaults standardUserDefaults] setObject:interests forKey:HAUserStoreInterestsKey];
+//    }
+//}
 
 - (void)fetchTrustPostsForTrust:(STKTrust *)t type:(STKTrustPostType)type completion:(void (^)(NSArray *posts, NSError *err))block
 {

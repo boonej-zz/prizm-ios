@@ -45,13 +45,17 @@
     if ([self isSelected]) {
         [self setAlpha:1.0f];
         [self.textLabel setTextColor:[UIColor whiteColor]];
+        [self.textLabel setFont:STKBoldFont(17)];
+        [self.textLabel sizeToFit];
         [UIView animateWithDuration:0.5 animations:^{
-            self.transform = CGAffineTransformMakeScale(1.3, 1.3);
+            self.transform = CGAffineTransformMakeScale(1.4, 1.4);
         }];
     } else {
         [self setAnimating:YES];
         [UIView animateWithDuration:0.5 animations:^{
             [self.textLabel setTextColor:STKTextColor];
+            [self.textLabel setFont:STKFont(17)];
+            [self.textLabel sizeToFit];
             self.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
         } completion:^(BOOL finished) {
             [self setAnimating:NO];
@@ -97,8 +101,11 @@
 {
     self.center = randomPointWithinContainer(self.superview.bounds.size, self.bounds.size);
     [self setAlpha:1.f];
-    self.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    self.transform = CGAffineTransformMakeScale(1.4, 1.4);
+    self.selected = YES;
     [self.textLabel setTextColor:[UIColor whiteColor]];
+    [self.textLabel setFont:STKBoldFont(17)];
+    [self.textLabel sizeToFit];
 }
 
 

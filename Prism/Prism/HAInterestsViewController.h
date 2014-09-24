@@ -12,5 +12,6 @@
 @interface HAInterestsViewController : UIViewController
 
 @property (nonatomic, strong) STKUser * user;
+@property (nonatomic, getter=isStandalone) BOOL standalone;
 
 @end

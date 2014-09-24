@@ -275,7 +275,7 @@
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    [[self tableView] setDelaysContentTouches:NO];
+//    [[self tableView] setDelaysContentTouches:NO];
     [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
 
     

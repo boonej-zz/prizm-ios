@@ -471,6 +471,8 @@ static BOOL HAActivityIsAnimating = NO;
                     [self.rightNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
                     if (hasCommentNotification) {
                         [self.extendedNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+                    } else {
+                        [self.extendedNotificationView setImage:nil];
                     }
                 } else {
                     if (hasCommentNotification) {
@@ -498,9 +500,9 @@ static BOOL HAActivityIsAnimating = NO;
                 [self.rightNotificationView setImage:nil];
                 [self.extendedNotificationView setImage:nil];
             }
-        } else if (hasUserNotifications) {
+        }
+        else if (hasUserNotifications) {
             [self.leftNotificationView setImage:[UIImage imageNamed:@"user_notification"]];
-            [self.rightNotificationView setImage:nil];
             [self.extendedNotificationView setImage:nil];
             if (hasTrustNotifications) {
                 [self.centerNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
@@ -540,7 +542,7 @@ static BOOL HAActivityIsAnimating = NO;
         [self.view bringSubviewToFront:self.rightNotificationView];
         [self.view bringSubviewToFront:self.centerNotificationView];
         [self.view bringSubviewToFront:self.leftNotificationView];
-        if ((hasLikeNotifications || hasTrustNotifications || hasUserNotifications )) {
+        if ((hasLikeNotifications || hasTrustNotifications || hasUserNotifications || hasCommentNotification)) {
             HAActivityIsAnimating = YES;
             [UIView animateWithDuration:1.0 animations:^{
                 [self.centerNotificationView setAlpha:1];
