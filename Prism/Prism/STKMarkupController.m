@@ -175,9 +175,9 @@ typedef enum {
     if(resultsAvailable) {
         int count = 0;
         if([self markupType] == STKMarkupTypeHashtag)
-            count = [[self hashTags] count];
+            count = (int)[[self hashTags] count];
         else
-            count = [[self userTags] count];
+            count = (int)[[self userTags] count];
         
         if(count > 3)
             count = 3;

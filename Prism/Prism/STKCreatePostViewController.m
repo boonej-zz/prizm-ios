@@ -112,6 +112,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 }
 
 
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

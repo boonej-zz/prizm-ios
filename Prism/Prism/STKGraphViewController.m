@@ -414,7 +414,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int row = [indexPath row];
+    long row = [indexPath row];
     if([self currentFilter]) {
         if([indexPath row] > 0) {
             UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];

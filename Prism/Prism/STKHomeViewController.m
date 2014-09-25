@@ -46,6 +46,7 @@
 @property (nonatomic, strong) NSMutableArray *reusableCards;
 @property (nonatomic, strong) NSMutableDictionary *cardMap;
 @property (nonatomic, strong) UINib *homeCellNib;
+@property (nonatomic, strong) UIView *underlayView;
 
 @property (nonatomic, strong) STKBackdropView *backdropView;
 
@@ -80,6 +81,30 @@
     return self;
 }
 
+- (void)menuWillAppear:(BOOL)animated
+{
+    [[self navigationItem] setRightBarButtonItem:nil];
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [[self underlayView] setAlpha:0.5];
+        }];
+    } else {
+        [[self underlayView] setAlpha:0.5];
+    }
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [[self underlayView] setAlpha:0.0];
+        }];
+    } else {
+        [[self underlayView] setAlpha:0.0];
+    }
+}
+
 
 - (void)viewDidLoad
 {
@@ -87,6 +112,12 @@
     
     _homeCellNib = [UINib nibWithNibName:@"STKPostCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
+    CGRect frame = [self.view frame];
+    frame.size.height = 64.f;
+    self.underlayView = [[UIView alloc] initWithFrame:frame];
+    [self.underlayView setBackgroundColor:[UIColor blackColor]];
+    [self.underlayView setAlpha:0.0];
+    [self.view insertSubview:self.underlayView atIndex:1];
 
 //    [[self tableView] setDelaysContentTouches:NO];
 
@@ -360,18 +391,6 @@
     [self layoutCards];
 }
 
-- (void)menuWillAppear:(BOOL)animated
-{
-    [[self blurView] setOverlayOpacity:0.5];
-    
-    [[self navigationItem] setRightBarButtonItem:nil];
-}
-
-- (void)menuWillDisappear:(BOOL)animated
-{
-    [[self blurView] setOverlayOpacity:0.0];
-    [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-}
 
 - (void)viewWillDisappear:(BOOL)animated
 {

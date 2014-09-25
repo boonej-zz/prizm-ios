@@ -209,8 +209,8 @@
     
     UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     //        UIView *bg = [[UIView alloc] initWithCoder:frame];
-    CGRect frame = [self.headerView frame];
-    UIVisualEffectView  *blurview = [[UIVisualEffectView alloc] initWithEffect:blur];
+//    CGRect frame = [self.headerView frame];
+//    UIVisualEffectView  *blurview = [[UIVisualEffectView alloc] initWithEffect:blur];
 //    UIVibrancyEffect *vib = [UIVibrancyEffect effectForBlurEffect:blur];
 //    [blurview setFrame:frame];
 //    [self.headerView insertSubview:blurview atIndex:0];

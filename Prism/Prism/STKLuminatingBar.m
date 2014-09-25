@@ -94,7 +94,7 @@
     } else {
         _luminating = luminating;
         CAGradientLayer *present = [[self luminatingLayer] presentationLayer];
-        NSArray *colors = [present colors];
+//        NSArray *colors = [present colors];
 //        NSLog(@"%@", colors);
 //        UIColor *currentTopColor =
         [_luminatingLayer removeFromSuperlayer];

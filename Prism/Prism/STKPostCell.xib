@@ -3,6 +3,7 @@
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -188,12 +189,16 @@
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="trailing" secondItem="JP4-cN-kHA" secondAttribute="trailing" id="PYf-AW-0E3"/>
                     <constraint firstItem="MuO-Ko-R2y" firstAttribute="top" secondItem="B1Y-Qd-F7e" secondAttribute="top" constant="5" id="Qv6-tj-NKb"/>
                     <constraint firstItem="6QP-zd-FRS" firstAttribute="top" secondItem="MuO-Ko-R2y" secondAttribute="bottom" constant="239" id="Wv4-7p-Rn4"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="CuU-pA-Dxf" secondAttribute="trailing" constant="-3" id="c7A-Tz-ekh"/>
                     <constraint firstItem="CuU-pA-Dxf" firstAttribute="bottom" secondItem="7BC-Pt-GTX" secondAttribute="bottom" id="cDT-EV-rmE"/>
                     <constraint firstAttribute="trailing" secondItem="7BC-Pt-GTX" secondAttribute="trailing" constant="5" id="cQ7-04-Ea5"/>
+                    <constraint firstItem="JP4-cN-kHA" firstAttribute="top" secondItem="CuU-pA-Dxf" secondAttribute="bottom" id="dbU-bQ-qbW"/>
                     <constraint firstItem="CuU-pA-Dxf" firstAttribute="leading" secondItem="7BC-Pt-GTX" secondAttribute="leading" id="gMn-2z-wfe"/>
+                    <constraint firstItem="CuU-pA-Dxf" firstAttribute="leading" secondItem="B1Y-Qd-F7e" secondAttribute="leadingMargin" constant="-3" id="kjG-Wy-gK5"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="trailing" secondItem="MuO-Ko-R2y" secondAttribute="trailing" id="mRA-aE-Xkw"/>
                     <constraint firstItem="CuU-pA-Dxf" firstAttribute="top" secondItem="7BC-Pt-GTX" secondAttribute="top" id="qOq-nY-Xda"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="leading" secondItem="MuO-Ko-R2y" secondAttribute="leading" id="yT0-7Z-Ofo"/>
+                    <constraint firstItem="CuU-pA-Dxf" firstAttribute="top" secondItem="MuO-Ko-R2y" secondAttribute="bottom" id="z5c-a8-S8F"/>
                     <constraint firstItem="6QP-zd-FRS" firstAttribute="leading" secondItem="7BC-Pt-GTX" secondAttribute="leading" id="zdc-FX-v9y"/>
                 </constraints>
             </tableViewCellContentView>

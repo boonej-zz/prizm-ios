@@ -174,8 +174,8 @@
     NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     NSDateComponents *dc = [cal components:NSYearForWeekOfYearCalendarUnit | NSWeekOfYearCalendarUnit fromDate:today];
     
-    [self setLastWeekInYear:[dc weekOfYear]];
-    [self setYear:[dc yearForWeekOfYear]];
+    [self setLastWeekInYear:(int)[dc weekOfYear]];
+    [self setYear:(int)[dc yearForWeekOfYear]];
     [self setLabels:[self labelsForCurrentRange]];
 
 }

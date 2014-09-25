@@ -263,7 +263,7 @@
                             <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is your Graph" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hk-7X-SZ1">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is your Graph." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hk-7X-SZ1">
                             <rect key="frame" x="15" y="15" width="290" height="40"/>
                             <color key="backgroundColor" red="0.97907876093856872" green="0.97607755434946175" blue="1" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -273,7 +273,7 @@
                             <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="It will help you connect the dots      between where you are now and where you want to be" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="v8m-bZ-ny3">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="It will help you connect the dots      between where you are now and where you want to be." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="v8m-bZ-ny3">
                             <rect key="frame" x="15" y="55" width="290" height="103"/>
                             <color key="backgroundColor" red="0.97907876093856872" green="0.97607755434946175" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                             <constraints>

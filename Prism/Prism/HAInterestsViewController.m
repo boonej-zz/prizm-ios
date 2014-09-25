@@ -21,6 +21,7 @@ static int currentTag = 0;
 @property (nonatomic, strong) NSMutableArray * selectedHashTags;
 @property (nonatomic, weak) IBOutlet UIView * overlayView;
 @property (nonatomic, strong) UIBarButtonItem * doneButton;
+@property (nonatomic, strong) NSMutableDictionary *tagPositions;
 
 - (IBAction)doneButtonTapped:(id)sender;
 - (IBAction)overlayCloseTapped:(id)sender;
@@ -54,6 +55,7 @@ static int currentTag = 0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tagPositions = [NSMutableDictionary dictionary];
     // Do any additional setup after loading the view from its nib.
     if ([self isStandalone]){
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
@@ -67,8 +69,8 @@ static int currentTag = 0;
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                       NSFontAttributeName : STKFont(22)}];
     [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
-                                              NSFontAttributeName : STKBoldFont(16)} forState:UIControlStateNormal];
-    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor lightTextColor],
+                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor clearColor],
                                               NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];
     
     [self.navigationItem setRightBarButtonItem:self.doneButton];
@@ -122,6 +124,13 @@ static int currentTag = 0;
     [self animateNextTag];
 }
 
+- (void)hideOverlayView
+{
+    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor lightTextColor],
+                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];
+    [self.overlayView setHidden:YES];
+}
+
 #pragma mark Hashtag Methods
 - (void)createTags
 {
@@ -131,6 +140,8 @@ static int currentTag = 0;
         HAHashTagView *hv = [self createViewForTag:tag];
         [self.tagObjects addObject:hv];
         [self.tagView addSubview:hv];
+        [self.tagPositions setObject:hv forKey:tag];
+        [hv setSisterTags:self.tagPositions];
     }];
     if (self.user.interests && ![self.user.interests isEqualToString:@""]){
         NSArray *interests = [self.user.interests componentsSeparatedByString:@","];
@@ -151,7 +162,7 @@ static int currentTag = 0;
                 }];
             }
         }];
-        [self.overlayView setHidden:YES];
+        [self hideOverlayView];
         
         [self animateNextTag];
     }

@@ -41,6 +41,7 @@ typedef enum {
 
 @property (nonatomic) BOOL activityFetchInProgress;
 @property (nonatomic) BOOL requestFetchInProgress;
+@property (nonatomic, strong) UIView *underlayView;
 
 
 @property (nonatomic) STKActivityViewControllerType currentType;
@@ -70,7 +71,12 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    CGRect frame = [self.view frame];
+    frame.size.height = 64.f;
+    self.underlayView = [[UIView alloc] initWithFrame:frame];
+    [self.underlayView setBackgroundColor:[UIColor blackColor]];
+    [self.underlayView setAlpha:0.0];
+    [self.view addSubview:self.underlayView];
     [[self tableView] setRowHeight:56];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
@@ -328,17 +334,17 @@ typedef enum {
 
 - (void)menuWillAppear:(BOOL)animated
 {
-//    [[self blurView] setOverlayOpacity:0.5];
+    [[self underlayView] setAlpha:0.5];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
-//    [[self blurView] setOverlayOpacity:0.0];
+    [[self underlayView] setAlpha:0.0];
 }
 
 - (IBAction)typeChanged:(id)sender
 {
-    [self setCurrentType:[sender selectedSegmentIndex]];
+    [self setCurrentType:(int)[sender selectedSegmentIndex]];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

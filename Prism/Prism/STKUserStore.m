@@ -80,6 +80,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     return store;
 }
 
+- (void)syncInterests
+{
+    
+}
+
 
 - (NSURLSession *)session
 {
@@ -387,7 +392,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         [[NSUserDefaults standardUserDefaults] setObject:[self.signedInUsers copy] forKey:HAUserStoreLoggedInUsersKey];
     }
-    __block NSString *currentuniqueID = NO;
+    __block NSString *currentuniqueID = nil;
     [self.signedInUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([[obj valueForKey:@"active"] boolValue]) {
             currentuniqueID = [obj valueForKey:@"id"];
@@ -402,7 +407,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
             [req setPredicate:p];
             NSArray *results = [ctx executeFetchRequest:req error:nil];
-            STKUser *u = NO;
+            STKUser *u = nil;
             if (results.count > 0)
                 u = [results objectAtIndex:0];
             if(u) {

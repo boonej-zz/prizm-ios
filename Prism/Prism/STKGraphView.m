@@ -39,8 +39,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    int xLines = [[self xLabels] count];
-    int yLines = [[self yLabels] count];
+    long xLines = [[self xLabels] count];
+    long yLines = [[self yLabels] count];
     
     float xInset = 40;
     float xBegin = xInset + 20;

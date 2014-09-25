@@ -47,7 +47,7 @@
             NSRegularExpression *regex = [[NSRegularExpression alloc] initWithPattern:@"[^0-9]" options:0 error:nil];
             NSString *trimmedBeforeRange = [regex stringByReplacingMatchesInString:[textField text] options:0 range:NSMakeRange(0, range.location + range.length) withTemplate:@""];
             
-            int offset = [[textField text] length] - [trimmedBeforeRange length];
+            long offset = [[textField text] length] - [trimmedBeforeRange length];
             range.location -= offset;
             NSString *rawString = [regex stringByReplacingMatchesInString:[textField text] options:0 range:NSMakeRange(0, [[textField text] length]) withTemplate:@""];
             convertString = [rawString stringByReplacingCharactersInRange:range withString:string];

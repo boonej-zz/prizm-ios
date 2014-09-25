@@ -74,11 +74,39 @@
     return;
 }
 
+- (float)randomNumberBetween:(float)min maxNumber:(float)max
+{
+    return min + arc4random_uniform(max - min + 1);
+}
+
 - (void)presentAndDismiss
 {
     if (! [self isAnimating]) {
         [self setAnimating:YES];
         self.center = randomPointWithinContainer(self.superview.bounds.size, self.bounds.size);
+        if (self.sisterTags) {
+            
+            [self.sisterTags enumerateKeysAndObjectsUsingBlock:^(id key, UIView *obj, BOOL *stop) {
+                float angle = [self randomNumberBetween:0 maxNumber:360];
+                CGPoint shiftedCenter;
+                CGFloat extraSpace = 50;
+                if (![key isEqualToString:self.text]) {
+                while(CGRectIntersectsRect(self.frame,obj.frame))
+                    {
+                        CGPoint startPoint = self.center;
+                        
+                        shiftedCenter.x = startPoint.x - (extraSpace * cos(angle));
+                        
+                        if(obj.center.y < self.center.y)
+                            shiftedCenter.y = startPoint.y + extraSpace * sin(angle);
+                        else
+                            shiftedCenter.y = startPoint.y - extraSpace * sin(angle);
+                        self.center = shiftedCenter;
+                        
+                    }
+                }
+            }];
+        }
         [UIView animateWithDuration:2.f animations:^{
             [self setAlpha:1.f];
         } completion:^(BOOL finished) {

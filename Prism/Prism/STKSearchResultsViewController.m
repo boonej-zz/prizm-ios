@@ -322,7 +322,7 @@ typedef enum {
                 NSString *tag = [hashtag objectForKey:@"hash_tag"];
                 if(tag) {
                     STKHashtagPostsViewController *vc = [[STKHashtagPostsViewController alloc] initWithHashTag:tag];
-                    [vc setHashTagCount:[NSString stringWithFormat:@"%i", [[self hashTagsFound] count]]];
+                    [vc setHashTagCount:[NSString stringWithFormat:@"%i", (int)[[self hashTagsFound] count]]];
                     [[self navigationController] pushViewController:vc animated:YES];
                 }
             }
