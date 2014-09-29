@@ -26,6 +26,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *searchResultsTableView;
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
+@property (weak, nonatomic) IBOutlet UIView *searchView;
 
 @property (nonatomic, strong) NSArray *profilesFound;
 
@@ -73,7 +74,7 @@
     CGFloat tableContentInsetTop = 114.f;
     [[self searchResultsTableView] setContentInset:UIEdgeInsetsMake(tableContentInsetTop, 0, 0, 0)];
     [self addBlurViewWithHeight:114.f];
-    [self.view bringSubviewToFront:self.searchTextField];
+    [self.view bringSubviewToFront:self.searchView];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

@@ -56,6 +56,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 @property (nonatomic, strong) UIImage *postImage;
 @property (nonatomic, strong) UIImage *originalPostImage;
 
+
 - (void)changeImage:(id)sender;
 - (IBAction)adjustImage:(id)sender;
 - (IBAction)closePrivacy:(id)sender;
@@ -241,10 +242,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    [[self markupController] textView:textView updatedWithText:[textView text]];
     [textView setFont:STKFont(14)];
     [textView setTintColor:STKTextColor];
-//    [self resizeTextArea];
+    [[self markupController] textView:textView updatedWithText:[textView text]];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView

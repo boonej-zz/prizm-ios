@@ -96,6 +96,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self addBlurViewWithHeight:64.f];
     [[self countView] setCircleTitles:@[@"Likes", @"Comments", @"Posts"]];
     [[self countView] setCircleValues:@[@"0", @"0", @"0"]];
     [[self countView] setDelegate:self];

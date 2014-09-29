@@ -890,6 +890,8 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"creator"]];
+//        STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
+//        [q addSubquery:tagQ];
         [q addSubquery:[STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]]];
         
         [c setQueryObject:q];

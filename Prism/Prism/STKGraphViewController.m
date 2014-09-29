@@ -253,7 +253,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self addBlurViewWithHeight:64.f];
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]];
     
     [[self lifetimeLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];

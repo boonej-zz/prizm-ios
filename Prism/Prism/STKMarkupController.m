@@ -186,6 +186,7 @@ typedef enum {
         float newHeight = [[self tableView] rowHeight] * count;
         
         [[self view] setFrame:CGRectMake(0, currentBottom - newHeight, 320, newHeight)];
+        [[self tableView] setFrame:CGRectMake(0, 0, 320, newHeight)];
         [[self tableView] setHidden:NO];
         [[self promptLabel] setHidden:YES];
     } else {
