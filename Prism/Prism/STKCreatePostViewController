@@ -65,36 +65,13 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 @implementation STKCreatePostViewController
 
-
 - (void)keyboardWillAppear:(NSNotification *)note
 {
     CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    r.origin.y -= _markupController.view.frame.size.height;
-    r.origin.x = 0;
-    r.size.height = _markupController.view.frame.size.height;
-    r.size.width = _markupController.view.frame.size.width;
-    [_markupController.view setFrame:r];
-    [_markupController.view setHidden:NO];
 
     [[self view] setNeedsUpdateConstraints];
     
-//    [[[self markupController] view] setFrame:CGRectMake(0, [[self view] bounds].size.height - r.size.height - [[self postTextView] bounds].size.height - 45, 320, 44)];
-    
-}
-
-- (void)keyboardWillDissapear:(NSNotification *)note
-{
-//    CGRect r = [[[note userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-//    r.origin.y -= _markupController.view.frame.size.height;
-//    r.origin.x = 0;
-//    r.size.height = _markupController.view.frame.size.height;
-//    r.size.width = _markupController.view.frame.size.width;
-//    [_markupController.view setFrame:r];
-    [_markupController.view setHidden:YES];
-    
-    [[self view] setNeedsUpdateConstraints];
-    
-    //    [[[self markupController] view] setFrame:CGRectMake(0, [[self view] bounds].size.height - r.size.height - [[self postTextView] bounds].size.height - 45, 320, 44)];
+    [[[self markupController] view] setFrame:CGRectMake(0, [[self view] bounds].size.height - r.size.height - [[self postTextView] bounds].size.height - 45, 320, 44)];
     
 }
 
@@ -154,11 +131,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     return UIStatusBarStyleLightContent;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -198,15 +171,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         [self.privacyInstructions setHidden:YES];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:)
-                                                 name:UIKeyboardDidShowNotification
+                                                 name:UIKeyboardWillShowNotification
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillDissapear:)
-                                                 name:UIKeyboardDidHideNotification
-                                               object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:)
-//                                                 name:UIKeyboardDidChangeFrameNotification
-//                                               object:nil];
-    
 }
 
 - (void)setPostImage:(UIImage *)postImage
@@ -349,7 +315,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     
     [[self postTextView] setText:STKCreatePostPlaceholderText];
     [[self view] addSubview:[[self markupController] view]];
-    [_markupController.view setHidden:YES];
     [self.postTextView setFont:STKFont(14)];
     [self.postTextView setTintColor:STKTextColor];
     
@@ -584,7 +549,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (void)markupControllerDidFinish:(STKMarkupController *)markupController
 {
-    [self.markupController.view setHidden:YES];
     [[self postTextView] resignFirstResponder];
 }
 

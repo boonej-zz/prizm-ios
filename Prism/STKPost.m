@@ -11,6 +11,8 @@
 #import "STKUserStore.h"
 #import "STKPostComment.h"
 #import "STKHashTag.h"
+#import "STKImageStore.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 
 
@@ -196,5 +198,6 @@ subtype;
              
              };
 }
+
 
 @end

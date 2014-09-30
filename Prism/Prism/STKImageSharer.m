@@ -6,10 +6,12 @@
 //  Copyright (c) 2014 Higher Altitude. All rights reserved.
 //
 
+
 #import "STKImageSharer.h"
 #import "STKPost.h"
 #import "STKImageStore.h"
 #import "STKContentStore.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
 NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
@@ -46,6 +48,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @property (nonatomic, strong) NSString * text;
 @property (nonatomic, strong) UIImage * image;
 @property (nonatomic, strong) STKPost *post;
+@property (nonatomic, strong) NSString *baseText;
 
 @end
 
@@ -70,8 +73,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
     NSLog(@"In the activity item");
-    NSMutableDictionary *obj = [NSMutableDictionary dictionary];
-    NSString *text = @"";
+    self.baseText = @"";
     if ([self post]) {
         NSMutableArray *textArr = [[self.post.text componentsSeparatedByString:@" "] mutableCopy];
         __block NSInteger i = 0;
@@ -87,49 +89,88 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                 
             }
         }];
-        text = [textArr componentsJoinedByString:@" "];
+        self.baseText = [textArr componentsJoinedByString:@" "];
     }
-    if (![activityType isEqualToString:UIActivityTypePostToTwitter]) {
-        NSString *link = @"http://www.prizmapp.com/download";
-        if (self.image)  {
-            [obj setObject:self.image forKey:@"image"];
-        }
-        if ([self post]) {
-            NSString *t = text;
-            if (![activityType isEqualToString:UIActivityTypePostToFacebook]) {
-                t = [t stringByAppendingString:@" @beprizmatic"];
-            }
-            t = [t stringByAppendingString:[NSString stringWithFormat:@" %@", link]];
-            [obj setValue:t forKey:@"text"];
-        } else {
-            [obj setValue:self.text forKey:@"text"];
-        }
-    } else {
-        if ([self post]) {
-            NSString *t= [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
-            if ([self.post text]){
-//                __block NSString *tags = @"";
-//                [self.post.hashTags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-//                    tags = [tags stringByAppendingString:[NSString stringWithFormat:@"#%@ ", [obj valueForKey:@"title"]]];
-//                }];
-                t = [NSString stringWithFormat:@"%@ @beprizmatic %@", text, t];
-            }
-            [obj setValue:t forKey:@"text"];
-            
-        } else {
-            if (self.image) {
-                [obj setValue:self.image forKey:@"image"];
-            }
-            [obj setValue:self.text forKey:@"text"];
-        }
-    }
-//    NSString *post = [NSString stringWithFormat:@"%@ @beprizmatic %@", [self.post text], @"http://www.prizmapp.com/download"];
-//    return @{@"text": post};
-    if ([activityType isEqualToString:@"STKActivityReport"]) {
+    
+    if ([activityType isEqualToString:UIActivityTypePostToTwitter]){
+        return [self twitterItem];
+    } else  if ([activityType isEqualToString:@"STKActivityReport"]) {
         return [self post];
+    } else if ([activityType isEqualToString:UIActivityTypeCopyToPasteboard]) {
+        return [self urlToCopy];
+    } else if ([activityType isEqualToString:STKActivityTypeInstagram] || [activityType isEqualToString:STKActivityTypeWhatsapp]) {
+        return [self customItem];
+    } else if ([activityType isEqualToString:STKActivityTypeWhatsapp]) {
+        
     }
-    NSLog(@"Activity Object: %@", obj);
-    return obj;
+    else {
+        return [self genericItem];
+        
+    }
+    return nil;
+}
+
+- (NSString *)activityViewController:(UIActivityViewController *)activityViewController
+              subjectForActivityType:(NSString *)activityType
+{
+    NSDictionary *obj = [self genericItem];
+    return [obj objectForKey:@"text"];
+}
+
+- (id)customItem
+{
+    NSMutableDictionary *d = [NSMutableDictionary dictionary];
+    if (self.image){
+        [d setObject:self.image forKey:@"image"];
+    }
+    NSString *t = @"";
+    if ([self post]) {
+        t = [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
+        }
+    }
+    [d setObject:t forKey:@"text"];
+    return d;
+}
+
+- (id)twitterItem
+{
+    NSString *t = @"";
+    if ([self post]) {
+        t = [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
+        }
+    }
+    return t;
+}
+    
+- (id)genericItem
+{
+    NSString *t = @"";
+    if ([self post]) {
+        NSString *link = @"http://www.prizmapp.com/download";
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
+        }
+    }
+    NSExtensionItem *i = [[NSExtensionItem alloc] init];
+    [i setAttributedContentText:[[NSAttributedString alloc] initWithString:t]];
+    if (self.image) {
+        NSArray *att = @[[[NSItemProvider alloc] initWithItem:UIImageJPEGRepresentation(self.image, 8.0f) typeIdentifier:(NSString *)kUTTypeJPEG]];
+        [i setAttachments:att];
+    }
+    return i;
+}
+
+- (id)urlToCopy
+{
+    if (self.post) {
+        NSString *url = [NSString stringWithFormat:@"http://www.prizmapp.com/posts/%@", [self.post uniqueID]];
+        return [NSURL URLWithString:url];
+    }
+    return @"";
 }
 
 @end
@@ -478,14 +519,16 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
    
     report.currentPost = post;
     [self setFinishHandler:block];
-    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
+    NSArray *activities = @[];
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
                              report,
                              [[STKActivityTumblr alloc] initWithDelegate:self],
                              [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
-    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];;
+    }
+    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeMail];;
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
                                                                                          applicationActivities:activities];
-    NSLog(@"Sharing a post...");
     [controller setExcludedActivityTypes:excludedActivities];
     if (! controller) return nil;
     [self setViewController:controller];
