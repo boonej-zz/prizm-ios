@@ -14,11 +14,25 @@
 		2C0D735219CB2B7A0078A9B9 /* HAHashTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D735119CB2B7A0078A9B9 /* HAHashTagView.m */; };
 		2C0D735619CB346B0078A9B9 /* HAInterestsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D735419CB346B0078A9B9 /* HAInterestsViewController.m */; };
 		2C0D735719CB346B0078A9B9 /* HAInterestsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */; };
+		2C1D45A819DF7C49008D84C5 /* STKInsightHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45A719DF7C49008D84C5 /* STKInsightHeaderView.m */; };
+		2C1D45AC19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45AA19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m */; };
+		2C1D45AD19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C1D45AB19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib */; };
+		2C1D45B619E43676008D84C5 /* STKInsightTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45B419E43676008D84C5 /* STKInsightTextCell.m */; };
+		2C1D45B719E43676008D84C5 /* STKInsightTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C1D45B519E43676008D84C5 /* STKInsightTextCell.xib */; };
+		2C1D45BA19E43A3B008D84C5 /* UITableViewCell+HAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45B919E43A3B008D84C5 /* UITableViewCell+HAExtensions.m */; };
+		2C1D45BE19E45E94008D84C5 /* STKInsightArchiveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45BC19E45E94008D84C5 /* STKInsightArchiveCell.m */; };
+		2C1D45BF19E45E94008D84C5 /* STKInsightArchiveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */; };
 		2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
 		2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */; };
 		2C97973219D9D9A7003A6C0A /* STKCreatePostViewController in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973119D9D9A7003A6C0A /* STKCreatePostViewController */; };
+		2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C97973419DC5285003A6C0A /* HAInsightCell.m */; };
+		2C97973719DC5285003A6C0A /* HAInsightCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973519DC5285003A6C0A /* HAInsightCell.xib */; };
+		2C97973E19DC5946003A6C0A /* HAInsightsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C97973C19DC5946003A6C0A /* HAInsightsViewController.m */; };
+		2C97973F19DC5946003A6C0A /* HAInsightsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973D19DC5946003A6C0A /* HAInsightsViewController.xib */; };
+		2C97974819DDE998003A6C0A /* STKInsight.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C97974719DDE998003A6C0A /* STKInsight.m */; };
+		2C97974B19DDEB8E003A6C0A /* STKInsightTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C97974A19DDEB8E003A6C0A /* STKInsightTarget.m */; };
 		2CA39E7D19D0A8CE001F9F0C /* STKHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */; };
 		2CB0126119A693D800B07C96 /* HAUtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */; };
 		2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB073D819AE634A00F70B7E /* HAFollowCell.m */; };
@@ -285,6 +299,19 @@
 		2C0D735319CB346B0078A9B9 /* HAInterestsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAInterestsViewController.h; sourceTree = "<group>"; };
 		2C0D735419CB346B0078A9B9 /* HAInterestsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAInterestsViewController.m; sourceTree = "<group>"; };
 		2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAInterestsViewController.xib; sourceTree = "<group>"; };
+		2C1D45A619DF7C49008D84C5 /* STKInsightHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsightHeaderView.h; sourceTree = "<group>"; };
+		2C1D45A719DF7C49008D84C5 /* STKInsightHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInsightHeaderView.m; sourceTree = "<group>"; };
+		2C1D45A919E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsightTitleCellTableViewCell.h; sourceTree = "<group>"; };
+		2C1D45AA19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInsightTitleCellTableViewCell.m; sourceTree = "<group>"; };
+		2C1D45AB19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInsightTitleCellTableViewCell.xib; sourceTree = "<group>"; };
+		2C1D45B319E43676008D84C5 /* STKInsightTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsightTextCell.h; sourceTree = "<group>"; };
+		2C1D45B419E43676008D84C5 /* STKInsightTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInsightTextCell.m; sourceTree = "<group>"; };
+		2C1D45B519E43676008D84C5 /* STKInsightTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInsightTextCell.xib; sourceTree = "<group>"; };
+		2C1D45B819E43A3B008D84C5 /* UITableViewCell+HAExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+HAExtensions.h"; sourceTree = "<group>"; };
+		2C1D45B919E43A3B008D84C5 /* UITableViewCell+HAExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+HAExtensions.m"; sourceTree = "<group>"; };
+		2C1D45BB19E45E94008D84C5 /* STKInsightArchiveCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsightArchiveCell.h; sourceTree = "<group>"; };
+		2C1D45BC19E45E94008D84C5 /* STKInsightArchiveCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInsightArchiveCell.m; sourceTree = "<group>"; };
+		2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInsightArchiveCell.xib; sourceTree = "<group>"; };
 		2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+STKLocation.h"; sourceTree = "<group>"; };
 		2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+STKLocation.m"; sourceTree = "<group>"; };
 		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
@@ -293,6 +320,16 @@
 		2C6B263E199AA7E900A14BD8 /* NSArray+Reverse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Reverse.h"; sourceTree = "<group>"; };
 		2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Reverse.m"; sourceTree = "<group>"; };
 		2C97973119D9D9A7003A6C0A /* STKCreatePostViewController */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = STKCreatePostViewController; sourceTree = "<group>"; };
+		2C97973319DC5285003A6C0A /* HAInsightCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HAInsightCell.h; path = Prism/HAInsightCell.h; sourceTree = "<group>"; };
+		2C97973419DC5285003A6C0A /* HAInsightCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HAInsightCell.m; path = Prism/HAInsightCell.m; sourceTree = "<group>"; };
+		2C97973519DC5285003A6C0A /* HAInsightCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HAInsightCell.xib; path = Prism/HAInsightCell.xib; sourceTree = "<group>"; };
+		2C97973B19DC5946003A6C0A /* HAInsightsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAInsightsViewController.h; sourceTree = "<group>"; };
+		2C97973C19DC5946003A6C0A /* HAInsightsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAInsightsViewController.m; sourceTree = "<group>"; };
+		2C97973D19DC5946003A6C0A /* HAInsightsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAInsightsViewController.xib; sourceTree = "<group>"; };
+		2C97974619DDE998003A6C0A /* STKInsight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsight.h; sourceTree = "<group>"; };
+		2C97974719DDE998003A6C0A /* STKInsight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInsight.m; sourceTree = "<group>"; };
+		2C97974919DDEB8E003A6C0A /* STKInsightTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsightTarget.h; sourceTree = "<group>"; };
+		2C97974A19DDEB8E003A6C0A /* STKInsightTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInsightTarget.m; sourceTree = "<group>"; };
 		2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeViewController.xib; sourceTree = "<group>"; };
 		2CB0125F19A693D800B07C96 /* HAUtilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAUtilityFunctions.h; sourceTree = "<group>"; };
 		2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAUtilityFunctions.m; sourceTree = "<group>"; };
@@ -2675,6 +2712,9 @@
 				2C0D735319CB346B0078A9B9 /* HAInterestsViewController.h */,
 				2C0D735419CB346B0078A9B9 /* HAInterestsViewController.m */,
 				2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */,
+				2C97973B19DC5946003A6C0A /* HAInsightsViewController.h */,
+				2C97973C19DC5946003A6C0A /* HAInsightsViewController.m */,
+				2C97973D19DC5946003A6C0A /* HAInsightsViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2736,6 +2776,8 @@
 				D0E85B11197D7910001A5333 /* STKMessageBanner.m */,
 				2C0D735019CB2B7A0078A9B9 /* HAHashTagView.h */,
 				2C0D735119CB2B7A0078A9B9 /* HAHashTagView.m */,
+				2C1D45A619DF7C49008D84C5 /* STKInsightHeaderView.h */,
+				2C1D45A719DF7C49008D84C5 /* STKInsightHeaderView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -2827,6 +2869,18 @@
 				2C0D730319C0E4BB0078A9B9 /* HAAccountSelectionCell.h */,
 				2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */,
 				2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */,
+				2C97973319DC5285003A6C0A /* HAInsightCell.h */,
+				2C97973419DC5285003A6C0A /* HAInsightCell.m */,
+				2C97973519DC5285003A6C0A /* HAInsightCell.xib */,
+				2C1D45A919E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.h */,
+				2C1D45AA19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m */,
+				2C1D45AB19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib */,
+				2C1D45B319E43676008D84C5 /* STKInsightTextCell.h */,
+				2C1D45B419E43676008D84C5 /* STKInsightTextCell.m */,
+				2C1D45B519E43676008D84C5 /* STKInsightTextCell.xib */,
+				2C1D45BB19E45E94008D84C5 /* STKInsightArchiveCell.h */,
+				2C1D45BC19E45E94008D84C5 /* STKInsightArchiveCell.m */,
+				2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4702,6 +4756,10 @@
 				BE8368FA18DA186300526637 /* STKTrust.m */,
 				BEC0676618E46B1F00B5C5E6 /* STKHashTag.h */,
 				BEC0676718E46B1F00B5C5E6 /* STKHashTag.m */,
+				2C97974619DDE998003A6C0A /* STKInsight.h */,
+				2C97974719DDE998003A6C0A /* STKInsight.m */,
+				2C97974919DDEB8E003A6C0A /* STKInsightTarget.h */,
+				2C97974A19DDEB8E003A6C0A /* STKInsightTarget.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -4740,6 +4798,8 @@
 				2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */,
 				2CB0125F19A693D800B07C96 /* HAUtilityFunctions.h */,
 				2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */,
+				2C1D45B819E43A3B008D84C5 /* UITableViewCell+HAExtensions.h */,
+				2C1D45B919E43A3B008D84C5 /* UITableViewCell+HAExtensions.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -4864,6 +4924,7 @@
 			files = (
 				BE5F690218F2131F006D2CD1 /* STKWebViewController.xib in Resources */,
 				2C97973219D9D9A7003A6C0A /* STKCreatePostViewController in Resources */,
+				2C1D45AD19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib in Resources */,
 				BECA6B4B197588670026FEEC /* STKCreateCommentViewController.xib in Resources */,
 				886FBD23195A094F0007188B /* STKInviteFriendsViewController.xib in Resources */,
 				BE1E09D61850E58900975652 /* STKVerticalNavigationController.xib in Resources */,
@@ -4886,6 +4947,7 @@
 				BE9CC7A718FDFF480097D308 /* STKLuminariesCell.xib in Resources */,
 				BE4C642E18970BE500467E2D /* STKLocationViewController.xib in Resources */,
 				BEED1FF6190944B100D0BFFF /* STKSettingsViewController.xib in Resources */,
+				2C1D45B719E43676008D84C5 /* STKInsightTextCell.xib in Resources */,
 				BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */,
 				BEF361CC18B2C3700085A38B /* STKTriImageCell.xib in Resources */,
 				BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */,
@@ -4911,6 +4973,7 @@
 				BE02EAB5182A80A200A5505A /* Images.xcassets in Resources */,
 				BE7391C91901A58200AD81AB /* STKHashtagPostsViewController.xib in Resources */,
 				D073F6E8195B4A590049E573 /* STKExploreFilterViewController.xib in Resources */,
+				2C97973719DC5285003A6C0A /* HAInsightCell.xib in Resources */,
 				88384078195B3275006750FC /* STKInviteFriendsShareCell.xib in Resources */,
 				2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */,
 				2C0D730C19C392F90078A9B9 /* HAFastSwitchViewController.xib in Resources */,
@@ -4922,10 +4985,12 @@
 				88053313193E6F2300A8E44D /* STKSearchTrustCell.xib in Resources */,
 				BEC01A14182AF43000080601 /* STKProfileViewController.xib in Resources */,
 				2CA39E7D19D0A8CE001F9F0C /* STKHomeViewController.xib in Resources */,
+				2C97973F19DC5946003A6C0A /* HAInsightsViewController.xib in Resources */,
 				BE8150D31982D3860094C7A8 /* Localizable.strings in Resources */,
 				BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */,
 				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
+				2C1D45BF19E45E94008D84C5 /* STKInsightArchiveCell.xib in Resources */,
 				BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */,
 				2CB073E019AF96C900F70B7E /* HAFollowViewController.xib in Resources */,
 				BE1C7083192F8E7400223BDC /* STKAccoladeViewController.xib in Resources */,
@@ -4998,6 +5063,7 @@
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,
 				BECA36B519004F88000A5851 /* STKGradientView.m in Sources */,
 				BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */,
+				2C1D45AC19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m in Sources */,
 				BE2E5FC518FB49E000A53AF6 /* STKSegmentedControl.m in Sources */,
 				BE9E806219746BE600C63180 /* STKPhoneNumberFormatter.m in Sources */,
 				BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */,
@@ -5014,6 +5080,7 @@
 				BE5F68FA18F0A522006D2CD1 /* STKResolutionQuery.m in Sources */,
 				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
 				BE63C53918FD89890087585E /* STKActivityIndicatorView.m in Sources */,
+				2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
@@ -5025,6 +5092,7 @@
 				883D87D719463E7F00195B11 /* MPSurveyNavigationController.m in Sources */,
 				88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */,
 				BE5767F5187B4DFF004AEE1F /* STKPostViewController.m in Sources */,
+				2C97973E19DC5946003A6C0A /* HAInsightsViewController.m in Sources */,
 				BE7391C3190193AB00AD81AB /* STKSearchResultsViewController.m in Sources */,
 				883D87DD19463E7F00195B11 /* UIImage+MPImageEffects.m in Sources */,
 				BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */,
@@ -5047,6 +5115,8 @@
 				BEE5F03D187DC03300CB5325 /* STKInitialProfileStatisticsCell.m in Sources */,
 				BEE0FA47185B6722009FCA3B /* STKDateCell.m in Sources */,
 				BE477C1D186E2ED4003672A0 /* STKProfileCell.m in Sources */,
+				2C1D45BA19E43A3B008D84C5 /* UITableViewCell+HAExtensions.m in Sources */,
+				2C97974B19DDEB8E003A6C0A /* STKInsightTarget.m in Sources */,
 				8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */,
 				BE24B523183AA653009BC02A /* STKCircleView.m in Sources */,
 				BE05502118A404E600F6B534 /* UIImage+BoxBlur.m in Sources */,
@@ -5067,6 +5137,7 @@
 				BEC0676818E46B1F00B5C5E6 /* STKHashTag.m in Sources */,
 				BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */,
 				2CBA45C819AC275D00A5BCD6 /* HANotificationViewController.m in Sources */,
+				2C1D45A819DF7C49008D84C5 /* STKInsightHeaderView.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,
 				BE4C64291896FA3800467E2D /* STKLocationListViewController.m in Sources */,
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
@@ -5085,8 +5156,10 @@
 				2C0D735219CB2B7A0078A9B9 /* HAHashTagView.m in Sources */,
 				BE2B7E82191AB3E300E6F408 /* STKGraphView.m in Sources */,
 				BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */,
+				2C1D45BE19E45E94008D84C5 /* STKInsightArchiveCell.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
 				883D87D819463E7F00195B11 /* MPSurveyQuestion.m in Sources */,
+				2C97974819DDE998003A6C0A /* STKInsight.m in Sources */,
 				D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */,
 				883D87DA19463E7F00195B11 /* NSData+MPBase64.m in Sources */,
 				BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */,
@@ -5129,6 +5202,7 @@
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
 				88384077195B3275006750FC /* STKInviteFriendsShareCell.m in Sources */,
 				BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */,
+				2C1D45B619E43676008D84C5 /* STKInsightTextCell.m in Sources */,
 				BEFCEE07182C210600648B9F /* STKSecurePassword.m in Sources */,
 				BE95438B1892CD1400DCC3B1 /* STKCommentCell.m in Sources */,
 				BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */,
@@ -5505,6 +5579,7 @@
 					"$(PROJECT_DIR)/Prism",
 					"$(PROJECT_DIR)",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (

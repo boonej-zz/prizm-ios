@@ -25,7 +25,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import "Mixpanel.h"
 #import "STKContentStore.h"
-
+#import "HAInsightsViewController.h"
 #import "STKAuthorizationToken.h"
 //#import "TMAPIClient.h"
 
@@ -65,6 +65,9 @@
     UIViewController *pvc = [[STKProfileViewController alloc] init];
     UIViewController *avc = [[STKActivityViewController alloc] init];
     UIViewController *gvc = [[STKGraphViewController alloc] init];
+//    UIViewController *ivc = [[HAInsightsViewController alloc] init];
+    
+
 
 
     STKMenuController *nvc = [[STKMenuController alloc] init];

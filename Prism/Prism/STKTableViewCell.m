@@ -24,7 +24,8 @@
     
     STKTableViewCell *cell = [tv dequeueReusableCellWithIdentifier:className];
     if(!cell) {
-        NSData *nibData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:className ofType:@"nib"]];
+        NSString *location = [[NSBundle mainBundle] pathForResource:className ofType:@"nib"];
+        NSData *nibData = [NSData dataWithContentsOfFile:location];
         if(nibData) {
             UINib *nib = [UINib nibWithData:nibData bundle:nil];
             [tv registerNib:nib forCellReuseIdentifier:className];

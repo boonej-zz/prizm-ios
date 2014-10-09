@@ -20,6 +20,8 @@
 #import "Mixpanel.h"
 #import "STKHashTag.h"
 #import "STKUser.h"
+#import "STKInsightTarget.h"
+#import "STKInsight.h"
 
 NSString * const STKContentStoreErrorDomain = @"STKContentStoreErrorDomain";
 
@@ -409,6 +411,69 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             } else {
                 block(nil, err);
             }
+        }];
+    }];
+}
+
+- (void)fetchInsightsForUser:(STKUser *)user
+            fetchDescription:(STKFetchDescription *)desc
+                  completion:(void (^)(NSArray *insights, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [user uniqueID], @"insights"]];
+        
+        STKQueryObject *query = [[STKQueryObject alloc] init];
+        STKResolutionQuery *insightQuery = [STKResolutionQuery resolutionQueryForField:@"insight"];
+        STKResolutionQuery *targetQuery = [STKResolutionQuery resolutionQueryForField:@"target"];
+        STKResolutionQuery *creatorQuery = [STKResolutionQuery resolutionQueryForField:@"creator"];
+        [query addSubquery:insightQuery];
+        [query addSubquery:targetQuery];
+        [query addSubquery:creatorQuery];
+        [c setQueryObject:query];
+        [c setModelGraph:@[@"STKInsightTarget"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setResolutionMap:@{@"User": @"STKUser", @"Insight": @"STKInsight"}];
+        [c setShouldReturnArray:YES];
+        [c setContext:[[STKUserStore store] context]];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if(!err) {
+                [[[STKUserStore store] context] save:nil];
+            }
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)likeInsight:(STKInsightTarget *)insightTarget completion:(void (^)(NSError *))block
+{
+    [insightTarget setLiked:[NSNumber numberWithBool:YES]];
+    [insightTarget setDisliked:[NSNumber numberWithBool:NO]];
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err){
+            block(err);
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/insights", [insightTarget uniqueID], @"like"]];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(err);
+        }];
+    }];
+}
+
+- (void)dislikeInsight:(STKInsightTarget *)insightTarget completion:(void(^)(NSError *err))block
+{
+    [insightTarget setLiked:[NSNumber numberWithBool:NO]];
+    [insightTarget setDisliked:[NSNumber numberWithBool:YES]];
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err){
+            block(err);
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/insights", [insightTarget uniqueID], @"dislike"]];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(err);
         }];
     }];
 }
@@ -975,5 +1040,6 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     
     [[Mixpanel sharedInstance] track:@"Commented on post" properties:mixpanelDataForObject(@{@"Post creator" : posterIdentifier})];
 }
+
 
 @end

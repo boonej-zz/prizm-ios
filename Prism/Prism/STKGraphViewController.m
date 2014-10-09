@@ -15,6 +15,7 @@
 #import "STKPost.h"
 #import "STKGraphCell.h"
 #import "STKNavigationButton.h"
+#import "HAInsightsViewController.h"
 
 @interface STKGraphViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -43,7 +44,7 @@
 @property (nonatomic, strong) NSDictionary *typeNames;
 @property (nonatomic, strong) NSMutableDictionary *graphValues;
 @property (nonatomic, strong) NSDictionary *typeHashTags;
-
+@property (nonatomic, strong) UIBarButtonItem *insightsButton;
 @property (nonatomic, strong) NSString *currentFilter;
 
 @end
@@ -89,10 +90,6 @@
     return self;
 }
 
-- (void)showInsights:(id)sender
-{
-    
-}
 
 - (IBAction)dateBarDidChange:(id)sender
 {
@@ -168,9 +165,11 @@
 
 - (void)menuWillAppear:(BOOL)animated
 {
+    [self.navigationItem setRightBarButtonItem:nil];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
             [[self underlayView] setAlpha:0.5];
+            
         }];
     } else {
         [[self underlayView] setAlpha:0.5];
@@ -179,13 +178,16 @@
 
 - (void)menuWillDisappear:(BOOL)animated
 {
+    [self.navigationItem setRightBarButtonItem:self.insightsButton];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
             [[self underlayView] setAlpha:0.0];
         }];
     } else {
         [[self underlayView] setAlpha:0.0];
+        
     }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -256,6 +258,9 @@
     [self addBlurViewWithHeight:64.f];
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]];
     
+    self.insightsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_brain"] style:UIBarButtonItemStylePlain target:self action:@selector(loadInsights:)];
+    [self.navigationItem setRightBarButtonItem:self.insightsButton];
+    
     [[self lifetimeLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     [[[self lifetimeLabel] layer] setCornerRadius:2];
     [[self lifetimeLabel] setClipsToBounds:YES];
@@ -266,6 +271,12 @@
     
     [[self graphView] setXLabels:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7"]];
     [[self graphView] setYLabels:@[@"", @"25%", @"50%", @"75%", @"100%"]];
+}
+
+- (void)loadInsights:(id)sender
+{
+    HAInsightsViewController *iv = [[HAInsightsViewController alloc] init];
+    [self.navigationController pushViewController:iv animated:YES];
 }
 
 
@@ -449,6 +460,7 @@
     
     return c;
 }
+
 
 
 @end

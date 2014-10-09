@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="STKInsightTitleCellTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title of Article More information " lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhd-gv-VuE">
+                        <rect key="frame" x="10" y="-3" width="225" height="49"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="225" id="Pf4-Ay-xdA"/>
+                            <constraint firstAttribute="height" constant="49" id="fbL-vP-i44"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QbI-V0-UVu">
+                        <rect key="frame" x="266" y="1" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="5Df-Np-vwD"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="CwV-Nb-Goh"/>
+                            <constraint firstAttribute="width" constant="44" id="Sbz-04-deo"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="q7y-3r-SV1"/>
+                        </constraints>
+                        <inset key="imageEdgeInsets" minX="-8" minY="-8" maxX="-8" maxY="-8"/>
+                        <state key="normal" image="action_share">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <state key="highlighted" image="action_share_selected"/>
+                        <connections>
+                            <action selector="shareInsight:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="3x4-Nt-wRn"/>
+                        </connections>
+                    </button>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iew-s2-bY1" customClass="UIControl">
+                        <rect key="frame" x="0.0" y="-1" width="247" height="46"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <action selector="titleAreaTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="b9s-zz-OuN"/>
+                        </connections>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="jhd-gv-VuE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="2Du-ac-Ayg"/>
+                    <constraint firstAttribute="centerY" secondItem="jhd-gv-VuE" secondAttribute="centerY" id="EU9-8w-YzX"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Iew-s2-bY1" secondAttribute="bottom" constant="-10" id="G2K-aF-XKC"/>
+                    <constraint firstAttribute="centerY" secondItem="jhd-gv-VuE" secondAttribute="centerY" id="HWc-cB-wO8"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="QbI-V0-UVu" secondAttribute="trailing" constant="2" id="NHR-19-61M"/>
+                    <constraint firstItem="QbI-V0-UVu" firstAttribute="leading" secondItem="Iew-s2-bY1" secondAttribute="trailing" constant="19" id="W8U-hB-m89"/>
+                    <constraint firstItem="Iew-s2-bY1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-9" id="ZyE-Po-xoT"/>
+                    <constraint firstItem="Iew-s2-bY1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="i6m-BX-PS0"/>
+                    <constraint firstAttribute="centerY" secondItem="QbI-V0-UVu" secondAttribute="centerY" constant="-1" id="j4r-B8-eaG"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="titleLabel" destination="jhd-gv-VuE" id="cf0-ch-FOZ"/>
+                <outlet property="titleOverlay" destination="Iew-s2-bY1" id="HiG-0x-qOx"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="144.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="action_share" width="24" height="24"/>
+        <image name="action_share_selected" width="56" height="56"/>
+    </resources>
+</document>

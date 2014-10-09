@@ -30,6 +30,8 @@
 #import "STKUserStore.h"
 #import "HAFastSwitchViewController.h"
 #import "HAInterestsViewController.h"
+#import "STKInsightTarget.h"
+#import "HAInsightsViewController.h"
 
 @import QuartzCore;
 
@@ -56,6 +58,7 @@ static BOOL HAActivityIsAnimating = NO;
 @property (nonatomic, strong) UIImageView *centerNotificationView;
 @property (nonatomic, strong) UIImageView *rightNotificationView;
 @property (nonatomic, strong) UIImageView *extendedNotificationView;
+@property (nonatomic) UINavigationControllerOperation operation;
 
 @property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
@@ -709,6 +712,22 @@ static BOOL HAActivityIsAnimating = NO;
     [[vc navigationController] pushViewController:postVC animated:animated];
 }
 
+- (void)transitionToInsightTarget:(STKInsightTarget *)it
+                fromRect:(CGRect)r
+              usingImage:(UIImage *)image
+        inViewController:(UIViewController *)vc
+                animated:(BOOL)animated
+{
+    [self setImageTransitionRect:r];
+    
+    [[self transitionImageView] setImage:image];
+    
+    HAInsightsViewController *ivc = [[HAInsightsViewController alloc] init];
+    [ivc setInsightTarget:it];
+    [ivc setModal:YES];
+    [[vc navigationController] pushViewController:ivc animated:animated];
+}
+
 - (void)transitionToCreatePostWithImage:(UIImage *)image
 {
     
@@ -728,6 +747,7 @@ static BOOL HAActivityIsAnimating = NO;
     }
 }
 
+
 - (UIImage *)transitioningImage
 {
     return [[self transitionImageView] image];
@@ -738,11 +758,25 @@ static BOOL HAActivityIsAnimating = NO;
                                                fromViewController:(UIViewController *)fromVC
                                                  toViewController:(UIViewController *)toVC
 {
-    if(([fromVC class] == [STKPostViewController class] && operation == UINavigationControllerOperationPop)
+    self.operation = operation;
+    if ([fromVC class] == [HAInsightsViewController class] && [toVC class] == [HAInsightsViewController class]) {
+        HAInsightsViewController *hvc = (HAInsightsViewController *)fromVC;
+        if ([hvc.segmentedControl selectedSegmentIndex] == 0 && ! [hvc isArchived] && [toVC class] != [STKProfileViewController class]) {
+            if (operation == UINavigationControllerOperationPush) {
+                [[self transitionImageView] setFrame:self.imageTransitionRect];
+            } else {
+                [[self transitionImageView] setFrame:CGRectMake(0, 116, 320, 300)];
+            }
+            return  self;
+        } else {
+            return nil;
+        }
+    }
+    if(([fromVC class] == [STKPostViewController class]&& operation == UINavigationControllerOperationPop)
     || ([toVC class] == [STKPostViewController class] && operation == UINavigationControllerOperationPush)) {
         
         
-        if([fromVC class] == [STKPostViewController class]) {
+        if([fromVC class] == [STKPostViewController class] || ([fromVC class] == [HAInsightsViewController class] && operation == UINavigationControllerOperationPop)) {
             [[self transitionImageView] setFrame:CGRectMake(0, 111, 320, 300)];
         } else {
             [[self transitionImageView] setFrame:[self imageTransitionRect]];
@@ -762,9 +796,17 @@ static BOOL HAActivityIsAnimating = NO;
 
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext
 {
+    
     UIViewController *inVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIViewController *outVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];    
-    if([inVC class] == [STKPostViewController class]) {
+    UIViewController *outVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    CGRect transitionFrame;
+    if ([inVC class] == [HAInsightsViewController class]) {
+        transitionFrame = CGRectMake(0, 116, 320, 300);
+    } else {
+        transitionFrame = CGRectMake(0, 111, 320, 300);
+    }
+    
+    if([inVC class] == [STKPostViewController class] || ([inVC class] == [HAInsightsViewController class] && self.operation == UINavigationControllerOperationPush)) {
         [[inVC view] setAlpha:0];
         [[transitionContext containerView] addSubview:[inVC view]];
     } else {
@@ -776,8 +818,8 @@ static BOOL HAActivityIsAnimating = NO;
     [[self transitionImageView] setHidden:NO];
 
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
-        if([inVC class] == [STKPostViewController class]) {
-            [[self transitionImageView] setFrame:CGRectMake(0, 111, 320, 300)];
+        if([inVC class] == [STKPostViewController class] || ([inVC class] == [HAInsightsViewController class] && self.operation == UINavigationControllerOperationPush)) {
+            [[self transitionImageView] setFrame:transitionFrame];
             [[inVC view] setAlpha:1];
         } else {
             [[self transitionImageView] setFrame:[self imageTransitionRect]];
@@ -791,6 +833,8 @@ static BOOL HAActivityIsAnimating = NO;
          }
      }];
 }
+
+
 
 
 - (void)animationEnded:(BOOL) transitionCompleted

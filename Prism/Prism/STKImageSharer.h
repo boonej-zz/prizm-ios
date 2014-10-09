@@ -14,6 +14,7 @@ extern NSString * const STKActivityTypeWhatsapp;
 extern NSString * const HANotificationReportInappropriate;
 
 @class STKPost;
+@class STKInsight;
 
 @interface STKImageSharer : NSObject
 
@@ -25,4 +26,5 @@ extern NSString * const HANotificationReportInappropriate;
 - (UIActivityViewController *)activityViewControllerForImage:(UIImage *)image object:(id)object
                                                finishHandler:(void (^)(UIDocumentInteractionController *))block;
 - (NSArray *)activitiesForImage:(UIImage *)image title:(NSString *)title viewController:(UIViewController *)viewController;
+- (UIActivityViewController *)activityViewControllerForInsight:(STKInsight *)insight finishHandler:(void (^)(UIDocumentInteractionController *))block;
 @end

@@ -12,7 +12,7 @@
 
 @import CoreLocation;
 
-@class STKUser, STKPostComment, STKFetchDescription;
+@class STKUser, STKPostComment, STKFetchDescription, STKInsightTarget;
 
 extern NSString * const STKContentStoreErrorDomain;
 typedef enum {
@@ -42,6 +42,13 @@ extern NSString * const STKContentStorePostDeletedKey;
 - (void)fetchProfilePostsForUser:(STKUser *)user
                 fetchDescription:(STKFetchDescription *)desc
                       completion:(void (^)(NSArray *posts, NSError *err))block;
+
+- (void)fetchInsightsForUser:(STKUser *)user
+            fetchDescription:(STKFetchDescription *)desc
+                  completion:(void (^)(NSArray *posts, NSError *err))block;
+
+- (void)likeInsight:(STKInsightTarget *)insightTarget completion:(void(^)(NSError *err))block;
+- (void)dislikeInsight:(STKInsightTarget *)insightTarget completion:(void(^)(NSError *err))block;
 
 - (void)fetchExplorePostsWithFetchDescription:(STKFetchDescription *)desc
                                    completion:(void (^)(NSArray *posts, NSError *err))block;

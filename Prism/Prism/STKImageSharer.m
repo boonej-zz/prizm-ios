@@ -11,6 +11,7 @@
 #import "STKPost.h"
 #import "STKImageStore.h"
 #import "STKContentStore.h"
+#import "STKInsight.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
 NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
@@ -48,6 +49,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @property (nonatomic, strong) NSString * text;
 @property (nonatomic, strong) UIImage * image;
 @property (nonatomic, strong) STKPost *post;
+@property (nonatomic, strong) STKInsight *insight;
 @property (nonatomic, strong) NSString *baseText;
 
 @end
@@ -76,6 +78,24 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     self.baseText = @"";
     if ([self post]) {
         NSMutableArray *textArr = [[self.post.text componentsSeparatedByString:@" "] mutableCopy];
+        __block NSInteger i = 0;
+        NSArray *hashTags = [self.post.tags allObjects];
+        [textArr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([(NSString *)obj rangeOfString:@"@"].location != NSNotFound) {
+                if ([hashTags count] >= i + 1) {
+                    STKUser *user = [hashTags objectAtIndex:i];
+                    NSString *newObj = user.name;
+                    ++i;
+                    [textArr replaceObjectAtIndex:idx withObject:newObj];
+                }
+                
+            }
+        }];
+        self.baseText = [textArr componentsJoinedByString:@" "];
+    }
+    
+    if ([self insight]){
+        NSMutableArray *textArr = [[self.insight.text componentsSeparatedByString:@" "] mutableCopy];
         __block NSInteger i = 0;
         NSArray *hashTags = [self.post.tags allObjects];
         [textArr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -130,6 +150,10 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
             t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
         }
     }
+    
+    if ([self insight]) {
+        t = self.insight.text;
+    }
     [d setObject:t forKey:@"text"];
     return d;
 }
@@ -143,6 +167,10 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
             t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
         }
     }
+    
+    if ([self insight]) {
+        t = self.insight.text;
+    }
     return t;
 }
     
@@ -154,6 +182,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         if ([self.post text]){
             t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
         }
+    }
+    if ([self insight]) {
+        t = self.insight.text;
     }
     NSExtensionItem *i = [[NSExtensionItem alloc] init];
     [i setAttributedContentText:[[NSAttributedString alloc] initWithString:t]];
@@ -519,16 +550,47 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
    
     report.currentPost = post;
     [self setFinishHandler:block];
-    NSArray *activities = @[];
+    NSArray *activities = nil;
     if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
         activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
                              report,
                              [[STKActivityTumblr alloc] initWithDelegate:self],
                              [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
+    } else {
+        activities = @[report];
     }
+    
     NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeMail];;
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
                                                                                          applicationActivities:activities];
+    [controller setExcludedActivityTypes:excludedActivities];
+    if (! controller) return nil;
+    [self setViewController:controller];
+    
+    return controller;
+}
+
+- (UIActivityViewController *)activityViewControllerForInsight:(STKInsight *)insight finishHandler:(void (^)(UIDocumentInteractionController *))block
+{
+    HAItemSource *is = [[HAItemSource alloc] init];
+    UIImage *image = [[STKImageStore store] cachedImageForURLString:[insight filePath]];
+    NSString *text = [NSString stringWithFormat:@"%@ %@", [insight text], @"http://www.prizmapp.com/download"];
+    [is setInsight:insight];
+    [is setImage:image];
+    [is setText: text];
+    [self setFinishHandler:block];
+    NSArray *activities = nil;
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
+                       [[STKActivityTumblr alloc] initWithDelegate:self],
+                       [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
+    } else {
+        activities = @[];
+    }
+    
+    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard];;
+    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
+                                                                             applicationActivities:activities];
     [controller setExcludedActivityTypes:excludedActivities];
     if (! controller) return nil;
     [self setViewController:controller];

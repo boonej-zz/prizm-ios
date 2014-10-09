@@ -25,6 +25,8 @@
 #import "STKFetchDescription.h"
 #import "Mixpanel.h"
 #import "STKImageStore.h"
+#import "STKInsight.h"
+#import "STKInsightTarget.h"
 
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
@@ -662,6 +664,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+
+
+
 - (void)searchUsersWithType:(NSString *)type completion:(void (^)(NSArray *profiles, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
@@ -680,6 +685,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setQueryObject:q];
         
         [c setModelGraph:@[@"STKUser"]];
+        
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setShouldReturnArray:YES];
