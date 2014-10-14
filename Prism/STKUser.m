@@ -48,7 +48,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
-tumblrTokenSecret, tumblrLastMinID;
+tumblrTokenSecret, tumblrLastMinID, programCode;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
@@ -69,6 +69,7 @@ tumblrTokenSecret, tumblrLastMinID;
              @"type" : @"type",
              @"provider" : @"externalServiceType",
              @"provider_id" : @"externalServiceID",
+             @"program_code": @"programCode",
              
              @"subtype" : @"subtype",
              @"state" : @"state",

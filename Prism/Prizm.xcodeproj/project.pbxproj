@@ -287,6 +287,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2CEC922619E70DA900B13D95 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2C0D730319C0E4BB0078A9B9 /* HAAccountSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAAccountSelectionCell.h; sourceTree = "<group>"; };
 		2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAAccountSelectionCell.m; sourceTree = "<group>"; };
@@ -343,6 +356,10 @@
 		2CBA45C619AC275D00A5BCD6 /* HANotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HANotificationViewController.m; sourceTree = "<group>"; };
 		2CBA45C719AC275D00A5BCD6 /* HANotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HANotificationViewController.xib; sourceTree = "<group>"; };
 		2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 2.xcdatamodel"; sourceTree = "<group>"; };
+		2CEC921419E70DA900B13D95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2CEC921519E70DA900B13D95 /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		2CEC921619E70DA900B13D95 /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		2CEC921819E70DA900B13D95 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -2460,6 +2477,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2CEC921219E70DA900B13D95 /* Prizm-Share */ = {
+			isa = PBXGroup;
+			children = (
+				2CEC921519E70DA900B13D95 /* ShareViewController.h */,
+				2CEC921619E70DA900B13D95 /* ShareViewController.m */,
+				2CEC921819E70DA900B13D95 /* MainInterface.storyboard */,
+				2CEC921319E70DA900B13D95 /* Supporting Files */,
+			);
+			path = "Prizm-Share";
+			sourceTree = "<group>";
+		};
+		2CEC921319E70DA900B13D95 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2CEC921419E70DA900B13D95 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		883D87B019463E7F00195B11 /* Mixpanel */ = {
 			isa = PBXGroup;
 			children = (
@@ -2507,6 +2543,7 @@
 				BEF7A0831843ACA500A3AFFB /* Utility */,
 				BE02EAA8182A80A200A5505A /* Prism */,
 				BE02EAC1182A80A200A5505A /* PrismTests */,
+				2CEC921219E70DA900B13D95 /* Prizm-Share */,
 				BE02EAA1182A80A200A5505A /* Frameworks */,
 				BE02EAA0182A80A200A5505A /* Products */,
 			);
@@ -4853,6 +4890,7 @@
 				BE02EA9C182A80A200A5505A /* Frameworks */,
 				BE02EA9D182A80A200A5505A /* Resources */,
 				BE36BC4518CA147B00694145 /* ShellScript */,
+				2CEC922619E70DA900B13D95 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);

@@ -121,14 +121,38 @@
     [[self emailField] becomeFirstResponder];
 }
 
+- (void)keyboardWillAppear:(NSNotification *)note
+{
+    [self.verticalController setBackButtonHidden:YES];
+}
+
+- (void)keyboardWillDisappear:(NSNotification *)note
+{
+    [self.verticalController setBackButtonHidden:NO];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(keyboardWillAppear:)
+//                                                 name:UIKeyboardWillShowNotification
+//                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(keyboardWillDisappear:)
+//                                                 name:UIKeyboardWillHideNotification
+//                                               object:nil];
+    [super viewWillAppear:animated];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super viewWillDisappear:animated];
 }
 

@@ -2012,7 +2012,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                                                       @"coverPhotoPath",
                                                                       @"profilePhotoPath",
                                                                       @"birthday",
-                                                                      @"phoneNumber"
+                                                                      @"phoneNumber",
+                                                                      @"programCode"
                                                                       ]];
 
             [c addQueryValues:values];

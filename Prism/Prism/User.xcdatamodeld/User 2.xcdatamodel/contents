@@ -13,6 +13,7 @@
     <entity name="STKHashTag" representedClassName="STKHashTag" syncable="YES">
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="hashTags" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="insights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="hashTags" inverseEntity="STKInsight" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="hashTags" inverseEntity="STKPost" syncable="YES"/>
     </entity>
@@ -75,14 +76,18 @@
     </entity>
     <entity name="STKPostComment" representedClassName="STKPostComment" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="hashTagsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="likeCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="tagsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="comment" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="comments" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="hashTags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKHashTag" inverseName="comments" inverseEntity="STKHashTag" syncable="YES"/>
         <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedComments" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="comments" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="commentsTaggedIn" inverseEntity="STKUser" syncable="YES"/>
     </entity>
     <entity name="STKTrust" representedClassName="STKTrust" syncable="YES">
         <attribute name="creatorCommentsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -130,6 +135,7 @@
         <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="postCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="programCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="religion" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="subtype" optional="YES" attributeType="String" syncable="YES"/>
@@ -145,6 +151,7 @@
         <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="accoladesReceived" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="accoladeReceiver" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="creator" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="commentsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="tags" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="createdActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="creator" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="createdInsights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="creator" inverseEntity="STKInsight" syncable="YES"/>
         <relationship name="createdPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="creator" inverseEntity="STKPost" syncable="YES"/>
@@ -163,12 +170,12 @@
     </entity>
     <elements>
         <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="165"/>
-        <element name="STKHashTag" positionX="36" positionY="180" width="128" height="103"/>
+        <element name="STKHashTag" positionX="36" positionY="180" width="128" height="120"/>
         <element name="STKInsight" positionX="18" positionY="153" width="128" height="270"/>
         <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="133"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
-        <element name="STKPostComment" positionX="18" positionY="162" width="128" height="178"/>
+        <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="898"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="928"/>
     </elements>
 </model>

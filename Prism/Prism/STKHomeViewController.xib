@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
@@ -109,23 +110,12 @@
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPY-pr-6vz">
                             <rect key="frame" x="15" y="263" width="290" height="44"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                            <state key="normal" title="Stuff We Like" backgroundImage="btn_lg">
+                            <state key="normal" title="Who to Follow" backgroundImage="btn_lg">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="stuffWeLike:" destination="-1" eventType="touchUpInside" id="rh0-gM-eGl"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uBm-FC-sh7">
-                            <rect key="frame" x="15" y="309" width="290" height="44"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                            <state key="normal" title="Trending" backgroundImage="btn_lg">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="trending:" destination="-1" eventType="touchUpInside" id="3rd-56-dkf"/>
+                                <action selector="whotofollow:" destination="-1" eventType="touchUpInside" id="P7O-H4-lgz"/>
                             </connections>
                         </button>
                     </subviews>
@@ -138,14 +128,11 @@
                         <constraint firstAttribute="trailing" secondItem="hPY-pr-6vz" secondAttribute="trailing" constant="15" id="8HA-CR-Fc4"/>
                         <constraint firstItem="kgD-Mz-FX2" firstAttribute="leading" secondItem="dhA-RV-lrR" secondAttribute="leading" constant="15" id="9Fw-iK-GmV"/>
                         <constraint firstItem="3zZ-iZ-25B" firstAttribute="leading" secondItem="dhA-RV-lrR" secondAttribute="leading" constant="15" id="LWx-jI-bne"/>
-                        <constraint firstItem="uBm-FC-sh7" firstAttribute="top" secondItem="hPY-pr-6vz" secondAttribute="bottom" constant="2" id="QoM-ya-MVo"/>
                         <constraint firstAttribute="trailing" secondItem="oRY-0V-FFF" secondAttribute="trailing" id="aRK-dj-9cU"/>
                         <constraint firstAttribute="trailing" secondItem="kgD-Mz-FX2" secondAttribute="trailing" constant="15" id="csa-vQ-G44"/>
                         <constraint firstItem="hPY-pr-6vz" firstAttribute="leading" secondItem="dhA-RV-lrR" secondAttribute="leading" constant="15" id="d8O-oZ-dPn"/>
-                        <constraint firstItem="uBm-FC-sh7" firstAttribute="leading" secondItem="dhA-RV-lrR" secondAttribute="leading" constant="15" id="esg-Db-fPW"/>
                         <constraint firstAttribute="trailing" secondItem="3zZ-iZ-25B" secondAttribute="trailing" constant="15" id="jvt-ij-KFY"/>
                         <constraint firstItem="oRY-0V-FFF" firstAttribute="top" secondItem="dhA-RV-lrR" secondAttribute="top" constant="15" id="rJA-m8-pZf"/>
-                        <constraint firstAttribute="trailing" secondItem="uBm-FC-sh7" secondAttribute="trailing" constant="15" id="x0N-ub-qcm"/>
                         <constraint firstItem="3zZ-iZ-25B" firstAttribute="top" secondItem="kgD-Mz-FX2" secondAttribute="bottom" constant="2" id="yK0-99-eMt"/>
                         <constraint firstItem="hPY-pr-6vz" firstAttribute="top" secondItem="3zZ-iZ-25B" secondAttribute="bottom" constant="2" id="z0H-Ao-xlw"/>
                     </constraints>

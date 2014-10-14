@@ -27,6 +27,7 @@
 #import "STKInviteFriendsViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "UIERealTimeBlurView.h"
+#import "HAFollowViewController.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
@@ -425,21 +426,20 @@
     [[self navigationController] pushViewController:stvc animated:YES];
 }
 
-- (IBAction)stuffWeLike:(id)sender
+- (IBAction)whotofollow:(id)sender
 {
-    UINavigationController *nvc = (UINavigationController *)[[self menuController] childViewControllerForType:[STKExploreViewController class]];
-    STKExploreViewController *vc = [[nvc viewControllers] firstObject];
-    [vc setExploreType:STKExploreTypeFeatured];
-    [[self menuController] setSelectedViewController:nvc];
+    HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
+//    [vc setExploreType:STKExploreTypeFeatured];
+    [[self navigationController] pushViewController:fvc animated:YES];
 }
-
-- (IBAction)trending:(id)sender
-{
-    UINavigationController *nvc = (UINavigationController *)[[self menuController] childViewControllerForType:[STKExploreViewController class]];
-    STKExploreViewController *vc = [[nvc viewControllers] firstObject];
-    [vc setExploreType:STKExploreTypePopular];
-    [[self menuController] setSelectedViewController:nvc];
-}
+//
+//- (IBAction)trending:(id)sender
+//{
+//    UINavigationController *nvc = (UINavigationController *)[[self menuController] childViewControllerForType:[STKExploreViewController class]];
+//    STKExploreViewController *vc = [[nvc viewControllers] firstObject];
+//    [vc setExploreType:STKExploreTypePopular];
+//    [[self menuController] setSelectedViewController:nvc];
+//}
 
 - (IBAction)inviteFriends:(id)sender
 {

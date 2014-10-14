@@ -60,6 +60,7 @@ extern BOOL const STKUserStatusInActive;
 
 @property (nonatomic, strong) NSString *externalServiceType;
 @property (nonatomic, strong) NSString *externalServiceID;
+@property (nonatomic, retain) NSString *programCode;
 
 @property (nonatomic, strong) NSString *state;
 @property (nonatomic, retain) NSString *zipCode;

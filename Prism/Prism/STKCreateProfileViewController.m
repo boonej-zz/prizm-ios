@@ -171,7 +171,8 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                    @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
-                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
+                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
+                   @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}}
                    ];
         
         _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday"];
@@ -256,7 +257,8 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                        
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
-                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
+                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
+                       @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday"];
         }
@@ -345,7 +347,7 @@ const long STKCreateProgressGeocoding = 4;
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
-    [[self tableView] setDelaysContentTouches:NO];
+    [[self tableView] setDelaysContentTouches:YES];
     
     NSMutableAttributedString *title = [[[self tosButton] attributedTitleForState:UIControlStateNormal] mutableCopy];
     [title addAttribute:NSUnderlineStyleAttributeName value:@(NSUnderlineStyleSingle) range:NSMakeRange(0, [title length])];
@@ -359,7 +361,7 @@ const long STKCreateProgressGeocoding = 4;
     
     [[self avatarView] setOutlineWidth:3];
     [[self avatarView] setOutlineColor:STKTextColor];
-    [self addBlurViewWithHeight:64.f];
+//    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)viewDidAppear:(BOOL)animated

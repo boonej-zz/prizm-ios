@@ -954,10 +954,12 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/posts", [post uniqueID], @"comments"]];
 
         STKQueryObject *q = [[STKQueryObject alloc] init];
+        STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"tags"];
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"creator"]];
 //        STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
 //        [q addSubquery:tagQ];
         [q addSubquery:[STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]]];
+        [q addSubquery:rq];
         
         [c setQueryObject:q];
         

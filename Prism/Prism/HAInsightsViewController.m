@@ -24,7 +24,7 @@
 #import "STKResolvingImageView.h"
 #import "STKProfileViewController.h"
 
-@interface HAInsightsViewController () <UITableViewDataSource, UITableViewDelegate, STKInsightCellDelegate, UITextViewDelegate, UIViewControllerAnimatedTransitioning>
+@interface HAInsightsViewController () <UITableViewDataSource, UITableViewDelegate, STKInsightCellDelegate, UITextViewDelegate>
 
 @property (nonatomic, strong) NSArray *insights;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
@@ -84,7 +84,7 @@
     } else {
         [self.segmentedControl setHidden:YES];
         [self.tableView setContentInset:UIEdgeInsetsMake(65.f, 0, 0, 0)];
-        [self addBlurViewWithHeight:65.f];
+        [self addBlurViewWithHeight:64.f];
     }
     
 //    [self.tableView set]

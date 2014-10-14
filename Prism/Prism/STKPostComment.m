@@ -11,7 +11,7 @@
 #import "STKUserStore.h"
 
 @implementation STKPostComment
-@dynamic uniqueID, text, date, likeCount, likes, post, creator, activities;
+@dynamic uniqueID, text, date, likeCount, likes, post, creator, activities, hashTags, tags, tagsCount, hashTagsCount;
 
 + (NSDictionary *)remoteToLocalKeyMap
 {
@@ -22,7 +22,11 @@
              @"create_date" : [STKBind bindMapForKey:@"date" transform:STKBindTransformDateTimestamp],
              // post
              @"likes_count" : @"likeCount",
-             @"likes" : [STKBind bindMapForKey:@"likes" matchMap:@{@"uniqueID" : @"_id"}]
+             @"likes" : [STKBind bindMapForKey:@"likes" matchMap:@{@"uniqueID" : @"_id"}],
+             @"tags"  : [STKBind bindMapForKey:@"tags" matchMap:@{@"uniqueID" : @"_id"}],
+             @"hash_tags": [STKBind bindMapForKey:@"hashTags" matchMap:@{@"title" : @"title"}],
+             @"tags_count": @"tagsCount",
+             @"hash_tags_count": @"hashTagsCount"
              };
 }
 
