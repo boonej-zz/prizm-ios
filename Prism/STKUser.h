@@ -14,7 +14,7 @@
 #import <GoogleOpenSource/GoogleOpenSource.h>
 #import <GooglePlus/GooglePlus.h>
 
-@class STKActivityItem, STKPost, STKTrust;
+@class STKActivityItem, STKPost, STKTrust, STKInterest;
 
 extern NSString * const STKUserGenderMale;
 extern NSString * const STKUserGenderFemale;
@@ -56,7 +56,7 @@ extern BOOL const STKUserStatusInActive;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *firstName;
 @property (nonatomic, retain) NSString *lastName;
-@property (nonatomic, strong) NSString *interests;
+@property (nonatomic, strong) NSSet *interests;
 
 @property (nonatomic, strong) NSString *externalServiceType;
 @property (nonatomic, strong) NSString *externalServiceID;
@@ -147,6 +147,10 @@ extern BOOL const STKUserStatusInActive;
 - (void)addFFeedPostsObject:(STKPost *)object;
 - (void)addFFeedPosts:(NSSet *)objects;
 - (NSDictionary *)mixpanelProperties;
+- (void)addInterestsObject:(STKInterest *)value;
+- (void)removeInterestsObject:(STKInterest *)value;
+- (void)addInterests:(NSSet *)values;
+- (void)removeInterests:(NSSet *)values;
 
 @end
 

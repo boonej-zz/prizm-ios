@@ -26,6 +26,9 @@
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
 		2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */; };
+		2C7B79FA19ED8E19000EC061 /* STKInterest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B79F919ED8E19000EC061 /* STKInterest.m */; };
+		2C7B79FE19EDA9C6000EC061 /* HAInterestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B79FC19EDA9C6000EC061 /* HAInterestCell.m */; };
+		2C7B79FF19EDA9C6000EC061 /* HAInterestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */; };
 		2C97973219D9D9A7003A6C0A /* STKCreatePostViewController in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973119D9D9A7003A6C0A /* STKCreatePostViewController */; };
 		2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C97973419DC5285003A6C0A /* HAInsightCell.m */; };
 		2C97973719DC5285003A6C0A /* HAInsightCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973519DC5285003A6C0A /* HAInsightCell.xib */; };
@@ -332,6 +335,11 @@
 		2C6969281982A71900E4B9FD /* STKIntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKIntroViewController.xib; sourceTree = "<group>"; };
 		2C6B263E199AA7E900A14BD8 /* NSArray+Reverse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Reverse.h"; sourceTree = "<group>"; };
 		2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Reverse.m"; sourceTree = "<group>"; };
+		2C7B79F819ED8E19000EC061 /* STKInterest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInterest.h; sourceTree = "<group>"; };
+		2C7B79F919ED8E19000EC061 /* STKInterest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInterest.m; sourceTree = "<group>"; };
+		2C7B79FB19EDA9C6000EC061 /* HAInterestCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAInterestCell.h; sourceTree = "<group>"; };
+		2C7B79FC19EDA9C6000EC061 /* HAInterestCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAInterestCell.m; sourceTree = "<group>"; };
+		2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAInterestCell.xib; sourceTree = "<group>"; };
 		2C97973119D9D9A7003A6C0A /* STKCreatePostViewController */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = STKCreatePostViewController; sourceTree = "<group>"; };
 		2C97973319DC5285003A6C0A /* HAInsightCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HAInsightCell.h; path = Prism/HAInsightCell.h; sourceTree = "<group>"; };
 		2C97973419DC5285003A6C0A /* HAInsightCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HAInsightCell.m; path = Prism/HAInsightCell.m; sourceTree = "<group>"; };
@@ -2918,6 +2926,9 @@
 				2C1D45BB19E45E94008D84C5 /* STKInsightArchiveCell.h */,
 				2C1D45BC19E45E94008D84C5 /* STKInsightArchiveCell.m */,
 				2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */,
+				2C7B79FB19EDA9C6000EC061 /* HAInterestCell.h */,
+				2C7B79FC19EDA9C6000EC061 /* HAInterestCell.m */,
+				2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4797,6 +4808,8 @@
 				2C97974719DDE998003A6C0A /* STKInsight.m */,
 				2C97974919DDEB8E003A6C0A /* STKInsightTarget.h */,
 				2C97974A19DDEB8E003A6C0A /* STKInsightTarget.m */,
+				2C7B79F819ED8E19000EC061 /* STKInterest.h */,
+				2C7B79F919ED8E19000EC061 /* STKInterest.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -4989,6 +5002,7 @@
 				BEF7A08E1843AEAB00A3AFFB /* STKPanelViewController.xib in Resources */,
 				BEF361CC18B2C3700085A38B /* STKTriImageCell.xib in Resources */,
 				BEC726EE18AC111D009350E8 /* STKLabelCell.xib in Resources */,
+				2C7B79FF19EDA9C6000EC061 /* HAInterestCell.xib in Resources */,
 				2CB073DB19AE634A00F70B7E /* HAFollowCell.xib in Resources */,
 				BEF7A08218439E0800A3AFFB /* STKRegisterViewController.xib in Resources */,
 				BE7D5AE518D37327005D3893 /* STKUserPostListViewController.xib in Resources */,
@@ -5095,6 +5109,7 @@
 				2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */,
 				BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
+				2C7B79FA19ED8E19000EC061 /* STKInterest.m in Sources */,
 				2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */,
 				883D87DB19463E7F00195B11 /* UIColor+MPColor.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
@@ -5147,6 +5162,7 @@
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
+				2C7B79FE19EDA9C6000EC061 /* HAInterestCell.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
 				2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */,
 				BE7D5AE918D382E5005D3893 /* STKTextInputViewController.m in Sources */,

@@ -27,6 +27,7 @@
 #import "STKImageStore.h"
 #import "STKInsight.h"
 #import "STKInsightTarget.h"
+#import "STKInterest.h"
 
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
@@ -556,8 +557,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     
 }
 
-- (void)updateInterests:(NSArray *)interests forUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block
+- (void)updateInterestsforUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block
 {
+    NSArray *interests = [user.interests allObjects];
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if (err) {
             block (nil, err);
@@ -565,11 +567,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID], @"interests"]];
-        NSDictionary *dataDictionary = @{@"interests": interests};
+        NSMutableArray *interestData = [NSMutableArray array];
+        [interests enumerateObjectsUsingBlock:^(STKInterest *interest, NSUInteger idx, BOOL *stop) {
+            [interestData addObject:interest.uniqueID];
+        }];
+        NSDictionary *dataDictionary = @{@"interests": interestData};
         [c addQueryValues:dataDictionary];
         [c setModelGraph:@[user]];
         [c setContext:[user managedObjectContext]];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            [[self context] save:nil];
             block(obj, err);
         }];
         
@@ -646,6 +653,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {
             [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
             [q addSubquery:[STKContainQuery containQueryForField:@"following" key:@"_id" value:[[self currentUser] uniqueID]]];
+            [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"interests"]];
             
             //[q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
 //            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" keyValues:@{@"from" : [[self currentUser] uniqueID], @"to" : [[self currentUser] uniqueID]}]];
@@ -654,6 +662,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setQueryObject:q];
         
         [c setModelGraph:@[user]];
+        [c setResolutionMap:@{@"Interest": @"STKInterest"}];
         [c setContext:[self context]];
         [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
             if(!err) {
@@ -1431,6 +1440,24 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
     }];
 
+}
+
+- (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/interests"]];
+        [c setModelGraph:@[@"STKInterest"]];
+        [c setShouldReturnArray:YES];
+        [c setContext:[self context]];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+        
+    }];
 }
 
 

@@ -75,13 +75,7 @@ tumblrTokenSecret, tumblrLastMinID, programCode;
              @"state" : @"state",
              @"zip_postal" : @"zipCode",
              @"gender" : @"gender",
-             @"interests" : [STKBind bindMapForKey:@"interests" transform:^id(id inValue, STKTransformDirection direction) {
-                 if ([inValue isKindOfClass:[NSArray class]]) {
-                     return [inValue componentsJoinedByString:@","];
-                 } else {
-                     return @"";
-                 }
-             }],
+             @"interests" : [STKBind bindMapForKey:@"interests" matchMap:@{@"uniqueID" : @"_id"}],
              
              @"info" : @"blurb",
              @"website" : @"website",

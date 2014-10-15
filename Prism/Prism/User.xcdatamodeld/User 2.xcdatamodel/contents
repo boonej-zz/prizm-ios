@@ -42,6 +42,15 @@
         <relationship name="insight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="targets" inverseEntity="STKInsight" syncable="YES"/>
         <relationship name="target" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="targetedInsights" inverseEntity="STKUser" syncable="YES"/>
     </entity>
+    <entity name="STKInterest" representedClassName="STKInterest" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="topLevel" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="subinterests" inverseEntity="STKInterest" syncable="YES"/>
+        <relationship name="subinterests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="parent" inverseEntity="STKInterest" syncable="YES"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="interests" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
     <entity name="STKPost" representedClassName="STKPost" syncable="YES">
         <attribute name="commentCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="coordinateLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -128,7 +137,6 @@
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="instagramLastMinID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="instagramToken" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="interests" optional="YES" attributeType="String" defaultValueString="@&quot;&quot;" syncable="YES"/>
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mascotName" optional="YES" attributeType="String" syncable="YES"/>
@@ -160,6 +168,7 @@
         <relationship name="following" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="followers" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="fProfilePosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="fInverseProfile" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="insightsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="tags" inverseEntity="STKInsight" syncable="YES"/>
+        <relationship name="interests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="users" inverseEntity="STKInterest" syncable="YES"/>
         <relationship name="likedComments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="likes" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="likedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="likes" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="ownedActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="notifiedUser" inverseEntity="STKActivityItem" syncable="YES"/>
@@ -169,7 +178,7 @@
         <relationship name="targetedInsights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsightTarget" inverseName="target" inverseEntity="STKInsightTarget" syncable="YES"/>
     </entity>
     <elements>
-        <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="165"/>
+        <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="163"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="120"/>
         <element name="STKInsight" positionX="18" positionY="153" width="128" height="270"/>
         <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="133"/>
@@ -177,5 +186,6 @@
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKUser" positionX="0" positionY="0" width="128" height="928"/>
+        <element name="STKInterest" positionX="18" positionY="153" width="128" height="148"/>
     </elements>
 </model>

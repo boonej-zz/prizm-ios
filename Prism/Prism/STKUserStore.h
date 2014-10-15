@@ -106,6 +106,7 @@ typedef enum {
 - (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSDictionary *weeks, NSError *err))block;
 - (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSDictionary *data, NSError *err))block;
 - (void)fetchHashtagsForPostTypesWithCompletion:(void (^)(NSDictionary *hashTags, NSError *err))block;
-- (void)updateInterests:(NSArray *)interests forUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block;
+- (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block;
+- (void)updateInterestsforUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block;
 
 @end

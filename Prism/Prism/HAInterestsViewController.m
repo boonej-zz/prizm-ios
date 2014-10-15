@@ -10,18 +10,23 @@
 #import "HAHashTagView.h"
 #import "STKUserStore.h"
 #import "STKProcessingView.h"
+#import "STKInterest.h"
+#import "HAInterestCell.h"
 
 static int currentTag = 0;
 
-@interface HAInterestsViewController () <HAHashTagViewDelegate>
+@interface HAInterestsViewController () <HAHashTagViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, weak) IBOutlet UIView * tagView;
-@property (nonatomic, strong) NSArray * tagList;
+@property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray * tagObjects;
-@property (nonatomic, strong) NSMutableArray * selectedHashTags;
+//@property (nonatomic, strong) NSMutableArray * selectedHashTags;
+@property (nonatomic, strong) NSMutableArray *selectedInterests;
+@property (nonatomic, strong) NSArray *interests;
 @property (nonatomic, weak) IBOutlet UIView * overlayView;
 @property (nonatomic, strong) UIBarButtonItem * doneButton;
 @property (nonatomic, strong) NSMutableDictionary *tagPositions;
+@property (nonatomic, strong) NSMutableArray *cellSizes;
 
 - (IBAction)doneButtonTapped:(id)sender;
 - (IBAction)overlayCloseTapped:(id)sender;
@@ -55,7 +60,13 @@ static int currentTag = 0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.selectedInterests = [NSMutableArray array];
+    [self.selectedInterests addObjectsFromArray:[self.user.interests allObjects]];
+    self.tagObjects = [NSMutableArray arrayWithArray:self.selectedInterests];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"HAInterestCell" bundle:nil] forCellWithReuseIdentifier:@"InterestCell"];
+    [self.collectionView setAllowsMultipleSelection:YES];
     self.tagPositions = [NSMutableDictionary dictionary];
+    [self.collectionView setContentInset:UIEdgeInsetsMake(75, 10, 0, 10)];
     // Do any additional setup after loading the view from its nib.
     if ([self isStandalone]){
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
@@ -65,7 +76,7 @@ static int currentTag = 0;
     }
     
     self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
-    [self.doneButton setEnabled:NO];
+    [self.doneButton setEnabled:YES];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                       NSFontAttributeName : STKFont(22)}];
     [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
@@ -73,19 +84,80 @@ static int currentTag = 0;
     [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor clearColor],
                                               NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];
     
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    [layout setMinimumInteritemSpacing:2.f];
+    [layout setMinimumLineSpacing:6.f];
+    [layout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    [self.collectionView setCollectionViewLayout:layout];
+    
     [self.navigationItem setRightBarButtonItem:self.doneButton];
+    [[STKUserStore store] fetchInterests:^(NSArray *interests, NSError *err) {
+        NSLog(@"%@", interests);
+        self.interests = interests;
+        [self loadCollectionData];
+    }];
     
     self.title = @"Interests";
     UIImage *backgroundImage = [UIImage imageNamed:@"img_background"];
-    self.tagList = @[@"fitness", @"beauty", @"sports", @"technology", @"business", @"design", @"photography", @"style", @"politics", @"arts", @"food", @"music", @"movies", @"gaming", @"auto", @"science", @"travel", @"medicine", @"legal", @"hunting", @"fishing"];
-//    self.tagList = [[NSUserDefaults standardUserDefaults] objectForKey:HAUserStoreInterestsKey];
-    
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
-    [backgroundView setFrame:self.view.bounds];
     [self.view insertSubview:backgroundView atIndex:0];
-    self.tagObjects = [NSMutableArray array];
-    self.selectedHashTags = [NSMutableArray array];
-    [self createTags];
+}
+
+- (void)loadCollectionData
+{
+    self.tagObjects = [NSMutableArray arrayWithArray:self.selectedInterests];
+    [self.interests enumerateObjectsUsingBlock:^(STKInterest *interest, NSUInteger idx, BOOL *stop) {
+        if ([self.tagObjects indexOfObject:interest] == NSNotFound) {
+            [self.tagObjects addObject:interest];
+        }
+    }];
+    [self sizeCells];
+    [self.collectionView reloadData];
+}
+
+- (void)sizeCells
+{
+    self.cellSizes = [NSMutableArray array];
+    NSInteger maxWidth = self.collectionView.contentSize.width;
+    UIFont *font = STKFont(16);
+    for (int i = 0; i < self.tagObjects.count; i = i + 3) {
+        STKInterest *i1 = i < self.tagObjects.count?[self.tagObjects objectAtIndex:i]:nil;
+        STKInterest *i2 = i +1 < self.tagObjects.count?[self.tagObjects objectAtIndex:i + 1]:nil;
+        STKInterest *i3 = i+2 < self.tagObjects.count?[self.tagObjects objectAtIndex:i + 2]:nil;
+        CGSize size1;
+        CGSize size2;
+        CGSize size3;
+        if (i1) {
+            size1 = [i1.text sizeWithAttributes:@{NSFontAttributeName: font}];
+        } else {
+            size1 = CGSizeMake(0, 0);
+        }
+        if (i2) {
+            size2 = [i2.text sizeWithAttributes:@{NSFontAttributeName: font}];
+        } else {
+            size2 = CGSizeMake(0, 0);
+        }
+        if (i3) {
+            size3 = [i3.text sizeWithAttributes:@{NSFontAttributeName :font}];
+        } else {
+            size3 = CGSizeMake(0, 0);
+        }
+        
+        NSInteger totalWidth = size1.width + size2.width + size3.width;
+        NSInteger diff = maxWidth - totalWidth - 8;
+        size1.width = size1.width + (diff/3);
+        size2.width = size2.width + (diff/3);
+        size3.width = size3.width + (diff/3);
+        if (size1.height){
+            [self.cellSizes addObject:@{@"width": @(size1.width)}];
+        }
+        if (size2.height){
+            [self.cellSizes addObject:@{@"width": @(size2.width)}];
+        }
+        if (size3.height){
+            [self.cellSizes addObject:@{@"width": @(size3.width)}];
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -103,12 +175,11 @@ static int currentTag = 0;
 
 - (IBAction)doneButtonTapped:(id)sender
 {
-    __block NSMutableArray *hashtags = [NSMutableArray array];
-    [self.selectedHashTags enumerateObjectsUsingBlock:^(HAHashTagView *ht, NSUInteger idx, BOOL *stop) {
-        [hashtags addObject:ht.text];
-    }];
-    [STKProcessingView present];
-    [[STKUserStore store] updateInterests:hashtags forUser:self.user completion:^(STKUser *u, NSError *err) {
+//    __block NSMutableArray *hashtags = [NSMutableArray array];
+//
+//    [STKProcessingView present];
+    [self loadCollectionData];
+    [[STKUserStore store] updateInterestsforUser:self.user completion:^(STKUser *u, NSError *err) {
         [STKProcessingView dismiss];
         if ([self isStandalone]){
             [self.navigationController popViewControllerAnimated:YES];
@@ -116,6 +187,7 @@ static int currentTag = 0;
             [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
         }
     }];
+    
 }
 
 - (IBAction)overlayCloseTapped:(id)sender
@@ -132,41 +204,6 @@ static int currentTag = 0;
 }
 
 #pragma mark Hashtag Methods
-- (void)createTags
-{
-    [self.tagList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//        NSString *tag = [obj objectForKey:@"name"];
-        NSString *tag = obj;
-        HAHashTagView *hv = [self createViewForTag:tag];
-        [self.tagObjects addObject:hv];
-        [self.tagView addSubview:hv];
-        [self.tagPositions setObject:hv forKey:tag];
-        [hv setSisterTags:self.tagPositions];
-    }];
-    if (self.user.interests && ![self.user.interests isEqualToString:@""]){
-        NSArray *interests = [self.user.interests componentsSeparatedByString:@","];
-        [interests enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-           NSArray *foundTags = [self.tagObjects filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(HAHashTagView *evaluatedObject, NSDictionary *bindings) {
-               if ([evaluatedObject.text isEqualToString:obj]) {
-                   return YES;
-               } else {
-                   return NO;
-               }
-               
-           }]];
-            if (foundTags.count > 0) {
-                [foundTags enumerateObjectsUsingBlock:^(HAHashTagView *obj, NSUInteger idx, BOOL *stop) {
-                    [self.tagObjects removeObject:obj];
-                    [self.selectedHashTags addObject:obj];
-                    [obj markSelected];
-                }];
-            }
-        }];
-        [self hideOverlayView];
-        
-        [self animateNextTag];
-    }
-}
 
 - (void)back:(id)sender
 {
@@ -201,22 +238,70 @@ static int currentTag = 0;
     }
 }
 
-#pragma mark Hashtag View Delegate
 
-- (void)hashTagTapped:(HAHashTagView *)ht
+#pragma mark Collection View Datasource
+
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if ([ht isSelected]) {
-        if ([self.tagObjects containsObject:ht]) {
-            [self.tagObjects removeObject:ht];
-            [self.selectedHashTags addObject:ht];
-        }
-    } else {
-        if ([self.selectedHashTags containsObject:ht]) {
-            [self.selectedHashTags removeObject:ht];
-            [self.tagObjects addObject:ht];
-        }
-    }
-    [self.doneButton setEnabled:(self.selectedHashTags.count > 2)];
+    return self.tagObjects.count;
 }
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    HAInterestCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"InterestCell" forIndexPath:indexPath];
+    STKInterest *interest = [self.tagObjects objectAtIndex:indexPath.row];
+    [cell setInterest:interest];
+    if ([self.selectedInterests indexOfObject:interest] != NSNotFound){
+        [cell setSelected:YES];
+    }
+    //    CGRect frame = cell.frame;
+//    frame.size.width += 10;
+//    cell.frame = frame;
+//    label.center = cell.center;
+    return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    float width = [[[self.cellSizes objectAtIndex:indexPath.row] objectForKey:@"width"] floatValue];
+    CGSize size = CGSizeMake(width, 24);
+    return size;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    HAInterestCell *cell = (HAInterestCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [cell setSelected:YES];
+    if (cell.interest.subinterests.count > 0 && [[self selectedInterests] indexOfObject:cell.interest] == NSNotFound) {
+        NSMutableArray *ips = [NSMutableArray array];
+        [cell.interest.subinterests enumerateObjectsUsingBlock:^(STKInterest *interest, BOOL *stop) {
+            if ([self.tagObjects indexOfObject:interest] == NSNotFound) {
+                [self.tagObjects addObject:interest];
+                [ips addObject:[NSIndexPath indexPathForRow:[self.tagObjects indexOfObject:interest] inSection:0]];
+            }
+        }];
+        [self sizeCells];
+        [collectionView insertItemsAtIndexPaths:ips];
+        
+    }
+    [self.selectedInterests addObject:cell.interest];
+    [self.user addInterestsObject:cell.interest];
+    if (self.selectedInterests.count > 2) {
+        [self.navigationItem setRightBarButtonItem:self.doneButton];
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    HAInterestCell *cell = (HAInterestCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [self.selectedInterests removeObject:cell.interest];
+    [self.user removeInterestsObject:cell.interest];
+    [cell setSelected:NO];
+    if (self.selectedInterests.count < 3) {
+        [self.navigationItem setRightBarButtonItem:nil];
+    }
+}
+
 
 @end
