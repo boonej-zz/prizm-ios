@@ -1451,6 +1451,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/interests"]];
         STKQueryObject *q = [[STKQueryObject alloc] init];
+        [q setLimit:200];
 
         STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"subinterests"];
         [rq setField:@"subinterests"];

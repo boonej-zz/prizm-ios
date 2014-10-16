@@ -12,6 +12,7 @@
 #import "STKProcessingView.h"
 #import "STKInterest.h"
 #import "HAInterestCell.h"
+#import "UIViewController+STKControllerItems.h"
 
 static int currentTag = 0;
 
@@ -61,7 +62,7 @@ static int currentTag = 0;
 {
     [super viewDidLoad];
     self.selectedInterests = [NSMutableArray array];
-    
+    [self addBlurViewWithHeight:64.f];
     self.tagObjects = [NSMutableArray array];
     [self.collectionView registerNib:[UINib nibWithNibName:@"HAInterestCell" bundle:nil] forCellWithReuseIdentifier:@"InterestCell"];
     [self.collectionView setAllowsMultipleSelection:YES];

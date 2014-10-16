@@ -21,6 +21,13 @@
 
 @synthesize selected = _selected;
 
+- (void)prepareForReuse
+{
+    [self setSelected:NO];
+    [self setStored:NO];
+    [super prepareForReuse];
+}
+
 - (void)awakeFromNib {
     // Initialization code
     [self.label setFont:STKFont(16)];
