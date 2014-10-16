@@ -12,6 +12,7 @@
 #import "STKPostHeaderView.h"
 
 @class STKPost;
+@class STKUser;
 
 @interface STKPostCell : STKTableViewCell
 
@@ -42,3 +43,4 @@
 - (void)populateWithPost:(STKPost *)post;
 
 @end
+

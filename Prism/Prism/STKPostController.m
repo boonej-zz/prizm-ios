@@ -143,6 +143,9 @@
 
 - (void)showPost:(STKPost *)p fromDerivativePost:(STKPost *)derivative
 {
+//    STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+//    [pvc setProfile:derivative.originalPost.creator];
+//    [self.viewController.navigationController pushViewController:pvc animated:YES];
     NSInteger idx = [[self posts] indexOfObject:derivative];
     [p setImageURLString:[derivative imageURLString]];
     
@@ -358,6 +361,8 @@
         
     }
 }
+
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
