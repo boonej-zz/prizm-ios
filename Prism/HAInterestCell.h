@@ -14,5 +14,6 @@
 
 @property (nonatomic, strong) STKInterest *interest;
 @property (nonatomic, getter=isSelected) BOOL selected;
+@property (nonatomic, getter=isStored) BOOL stored;
 
 @end

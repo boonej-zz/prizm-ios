@@ -1450,7 +1450,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/interests"]];
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+
+        STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"subinterests"];
+        [rq setField:@"subinterests"];
+        [rq setFormat:@"basic"];
+        [q addSubquery:rq];
+        [c setQueryObject:q];
         [c setModelGraph:@[@"STKInterest"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setResolutionMap:@{@"Interest": @"STKInterest"}];
         [c setShouldReturnArray:YES];
         [c setContext:[self context]];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {

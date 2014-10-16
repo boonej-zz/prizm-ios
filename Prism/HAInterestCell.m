@@ -23,31 +23,52 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    [self setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     [self.label setFont:STKFont(16)];
-    [self.label setTextColor:[UIColor whiteColor]];
     self.layer.cornerRadius = 12;
 }
 
 - (void)setInterest:(STKInterest *)interest
 {
     _interest = interest;
-    [self.label setText:[self.interest.text capitalizedString]];
+    [self styleCell];
 }
 
 - (void)setSelected:(BOOL)selected
 {
     _selected = selected;
-    if (selected) {
+    [self styleCell];
+}
+
+- (void)setStored:(BOOL)stored
+{
+    _stored = stored;
+    [self styleCell];
+}
+
+- (void)styleCell
+{
+    if ([self isSelected] || [self isStored]) {
         NSString *textString = [self.interest.text stringByReplacingOccurrencesOfString:@" " withString:@""];
         [self.label setText:[NSString stringWithFormat:@"#%@", [textString lowercaseString]]];
+    } else {
+        [self.label setText:[self.interest.text capitalizedString]];
+    }
+    if ([self isSelected] && ![self isStored]) {
+        [self setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.4f]];
         [self setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.4f]];
         [self.label setTextColor:STKSelectedTextColor];
     } else {
-        [self.label setText:[self.interest.text capitalizedString]];
-        [self setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
         [self.label setTextColor:[UIColor whiteColor]];
     }
+    
+    if ([self isStored]) {
+        [self setBackgroundColor:[UIColor colorWithRed:14.f/255.f green:132.f/255.f blue:218.f/255.f alpha:0.4f]];
+    }
+    
+    if (![self isStored] && ![self isSelected]) {
+        [self setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
+    }
+    
 }
 
 

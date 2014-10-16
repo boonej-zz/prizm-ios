@@ -44,6 +44,7 @@
     </entity>
     <entity name="STKInterest" representedClassName="STKInterest" syncable="YES">
         <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="isSubinterest" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="topLevel" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
@@ -182,10 +183,10 @@
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="120"/>
         <element name="STKInsight" positionX="18" positionY="153" width="128" height="270"/>
         <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="133"/>
+        <element name="STKInterest" positionX="18" positionY="153" width="128" height="165"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKUser" positionX="0" positionY="0" width="128" height="928"/>
-        <element name="STKInterest" positionX="18" positionY="153" width="128" height="148"/>
     </elements>
 </model>

@@ -97,6 +97,7 @@ typedef enum {
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.searchTextField becomeFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

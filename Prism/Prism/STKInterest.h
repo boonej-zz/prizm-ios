@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSNumber * topLevel;
 @property (nonatomic, retain) NSSet *subinterests;
 @property (nonatomic, retain) STKInterest *parent;
+@property (nonatomic) BOOL isSubinterest;
 @end
 
 @interface STKInterest (CoreDataGeneratedAccessors)

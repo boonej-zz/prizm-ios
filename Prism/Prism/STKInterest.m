@@ -18,6 +18,7 @@
 @dynamic topLevel;
 @dynamic subinterests;
 @dynamic parent;
+@dynamic isSubinterest;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -36,7 +37,8 @@
     return @{
              @"_id" : @"uniqueID",
              @"text" : @"text",
-             @"subinterests" : [STKBind bindMapForKey:@"subinterests" matchMap:@{@"text" : @"text"}]
+             @"subinterests" : [STKBind bindMapForKey:@"subinterests" matchMap:@{@"uniqueID" : @"_id"}],
+             @"is_subinterest": @"isSubinterest"
              };
 }
 

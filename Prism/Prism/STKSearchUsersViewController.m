@@ -77,6 +77,12 @@
     [self.view bringSubviewToFront:self.searchView];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.searchTextField becomeFirstResponder];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if(scrollView == [self searchResultsTableView])
