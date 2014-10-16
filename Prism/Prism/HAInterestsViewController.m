@@ -260,8 +260,9 @@ static int currentTag = 0;
     STKInterest *interest = [self.tagObjects objectAtIndex:indexPath.row];
     [cell setInterest:interest];
     if ([self.selectedInterests indexOfObject:interest] != NSNotFound){
+        [cell setSelected:YES];
         [cell setStored:YES];
-        [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
 //        [cell setSelected:YES];
         
     }
