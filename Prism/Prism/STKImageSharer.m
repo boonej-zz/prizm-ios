@@ -121,7 +121,11 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     } else if ([activityType isEqualToString:STKActivityTypeInstagram] || [activityType isEqualToString:STKActivityTypeWhatsapp]) {
         return [self customItem];
     } else if ([activityType isEqualToString:STKActivityTypeWhatsapp]) {
-        
+        return [self dictionaryItem];
+    } else if ([activityType isEqualToString:UIActivityTypeSaveToCameraRoll]) {
+        return [self dictionaryItem];
+    } else if ([activityType isEqualToString:UIActivityTypeMessage] || [activityType isEqualToString:UIActivityTypeMail]) {
+        return [self dictionaryItem];
     }
     else {
         return [self genericItem];
@@ -130,12 +134,46 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     return nil;
 }
 
-- (NSString *)activityViewController:(UIActivityViewController *)activityViewController
-              subjectForActivityType:(NSString *)activityType
+- (NSDictionary *)dictionaryItem
 {
-    NSDictionary *obj = [self genericItem];
-    return [obj objectForKey:@"text"];
+    NSString *t = @"";
+    if ([self post]) {
+        NSString *link = @"http://www.prizmapp.com/download";
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
+        }
+    }
+    if ([self insight]) {
+        t = self.insight.text;
+    }
+    UIImage *image = nil;
+    if (self.image) {
+        image = self.image;
+    }
+    return @{@"text": t, @"image": image};
 }
+
+- (NSArray *)arrayItem
+{
+    NSString *t = @"";
+    if ([self post]) {
+        NSString *link = @"http://www.prizmapp.com/download";
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
+        }
+    }
+    if ([self insight]) {
+        t = self.insight.text;
+    }
+    return @[self.image, t];
+}
+
+//- (NSString *)activityViewController:(UIActivityViewController *)activityViewController
+//              subjectForActivityType:(NSString *)activityType
+//{
+//    NSDictionary *obj = [self genericItem];
+//    return [obj objectForKey:@"text"];
+//}
 
 - (id)customItem
 {
@@ -624,11 +662,13 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     
     [self setFinishHandler:block];
     
+    NSArray *activities =  @[];;
     
-    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
-                             report,
-                             [[STKActivityTumblr alloc] initWithDelegate:self],
-                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
+    
+//    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
+//                             report,
+//                             [[STKActivityTumblr alloc] initWithDelegate:self],
+//                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
     NSArray *excludedActivities = nil;
     if ([object isKindOfClass:[STKPost class]]){
         excludedActivities = @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];
@@ -645,20 +685,21 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         [activityViewController setTitle:@"Look who's on Prizm!"];
     }
     
-#warning smelly, but we do not have direct access to system provided activities and their navigation controllers
+
     // revert appearance proxies to get default iOS behavior when sharing through Messages
-    UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
-    UIColor *tintColor = [[UITextField appearance] tintColor];
-    [[UINavigationBar appearance] setBackgroundImage:nil
-                                       forBarMetrics:UIBarMetricsDefault];
-    [[UITextField appearance] setTintColor:nil];
-    UIActivityViewControllerCompletionHandler handler = ^void (NSString *activityType, BOOL completed) {
-        // restore appearance proxies to original
-        [[UINavigationBar appearance] setBackgroundImage:backgroundImage
-                                           forBarMetrics:UIBarMetricsDefault];
-        [[UITextField appearance] setTintColor:tintColor];
-    };
-    [activityViewController setCompletionHandler:handler];
+//    UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
+//    UIColor *tintColor = [[UITextField appearance] tintColor];
+//    [[UINavigationBar appearance] setBackgroundImage:nil
+//                                       forBarMetrics:UIBarMetricsDefault];
+//    [[UITextField appearance] setTintColor:nil];
+//    UIActivityViewControllerCompletionHandler handler = ^void (NSString *activityType, BOOL completed) {
+//        // restore appearance proxies to original
+//        [[UINavigationBar appearance] setBackgroundImage:backgroundImage
+//                                           forBarMetrics:UIBarMetricsDefault];
+//        [[UITextField appearance] setTintColor:tintColor];
+//    };
+//    [activityViewController setCompletionHandler:handler];
+    
     [self setViewController:activityViewController];
     
     return activityViewController;

@@ -97,6 +97,11 @@
         [nvc presentViewController:registerNVC animated:NO completion:nil];
     }
     
+    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (notification) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ShowActivities" object:nil];
+    }
+    
     return YES;
 }
 
@@ -108,6 +113,7 @@
     int badgeValue= [alertValue intValue];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeValue];
 }
+
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

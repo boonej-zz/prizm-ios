@@ -172,7 +172,11 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
     [[self tableView] setRowHeight:106];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [self addBlurViewWithHeight:115.f];
+    if (self.user == [[STKUserStore store] currentUser]) {
+        [self addBlurViewWithHeight:115.f];
+    } else {
+        [self addBlurViewWithHeight:64.f];
+    }
     [self.view bringSubviewToFront:self.filterBar];
 }
 

@@ -9,8 +9,8 @@
 #import "STKInsightHeaderView.h"
 #import "STKAvatarView.h"
 
-NSString *const HAImageLikeInsightButton = @"icon_check_active";
-NSString *const HAImageDislikeInsightButton = @"reject";
+NSString *const HAImageLikeInsightButton = @"trust_check";
+NSString *const HAImageDislikeInsightButton = @"trust_reject";
 
 @implementation STKInsightHeaderView
 

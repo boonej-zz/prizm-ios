@@ -82,9 +82,15 @@ static BOOL HAActivityIsAnimating = NO;
                                                      name:@"STKConnectionNetworkError"
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoggedOut:) name:HANotificationKeyUserLoggedOut object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showActivities:) name:@"ShowActivities" object:nil];
     }
     
     return self;
+}
+
+- (void)showActivities:(NSNotification *)note
+{
+    [self setSelectedViewController:[self.viewControllers objectAtIndex:4]];
 }
 
 - (void)userLoggedOut:(id)sender
