@@ -76,6 +76,7 @@ tumblrTokenSecret, tumblrLastMinID, programCode;
              @"zip_postal" : @"zipCode",
              @"gender" : @"gender",
              @"interests" : [STKBind bindMapForKey:@"interests" matchMap:@{@"uniqueID" : @"_id"}],
+             @"insight_count": @"insightCount",
              
              @"info" : @"blurb",
              @"website" : @"website",

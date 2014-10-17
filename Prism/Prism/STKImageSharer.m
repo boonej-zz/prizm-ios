@@ -601,6 +601,19 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeMail];;
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
                                                                                          applicationActivities:activities];
+    UIActivityViewControllerCompletionHandler completionHandler = ^(NSString *activityType, BOOL completed){
+        if (activityType == UIActivityTypeSaveToCameraRoll) {
+            NSString *message = nil;
+            if (completed) {
+                message = @"The image was saved to your camera roll.";
+            } else {
+                message = @"The image could not be saved.";
+            }
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Save Image" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+        }
+    };
+    [controller setCompletionHandler:completionHandler];
     [controller setExcludedActivityTypes:excludedActivities];
     if (! controller) return nil;
     [self setViewController:controller];

@@ -32,6 +32,7 @@
 #import "HAInterestsViewController.h"
 #import "STKInsightTarget.h"
 #import "HAInsightsViewController.h"
+#import <CoreGraphics/CoreGraphics.h>
 
 @import QuartzCore;
 
@@ -59,6 +60,7 @@ static BOOL HAActivityIsAnimating = NO;
 @property (nonatomic, strong) UIImageView *rightNotificationView;
 @property (nonatomic, strong) UIImageView *extendedNotificationView;
 @property (nonatomic) UINavigationControllerOperation operation;
+@property (nonatomic, strong) UIImage *originalImage;
 
 @property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
@@ -700,6 +702,7 @@ static BOOL HAActivityIsAnimating = NO;
         _transitionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 300)];
         [[self view] addSubview:_transitionImageView];
     }
+    
     return _transitionImageView;
 }
 
@@ -710,8 +713,22 @@ static BOOL HAActivityIsAnimating = NO;
                 animated:(BOOL)animated
 {
     [self setImageTransitionRect:r];
-    
-    [[self transitionImageView] setImage:image];
+    UIImage *newImage;
+    if (image.size.width < 600) {
+        CGRect imageRect = CGRectMake(0, 0, image.size.width, image.size.height);
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+        CGContextRef context = CGBitmapContextCreate(nil, image.size.width, image.size.height, 8, 0, colorSpace, 0);
+        CGContextDrawImage(context, imageRect, [image CGImage]);
+        CGImageRef imageRef = CGBitmapContextCreateImage(context);
+        newImage = [UIImage imageWithCGImage:imageRef];
+        CGColorSpaceRelease(colorSpace);
+        CGContextRelease(context);
+        CFRelease(imageRef);
+    } else {
+        newImage = image;
+    }
+    self.originalImage = image;
+    [[self transitionImageView] setImage:newImage];
     
     STKPostViewController *postVC = [[STKPostViewController alloc] init];
     [postVC setPost:p];
@@ -756,7 +773,9 @@ static BOOL HAActivityIsAnimating = NO;
 
 - (UIImage *)transitioningImage
 {
-    return [[self transitionImageView] image];
+    UIImage *image = self.transitionImageView.image ;
+    
+    return image;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
@@ -783,6 +802,7 @@ static BOOL HAActivityIsAnimating = NO;
         
         
         if([fromVC class] == [STKPostViewController class] || ([fromVC class] == [HAInsightsViewController class] && operation == UINavigationControllerOperationPop)) {
+            [self.transitionImageView setImage:self.originalImage];
             [[self transitionImageView] setFrame:CGRectMake(0, 111, 320, 300)];
         } else {
             [[self transitionImageView] setFrame:[self imageTransitionRect]];

@@ -139,6 +139,11 @@ subtype;
     return [[self class] disabledImageForType:[self type]];
 }
 
+- (UIImage *)largeTypeImage
+{
+    return [[self class] largeImageForType:[self type]];
+}
+
 + (UIImage *)imageForType:(NSString *)t
 {
     NSDictionary *m = @{STKPostTypeAchievement : @"category_achievements_sm",
@@ -165,6 +170,24 @@ subtype;
                         STKPostTypeInspiration : @"category_inspiration_disabled",
                         STKPostTypePersonal : @"category_personal_disabled",
                         STKPostTypePassion : @"category_passions_disabled"};
+    
+    NSString *imageName = m[t];
+    
+    if(imageName) {
+        return [UIImage imageNamed:imageName];
+    }
+    
+    return nil;
+}
+
++ (UIImage *)largeImageForType:(NSString *)t
+{
+    NSDictionary *m = @{STKPostTypeAchievement : @"category_achievements_large",
+                        STKPostTypeAspiration : @"category_aspirations_large",
+                        STKPostTypeExperience : @"category_experiences_large",
+                        STKPostTypeInspiration : @"category_inspiration_large",
+                        STKPostTypePersonal : @"category_personal_large",
+                        STKPostTypePassion : @"category_passions_large"};
     
     NSString *imageName = m[t];
     

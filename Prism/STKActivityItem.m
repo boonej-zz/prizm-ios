@@ -29,7 +29,7 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
 @dynamic dateCreated;
 @dynamic hasBeenViewed;
 @dynamic post, comment;
-@dynamic creator, notifiedUser;
+@dynamic creator, notifiedUser, insightTarget;
 
 + (NSDictionary*)remoteToLocalKeyMap
 {
@@ -41,6 +41,7 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
         @"comment_id" : [STKBind bindMapForKey:@"comment" matchMap:@{@"uniqueID" : @"_id"}],
         @"action" : @"action",
         @"has_been_viewed" : @"hasBeenViewed",
+        @"insight_id" : [STKBind bindMapForKey:@"insightTarget" matchMap:@{@"uniqueID": @"_id"}],
         @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp]
         };
 }
@@ -56,6 +57,10 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
 - (NSString *)text
 {
     NSMutableString *str = [[NSMutableString alloc] init];
+    if ([self insightTarget]) {
+        [str appendString:@"sent you an insight."];
+        return [str copy];
+    }
     if([[self action] isEqualToString:STKActivityItemTypeLike]) {
         [str appendString:@"liked your "];
 

@@ -94,6 +94,7 @@ extern BOOL const STKUserStatusInActive;
 @property (nonatomic) int followingCount;
 @property (nonatomic) int postCount;
 @property (nonatomic) int trustCount;
+@property (nonatomic) int insightCount;
 
 @property (nonatomic, strong) NSSet *ownedTrusts;
 @property (nonatomic, strong) NSSet *receivedTrusts;

@@ -16,6 +16,7 @@
 #import "STKGraphCell.h"
 #import "STKNavigationButton.h"
 #import "HAInsightsViewController.h"
+#import "STKNavigationButton.h"
 
 @interface STKGraphViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -190,9 +191,37 @@
     
 }
 
+- (UIBarButtonItem *)insightsButtonWithGlow:(BOOL)glow
+{
+    STKNavigationButton *view = [[STKNavigationButton alloc] init];
+    [view addTarget:self action:@selector(loadInsights:) forControlEvents:UIControlEventTouchUpInside];
+    if (glow){
+        [view setImage:[UIImage imageNamed:@"btn_brain_glow"]];
+    } else {
+        [view setImage:[UIImage imageNamed:@"btn_brain"]];
+    }
+    [view setOffset:10];
+    [view setBadgeable:YES];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+    return bbi;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.insightsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_brain"] style:UIBarButtonItemStylePlain target:self action:@selector(loadInsights:)];
+    [self.navigationItem setRightBarButtonItem:self.insightsButton];
+    [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser]  additionalFields:nil completion:^(STKUser *u, NSError *err) {
+        if ([u insightCount] > 0) {
+            self.insightsButton = [self insightsButtonWithGlow:YES];
+            [self.navigationItem setRightBarButtonItem:self.insightsButton];
+        } else {
+            self.insightsButton = [self insightsButtonWithGlow:NO];
+            [self.navigationItem setRightBarButtonItem:self.insightsButton];
+        }
+    }];
+   
+    
     
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
@@ -258,8 +287,6 @@
     [self addBlurViewWithHeight:64.f];
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]];
     
-    self.insightsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_brain"] style:UIBarButtonItemStylePlain target:self action:@selector(loadInsights:)];
-    [self.navigationItem setRightBarButtonItem:self.insightsButton];
     
     [[self lifetimeLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     [[[self lifetimeLabel] layer] setCornerRadius:2];

@@ -42,7 +42,7 @@
     if([self overrideLoadingImage])
         [[self contentImageView] setLoadingImage:[self overrideLoadingImage]];
     else
-        [[self contentImageView] setLoadingImage:[p disabledTypeImage]];
+        [[self contentImageView] setLoadingImage:[p largeTypeImage]];
     [[self contentImageView] setUrlString:[p imageURLString]];
     
     if(![self displayFullBleed]) {

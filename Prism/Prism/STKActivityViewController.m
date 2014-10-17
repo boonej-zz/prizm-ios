@@ -97,6 +97,7 @@ typedef enum {
     [super viewWillAppear:animated];
 //    [[[self blurView] displayLink] setPaused:NO];
     [self fetchNewItems];
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:nil userInfo:@{STKUserStoreActivityUpdateCountKey : @0, HAUserStoreActivityLikeKey: @0, HAUserStoreActivityUserKey: @0, HAUserStoreActivityTrustKey: @0, HAUserStoreActivityCommentKey: @0}];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
