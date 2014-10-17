@@ -13,6 +13,7 @@
 #import "STKInterest.h"
 #import "HAInterestCell.h"
 #import "UIViewController+STKControllerItems.h"
+#import "HAFollowViewController.h"
 
 static int currentTag = 0;
 
@@ -74,9 +75,12 @@ static int currentTag = 0;
                                                   landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                                target:self action:@selector(back:)];
         [self.navigationItem setLeftBarButtonItem:bbi];
+        self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
+    } else {
+        self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonTapped:)];
     }
     
-    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
+    
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                       NSFontAttributeName : STKFont(22)}];
     [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
@@ -225,6 +229,13 @@ static int currentTag = 0;
         }
     }];
     
+}
+
+- (void)nextButtonTapped:(id)sender
+{
+    HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
+    [fvc setStandalone:YES];
+    [self.navigationController pushViewController:fvc animated:YES];
 }
 
 - (IBAction)overlayCloseTapped:(id)sender

@@ -44,6 +44,13 @@
                                               landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                            target:self action:@selector(back:)];
     [[self navigationItem] setLeftBarButtonItem:bbi];
+    if ([self isStandalone]) {
+        [self.navigationController.navigationBar setTintColor:STKTextColor];
+        UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
+        
+        [self.navigationItem setRightBarButtonItem:done];
+    }
+    
     [super viewWillAppear:animated];
 }
 
@@ -57,6 +64,11 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)doneButtonTapped:(id)sender
+{
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -66,6 +78,7 @@
     UIView *blankView = [[UIView alloc] init];
     [blankView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView setContentInset:UIEdgeInsetsMake(3, 0, 0, 0)];
     [self addBlurViewWithHeight:64.f];
     [[STKUserStore store] searchUsersWithType:@"luminary" completion:^(NSArray *profiles, NSError *err) {
         NSPredicate *notFollowing = [NSPredicate predicateWithBlock:^BOOL(STKUser *user, NSDictionary *bindings) {

@@ -12,5 +12,6 @@
 @interface HAFollowViewController : UIViewController
 
 @property (nonatomic, weak) STKMenuController *menuController;
+@property (nonatomic, getter=isStandalone) BOOL standalone;
 
 @end

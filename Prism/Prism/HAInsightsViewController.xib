@@ -65,7 +65,6 @@
                 <constraint firstAttribute="centerX" secondItem="kwK-t1-Ubh" secondAttribute="centerX" id="XxZ-ME-n8h"/>
                 <constraint firstAttribute="bottom" secondItem="tRL-Dh-o0i" secondAttribute="bottom" id="YiA-oT-svE"/>
                 <constraint firstAttribute="centerY" secondItem="kwK-t1-Ubh" secondAttribute="centerY" id="aPO-CA-7hS"/>
-                <constraint firstItem="kwK-t1-Ubh" firstAttribute="top" secondItem="Dvu-Gd-saX" secondAttribute="bottom" constant="159" id="pTv-bc-G6o"/>
                 <constraint firstAttribute="trailing" secondItem="Dvu-Gd-saX" secondAttribute="trailing" id="vgq-Du-TNu"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
