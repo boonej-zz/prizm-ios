@@ -32,6 +32,8 @@
     // Initialization code
     [self.label setFont:STKFont(16)];
     self.layer.cornerRadius = 12;
+    self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.contentView.translatesAutoresizingMaskIntoConstraints = YES;
 }
 
 - (void)setInterest:(STKInterest *)interest
@@ -54,6 +56,9 @@
 
 - (void)styleCell
 {
+//    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+//        self.label.center = CGPointMake(self.frame.size.height/2, self.frame.size.width/2);
+//    }
     if ([self isSelected] || [self isStored]) {
         NSString *textString = [self.interest.text stringByReplacingOccurrencesOfString:@" " withString:@""];
         [self.label setText:[NSString stringWithFormat:@"#%@", [textString lowercaseString]]];

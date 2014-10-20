@@ -15,9 +15,7 @@
 #import "UIViewController+STKControllerItems.h"
 #import "HAFollowViewController.h"
 
-static int currentTag = 0;
-
-@interface HAInterestsViewController () <HAHashTagViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface HAInterestsViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, weak) IBOutlet UIView * tagView;
 @property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
@@ -75,7 +73,7 @@ static int currentTag = 0;
                                                   landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                                target:self action:@selector(back:)];
         [self.navigationItem setLeftBarButtonItem:bbi];
-        self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
+        self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonTapped:)];
     } else {
         self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonTapped:)];
     }
@@ -83,10 +81,11 @@ static int currentTag = 0;
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
                                                                       NSFontAttributeName : STKFont(22)}];
-    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor],
-                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
-    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor clearColor],
-                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];
+    [self.navigationController.navigationBar setTintColor:STKTextColor];
+//    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+//                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+//    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor clearColor],
+//                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     [layout setMinimumInteritemSpacing:2.f];
@@ -104,11 +103,11 @@ static int currentTag = 0;
                 return ![interest isSubinterest];
             }]];
             if ([self.selectedInterests count] < 3) {
-                [self.collectionView setHidden:YES];
+//                [self.collectionView setHidden:YES];
                 [self.overlayView setHidden:NO];
                 [self.doneButton setEnabled:NO];
             } else {
-                [self.collectionView setHidden:NO];
+//                [self.collectionView setHidden:NO];
                 [self.overlayView setHidden:YES];
                 [self.doneButton setEnabled:YES];
             }
@@ -219,7 +218,7 @@ static int currentTag = 0;
 //    __block NSMutableArray *hashtags = [NSMutableArray array];
 //
 //    [STKProcessingView present];
-    [self loadCollectionData];
+//    [self loadCollectionData];
     [[STKUserStore store] updateInterestsforUser:self.user completion:^(STKUser *u, NSError *err) {
         [STKProcessingView dismiss];
         if ([self isStandalone]){
@@ -246,8 +245,6 @@ static int currentTag = 0;
 
 - (void)hideOverlayView
 {
-    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor lightTextColor],
-                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];
     [self.overlayView setHidden:YES];
 }
 

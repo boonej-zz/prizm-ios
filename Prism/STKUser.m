@@ -49,7 +49,7 @@ state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religi
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
 tumblrTokenSecret, tumblrLastMinID, programCode;
-@dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype;
+@dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype, insightCount;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 

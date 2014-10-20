@@ -396,7 +396,9 @@
 {
     NSString *action = [[[self optionItems] objectAtIndex:[indexPath row]] objectForKey:@"action"];
     if(action) {
-        [self performSelector:NSSelectorFromString(action) withObject:nil];
+        if ([self respondsToSelector:NSSelectorFromString(action)]) {
+            SuppressPerformSelectorLeakWarning([self performSelector:NSSelectorFromString(action) withObject:nil]);
+        }
     }
     
 }

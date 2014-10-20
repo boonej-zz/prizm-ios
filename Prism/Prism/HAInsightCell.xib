@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -15,24 +14,24 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VB4-Zi-HCA" customClass="STKInsightHeaderView">
-                        <rect key="frame" x="5" y="0.0" width="310" height="46"/>
+                        <rect key="frame" x="-3" y="0.0" width="326" height="46"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="46" id="N8Q-lG-Mu5"/>
                         </constraints>
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VuL-3N-HiR" customClass="STKResolvingImageView">
-                        <rect key="frame" x="5" y="50" width="310" height="300"/>
+                        <rect key="frame" x="4" y="48" width="312" height="300"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="300" id="Iih-Yz-qjk"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="TYJ-RP-JLc"/>
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VjE-dA-Ybj" customClass="STKGradientView">
-                        <rect key="frame" x="5" y="289" width="310" height="61"/>
+                        <rect key="frame" x="0.0" y="289" width="320" height="61"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RWc-IC-GFg">
-                                <rect key="frame" x="8" y="40" width="296" height="21"/>
+                                <rect key="frame" x="13" y="40" width="296" height="21"/>
                                 <color key="backgroundColor" red="0.99836575260000004" green="0.99836575260000004" blue="0.99836575260000004" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="296" id="Q0F-Yy-Eh0"/>
@@ -53,15 +52,15 @@
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
-                    <constraint firstItem="VjE-dA-Ybj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-3" id="0TT-hH-Q9i"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="VuL-3N-HiR" secondAttribute="trailing" constant="-3" id="Bcl-UB-j9k"/>
+                    <constraint firstItem="VjE-dA-Ybj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="0TT-hH-Q9i"/>
+                    <constraint firstAttribute="trailing" secondItem="VuL-3N-HiR" secondAttribute="trailing" constant="4" id="Bcl-UB-j9k"/>
                     <constraint firstItem="VjE-dA-Ybj" firstAttribute="top" secondItem="VB4-Zi-HCA" secondAttribute="bottom" constant="243" id="CmH-c0-gs2"/>
-                    <constraint firstItem="VB4-Zi-HCA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="Jev-Ws-ARp"/>
-                    <constraint firstItem="VB4-Zi-HCA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-3" id="hFB-dt-sLL"/>
-                    <constraint firstItem="VuL-3N-HiR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-3" id="lle-cJ-SZA"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="VjE-dA-Ybj" secondAttribute="trailing" constant="-3" id="qOV-k5-E64"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="VB4-Zi-HCA" secondAttribute="trailing" constant="-3" id="x30-di-yLc"/>
-                    <constraint firstItem="VuL-3N-HiR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="42" id="xgS-WJ-EJv"/>
+                    <constraint firstItem="VB4-Zi-HCA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Jev-Ws-ARp"/>
+                    <constraint firstItem="VB4-Zi-HCA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="-3" id="hFB-dt-sLL"/>
+                    <constraint firstItem="VuL-3N-HiR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="4" id="lle-cJ-SZA"/>
+                    <constraint firstAttribute="trailing" secondItem="VjE-dA-Ybj" secondAttribute="trailing" id="qOV-k5-E64"/>
+                    <constraint firstAttribute="trailing" secondItem="VB4-Zi-HCA" secondAttribute="trailing" constant="-3" id="x30-di-yLc"/>
+                    <constraint firstItem="VuL-3N-HiR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="48" id="xgS-WJ-EJv"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

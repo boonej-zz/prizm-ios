@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -15,7 +15,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yQQ-eO-uaK" customClass="STKAvatarView">
-                        <rect key="frame" x="8" y="9" width="44" height="44"/>
+                        <rect key="frame" x="5" y="9" width="44" height="44"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="44" id="5u7-If-mrY"/>
@@ -24,8 +24,8 @@
                             <constraint firstAttribute="height" constant="44" id="Ra3-g0-pru"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NLF-CI-QpN">
-                        <rect key="frame" x="60" y="9" width="252" height="42"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="264" translatesAutoresizingMaskIntoConstraints="NO" id="NLF-CI-QpN">
+                        <rect key="frame" x="57" y="9" width="263" height="42"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="42" id="gcy-5c-JZ2"/>
                         </constraints>
@@ -35,10 +35,10 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="yQQ-eO-uaK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="8Tb-Cg-lIj"/>
-                    <constraint firstItem="yQQ-eO-uaK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="VKf-F2-cGT"/>
+                    <constraint firstItem="yQQ-eO-uaK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="1" id="8Tb-Cg-lIj"/>
+                    <constraint firstItem="yQQ-eO-uaK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="VKf-F2-cGT"/>
                     <constraint firstItem="NLF-CI-QpN" firstAttribute="leading" secondItem="yQQ-eO-uaK" secondAttribute="trailing" constant="8" id="fuO-vF-ijd"/>
-                    <constraint firstItem="NLF-CI-QpN" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="r6j-Rf-R48"/>
+                    <constraint firstItem="NLF-CI-QpN" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailing" id="r6j-Rf-R48"/>
                     <constraint firstAttribute="centerY" secondItem="yQQ-eO-uaK" secondAttribute="centerY" constant="-1.5" id="vW7-vJ-okJ"/>
                     <constraint firstAttribute="centerY" secondItem="NLF-CI-QpN" secondAttribute="centerY" id="zUs-Rw-NkC"/>
                 </constraints>

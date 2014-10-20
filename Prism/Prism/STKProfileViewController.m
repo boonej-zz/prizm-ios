@@ -852,7 +852,7 @@ typedef enum {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(section == STKProfileSectionPosts) {
-        int count = [[[self postController] posts] count];
+        NSInteger count = [[[self postController] posts] count];
         if([self showPostsInSingleLayout]) {
             return count;
         } else {

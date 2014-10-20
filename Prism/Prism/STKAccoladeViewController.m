@@ -208,7 +208,7 @@ typedef enum {
     if([self type] == STKAccoladeTypeReceived)
         a = [self receivedPostController];
 
-    int postCount = [[a posts] count];
+    NSInteger postCount = [[a posts] count];
     if(postCount % 3 > 0)
         return postCount / 3 + 1;
     return postCount / 3;

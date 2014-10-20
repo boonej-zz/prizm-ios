@@ -137,14 +137,14 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (NSDictionary *)dictionaryItem
 {
     NSString *t = @"";
+    NSString *link = @"http://www.prizmapp.com/download";
     if ([self post]) {
-        NSString *link = @"http://www.prizmapp.com/download";
         if ([self.post text]){
             t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
         }
     }
     if ([self insight]) {
-        t = self.insight.text;
+        t = [NSString stringWithFormat:@"%@ %@ %@", self.insight.text, [self.insight.linkURL absoluteString], link];
     }
     UIImage *image = nil;
     if (self.image) {
@@ -156,14 +156,15 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (NSArray *)arrayItem
 {
     NSString *t = @"";
+    NSString *link = @"http://www.prizmapp.com/download";
     if ([self post]) {
-        NSString *link = @"http://www.prizmapp.com/download";
+        
         if ([self.post text]){
             t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
         }
     }
     if ([self insight]) {
-        t = self.insight.text;
+        t = [NSString stringWithFormat:@"%@ %@ %@", self.insight.text, [self.insight.linkURL absoluteString], link];
     }
     return @[self.image, t];
 }
@@ -178,6 +179,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (id)customItem
 {
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
+    NSString *link = @"http://www.prizmapp.com/download";
     if (self.image){
         [d setObject:self.image forKey:@"image"];
     }
@@ -190,7 +192,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     }
     
     if ([self insight]) {
-        t = self.insight.text;
+        t = [NSString stringWithFormat:@"%@ %@ %@", self.insight.text, [self.insight.linkURL absoluteString], link];
     }
     [d setObject:t forKey:@"text"];
     return d;
@@ -198,23 +200,27 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 - (id)twitterItem
 {
+    id obj = nil;
     NSString *t = @"";
+    NSString *link = @"http://www.prizmapp.com/download";
     if ([self post]) {
         t = [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
         if ([self.post text]){
             t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
         }
+        obj = t;
     }
     
     if ([self insight]) {
-        t = self.insight.text;
+        return [self genericItem];
     }
-    return t;
+    return obj;
 }
     
 - (id)genericItem
 {
     NSString *t = @"";
+    NSString *link = @"http://www.prizmapp.com/download";
     if ([self post]) {
         NSString *link = @"http://www.prizmapp.com/download";
         if ([self.post text]){
@@ -222,7 +228,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         }
     }
     if ([self insight]) {
-        t = self.insight.text;
+        t = [NSString stringWithFormat:@"%@ %@ %@", self.insight.text, [self.insight.linkURL absoluteString], link];
     }
     NSExtensionItem *i = [[NSExtensionItem alloc] init];
     [i setAttributedContentText:[[NSAttributedString alloc] initWithString:t]];
@@ -604,12 +610,15 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     UIActivityViewControllerCompletionHandler completionHandler = ^(NSString *activityType, BOOL completed){
         if (activityType == UIActivityTypeSaveToCameraRoll) {
             NSString *message = nil;
+            NSString *title = nil;
             if (completed) {
-                message = @"The image was saved to your camera roll.";
+                title = @"Image Saved";
+                message = @"The image has been saved \n to your camera roll.";
             } else {
+                title = @"Error";
                 message = @"The image could not be saved.";
             }
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Save Image" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [av show];
         }
     };
@@ -639,7 +648,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         activities = @[];
     }
     
-    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard];;
+    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];;
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
                                                                              applicationActivities:activities];
     [controller setExcludedActivityTypes:excludedActivities];

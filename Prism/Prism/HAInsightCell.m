@@ -63,7 +63,7 @@
     // Initialization code
     NSLog(@"Woke up");
 //    [self setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self setBackgroundColor:[UIColor colorWithRed:1.f green:1.f blue:1.f alpha:0.2f]];
+    [self.contentView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     
     [self.headerView.likeButton addTarget:self action:@selector(likeButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.headerView.dislikeButton addTarget:self action:@selector(dislikeButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -109,7 +109,7 @@
     NSLog(@"%@", insightTarget.insight);
     [self.headerView.avatarView setUrlString:self.insightTarget.insight.creator.profilePhotoPath];
     [self.headerView.posterLabel setText:self.insightTarget.insight.creator.name];
-    CGRect frame = [self convertRect:self.headerView.avatarView.frame fromCoordinateSpace:self.headerView];
+    CGRect frame = [self convertRect:self.headerView.avatarView.frame fromView:self.headerView];
     frame.size.width = 60;
     frame.size.height = 44;
     UIControl *avatarControl = [[UIControl alloc] initWithFrame:frame];

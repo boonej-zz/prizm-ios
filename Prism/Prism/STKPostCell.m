@@ -208,7 +208,7 @@
     [[self contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
     [[self contentImageView] setLoadingContentMode:UIViewContentModeCenter];
     
-    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+//    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     //        UIView *bg = [[UIView alloc] initWithCoder:frame];
 //    CGRect frame = [self.headerView frame];
 //    UIVisualEffectView  *blurview = [[UIVisualEffectView alloc] initWithEffect:blur];

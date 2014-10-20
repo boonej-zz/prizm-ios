@@ -284,7 +284,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addBlurViewWithHeight:64.f];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]];
+    [self.view insertSubview:iv atIndex:0];
+    
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]];
     
     
@@ -298,6 +300,7 @@
     
     [[self graphView] setXLabels:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7"]];
     [[self graphView] setYLabels:@[@"", @"25%", @"50%", @"75%", @"100%"]];
+    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)loadInsights:(id)sender

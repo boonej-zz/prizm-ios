@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,8 +14,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title of Article More information " lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhd-gv-VuE">
-                        <rect key="frame" x="10" y="-3" width="225" height="49"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title of Article More information " lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="225" translatesAutoresizingMaskIntoConstraints="NO" id="jhd-gv-VuE">
+                        <rect key="frame" x="7" y="-3" width="225" height="49"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="225" id="Pf4-Ay-xdA"/>
                             <constraint firstAttribute="height" constant="49" id="fbL-vP-i44"/>
@@ -24,14 +24,14 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iew-s2-bY1" customClass="UIControl">
-                        <rect key="frame" x="0.0" y="-1" width="247" height="46"/>
+                        <rect key="frame" x="7" y="0.0" width="250" height="42"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <connections>
                             <action selector="titleAreaTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="b9s-zz-OuN"/>
                         </connections>
                     </view>
                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QbI-V0-UVu">
-                        <rect key="frame" x="273" y="-1" width="44" height="44"/>
+                        <rect key="frame" x="276" y="-1" width="44" height="44"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="5Df-Np-vwD"/>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="CwV-Nb-Goh"/>
@@ -49,14 +49,14 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="jhd-gv-VuE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="2Du-ac-Ayg"/>
+                    <constraint firstItem="jhd-gv-VuE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="7" id="2Du-ac-Ayg"/>
                     <constraint firstAttribute="centerY" secondItem="jhd-gv-VuE" secondAttribute="centerY" id="EU9-8w-YzX"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="Iew-s2-bY1" secondAttribute="bottom" constant="-10" id="G2K-aF-XKC"/>
+                    <constraint firstAttribute="bottom" secondItem="Iew-s2-bY1" secondAttribute="bottom" constant="1" id="G2K-aF-XKC"/>
                     <constraint firstAttribute="centerY" secondItem="jhd-gv-VuE" secondAttribute="centerY" id="HWc-cB-wO8"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="QbI-V0-UVu" secondAttribute="trailing" constant="-5" id="NHR-19-61M"/>
-                    <constraint firstItem="QbI-V0-UVu" firstAttribute="leading" secondItem="Iew-s2-bY1" secondAttribute="trailing" constant="26" id="W8U-hB-m89"/>
-                    <constraint firstItem="Iew-s2-bY1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-9" id="ZyE-Po-xoT"/>
-                    <constraint firstItem="Iew-s2-bY1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="i6m-BX-PS0"/>
+                    <constraint firstAttribute="trailing" secondItem="QbI-V0-UVu" secondAttribute="trailing" id="NHR-19-61M"/>
+                    <constraint firstItem="QbI-V0-UVu" firstAttribute="leading" secondItem="Iew-s2-bY1" secondAttribute="trailing" constant="19" id="W8U-hB-m89"/>
+                    <constraint firstItem="Iew-s2-bY1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ZyE-Po-xoT"/>
+                    <constraint firstItem="Iew-s2-bY1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="7" id="i6m-BX-PS0"/>
                     <constraint firstAttribute="centerY" secondItem="QbI-V0-UVu" secondAttribute="centerY" constant="0.5" id="j4r-B8-eaG"/>
                 </constraints>
             </tableViewCellContentView>

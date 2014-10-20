@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKRegisterViewController">
@@ -18,12 +19,10 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ay2-kb-Tax">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
                 </view>
                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Prismlogo" translatesAutoresizingMaskIntoConstraints="NO" id="NtM-kg-InZ">
-                    <rect key="frame" x="83" y="45" width="154" height="154"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="83" y="61" width="154" height="154"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="154" id="1qA-Zi-3rp"/>
                         <constraint firstAttribute="height" constant="154" id="F9X-3s-NKb"/>
@@ -31,11 +30,9 @@
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HV6-tB-Qog">
                     <rect key="frame" x="0.0" y="249" width="320" height="240"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="igK-xV-ixB">
                             <rect key="frame" x="50" y="50" width="64" height="64"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="64" id="Qhs-o1-Xao"/>
                             </constraints>
@@ -48,7 +45,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AuD-6k-wNl">
                             <rect key="frame" x="129" y="50" width="64" height="64"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="64" id="a96-yp-rpd"/>
                             </constraints>
@@ -61,7 +57,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="miH-by-LCp">
                             <rect key="frame" x="208" y="50" width="64" height="64"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="64" id="0LJ-no-FP6"/>
                             </constraints>
@@ -74,7 +69,6 @@
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect with" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HRJ-LH-Onv">
                             <rect key="frame" x="85" y="2" width="150" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="150" id="slK-gu-kNU"/>
                             </constraints>
@@ -84,7 +78,6 @@
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MEU-rq-7z5">
                             <rect key="frame" x="153" y="143" width="15" height="20"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="9Yy-ev-uFR"/>
                                 <constraint firstAttribute="width" constant="15" id="Bzf-gE-lEE"/>
@@ -95,7 +88,6 @@
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J05-LM-NiM">
                             <rect key="frame" x="43" y="201" width="105" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="GX6-Db-7rN"/>
                                 <constraint firstAttribute="width" constant="105" id="tti-Jx-hNL"/>
@@ -110,7 +102,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cTj-NF-h6D">
                             <rect key="frame" x="172" y="201" width="105" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="CFe-ry-UwJ"/>
                                 <constraint firstAttribute="width" constant="105" id="PFq-L0-6Qw"/>
@@ -126,7 +117,6 @@
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="roY-bq-WkQ">
                             <rect key="frame" x="170" y="155" width="105" height="1"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="rND-yT-gmc"/>
@@ -134,7 +124,6 @@
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W4Y-VV-MGB">
                             <rect key="frame" x="44" y="155" width="105" height="1"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="nXW-Dl-1OU"/>
@@ -174,20 +163,23 @@
                 <constraint firstItem="Ay2-kb-Tax" firstAttribute="top" secondItem="1" secondAttribute="top" id="GE1-bD-QCI"/>
                 <constraint firstAttribute="centerX" secondItem="NtM-kg-InZ" secondAttribute="centerX" id="Umc-ZC-hMA"/>
                 <constraint firstAttribute="bottom" secondItem="Ay2-kb-Tax" secondAttribute="bottom" id="ax2-LK-7Te"/>
-                <constraint firstItem="HV6-tB-Qog" firstAttribute="top" secondItem="NtM-kg-InZ" secondAttribute="bottom" constant="50" id="bll-mm-o0g"/>
-                <constraint firstItem="NtM-kg-InZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="45" id="c6b-mB-aNi"/>
+                <constraint firstItem="HV6-tB-Qog" firstAttribute="top" secondItem="NtM-kg-InZ" secondAttribute="bottom" constant="34" id="bll-mm-o0g"/>
+                <constraint firstItem="NtM-kg-InZ" firstAttribute="top" secondItem="1" secondAttribute="top" constant="61" id="c6b-mB-aNi"/>
                 <constraint firstAttribute="trailing" secondItem="HV6-tB-Qog" secondAttribute="trailing" id="gc0-uO-6Wb"/>
                 <constraint firstAttribute="trailing" secondItem="Ay2-kb-Tax" secondAttribute="trailing" id="vOg-1o-sXW"/>
             </constraints>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
-        <image name="Prismlogo" width="80" height="80"/>
+        <image name="Prismlogo" width="82" height="104"/>
         <image name="btn_sm" width="105" height="44"/>
         <image name="facebook" width="64" height="64"/>
         <image name="gplus" width="64" height="64"/>
         <image name="twitter" width="64" height="64"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
+        <development version="5100" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
@@ -36,7 +37,7 @@
                         <action selector="selectedIndexChanged:" destination="-1" eventType="valueChanged" id="c4P-7Q-aAV"/>
                     </connections>
                 </segmentedControl>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No New Insights." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kwK-t1-Ubh">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No New Insights." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" useAutomaticPreferredMaxLayoutWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kwK-t1-Ubh">
                     <rect key="frame" x="95" y="273" width="131" height="21"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="21" id="dld-MU-zO2"/>
@@ -67,6 +68,7 @@
                 <constraint firstAttribute="centerY" secondItem="kwK-t1-Ubh" secondAttribute="centerY" id="aPO-CA-7hS"/>
                 <constraint firstAttribute="trailing" secondItem="Dvu-Gd-saX" secondAttribute="trailing" id="vgq-Du-TNu"/>
             </constraints>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="139" y="154"/>

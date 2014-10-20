@@ -126,7 +126,7 @@
 
 - (void)circleTapped:(id)sender
 {
-    int idx = [[self circleViews] indexOfObject:sender];
+    int idx = (int)[[self circleViews] indexOfObject:sender];
     [[self delegate] countView:self didSelectCircleAtIndex:idx];
 }
 

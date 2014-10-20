@@ -714,7 +714,7 @@ static BOOL HAActivityIsAnimating = NO;
 {
     [self setImageTransitionRect:r];
     UIImage *newImage;
-    if (image.size.width < 600) {
+    if (image.size.width < 600 && image.size.width > 0) {
         CGRect imageRect = CGRectMake(0, 0, image.size.width, image.size.height);
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
         CGContextRef context = CGBitmapContextCreate(nil, image.size.width, image.size.height, 8, 0, colorSpace, 0);

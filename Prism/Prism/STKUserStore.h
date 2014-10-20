@@ -62,9 +62,9 @@ typedef enum {
 - (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKUser *facebookData, NSError *err))block;
 - (void)connectWithTwitterAccount:(ACAccount *)acct completion:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))block;
 - (void)connectWithGoogle:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))completionBlock processing:(void (^)())processingBlock;
-- (void)fetchInsightsForUser:(STKUser *)user
-            fetchDescription:(STKFetchDescription *)desc
-                  completion:(void (^)(NSArray *insights, NSError *err))block;
+//- (void)fetchInsightsForUser:(STKUser *)user
+//            fetchDescription:(STKFetchDescription *)desc
+//                  completion:(void (^)(NSArray *insights, NSError *err))block;
 
 
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil

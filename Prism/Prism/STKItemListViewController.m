@@ -28,7 +28,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([self selectionBlock]) {
-        [self selectionBlock]([indexPath row]);
+        [self selectionBlock]((int)[indexPath row]);
     }
 }
 

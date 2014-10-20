@@ -158,7 +158,7 @@
         </view>
     </objects>
     <resources>
-        <image name="Prismlogo" width="80" height="80"/>
+        <image name="Prismlogo" width="82" height="104"/>
         <image name="lockpassword" width="18" height="25"/>
         <image name="username" width="23" height="24"/>
     </resources>

@@ -33,6 +33,7 @@ NSString *const HAImageDislikeInsightButton = @"trust_reject";
 
 - (void)configure
 {
+    [self setTranslatesAutoresizingMaskIntoConstraints:YES];
     self.avatarView = [[STKAvatarView alloc] init];
     self.avatarButton = [[UIControl alloc] init];
     self.backdropFadeView = [[UIImageView alloc] init];
@@ -56,28 +57,30 @@ NSString *const HAImageDislikeInsightButton = @"trust_reject";
     [self addSubview:self.avatarButton];
     [self addSubview:self.likeButton];
     [self addSubview:self.dislikeButton];
-    
+    [self setTranslatesAutoresizingMaskIntoConstraints:NO];
     for(UIView *v in [self subviews]) {
         [v setTranslatesAutoresizingMaskIntoConstraints:NO];
     }
     
     
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[a(35)]-8-[pv]" options:0 metrics:nil views:@{@"a": self.avatarView, @"pv": self.posterLabel}]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[a(35)][pv(35)]" options:0 metrics:nil views:@{@"a": self.avatarView, @"pv": self.posterLabel}]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:1]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.posterLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:1]];
-                                                                                                                      
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[a(==36)]-8-[pv]" options:0 metrics:nil views:@{@"a": self.avatarView, @"pv": self.posterLabel}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[a(36)]" options:0 metrics:nil views:@{@"a": self.avatarView}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v(36)]" options:0 metrics:nil views:@{@"v": self.posterLabel}]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.posterLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual
                                                         toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-5]];
     
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.likeButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:1]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.dislikeButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:1]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.likeButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.posterLabel attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.dislikeButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.likeButton attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     
 
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[d(30.0)]-15-[l(30.0)]-5-|" options:0 metrics:nil views:@{@"l": self.likeButton, @"d": self.dislikeButton}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[d(30.0)]-15-[l(30.0)]-10-|" options:0 metrics:nil views:@{@"l": self.likeButton, @"d": self.dislikeButton}]];
 
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[d(30.0)][l(30.0)]" options:0 metrics:nil views:@{@"l": self.likeButton, @"d": self.dislikeButton}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[d(30.0)]" options:0 metrics:nil views:@{@"d": self.dislikeButton}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[l(30.0)]" options:0 metrics:nil views:@{@"l": self.likeButton}]];
     
 }
 

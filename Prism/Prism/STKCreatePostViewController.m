@@ -33,10 +33,11 @@
 NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 @interface STKCreatePostViewController ()
-    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKMarkupControllerDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate>
+    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKMarkupControllerDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UIImageView *locationIndicator;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *optionHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *optionBottomConstraint;
 @property (weak, nonatomic) IBOutlet UITextView *postTextView;
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -345,7 +346,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 //    [[[self imageView] layer] setBorderWidth:2];
     
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
-
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        [self.optionBottomConstraint setConstant:-6];
+    }
     
     [[self postTextView] setText:STKCreatePostPlaceholderText];
     [[self view] addSubview:[[self markupController] view]];
@@ -360,6 +363,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     
     [[self optionCollectionView] registerNib:[UINib nibWithNibName:@"STKImageCollectionViewCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKImageCollectionViewCell"];
+    [self.view setAutoresizesSubviews:YES];
+    [self.optionCollectionView setAutoresizesSubviews:YES];
     [[self optionCollectionView] setBackgroundColor:[UIColor clearColor]];
     [[self optionCollectionView] setScrollEnabled:NO];
 }
@@ -376,7 +381,8 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }
     
 
-    return [[self optionItems] count];
+//    return [[self optionItems] count];
+    return 4;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -394,7 +400,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
             [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
             [[cell label] setTextColor:[UIColor whiteColor]];
         }
-        
+
         return cell;
     }
     
@@ -421,7 +427,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                 [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
             }
         }
-        
+        NSLog(@"%f", self.optionCollectionView.frame.size.height);
         return cell;
     }
 
@@ -631,5 +637,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [self.postTextView setHidden:NO];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:STKPrivacyInstructionsDismissedKey];
 }
+
+
 
 @end
