@@ -21,7 +21,8 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    [self setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
+    [self setBackgroundColor:[UIColor clearColor]];
+    [self.contentView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     [self.titleLabel setTextColor:STKTextColor];
 }
 

@@ -25,7 +25,7 @@
 
 - (void)populateWithTrust:(STKTrust *)i
 {
-    [[self dateLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateModified]]];
+    [[self dateLabel] setText:[STKRelativeDateConverter relativeDateStringFromDate:[i dateCreated]]];
     [[self avatarImageView] setUrlString:[[i creator] profilePhotoPath]];
     [[self nameLabel] setText:[[i creator] name]];
     

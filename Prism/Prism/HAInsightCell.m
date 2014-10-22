@@ -41,7 +41,7 @@
     _fullBleed = fullBleed;
     if (_fullBleed) {
         UIBezierPath *bp = [UIBezierPath bezierPathWithRect:CGRectMake(0, 19, 320, 1)];
-        [self.hashtagTopOffset setConstant:304];
+        [self.hashtagTopOffset setConstant:302];
         [self.hashtagHeight setConstant:21];
         [self.hashtagView setColors:@[[UIColor colorWithWhite:1 alpha:0.3], [UIColor colorWithWhite:1 alpha:0.3]]];
         [self.hashtagView.layer setShadowOpacity:1.f];

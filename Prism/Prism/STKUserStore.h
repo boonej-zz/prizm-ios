@@ -23,6 +23,7 @@ extern NSString * const HAUserStoreActivityTrustKey;
 extern NSString * const HAUserStoreActivityCommentKey;
 extern NSString * const HANotificationKeyUserLoggedOut;
 extern NSString * const HAUserStoreInterestsKey;
+extern NSString * const HAUserStoreActivityInsightKey;
 
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]

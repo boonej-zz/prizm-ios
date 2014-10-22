@@ -70,6 +70,7 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     [v setBackgroundColor:[UIColor clearColor]];
     [[self searchResultsTableView] setTableFooterView:v];
+    [self.searchTextField setTintColor:STKTextColor];
     
     CGFloat tableContentInsetTop = 114.f;
     [[self searchResultsTableView] setContentInset:UIEdgeInsetsMake(tableContentInsetTop, 0, 0, 0)];

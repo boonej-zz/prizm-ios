@@ -29,7 +29,7 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
 @dynamic dateCreated;
 @dynamic hasBeenViewed;
 @dynamic post, comment;
-@dynamic creator, notifiedUser, insightTarget;
+@dynamic creator, notifiedUser, insightTarget, insight;
 
 + (NSDictionary*)remoteToLocalKeyMap
 {
@@ -41,7 +41,8 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
         @"comment_id" : [STKBind bindMapForKey:@"comment" matchMap:@{@"uniqueID" : @"_id"}],
         @"action" : @"action",
         @"has_been_viewed" : @"hasBeenViewed",
-        @"insight_id" : [STKBind bindMapForKey:@"insightTarget" matchMap:@{@"uniqueID": @"_id"}],
+        @"insight_target_id" : [STKBind bindMapForKey:@"insightTarget" matchMap:@{@"uniqueID": @"_id"}],
+        @"insight_id" : [STKBind bindMapForKey:@"insight" matchMap:@{@"uniqueID":@"_id"}],
         @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp]
         };
 }

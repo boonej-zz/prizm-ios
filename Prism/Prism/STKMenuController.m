@@ -43,6 +43,7 @@ static int HALikeNotificationCount = 0;
 static int HAUserNotificationCount = 0;
 static int HATrustNotificationCount = 0;
 static int HACommentNotificationCount = 0;
+static int HAInsightNotificationCount = 0;
 static BOOL HAActivityIsAnimating = NO;
 
 @interface STKMenuController () <UINavigationControllerDelegate, STKMenuViewDelegate, UIViewControllerAnimatedTransitioning>
@@ -55,10 +56,11 @@ static BOOL HAActivityIsAnimating = NO;
 @property (nonatomic, strong) NSLayoutConstraint *messageBannerHeightConstraint;
 @property (nonatomic, strong) NSTimer *messageBannerDuration;
 //@property (nonatomic, strong) HANotificationViewController *nvc;
-@property (nonatomic, strong) UIImageView *leftNotificationView;
-@property (nonatomic, strong) UIImageView *centerNotificationView;
-@property (nonatomic, strong) UIImageView *rightNotificationView;
-@property (nonatomic, strong) UIImageView *extendedNotificationView;
+@property (nonatomic, strong) UIImageView *notificationView1;
+@property (nonatomic, strong) UIImageView *notificationView2;
+@property (nonatomic, strong) UIImageView *notificationView3;
+@property (nonatomic, strong) UIImageView *notificationView4;
+@property (nonatomic, strong) UIImageView *notificationView5;
 @property (nonatomic) UINavigationControllerOperation operation;
 @property (nonatomic, strong) UIImage *originalImage;
 
@@ -457,10 +459,12 @@ static BOOL HAActivityIsAnimating = NO;
     long likeCount = [[userInfo valueForKey:HAUserStoreActivityLikeKey] longValue];
     long userCount = [[userInfo valueForKey:HAUserStoreActivityUserKey] longValue];
     long commentCount = [[userInfo valueForKey:HAUserStoreActivityCommentKey] longValue];
+    long insightCount = [[userInfo valueForKey:HAUserStoreActivityInsightKey] longValue];
     BOOL hasTrustNotifications = trustCount > HATrustNotificationCount;
     BOOL hasUserNotifications = userCount > HAUserNotificationCount;
     BOOL hasLikeNotifications = likeCount > HALikeNotificationCount;
     BOOL hasCommentNotification = commentCount > HACommentNotificationCount;
+    BOOL hasInsightNotification = insightCount > HAInsightNotificationCount;
     
 //    
 //    BOOL hasTrustNotifications = YES;
@@ -472,99 +476,125 @@ static BOOL HAActivityIsAnimating = NO;
     HALikeNotificationCount = (int)likeCount;
     HAUserNotificationCount = (int)userCount;
     HACommentNotificationCount = (int)commentCount;
+    HATrustNotificationCount = (int)trustCount;
+    
+    UIImage *likeImage = [UIImage imageNamed:@"like_notification"];
+    UIImage *userImage = [UIImage imageNamed:@"user_notification"];
+    UIImage *trustImage = [UIImage imageNamed:@"trust_notification"];
+    UIImage *commentImage = [UIImage imageNamed:@"comment_notification"];
+    UIImage *insightImage = [UIImage imageNamed:@"insight_notification"];
+                           
     
     if (!HAActivityIsAnimating) {
+        [self.notificationView1 setImage:nil];
+        [self.notificationView2 setImage:nil];
+        [self.notificationView3 setImage:nil];
+        [self.notificationView4 setImage:nil];
+        [self.notificationView5 setImage:nil];
+        // Like Notifications
         if (hasLikeNotifications) {
-            [self.leftNotificationView setImage:[UIImage imageNamed:@"like_notification"]];
+            [self.notificationView1 setImage:likeImage];
             if (hasUserNotifications) {
-                [self.centerNotificationView setImage:[UIImage imageNamed:@"user_notification"]];
+                [self.notificationView2 setImage:userImage];
                 if (hasTrustNotifications){
-                    [self.rightNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+                    [self.notificationView3 setImage:trustImage];
                     if (hasCommentNotification) {
-                        [self.extendedNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
-                    } else {
-                        [self.extendedNotificationView setImage:nil];
+                        [self.notificationView4 setImage:commentImage];
+                        if (hasInsightNotification) {
+                            [self.notificationView5 setImage:insightImage];
+                        }
+                    } else if (hasInsightNotification){
+                        [self.notificationView4 setImage:insightImage];
                     }
-                } else {
-                    if (hasCommentNotification) {
-                        [self.rightNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
-                    } else {
-                        [self.rightNotificationView setImage:nil];
+                } else if (hasCommentNotification) {
+                    [self.notificationView3 setImage:commentImage];
+                    if (hasInsightNotification) {
+                        [self.notificationView4 setImage:insightImage];
                     }
-                    [self.extendedNotificationView setImage:nil];
                 }
             } else if (hasTrustNotifications) {
-                [self.centerNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+                [self.notificationView2 setImage:trustImage];
                 if (hasCommentNotification) {
-                    [self.rightNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
+                    [self.notificationView3 setImage:commentImage];
+                    if (hasInsightNotification) {
+                        [self.notificationView4 setImage:insightImage];
+                    }
                 } else {
-                    [self.rightNotificationView setImage:nil];
+                    if (hasInsightNotification) {
+                        [self.notificationView3 setImage:insightImage];
+                    }
                 }
-                [self.extendedNotificationView setImage:nil];
+            } else if (hasCommentNotification) {
+                [self.notificationView2 setImage:commentImage];
+                if (hasInsightNotification) {
+                    [self.notificationView3 setImage:insightImage];
+                }
+            } else if (hasInsightNotification) {
+                [self.notificationView2 setImage:insightImage];
                 
-            } else {
-                if (hasCommentNotification) {
-                    [self.centerNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
-                } else {
-                    [self.centerNotificationView setImage:nil];
-                }
-                [self.rightNotificationView setImage:nil];
-                [self.extendedNotificationView setImage:nil];
             }
-        }
-        else if (hasUserNotifications) {
-            [self.leftNotificationView setImage:[UIImage imageNamed:@"user_notification"]];
-            [self.extendedNotificationView setImage:nil];
+        } else if (hasUserNotifications) {
+            [self.notificationView1 setImage:userImage];
             if (hasTrustNotifications) {
-                [self.centerNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+                [self.notificationView2 setImage:trustImage];
                 if (hasCommentNotification) {
-                    [self.rightNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
-                } else {
-                    [self.rightNotificationView setImage:nil];
+                    [self.notificationView3 setImage:commentImage];
+                    if (hasInsightNotification) {
+                        [self.notificationView4 setImage:insightImage];
+                    }
+                } else if (hasInsightNotification) {
+                    [self.notificationView3 setImage:insightImage];
                 }
             } else {
                 if (hasCommentNotification) {
-                    [self.centerNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
-                } else {
-                    [self.centerNotificationView setImage:nil];
+                    [self.notificationView2 setImage:commentImage];
+                    if (hasInsightNotification){
+                        [self.notificationView3 setImage:insightImage];
+                    }
+                } else if (hasInsightNotification) {
+                    [self.notificationView2 setImage:insightImage];
                 }
-                [self.rightNotificationView setImage:nil];
             }
-        } else if (hasTrustNotifications){
-            [self.leftNotificationView setImage:[UIImage imageNamed:@"trust_notification"]];
+        } else if (hasTrustNotifications) {
+            [self.notificationView1 setImage:trustImage];
             if (hasCommentNotification) {
-                [self.centerNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
-            } else {
-            [self.centerNotificationView setImage:nil];
+                [self.notificationView2 setImage:commentImage];
+                if (hasInsightNotification) {
+                    [self.notificationView3 setImage:insightImage];
+                }
+            } else if (hasInsightNotification) {
+                [self.notificationView2 setImage:insightImage];
             }
-            [self.rightNotificationView setImage:nil];
-            [self.extendedNotificationView setImage:nil];
-        } else {
-            if (hasCommentNotification) {
-                [self.leftNotificationView setImage:[UIImage imageNamed:@"comment_notification"]];
-            } else {
-                [self.leftNotificationView setImage:nil];
+        } else if (hasCommentNotification) {
+            [self.notificationView1 setImage:commentImage];
+            if (hasInsightNotification) {
+                [self.notificationView2 setImage:insightImage];
             }
-            [self.centerNotificationView setImage:nil];
-            [self.rightNotificationView setImage:nil];
-            [self.extendedNotificationView setImage:nil];
+        } else if (hasInsightNotification){
+            [self.notificationView1 setImage:insightImage];
         }
-        [self.view bringSubviewToFront:self.extendedNotificationView];
-        [self.view bringSubviewToFront:self.rightNotificationView];
-        [self.view bringSubviewToFront:self.centerNotificationView];
-        [self.view bringSubviewToFront:self.leftNotificationView];
+
+        [self.view bringSubviewToFront:self.notificationView1];
+        [self.view bringSubviewToFront:self.notificationView2];
+        [self.view bringSubviewToFront:self.notificationView3];
+        [self.view bringSubviewToFront:self.notificationView4];
+        [self.view bringSubviewToFront:self.notificationView5];
         if ((hasLikeNotifications || hasTrustNotifications || hasUserNotifications || hasCommentNotification)) {
             HAActivityIsAnimating = YES;
             [UIView animateWithDuration:1.0 animations:^{
-                [self.centerNotificationView setAlpha:1];
-                [self.leftNotificationView setAlpha:1];
-                [self.rightNotificationView setAlpha:1];
+                [self.notificationView1 setAlpha:1];
+                [self.notificationView2 setAlpha:1];
+                [self.notificationView3 setAlpha:1];
+                [self.notificationView4 setAlpha:1];
+                [self.notificationView5 setAlpha:1];
             } completion:^(BOOL finished) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [UIView animateWithDuration:2.0 animations:^{
-                        [self.centerNotificationView setAlpha:0];
-                        [self.leftNotificationView setAlpha:0];
-                        [self.rightNotificationView setAlpha:0];
+                        [self.notificationView1 setAlpha:0];
+                        [self.notificationView2 setAlpha:0];
+                        [self.notificationView3 setAlpha:0];
+                        [self.notificationView4 setAlpha:0];
+                        [self.notificationView5 setAlpha:0];
                     } completion:^(BOOL finished) {
                         HAActivityIsAnimating = NO;
                     }];
@@ -660,18 +690,25 @@ static BOOL HAActivityIsAnimating = NO;
     [[self menuView] setVisible:NO];
     [[self backgroundImageView] setImage:[self backgroundImage]];
     
-    self.leftNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(45.f, 32.f, 28.f, 19.f)];
-    self.centerNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(65.f, 32.f, 28.f, 19.f)];
-    self.rightNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(85.f, 32.f, 28.f, 19.f)];
-    self.extendedNotificationView = [[UIImageView alloc] initWithFrame:CGRectMake(105.f, 32.f, 28.f, 19.f)];
-    [self.leftNotificationView setAlpha:0.f];
-    [self.rightNotificationView setAlpha:0.f];
-    [self.centerNotificationView setAlpha:0.f];
-    [self.extendedNotificationView setAlpha:0.f];
-    [self.view addSubview:self.extendedNotificationView];
-    [self.view addSubview:self.rightNotificationView];
-    [self.view addSubview:self.centerNotificationView];
-    [self.view addSubview:self.leftNotificationView];
+    self.notificationView1 = [[UIImageView alloc] initWithFrame:CGRectMake(45.f, 32.f, 28.f, 19.f)];
+    self.notificationView2 = [[UIImageView alloc] initWithFrame:CGRectMake(65.f, 32.f, 28.f, 19.f)];
+    self.notificationView3 = [[UIImageView alloc] initWithFrame:CGRectMake(85.f, 32.f, 28.f, 19.f)];
+    self.notificationView4 = [[UIImageView alloc] initWithFrame:CGRectMake(105.f, 32.f, 28.f, 19.f)];
+    self.notificationView5 = [[UIImageView alloc] initWithFrame:CGRectMake(125.f, 32.f, 28.f, 19.f)];
+    
+    [self.notificationView1 setAlpha:0.f];
+    [self.notificationView3 setAlpha:0.f];
+    [self.notificationView2 setAlpha:0.f];
+    [self.notificationView4 setAlpha:0.f];
+    [self.notificationView5 setAlpha:0.f];
+    
+    [self.view addSubview:self.notificationView1];
+    [self.view addSubview:self.notificationView2];
+    [self.view addSubview:self.notificationView3];
+    [self.view addSubview:self.notificationView4];
+    [self.view addSubview:self.notificationView5];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newUserRegistered:) name:@"didRegisterNewAccount" object:nil];
     
 }
@@ -713,6 +750,7 @@ static BOOL HAActivityIsAnimating = NO;
                 animated:(BOOL)animated
 {
     [self setImageTransitionRect:r];
+    
     UIImage *newImage;
     if (image.size.width < 600 && image.size.width > 0) {
         CGRect imageRect = CGRectMake(0, 0, image.size.width, image.size.height);
@@ -728,6 +766,11 @@ static BOOL HAActivityIsAnimating = NO;
         newImage = image;
     }
     self.originalImage = image;
+    NSLog(@"%f", image.size.width);
+    if (image == nil) {
+        image = [p largeTypeImage];
+        
+    }
     [[self transitionImageView] setImage:newImage];
     
     STKPostViewController *postVC = [[STKPostViewController alloc] init];
@@ -784,17 +827,26 @@ static BOOL HAActivityIsAnimating = NO;
                                                  toViewController:(UIViewController *)toVC
 {
     self.operation = operation;
-    if ([fromVC class] == [HAInsightsViewController class] && [toVC class] == [HAInsightsViewController class]) {
-        HAInsightsViewController *hvc = (HAInsightsViewController *)fromVC;
-        if ([hvc.segmentedControl selectedSegmentIndex] == 0 && ! [hvc isArchived] && [toVC class] != [STKProfileViewController class]) {
+    if (([fromVC class] == [HAInsightsViewController class] || [fromVC class] == [STKActivityViewController class])&& ([toVC class] == [HAInsightsViewController class] || [toVC isKindOfClass:[STKActivityViewController class]])) {
+        if ([fromVC isKindOfClass:[HAInsightsViewController class]]) {
+            HAInsightsViewController *hvc = (HAInsightsViewController *)fromVC;
+            if ([hvc.segmentedControl selectedSegmentIndex] == 0 && ! [hvc isArchived] && [toVC class] != [STKProfileViewController class]) {
+                if (operation == UINavigationControllerOperationPush) {
+                    [[self transitionImageView] setFrame:self.imageTransitionRect];
+                } else {
+                    [[self transitionImageView] setFrame:CGRectMake(0, 116, 320, 300)];
+                }
+                return  self;
+            } else {
+                return nil;
+            }
+        } else {
             if (operation == UINavigationControllerOperationPush) {
                 [[self transitionImageView] setFrame:self.imageTransitionRect];
             } else {
                 [[self transitionImageView] setFrame:CGRectMake(0, 116, 320, 300)];
             }
-            return  self;
-        } else {
-            return nil;
+            return self;
         }
     }
     if(([fromVC class] == [STKPostViewController class]&& operation == UINavigationControllerOperationPop)

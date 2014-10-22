@@ -83,7 +83,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+//    [self.textView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:NULL];
     [[self textView] becomeFirstResponder];
+    [self.textView setContentOffset:CGPointMake(0, 7)];
 
     if([self editingPostText]) {
         [[self textView] setAttributedText:[STKMarkupUtilities renderedTextForText:[[self post] text] attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
@@ -103,6 +105,13 @@
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
 }
+
+//-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+//    UITextView *txtview = object;
+//    CGFloat topoffset = ([txtview bounds].size.height - [txtview contentSize].height * [txtview zoomScale])/2.0;
+//    topoffset = ( topoffset < 0.0 ? 0.0 : topoffset );
+//    txtview.contentOffset = (CGPoint){.x = 0, .y = -topoffset};
+//}
 
 - (void)viewWillDisappear:(BOOL)animated
 {

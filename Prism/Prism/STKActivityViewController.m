@@ -23,6 +23,9 @@
 #import "STKProfileViewController.h"
 #import "STKLuminatingBar.h"
 #import "STKFetchDescription.h"
+#import "STKInsightTarget.h"
+#import "STKInsight.h"
+#import "HAInsightsViewController.h"
 
 typedef enum {
     STKActivityViewControllerTypeActivity,
@@ -294,6 +297,12 @@ typedef enum {
             return;
         }
         
+        if([i insightTarget]) {
+             STKActivityCell *c = (STKActivityCell *)[tableView cellForRowAtIndexPath:indexPath];
+            [self.menuController transitionToInsightTarget:i.insightTarget fromRect:[[self view] convertRect:[[c imageReferenceView] frame] fromView:c] usingImage:[[c imageReferenceView] image] inViewController:self animated:YES];
+            return;
+        }
+        
         
     }
     
@@ -314,7 +323,10 @@ typedef enum {
         
         if([i post]) {
             [[cell imageReferenceView] setUrlString:[[i post] imageURLString]];
-        } else {
+        } else if([i insightTarget]) {
+            [cell.imageReferenceView setUrlString:i.insightTarget.filePath];
+        }
+        else {
             [[cell imageReferenceView] setUrlString:nil];
         }
         

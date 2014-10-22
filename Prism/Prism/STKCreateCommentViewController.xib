@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
@@ -49,7 +49,7 @@
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dWj-dA-ICt">
-                            <rect key="frame" x="38" y="4" width="216" height="24"/>
+                            <rect key="frame" x="38" y="10" width="216" height="24"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                             <color key="textColor" red="0.75294119120000003" green="0.75686275960000005" blue="0.83529412749999998" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
@@ -97,7 +97,7 @@
                         <constraint firstItem="dWj-dA-ICt" firstAttribute="leading" secondItem="jsr-Q6-U8q" secondAttribute="trailing" constant="8" id="heY-Sm-jDx"/>
                         <constraint firstAttribute="centerY" secondItem="jsr-Q6-U8q" secondAttribute="centerY" id="mWA-l9-IeI"/>
                         <constraint firstAttribute="bottom" secondItem="VSh-6l-Rum" secondAttribute="bottom" id="oCw-b4-ziV"/>
-                        <constraint firstAttribute="centerY" secondItem="dWj-dA-ICt" secondAttribute="centerY" constant="2" id="rqQ-fx-dSX"/>
+                        <constraint firstAttribute="centerY" secondItem="dWj-dA-ICt" secondAttribute="centerY" constant="-4" id="rqQ-fx-dSX"/>
                         <constraint firstAttribute="trailing" secondItem="VSh-6l-Rum" secondAttribute="trailing" id="wFi-lN-Y3y"/>
                     </constraints>
                 </view>

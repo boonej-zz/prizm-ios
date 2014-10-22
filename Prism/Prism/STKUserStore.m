@@ -38,6 +38,7 @@ NSString * const STKUserStoreActivityUpdateCountKey = @"STKUSerStoreActivityUpda
 NSString * const HAUserStoreActivityUserKey = @"HAUserStoreActivityUserKey";
 NSString * const HAUserStoreActivityLikeKey = @"HAUserStoreActivityLikeKey";
 NSString * const HAUserStoreActivityTrustKey = @"HAUserStoreActivityTrustKey";
+NSString * const HAUserStoreActivityInsightKey = @"HAUserStoreActivityInsightKey";
 NSString * const HAUserStoreActivityCommentKey = @"HAUserStoreActivityCommentKey";
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 NSString * const HAUserStoreLoggedInUsersKey = @"com.higheraltitude.prism.loggedInUsers";
@@ -166,14 +167,17 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"like"]];
     NSFetchRequest *cReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     [cReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (comment <> NULL)"]];
+    NSFetchRequest *dReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    [dReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"insight"]];
     long actCount = [[self context] countForFetchRequest:aReq error:nil];
     long likeCount = [[self context] countForFetchRequest:bReq error:nil];
     long commentCount = [[self context] countForFetchRequest:cReq error:nil];
+    long insightCount = [[self context] countForFetchRequest:dReq error:nil];
     aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
     [aReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
     long trustCount = [[self context] countForFetchRequest:aReq error:nil];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount), HAUserStoreActivityCommentKey: @(commentCount)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount), HAUserStoreActivityCommentKey: @(commentCount), HAUserStoreActivityInsightKey: @(insightCount)}];
 }
 
 - (void)markActivitiesAsRead
@@ -1359,8 +1363,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
         STKResolutionQuery *postResolve = [STKResolutionQuery resolutionQueryForField:@"post_id"];
+        
         [postResolve addSubquery:[STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[self currentUser] uniqueID]]];
         [q addSubquery:postResolve];
+        STKResolutionQuery *insightTargetResolve = [STKResolutionQuery resolutionQueryForField:@"insight_target_id"];
+        STKResolutionQuery *insightResolve = [STKResolutionQuery resolutionQueryForField:@"insight_id"];
+//        [insightTargetResolve addSubquery:[STKResolutionQuery resolutionQueryForField:@"insight"]];
+        [q addSubquery:insightTargetResolve];
+        [q addSubquery:insightResolve];
+        
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"comment_id"]];
         
         [c setQueryObject:q];
@@ -1369,7 +1380,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setShouldReturnArray:YES];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost", @"Comment" : @"STKComment"}];
+        [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost", @"Comment" : @"STKComment", @"InsightTarget": @"STKInsightTarget", @"Insight": @"STKInsight"}];
         
         [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {

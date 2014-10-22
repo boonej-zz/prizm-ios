@@ -19,6 +19,7 @@
 @dynamic uniqueID;
 @dynamic target;
 @dynamic insight;
+@dynamic filePath;
 
 + (NSDictionary *)remoteToLocalKeyMap
 {
@@ -28,7 +29,8 @@
              @"liked": @"liked",
              @"target" : [STKBind bindMapForKey:@"target" matchMap:@{@"uniqueID" : @"_id"}],
              @"insight" : [STKBind bindMapForKey:@"insight" matchMap:@{@"uniqueID" : @"_id"}],
-             @"create_date" : [STKBind bindMapForKey:@"sentDate" transform:STKBindTransformDateTimestamp]
+             @"create_date" : [STKBind bindMapForKey:@"sentDate" transform:STKBindTransformDateTimestamp],
+             @"file_path": @"filePath"
              };
 }
 

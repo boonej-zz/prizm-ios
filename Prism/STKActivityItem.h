@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class STKUser, STKPost, STKPostComment, STKInsightTarget;
+@class STKUser, STKPost, STKPostComment, STKInsightTarget, STKInsight;
 
 extern NSString *const STKActivityItemTypePost;
 extern NSString *const STKActivityItemTypeFollow;
@@ -32,6 +32,7 @@ extern NSString * const STKActivityItemTypeAccolade;
 @property (nonatomic, retain) STKPost *post;
 @property (nonatomic, strong) STKPostComment *comment;
 @property (nonatomic, strong) STKInsightTarget *insightTarget;
+@property (nonatomic, strong) STKInsight *insight;
 @property (nonatomic, retain) STKUser *creator;
 @property (nonatomic, strong) STKUser *notifiedUser;
 

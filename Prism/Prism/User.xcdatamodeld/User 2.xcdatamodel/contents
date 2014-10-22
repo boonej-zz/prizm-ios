@@ -7,6 +7,7 @@
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="comment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="activities" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="createdActivities" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="insight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="activities" inverseEntity="STKInsight" syncable="YES"/>
         <relationship name="insightTarget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKInsightTarget" inverseName="activity" inverseEntity="STKInsightTarget" syncable="YES"/>
         <relationship name="notifiedUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedActivities" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="activities" inverseEntity="STKPost" syncable="YES"/>
@@ -30,6 +31,7 @@
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="insight" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="createdInsights" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="hashTags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKHashTag" inverseName="insights" inverseEntity="STKHashTag" syncable="YES"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="insightsTaggedIn" inverseEntity="STKUser" syncable="YES"/>
@@ -37,6 +39,7 @@
     </entity>
     <entity name="STKInsightTarget" representedClassName="STKInsightTarget" syncable="YES">
         <attribute name="disliked" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="filePath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="sentDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
@@ -182,10 +185,10 @@
         <relationship name="targetedInsights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsightTarget" inverseName="target" inverseEntity="STKInsightTarget" syncable="YES"/>
     </entity>
     <elements>
-        <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="178"/>
+        <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="193"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="120"/>
-        <element name="STKInsight" positionX="18" positionY="153" width="128" height="270"/>
-        <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="150"/>
+        <element name="STKInsight" positionX="18" positionY="153" width="128" height="285"/>
+        <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="165"/>
         <element name="STKInterest" positionX="18" positionY="153" width="128" height="165"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>

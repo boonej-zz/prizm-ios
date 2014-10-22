@@ -20,5 +20,6 @@
 @property (nonatomic, retain) NSString * uniqueID;
 @property (nonatomic, retain) STKUser *target;
 @property (nonatomic, retain) STKInsight *insight;
+@property (nonatomic, retain) NSString *filePath;
 
 @end
