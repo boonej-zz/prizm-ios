@@ -151,12 +151,12 @@
         view = [[UIVisualEffectView alloc] initWithEffect:blur];
         [view setFrame:frame];
         UIView *dv = [[UIView alloc] initWithFrame:frame];
-        [dv setBackgroundColor:[UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.37f]];
-        UIVibrancyEffect *ve = [UIVibrancyEffect effectForBlurEffect:blur];
-        UIVisualEffectView *vev = [[UIVisualEffectView alloc] initWithEffect:ve];
-        [vev setFrame:frame];
+        [dv setBackgroundColor:[UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.34f]];
+//        UIVibrancyEffect *ve = [UIVibrancyEffect effectForBlurEffect:blur];
+//        UIVisualEffectView *vev = [[UIVisualEffectView alloc] initWithEffect:ve];
+//        [vev setFrame:frame];
         
-        [[(UIVisualEffectView *)view contentView] addSubview:vev];
+//        [[(UIVisualEffectView *)view contentView] addSubview:vev];
         [[(UIVisualEffectView *)view contentView] addSubview:dv];
     } else {
         view = [[UIImageView alloc] initWithFrame:frame];

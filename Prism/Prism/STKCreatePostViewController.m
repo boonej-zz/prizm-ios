@@ -344,6 +344,15 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     
 //    [[[self imageView] layer] setBorderColor:[STKTextColor CGColor]];
 //    [[[self imageView] layer] setBorderWidth:2];
+    UIImage *img;
+    UIGraphicsBeginImageContext(CGSizeMake(10, 10));
+    [[UIColor colorWithWhite:1 alpha:0.2] set];
+    UIRectFill(CGRectMake(0, 0, 10, 10));
+    img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    
+    UIGraphicsEndImageContext();
+    [self.navigationController.navigationBar setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
     
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
     if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {

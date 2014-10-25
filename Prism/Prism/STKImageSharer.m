@@ -18,7 +18,6 @@ NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
 NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
 NSString * const STKActivityTypeWhatsapp = @"STKActivityWhatsapp";
 NSString * const HANotificationReportInappropriate = @"HANotificationReportInappropriate";
-static UIImage *navBarImage;
 
 @class STKActivity;
 
@@ -625,29 +624,10 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     __block UIColor *tintB = [[UITextView appearance] tintColor];
     [[UITextField appearance] setTintColor:nil];
     [[UITextView appearance] setTintColor:nil];
-    navBarImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-    
-    
     return ^(NSString *activityType, BOOL completed){
-    
-        [[UINavigationBar appearance] setBackgroundImage:navBarImage
-                                           forBarMetrics:UIBarMetricsDefault];
-        [[UINavigationBar appearance] setShadowImage:[UIImage new]];
         [[UITextField appearance] setTintColor:tintColor];
         [[UITextView appearance] setTintColor:tintB];
         [self presentMessageAlertForActivityType:activityType completed:completed];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ActivityFinished" object:nil];
-
-        
-//        UIGraphicsBeginImageContext(CGSizeMake(10, 10));
-//        [[UIColor colorWithWhite:1 alpha:0.2] set];
-//        UIRectFill(CGRectMake(0, 0, 10, 10));
-//        [[UINavigationBar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext() forBarMetrics:UIBarMetricsDefault];
-//        [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-//        
-//        UIGraphicsEndImageContext();
-       
     };
 
 }

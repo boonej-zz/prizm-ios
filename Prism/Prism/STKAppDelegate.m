@@ -20,6 +20,7 @@
 #import "STKBaseStore.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKPostViewController.h"
+#import <MessageUI/MessageUI.h>
 
 #import <GooglePlus/GooglePlus.h>
 #import <Crashlytics/Crashlytics.h>
@@ -27,6 +28,7 @@
 #import "STKContentStore.h"
 #import "HAInsightsViewController.h"
 #import "STKAuthorizationToken.h"
+#import "STKCreatePostViewController.h"
 //#import "TMAPIClient.h"
 
 #ifdef DEBUG 
@@ -191,10 +193,12 @@
 
     UIGraphicsEndImageContext();
     
-    [[UINavigationBar appearance] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
+//    [[UINavigationBar appearance] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
     
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:STKFont(14)];
+    [[UINavigationBar appearanceWhenContainedIn:[STKMenuController class], nil] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
+ 
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class],nil] setFont:STKFont(14)];
     
     [[UITextField appearance] setTintColor:[UIColor whiteColor]];
     [[UITextView appearance] setTintColor:[UIColor whiteColor]];
