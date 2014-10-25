@@ -276,8 +276,9 @@
                                                                                                                inView:[[self viewController] view]
                                                                                                              animated:YES];
                                                                                    }];
+   
     if(vc) {
-        [[self viewController] presentViewController:vc animated:YES completion:nil];
+        [[self.viewController navigationController] presentViewController:vc animated:YES completion:nil];
     }
 }
 

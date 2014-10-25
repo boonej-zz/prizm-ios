@@ -7,18 +7,18 @@
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "Iphone4Shareb.png"
+      "filename" : "Iphone4share.png"
     },
     {
       "idiom" : "iphone",
-      "filename" : "Iphone5Shareb.png",
+      "filename" : "Iphone5share.png",
       "subtype" : "retina4",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
       "scale" : "3x",
-      "filename" : "Iphone6PlusShareb.png"
+      "filename" : "Iphone6share.png"
     }
   ],
   "info" : {

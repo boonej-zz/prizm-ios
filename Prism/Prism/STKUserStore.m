@@ -169,13 +169,14 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [cReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (comment <> NULL)"]];
     NSFetchRequest *dReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     [dReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"insight"]];
+    NSFetchRequest *eReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+    [eReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
     long actCount = [[self context] countForFetchRequest:aReq error:nil];
     long likeCount = [[self context] countForFetchRequest:bReq error:nil];
     long commentCount = [[self context] countForFetchRequest:cReq error:nil];
     long insightCount = [[self context] countForFetchRequest:dReq error:nil];
-    aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-    [aReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
-    long trustCount = [[self context] countForFetchRequest:aReq error:nil];
+    
+    long trustCount = [[self context] countForFetchRequest:eReq error:nil];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount), HAUserStoreActivityCommentKey: @(commentCount), HAUserStoreActivityInsightKey: @(insightCount)}];
 }

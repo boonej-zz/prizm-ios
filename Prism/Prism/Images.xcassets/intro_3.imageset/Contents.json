@@ -7,18 +7,18 @@
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "Iphone4Insightb.png"
+      "filename" : "Iphone4insight.png"
     },
     {
       "idiom" : "iphone",
-      "filename" : "Iphone5Insightb.png",
+      "filename" : "Iphone5insight.png",
       "subtype" : "retina4",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
       "scale" : "3x",
-      "filename" : "Iphone6PlusInsightb.png"
+      "filename" : "Iphone6insight.png"
     }
   ],
   "info" : {

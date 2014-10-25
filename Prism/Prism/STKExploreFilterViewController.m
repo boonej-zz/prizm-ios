@@ -88,9 +88,19 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    if ([self.delegate respondsToSelector:@selector(exploreFilterWillAppear)]){
+        [self.delegate exploreFilterWillAppear];
+    }
     [super viewWillAppear:animated];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if ([self.delegate respondsToSelector:@selector(exploreFilterWillDissappear)]){
+        [self.delegate exploreFilterWillDissappear];
+    }
+    [super viewWillDisappear:animated];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];

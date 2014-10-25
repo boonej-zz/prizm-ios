@@ -18,6 +18,7 @@ NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
 NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
 NSString * const STKActivityTypeWhatsapp = @"STKActivityWhatsapp";
 NSString * const HANotificationReportInappropriate = @"HANotificationReportInappropriate";
+static UIImage *navBarImage;
 
 @class STKActivity;
 
@@ -607,27 +608,48 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeMail];;
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
                                                                                          applicationActivities:activities];
-    UIActivityViewControllerCompletionHandler completionHandler = ^(NSString *activityType, BOOL completed){
-        if (activityType == UIActivityTypeSaveToCameraRoll) {
-            NSString *message = nil;
-            NSString *title = nil;
-            if (completed) {
-                title = @"Image Saved";
-                message = @"The image has been saved \n to your camera roll.";
-            } else {
-                title = @"Error";
-                message = @"The image could not be saved.";
-            }
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [av show];
-        }
-    };
-    [controller setCompletionHandler:completionHandler];
+    
+  
+    [controller setCompletionHandler:[self completionHandlerForActivity]];
+    [controller.navigationController.navigationBar setTranslucent:NO];
     [controller setExcludedActivityTypes:excludedActivities];
     if (! controller) return nil;
     [self setViewController:controller];
     
     return controller;
+}
+
+- (UIActivityViewControllerCompletionHandler)completionHandlerForActivity
+{
+    __block UIColor *tintColor = [[UITextField appearance] tintColor];
+    __block UIColor *tintB = [[UITextView appearance] tintColor];
+    [[UITextField appearance] setTintColor:nil];
+    [[UITextView appearance] setTintColor:nil];
+    navBarImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    
+    
+    return ^(NSString *activityType, BOOL completed){
+    
+        [[UINavigationBar appearance] setBackgroundImage:navBarImage
+                                           forBarMetrics:UIBarMetricsDefault];
+        [[UINavigationBar appearance] setShadowImage:[UIImage new]];
+        [[UITextField appearance] setTintColor:tintColor];
+        [[UITextView appearance] setTintColor:tintB];
+        [self presentMessageAlertForActivityType:activityType completed:completed];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ActivityFinished" object:nil];
+
+        
+//        UIGraphicsBeginImageContext(CGSizeMake(10, 10));
+//        [[UIColor colorWithWhite:1 alpha:0.2] set];
+//        UIRectFill(CGRectMake(0, 0, 10, 10));
+//        [[UINavigationBar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext() forBarMetrics:UIBarMetricsDefault];
+//        [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+//        
+//        UIGraphicsEndImageContext();
+       
+    };
+
 }
 
 - (UIActivityViewController *)activityViewControllerForInsight:(STKInsight *)insight finishHandler:(void (^)(UIDocumentInteractionController *))block
@@ -651,6 +673,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];;
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
                                                                              applicationActivities:activities];
+    [controller setCompletionHandler:[self completionHandlerForActivity]];
     [controller setExcludedActivityTypes:excludedActivities];
     if (! controller) return nil;
     [self setViewController:controller];
@@ -709,22 +732,29 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     
 
     // revert appearance proxies to get default iOS behavior when sharing through Messages
-//    UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
-//    UIColor *tintColor = [[UITextField appearance] tintColor];
-//    [[UINavigationBar appearance] setBackgroundImage:nil
-//                                       forBarMetrics:UIBarMetricsDefault];
-//    [[UITextField appearance] setTintColor:nil];
-//    UIActivityViewControllerCompletionHandler handler = ^void (NSString *activityType, BOOL completed) {
-//        // restore appearance proxies to original
-//        [[UINavigationBar appearance] setBackgroundImage:backgroundImage
-//                                           forBarMetrics:UIBarMetricsDefault];
-//        [[UITextField appearance] setTintColor:tintColor];
-//    };
-//    [activityViewController setCompletionHandler:handler];
+    
+    [activityViewController setCompletionHandler:[self completionHandlerForActivity]];
     
     [self setViewController:activityViewController];
     
     return activityViewController;
+}
+
+- (void)presentMessageAlertForActivityType:(NSString *)activityType completed:(BOOL)completed
+{
+    if (activityType == UIActivityTypeSaveToCameraRoll) {
+        NSString *message = nil;
+        NSString *title = nil;
+        if (completed) {
+            title = @"Image Saved";
+            message = @"The image has been saved \n to your camera roll.";
+        } else {
+            title = @"Error";
+            message = @"The image could not be saved.";
+        }
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+    }
 }
 
 

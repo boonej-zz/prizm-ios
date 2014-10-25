@@ -194,6 +194,16 @@
     [self configureInterface];
 }
 
+- (void)exploreFilterWillAppear
+{
+    [[self underlayView] setAlpha:0.5f];
+}
+
+- (void)exploreFilterWillDissappear
+{
+    [self.underlayView setAlpha:0.f];
+}
+
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
 {
     int row = idx / 3;

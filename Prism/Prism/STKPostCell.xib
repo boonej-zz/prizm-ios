@@ -180,7 +180,6 @@
                 <color key="backgroundColor" red="0.11541455186979721" green="0.27227393437720682" blue="0.50801078680203049" alpha="0.0" colorSpace="calibratedRGB"/>
                 <constraints>
                     <constraint firstItem="JP4-cN-kHA" firstAttribute="top" secondItem="6QP-zd-FRS" secondAttribute="bottom" id="1BT-Cs-adO"/>
-                    <constraint firstItem="MuO-Ko-R2y" firstAttribute="top" secondItem="B1Y-Qd-F7e" secondAttribute="top" constant="5" id="65m-P8-94x"/>
                     <constraint firstAttribute="trailing" secondItem="7BC-Pt-GTX" secondAttribute="trailing" constant="5" id="9mA-2A-k5S"/>
                     <constraint firstItem="7BC-Pt-GTX" firstAttribute="top" secondItem="MuO-Ko-R2y" secondAttribute="bottom" id="CRL-e1-bDo"/>
                     <constraint firstItem="MuO-Ko-R2y" firstAttribute="leading" secondItem="B1Y-Qd-F7e" secondAttribute="leading" constant="5" id="Kwl-j9-c9y"/>

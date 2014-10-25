@@ -94,27 +94,7 @@
     [self.collectionView setCollectionViewLayout:layout];
     
     [self.navigationItem setRightBarButtonItem:self.doneButton];
-    [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {
-        [self.selectedInterests addObjectsFromArray:[u.interests allObjects]];
-        [self.tagObjects addObjectsFromArray:self.selectedInterests];
-        [[STKUserStore store] fetchInterests:^(NSArray *interests, NSError *err) {
-            NSLog(@"%@", interests);
-            self.interests = [interests filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(STKInterest *interest, NSDictionary *bindings) {
-                return ![interest isSubinterest];
-            }]];
-            if ([self.selectedInterests count] < 3) {
-//                [self.collectionView setHidden:YES];
-                [self.overlayView setHidden:NO];
-                [self.doneButton setEnabled:NO];
-            } else {
-//                [self.collectionView setHidden:NO];
-                [self.overlayView setHidden:YES];
-                [self.doneButton setEnabled:YES];
-            }
-
-            [self loadCollectionData];
-        }];
-    }];
+    
     
     
     self.title = @"Interests";
@@ -202,6 +182,27 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {
+        [self.selectedInterests addObjectsFromArray:[u.interests allObjects]];
+        [self.tagObjects addObjectsFromArray:self.selectedInterests];
+        [[STKUserStore store] fetchInterests:^(NSArray *interests, NSError *err) {
+            NSLog(@"%@", interests);
+            self.interests = [interests filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(STKInterest *interest, NSDictionary *bindings) {
+                return ![interest isSubinterest];
+            }]];
+            if ([self.selectedInterests count] < 3) {
+                //                [self.collectionView setHidden:YES];
+                [self.overlayView setHidden:NO];
+                [self.doneButton setEnabled:NO];
+            } else {
+                //                [self.collectionView setHidden:NO];
+                [self.overlayView setHidden:YES];
+                [self.doneButton setEnabled:YES];
+            }
+            
+            [self loadCollectionData];
+        }];
+    }];
     [super viewWillAppear:animated];
 }
 
@@ -293,12 +294,13 @@
     HAInterestCell *cell = (HAInterestCell *)[collectionView cellForItemAtIndexPath:indexPath];
     [cell setSelected:YES];
     [cell setStored:NO];
+    __block NSInteger row = indexPath.row;
     if (cell.interest.subinterests.count > 0 && [[self selectedInterests] indexOfObject:cell.interest] == NSNotFound) {
         NSMutableArray *ips = [NSMutableArray array];
         [cell.interest.subinterests enumerateObjectsUsingBlock:^(STKInterest *interest, BOOL *stop) {
             if ([self.tagObjects indexOfObject:interest] == NSNotFound) {
-                [self.tagObjects addObject:interest];
-                [ips addObject:[NSIndexPath indexPathForRow:[self.tagObjects indexOfObject:interest] inSection:0]];
+                [self.tagObjects insertObject:interest atIndex:++row];
+                [ips addObject:[NSIndexPath indexPathForRow:row inSection:0]];
             }
         }];
         [self sizeCells];

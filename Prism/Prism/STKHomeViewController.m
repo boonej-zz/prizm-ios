@@ -34,7 +34,7 @@
 @property (nonatomic, strong) STKPostController *postController;
 @property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *cardView;
 @property (weak, nonatomic) IBOutlet UIView *instructionView;
@@ -110,7 +110,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     _homeCellNib = [UINib nibWithNibName:@"STKPostCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     CGRect frame = [self.view frame];
@@ -140,6 +139,10 @@
     [self addBlurViewWithHeight:64.f];
 }
 
+- (void)setBlurView:(id)blurView
+{
+    _blurView = blurView;
+}
 
 
 - (STKPostCell *)cardCellForIndexPath:(NSIndexPath *)ip
@@ -367,14 +370,12 @@
 {
     [super viewWillAppear:animated];
     
-    [[[self blurView] displayLink] setPaused:NO];
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
 
     if([[STKUserStore store] currentUser]) {
         [self fetchNewPosts];
     }
-    
     [self configureInterface];
    
 }
@@ -396,7 +397,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[[self blurView] displayLink] setPaused:YES];
+    [self.blurView setAlpha:0];
 }
 
 - (void)viewDidAppear:(BOOL)animated

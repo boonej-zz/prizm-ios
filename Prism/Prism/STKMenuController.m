@@ -32,6 +32,7 @@
 #import "HAInterestsViewController.h"
 #import "STKInsightTarget.h"
 #import "HAInsightsViewController.h"
+#import "UIERealTimeBlurView.h"
 #import <CoreGraphics/CoreGraphics.h>
 
 @import QuartzCore;
@@ -476,7 +477,7 @@ static BOOL HAActivityIsAnimating = NO;
     HALikeNotificationCount = (int)likeCount;
     HAUserNotificationCount = (int)userCount;
     HACommentNotificationCount = (int)commentCount;
-    HATrustNotificationCount = (int)trustCount;
+    HAInsightNotificationCount = (int)insightCount;
     
     UIImage *likeImage = [UIImage imageNamed:@"like_notification"];
     UIImage *userImage = [UIImage imageNamed:@"user_notification"];
@@ -626,13 +627,25 @@ static BOOL HAActivityIsAnimating = NO;
     }
     
     _viewControllers = [viewControllers copy];
-
+    [self refreshNavBars];
     for(UIViewController *vc in viewControllers) {
+        
+        
+        [self addChildViewController:vc];
+        [vc didMoveToParentViewController:self];
+        
+    }
+    [self setSelectedViewController:[viewControllers objectAtIndex:0]];
+}
+
+- (void)refreshNavBars
+{
+    for (UIViewController *vc in self.viewControllers) {
         if([vc isKindOfClass:[UINavigationController class]]) {
             [(UINavigationController *)vc setDelegate:self];
             [[(UINavigationController *)vc navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
             [[(UINavigationController *)vc navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
-                                                                                  NSFontAttributeName : STKFont(22)}];
+                                                                                   NSFontAttributeName : STKFont(22)}];
             [[(UINavigationController *)vc navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
             [[(UINavigationController *)vc navigationBar] setTitleVerticalPositionAdjustment:4 forBarMetrics:UIBarMetricsDefault];
         } else {
@@ -640,12 +653,7 @@ static BOOL HAActivityIsAnimating = NO;
                                            reason:@"All view controllers must be embedded in a UINavigationController"
                                          userInfo:nil];
         }
-        
-        [self addChildViewController:vc];
-        [vc didMoveToParentViewController:self];
-        
     }
-    [self setSelectedViewController:[viewControllers objectAtIndex:0]];
 }
 
 
@@ -710,7 +718,35 @@ static BOOL HAActivityIsAnimating = NO;
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newUserRegistered:) name:@"didRegisterNewAccount" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fishBlurView) name:@"FinishedActivity" object:nil];
+//
+    [[UINavigationBar appearanceWhenContainedIn:[UIActivityViewController class], nil] setTranslucent:NO];
     
+    [[UITextField appearanceWhenContainedIn:[UIActivityViewController class], nil] setTintColor:nil];
+    [[UITextView appearanceWhenContainedIn:[UIActivityViewController class], nil] setTintColor:nil];
+//    [[UINavigationBar appearanceWhenContainedIn:[UIDocumentInteractionController class], nil] setTranslucent:NO];
+//    
+//    [[UITextField appearanceWhenContainedIn:[UIDocumentInteractionController class], nil] setTintColor:nil];
+//    [[UITextView appearanceWhenContainedIn:[UIDocumentInteractionController class], nil] setTintColor:nil];
+    
+}
+
+- (void)fishBlurView
+{
+//    [[UINavigationBar appearance] setBarTintColor:nil];
+    
+//    UIViewController *vc = [self selectedViewController];
+//    if ([vc isKindOfClass:[UINavigationController class]]) {
+//        [vc = [(UINavigationController *)vc viewControllers]]
+//    }
+//    for (UIView *v in  vc.view.subviews) {
+//        NSString *str = [NSString stringWithFormat:@"%@", [v class]];
+//        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Her" message:str delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        [av show];
+//        if (v.tag == 99999) {
+//            [vc.view bringSubviewToFront:v];
+//        }
+//    }
 }
 
 - (void)newUserRegistered:(NSNotification *)note
@@ -877,6 +913,11 @@ static BOOL HAActivityIsAnimating = NO;
     
     UIViewController *inVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIViewController *outVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    if ([inVC isKindOfClass:[STKHomeViewController class]]) {
+        STKHomeViewController *hvc = (STKHomeViewController *)inVC;
+//        [hvc.blurView setRenderStatic:YES];
+        
+    }
     CGRect transitionFrame;
     if ([inVC class] == [HAInsightsViewController class]) {
         transitionFrame = CGRectMake(0, 116, 320, 300);

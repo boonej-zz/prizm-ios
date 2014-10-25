@@ -7,18 +7,18 @@
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "Iphone4Importb.png"
+      "filename" : "Iphone4import.png"
     },
     {
       "idiom" : "iphone",
-      "filename" : "Iphone5Importb.png",
+      "filename" : "Iphone5import.png",
       "subtype" : "retina4",
       "scale" : "2x"
     },
     {
       "idiom" : "iphone",
       "scale" : "3x",
-      "filename" : "Iphone6PlusImportb.png"
+      "filename" : "Iphone6import.png"
     }
   ],
   "info" : {

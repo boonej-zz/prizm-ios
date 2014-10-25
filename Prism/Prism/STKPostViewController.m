@@ -54,6 +54,8 @@
 @property (weak, nonatomic) IBOutlet UIView *editViewAnimationContainer;
 @property (nonatomic, strong) NSArray *categoryItems;
 
+@property (nonatomic, strong) UIERealTimeBlurView *blurView;
+
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
@@ -396,8 +398,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-//    [[[self blurView] displayLink] setPaused:YES];
+    if ([self blurView]) {
+        [self.blurView setRenderStatic:YES];
+    }
     
     [[self navigationController] setNavigationBarHidden:NO];
     
@@ -444,6 +447,11 @@
 - (void)avatarTapped:(id)sender
 {
     [self showProfileForUser:[[self post] creator]];
+}
+
+- (void)setBlurView:(UIERealTimeBlurView *)blurView
+{
+    _blurView = blurView;
 }
 
 

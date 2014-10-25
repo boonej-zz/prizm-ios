@@ -332,6 +332,9 @@
 - (void)likeButtonTapped:(STKInsightTarget *)it
 {
     [[STKContentStore store] likeInsight:it completion:^(NSError *err) {
+        if ([self isModal] || [self isArchived]) {
+            [[self navigationController] popViewControllerAnimated:YES];
+        }
         [self filterArrays];
         
     }];
@@ -340,6 +343,9 @@
 - (void)dislikeButtonTapped:(STKInsightTarget *)it
 {
     [[STKContentStore store] dislikeInsight:it completion:^(NSError *err) {
+        if ([self isModal] || [self isArchived]) {
+            [[self navigationController] popViewControllerAnimated:YES];
+        }
         [self filterArrays];
     }];
 }

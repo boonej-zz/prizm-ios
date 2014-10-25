@@ -141,28 +141,40 @@
 - (void)addBlurViewWithHeight:(double)height
 {
    
-    CGRect frame = self.view.bounds;
+    
+    CGRect frame = [UIScreen mainScreen].bounds;
     frame.size.height = height;
     UIView *view = nil;
-    if (IS_HEIGHT_GTE_568){
-        if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
-            view = [[UIERealTimeBlurView alloc] initWithFrame:frame];
-        } else {
-            UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-            view = [[UIVisualEffectView alloc] initWithEffect:blur];
-            UIView *dv = [[UIView alloc] initWithFrame:frame];
-            [dv setBackgroundColor:[UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.35f]];
-            [[(UIVisualEffectView *)view contentView] addSubview:dv];
-            
-            [view setFrame:frame];
-        }
+    
+    if (IS_HEIGHT_GTE_568 && SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+        UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        view = [[UIVisualEffectView alloc] initWithEffect:blur];
+        [view setFrame:frame];
+        UIView *dv = [[UIView alloc] initWithFrame:frame];
+        [dv setBackgroundColor:[UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.37f]];
+        UIVibrancyEffect *ve = [UIVibrancyEffect effectForBlurEffect:blur];
+        UIVisualEffectView *vev = [[UIVisualEffectView alloc] initWithEffect:ve];
+        [vev setFrame:frame];
+        
+        [[(UIVisualEffectView *)view contentView] addSubview:vev];
+        [[(UIVisualEffectView *)view contentView] addSubview:dv];
     } else {
         view = [[UIImageView alloc] initWithFrame:frame];
         [(UIImageView *)view setImage:[UIImage imageNamed:@"img_background"]];
         [(UIImageView *)view setContentMode:UIViewContentModeTopLeft];
+        [view setAlpha:0.8];
         [view setClipsToBounds:YES];
     }
+    
     [self.view addSubview:view];
+    NSArray *horizontalConstatraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[v(>=300)]-0-|" options:0 metrics:nil views:@{@"v": view}];
+    NSString *verticalString = [NSString stringWithFormat:@"V:[v(%f)]", height];
+    NSArray *verticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:verticalString options:0 metrics:nil views:@{@"v": view}];
+    view.tag = 99999;
+    [self.view addConstraints:horizontalConstatraints];
+    [self.view addConstraints:verticalConstraints];
+    NSLog(@"%@", [self class]);
+    
 }
 
 @end

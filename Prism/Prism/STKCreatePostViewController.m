@@ -367,6 +367,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [self.optionCollectionView setAutoresizesSubviews:YES];
     [[self optionCollectionView] setBackgroundColor:[UIColor clearColor]];
     [[self optionCollectionView] setScrollEnabled:NO];
+    [self addBlurViewWithHeight:64.f];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
