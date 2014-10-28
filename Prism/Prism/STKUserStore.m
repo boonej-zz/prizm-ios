@@ -40,6 +40,7 @@ NSString * const HAUserStoreActivityLikeKey = @"HAUserStoreActivityLikeKey";
 NSString * const HAUserStoreActivityTrustKey = @"HAUserStoreActivityTrustKey";
 NSString * const HAUserStoreActivityInsightKey = @"HAUserStoreActivityInsightKey";
 NSString * const HAUserStoreActivityCommentKey = @"HAUserStoreActivityCommentKey";
+NSString * const HAUserStoreActivityLuminaryPostKey = @"HAUserStoreActivityLuminaryPostKey";
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 NSString * const HAUserStoreLoggedInUsersKey = @"com.higheraltitude.prism.loggedInUsers";
 NSString * const HANotificationKeyUserLoggedOut = @"HANotificationKeyUserLoggedOut";
@@ -139,7 +140,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
         req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
         [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@", [self currentUser]]];
-        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
+        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
         [req setFetchLimit:1];
         NSArray *cachedRequests = [[self context] executeFetchRequest:req error:nil];
 
@@ -171,14 +172,17 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [dReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"insight"]];
     NSFetchRequest *eReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
     [eReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
+    NSFetchRequest *fReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    [fReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"post"]];
     long actCount = [[self context] countForFetchRequest:aReq error:nil];
     long likeCount = [[self context] countForFetchRequest:bReq error:nil];
     long commentCount = [[self context] countForFetchRequest:cReq error:nil];
     long insightCount = [[self context] countForFetchRequest:dReq error:nil];
     
     long trustCount = [[self context] countForFetchRequest:eReq error:nil];
+    long luminaryPostCount = [[self context] countForFetchRequest:fReq error:nil];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount), HAUserStoreActivityCommentKey: @(commentCount), HAUserStoreActivityInsightKey: @(insightCount)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount + insightCount+ luminaryPostCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount), HAUserStoreActivityCommentKey: @(commentCount), HAUserStoreActivityInsightKey: @(insightCount), HAUserStoreActivityLuminaryPostKey: @(luminaryPostCount)}];
 }
 
 - (void)markActivitiesAsRead
@@ -421,7 +425,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];
+                [[Mixpanel sharedInstance] identify:[u uniqueID]];
+                [[Mixpanel sharedInstance].people set:[u mixpanelProperties]];
                 
+//                MixpanelPeople *people  = [[Mixpanel sharedInstance] people];
+
                 [self attemptTransparentLoginWithUser:u];
                 
                 [self pruneDatabase];
@@ -1356,6 +1364,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKQueryObject *q = [[STKQueryObject alloc] init];
         
         if(referenceActivity) {
+            NSLog(@"%@", [referenceActivity dateCreated]);
             [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceActivity dateCreated]]];
         }
         [q setPageDirection:direction];

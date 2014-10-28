@@ -17,6 +17,9 @@
 #import "STKNavigationButton.h"
 #import "HAInsightsViewController.h"
 #import "STKNavigationButton.h"
+#import "STKContentStore.h"
+#import "STKInsight.h"
+#import "STKInsightTarget.h"
 
 @interface STKGraphViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -211,17 +214,16 @@
     [super viewWillAppear:animated];
     self.insightsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_brain"] style:UIBarButtonItemStylePlain target:self action:@selector(loadInsights:)];
     [self.navigationItem setRightBarButtonItem:self.insightsButton];
-    [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser]  additionalFields:nil completion:^(STKUser *u, NSError *err) {
-        if ([u insightCount] > 0) {
-            self.insightsButton = [self insightsButtonWithGlow:YES];
-            [self.navigationItem setRightBarButtonItem:self.insightsButton];
-        } else {
-            self.insightsButton = [self insightsButtonWithGlow:NO];
-            [self.navigationItem setRightBarButtonItem:self.insightsButton];
-        }
-    }];
-   
     
+    [[STKContentStore store] fetchInsightsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *insights, NSError *err) {
+        NSArray *unread = [insights filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(STKInsightTarget *it, NSDictionary *bindings) {
+            return !it.liked && !it.disliked;
+        }]];
+        BOOL glow = [unread count] > 0;
+
+        self.insightsButton = [self insightsButtonWithGlow:glow];
+        [self.navigationItem setRightBarButtonItem:self.insightsButton];
+    }];
     
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {

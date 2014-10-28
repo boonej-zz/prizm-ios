@@ -23,6 +23,7 @@
 #import "STKImageSharer.h"
 #import "STKResolvingImageView.h"
 #import "STKProfileViewController.h"
+#import "Mixpanel.h"
 
 @interface HAInsightsViewController () <UITableViewDataSource, UITableViewDelegate, STKInsightCellDelegate, UITextViewDelegate>
 
@@ -62,6 +63,13 @@
     if ([self isModal]) {
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_close"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(close:)];
         [self.navigationItem setLeftBarButtonItem:bbi];
+        NSMutableDictionary *props = [[[[STKUserStore store] currentUser] mixpanelProperties] mutableCopy];
+        if (self.insightTarget) {
+            [props setObject:self.insightTarget.insight.title forKey:@"insight_title"];
+            [props setObject:self.insightTarget.insight.uniqueID forKey:@"insight_id"];
+        }
+
+        [[Mixpanel sharedInstance] track:@"Viewed Insight" properties:[props copy]];
 //        UILabel *titleLabel = [[UILabel alloc] init];
 //        [titleLabel setText:@"Insight"];
 //        [titleLabel setFont:STKFont(22)];
@@ -332,6 +340,10 @@
 - (void)likeButtonTapped:(STKInsightTarget *)it
 {
     [[STKContentStore store] likeInsight:it completion:^(NSError *err) {
+        NSMutableDictionary *props = [[[[STKUserStore store] currentUser] mixpanelProperties] mutableCopy];
+        [props setObject:it.insight.title forKey:@"insight_title"];
+        [props setObject:it.insight.uniqueID forKey:@"insight_id"];
+        [[Mixpanel sharedInstance] track:@"Liked insight" properties:[props copy]];
         if ([self isModal] || [self isArchived]) {
             [[self navigationController] popViewControllerAnimated:YES];
         }
@@ -343,6 +355,10 @@
 - (void)dislikeButtonTapped:(STKInsightTarget *)it
 {
     [[STKContentStore store] dislikeInsight:it completion:^(NSError *err) {
+        NSMutableDictionary *props = [[[[STKUserStore store] currentUser] mixpanelProperties] mutableCopy];
+        [props setObject:it.insight.title forKey:@"insight_title"];
+        [props setObject:it.insight.uniqueID forKey:@"insight_id"];
+        [[Mixpanel sharedInstance] track:@"Disliked insight" properties:[props copy]];
         if ([self isModal] || [self isArchived]) {
             [[self navigationController] popViewControllerAnimated:YES];
         }
@@ -366,6 +382,13 @@
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
     if([[URL scheme] isEqualToString:@"http"] || [[URL scheme] isEqualToString:@"https"]) {
+        NSMutableDictionary *props = [[[[STKUserStore store] currentUser] mixpanelProperties] mutableCopy];
+        if (self.insightTarget) {
+            [props setObject:self.insightTarget.insight.title forKey:@"insight_title"];
+            [props setObject:self.insightTarget.insight.uniqueID forKey:@"insight_id"];
+        }
+        
+        [[Mixpanel sharedInstance] track:@"Clicked insight link." properties:[props copy]];
         STKWebViewController *wvc = [[STKWebViewController alloc] init];
         [wvc setUrl:URL];
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];

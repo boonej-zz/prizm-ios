@@ -83,6 +83,8 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
         [str appendString:@"tagged you in a post."];
     } else if([[self action] isEqualToString:STKActivityItemTypeAccolade]) {
         [str appendString:@"sent you an accolade."];
+    } else if([[self action] isEqualToString:@"post"]) {
+        [str appendString:@"created a new post."];
     }
     
     

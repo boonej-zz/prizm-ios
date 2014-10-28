@@ -24,6 +24,7 @@ extern NSString * const HAUserStoreActivityCommentKey;
 extern NSString * const HANotificationKeyUserLoggedOut;
 extern NSString * const HAUserStoreInterestsKey;
 extern NSString * const HAUserStoreActivityInsightKey;
+extern NSString * const HAUserStoreActivityLuminaryPostKey ;
 
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]

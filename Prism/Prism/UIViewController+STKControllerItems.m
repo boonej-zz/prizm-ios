@@ -162,7 +162,7 @@
         view = [[UIImageView alloc] initWithFrame:frame];
         [(UIImageView *)view setImage:[UIImage imageNamed:@"img_background"]];
         [(UIImageView *)view setContentMode:UIViewContentModeTopLeft];
-        [view setAlpha:0.8];
+        [view setAlpha:0.95];
         [view setClipsToBounds:YES];
     }
     

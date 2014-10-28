@@ -458,7 +458,7 @@ static BOOL HAActivityIsAnimating = NO;
 {
     long trustCount = [[userInfo valueForKey:HAUserStoreActivityTrustKey] longValue];
     long likeCount = [[userInfo valueForKey:HAUserStoreActivityLikeKey] longValue];
-    long userCount = [[userInfo valueForKey:HAUserStoreActivityUserKey] longValue];
+    long userCount = [[userInfo valueForKey:HAUserStoreActivityUserKey] longValue] + [[userInfo valueForKey:HAUserStoreActivityLuminaryPostKey] longValue];
     long commentCount = [[userInfo valueForKey:HAUserStoreActivityCommentKey] longValue];
     long insightCount = [[userInfo valueForKey:HAUserStoreActivityInsightKey] longValue];
     BOOL hasTrustNotifications = trustCount > HATrustNotificationCount;
@@ -720,7 +720,7 @@ static BOOL HAActivityIsAnimating = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newUserRegistered:) name:@"didRegisterNewAccount" object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fishBlurView) name:@"FinishedActivity" object:nil];
 //
-    [[UINavigationBar appearanceWhenContainedIn:[UIActivityViewController class], nil] setTranslucent:NO];
+//    [[UINavigationBar appearanceWhenContainedIn:[UIActivityViewController class], nil] setTranslucent:NO];
     
     [[UITextField appearanceWhenContainedIn:[UIActivityViewController class], nil] setTintColor:nil];
     [[UITextView appearanceWhenContainedIn:[UIActivityViewController class], nil] setTintColor:nil];

@@ -197,6 +197,7 @@
     
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[UINavigationBar appearanceWhenContainedIn:[STKMenuController class], nil] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBarStyle:UIBarStyleBlackTranslucent];
  
     [[UITextField appearanceWhenContainedIn:[UISearchBar class],nil] setFont:STKFont(14)];
     

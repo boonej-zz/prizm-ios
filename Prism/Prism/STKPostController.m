@@ -320,13 +320,15 @@
 {
     STKPost *post = [[self posts] objectAtIndex:[ip row]];
     if([[post creator] isEqual:[[STKUserStore store] currentUser]]) {
-        STKUserListViewController *vc = [[STKUserListViewController alloc] init];
-        [vc setTitle:@"Likes"];
-        [[STKContentStore store] fetchLikersForPost:[[self posts] objectAtIndex:[ip row]]
-                                         completion:^(NSArray *likers, NSError *err) {
-                                             [vc setUsers:likers];
-                                         }];
-        [[[self viewController] navigationController] pushViewController:vc animated:YES];
+        if ([post likeCount] > 0 ){
+            STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+            [vc setTitle:@"Likes"];
+            [[STKContentStore store] fetchLikersForPost:[[self posts] objectAtIndex:[ip row]]
+                                             completion:^(NSArray *likers, NSError *err) {
+                                                 [vc setUsers:likers];
+                                             }];
+            [[[self viewController] navigationController] pushViewController:vc animated:YES];
+        }
     } else {
         
         STKPostCell *c = nil;
