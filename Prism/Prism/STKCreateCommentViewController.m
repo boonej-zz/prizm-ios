@@ -248,8 +248,7 @@
 
 - (BOOL)postHasText
 {
-    
-    return [[self post] text] ? [[[self post] text] length] > 0 : NO;
+    return [[[self post] text] length] > 0;
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
