@@ -203,6 +203,7 @@
     } else {
         [view setImage:[UIImage imageNamed:@"btn_brain"]];
     }
+    [view setHighlightedImage:[UIImage imageNamed:@"btn_brain_glow"]];
     [view setOffset:10];
     [view setBadgeable:YES];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
@@ -212,7 +213,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.insightsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_brain"] style:UIBarButtonItemStylePlain target:self action:@selector(loadInsights:)];
+    self.insightsButton = [self insightsButtonWithGlow:NO];
     [self.navigationItem setRightBarButtonItem:self.insightsButton];
     
     [[STKContentStore store] fetchInsightsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *insights, NSError *err) {

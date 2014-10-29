@@ -320,13 +320,19 @@ tumblrTokenSecret, tumblrLastMinID, programCode;
     [df setDateFormat:@"YYYY-MM-dd"];
     NSLog(@"%@", [self age]);
     return @{
-             @"email": self.email?self.email:@"none",
-             @"birthday": self.birthday?[df stringFromDate:self.birthday]:@"unknown",
-             @"age": [self age],
-             @"gender": self.gender?self.gender:@"unknown",
-             @"city": self.city?self.city:@"unknown",
-             @"state": self.state?self.state:@"unknown",
-             @"zip": self.zipCode?self.zipCode:@"unknown"
+             @"$name": self.name?self.name:@"",
+             @"$first_name": self.firstName?self.firstName:@"",
+             @"$last_name": self.lastName?self.lastName:@"",
+             @"$created": self.dateCreated?self.dateCreated:[NSDate date],
+             @"$email": self.email?self.email:@"none",
+             @"Birthday": self.birthday?[df stringFromDate:self.birthday]:@"unknown",
+             @"Age": [self age],
+             @"Gender": self.gender?self.gender:@"unknown",
+             @"Origin": self.city?self.city:@"unknown",
+             @"State": self.state?self.state:@"unknown",
+             @"Zip": self.zipCode?self.zipCode:@"unknown",
+             @"Total Posts": self.postCount?@(self.postCount):@(0),
+             @"Likes Count": [self.likedPosts count]?@([self.likedPosts count]):@(0)
              };
 }
 

@@ -1319,7 +1319,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     STKQueryObjectPage direction = [fetchDescription direction];
     
     if (fetchLimit == 0) {
-        fetchLimit = 30;
+        fetchLimit = 20;
     }
 
     NSArray *cached = nil;
