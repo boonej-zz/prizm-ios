@@ -217,9 +217,7 @@
     [self.navigationItem setRightBarButtonItem:self.insightsButton];
     
     [[STKContentStore store] fetchInsightsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *insights, NSError *err) {
-        NSArray *unread = [insights filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(STKInsightTarget *it, NSDictionary *bindings) {
-            return !it.liked && !it.disliked;
-        }]];
+        NSArray *unread = [insights filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"liked == NO && disliked == NO"]];
         BOOL glow = [unread count] > 0;
 
         self.insightsButton = [self insightsButtonWithGlow:glow];

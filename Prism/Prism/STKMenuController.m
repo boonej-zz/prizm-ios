@@ -487,6 +487,7 @@ static BOOL HAActivityIsAnimating = NO;
                            
     
     if (!HAActivityIsAnimating) {
+        HAActivityIsAnimating = YES;
         [self.notificationView1 setImage:nil];
         [self.notificationView2 setImage:nil];
         [self.notificationView3 setImage:nil];
@@ -580,8 +581,8 @@ static BOOL HAActivityIsAnimating = NO;
         [self.view bringSubviewToFront:self.notificationView3];
         [self.view bringSubviewToFront:self.notificationView4];
         [self.view bringSubviewToFront:self.notificationView5];
-        if ((hasLikeNotifications || hasTrustNotifications || hasUserNotifications || hasCommentNotification)) {
-            HAActivityIsAnimating = YES;
+        if ((hasLikeNotifications || hasTrustNotifications || hasUserNotifications || hasCommentNotification || hasInsightNotification)) {
+            
             [UIView animateWithDuration:1.0 animations:^{
                 [self.notificationView1 setAlpha:1];
                 [self.notificationView2 setAlpha:1];
@@ -602,6 +603,8 @@ static BOOL HAActivityIsAnimating = NO;
                 });
             }];
             
+        } else {
+            HAActivityIsAnimating = NO;
         }
     }
 }

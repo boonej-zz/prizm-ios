@@ -163,7 +163,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)notifyNotificationCount
 {
     NSFetchRequest *aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [aReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action <> %@ && action <> %@)", @"like", @"comment"]];
+    [aReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action <> %@ && action <> %@ && action <> %@)", @"like", @"comment", @"insight"]];
     NSFetchRequest *bReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"like"]];
     NSFetchRequest *cReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
