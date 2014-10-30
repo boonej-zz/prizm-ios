@@ -1050,14 +1050,16 @@ const long STKCreateProgressGeocoding = 4;
                 [[c femaleButton] setSelected:NO];
                 [[c maleButton] setSelected:YES];
                 [[c notSetButton] setSelected:NO];
-            } else if ([self.user.gender isEqualToString:STKUserGenderUnknown]){
-                [[c femaleButton] setSelected:NO];
+            } else {
                 [[c maleButton] setSelected:NO];
-                [[c notSetButton] setSelected:YES];
-            }else {
-                [[c femaleButton] setSelected:YES];
-                [[c maleButton] setSelected:NO];
-                [[c notSetButton] setSelected:NO];
+                
+                if ([self isEditingProfile]) {
+                    [[c femaleButton] setSelected:NO];
+                    [[c notSetButton] setSelected:YES];
+                } else {
+                    [[c femaleButton] setSelected:YES];
+                    [[c notSetButton] setSelected:NO];
+                }
             }
             return c;
         } else if([cellType isEqualToString:@"date"]) {
