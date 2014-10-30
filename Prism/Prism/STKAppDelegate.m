@@ -29,6 +29,7 @@
 #import "HAInsightsViewController.h"
 #import "STKAuthorizationToken.h"
 #import "STKCreatePostViewController.h"
+#import "HANavigationController.h"
 //#import "TMAPIClient.h"
 
 #ifdef DEBUG 
@@ -197,6 +198,7 @@
     
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[UINavigationBar appearanceWhenContainedIn:[STKMenuController class], nil] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearanceWhenContainedIn:[HANavigationController class], nil] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBarStyle:UIBarStyleBlackTranslucent];
  
     [[UITextField appearanceWhenContainedIn:[UISearchBar class],nil] setFont:STKFont(14)];

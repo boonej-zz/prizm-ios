@@ -31,6 +31,7 @@
 #import "Mixpanel.h"
 #import "STKPhoneNumberFormatter.h"
 #import "HAInterestsViewController.h"
+#import "HANavigationController.h"
 
 @import AddressBook;
 @import Social;
@@ -927,7 +928,7 @@ const long STKCreateProgressGeocoding = 4;
                                                    [self dismissViewControllerAnimated:NO completion:^{
                                                        HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
                                                        [ivc setUser:user];
-                                                       UINavigationController *nvc = [[UINavigationController alloc] init];
+                                                        HANavigationController *nvc = [[HANavigationController alloc] init];
                                                        [nvc addChildViewController:ivc];
                                                        [menuController presentViewController:nvc animated:NO completion:nil];
                                                    }];
@@ -1057,6 +1058,7 @@ const long STKCreateProgressGeocoding = 4;
                     [[c femaleButton] setSelected:NO];
                     [[c notSetButton] setSelected:YES];
                 } else {
+                    [self.user setGender:STKUserGenderFemale];
                     [[c femaleButton] setSelected:YES];
                     [[c notSetButton] setSelected:NO];
                 }
