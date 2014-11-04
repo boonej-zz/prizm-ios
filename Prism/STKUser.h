@@ -152,6 +152,7 @@ extern BOOL const STKUserStatusInActive;
 - (void)removeInterestsObject:(STKInterest *)value;
 - (void)addInterests:(NSSet *)values;
 - (void)removeInterests:(NSSet *)values;
+- (NSInteger)matchingInterestsCount;
 
 @end
 

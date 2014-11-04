@@ -335,11 +335,12 @@ const long STKCreateProgressGeocoding = 4;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[Mixpanel sharedInstance] track:@"Entered Profile Creation"];
+    
     if(![self isEditingProfile]) {
+        [[Mixpanel sharedInstance] track:@"Entered Profile Creation"];
         [[self tableView] setTableFooterView:[self footerView]];
     } else {
-
+        [[Mixpanel sharedInstance] track:@"Entered Profile Editing"];
     }
     
     [[self topOffset] setConstant:[self topOffsetConstant]];

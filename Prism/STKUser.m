@@ -11,6 +11,7 @@
 #import "STKPost.h"
 #import "STKTrust.h"
 #import "STKUserStore.h"
+#import "STKInterest.h"
 
 NSString * const STKUserGenderMale = @"male";
 NSString * const STKUserGenderFemale = @"female";
@@ -319,6 +320,10 @@ tumblrTokenSecret, tumblrLastMinID, programCode;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"YYYY-MM-dd"];
     NSLog(@"%@", [self age]);
+    NSMutableArray *interests = [NSMutableArray arrayWithCapacity:self.interests.count];
+    [self.interests enumerateObjectsUsingBlock:^(STKInterest *interest, BOOL *stop) {
+        [interests addObject:[interest text]];
+    }];
     return @{
              @"$name": self.name?self.name:@"",
              @"$first_name": self.firstName?self.firstName:@"",
@@ -332,8 +337,24 @@ tumblrTokenSecret, tumblrLastMinID, programCode;
              @"State": self.state?self.state:@"unknown",
              @"Zip": self.zipCode?self.zipCode:@"unknown",
              @"Total Posts": self.postCount?@(self.postCount):@(0),
-             @"Likes Count": [self.likedPosts count]?@([self.likedPosts count]):@(0)
+             @"Likes Count": [self.likedPosts count]?@([self.likedPosts count]):@(0),
+             @"Interests": [interests copy]
              };
+}
+
+- (NSInteger)matchingInterestsCount
+{
+    STKUser *currentUser = [[STKUserStore store] currentUser];
+    __block NSInteger count = 0;
+    [self.interests enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+       [currentUser.interests enumerateObjectsUsingBlock:^(id nobj, BOOL *nstop) {
+           if (nobj == obj) {
+               ++count;
+               *nstop = YES;
+           }
+       }];
+    }];
+    return count;
 }
 
 @end

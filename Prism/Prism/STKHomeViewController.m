@@ -28,6 +28,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import "UIERealTimeBlurView.h"
 #import "HAFollowViewController.h"
+#import "HAInterestsViewController.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
@@ -48,6 +49,7 @@
 @property (nonatomic, strong) NSMutableDictionary *cardMap;
 @property (nonatomic, strong) UINib *homeCellNib;
 @property (nonatomic, strong) UIView *underlayView;
+@property (nonatomic, getter=didDisplayInterests) BOOL displayInterests;
 
 @property (nonatomic, strong) STKBackdropView *backdropView;
 
@@ -110,6 +112,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     _homeCellNib = [UINib nibWithNibName:@"STKPostCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     CGRect frame = [self.view frame];
@@ -118,6 +121,7 @@
     [self.underlayView setBackgroundColor:[UIColor blackColor]];
     [self.underlayView setAlpha:0.0];
     [self.view insertSubview:self.underlayView atIndex:1];
+    [self setDisplayInterests:[[NSUserDefaults standardUserDefaults] boolForKey:@"HADidDisplayInterestPage"]];
 
 //    [[self tableView] setDelaysContentTouches:NO];
 
@@ -372,6 +376,7 @@
     
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
+    [self setDisplayInterests:[[NSUserDefaults standardUserDefaults] boolForKey:@"HADidDisplayInterestPage"]];
 
     if([[STKUserStore store] currentUser]) {
         [self fetchNewPosts];
@@ -402,8 +407,16 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    
     [super viewDidAppear:animated];
+    STKUser *user = [[STKUserStore store] currentUser];
+    if (user) {
+        if (![self didDisplayInterests] && user.interests.count == 0){
+            HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
+            [ivc setStandalone:YES];
+            [ivc setUser:user];
+            [self.navigationController pushViewController:ivc animated:YES];
+        }
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

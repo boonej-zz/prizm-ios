@@ -69,6 +69,7 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -80,16 +81,25 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.tableView setContentInset:UIEdgeInsetsMake(3, 0, 0, 0)];
     [self addBlurViewWithHeight:64.f];
+    id sort = ^(STKUser *user1, STKUser *user2){
+        NSNumber *count1 = @(user1.matchingInterestsCount);
+        NSNumber *count2 = @(user2.matchingInterestsCount);
+        return [count2 compare:count1];
+    };
     [[STKUserStore store] searchUsersWithType:@"luminary" completion:^(NSArray *profiles, NSError *err) {
         NSPredicate *notFollowing = [NSPredicate predicateWithBlock:^BOOL(STKUser *user, NSDictionary *bindings) {
             return (![user isFollowedByUser:[[STKUserStore store] currentUser]]) && user.postCount > 2;
         }];
-        self.users = [profiles filteredArrayUsingPredicate:notFollowing];
+        NSArray *filtered = [profiles filteredArrayUsingPredicate:notFollowing];
+        self.users = [filtered sortedArrayUsingComparator:sort];
         STKFetchDescription *desc = [[STKFetchDescription alloc] init];
         desc.limit = 3;
         self.posts = [NSMutableArray arrayWithArray:self.users];
         [self.tableView reloadData];
-        [self.users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self.users enumerateObjectsUsingBlock:^(STKUser *obj, NSUInteger idx, BOOL *stop) {
+            NSLog(@"%@: %ld", [obj name], [obj matchingInterestsCount]);
+        }];
+        [self.users enumerateObjectsUsingBlock:^(STKUser *obj, NSUInteger idx, BOOL *stop) {
            [[STKContentStore store] fetchProfilePostsForUser:obj fetchDescription:desc completion:^(NSArray *posts, NSError *err) {
                if (posts && posts.count > 0) {
                    [self.posts replaceObjectAtIndex:idx withObject:posts];
