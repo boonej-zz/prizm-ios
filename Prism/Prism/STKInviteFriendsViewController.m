@@ -251,7 +251,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
     
     if ([indexPath section] == 3) {
 #warning smelly, but no direct manipulations on the nav controller had any effect
-        [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+//        [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
         [[UITextField appearance] setTintColor:nil];
         
         MFMessageComposeViewController *vc = [[MFMessageComposeViewController alloc] init];

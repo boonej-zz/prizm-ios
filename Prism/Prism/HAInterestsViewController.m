@@ -183,6 +183,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    self.selectedInterests = [NSMutableArray array];
     [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {
         [self.selectedInterests addObjectsFromArray:[u.interests allObjects]];
         [self.tagObjects addObjectsFromArray:self.selectedInterests];
@@ -278,6 +279,10 @@
 //        [cell setSelected:YES];
         
     }
+    if ([self.user.interests containsObject:interest]) {
+        [cell setSelected:YES];
+        [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+    }
     //    CGRect frame = cell.frame;
 //    frame.size.width += 10;
 //    cell.frame = frame;
@@ -310,9 +315,9 @@
         [collectionView insertItemsAtIndexPaths:ips];
         
     }
-    [self.selectedInterests addObject:cell.interest];
+//    [self.selectedInterests addObject:cell.interest];
     [self.user addInterestsObject:cell.interest];
-    if (self.selectedInterests.count > 2) {
+    if (self.user.interests.count > 2) {
         [self.doneButton setEnabled:YES];
     }
 }

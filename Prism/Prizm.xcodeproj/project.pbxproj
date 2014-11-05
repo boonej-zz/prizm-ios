@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C01A3071A09727400D58D9B /* HATableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3061A09727400D58D9B /* HATableView.m */; };
+		2C01A30B1A098C7400D58D9B /* STKCommentTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */; };
+		2C01A30C1A098C7400D58D9B /* STKCommentTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */; };
 		2C0D730619C0E4BB0078A9B9 /* HAAccountSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */; };
 		2C0D730719C0E4BB0078A9B9 /* HAAccountSelectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */; };
 		2C0D730B19C392F90078A9B9 /* HAFastSwitchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D730919C392F90078A9B9 /* HAFastSwitchViewController.m */; };
@@ -305,6 +308,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2C01A3051A09727400D58D9B /* HATableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HATableView.h; sourceTree = "<group>"; };
+		2C01A3061A09727400D58D9B /* HATableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HATableView.m; sourceTree = "<group>"; };
+		2C01A3081A098C7400D58D9B /* STKCommentTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCommentTitleCell.h; sourceTree = "<group>"; };
+		2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCommentTitleCell.m; sourceTree = "<group>"; };
+		2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCommentTitleCell.xib; sourceTree = "<group>"; };
 		2C0D730319C0E4BB0078A9B9 /* HAAccountSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAAccountSelectionCell.h; sourceTree = "<group>"; };
 		2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAAccountSelectionCell.m; sourceTree = "<group>"; };
 		2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAAccountSelectionCell.xib; sourceTree = "<group>"; };
@@ -2932,6 +2940,9 @@
 				2C7B79FB19EDA9C6000EC061 /* HAInterestCell.h */,
 				2C7B79FC19EDA9C6000EC061 /* HAInterestCell.m */,
 				2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */,
+				2C01A3081A098C7400D58D9B /* STKCommentTitleCell.h */,
+				2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */,
+				2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */,
 			);
 			name = Cells;
 			path = ..;
@@ -4855,6 +4866,8 @@
 				2C1D45B919E43A3B008D84C5 /* UITableViewCell+HAExtensions.m */,
 				2C4FD7301A029E98003A4212 /* HANavigationController.h */,
 				2C4FD7311A029E98003A4212 /* HANavigationController.m */,
+				2C01A3051A09727400D58D9B /* HATableView.h */,
+				2C01A3061A09727400D58D9B /* HATableView.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -5059,6 +5072,7 @@
 				BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */,
 				2C0D730719C0E4BB0078A9B9 /* HAAccountSelectionCell.xib in Resources */,
 				2C0D735719CB346B0078A9B9 /* HAInterestsViewController.xib in Resources */,
+				2C01A30C1A098C7400D58D9B /* STKCommentTitleCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5123,6 +5137,8 @@
 				BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */,
 				2C1D45AC19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m in Sources */,
 				BE2E5FC518FB49E000A53AF6 /* STKSegmentedControl.m in Sources */,
+				2C01A3071A09727400D58D9B /* HATableView.m in Sources */,
+				2C01A30B1A098C7400D58D9B /* STKCommentTitleCell.m in Sources */,
 				BE9E806219746BE600C63180 /* STKPhoneNumberFormatter.m in Sources */,
 				BEF2D78B1899818900D3C8D6 /* STKRequestCell.m in Sources */,
 				BE1FC3B5186C8C0A003464E1 /* STKImageCollectionViewCell.m in Sources */,

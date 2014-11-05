@@ -576,11 +576,11 @@ static BOOL HAActivityIsAnimating = NO;
             [self.notificationView1 setImage:insightImage];
         }
 
-        [self.view bringSubviewToFront:self.notificationView1];
-        [self.view bringSubviewToFront:self.notificationView2];
-        [self.view bringSubviewToFront:self.notificationView3];
-        [self.view bringSubviewToFront:self.notificationView4];
         [self.view bringSubviewToFront:self.notificationView5];
+        [self.view bringSubviewToFront:self.notificationView4];
+        [self.view bringSubviewToFront:self.notificationView3];
+        [self.view bringSubviewToFront:self.notificationView2];
+        [self.view bringSubviewToFront:self.notificationView1];
         if ((hasLikeNotifications || hasTrustNotifications || hasUserNotifications || hasCommentNotification || hasInsightNotification)) {
             
             [UIView animateWithDuration:1.0 animations:^{
