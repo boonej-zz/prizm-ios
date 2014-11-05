@@ -510,6 +510,7 @@ const long STKCreateProgressGeocoding = 4;
             [[self user] setValue:val forKey:key];
         }
     }
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"HAIsCreatingProfile"];
     [[self navigationController] popViewControllerAnimated:YES];
 }
 
@@ -543,6 +544,8 @@ const long STKCreateProgressGeocoding = 4;
     
     if([self isEditingProfile]) {
         [[self navigationItem] setLeftBarButtonItem:[self backButtonItem]];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HAIsCreatingProfile"];
     }
     
     

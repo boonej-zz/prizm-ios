@@ -410,7 +410,7 @@
     [super viewDidAppear:animated];
     STKUser *user = [[STKUserStore store] currentUser];
     if (user) {
-        if (![self didDisplayInterests] && user.interests.count == 0){
+        if (![self didDisplayInterests] && ![[NSUserDefaults standardUserDefaults] boolForKey:@"HAIsCreatingProfile"] && user.interests.count == 0){
             HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
             [ivc setStandalone:YES];
             [ivc setUser:user];

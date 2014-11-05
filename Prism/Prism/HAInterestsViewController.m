@@ -60,6 +60,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.user = [[STKUserStore store] currentUser];
     self.selectedInterests = [NSMutableArray array];
     [self addBlurViewWithHeight:64.f];
     self.tagObjects = [NSMutableArray array];
@@ -74,7 +75,7 @@
                                                                target:self action:@selector(back:)];
         [self.navigationItem setLeftBarButtonItem:bbi];
         self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonTapped:)];
-        [bbi setEnabled:self.user.interests.count > 0];
+        [bbi setEnabled:(self.selectedInterests > 0)];
     } else {
         self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonTapped:)];
     }
@@ -237,9 +238,14 @@
 
 - (void)nextButtonTapped:(id)sender
 {
-    HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
-    [fvc setStandalone:YES];
-    [self.navigationController pushViewController:fvc animated:YES];
+    [[STKUserStore store] updateInterestsforUser:self.user completion:^(STKUser *u, NSError *err) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HADidDisplayInterestPage"];
+        [STKProcessingView dismiss];
+        HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
+        [fvc setStandalone:YES];
+        [self.navigationController pushViewController:fvc animated:YES];
+    }];
+    
 }
 
 - (IBAction)overlayCloseTapped:(id)sender
