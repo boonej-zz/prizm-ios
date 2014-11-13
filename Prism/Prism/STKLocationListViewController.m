@@ -48,8 +48,7 @@
         self.locationCoordinate = CLLocationCoordinate2DMake(0, 0);
         
         UIColor *clr = [UIColor colorWithRed:49.0 / 255.0 green:141.0 / 255.0 blue:205.0 / 255.0 alpha:1];
-//        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-//        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : clr, NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
         [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Locations"];
@@ -133,7 +132,6 @@
         }];
     } else {
         [self fetchLocations];
-//        [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : STKFont(22)}];
     }
 }
 
