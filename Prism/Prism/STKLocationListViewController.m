@@ -137,12 +137,15 @@
 
 - (void)fetchLocations
 {
-    
+    // 'requestWhenInUseAuthorization' is new for iOS8, also needs
+    // 'NSLocationWhenInUseUsageDescription' key in Prism-Info.plist
+    [[self locationManager] requestWhenInUseAuthorization];
     [[self locationManager] startUpdatingLocation];
     [[self navigationItem] setLeftBarButtonItem:[self spinningButtonItem]];
     [[self activityIndicator] startAnimating];
     [self setFetchingLocations:YES];
 }
+
 
 - (void)finishFetchingLocations
 {
