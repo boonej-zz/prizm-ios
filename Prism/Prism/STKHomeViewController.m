@@ -27,13 +27,15 @@
 #import "STKInviteFriendsViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "UIERealTimeBlurView.h"
+#import "HAFollowViewController.h"
+#import "HAInterestsViewController.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
 @property (nonatomic, strong) STKPostController *postController;
 @property (weak, nonatomic) IBOutlet STKLuminatingBar *luminatingBar;
 
-@property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIView *blurView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *cardView;
 @property (weak, nonatomic) IBOutlet UIView *instructionView;
@@ -46,6 +48,8 @@
 @property (nonatomic, strong) NSMutableArray *reusableCards;
 @property (nonatomic, strong) NSMutableDictionary *cardMap;
 @property (nonatomic, strong) UINib *homeCellNib;
+@property (nonatomic, strong) UIView *underlayView;
+@property (nonatomic, getter=didDisplayInterests) BOOL displayInterests;
 
 @property (nonatomic, strong) STKBackdropView *backdropView;
 
@@ -80,6 +84,30 @@
     return self;
 }
 
+- (void)menuWillAppear:(BOOL)animated
+{
+    [[self navigationItem] setRightBarButtonItem:nil];
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [[self underlayView] setAlpha:0.5];
+        }];
+    } else {
+        [[self underlayView] setAlpha:0.5];
+    }
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            [[self underlayView] setAlpha:0.0];
+        }];
+    } else {
+        [[self underlayView] setAlpha:0.0];
+    }
+}
+
 
 - (void)viewDidLoad
 {
@@ -87,6 +115,13 @@
     
     _homeCellNib = [UINib nibWithNibName:@"STKPostCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
+    CGRect frame = [self.view frame];
+    frame.size.height = 64.f;
+    self.underlayView = [[UIView alloc] initWithFrame:frame];
+    [self.underlayView setBackgroundColor:[UIColor blackColor]];
+    [self.underlayView setAlpha:0.0];
+    [self.view insertSubview:self.underlayView atIndex:1];
+    [self setDisplayInterests:[[NSUserDefaults standardUserDefaults] boolForKey:@"HADidDisplayInterestPage"]];
 
 //    [[self tableView] setDelaysContentTouches:NO];
 
@@ -108,6 +143,10 @@
     [self addBlurViewWithHeight:64.f];
 }
 
+- (void)setBlurView:(id)blurView
+{
+    _blurView = blurView;
+}
 
 
 - (STKPostCell *)cardCellForIndexPath:(NSIndexPath *)ip
@@ -335,14 +374,13 @@
 {
     [super viewWillAppear:animated];
     
-    [[[self blurView] displayLink] setPaused:NO];
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
+    [self setDisplayInterests:[[NSUserDefaults standardUserDefaults] boolForKey:@"HADidDisplayInterestPage"]];
 
     if([[STKUserStore store] currentUser]) {
         [self fetchNewPosts];
     }
-    
     [self configureInterface];
    
 }
@@ -360,29 +398,25 @@
     [self layoutCards];
 }
 
-- (void)menuWillAppear:(BOOL)animated
-{
-    [[self blurView] setOverlayOpacity:0.5];
-    
-    [[self navigationItem] setRightBarButtonItem:nil];
-}
-
-- (void)menuWillDisappear:(BOOL)animated
-{
-    [[self blurView] setOverlayOpacity:0.0];
-    [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
-}
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[[self blurView] displayLink] setPaused:YES];
+    [self.blurView setAlpha:0];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    
     [super viewDidAppear:animated];
+    STKUser *user = [[STKUserStore store] currentUser];
+    if (user) {
+        if (![self didDisplayInterests] && ![[NSUserDefaults standardUserDefaults] boolForKey:@"HAIsCreatingProfile"] && user.interests.count == 0){
+            HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
+            [ivc setStandalone:YES];
+            [ivc setUser:user];
+            [self.navigationController pushViewController:ivc animated:YES];
+        }
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -406,21 +440,20 @@
     [[self navigationController] pushViewController:stvc animated:YES];
 }
 
-- (IBAction)stuffWeLike:(id)sender
+- (IBAction)whotofollow:(id)sender
 {
-    UINavigationController *nvc = (UINavigationController *)[[self menuController] childViewControllerForType:[STKExploreViewController class]];
-    STKExploreViewController *vc = [[nvc viewControllers] firstObject];
-    [vc setExploreType:STKExploreTypeFeatured];
-    [[self menuController] setSelectedViewController:nvc];
+    HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
+//    [vc setExploreType:STKExploreTypeFeatured];
+    [[self navigationController] pushViewController:fvc animated:YES];
 }
-
-- (IBAction)trending:(id)sender
-{
-    UINavigationController *nvc = (UINavigationController *)[[self menuController] childViewControllerForType:[STKExploreViewController class]];
-    STKExploreViewController *vc = [[nvc viewControllers] firstObject];
-    [vc setExploreType:STKExploreTypePopular];
-    [[self menuController] setSelectedViewController:nvc];
-}
+//
+//- (IBAction)trending:(id)sender
+//{
+//    UINavigationController *nvc = (UINavigationController *)[[self menuController] childViewControllerForType:[STKExploreViewController class]];
+//    STKExploreViewController *vc = [[nvc viewControllers] firstObject];
+//    [vc setExploreType:STKExploreTypePopular];
+//    [[self menuController] setSelectedViewController:nvc];
+//}
 
 - (IBAction)inviteFriends:(id)sender
 {

@@ -31,6 +31,7 @@
 #import "Mixpanel.h"
 #import "STKPhoneNumberFormatter.h"
 #import "HAInterestsViewController.h"
+#import "HANavigationController.h"
 
 @import AddressBook;
 @import Social;
@@ -171,7 +172,8 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                    @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
-                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
+                   @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
+                   @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}}
                    ];
         
         _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday"];
@@ -256,7 +258,8 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                        
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
-                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
+                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
+                       @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday"];
         }
@@ -332,11 +335,12 @@ const long STKCreateProgressGeocoding = 4;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[Mixpanel sharedInstance] track:@"Entered Profile Creation"];
+    
     if(![self isEditingProfile]) {
+        [[Mixpanel sharedInstance] track:@"Entered Profile Creation"];
         [[self tableView] setTableFooterView:[self footerView]];
     } else {
-
+        [[Mixpanel sharedInstance] track:@"Entered Profile Editing"];
     }
     
     [[self topOffset] setConstant:[self topOffsetConstant]];
@@ -345,7 +349,7 @@ const long STKCreateProgressGeocoding = 4;
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setIndicatorStyle:UIScrollViewIndicatorStyleWhite];
-    [[self tableView] setDelaysContentTouches:NO];
+    [[self tableView] setDelaysContentTouches:YES];
     
     NSMutableAttributedString *title = [[[self tosButton] attributedTitleForState:UIControlStateNormal] mutableCopy];
     [title addAttribute:NSUnderlineStyleAttributeName value:@(NSUnderlineStyleSingle) range:NSMakeRange(0, [title length])];
@@ -359,7 +363,7 @@ const long STKCreateProgressGeocoding = 4;
     
     [[self avatarView] setOutlineWidth:3];
     [[self avatarView] setOutlineColor:STKTextColor];
-    [self addBlurViewWithHeight:64.f];
+//    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -506,6 +510,7 @@ const long STKCreateProgressGeocoding = 4;
             [[self user] setValue:val forKey:key];
         }
     }
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"HAIsCreatingProfile"];
     [[self navigationController] popViewControllerAnimated:YES];
 }
 
@@ -539,6 +544,8 @@ const long STKCreateProgressGeocoding = 4;
     
     if([self isEditingProfile]) {
         [[self navigationItem] setLeftBarButtonItem:[self backButtonItem]];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HAIsCreatingProfile"];
     }
     
     
@@ -925,7 +932,7 @@ const long STKCreateProgressGeocoding = 4;
                                                    [self dismissViewControllerAnimated:NO completion:^{
                                                        HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
                                                        [ivc setUser:user];
-                                                       UINavigationController *nvc = [[UINavigationController alloc] init];
+                                                        HANavigationController *nvc = [[HANavigationController alloc] init];
                                                        [nvc addChildViewController:ivc];
                                                        [menuController presentViewController:nvc animated:NO completion:nil];
                                                    }];
@@ -1049,9 +1056,16 @@ const long STKCreateProgressGeocoding = 4;
                 [[c maleButton] setSelected:YES];
                 [[c notSetButton] setSelected:NO];
             } else {
-                [[c femaleButton] setSelected:NO];
                 [[c maleButton] setSelected:NO];
-                [[c notSetButton] setSelected:YES];
+                
+                if ([self isEditingProfile]) {
+                    [[c femaleButton] setSelected:NO];
+                    [[c notSetButton] setSelected:YES];
+                } else {
+                    [self.user setGender:STKUserGenderFemale];
+                    [[c femaleButton] setSelected:YES];
+                    [[c notSetButton] setSelected:NO];
+                }
             }
             return c;
         } else if([cellType isEqualToString:@"date"]) {

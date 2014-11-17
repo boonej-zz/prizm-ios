@@ -7,7 +7,11 @@
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "prismcard@2x.png"
+      "filename" : "prsimcard640.png"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

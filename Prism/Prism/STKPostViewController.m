@@ -54,6 +54,8 @@
 @property (weak, nonatomic) IBOutlet UIView *editViewAnimationContainer;
 @property (nonatomic, strong) NSArray *categoryItems;
 
+@property (nonatomic, strong) UIERealTimeBlurView *blurView;
+
 
 @property (weak, nonatomic) IBOutlet STKResolvingImageView *stretchView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *stretchHeightConstraint;
@@ -275,17 +277,28 @@
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    [[self tableView] setDelaysContentTouches:NO];
+//    [[self tableView] setDelaysContentTouches:NO];
     [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
 
     
     [[[self fakeHeaderView] avatarButton] addTarget:self action:@selector(avatarTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.fakeHeaderView.sourceButton addTarget:self action:@selector(sourceTapped:) forControlEvents:UIControlEventTouchUpInside];
     
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
     [footerView setBackgroundColor:[UIColor clearColor]];
     
     [[self tableView] setTableFooterView:footerView];
     [self addBlurViewWithHeight:64.f];
+}
+
+- (void)sourceTapped:(id)sender
+{
+    if (self.post.originalPost) {
+        STKPostViewController *pvc = [[STKPostViewController alloc] init];
+        [pvc setPost:self.post.originalPost];
+        [self.navigationController pushViewController:pvc animated:YES];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -385,8 +398,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-//    [[[self blurView] displayLink] setPaused:YES];
+    if ([self blurView]) {
+        [self.blurView setRenderStatic:YES];
+    }
     
     [[self navigationController] setNavigationBarHidden:NO];
     
@@ -433,6 +447,11 @@
 - (void)avatarTapped:(id)sender
 {
     [self showProfileForUser:[[self post] creator]];
+}
+
+- (void)setBlurView:(UIERealTimeBlurView *)blurView
+{
+    _blurView = blurView;
 }
 
 

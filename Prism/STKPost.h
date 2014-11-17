@@ -85,6 +85,7 @@ extern NSString * const STKPostExternalProvider;
 
 - (UIImage *)typeImage;
 - (UIImage *)disabledTypeImage;
+- (UIImage *)largeTypeImage;
 - (NSDictionary *)mixpanelProperties;
 
 @end

@@ -42,7 +42,7 @@
     if([self overrideLoadingImage])
         [[self contentImageView] setLoadingImage:[self overrideLoadingImage]];
     else
-        [[self contentImageView] setLoadingImage:[p disabledTypeImage]];
+        [[self contentImageView] setLoadingImage:[p largeTypeImage]];
     [[self contentImageView] setUrlString:[p imageURLString]];
     
     if(![self displayFullBleed]) {
@@ -101,6 +101,7 @@
         [[self hashTagContainer] setHidden:YES];
     }
 }
+
 
 - (void)setDisplayFullBleed:(BOOL)displayFullBleed
 {
@@ -207,10 +208,10 @@
     [[self contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
     [[self contentImageView] setLoadingContentMode:UIViewContentModeCenter];
     
-    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+//    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     //        UIView *bg = [[UIView alloc] initWithCoder:frame];
-    CGRect frame = [self.headerView frame];
-    UIVisualEffectView  *blurview = [[UIVisualEffectView alloc] initWithEffect:blur];
+//    CGRect frame = [self.headerView frame];
+//    UIVisualEffectView  *blurview = [[UIVisualEffectView alloc] initWithEffect:blur];
 //    UIVibrancyEffect *vib = [UIVibrancyEffect effectForBlurEffect:blur];
 //    [blurview setFrame:frame];
 //    [self.headerView insertSubview:blurview atIndex:0];

@@ -410,6 +410,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     if([[[self session] inputs] count] > 0 && ![self capturedImage])
         [[self session] startRunning];
 
@@ -425,15 +426,23 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[self session] stopRunning];
 }
 
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    
+    [super viewDidDisappear:YES];
+}
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {

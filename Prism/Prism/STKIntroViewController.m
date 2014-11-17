@@ -39,7 +39,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.mixpanel = [Mixpanel sharedInstance];
-    self.imageNames = @[@"intro_1", @"intro_2", @"intro_3"];
+    self.imageNames = @[@"intro_1", @"intro_2", @"intro_3", @"intro_4"];
     [self.mixpanel track:@"Intro Begin" properties:@{}];
     [self configure];
 }

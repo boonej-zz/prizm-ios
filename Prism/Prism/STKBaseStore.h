@@ -16,6 +16,7 @@ extern NSString * const STKSessionEndedReasonKey;
 extern NSString * const STKSessionEndedConnectionValue;
 extern NSString * const STKSessionEndedAuthenticationValue;
 extern NSString * const STKSessionEndedLogoutValue;
+extern NSString * const STKUserBaseURLString;
 
 extern NSString * const STKAuthenticationErrorDomain;
 

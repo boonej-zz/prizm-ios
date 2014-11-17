@@ -45,13 +45,17 @@
     if ([self isSelected]) {
         [self setAlpha:1.0f];
         [self.textLabel setTextColor:[UIColor whiteColor]];
+        [self.textLabel setFont:STKBoldFont(17)];
+        [self.textLabel sizeToFit];
         [UIView animateWithDuration:0.5 animations:^{
-            self.transform = CGAffineTransformMakeScale(1.3, 1.3);
+            self.transform = CGAffineTransformMakeScale(1.4, 1.4);
         }];
     } else {
         [self setAnimating:YES];
         [UIView animateWithDuration:0.5 animations:^{
             [self.textLabel setTextColor:STKTextColor];
+            [self.textLabel setFont:STKFont(17)];
+            [self.textLabel sizeToFit];
             self.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
         } completion:^(BOOL finished) {
             [self setAnimating:NO];
@@ -70,11 +74,39 @@
     return;
 }
 
+- (float)randomNumberBetween:(float)min maxNumber:(float)max
+{
+    return min + arc4random_uniform(max - min + 1);
+}
+
 - (void)presentAndDismiss
 {
     if (! [self isAnimating]) {
         [self setAnimating:YES];
         self.center = randomPointWithinContainer(self.superview.bounds.size, self.bounds.size);
+        if (self.sisterTags) {
+            
+            [self.sisterTags enumerateKeysAndObjectsUsingBlock:^(id key, UIView *obj, BOOL *stop) {
+                float angle = [self randomNumberBetween:0 maxNumber:360];
+                CGPoint shiftedCenter;
+                CGFloat extraSpace = 50;
+                if (![key isEqualToString:self.text]) {
+                while(CGRectIntersectsRect(self.frame,obj.frame))
+                    {
+                        CGPoint startPoint = self.center;
+                        
+                        shiftedCenter.x = startPoint.x - (extraSpace * cos(angle));
+                        
+                        if(obj.center.y < self.center.y)
+                            shiftedCenter.y = startPoint.y + extraSpace * sin(angle);
+                        else
+                            shiftedCenter.y = startPoint.y - extraSpace * sin(angle);
+                        self.center = shiftedCenter;
+                        
+                    }
+                }
+            }];
+        }
         [UIView animateWithDuration:2.f animations:^{
             [self setAlpha:1.f];
         } completion:^(BOOL finished) {
@@ -97,8 +129,11 @@
 {
     self.center = randomPointWithinContainer(self.superview.bounds.size, self.bounds.size);
     [self setAlpha:1.f];
-    self.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    self.transform = CGAffineTransformMakeScale(1.4, 1.4);
+    self.selected = YES;
     [self.textLabel setTextColor:[UIColor whiteColor]];
+    [self.textLabel setFont:STKBoldFont(17)];
+    [self.textLabel sizeToFit];
 }
 
 

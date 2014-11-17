@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class UIERealTimeBlurView;
+
 @interface STKHomeViewController : UIViewController
+
+@property (nonatomic, strong) UIView *blurView;
+
+- (void)setBlurView:(UIView *)blurView;
 
 @end

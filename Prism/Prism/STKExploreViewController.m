@@ -53,6 +53,7 @@
 @property (nonatomic, strong) NSDictionary *activeFilter;
 @property (nonatomic, strong) NSDictionary *defaultFeaturedFilter;
 @property (nonatomic, assign) BOOL isShowingFilterView;
+@property (nonatomic, strong) UIView *underlayView;
 
 - (IBAction)exploreTypeChanged:(id)sender;
 
@@ -183,12 +184,24 @@
 
 - (void)menuWillAppear:(BOOL)animated
 {
+    [[self underlayView] setAlpha:0.5f];
     [[self navigationItem] setRightBarButtonItems:nil];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
+    [[self underlayView] setAlpha:0.0f];
     [self configureInterface];
+}
+
+- (void)exploreFilterWillAppear
+{
+    [[self underlayView] setAlpha:0.5f];
+}
+
+- (void)exploreFilterWillDissappear
+{
+    [self.underlayView setAlpha:0.f];
 }
 
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
@@ -247,6 +260,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CGRect frame = [self.view frame];
+    frame.size.height = 64.f;
+    self.underlayView = [[UIView alloc] initWithFrame:frame];
+    [self.underlayView setBackgroundColor:[UIColor blackColor]];
+    [self.underlayView setAlpha:0.0];
+    [self.view addSubview:self.underlayView];
     
     [[self luminatingBar] setLuminationOpacity:1];
     
@@ -458,7 +477,7 @@
 
 - (IBAction)exploreTypeChanged:(UISegmentedControl *)sender
 {
-    [self setExploreType:[sender selectedSegmentIndex]];
+    [self setExploreType:(int)[sender selectedSegmentIndex]];
     
     if([self exploreType] == STKExploreTypeLatest)
         [self setActivePostController:[self recentPostsController]];

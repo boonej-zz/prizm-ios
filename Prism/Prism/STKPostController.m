@@ -143,6 +143,9 @@
 
 - (void)showPost:(STKPost *)p fromDerivativePost:(STKPost *)derivative
 {
+//    STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+//    [pvc setProfile:derivative.originalPost.creator];
+//    [self.viewController.navigationController pushViewController:pvc animated:YES];
     NSInteger idx = [[self posts] indexOfObject:derivative];
     [p setImageURLString:[derivative imageURLString]];
     
@@ -154,7 +157,7 @@
     }
 
     if([[self delegate] respondsToSelector:@selector(postController:rectForPostAtIndex:)]) {
-        CGRect r = [[self delegate] postController:self rectForPostAtIndex:idx];
+        CGRect r = [[self delegate] postController:self rectForPostAtIndex:(int)idx];
         [[[self viewController] menuController] transitionToPost:p
                                                         fromRect:r
                                                       usingImage:img
@@ -181,7 +184,7 @@
     }
     
     if([[self delegate] respondsToSelector:@selector(postController:rectForPostAtIndex:)]) {
-        CGRect r = [[self delegate] postController:self rectForPostAtIndex:idx];
+        CGRect r = [[self delegate] postController:self rectForPostAtIndex:(int)idx];
         [[[self viewController] menuController] transitionToPost:p
                                                         fromRect:r
                                                       usingImage:img
@@ -198,8 +201,8 @@
 
 - (void)leftImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    int row = [ip row];
-    int itemIndex = row * 3;
+    long row = [ip row];
+    long itemIndex = row * 3;
     if(itemIndex < [[self posts] count]) {
         STKPost *p = [[self posts] objectAtIndex:itemIndex];
         [self showPost:p];
@@ -208,8 +211,8 @@
 
 - (void)centerImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    int row = [ip row];
-    int itemIndex = row * 3 + 1;
+    long row = [ip row];
+    long itemIndex = row * 3 + 1;
     if(itemIndex < [[self posts] count]) {
         STKPost *p = [[self posts] objectAtIndex:itemIndex];
         [self showPost:p];
@@ -218,8 +221,8 @@
 
 - (void)rightImageButtonTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
-    int row = [ip row];
-    int itemIndex = row * 3 + 2;
+    long row = [ip row];
+    long itemIndex = row * 3 + 2;
     if(itemIndex < [[self posts] count]) {
         STKPost *p = [[self posts] objectAtIndex:itemIndex];
         [self showPost:p];
@@ -230,7 +233,7 @@
 - (void)showComments:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     if([[self delegate] respondsToSelector:@selector(postController:shouldContinueAfterTappingCommentsAtIndex:)]) {
-        BOOL shouldContinue = [[self delegate] postController:self shouldContinueAfterTappingCommentsAtIndex:[ip row]];
+        BOOL shouldContinue = [[self delegate] postController:self shouldContinueAfterTappingCommentsAtIndex:(int)[ip row]];
         
         if(!shouldContinue)
             return;
@@ -243,7 +246,7 @@
 - (void)imageTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     if([[self delegate] respondsToSelector:@selector(postController:shouldContinueAfterTappingImageAtIndex:)]) {
-        BOOL shouldContinue = [[self delegate] postController:self shouldContinueAfterTappingImageAtIndex:[ip row]];
+        BOOL shouldContinue = [[self delegate] postController:self shouldContinueAfterTappingImageAtIndex:(int)[ip row]];
         
         if(!shouldContinue)
             return;
@@ -273,8 +276,9 @@
                                                                                                                inView:[[self viewController] view]
                                                                                                              animated:YES];
                                                                                    }];
+   
     if(vc) {
-        [[self viewController] presentViewController:vc animated:YES completion:nil];
+        [[self.viewController navigationController] presentViewController:vc animated:YES completion:nil];
     }
 }
 
@@ -292,7 +296,7 @@
 - (void)avatarTapped:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     if([[self delegate] respondsToSelector:@selector(postController:shouldContinueAfterTappingAvatarAtIndex:)]) {
-        BOOL shouldContinue = [[self delegate] postController:self shouldContinueAfterTappingAvatarAtIndex:[ip row]];
+        BOOL shouldContinue = [[self delegate] postController:self shouldContinueAfterTappingAvatarAtIndex:(int)[ip row]];
         
         if(!shouldContinue)
             return;
@@ -316,13 +320,15 @@
 {
     STKPost *post = [[self posts] objectAtIndex:[ip row]];
     if([[post creator] isEqual:[[STKUserStore store] currentUser]]) {
-        STKUserListViewController *vc = [[STKUserListViewController alloc] init];
-        [vc setTitle:@"Likes"];
-        [[STKContentStore store] fetchLikersForPost:[[self posts] objectAtIndex:[ip row]]
-                                         completion:^(NSArray *likers, NSError *err) {
-                                             [vc setUsers:likers];
-                                         }];
-        [[[self viewController] navigationController] pushViewController:vc animated:YES];
+        if ([post likeCount] > 0 ){
+            STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+            [vc setTitle:@"Likes"];
+            [[STKContentStore store] fetchLikersForPost:[[self posts] objectAtIndex:[ip row]]
+                                             completion:^(NSArray *likers, NSError *err) {
+                                                 [vc setUsers:likers];
+                                             }];
+            [[[self viewController] navigationController] pushViewController:vc animated:YES];
+        }
     } else {
         
         STKPostCell *c = nil;
@@ -358,6 +364,8 @@
         
     }
 }
+
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

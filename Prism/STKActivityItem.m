@@ -29,7 +29,7 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
 @dynamic dateCreated;
 @dynamic hasBeenViewed;
 @dynamic post, comment;
-@dynamic creator, notifiedUser;
+@dynamic creator, notifiedUser, insightTarget, insight;
 
 + (NSDictionary*)remoteToLocalKeyMap
 {
@@ -41,6 +41,8 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
         @"comment_id" : [STKBind bindMapForKey:@"comment" matchMap:@{@"uniqueID" : @"_id"}],
         @"action" : @"action",
         @"has_been_viewed" : @"hasBeenViewed",
+        @"insight_target_id" : [STKBind bindMapForKey:@"insightTarget" matchMap:@{@"uniqueID": @"_id"}],
+        @"insight_id" : [STKBind bindMapForKey:@"insight" matchMap:@{@"uniqueID":@"_id"}],
         @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp]
         };
 }
@@ -56,6 +58,10 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
 - (NSString *)text
 {
     NSMutableString *str = [[NSMutableString alloc] init];
+    if ([self insightTarget]) {
+        [str appendString:@"sent you an insight."];
+        return [str copy];
+    }
     if([[self action] isEqualToString:STKActivityItemTypeLike]) {
         [str appendString:@"liked your "];
 
@@ -77,6 +83,8 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
         [str appendString:@"tagged you in a post."];
     } else if([[self action] isEqualToString:STKActivityItemTypeAccolade]) {
         [str appendString:@"sent you an accolade."];
+    } else if([[self action] isEqualToString:@"post"]) {
+        [str appendString:@"created a new post."];
     }
     
     

@@ -22,6 +22,9 @@ extern NSString * const HAUserStoreActivityLikeKey;
 extern NSString * const HAUserStoreActivityTrustKey;
 extern NSString * const HAUserStoreActivityCommentKey;
 extern NSString * const HANotificationKeyUserLoggedOut;
+extern NSString * const HAUserStoreInterestsKey;
+extern NSString * const HAUserStoreActivityInsightKey;
+extern NSString * const HAUserStoreActivityLuminaryPostKey ;
 
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]
@@ -49,6 +52,7 @@ typedef enum {
 
 - (void)transferPostsFromSocialNetworks;
 - (void)logout;
+- (void)syncInterests;
 
 - (void)switchToUser:(STKUser *)u;
 - (void)loginWithEmail:(NSString *)email password:(NSString *)password completion:(void (^)(STKUser *user, NSError *err))block;
@@ -60,6 +64,9 @@ typedef enum {
 - (void)connectWithFacebook:(void (^)(STKUser *existingUser, STKUser *facebookData, NSError *err))block;
 - (void)connectWithTwitterAccount:(ACAccount *)acct completion:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))block;
 - (void)connectWithGoogle:(void (^)(STKUser *existingUser, STKUser *registrationData, NSError *err))completionBlock processing:(void (^)())processingBlock;
+//- (void)fetchInsightsForUser:(STKUser *)user
+//            fetchDescription:(STKFetchDescription *)desc
+//                  completion:(void (^)(NSArray *insights, NSError *err))block;
 
 
 // If accounts == 0, err is non-nil. Else, accounts is populated, err = nil
@@ -101,6 +108,7 @@ typedef enum {
 - (void)fetchGraphDataForWeek:(int)week inYear:(int)year previousWeekCount:(int)count completion:(void (^)(NSDictionary *weeks, NSError *err))block;
 - (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSDictionary *data, NSError *err))block;
 - (void)fetchHashtagsForPostTypesWithCompletion:(void (^)(NSDictionary *hashTags, NSError *err))block;
-- (void)updateInterests:(NSArray *)interests forUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block;
+- (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block;
+- (void)updateInterestsforUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block;
 
 @end

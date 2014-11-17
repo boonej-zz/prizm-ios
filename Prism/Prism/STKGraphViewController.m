@@ -15,6 +15,11 @@
 #import "STKPost.h"
 #import "STKGraphCell.h"
 #import "STKNavigationButton.h"
+#import "HAInsightsViewController.h"
+#import "STKNavigationButton.h"
+#import "STKContentStore.h"
+#import "STKInsight.h"
+#import "STKInsightTarget.h"
 
 @interface STKGraphViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -43,7 +48,7 @@
 @property (nonatomic, strong) NSDictionary *typeNames;
 @property (nonatomic, strong) NSMutableDictionary *graphValues;
 @property (nonatomic, strong) NSDictionary *typeHashTags;
-
+@property (nonatomic, strong) UIBarButtonItem *insightsButton;
 @property (nonatomic, strong) NSString *currentFilter;
 
 @end
@@ -89,10 +94,6 @@
     return self;
 }
 
-- (void)showInsights:(id)sender
-{
-    
-}
 
 - (IBAction)dateBarDidChange:(id)sender
 {
@@ -168,9 +169,11 @@
 
 - (void)menuWillAppear:(BOOL)animated
 {
+    [self.navigationItem setRightBarButtonItem:nil];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
             [[self underlayView] setAlpha:0.5];
+            
         }];
     } else {
         [[self underlayView] setAlpha:0.5];
@@ -179,18 +182,47 @@
 
 - (void)menuWillDisappear:(BOOL)animated
 {
+    [self.navigationItem setRightBarButtonItem:self.insightsButton];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
             [[self underlayView] setAlpha:0.0];
         }];
     } else {
         [[self underlayView] setAlpha:0.0];
+        
     }
+    
+}
+
+- (UIBarButtonItem *)insightsButtonWithGlow:(BOOL)glow
+{
+    STKNavigationButton *view = [[STKNavigationButton alloc] init];
+    [view addTarget:self action:@selector(loadInsights:) forControlEvents:UIControlEventTouchUpInside];
+    if (glow){
+        [view setImage:[UIImage imageNamed:@"btn_brain_glow"]];
+    } else {
+        [view setImage:[UIImage imageNamed:@"btn_brain"]];
+    }
+    [view setHighlightedImage:[UIImage imageNamed:@"btn_brain_glow"]];
+    [view setOffset:10];
+    [view setBadgeable:YES];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
+    return bbi;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.insightsButton = [self insightsButtonWithGlow:NO];
+    [self.navigationItem setRightBarButtonItem:self.insightsButton];
+    
+    [[STKContentStore store] fetchInsightsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *insights, NSError *err) {
+        NSArray *unread = [insights filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"liked == NO && disliked == NO"]];
+        BOOL glow = [unread count] > 0;
+
+        self.insightsButton = [self insightsButtonWithGlow:glow];
+        [self.navigationItem setRightBarButtonItem:self.insightsButton];
+    }];
     
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {
@@ -253,8 +285,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]];
+    [self.view insertSubview:iv atIndex:0];
     
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]];
+    
     
     [[self lifetimeLabel] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     [[[self lifetimeLabel] layer] setCornerRadius:2];
@@ -266,6 +301,13 @@
     
     [[self graphView] setXLabels:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7"]];
     [[self graphView] setYLabels:@[@"", @"25%", @"50%", @"75%", @"100%"]];
+    [self addBlurViewWithHeight:64.f];
+}
+
+- (void)loadInsights:(id)sender
+{
+    HAInsightsViewController *iv = [[HAInsightsViewController alloc] init];
+    [self.navigationController pushViewController:iv animated:YES];
 }
 
 
@@ -414,7 +456,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int row = [indexPath row];
+    long row = [indexPath row];
     if([self currentFilter]) {
         if([indexPath row] > 0) {
             UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
@@ -449,6 +491,7 @@
     
     return c;
 }
+
 
 
 @end

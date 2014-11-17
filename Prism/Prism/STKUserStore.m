@@ -25,6 +25,9 @@
 #import "STKFetchDescription.h"
 #import "Mixpanel.h"
 #import "STKImageStore.h"
+#import "STKInsight.h"
+#import "STKInsightTarget.h"
+#import "STKInterest.h"
 
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
@@ -35,10 +38,13 @@ NSString * const STKUserStoreActivityUpdateCountKey = @"STKUSerStoreActivityUpda
 NSString * const HAUserStoreActivityUserKey = @"HAUserStoreActivityUserKey";
 NSString * const HAUserStoreActivityLikeKey = @"HAUserStoreActivityLikeKey";
 NSString * const HAUserStoreActivityTrustKey = @"HAUserStoreActivityTrustKey";
+NSString * const HAUserStoreActivityInsightKey = @"HAUserStoreActivityInsightKey";
 NSString * const HAUserStoreActivityCommentKey = @"HAUserStoreActivityCommentKey";
+NSString * const HAUserStoreActivityLuminaryPostKey = @"HAUserStoreActivityLuminaryPostKey";
 NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.currentUser";
 NSString * const HAUserStoreLoggedInUsersKey = @"com.higheraltitude.prism.loggedInUsers";
 NSString * const HANotificationKeyUserLoggedOut = @"HANotificationKeyUserLoggedOut";
+NSString * const HAUserStoreInterestsKey = @"HAUserStoreInterestsKey";
 
 NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurrentUserChangedNotification";
 
@@ -77,6 +83,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         store = [[STKUserStore alloc] init];
     });
     return store;
+}
+
+- (void)syncInterests
+{
+    
 }
 
 
@@ -129,7 +140,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
         req = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
         [req setPredicate:[NSPredicate predicateWithFormat:@"recepient == %@", [self currentUser]]];
-        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
+        [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
         [req setFetchLimit:1];
         NSArray *cachedRequests = [[self context] executeFetchRequest:req error:nil];
 
@@ -152,25 +163,32 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)notifyNotificationCount
 {
     NSFetchRequest *aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [aReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action <> %@ && action <> %@)", @"like", @"comment"]];
+    [aReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action <> %@ && action <> %@ && action <> %@)", @"like", @"comment", @"insight"]];
     NSFetchRequest *bReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"like"]];
     NSFetchRequest *cReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"comment"]];
+    [cReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (comment <> NULL)"]];
+    NSFetchRequest *dReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    [dReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"insight"]];
+    NSFetchRequest *eReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
+    [eReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
+    NSFetchRequest *fReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
+    [fReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"post"]];
     long actCount = [[self context] countForFetchRequest:aReq error:nil];
     long likeCount = [[self context] countForFetchRequest:bReq error:nil];
     long commentCount = [[self context] countForFetchRequest:cReq error:nil];
-    aReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];
-    [aReq setPredicate:[NSPredicate predicateWithFormat:@"status == %@ and recepient == %@", STKRequestStatusPending, [self currentUser]]];
-    long trustCount = [[self context] countForFetchRequest:aReq error:nil];
+    long insightCount = [[self context] countForFetchRequest:dReq error:nil];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount), HAUserStoreActivityCommentKey: @(commentCount)}];
+    long trustCount = [[self context] countForFetchRequest:eReq error:nil];
+    long luminaryPostCount = [[self context] countForFetchRequest:fReq error:nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:self userInfo:@{STKUserStoreActivityUpdateCountKey : @(actCount + trustCount + likeCount + insightCount+ luminaryPostCount), HAUserStoreActivityLikeKey: @(likeCount), HAUserStoreActivityUserKey: @(actCount), HAUserStoreActivityTrustKey: @(trustCount), HAUserStoreActivityCommentKey: @(commentCount), HAUserStoreActivityInsightKey: @(insightCount), HAUserStoreActivityLuminaryPostKey: @(luminaryPostCount)}];
 }
 
 - (void)markActivitiesAsRead
 {
     NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [req setPredicate:[NSPredicate predicateWithFormat:@"hasBeenViewed == %@", @(NO)]];
+    [req setPredicate:[NSPredicate predicateWithFormat:@"hasBeenViewed == NO"]];
     NSArray *results = [[self context] executeFetchRequest:req error:nil];
     for(STKActivityItem *i in results) {
         [i setHasBeenViewed:YES];
@@ -386,7 +404,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         [[NSUserDefaults standardUserDefaults] setObject:[self.signedInUsers copy] forKey:HAUserStoreLoggedInUsersKey];
     }
-    __block NSString *currentuniqueID = NO;
+    __block NSString *currentuniqueID = nil;
     [self.signedInUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([[obj valueForKey:@"active"] boolValue]) {
             currentuniqueID = [obj valueForKey:@"id"];
@@ -401,13 +419,17 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKUser"];
             [req setPredicate:p];
             NSArray *results = [ctx executeFetchRequest:req error:nil];
-            STKUser *u = NO;
+            STKUser *u = nil;
             if (results.count > 0)
                 u = [results objectAtIndex:0];
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];
+                [[Mixpanel sharedInstance] identify:[u uniqueID]];
+                [[Mixpanel sharedInstance].people set:[u mixpanelProperties]];
                 
+//                MixpanelPeople *people  = [[Mixpanel sharedInstance] people];
+
                 [self attemptTransparentLoginWithUser:u];
                 
                 [self pruneDatabase];
@@ -453,6 +475,17 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
     return [users copy];
 }
+
+//- (void)syncInterests
+//{
+//    NSURL *plistUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@/files/interests.plist", STKUserBaseURLString]];
+//    NSData *data = [NSData dataWithContentsOfURL:plistUrl];
+//    
+//    NSArray *interests = [[NSArray alloc] initWithContentsOfURL:plistUrl];
+//    if (interests && [interests count] > 0) {
+//        [[NSUserDefaults standardUserDefaults] setObject:interests forKey:HAUserStoreInterestsKey];
+//    }
+//}
 
 - (void)fetchTrustPostsForTrust:(STKTrust *)t type:(STKTrustPostType)type completion:(void (^)(NSArray *posts, NSError *err))block
 {
@@ -537,8 +570,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     
 }
 
-- (void)updateInterests:(NSArray *)interests forUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block
+- (void)updateInterestsforUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block
 {
+    NSArray *interests = [user.interests allObjects];
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if (err) {
             block (nil, err);
@@ -546,11 +580,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }
         
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID], @"interests"]];
-        NSDictionary *dataDictionary = @{@"interests": interests};
+        NSMutableArray *interestData = [NSMutableArray array];
+        [interests enumerateObjectsUsingBlock:^(STKInterest *interest, NSUInteger idx, BOOL *stop) {
+            [interestData addObject:interest.uniqueID];
+        }];
+        NSDictionary *dataDictionary = @{@"interests": interestData};
         [c addQueryValues:dataDictionary];
         [c setModelGraph:@[user]];
         [c setContext:[user managedObjectContext]];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            [[self context] save:nil];
             block(obj, err);
         }];
         
@@ -627,6 +666,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {
             [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
             [q addSubquery:[STKContainQuery containQueryForField:@"following" key:@"_id" value:[[self currentUser] uniqueID]]];
+            [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"interests"]];
             
             //[q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
 //            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" keyValues:@{@"from" : [[self currentUser] uniqueID], @"to" : [[self currentUser] uniqueID]}]];
@@ -635,6 +675,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setQueryObject:q];
         
         [c setModelGraph:@[user]];
+        [c setResolutionMap:@{@"Interest": @"STKInterest"}];
         [c setContext:[self context]];
         [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
             if(!err) {
@@ -644,6 +685,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
     }];
 }
+
+
+
 
 - (void)searchUsersWithType:(NSString *)type completion:(void (^)(NSArray *profiles, NSError *err))block
 {
@@ -663,6 +707,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setQueryObject:q];
         
         [c setModelGraph:@[@"STKUser"]];
+        
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         [c setShouldReturnArray:YES];
@@ -1274,7 +1319,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     STKQueryObjectPage direction = [fetchDescription direction];
     
     if (fetchLimit == 0) {
-        fetchLimit = 30;
+        fetchLimit = 20;
     }
 
     NSArray *cached = nil;
@@ -1319,6 +1364,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKQueryObject *q = [[STKQueryObject alloc] init];
         
         if(referenceActivity) {
+            NSLog(@"%@", [referenceActivity dateCreated]);
             [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceActivity dateCreated]]];
         }
         [q setPageDirection:direction];
@@ -1327,8 +1373,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"from"]];
         STKResolutionQuery *postResolve = [STKResolutionQuery resolutionQueryForField:@"post_id"];
+        
         [postResolve addSubquery:[STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[self currentUser] uniqueID]]];
         [q addSubquery:postResolve];
+        STKResolutionQuery *insightTargetResolve = [STKResolutionQuery resolutionQueryForField:@"insight_target_id"];
+        STKResolutionQuery *insightResolve = [STKResolutionQuery resolutionQueryForField:@"insight_id"];
+//        [insightTargetResolve addSubquery:[STKResolutionQuery resolutionQueryForField:@"insight"]];
+        [q addSubquery:insightTargetResolve];
+        [q addSubquery:insightResolve];
+        
         [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"comment_id"]];
         
         [c setQueryObject:q];
@@ -1337,7 +1390,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setShouldReturnArray:YES];
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost", @"Comment" : @"STKComment"}];
+        [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost", @"Comment" : @"STKComment", @"InsightTarget": @"STKInsightTarget", @"Insight": @"STKInsight"}];
         
         [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
             if(!err) {
@@ -1408,6 +1461,34 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
     }];
 
+}
+
+- (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/interests"]];
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+        [q setLimit:200];
+
+        STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"subinterests"];
+        [rq setField:@"subinterests"];
+        [rq setFormat:@"basic"];
+        [q addSubquery:rq];
+        [c setQueryObject:q];
+        [c setModelGraph:@[@"STKInterest"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setResolutionMap:@{@"Interest": @"STKInterest"}];
+        [c setShouldReturnArray:YES];
+        [c setContext:[self context]];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+        
+    }];
 }
 
 
@@ -1989,7 +2070,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                                                       @"coverPhotoPath",
                                                                       @"profilePhotoPath",
                                                                       @"birthday",
-                                                                      @"phoneNumber"
+                                                                      @"phoneNumber",
+                                                                      @"programCode"
                                                                       ]];
 
             [c addQueryValues:values];

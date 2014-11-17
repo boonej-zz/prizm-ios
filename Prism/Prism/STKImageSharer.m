@@ -6,10 +6,13 @@
 //  Copyright (c) 2014 Higher Altitude. All rights reserved.
 //
 
+
 #import "STKImageSharer.h"
 #import "STKPost.h"
 #import "STKImageStore.h"
 #import "STKContentStore.h"
+#import "STKInsight.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 NSString * const STKActivityTypeInstagram = @"STKActivityInstagram";
 NSString * const STKActivityTypeTumblr = @"STKActivityTumblr";
@@ -46,6 +49,8 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 @property (nonatomic, strong) NSString * text;
 @property (nonatomic, strong) UIImage * image;
 @property (nonatomic, strong) STKPost *post;
+@property (nonatomic, strong) STKInsight *insight;
+@property (nonatomic, strong) NSString *baseText;
 
 @end
 
@@ -70,8 +75,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
     NSLog(@"In the activity item");
-    NSMutableDictionary *obj = [NSMutableDictionary dictionary];
-    NSString *text = @"";
+    self.baseText = @"";
     if ([self post]) {
         NSMutableArray *textArr = [[self.post.text componentsSeparatedByString:@" "] mutableCopy];
         __block NSInteger i = 0;
@@ -87,49 +91,161 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
                 
             }
         }];
-        text = [textArr componentsJoinedByString:@" "];
+        self.baseText = [textArr componentsJoinedByString:@" "];
     }
-    if (![activityType isEqualToString:UIActivityTypePostToTwitter]) {
-        NSString *link = @"http://www.prizmapp.com/download";
-        if (self.image)  {
-            [obj setObject:self.image forKey:@"image"];
-        }
-        if ([self post]) {
-            NSString *t = text;
-            if (![activityType isEqualToString:UIActivityTypePostToFacebook]) {
-                t = [t stringByAppendingString:@" @beprizmatic"];
+    
+    if ([self insight]){
+        NSMutableArray *textArr = [[self.insight.text componentsSeparatedByString:@" "] mutableCopy];
+        __block NSInteger i = 0;
+        NSArray *hashTags = [self.post.tags allObjects];
+        [textArr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([(NSString *)obj rangeOfString:@"@"].location != NSNotFound) {
+                if ([hashTags count] >= i + 1) {
+                    STKUser *user = [hashTags objectAtIndex:i];
+                    NSString *newObj = user.name;
+                    ++i;
+                    [textArr replaceObjectAtIndex:idx withObject:newObj];
+                }
+                
             }
-            t = [t stringByAppendingString:[NSString stringWithFormat:@" %@", link]];
-            [obj setValue:t forKey:@"text"];
-        } else {
-            [obj setValue:self.text forKey:@"text"];
-        }
-    } else {
-        if ([self post]) {
-            NSString *t= [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
-            if ([self.post text]){
-//                __block NSString *tags = @"";
-//                [self.post.hashTags enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-//                    tags = [tags stringByAppendingString:[NSString stringWithFormat:@"#%@ ", [obj valueForKey:@"title"]]];
-//                }];
-                t = [NSString stringWithFormat:@"%@ @beprizmatic %@", text, t];
-            }
-            [obj setValue:t forKey:@"text"];
-            
-        } else {
-            if (self.image) {
-                [obj setValue:self.image forKey:@"image"];
-            }
-            [obj setValue:self.text forKey:@"text"];
-        }
+        }];
+        self.baseText = [textArr componentsJoinedByString:@" "];
     }
-//    NSString *post = [NSString stringWithFormat:@"%@ @beprizmatic %@", [self.post text], @"http://www.prizmapp.com/download"];
-//    return @{@"text": post};
-    if ([activityType isEqualToString:@"STKActivityReport"]) {
+    
+    if ([activityType isEqualToString:UIActivityTypePostToTwitter]){
+        return [self twitterItem];
+    } else  if ([activityType isEqualToString:@"STKActivityReport"]) {
         return [self post];
+    } else if ([activityType isEqualToString:UIActivityTypeCopyToPasteboard]) {
+        return [self urlToCopy];
+    } else if ([activityType isEqualToString:STKActivityTypeInstagram] || [activityType isEqualToString:STKActivityTypeWhatsapp]) {
+        return [self customItem];
+    } else if ([activityType isEqualToString:STKActivityTypeWhatsapp]) {
+        return [self dictionaryItem];
+    } else if ([activityType isEqualToString:UIActivityTypeSaveToCameraRoll]) {
+        return [self dictionaryItem];
+    } else if ([activityType isEqualToString:UIActivityTypeMessage] || [activityType isEqualToString:UIActivityTypeMail]) {
+        return [self dictionaryItem];
     }
-    NSLog(@"Activity Object: %@", obj);
+    else {
+        return [self genericItem];
+        
+    }
+    return nil;
+}
+
+- (NSDictionary *)dictionaryItem
+{
+    NSString *t = @"";
+    NSString *link = @"http://www.prizmapp.com/download";
+    if ([self post]) {
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
+        }
+    }
+    if ([self insight]) {
+        t = [NSString stringWithFormat:@"%@ %@ %@", self.insight.text, [self.insight.linkURL absoluteString], link];
+    }
+    UIImage *image = nil;
+    if (self.image) {
+        image = self.image;
+    }
+    return @{@"text": t, @"image": image};
+}
+
+- (NSArray *)arrayItem
+{
+    NSString *t = @"";
+    NSString *link = @"http://www.prizmapp.com/download";
+    if ([self post]) {
+        
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
+        }
+    }
+    if ([self insight]) {
+        t = [NSString stringWithFormat:@"%@ %@ %@", self.insight.text, [self.insight.linkURL absoluteString], link];
+    }
+    return @[self.image, t];
+}
+
+//- (NSString *)activityViewController:(UIActivityViewController *)activityViewController
+//              subjectForActivityType:(NSString *)activityType
+//{
+//    NSDictionary *obj = [self genericItem];
+//    return [obj objectForKey:@"text"];
+//}
+
+- (id)customItem
+{
+    NSMutableDictionary *d = [NSMutableDictionary dictionary];
+    NSString *link = @"http://www.prizmapp.com/download";
+    if (self.image){
+        [d setObject:self.image forKey:@"image"];
+    }
+    NSString *t = @"";
+    if ([self post]) {
+        t = [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
+        }
+    }
+    
+    if ([self insight]) {
+        t = [NSString stringWithFormat:@"%@ %@ %@", self.insight.text, [self.insight.linkURL absoluteString], link];
+    }
+    [d setObject:t forKey:@"text"];
+    return d;
+}
+
+- (id)twitterItem
+{
+    id obj = nil;
+    NSString *t = @"";
+    NSString *link = @"http://www.prizmapp.com/download";
+    if ([self post]) {
+        t = [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
+        }
+        obj = t;
+    }
+    
+    if ([self insight]) {
+        return [self genericItem];
+    }
     return obj;
+}
+    
+- (id)genericItem
+{
+    NSString *t = @"";
+    NSString *link = @"http://www.prizmapp.com/download";
+    if ([self post]) {
+        NSString *link = @"http://www.prizmapp.com/download";
+        if ([self.post text]){
+            t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
+        }
+    }
+    if ([self insight]) {
+        t = [NSString stringWithFormat:@"%@ %@ %@", self.insight.text, [self.insight.linkURL absoluteString], link];
+    }
+    NSExtensionItem *i = [[NSExtensionItem alloc] init];
+    [i setAttributedContentText:[[NSAttributedString alloc] initWithString:t]];
+    if (self.image) {
+        NSArray *att = @[[[NSItemProvider alloc] initWithItem:UIImageJPEGRepresentation(self.image, 8.0f) typeIdentifier:(NSString *)kUTTypeJPEG]];
+        [i setAttachments:att];
+    }
+    return i;
+}
+
+- (id)urlToCopy
+{
+    if (self.post) {
+        NSString *url = [NSString stringWithFormat:@"http://www.prizmapp.com/posts/%@", [self.post uniqueID]];
+        return [NSURL URLWithString:url];
+    }
+    return @"";
 }
 
 @end
@@ -478,14 +594,66 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
    
     report.currentPost = post;
     [self setFinishHandler:block];
-    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
+    NSArray *activities = nil;
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
                              report,
                              [[STKActivityTumblr alloc] initWithDelegate:self],
                              [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
-    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];;
+    } else {
+        activities = @[report];
+    }
+    
+    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeMail];;
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
                                                                                          applicationActivities:activities];
-    NSLog(@"Sharing a post...");
+    
+  
+    [controller setCompletionHandler:[self completionHandlerForActivity]];
+    [controller.navigationController.navigationBar setTranslucent:NO];
+    [controller setExcludedActivityTypes:excludedActivities];
+    if (! controller) return nil;
+    [self setViewController:controller];
+    
+    return controller;
+}
+
+- (UIActivityViewControllerCompletionHandler)completionHandlerForActivity
+{
+    __block UIColor *tintColor = [[UITextField appearance] tintColor];
+    __block UIColor *tintB = [[UITextView appearance] tintColor];
+    [[UITextField appearance] setTintColor:nil];
+    [[UITextView appearance] setTintColor:nil];
+    return ^(NSString *activityType, BOOL completed){
+        [[UITextField appearance] setTintColor:tintColor];
+        [[UITextView appearance] setTintColor:tintB];
+        [self presentMessageAlertForActivityType:activityType completed:completed];
+    };
+
+}
+
+- (UIActivityViewController *)activityViewControllerForInsight:(STKInsight *)insight finishHandler:(void (^)(UIDocumentInteractionController *))block
+{
+    HAItemSource *is = [[HAItemSource alloc] init];
+    UIImage *image = [[STKImageStore store] cachedImageForURLString:[insight filePath]];
+    NSString *text = [NSString stringWithFormat:@"%@ %@", [insight text], @"http://www.prizmapp.com/download"];
+    [is setInsight:insight];
+    [is setImage:image];
+    [is setText: text];
+    [self setFinishHandler:block];
+    NSArray *activities = nil;
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        activities = @[[[STKActivityInstagram alloc] initWithDelegate:self],
+                       [[STKActivityTumblr alloc] initWithDelegate:self],
+                       [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
+    } else {
+        activities = @[];
+    }
+    
+    NSArray *excludedActivities =  @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];;
+    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:@[is]
+                                                                             applicationActivities:activities];
+    [controller setCompletionHandler:[self completionHandlerForActivity]];
     [controller setExcludedActivityTypes:excludedActivities];
     if (! controller) return nil;
     [self setViewController:controller];
@@ -519,11 +687,13 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
     
     [self setFinishHandler:block];
     
+    NSArray *activities =  @[];;
     
-    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
-                             report,
-                             [[STKActivityTumblr alloc] initWithDelegate:self],
-                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
+    
+//    NSArray *activities =  @[[[STKActivityInstagram alloc] initWithDelegate:self],
+//                             report,
+//                             [[STKActivityTumblr alloc] initWithDelegate:self],
+//                             [[STKActivityWhatsapp alloc] initWithDelegate:self]];;
     NSArray *excludedActivities = nil;
     if ([object isKindOfClass:[STKPost class]]){
         excludedActivities = @[UIActivityTypeAssignToContact, UIActivityTypePrint, UIActivityTypeCopyToPasteboard, UIActivityTypeMail];
@@ -540,23 +710,31 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         [activityViewController setTitle:@"Look who's on Prizm!"];
     }
     
-#warning smelly, but we do not have direct access to system provided activities and their navigation controllers
+
     // revert appearance proxies to get default iOS behavior when sharing through Messages
-    UIImage *backgroundImage = [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault];
-    UIColor *tintColor = [[UITextField appearance] tintColor];
-    [[UINavigationBar appearance] setBackgroundImage:nil
-                                       forBarMetrics:UIBarMetricsDefault];
-    [[UITextField appearance] setTintColor:nil];
-    UIActivityViewControllerCompletionHandler handler = ^void (NSString *activityType, BOOL completed) {
-        // restore appearance proxies to original
-        [[UINavigationBar appearance] setBackgroundImage:backgroundImage
-                                           forBarMetrics:UIBarMetricsDefault];
-        [[UITextField appearance] setTintColor:tintColor];
-    };
-    [activityViewController setCompletionHandler:handler];
+    
+    [activityViewController setCompletionHandler:[self completionHandlerForActivity]];
+    
     [self setViewController:activityViewController];
     
     return activityViewController;
+}
+
+- (void)presentMessageAlertForActivityType:(NSString *)activityType completed:(BOOL)completed
+{
+    if (activityType == UIActivityTypeSaveToCameraRoll) {
+        NSString *message = nil;
+        NSString *title = nil;
+        if (completed) {
+            title = @"Image Saved";
+            message = @"The image has been saved \n to your camera roll.";
+        } else {
+            title = @"Error";
+            message = @"The image could not be saved.";
+        }
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+    }
 }
 
 

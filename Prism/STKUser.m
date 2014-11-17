@@ -11,6 +11,7 @@
 #import "STKPost.h"
 #import "STKTrust.h"
 #import "STKUserStore.h"
+#import "STKInterest.h"
 
 NSString * const STKUserGenderMale = @"male";
 NSString * const STKUserGenderFemale = @"female";
@@ -48,8 +49,8 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
-tumblrTokenSecret, tumblrLastMinID;
-@dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype;
+tumblrTokenSecret, tumblrLastMinID, programCode;
+@dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype, insightCount;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 
@@ -69,18 +70,14 @@ tumblrTokenSecret, tumblrLastMinID;
              @"type" : @"type",
              @"provider" : @"externalServiceType",
              @"provider_id" : @"externalServiceID",
+             @"program_code": @"programCode",
              
              @"subtype" : @"subtype",
              @"state" : @"state",
              @"zip_postal" : @"zipCode",
              @"gender" : @"gender",
-             @"interests" : [STKBind bindMapForKey:@"interests" transform:^id(id inValue, STKTransformDirection direction) {
-                 if ([inValue isKindOfClass:[NSArray class]]) {
-                     return [inValue componentsJoinedByString:@","];
-                 } else {
-                     return @"";
-                 }
-             }],
+             @"interests" : [STKBind bindMapForKey:@"interests" matchMap:@{@"uniqueID" : @"_id"}],
+             @"insight_count": @"insightCount",
              
              @"info" : @"blurb",
              @"website" : @"website",
@@ -323,15 +320,41 @@ tumblrTokenSecret, tumblrLastMinID;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"YYYY-MM-dd"];
     NSLog(@"%@", [self age]);
+    NSMutableArray *interests = [NSMutableArray arrayWithCapacity:self.interests.count];
+    [self.interests enumerateObjectsUsingBlock:^(STKInterest *interest, BOOL *stop) {
+        [interests addObject:[interest text]];
+    }];
     return @{
-             @"email": self.email?self.email:@"none",
-             @"birthday": self.birthday?[df stringFromDate:self.birthday]:@"unknown",
-             @"age": [self age],
-             @"gender": self.gender?self.gender:@"unknown",
-             @"city": self.city?self.city:@"unknown",
-             @"state": self.state?self.state:@"unknown",
-             @"zip": self.zipCode?self.zipCode:@"unknown"
+             @"$name": self.name?self.name:@"",
+             @"$first_name": self.firstName?self.firstName:@"",
+             @"$last_name": self.lastName?self.lastName:@"",
+             @"$created": self.dateCreated?self.dateCreated:[NSDate date],
+             @"$email": self.email?self.email:@"none",
+             @"Birthday": self.birthday?[df stringFromDate:self.birthday]:@"unknown",
+             @"Age": [self age],
+             @"Gender": self.gender?self.gender:@"unknown",
+             @"Origin": self.city?self.city:@"unknown",
+             @"State": self.state?self.state:@"unknown",
+             @"Zip": self.zipCode?self.zipCode:@"unknown",
+             @"Total Posts": self.postCount?@(self.postCount):@(0),
+             @"Likes Count": [self.likedPosts count]?@([self.likedPosts count]):@(0),
+             @"Interests": [interests copy]
              };
+}
+
+- (NSInteger)matchingInterestsCount
+{
+    STKUser *currentUser = [[STKUserStore store] currentUser];
+    __block NSInteger count = 0;
+    [self.interests enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+       [currentUser.interests enumerateObjectsUsingBlock:^(id nobj, BOOL *nstop) {
+           if (nobj == obj) {
+               ++count;
+               *nstop = YES;
+           }
+       }];
+    }];
+    return count;
 }
 
 @end

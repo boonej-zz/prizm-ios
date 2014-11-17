@@ -7,7 +7,11 @@
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Prismlogo@2x.png"
+      "filename" : "prizmlogowhite@2x.png"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

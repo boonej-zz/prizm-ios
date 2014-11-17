@@ -20,13 +20,16 @@
 #import "STKBaseStore.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKPostViewController.h"
+#import <MessageUI/MessageUI.h>
 
 #import <GooglePlus/GooglePlus.h>
 #import <Crashlytics/Crashlytics.h>
 #import "Mixpanel.h"
 #import "STKContentStore.h"
-
+#import "HAInsightsViewController.h"
 #import "STKAuthorizationToken.h"
+#import "STKCreatePostViewController.h"
+#import "HANavigationController.h"
 //#import "TMAPIClient.h"
 
 #ifdef DEBUG 
@@ -54,7 +57,7 @@
     [Crashlytics startWithAPIKey:@"e70b092ac5acf46c6e8a86bc59e79c34df550f5f"];
     [Mixpanel sharedInstanceWithToken:STKMixpanelKey];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
+//    [[STKUserStore store] syncInterests];
     [self configureAppearanceProxies];
     
     STKUser *u = [[STKUserStore store] currentUser];
@@ -65,6 +68,9 @@
     UIViewController *pvc = [[STKProfileViewController alloc] init];
     UIViewController *avc = [[STKActivityViewController alloc] init];
     UIViewController *gvc = [[STKGraphViewController alloc] init];
+//    UIViewController *ivc = [[HAInsightsViewController alloc] init];
+    
+
 
 
     STKMenuController *nvc = [[STKMenuController alloc] init];
@@ -94,6 +100,11 @@
         [nvc presentViewController:registerNVC animated:NO completion:nil];
     }
     
+    UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (notification) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ShowActivities" object:nil];
+    }
+    
     return YES;
 }
 
@@ -107,8 +118,10 @@
 }
 
 
+
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    
     [[STKUserStore store] transferPostsFromSocialNetworks];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
@@ -171,18 +184,24 @@
 
 
 - (void)configureAppearanceProxies
-{    
+{
+    UIImage *img;
     UIGraphicsBeginImageContext(CGSizeMake(10, 10));
     [[UIColor colorWithWhite:1 alpha:0.2] set];
     UIRectFill(CGRectMake(0, 0, 10, 10));
+    img = UIGraphicsGetImageFromCurrentImageContext();
     
-    [[UINavigationBar appearance] setBackgroundImage:UIGraphicsGetImageFromCurrentImageContext()
-             forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
     UIGraphicsEndImageContext();
-
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:STKFont(14)];
+    
+//    [[UINavigationBar appearance] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
+    
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    [[UINavigationBar appearanceWhenContainedIn:[STKMenuController class], nil] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearanceWhenContainedIn:[HANavigationController class], nil] setBackgroundImage:img forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBarStyle:UIBarStyleBlackTranslucent];
+ 
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class],nil] setFont:STKFont(14)];
     
     [[UITextField appearance] setTintColor:[UIColor whiteColor]];
     [[UITextView appearance] setTintColor:[UIColor whiteColor]];

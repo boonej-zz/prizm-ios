@@ -26,6 +26,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *searchResultsTableView;
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
+@property (weak, nonatomic) IBOutlet UIView *searchView;
 
 @property (nonatomic, strong) NSArray *profilesFound;
 
@@ -69,11 +70,18 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     [v setBackgroundColor:[UIColor clearColor]];
     [[self searchResultsTableView] setTableFooterView:v];
+    [self.searchTextField setTintColor:STKTextColor];
     
     CGFloat tableContentInsetTop = 114.f;
     [[self searchResultsTableView] setContentInset:UIEdgeInsetsMake(tableContentInsetTop, 0, 0, 0)];
     [self addBlurViewWithHeight:114.f];
-    [self.view bringSubviewToFront:self.searchTextField];
+    [self.view bringSubviewToFront:self.searchView];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.searchTextField becomeFirstResponder];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

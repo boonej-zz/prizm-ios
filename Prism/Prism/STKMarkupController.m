@@ -175,9 +175,9 @@ typedef enum {
     if(resultsAvailable) {
         int count = 0;
         if([self markupType] == STKMarkupTypeHashtag)
-            count = [[self hashTags] count];
+            count = (int)[[self hashTags] count];
         else
-            count = [[self userTags] count];
+            count = (int)[[self userTags] count];
         
         if(count > 3)
             count = 3;
@@ -186,6 +186,7 @@ typedef enum {
         float newHeight = [[self tableView] rowHeight] * count;
         
         [[self view] setFrame:CGRectMake(0, currentBottom - newHeight, 320, newHeight)];
+        [[self tableView] setFrame:CGRectMake(0, 0, 320, newHeight)];
         [[self tableView] setHidden:NO];
         [[self promptLabel] setHidden:YES];
     } else {

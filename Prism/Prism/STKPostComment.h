@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "STKJSONObject.h"
-@class STKUser, STKPost;
+@class STKUser, STKPost, STKHashTag;
 
 @interface STKPostComment : NSManagedObject <STKJSONObject>
 
@@ -23,8 +23,29 @@
 
 @property (nonatomic, strong) NSSet *activities;
 
+@property (nonatomic, retain) NSSet *hashTags;
+@property (nonatomic, retain) NSSet *tags;
+@property (nonatomic) int hashTagsCount;
+@property (nonatomic) int tagsCount;
+
+
 - (BOOL)isLikedByUser:(STKUser *)u;
 
 - (NSDictionary *)mixpanelProperties;
+
+@end
+
+
+@interface STKPostComment (CoreDataGeneratedAccessors)
+
+- (void)addHashTagsObject:(STKHashTag *)value;
+- (void)removeHashTagsObject:(STKHashTag *)value;
+- (void)addHashTags:(NSSet *)values;
+- (void)removeHashTags:(NSSet *)values;
+
+- (void)addTagsObject:(STKUser *)value;
+- (void)removeTagsObject:(STKUser *)value;
+- (void)addTags:(NSSet *)values;
+- (void)removeTags:(NSSet *)values;
 
 @end

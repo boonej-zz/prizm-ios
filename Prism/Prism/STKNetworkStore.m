@@ -209,7 +209,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     NSString *urlString = [NSString stringWithFormat:@"https://api.instagram.com/v1/users/self/media/recent/?access_token=%@&count=20", token];
     if(minID) {
         NSInteger v = [minID integerValue] + 1;
-        urlString = [urlString stringByAppendingFormat:@"&min_timestamp=%d", v];
+        urlString = [urlString stringByAppendingFormat:@"&min_timestamp=%d", (int)v];
     }
     NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
@@ -220,7 +220,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                                                                              NSMutableArray *postsToSend = [NSMutableArray array];
                                                                              NSArray *posts = [val objectForKey:@"data"];
-                                                                             NSLog(@"Instagram yielded %d total posts", [posts count]);
+                                                                             NSLog(@"Instagram yielded %d total posts", (int)[posts count]);
                                                                              for(NSDictionary *post in posts) {
                                                                                  
                                                                                  if([[post objectForKey:@"type"] isEqualToString:@"image"]) {
@@ -370,7 +370,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                     block(nil, connectionError);
                 } else {
                     NSArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                    NSLog(@"Twitter got %d total posts", [json count]);
+                    NSLog(@"Twitter got %d total posts", (int)[json count]);
                     
                     NSMutableArray *postsToSend = [NSMutableArray array];
                     for(NSDictionary *d in json) {

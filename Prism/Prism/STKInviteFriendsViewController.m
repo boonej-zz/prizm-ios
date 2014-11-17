@@ -123,7 +123,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setSeparatorColor:STKTextTransparentColor];
-    [self addBlurViewWithHeight:44.f];
+    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)configureInterface
@@ -251,7 +251,7 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
     
     if ([indexPath section] == 3) {
 #warning smelly, but no direct manipulations on the nav controller had any effect
-        [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+//        [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
         [[UITextField appearance] setTintColor:nil];
         
         MFMessageComposeViewController *vc = [[MFMessageComposeViewController alloc] init];

@@ -23,6 +23,9 @@
 #import "STKProfileViewController.h"
 #import "STKLuminatingBar.h"
 #import "STKFetchDescription.h"
+#import "STKInsightTarget.h"
+#import "STKInsight.h"
+#import "HAInsightsViewController.h"
 
 typedef enum {
     STKActivityViewControllerTypeActivity,
@@ -41,6 +44,7 @@ typedef enum {
 
 @property (nonatomic) BOOL activityFetchInProgress;
 @property (nonatomic) BOOL requestFetchInProgress;
+@property (nonatomic, strong) UIView *underlayView;
 
 
 @property (nonatomic) STKActivityViewControllerType currentType;
@@ -70,7 +74,12 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    CGRect frame = [self.view frame];
+    frame.size.height = 64.f;
+    self.underlayView = [[UIView alloc] initWithFrame:frame];
+    [self.underlayView setBackgroundColor:[UIColor blackColor]];
+    [self.underlayView setAlpha:0.0];
+    [self.view addSubview:self.underlayView];
     [[self tableView] setRowHeight:56];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
@@ -91,6 +100,7 @@ typedef enum {
     [super viewWillAppear:animated];
 //    [[[self blurView] displayLink] setPaused:NO];
     [self fetchNewItems];
+    [[NSNotificationCenter defaultCenter] postNotificationName:STKUserStoreActivityUpdateNotification object:nil userInfo:@{STKUserStoreActivityUpdateCountKey : @0, HAUserStoreActivityLikeKey: @0, HAUserStoreActivityUserKey: @0, HAUserStoreActivityTrustKey: @0, HAUserStoreActivityCommentKey: @0}];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -148,7 +158,7 @@ typedef enum {
                 [requestSet addObjectsFromArray:requests];
                 [self setRequests:[[requestSet allObjects] mutableCopy]];
                 [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@", STKRequestStatusCancelled]];
-                [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO]]];
+                [[self requests] sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"status" ascending:NO], [NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:YES]]];
             }
             [[self tableView] reloadData];
         }];
@@ -202,7 +212,7 @@ typedef enum {
                 [self setRequests:[[requestSet allObjects] mutableCopy]];
                 [[self requests] filterUsingPredicate:[NSPredicate predicateWithFormat:@"status != %@ && status != %@", STKRequestStatusCancelled, STKRequestStatusRejected]];
                 NSSortDescriptor *trustAccepted = [NSSortDescriptor sortDescriptorWithKey:@"status" ascending:NO];
-                NSSortDescriptor *dateCreated =[NSSortDescriptor sortDescriptorWithKey:@"dateModified" ascending:NO];
+                NSSortDescriptor *dateCreated =[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO];
                 [[self requests] sortUsingDescriptors:@[trustAccepted, dateCreated]];
             }
             [[self tableView] reloadData];
@@ -287,6 +297,12 @@ typedef enum {
             return;
         }
         
+        if([i insightTarget]) {
+             STKActivityCell *c = (STKActivityCell *)[tableView cellForRowAtIndexPath:indexPath];
+            [self.menuController transitionToInsightTarget:i.insightTarget fromRect:[[self view] convertRect:[[c imageReferenceView] frame] fromView:c] usingImage:[[c imageReferenceView] image] inViewController:self animated:YES];
+            return;
+        }
+        
         
     }
     
@@ -307,7 +323,10 @@ typedef enum {
         
         if([i post]) {
             [[cell imageReferenceView] setUrlString:[[i post] imageURLString]];
-        } else {
+        } else if([i insightTarget]) {
+            [cell.imageReferenceView setUrlString:i.insightTarget.filePath];
+        }
+        else {
             [[cell imageReferenceView] setUrlString:nil];
         }
         
@@ -328,17 +347,17 @@ typedef enum {
 
 - (void)menuWillAppear:(BOOL)animated
 {
-//    [[self blurView] setOverlayOpacity:0.5];
+    [[self underlayView] setAlpha:0.5];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
-//    [[self blurView] setOverlayOpacity:0.0];
+    [[self underlayView] setAlpha:0.0];
 }
 
 - (IBAction)typeChanged:(id)sender
 {
-    [self setCurrentType:[sender selectedSegmentIndex]];
+    [self setCurrentType:(int)[sender selectedSegmentIndex]];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

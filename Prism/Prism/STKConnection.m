@@ -236,7 +236,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
           requestString,
           argHeaders,
           dataString,
-          [self statusCode],
+          (int)[self statusCode],
           [error localizedDescription]);
 
 #endif
@@ -299,7 +299,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     
     NSLog(@"Request Finished (%.3fs) -> \n%@ %@\n %@ \n %@\nResponse: %d\n%@", i, [[self request] HTTPMethod], requestString,
           argHeaders, dataString,
-          [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+          (int)[self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 #endif
 
 

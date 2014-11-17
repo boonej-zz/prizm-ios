@@ -504,7 +504,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if(self = [super initWithCoder:aDecoder]) {
-        _maskLayer = [GradientMaskLayer layer];
+        _maskLayer = (CAGradientLayer *)[GradientMaskLayer layer];
         [self.layer setMask:_maskLayer];
         self.opaque = NO;
         _maskLayer.opaque = NO;

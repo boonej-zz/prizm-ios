@@ -65,6 +65,7 @@ typedef enum {
 @property (nonatomic) BOOL showPostsInSingleLayout;
 @property (nonatomic) BOOL filterByLocation;
 @property (nonatomic) BOOL filterByUserTags;
+@property (nonatomic, strong) UIView *underlayView;
 
 - (BOOL)isShowingCurrentUserProfile;
 - (BOOL)canEmailProfile;
@@ -277,6 +278,13 @@ typedef enum {
 {
     [super viewDidLoad];
     
+    CGRect frame = [self.view frame];
+    frame.size.height = 64.f;
+    self.underlayView = [[UIView alloc] initWithFrame:frame];
+    [self.underlayView setBackgroundColor:[UIColor blackColor]];
+    [self.underlayView setAlpha:0.0];
+    [self.view addSubview:self.underlayView];
+    
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
 
     [self setStatsView:[STKInitialProfileStatisticsCell cellForTableView:[self tableView] target:self]];
@@ -423,13 +431,13 @@ typedef enum {
 
 - (void)menuWillAppear:(BOOL)animated
 {
-    [[self blurView] setOverlayOpacity:0.5];
+    [[self underlayView] setAlpha:0.5f];
     [[self navigationItem] setRightBarButtonItem:nil];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
-    [[self blurView] setOverlayOpacity:0.0];
+    [[self underlayView] setAlpha:0.0f];
     [[self navigationItem] setRightBarButtonItem:[self settingsBarButtonItem]];
 }
 
@@ -844,7 +852,7 @@ typedef enum {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(section == STKProfileSectionPosts) {
-        int count = [[[self postController] posts] count];
+        NSInteger count = [[[self postController] posts] count];
         if([self showPostsInSingleLayout]) {
             return count;
         } else {

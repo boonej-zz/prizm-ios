@@ -23,6 +23,7 @@
 @property (nonatomic, weak) id<HAHashTagViewDelegate> delegate;
 @property (nonatomic, getter = isSelected) BOOL selected;
 @property (nonatomic, strong) UILabel * textLabel;
+@property (nonatomic, weak) NSDictionary *sisterTags;
 
 
 - (void)presentAndDismiss;

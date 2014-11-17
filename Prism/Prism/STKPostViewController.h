@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class STKPost, STKPostViewController, STKProfile;
+@class STKPost, STKPostViewController, STKProfile, UIERealTimeBlurView;
 
 @interface STKPostViewController : UIViewController
 
 @property (nonatomic, strong) STKPost *post;
+
+- (void)setBlurView:(UIERealTimeBlurView *)blurView;
+
 
 @end

@@ -13,7 +13,7 @@
 - (void)handleSuccess:(NSData *)data
 {
 #ifdef DEBUG
-    NSLog(@"Request Finished -> \nRequest: %@ - %@\nResponse: %d\nData:%@", [self request], [[self request] HTTPMethod], [self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSLog(@"Request Finished -> \nRequest: %@ - %@\nResponse: %d\nData:%@", [self request], [[self request] HTTPMethod], (int)[self statusCode], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 #endif
     
     

@@ -61,7 +61,7 @@
 
 - (void)buttonTapped:(UIButton *)sender
 {
-    [self setCurrentIndex:[[self buttons] indexOfObject:sender]];
+    [self setCurrentIndex:(int)[[self buttons] indexOfObject:sender]];
     [self configureInterface];
     
     [self sendActionsForControlEvents:UIControlEventValueChanged];

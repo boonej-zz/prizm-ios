@@ -7,13 +7,18 @@
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "prizm_intro1b.png"
+      "filename" : "Iphone4explore.png"
     },
     {
       "idiom" : "iphone",
-      "filename" : "prizm_intro1.png",
+      "filename" : "Iphone5explore.png",
       "subtype" : "retina4",
       "scale" : "2x"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "filename" : "Iphone6explore.png"
     }
   ],
   "info" : {

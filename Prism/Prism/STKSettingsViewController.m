@@ -96,6 +96,7 @@
 {
     HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
     [ivc setUser:[[STKUserStore store] currentUser]];
+    [ivc setStandalone:YES];
     [self.navigationController pushViewController:ivc animated:YES];
 }
 

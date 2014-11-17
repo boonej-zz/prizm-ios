@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class STKPost;
+@class STKInsightTarget;
 
 @interface STKMenuController : UIViewController
 
@@ -30,6 +31,12 @@
               usingImage:(UIImage *)image
         inViewController:(UIViewController *)vc
                 animated:(BOOL)animated;
+
+- (void)transitionToInsightTarget:(STKInsightTarget *)it
+                         fromRect:(CGRect)r
+                       usingImage:(UIImage *)image
+                 inViewController:(UIViewController *)vc
+                         animated:(BOOL)animated;
 
 // Pass another applications image to create a new post, dismissing any present modal view
 - (void)transitionToCreatePostWithImage:(UIImage *)image;
