@@ -87,7 +87,7 @@
     [[self textView] becomeFirstResponder];
     [self.textView setContentOffset:CGPointMake(0, 7)];
 
-    if([self editingPostText] && [self postHasText]) {
+    if([self editingPostText]) {
         [[self textView] setAttributedText:[STKMarkupUtilities renderedTextForText:[[self post] text] attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self resizeTextArea];
