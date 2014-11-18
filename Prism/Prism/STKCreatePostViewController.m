@@ -27,6 +27,7 @@
 #import "STKMarkupController.h"
 #import "STKMarkupUtilities.h"
 #import "UIImage+STKLocation.h"
+#import "HANavigationController.h"
 
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
@@ -266,7 +267,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     }
     
     [lvc setDelegate:self];
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:lvc];
+    HANavigationController *nvc = [[HANavigationController alloc] initWithRootViewController:lvc];
     [[nvc navigationBar] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     [self presentViewController:nvc animated:YES completion:nil];
 }
