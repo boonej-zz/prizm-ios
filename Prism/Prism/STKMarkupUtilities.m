@@ -205,6 +205,9 @@
 
 + (NSAttributedString *)renderedTextForText:(NSString *)text attributes:(NSDictionary *)attributes
 {
+    if (!text) {
+        text = @"";
+    }
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:text
                                                                             attributes:attributes];
     NSRegularExpression *hashTagExpression = [[NSRegularExpression alloc] initWithPattern:@"#(\\S*)" options:0 error:nil];
