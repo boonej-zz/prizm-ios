@@ -49,8 +49,8 @@
         self.locationCoordinate = CLLocationCoordinate2DMake(0, 0);
         
         UIColor *clr = [UIColor colorWithRed:49.0 / 255.0 green:141.0 / 255.0 blue:205.0 / 255.0 alpha:1];
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : clr, NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
         [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Locations"];
         
@@ -90,6 +90,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[[self navigationController] navigationBar] setBackgroundImage:[UIImage imageNamed:@"nav_bar"] forBarMetrics:UIBarMetricsDefault];
+    [[[self navigationController] navigationBar] setTranslucent:YES];
+    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+                                                                          NSFontAttributeName : STKFont(22)}];
+    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
 
     [[[self searchDisplayController] searchResultsTableView] setDataSource:self];
     [[[self searchDisplayController] searchResultsTableView] setDelegate:self];
@@ -106,6 +113,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    
+    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+                                                                          NSFontAttributeName : STKFont(22)}];
+    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
+    
     if (self.locationCoordinate.longitude != 0 && self.locationCoordinate.latitude != 0) {
         [[STKContentStore store] fetchLocationNamesForCoordinate:self.locationCoordinate completion:^(NSArray *locations, NSError *err) {
             [self finishFetchingLocations];
@@ -120,18 +134,22 @@
         }];
     } else {
         [self fetchLocations];
-        [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : STKFont(22)}];
     }
 }
 
 - (void)fetchLocations
 {
-    
+    // 'requestWhenInUseAuthorization' is new for iOS8, also needs
+    // 'NSLocationWhenInUseUsageDescription' key in Prism-Info.plist
+    if ([[self locationManager] respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [[self locationManager] requestWhenInUseAuthorization];
+    }
     [[self locationManager] startUpdatingLocation];
     [[self navigationItem] setLeftBarButtonItem:[self spinningButtonItem]];
     [[self activityIndicator] startAnimating];
     [self setFetchingLocations:YES];
 }
+
 
 - (void)finishFetchingLocations
 {
