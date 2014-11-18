@@ -10,6 +10,7 @@
 #import "STKFoursquareLocation.h"
 #import "STKContentStore.h"
 #import "STKErrorStore.h"
+#import "UIViewController+STKControllerItems.h"
 
 @import CoreLocation;
 
@@ -99,6 +100,7 @@
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
     [imageView setFrame:CGRectMake(0, 0, 320, 100)];
     [[self tableView] setTableFooterView:imageView];
+//    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)viewWillAppear:(BOOL)animated
