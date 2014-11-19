@@ -15,6 +15,7 @@
 #import "STKPost.h"
 #import "STKMarkupUtilities.h"
 //#import "TMAPIClient.h"
+#import "HAShareExtensionHelper.h"
 
 @import Accounts;
 
@@ -153,7 +154,8 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
         return;
     }
     
-    [self setUpdating:YES];
+    [[HAShareExtensionHelper helper] checkForUserDefaults];
+    [[HAShareExtensionHelper helper] createPostsFromDefaults];
     
     NSMutableDictionary *stats = [[NSMutableDictionary alloc] init];
     [[STKUserStore store] fetchUserDetails:u additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token", @"tumblr_token", @"tumblr_min_id"] completion:^(STKUser *user, NSError *err) {

@@ -75,12 +75,10 @@
 		886FBD23195A094F0007188B /* STKInviteFriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 886FBD22195A094F0007188B /* STKInviteFriendsViewController.xib */; };
 		88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */; };
 		88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */; };
-		9C046F321A1936B600F8CE44 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C046F311A1936B600F8CE44 /* ShareViewController.m */; };
-		9C046F341A1936B600F8CE44 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C046F331A1936B600F8CE44 /* MainInterface.storyboard */; };
-		9C046F371A1936B600F8CE44 /* PrizmSharingExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9C046F2C1A1936B600F8CE44 /* PrizmSharingExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		9C802F321A1951F100B3839C /* HAExtensionStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C802F311A1951F100B3839C /* HAExtensionStore.m */; };
-		9C802F351A19554000B3839C /* HAExtensionSharePostImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C802F341A19554000B3839C /* HAExtensionSharePostImporter.m */; };
-		9C802F361A1957D400B3839C /* HAExtensionSharePostImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C802F341A19554000B3839C /* HAExtensionSharePostImporter.m */; };
+		9C6AAF891A1C27DC00284A48 /* HAShareExtensionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7D9C21A1C1E84003E221C /* HAShareExtensionHelper.m */; };
+		9CD7D98E1A1BC1FF003E221C /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7D98D1A1BC1FF003E221C /* ShareViewController.m */; };
+		9CD7D9901A1BC1FF003E221C /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CD7D98F1A1BC1FF003E221C /* MainInterface.storyboard */; };
+		9CD7D9931A1BC1FF003E221C /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BE02EAA3182A80A200A5505A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA2182A80A200A5505A /* Foundation.framework */; };
 		BE02EAA5182A80A200A5505A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA4182A80A200A5505A /* CoreGraphics.framework */; };
 		BE02EAA7182A80A200A5505A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA6182A80A200A5505A /* UIKit.framework */; };
@@ -291,12 +289,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9C046F351A1936B600F8CE44 /* PBXContainerItemProxy */ = {
+		9CD7D9911A1BC1FF003E221C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BE02EA97182A80A200A5505A /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 9C046F2B1A1936B600F8CE44;
-			remoteInfo = PrizmSharingExt;
+			remoteGlobalIDString = 9CD7D9871A1BC1FF003E221C;
+			remoteInfo = PrizmShareExt;
 		};
 		BE02EABF182A80A200A5505A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -314,7 +312,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				9C046F371A1936B600F8CE44 /* PrizmSharingExt.appex in Embed App Extensions */,
+				9CD7D9931A1BC1FF003E221C /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,17 +436,15 @@
 		88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagToolbar.m; sourceTree = "<group>"; };
 		88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+STKHashtagDetector.h"; sourceTree = "<group>"; };
 		88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+STKHashtagDetector.m"; sourceTree = "<group>"; };
-		9C046F2C1A1936B600F8CE44 /* PrizmSharingExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PrizmSharingExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C046F2F1A1936B600F8CE44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9C046F301A1936B600F8CE44 /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
-		9C046F311A1936B600F8CE44 /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
-		9C046F331A1936B600F8CE44 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
-		9C802F2E1A194B8100B3839C /* Prizm β.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Prizm β.entitlements"; sourceTree = "<group>"; };
-		9C802F2F1A194B8E00B3839C /* PrizmSharingExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrizmSharingExt.entitlements; sourceTree = "<group>"; };
-		9C802F301A1951F100B3839C /* HAExtensionStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAExtensionStore.h; sourceTree = "<group>"; };
-		9C802F311A1951F100B3839C /* HAExtensionStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAExtensionStore.m; sourceTree = "<group>"; };
-		9C802F331A19554000B3839C /* HAExtensionSharePostImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAExtensionSharePostImporter.h; sourceTree = "<group>"; };
-		9C802F341A19554000B3839C /* HAExtensionSharePostImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAExtensionSharePostImporter.m; sourceTree = "<group>"; };
+		9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PrizmShareExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CD7D98B1A1BC1FF003E221C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9CD7D98C1A1BC1FF003E221C /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		9CD7D98D1A1BC1FF003E221C /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		9CD7D98F1A1BC1FF003E221C /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
+		9CD7D9A21A1BD058003E221C /* Prizm β.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Prizm β.entitlements"; sourceTree = "<group>"; };
+		9CD7D9A31A1BD062003E221C /* PrizmShareExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrizmShareExt.entitlements; sourceTree = "<group>"; };
+		9CD7D9C11A1C1E84003E221C /* HAShareExtensionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAShareExtensionHelper.h; sourceTree = "<group>"; };
+		9CD7D9C21A1C1E84003E221C /* HAShareExtensionHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAShareExtensionHelper.m; sourceTree = "<group>"; };
 		BE02EA9F182A80A200A5505A /* Prizm β.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prizm β.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE02EAA2182A80A200A5505A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE02EAA4182A80A200A5505A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2488,7 +2484,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		9C046F291A1936B600F8CE44 /* Frameworks */ = {
+		9CD7D9851A1BC1FF003E221C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2583,22 +2579,22 @@
 			path = Mixpanel;
 			sourceTree = "<group>";
 		};
-		9C046F2D1A1936B600F8CE44 /* PrizmSharingExt */ = {
+		9CD7D9891A1BC1FF003E221C /* PrizmShareExt */ = {
 			isa = PBXGroup;
 			children = (
-				9C802F2F1A194B8E00B3839C /* PrizmSharingExt.entitlements */,
-				9C046F301A1936B600F8CE44 /* ShareViewController.h */,
-				9C046F311A1936B600F8CE44 /* ShareViewController.m */,
-				9C046F331A1936B600F8CE44 /* MainInterface.storyboard */,
-				9C046F2E1A1936B600F8CE44 /* Supporting Files */,
+				9CD7D9A31A1BD062003E221C /* PrizmShareExt.entitlements */,
+				9CD7D98C1A1BC1FF003E221C /* ShareViewController.h */,
+				9CD7D98D1A1BC1FF003E221C /* ShareViewController.m */,
+				9CD7D98F1A1BC1FF003E221C /* MainInterface.storyboard */,
+				9CD7D98A1A1BC1FF003E221C /* Supporting Files */,
 			);
-			path = PrizmSharingExt;
+			path = PrizmShareExt;
 			sourceTree = "<group>";
 		};
-		9C046F2E1A1936B600F8CE44 /* Supporting Files */ = {
+		9CD7D98A1A1BC1FF003E221C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				9C046F2F1A1936B600F8CE44 /* Info.plist */,
+				9CD7D98B1A1BC1FF003E221C /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -2615,7 +2611,7 @@
 				BE02EAA8182A80A200A5505A /* Prism */,
 				BE02EAC1182A80A200A5505A /* PrismTests */,
 				2C109D5A19F06CE300470861 /* Prizm-Action */,
-				9C046F2D1A1936B600F8CE44 /* PrizmSharingExt */,
+				9CD7D9891A1BC1FF003E221C /* PrizmShareExt */,
 				BE02EAA1182A80A200A5505A /* Frameworks */,
 				BE02EAA0182A80A200A5505A /* Products */,
 			);
@@ -2626,7 +2622,7 @@
 			children = (
 				BE02EA9F182A80A200A5505A /* Prizm β.app */,
 				BE02EABA182A80A200A5505A /* PrismTests.xctest */,
-				9C046F2C1A1936B600F8CE44 /* PrizmSharingExt.appex */,
+				9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2654,7 +2650,7 @@
 		BE02EAA8182A80A200A5505A /* Prism */ = {
 			isa = PBXGroup;
 			children = (
-				9C802F2E1A194B8100B3839C /* Prizm β.entitlements */,
+				9CD7D9A21A1BD058003E221C /* Prizm β.entitlements */,
 				BEE97D93183A5CD900B7BAC1 /* Model */,
 				BEFCEDFC182C204900648B9F /* Store */,
 				BE1FC3AD186C8131003464E1 /* Cells */,
@@ -4923,10 +4919,8 @@
 				2C4FD7311A029E98003A4212 /* HANavigationController.m */,
 				2C01A3051A09727400D58D9B /* HATableView.h */,
 				2C01A3061A09727400D58D9B /* HATableView.m */,
-				9C802F301A1951F100B3839C /* HAExtensionStore.h */,
-				9C802F311A1951F100B3839C /* HAExtensionStore.m */,
-				9C802F331A19554000B3839C /* HAExtensionSharePostImporter.h */,
-				9C802F341A19554000B3839C /* HAExtensionSharePostImporter.m */,
+				9CD7D9C11A1C1E84003E221C /* HAShareExtensionHelper.h */,
+				9CD7D9C21A1C1E84003E221C /* HAShareExtensionHelper.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -4972,21 +4966,21 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9C046F2B1A1936B600F8CE44 /* PrizmSharingExt */ = {
+		9CD7D9871A1BC1FF003E221C /* PrizmShareExt */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9C046F3E1A1936B700F8CE44 /* Build configuration list for PBXNativeTarget "PrizmSharingExt" */;
+			buildConfigurationList = 9CD7D99A1A1BC200003E221C /* Build configuration list for PBXNativeTarget "PrizmShareExt" */;
 			buildPhases = (
-				9C046F281A1936B600F8CE44 /* Sources */,
-				9C046F291A1936B600F8CE44 /* Frameworks */,
-				9C046F2A1A1936B600F8CE44 /* Resources */,
+				9CD7D9841A1BC1FF003E221C /* Sources */,
+				9CD7D9851A1BC1FF003E221C /* Frameworks */,
+				9CD7D9861A1BC1FF003E221C /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = PrizmSharingExt;
-			productName = PrizmSharingExt;
-			productReference = 9C046F2C1A1936B600F8CE44 /* PrizmSharingExt.appex */;
+			name = PrizmShareExt;
+			productName = PrizmShareExt;
+			productReference = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		BE02EA9E182A80A200A5505A /* Prism */ = {
@@ -5002,7 +4996,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				9C046F361A1936B600F8CE44 /* PBXTargetDependency */,
+				9CD7D9921A1BC1FF003E221C /* PBXTargetDependency */,
 			);
 			name = Prism;
 			productName = Prism;
@@ -5037,7 +5031,7 @@
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Higher Altitude";
 				TargetAttributes = {
-					9C046F2B1A1936B600F8CE44 = {
+					9CD7D9871A1BC1FF003E221C = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = MU64MV9X8B;
 						SystemCapabilities = {
@@ -5073,17 +5067,17 @@
 			targets = (
 				BE02EA9E182A80A200A5505A /* Prism */,
 				BE02EAB9182A80A200A5505A /* PrismTests */,
-				9C046F2B1A1936B600F8CE44 /* PrizmSharingExt */,
+				9CD7D9871A1BC1FF003E221C /* PrizmShareExt */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		9C046F2A1A1936B600F8CE44 /* Resources */ = {
+		9CD7D9861A1BC1FF003E221C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C046F341A1936B600F8CE44 /* MainInterface.storyboard in Resources */,
+				9CD7D9901A1BC1FF003E221C /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5203,12 +5197,11 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		9C046F281A1936B600F8CE44 /* Sources */ = {
+		9CD7D9841A1BC1FF003E221C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C802F361A1957D400B3839C /* HAExtensionSharePostImporter.m in Sources */,
-				9C046F321A1936B600F8CE44 /* ShareViewController.m in Sources */,
+				9CD7D98E1A1BC1FF003E221C /* ShareViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5237,7 +5230,6 @@
 				2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */,
 				BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
-				9C802F351A19554000B3839C /* HAExtensionSharePostImporter.m in Sources */,
 				2C7B79FA19ED8E19000EC061 /* STKInterest.m in Sources */,
 				2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */,
 				883D87DB19463E7F00195B11 /* UIColor+MPColor.m in Sources */,
@@ -5265,7 +5257,6 @@
 				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
 				BE63C53918FD89890087585E /* STKActivityIndicatorView.m in Sources */,
 				2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */,
-				9C802F321A1951F100B3839C /* HAExtensionStore.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
@@ -5342,6 +5333,7 @@
 				2C0D735219CB2B7A0078A9B9 /* HAHashTagView.m in Sources */,
 				BE2B7E82191AB3E300E6F408 /* STKGraphView.m in Sources */,
 				BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */,
+				9C6AAF891A1C27DC00284A48 /* HAShareExtensionHelper.m in Sources */,
 				2C1D45BE19E45E94008D84C5 /* STKInsightArchiveCell.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
 				883D87D819463E7F00195B11 /* MPSurveyQuestion.m in Sources */,
@@ -5407,10 +5399,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9C046F361A1936B600F8CE44 /* PBXTargetDependency */ = {
+		9CD7D9921A1BC1FF003E221C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9C046F2B1A1936B600F8CE44 /* PrizmSharingExt */;
-			targetProxy = 9C046F351A1936B600F8CE44 /* PBXContainerItemProxy */;
+			target = 9CD7D9871A1BC1FF003E221C /* PrizmShareExt */;
+			targetProxy = 9CD7D9911A1BC1FF003E221C /* PBXContainerItemProxy */;
 		};
 		BE02EAC0182A80A200A5505A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5447,7 +5439,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		9C046F381A1936B700F8CE44 /* Debug (Staging) */ = {
+		9CD7D9941A1BC200003E221C /* Debug (Staging) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -5464,11 +5456,15 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = PrizmSharingExt/PrizmSharingExt.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -5483,7 +5479,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = PrizmSharingExt/Info.plist;
+				INFOPLIST_FILE = PrizmShareExt/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -5495,7 +5491,7 @@
 			};
 			name = "Debug (Staging)";
 		};
-		9C046F391A1936B700F8CE44 /* Debug (Dev) */ = {
+		9CD7D9951A1BC200003E221C /* Debug (Dev) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -5512,11 +5508,15 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = PrizmSharingExt/PrizmSharingExt.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -5531,7 +5531,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = PrizmSharingExt/Info.plist;
+				INFOPLIST_FILE = PrizmShareExt/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -5543,16 +5543,20 @@
 			};
 			name = "Debug (Dev)";
 		};
-		9C046F3A1A1936B700F8CE44 /* Release */ = {
+		9CD7D9961A1BC200003E221C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_ENTITLEMENTS = PrizmSharingExt/PrizmSharingExt.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = PrizmSharingExt/Info.plist;
+				INFOPLIST_FILE = PrizmShareExt/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -5562,16 +5566,20 @@
 			};
 			name = Release;
 		};
-		9C046F3B1A1936B700F8CE44 /* App Store */ = {
+		9CD7D9971A1BC200003E221C /* App Store */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_ENTITLEMENTS = PrizmSharingExt/PrizmSharingExt.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = PrizmSharingExt/Info.plist;
+				INFOPLIST_FILE = PrizmShareExt/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -5581,16 +5589,20 @@
 			};
 			name = "App Store";
 		};
-		9C046F3C1A1936B700F8CE44 /* Release (User Testing) */ = {
+		9CD7D9981A1BC200003E221C /* Release (User Testing) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_ENTITLEMENTS = PrizmSharingExt/PrizmSharingExt.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = PrizmSharingExt/Info.plist;
+				INFOPLIST_FILE = PrizmShareExt/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -5600,16 +5612,20 @@
 			};
 			name = "Release (User Testing)";
 		};
-		9C046F3D1A1936B700F8CE44 /* Release (Staging) */ = {
+		9CD7D9991A1BC200003E221C /* Release (Staging) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_ENTITLEMENTS = PrizmSharingExt/PrizmSharingExt.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = PrizmSharingExt/Info.plist;
+				INFOPLIST_FILE = PrizmShareExt/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -5699,7 +5715,7 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm β";
 				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5739,7 +5755,7 @@
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5850,7 +5866,7 @@
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5939,7 +5955,7 @@
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6035,7 +6051,7 @@
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
 				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6137,7 +6153,7 @@
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = "Prizm β";
 				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6194,15 +6210,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9C046F3E1A1936B700F8CE44 /* Build configuration list for PBXNativeTarget "PrizmSharingExt" */ = {
+		9CD7D99A1A1BC200003E221C /* Build configuration list for PBXNativeTarget "PrizmShareExt" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9C046F381A1936B700F8CE44 /* Debug (Staging) */,
-				9C046F391A1936B700F8CE44 /* Debug (Dev) */,
-				9C046F3A1A1936B700F8CE44 /* Release */,
-				9C046F3B1A1936B700F8CE44 /* App Store */,
-				9C046F3C1A1936B700F8CE44 /* Release (User Testing) */,
-				9C046F3D1A1936B700F8CE44 /* Release (Staging) */,
+				9CD7D9941A1BC200003E221C /* Debug (Staging) */,
+				9CD7D9951A1BC200003E221C /* Debug (Dev) */,
+				9CD7D9961A1BC200003E221C /* Release */,
+				9CD7D9971A1BC200003E221C /* App Store */,
+				9CD7D9981A1BC200003E221C /* Release (User Testing) */,
+				9CD7D9991A1BC200003E221C /* Release (Staging) */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
