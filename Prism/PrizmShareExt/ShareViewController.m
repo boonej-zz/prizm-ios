@@ -12,8 +12,6 @@
 @interface ShareViewController ()
 
 @property (nonatomic, strong) UIImage *postImage;
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
-
 
 @end
 
@@ -26,8 +24,6 @@
 
 - (void)didSelectPost {
     // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-//    HAExtensionImageUploader *uploader = [[HAExtensionImageUploader alloc] init];
-    
     NSExtensionItem *imageItem = [self.extensionContext.inputItems firstObject];
     if (!imageItem) {
         return;
@@ -64,7 +60,6 @@
 
 - (NSUserDefaults *)savePostToUserDefaults:(NSString *)postText withImage:(UIImage *)postImage
 {
-
     NSUserDefaults *sharedPost = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.higheraltitude.prizm.staging"];
 
     [sharedPost setObject:postText forKey:@"postText"];
@@ -72,10 +67,8 @@
     return sharedPost;
 }
 
-- (UIImage *)cropImage:(UIImage *)image {
-    //UIGraphicsBeginImageContext(newSize);
-    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
-    // Pass 1.0 to force exact pixel size.
+- (UIImage *)cropImage:(UIImage *)image
+{
     CGSize newSize = CGSizeMake(600, 600);
     UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
     [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
