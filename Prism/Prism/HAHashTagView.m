@@ -19,7 +19,7 @@
         labelFrame.origin.x = 0;
         labelFrame.origin.y = 0;
         self.textLabel = [[UILabel alloc] initWithFrame:labelFrame];
-        [self.textLabel setTextColor:STKTextColor];
+        [self.textLabel setTextColor:[UIColor HATextColor]];
         [self.textLabel setFont:STKFont(17)];
         UITapGestureRecognizer *tr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hashTagTapped:)];
         [self addGestureRecognizer:tr];
@@ -53,7 +53,7 @@
     } else {
         [self setAnimating:YES];
         [UIView animateWithDuration:0.5 animations:^{
-            [self.textLabel setTextColor:STKTextColor];
+            [self.textLabel setTextColor:[UIColor HATextColor]];
             [self.textLabel setFont:STKFont(17)];
             [self.textLabel sizeToFit];
             self.transform = CGAffineTransformMakeScale(1.0f, 1.0f);

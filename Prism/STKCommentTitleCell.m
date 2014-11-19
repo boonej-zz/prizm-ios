@@ -13,7 +13,7 @@
 - (void)awakeFromNib {
     // Initialization code
     [self.titleLabel setFont:STKFont(13)];
-    [self.titleLabel setTextColor:STKTextColor];
+    [self.titleLabel setTextColor:[UIColor HATextColor]];
     [self setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];
     [[self layer] setShadowColor:[[UIColor whiteColor] CGColor]];
     [[self layer] setShadowOffset:CGSizeMake(0, -1)];

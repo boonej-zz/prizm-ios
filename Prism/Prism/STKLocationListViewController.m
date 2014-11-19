@@ -94,9 +94,9 @@
     [[[self navigationController] navigationBar] setBackgroundImage:[UIImage imageNamed:@"nav_bar"] forBarMetrics:UIBarMetricsDefault];
     [[[self navigationController] navigationBar] setTranslucent:YES];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor],
                                                                           NSFontAttributeName : STKFont(22)}];
-    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
+    [[[self navigationController] navigationBar] setTintColor:[[UIColor HATextColor] colorWithAlphaComponent:0.8]];
 
     [[[self searchDisplayController] searchResultsTableView] setDataSource:self];
     [[[self searchDisplayController] searchResultsTableView] setDelegate:self];
@@ -116,9 +116,9 @@
     
     
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor],
                                                                           NSFontAttributeName : STKFont(22)}];
-    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
+    [[[self navigationController] navigationBar] setTintColor:[[UIColor HATextColor] colorWithAlphaComponent:0.8]];
     
     if (self.locationCoordinate.longitude != 0 && self.locationCoordinate.latitude != 0) {
         [[STKContentStore store] fetchLocationNamesForCoordinate:self.locationCoordinate completion:^(NSArray *locations, NSError *err) {

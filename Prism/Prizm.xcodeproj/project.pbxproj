@@ -48,6 +48,9 @@
 		2CB073E019AF96C900F70B7E /* HAFollowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CB073DE19AF96C900F70B7E /* HAFollowViewController.xib */; };
 		2CBA45C819AC275D00A5BCD6 /* HANotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBA45C619AC275D00A5BCD6 /* HANotificationViewController.m */; };
 		2CBA45C919AC275D00A5BCD6 /* HANotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CBA45C719AC275D00A5BCD6 /* HANotificationViewController.xib */; };
+		2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762A1A1BC151007580A5 /* STKTheme.m */; };
+		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
+		2CCA76311A1BE8CD007580A5 /* UIColor+HACore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA76301A1BE8CD007580A5 /* UIColor+HACore.m */; };
 		8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */; };
 		8805330E193E5FD900A8E44D /* STKSearchUsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */; };
 		88053311193E6F0000A8E44D /* STKSearchTrustCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 88053310193E6F0000A8E44D /* STKSearchTrustCell.m */; };
@@ -379,6 +382,13 @@
 		2CBA45C619AC275D00A5BCD6 /* HANotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HANotificationViewController.m; sourceTree = "<group>"; };
 		2CBA45C719AC275D00A5BCD6 /* HANotificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HANotificationViewController.xib; sourceTree = "<group>"; };
 		2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 2.xcdatamodel"; sourceTree = "<group>"; };
+		2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 3.xcdatamodel"; sourceTree = "<group>"; };
+		2CCA76291A1BC151007580A5 /* STKTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTheme.h; sourceTree = "<group>"; };
+		2CCA762A1A1BC151007580A5 /* STKTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTheme.m; sourceTree = "<group>"; };
+		2CCA762C1A1BC152007580A5 /* STKOrganization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKOrganization.h; sourceTree = "<group>"; };
+		2CCA762D1A1BC152007580A5 /* STKOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKOrganization.m; sourceTree = "<group>"; };
+		2CCA762F1A1BE8CD007580A5 /* UIColor+HACore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HACore.h"; sourceTree = "<group>"; };
+		2CCA76301A1BE8CD007580A5 /* UIColor+HACore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HACore.m"; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -4824,6 +4834,10 @@
 				2C97974A19DDEB8E003A6C0A /* STKInsightTarget.m */,
 				2C7B79F819ED8E19000EC061 /* STKInterest.h */,
 				2C7B79F919ED8E19000EC061 /* STKInterest.m */,
+				2CCA762C1A1BC152007580A5 /* STKOrganization.h */,
+				2CCA762D1A1BC152007580A5 /* STKOrganization.m */,
+				2CCA76291A1BC151007580A5 /* STKTheme.h */,
+				2CCA762A1A1BC151007580A5 /* STKTheme.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -4868,6 +4882,8 @@
 				2C4FD7311A029E98003A4212 /* HANavigationController.m */,
 				2C01A3051A09727400D58D9B /* HATableView.h */,
 				2C01A3061A09727400D58D9B /* HATableView.m */,
+				2CCA762F1A1BE8CD007580A5 /* UIColor+HACore.h */,
+				2CCA76301A1BE8CD007580A5 /* UIColor+HACore.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -5108,6 +5124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEF361CB18B2C3700085A38B /* STKTriImageCell.m in Sources */,
+				2CCA76311A1BE8CD007580A5 /* UIColor+HACore.m in Sources */,
 				BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */,
 				BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */,
 				BE8F35E91833D48D00C4ED03 /* STKPostCell.m in Sources */,
@@ -5121,6 +5138,7 @@
 				BE7AFA7E18ECA32800DA30A7 /* STKNetworkStore.m in Sources */,
 				BEE84F5D192BFB2200820A19 /* STKLuminatingBar.m in Sources */,
 				BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */,
+				2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */,
 				BECA9F1E1937CAF600AABA20 /* STKAccoladeUserListViewController.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
@@ -5277,6 +5295,7 @@
 				BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */,
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
 				88384077195B3275006750FC /* STKInviteFriendsShareCell.m in Sources */,
+				2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */,
 				BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */,
 				2C1D45B619E43676008D84C5 /* STKInsightTextCell.m in Sources */,
 				BEFCEE07182C210600648B9F /* STKSecurePassword.m in Sources */,
@@ -5955,10 +5974,11 @@
 		BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */,
 				2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */,
 				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
 			);
-			currentVersion = 2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */;
+			currentVersion = 2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */;
 			path = User.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

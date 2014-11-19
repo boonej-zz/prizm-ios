@@ -53,7 +53,7 @@
 
 //        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
         
-//        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor, NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
+//        [bbi setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor], NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
 
 //        [[self navigationItem] setRightBarButtonItem:bbi];
         [[self navigationItem] setTitle:@"Settings"];
@@ -409,7 +409,7 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 180)];
     UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
     [[b titleLabel] setFont:STKFont(18)];
-    [[b titleLabel] setTextColor:STKTextColor];
+    [[b titleLabel] setTextColor:[UIColor HATextColor]];
     [b addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
     [b setBackgroundImage:[UIImage imageNamed:@"btn_lg"] forState:UIControlStateNormal];
     [b setTitle:@"Logout" forState:UIControlStateNormal];

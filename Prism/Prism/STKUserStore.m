@@ -425,6 +425,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];
+                [self fetchOrganizationByCode:u.programCode completion:^(STKOrganization *organization, NSError *err) {
+                    NSLog(@"Organization Fetched");
+                }];
                 [[Mixpanel sharedInstance] identify:[u uniqueID]];
                 [[Mixpanel sharedInstance].people set:[u mixpanelProperties]];
                 
@@ -1489,6 +1492,56 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
         
     }];
+}
+
+- (void)fetchOrganizationByCode:(NSString *)code completion:(void (^)(STKOrganization *organization, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", code]];
+        
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+    
+        
+        STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"theme"];
+        STKResolutionQuery *mq = [STKResolutionQuery resolutionQueryForField:@"members"];
+        [q addSubquery:rq];
+        [q addSubquery:mq];
+        [c setQueryObject:q];
+        [c setModelGraph:@"STKOrganization"];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setResolutionMap:@{@"Theme": @"STKTheme", @"User": @"STKUser"}];
+        [c setContext:[self context]];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if (obj && [obj isKindOfClass:[NSArray class]]) {
+                if ([obj count] > 0) {
+                    obj = [obj objectAtIndex:0];
+                } else {
+                    obj = nil;
+                }
+            }
+            block(obj, err);
+        }];
+    }];
+}
+
+- (STKOrganization *)getOrganizationByCode:(NSString *)code
+{
+    NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKOrganization"];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"code == %@", code];
+    [fr setPredicate:p];
+    NSArray *cached = nil;
+    [fr setFetchLimit:1];
+    cached = [[self context] executeFetchRequest:fr error:nil];
+    if (cached.count > 0) {
+        return cached[0];
+    } else {
+        return nil;
+    }
 }
 
 

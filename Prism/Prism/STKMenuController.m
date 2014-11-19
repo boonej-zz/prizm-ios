@@ -647,9 +647,9 @@ static BOOL HAActivityIsAnimating = NO;
         if([vc isKindOfClass:[UINavigationController class]]) {
             [(UINavigationController *)vc setDelegate:self];
             [[(UINavigationController *)vc navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
-            [[(UINavigationController *)vc navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+            [[(UINavigationController *)vc navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor],
                                                                                    NSFontAttributeName : STKFont(22)}];
-            [[(UINavigationController *)vc navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
+            [[(UINavigationController *)vc navigationBar] setTintColor:[[UIColor HATextColor] colorWithAlphaComponent:0.8]];
             [[(UINavigationController *)vc navigationBar] setTitleVerticalPositionAdjustment:4 forBarMetrics:UIBarMetricsDefault];
         } else {
             @throw [NSException exceptionWithName:@"STKMenuControllerException"

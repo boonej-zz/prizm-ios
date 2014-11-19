@@ -23,7 +23,7 @@
     // Initialization code
     [self setBackgroundColor:[UIColor clearColor]];
     [self.contentView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
-    [self.titleLabel setTextColor:STKTextColor];
+    [self.titleLabel setTextColor:[UIColor HATextColor]];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

@@ -222,7 +222,7 @@
 {
     [super viewDidLoad];
     
-    //    [[[self imageView] layer] setBorderColor:[STKTextColor CGColor]];
+    //    [[[self imageView] layer] setBorderColor:[[UIColor HATextColor] CGColor]];
     //    [[[self imageView] layer] setBorderWidth:2];
     
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
@@ -273,9 +273,9 @@
     [super viewWillAppear:animated];
 
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor],
                                                                           NSFontAttributeName : STKFont(22)}];
-    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
+    [[[self navigationController] navigationBar] setTintColor:[[UIColor HATextColor] colorWithAlphaComponent:0.8]];
 
     [[self optionCollectionView] reloadData];
 
@@ -314,7 +314,7 @@
            didSelectUser:(STKUser *)user
         forMarkerAtRange:(NSRange)range
 {
-    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
+    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}];
     
     if(range.location == NSNotFound) {
         range = NSMakeRange([[[self postTextView] textStorage] length], 0);
@@ -323,7 +323,7 @@
     [[[self postTextView] textStorage] replaceCharactersInRange:range
                                            withAttributedString:str];
     [[[self postTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}]];
     
     NSInteger newIndex = range.location + [str length] + 2;
     [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
@@ -340,7 +340,7 @@
     [[[self postTextView] textStorage] replaceCharactersInRange:range
                                                      withString:[NSString stringWithFormat:@"#%@ ", hashTag]];
     [[[self postTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}]];
     
     NSInteger newIndex = range.location + [hashTag length] + 2;
     [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];

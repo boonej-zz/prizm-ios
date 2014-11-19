@@ -50,13 +50,13 @@
     
     [_backdropFadeView setAlpha:0.0];
     [_posterLabel setFont:STKFont(16)];
-    [_posterLabel setTextColor:STKTextColor];
+    [_posterLabel setTextColor:[UIColor HATextColor]];
 
     [_timeLabel setFont:STKFont(10)];
-    [_timeLabel setTextColor:STKTextColor];
+    [_timeLabel setTextColor:[UIColor HATextColor]];
     
     [_sourceLabel setFont:STKFont(10)];
-    [_sourceLabel setTextColor:STKTextColor];
+    [_sourceLabel setTextColor:[UIColor HATextColor]];
     [_sourceLabel setTextAlignment:NSTextAlignmentRight];
     
     [_postTypeView setContentMode:UIViewContentModeCenter];

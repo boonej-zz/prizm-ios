@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "STKTrust.h"
 
-@class STKUser, STKPost, STKActivityItem, STKFetchDescription;
+@class STKUser, STKPost, STKActivityItem, STKFetchDescription, STKOrganization;
 @class ACAccount, ACAccountStore;
 
 extern NSString * const STKUserStoreActivityUpdateNotification;
@@ -109,6 +109,8 @@ typedef enum {
 - (void)fetchLifetimeGraphDataWithCompletion:(void (^)(NSDictionary *data, NSError *err))block;
 - (void)fetchHashtagsForPostTypesWithCompletion:(void (^)(NSDictionary *hashTags, NSError *err))block;
 - (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block;
+- (void)fetchOrganizationByCode:(NSString *)code completion:(void (^)(STKOrganization *organization, NSError *err))block;
+- (STKOrganization *)getOrganizationByCode:(NSString *)code;
 - (void)updateInterestsforUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block;
 
 @end

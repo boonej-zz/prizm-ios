@@ -146,7 +146,7 @@
         STKTextImageCell *cell = (STKTextImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKTextImageCell"
                                                                                                forIndexPath:indexPath];
         [[cell label] setText:[item objectForKey:@"title"]];
-        [[cell label] setTextColor:STKTextColor];
+        [[cell label] setTextColor:[UIColor HATextColor]];
         
         [cell setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.3]];
 
@@ -165,7 +165,7 @@
         STKTextImageCell *cell = (STKTextImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKTextImageCell"
                                                                                                forIndexPath:indexPath];
         [[cell label] setText:[item objectForKey:@"title"]];
-        [[cell label] setTextColor:STKTextColor];
+        [[cell label] setTextColor:[UIColor HATextColor]];
         [cell setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.3]];
         
         if([[item objectForKey:@"key"] isEqualToString:[[self filters] objectForKey:@"subtype"]]) {

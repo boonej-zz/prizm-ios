@@ -23,7 +23,7 @@
 {
     // Initialization code
     [self setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
-    [self.nameLabel setTextColor:STKTextColor];
+    [self.nameLabel setTextColor:[UIColor HATextColor]];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

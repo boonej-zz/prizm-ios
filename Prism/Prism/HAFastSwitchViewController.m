@@ -70,7 +70,7 @@
 {
     UIButton *b = [UIButton buttonWithType:UIButtonTypeCustom];
     [[b titleLabel] setFont:STKFont(18)];
-    [[b titleLabel] setTextColor:STKTextColor];
+    [[b titleLabel] setTextColor:[UIColor HATextColor]];
     [b addTarget:self action:@selector(showSignIn:) forControlEvents:UIControlEventTouchUpInside];
     [b setBackgroundImage:[UIImage imageNamed:@"btn_lg"] forState:UIControlStateNormal];
     [b setTitle:@"Add Profile" forState:UIControlStateNormal];

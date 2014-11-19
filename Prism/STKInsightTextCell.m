@@ -17,7 +17,7 @@
     [self setBackgroundColor:[UIColor clearColor]];
     [self.textView setBackgroundColor:[UIColor clearColor]];
     [self.textView setEditable:NO];
-    [self.textView setTextColor:STKTextColor];
+    [self.textView setTextColor:[UIColor HATextColor]];
     [self.textView setFont:STKFont(16)];
                                                                                                                     
 }
@@ -34,7 +34,7 @@
     UIColor *blueColor = [UIColor colorWithRed:81.f/255.f green:180.f/255.f blue:250.f/255.f alpha:0.8f];
     [self.textView setLinkTextAttributes:@{NSForegroundColorAttributeName: blueColor}];
     NSMutableAttributedString *mat = [[NSMutableAttributedString alloc] init];
-    [mat appendAttributedString:[[NSAttributedString alloc] initWithString:insightTarget.insight.text attributes:@{NSFontAttributeName: STKFont(16), NSForegroundColorAttributeName: STKTextColor}]];
+    [mat appendAttributedString:[[NSAttributedString alloc] initWithString:insightTarget.insight.text attributes:@{NSFontAttributeName: STKFont(16), NSForegroundColorAttributeName: [UIColor HATextColor]}]];
     [mat appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n\n" attributes:nil]];
     NSAttributedString *linkString = [[NSAttributedString alloc] initWithString:self.insightTarget.insight.linkTitle attributes:@{NSFontAttributeName: STKFont(20), NSForegroundColorAttributeName: blueColor, NSLinkAttributeName: [self.insightTarget.insight linkURL]}];
     [mat appendAttributedString:linkString];

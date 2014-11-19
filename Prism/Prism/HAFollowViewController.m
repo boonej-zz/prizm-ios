@@ -45,7 +45,7 @@
                                                            target:self action:@selector(back:)];
     [[self navigationItem] setLeftBarButtonItem:bbi];
     if ([self isStandalone]) {
-        [self.navigationController.navigationBar setTintColor:STKTextColor];
+        [self.navigationController.navigationBar setTintColor:[UIColor HATextColor]];
         UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonTapped:)];
         
         [self.navigationItem setRightBarButtonItem:done];

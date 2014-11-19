@@ -44,7 +44,7 @@ NSString *const HAImageDislikeInsightButton = @"trust_reject";
     [self.backdropFadeView setAlpha:0.f];
     
     [self.posterLabel setFont:STKFont(16)];
-    [self.posterLabel setTextColor:STKTextColor];
+    [self.posterLabel setTextColor:[UIColor HATextColor]];
     
     [self.avatarButton setBackgroundColor:[UIColor clearColor]];
     

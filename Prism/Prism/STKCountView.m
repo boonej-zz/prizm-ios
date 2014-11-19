@@ -24,8 +24,8 @@
         
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _countLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_titleLabel setTextColor:STKTextColor];
-        [_countLabel setTextColor:STKTextColor];
+        [_titleLabel setTextColor:[UIColor HATextColor]];
+        [_countLabel setTextColor:[UIColor HATextColor]];
         [_titleLabel setMinimumScaleFactor:0.5];
         [_countLabel setMinimumScaleFactor:0.5];
         [_titleLabel setFont:STKFont(16)];

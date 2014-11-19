@@ -81,10 +81,10 @@
     }
     
     
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor],
                                                                       NSFontAttributeName : STKFont(22)}];
-    [self.navigationController.navigationBar setTintColor:STKTextColor];
-//    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+    [self.navigationController.navigationBar setTintColor:[UIColor HATextColor]];
+//    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor],
 //                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateNormal];
 //    [self.doneButton setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor clearColor],
 //                                              NSFontAttributeName : STKFont(16)} forState:UIControlStateDisabled];

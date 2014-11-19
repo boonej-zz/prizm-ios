@@ -46,7 +46,7 @@
     // Do any additional setup after loading the view from its nib.
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     self.title = @"Insight";
-    [self.noInsightsLabel setTextColor:STKTextColor];
+    [self.noInsightsLabel setTextColor:[UIColor HATextColor]];
     [self.noInsightsLabel setFont:STKFont(18)];
     [self.noInsightsLabel sizeToFit];
     self.transitionImageView = [[UIImageView alloc] init];
@@ -73,10 +73,10 @@
 //        UILabel *titleLabel = [[UILabel alloc] init];
 //        [titleLabel setText:@"Insight"];
 //        [titleLabel setFont:STKFont(22)];
-//        [titleLabel setTextColor:STKTextColor];
+//        [titleLabel setTextColor:[UIColor HATextColor]];
 //        [titleLabel sizeToFit];
 //        [self.navigationItem setTitleView:titleLabel];
-//        [self.navigationController.navigationBar setTintColor:STKTextColor];
+//        [self.navigationController.navigationBar setTintColor:[UIColor HATextColor]];
     } else {
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
                                                   landscapeImagePhone:nil style:UIBarButtonItemStylePlain
@@ -323,7 +323,7 @@
 //            label = [[UILabel alloc] init];
 //            [label setText:@"Insight"];
 //            [label setFont:STKFont(16)];
-//            [label setTextColor:STKTextColor];
+//            [label setTextColor:[UIColor HATextColor]];
 //            [label sizeToFit];
 //            [view addSubview:label];
 //            [view addConstraint:[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeCenterX multiplier:0 constant:1]];

@@ -70,7 +70,7 @@
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
     [v setBackgroundColor:[UIColor clearColor]];
     [[self searchResultsTableView] setTableFooterView:v];
-    [self.searchTextField setTintColor:STKTextColor];
+    [self.searchTextField setTintColor:[UIColor HATextColor]];
     
     CGFloat tableContentInsetTop = 114.f;
     [[self searchResultsTableView] setContentInset:UIEdgeInsetsMake(tableContentInsetTop, 0, 0, 0)];
@@ -208,7 +208,7 @@
         UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
         if(!c) {
             c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
-            [[c textLabel] setTextColor:STKTextColor];
+            [[c textLabel] setTextColor:[UIColor HATextColor]];
             [[c textLabel] setFont:STKFont(16)];
             [c setSelectionStyle:UITableViewCellSelectionStyleNone];
         }
@@ -220,7 +220,7 @@
     if([self searchType] == STKSearchUsersTypeNotInTrust){
         STKSearchTrustCell *c = [STKSearchTrustCell cellForTableView:tableView target:self];
         STKUser *u = [[self profilesFound] objectAtIndex:[indexPath row]];
-        [[c nameLabel] setTextColor:STKTextColor];
+        [[c nameLabel] setTextColor:[UIColor HATextColor]];
         [[c nameLabel] setText:[u name]];
         [[c avatarView] setUrlString:[u profilePhotoPath]];
 
@@ -234,7 +234,7 @@
     }else{
         STKSearchProfileCell *cell = [STKSearchProfileCell cellForTableView:tableView target:self];
         STKUser *user = [[self profilesFound] objectAtIndex:[indexPath row]];
-        [[cell nameLabel] setTextColor:STKTextColor];
+        [[cell nameLabel] setTextColor:[UIColor HATextColor]];
         [[cell nameLabel] setText:[user name]];
         [[cell avatarView] setUrlString:[user profilePhotoPath]];
         [[cell cancelTrustButton] setHidden:YES];

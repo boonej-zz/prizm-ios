@@ -53,7 +53,7 @@
         if([self borderColor])
             [[self borderColor] set];
         else
-            [STKTextColor set];
+            [[UIColor HATextColor] set];
         [bp setLineWidth:4];
         [bp stroke];
         [bp addClip];
@@ -66,7 +66,7 @@
         if([self borderColor])
             [[self borderColor] set];
         else
-            [STKTextColor set];
+            [[UIColor HATextColor] set];
         [bp setLineWidth:4];
         [bp addClip];
         

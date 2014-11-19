@@ -249,7 +249,7 @@ typedef enum {
             UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
             if(!c) {
                 c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
-                [[c textLabel] setTextColor:STKTextColor];
+                [[c textLabel] setTextColor:[UIColor HATextColor]];
                 [[c textLabel] setFont:STKFont(16)];
                 [c setSelectionStyle:UITableViewCellSelectionStyleNone];
             }
@@ -269,7 +269,7 @@ typedef enum {
         UITableViewCell *c = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
         if(!c) {
             c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
-            [[c textLabel] setTextColor:STKTextColor];
+            [[c textLabel] setTextColor:[UIColor HATextColor]];
             [[c textLabel] setFont:STKFont(16)];
             [c setSelectionStyle:UITableViewCellSelectionStyleNone];
         }
@@ -280,7 +280,7 @@ typedef enum {
     
     STKSearchProfileCell *c = [STKSearchProfileCell cellForTableView:tableView target:self];
     STKUser *u = [[self profilesFound] objectAtIndex:[indexPath row]];
-    [[c nameLabel] setTextColor:STKTextColor];
+    [[c nameLabel] setTextColor:[UIColor HATextColor]];
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
 

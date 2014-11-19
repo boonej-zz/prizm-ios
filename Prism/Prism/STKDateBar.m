@@ -55,7 +55,7 @@
             [lbl setNumberOfLines:2];
             [lbl setFont:STKFont(12)];
             [lbl setTranslatesAutoresizingMaskIntoConstraints:NO];
-            [lbl setTextColor:STKTextColor];
+            [lbl setTextColor:[UIColor HATextColor]];
             [lbl setTextAlignment:NSTextAlignmentCenter];
             [lbl setText:newStr];
             [a addObject:lbl];
@@ -123,7 +123,7 @@
 {
     
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(30, 30), NO, [[UIScreen mainScreen] scale]);
-    [STKTextColor set];
+    [[UIColor HATextColor] set];
 
     UIBezierPath *bp = [UIBezierPath bezierPath];
     [bp setLineWidth:2];
@@ -135,7 +135,7 @@
     UIGraphicsEndImageContext();
 
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(30, 30), NO, [[UIScreen mainScreen] scale]);
-    [STKTextColor set];
+    [[UIColor HATextColor] set];
     bp = [UIBezierPath bezierPath];
     [bp setLineWidth:2];
 

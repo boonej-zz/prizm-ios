@@ -606,7 +606,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
             UILabel *lbl = [[UILabel alloc] initWithFrame:[_commentHeaderView bounds]];
             [lbl setBackgroundColor:[UIColor clearColor]];
             [lbl setTextAlignment:NSTextAlignmentCenter];
-            [lbl setTextColor:STKTextColor];
+            [lbl setTextColor:[UIColor HATextColor]];
             [lbl setFont:STKFont(13)];
             [lbl setText:@"Comments"];
             [_commentHeaderView addSubview:lbl];
@@ -643,7 +643,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     } else {
         STKCommentCell *c = [STKCommentCell cellForTableView:tableView target:self];
         [[c textView] setDelegate:self];
-        NSDictionary *attributes = @{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor};
+        NSDictionary *attributes = @{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
         
         if([self postHasText] && [indexPath row] == 0) {
             
@@ -749,7 +749,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     STKTextImageCell *cell = (STKTextImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKTextImageCell"
                                                                                            forIndexPath:indexPath];
     [[cell label] setText:[item objectForKey:@"title"]];
-    [[cell label] setTextColor:STKTextColor];
+    [[cell label] setTextColor:[UIColor HATextColor]];
     [[cell imageView] setImage:[item objectForKey:@"image"]];
     [cell setBackgroundColor:[UIColor clearColor]];
     

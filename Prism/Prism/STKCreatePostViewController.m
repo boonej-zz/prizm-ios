@@ -167,9 +167,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [super viewWillAppear:animated];
     
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
-    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : STKTextColor,
+    [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor],
                                                                           NSFontAttributeName : STKFont(22)}];
-    [[[self navigationController] navigationBar] setTintColor:[STKTextColor colorWithAlphaComponent:0.8]];
+    [[[self navigationController] navigationBar] setTintColor:[[UIColor HATextColor] colorWithAlphaComponent:0.8]];
 
     if([[[STKUserStore store] currentUser] isInstitution]) {
         [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
@@ -302,7 +302,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)textViewDidChange:(UITextView *)textView
 {
     [textView setFont:STKFont(14)];
-    [textView setTintColor:STKTextColor];
+    [textView setTintColor:[UIColor HATextColor]];
     [[self markupController] textView:textView updatedWithText:[textView text]];
     [self resizeTextArea];
 }
@@ -343,7 +343,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 {
     [super viewDidLoad];
     
-//    [[[self imageView] layer] setBorderColor:[STKTextColor CGColor]];
+//    [[[self imageView] layer] setBorderColor:[[UIColor HATextColor] CGColor]];
 //    [[[self imageView] layer] setBorderWidth:2];
     UIImage *img;
     UIGraphicsBeginImageContext(CGSizeMake(10, 10));
@@ -364,7 +364,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[self view] addSubview:[[self markupController] view]];
     [_markupController.view setHidden:YES];
     [self.postTextView setFont:STKFont(14)];
-    [self.postTextView setTintColor:STKTextColor];
+    [self.postTextView setTintColor:[UIColor HATextColor]];
     
     [[self categoryCollectionView] registerNib:[UINib nibWithNibName:@"STKTextImageCell" bundle:nil]
                     forCellWithReuseIdentifier:@"STKTextImageCell"];
@@ -403,7 +403,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
         STKTextImageCell *cell = (STKTextImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"STKTextImageCell"
                                                                                                forIndexPath:indexPath];
         [[cell label] setText:[item objectForKey:@"title"]];
-        [[cell label] setTextColor:STKTextColor];
+        [[cell label] setTextColor:[UIColor HATextColor]];
         [[cell imageView] setImage:[item objectForKey:@"image"]];
         [cell setBackgroundColor:[UIColor clearColor]];
         
@@ -566,7 +566,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
            didSelectUser:(STKUser *)user
         forMarkerAtRange:(NSRange)range
 {
-    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
+    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}];
     
     if(range.location == NSNotFound) {
         range = NSMakeRange([[[self postTextView] textStorage] length], 0);
@@ -575,7 +575,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[[self postTextView] textStorage] replaceCharactersInRange:range
                                            withAttributedString:str];
     [[[self postTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}]];
     
     NSInteger newIndex = range.location + [str length] + 2;
     [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];
@@ -593,7 +593,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [[[self postTextView] textStorage] replaceCharactersInRange:range
                                                      withString:[NSString stringWithFormat:@"#%@ ", hashTag]];
     [[[self postTextView] textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
-                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}]];
+                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}]];
     
     NSInteger newIndex = range.location + [hashTag length] + 2;
     [[self postTextView] setSelectedRange:NSMakeRange(newIndex, 0)];

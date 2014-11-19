@@ -38,8 +38,8 @@
 {
     // Initialization code
     [self setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
-    [self.nameLabel setTextColor:STKTextColor];
-    [self.locationLabel setTextColor:STKTextColor];
+    [self.nameLabel setTextColor:[UIColor HATextColor]];
+    [self.locationLabel setTextColor:[UIColor HATextColor]];
     [self.leftImage setLoadingContentMode:UIViewContentModeCenter];
     [self.centerImage setLoadingContentMode:UIViewContentModeCenter];
     [self.rightImage setLoadingContentMode:UIViewContentModeCenter];

@@ -203,7 +203,8 @@
 - (void)drawRect:(CGRect)rect
 {
     CGRect b = [self bounds];
-    [[STKTextColor colorWithAlphaComponent:0.5] set];
+    UIColor *c = [UIColor HATextColor];
+    [[c colorWithAlphaComponent:0.5] set];
     UIBezierPath *bp = [UIBezierPath bezierPath];
     
     CGPoint initialPoint = CGPointMake(b.size.width / 2.0, b.size.height / 2.0);

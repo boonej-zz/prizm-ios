@@ -32,6 +32,7 @@
 #import "STKPhoneNumberFormatter.h"
 #import "HAInterestsViewController.h"
 #import "HANavigationController.h"
+#import "STKOrganization.h"
 
 @import AddressBook;
 @import Social;
@@ -299,7 +300,7 @@ const long STKCreateProgressGeocoding = 4;
     if([[self user] coverPhotoPath] || [[self user] coverPhoto] || [self progressMask] & STKCreateProgressUploadingCover) {
         [[self coverOverlayView] setHidden:NO];
         [[self coverPhotoButton] setTitle:@"Edit" forState:UIControlStateNormal];
-        [[self coverPhotoButton] setTitleColor:STKTextColor forState:UIControlStateNormal];
+        [[self coverPhotoButton] setTitleColor:[UIColor HATextColor] forState:UIControlStateNormal];
         [[self coverPhotoButton] setImage:[UIImage imageNamed:@"btn_pic_uploadedit"] forState:UIControlStateNormal];
     } else {
         [[self coverOverlayView] setHidden:YES];
@@ -310,7 +311,7 @@ const long STKCreateProgressGeocoding = 4;
     
     if([[self user] profilePhotoPath] || [[self user] profilePhoto] || [self progressMask] & STKCreateProgressUploadingProfile) {
         [[self profilePhotoButton] setTitle:@"Edit" forState:UIControlStateNormal];
-        [[self profilePhotoButton] setTitleColor:STKTextColor forState:UIControlStateNormal];
+        [[self profilePhotoButton] setTitleColor:[UIColor HATextColor] forState:UIControlStateNormal];
         [[self profilePhotoButton] setBackgroundImage:nil forState:UIControlStateNormal];
         [[self avatarView] setOverlayColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
         [[self avatarView] setHidden:NO];
@@ -362,7 +363,7 @@ const long STKCreateProgressGeocoding = 4;
     [[self coverOverlayView] setHidden:YES];
     
     [[self avatarView] setOutlineWidth:3];
-    [[self avatarView] setOutlineColor:STKTextColor];
+    [[self avatarView] setOutlineColor:[UIColor HATextColor]];
 //    [self addBlurViewWithHeight:64.f];
 }
 
@@ -618,6 +619,15 @@ const long STKCreateProgressGeocoding = 4;
                                             if(err ) {
                                                 [[STKErrorStore alertViewForError:err delegate:nil] show];
                                                 [self setUser:nil];
+                                            }
+                                            if (u.programCode && ![u.programCode isEqualToString:@""]) {
+                                                [[STKUserStore store] fetchOrganizationByCode:u.programCode completion:^(STKOrganization *organization, NSError *err) {
+                                                    if (!err && organization){
+                                                        [[NSUserDefaults standardUserDefaults] setObject:organization.uniqueID forKey:@"STKOrganizationId"];
+                                                    } else {
+                                                        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"STKOrganizationId"];
+                                                    }
+                                                }];
                                             }
                                             [[self tableView] reloadData];
                                         }];
@@ -1119,7 +1129,7 @@ const long STKCreateProgressGeocoding = 4;
     if(![[item objectForKey:@"key"] isEqualToString:@"confirmPassword"]) {
         if(![[self requiredKeys] containsObject:[item objectForKey:@"key"]]) {
             NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:@"optional"
-                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : STKTextColor}];
+                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}];
             [[c textField] setAttributedPlaceholder:placeholder];
         }
     }

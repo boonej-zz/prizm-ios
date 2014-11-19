@@ -23,7 +23,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    [self.label setTextColor:STKTextColor];
+    [self.label setTextColor:[UIColor HATextColor]];
     [self.label setFont:STKFont(15)];
     [self setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.1]];
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_right"]];

@@ -39,7 +39,7 @@
     
     CGFloat nameTextSize = 32;
     CGFloat promptTextSize = 36;
-    UIColor *textColor = [UIColor whiteColor]; //STKTextColor
+    UIColor *textColor = [UIColor whiteColor]; //[UIColor HATextColor]
     
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(640, 640), YES, 1);
     
@@ -58,7 +58,7 @@
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
     
     UIBezierPath *bpInnerStroke = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(avatarRect, 2, 2)];
-    [STKTextColor set];
+    [[UIColor HATextColor] set];
     [bpInnerStroke setFlatness:1];
     [bpInnerStroke setLineJoinStyle:kCGLineJoinRound];
     [bpInnerStroke setLineWidth:3];
@@ -196,7 +196,7 @@
     centeredRect.origin.x = (640 - w) / 2.0;
     centeredRect.origin.y = (640 - h) / 2.0;
         
-    [text drawInRect:centeredRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : STKTextColor, NSParagraphStyleAttributeName : style}];
+    [text drawInRect:centeredRect withAttributes:@{NSFontAttributeName : f, NSForegroundColorAttributeName : [UIColor HATextColor], NSParagraphStyleAttributeName : style}];
     
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

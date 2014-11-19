@@ -176,7 +176,7 @@
     STKUser *u = [[self users] objectAtIndex:[indexPath row]];
     STKSearchProfileCell *c = [STKSearchProfileCell cellForTableView:tableView target:self];
     
-    [[c nameLabel] setTextColor:STKTextColor];
+    [[c nameLabel] setTextColor:[UIColor HATextColor]];
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
     [[c luminaryIcon] setHidden:![u isLuminary]];

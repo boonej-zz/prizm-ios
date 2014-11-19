@@ -96,7 +96,7 @@
     
     NSString *s = [[self item] title];
     UIFont *f = STKFont(12);
-    NSDictionary *attrs = @{NSFontAttributeName : f, NSForegroundColorAttributeName : STKTextColor};
+    NSDictionary *attrs = @{NSFontAttributeName : f, NSForegroundColorAttributeName : [UIColor HATextColor]};
     sz = [s sizeWithAttributes:attrs];
     
     CGRect r = CGRectMake(([self bounds].size.width - sz.width) / 2.0, [self bounds].size.height - sz.height - 5, sz.width, sz.height);
