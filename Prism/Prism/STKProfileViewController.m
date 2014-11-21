@@ -66,6 +66,7 @@ typedef enum {
 @property (nonatomic) BOOL filterByLocation;
 @property (nonatomic) BOOL filterByUserTags;
 @property (nonatomic, strong) UIView *underlayView;
+@property (nonatomic, weak) IBOutlet UIView *profileDisabledView;
 
 - (BOOL)isShowingCurrentUserProfile;
 - (BOOL)canEmailProfile;
@@ -125,9 +126,10 @@ typedef enum {
     if(![self profile]) {
         [self setProfile:[[STKUserStore store] currentUser]];
     }
-    
+    [self.profileDisabledView setHidden:self.profile.active];
     if ([[self profile] active] == NO) {
         [[self tableView] setHidden:YES];
+        
         [[self navigationItem] setTitle:@"Prizm"];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [self refreshProfileViews];

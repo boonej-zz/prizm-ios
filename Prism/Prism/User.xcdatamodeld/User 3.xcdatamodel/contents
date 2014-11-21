@@ -65,7 +65,7 @@
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="welcomeImageURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="welcomeMessage" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" syncable="YES"/>
+        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="organization" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="theme" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKTheme" inverseName="organization" inverseEntity="STKTheme" syncable="YES"/>
     </entity>
     <entity name="STKPost" representedClassName="STKPost" syncable="YES">
@@ -199,6 +199,7 @@
         <relationship name="interests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="users" inverseEntity="STKInterest" syncable="YES"/>
         <relationship name="likedComments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="likes" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="likedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="likes" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="members" inverseEntity="STKOrganization" syncable="YES"/>
         <relationship name="ownedActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="notifiedUser" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="ownedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="creator" inverseEntity="STKTrust" syncable="YES"/>
         <relationship name="postsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="tags" inverseEntity="STKPost" syncable="YES"/>
@@ -217,6 +218,6 @@
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
         <element name="STKTheme" positionX="45" positionY="180" width="128" height="165"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="958"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="975"/>
     </elements>
 </model>

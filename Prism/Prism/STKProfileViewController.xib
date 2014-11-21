@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKProfileViewController">
             <connections>
                 <outlet property="luminatingBar" destination="I98-XS-S6S" id="WXO-sh-fGF"/>
+                <outlet property="profileDisabledView" destination="Dgj-jg-mYk" id="Jml-sB-sRt"/>
                 <outlet property="tableView" destination="rRt-hT-A27" id="Uad-dm-g6j"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -17,7 +18,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dgj-jg-mYk" userLabel="Profile Deactivated View">
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dgj-jg-mYk" userLabel="Profile Deactivated View">
                     <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This profile has been deactivated." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y54-fJ-7MW">

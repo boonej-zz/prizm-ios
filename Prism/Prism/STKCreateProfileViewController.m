@@ -33,6 +33,7 @@
 #import "HAInterestsViewController.h"
 #import "HANavigationController.h"
 #import "STKOrganization.h"
+#import "HAChangePasswordViewController.h"
 
 @import AddressBook;
 @import Social;
@@ -226,7 +227,8 @@ const long STKCreateProgressGeocoding = 4;
                        
                        
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
-                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}}
+                       @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
+                       @{@"title" : @"Change Password", @"key" : @"password", @"cellType" : @"password"}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"zipCode", @"subtype", @"phoneNumber", @"zipCode"];
         } else {
@@ -260,7 +262,8 @@ const long STKCreateProgressGeocoding = 4;
                        
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
-                       @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}}
+                       @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}},
+                       @{@"title" : @"Change Password", @"key" : @"password", @"cellType" : @"password"}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday"];
         }
@@ -1036,6 +1039,10 @@ const long STKCreateProgressGeocoding = 4;
             [[self user] setSubtype:[[item objectForKey:@"values"] objectAtIndex:idx]];
             [[self navigationController] popViewControllerAnimated:YES];
         }];
+    } else if ([[item objectForKey:@"cellType"] isEqualToString:@"password"]) {
+        HAChangePasswordViewController *pvc = [[HAChangePasswordViewController alloc] init];
+        [pvc setUserEmail:[[self user] email]];
+        [[self navigationController] pushViewController:pvc animated:YES];
     }
     
 }
@@ -1108,7 +1115,7 @@ const long STKCreateProgressGeocoding = 4;
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
     
-    if([cellType isEqual:@"textView"] || [cellType isEqualToString:@"list"]) {
+    if([cellType isEqual:@"textView"] || [cellType isEqualToString:@"list"] || [cellType isEqualToString:@"password"]) {
         [[c textField] setEnabled:NO];
     } else {
         [[c textField] setEnabled:YES];
