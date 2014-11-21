@@ -118,7 +118,7 @@ NSString * const HAAPPGROUP = @"group.com.higheraltitude.prizm.staging";
             NSDictionary *postInfo = @{
                                        STKPostTextKey : text,
                                        STKPostTypeKey : postType,
-                                       @"external_provider" : @"extension",
+//                                       @"external_provider" : @"extension",
 //                                       @"external_link" : link,
                                        STKPostURLKey : URLString,
                                        STKPostVisibilityKey : STKPostVisibilityPublic

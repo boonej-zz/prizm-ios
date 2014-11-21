@@ -24,19 +24,30 @@
 
 - (void)didSelectPost {
     // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-    NSExtensionItem *imageItem = [self.extensionContext.inputItems firstObject];
-    if (!imageItem) {
+    NSExtensionItem *extensionItem = [self.extensionContext.inputItems firstObject];
+    if (!extensionItem) {
         return;
     }
     
-    NSItemProvider *imageItemProvider = [[imageItem attachments] firstObject];
-    if (!imageItemProvider) {
+    NSString *title = [extensionItem.attributedContentText string];
+    NSLog(@"Title: %@", title);
+    
+    NSLog(@"Attatchments: %@", extensionItem.attachments);
+    NSLog(@"Attributed Context: %@", extensionItem.attributedContentText.string);
+    NSLog(@"Attributed Title: %@", extensionItem.attributedTitle.string);
+    NSLog(@"Description: %@", extensionItem.description);
+    NSLog(@"User Info: %@", extensionItem.userInfo);
+    
+
+
+    NSItemProvider *extensionItemProvider = [[extensionItem attachments] firstObject];
+    if (!extensionItemProvider) {
         return;
     }
     
-    if ([imageItemProvider hasItemConformingToTypeIdentifier:(NSString *)kUTTypeImage]) {
+    if ([extensionItemProvider hasItemConformingToTypeIdentifier:(NSString *)kUTTypeImage]) {
         
-        [imageItemProvider loadItemForTypeIdentifier:(NSString *)kUTTypeImage options:nil completionHandler:^(UIImage *image, NSError *error) {
+        [extensionItemProvider loadItemForTypeIdentifier:(NSString *)kUTTypeImage options:nil completionHandler:^(UIImage *image, NSError *error) {
             
             if(image){
 
@@ -46,6 +57,16 @@
             }
         }];
         
+    }
+    else if ([extensionItemProvider hasItemConformingToTypeIdentifier:(NSString *)kUTTypeURL]) {
+        [extensionItemProvider loadItemForTypeIdentifier:(NSString *)kUTTypeURL options:nil completionHandler:^(NSURL *url, NSError *error) {
+            
+            if (url) {
+                NSString *postText = [self appendURLToContextText:url];
+                [self savePostToUserDefaults:postText withImage:nil];
+                [self.extensionContext completeRequestReturningItems:nil completionHandler:nil];
+            }
+        }];
     }
     
     
@@ -75,6 +96,18 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
+}
+
+- (NSString *)appendURLToContextText:(NSURL *)url
+{
+    NSString *postText;
+    if (self.contentText.length == 0) {
+        postText = [NSString stringWithFormat:@"%@", url];
+    }
+    else {
+        postText = [NSString stringWithFormat:@"%@ - %@", self.contentText, url];
+    }
+    return postText;
 }
 
 @end
