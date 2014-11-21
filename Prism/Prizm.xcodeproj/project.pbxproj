@@ -76,6 +76,8 @@
 		88A74C7E184714A600DF05AC /* STKHashtagToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */; };
 		88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */; };
 		9C6AAF891A1C27DC00284A48 /* HAShareExtensionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7D9C21A1C1E84003E221C /* HAShareExtensionHelper.m */; };
+		9CC22F171A1F0CD1004AFF73 /* HAChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC22F151A1F0CD1004AFF73 /* HAChangePasswordViewController.m */; };
+		9CC22F181A1F0CD1004AFF73 /* HAChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CC22F161A1F0CD1004AFF73 /* HAChangePasswordViewController.xib */; };
 		9CD7D98E1A1BC1FF003E221C /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7D98D1A1BC1FF003E221C /* ShareViewController.m */; };
 		9CD7D9901A1BC1FF003E221C /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CD7D98F1A1BC1FF003E221C /* MainInterface.storyboard */; };
 		9CD7D9931A1BC1FF003E221C /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -436,6 +438,9 @@
 		88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagToolbar.m; sourceTree = "<group>"; };
 		88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+STKHashtagDetector.h"; sourceTree = "<group>"; };
 		88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+STKHashtagDetector.m"; sourceTree = "<group>"; };
+		9CC22F141A1F0CD1004AFF73 /* HAChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAChangePasswordViewController.h; sourceTree = "<group>"; };
+		9CC22F151A1F0CD1004AFF73 /* HAChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAChangePasswordViewController.m; sourceTree = "<group>"; };
+		9CC22F161A1F0CD1004AFF73 /* HAChangePasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAChangePasswordViewController.xib; sourceTree = "<group>"; };
 		9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PrizmShareExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CD7D98B1A1BC1FF003E221C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CD7D98C1A1BC1FF003E221C /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
@@ -2822,6 +2827,9 @@
 				2C97973B19DC5946003A6C0A /* HAInsightsViewController.h */,
 				2C97973C19DC5946003A6C0A /* HAInsightsViewController.m */,
 				2C97973D19DC5946003A6C0A /* HAInsightsViewController.xib */,
+				9CC22F141A1F0CD1004AFF73 /* HAChangePasswordViewController.h */,
+				9CC22F151A1F0CD1004AFF73 /* HAChangePasswordViewController.m */,
+				9CC22F161A1F0CD1004AFF73 /* HAChangePasswordViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5144,6 +5152,7 @@
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
 				D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */,
 				D0E3508418FF30A40006B992 /* STKSearchHashTagsCell.xib in Resources */,
+				9CC22F181A1F0CD1004AFF73 /* HAChangePasswordViewController.xib in Resources */,
 				BEE6CBC01832DCC300BC72F4 /* STKExploreCell.xib in Resources */,
 				BE6AEF851857681E00F92DF4 /* STKGenderCell.xib in Resources */,
 				88053313193E6F2300A8E44D /* STKSearchTrustCell.xib in Resources */,
@@ -5260,6 +5269,7 @@
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
+				9CC22F171A1F0CD1004AFF73 /* HAChangePasswordViewController.m in Sources */,
 				2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */,
 				2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
