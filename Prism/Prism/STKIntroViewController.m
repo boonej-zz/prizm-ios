@@ -66,10 +66,10 @@
 {
     CGRect bounds = [[UIScreen mainScreen] bounds];
     UIImageView *backgroundImage = [[UIImageView alloc] initWithFrame:bounds];
-    [backgroundImage setImage:[UIImage imageNamed:@"img_background"]];
+    [backgroundImage setImage:[UIImage HABackgroundImage]];
     [self.view insertSubview:backgroundImage atIndex:0];
     [self.scrollView setBackgroundColor:[UIColor clearColor]];
-//    [self.scrollView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"img_background"]]];
+//    [self.scrollView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage HABackgroundImage]]];
     [self.scrollView setDelegate:self];
     NSArray *names = self.imageNames;
     for (NSInteger i = 0; i != [names count]; ++i) {

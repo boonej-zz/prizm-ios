@@ -260,6 +260,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self addBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
     CGRect frame = [self.view frame];
     frame.size.height = 64.f;
     self.underlayView = [[UIView alloc] initWithFrame:frame];
@@ -281,7 +283,7 @@
 
     
     [[self tableView] setRowHeight:106];
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadPosts) name:HANotificationReportInappropriate object:nil];
     [self addBlurViewWithHeight:114.0];

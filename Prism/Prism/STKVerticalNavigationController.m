@@ -72,6 +72,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    [self.view insertSubview:iv atIndex:0];
     CGRect r = [[self view] bounds];
     _barContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, r.size.width, 86)];
     [_barContainer setBackgroundColor:[UIColor clearColor]];

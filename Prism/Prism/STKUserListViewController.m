@@ -130,7 +130,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
     [[self tableView] setSeparatorColor:STKTextTransparentColor];
     [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];

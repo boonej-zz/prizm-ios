@@ -100,7 +100,7 @@
     
     
     self.title = @"Interests";
-    UIImage *backgroundImage = [UIImage imageNamed:@"img_background"];
+    UIImage *backgroundImage = [UIImage HABackgroundImage];
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
     [self.view insertSubview:backgroundView atIndex:0];
     

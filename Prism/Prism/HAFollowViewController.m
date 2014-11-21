@@ -75,7 +75,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"Who to Follow";
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     UIView *blankView = [[UIView alloc] init];
     [blankView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];

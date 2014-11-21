@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKHomeViewController">
@@ -20,9 +20,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="Mbq-bp-RoN">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yEA-J2-5KI">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -146,16 +143,12 @@
                 <constraint firstAttribute="trailing" secondItem="yEA-J2-5KI" secondAttribute="trailing" id="INH-YB-alM"/>
                 <constraint firstItem="Wsg-NP-6jI" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="N9b-bN-bon"/>
                 <constraint firstItem="dhA-RV-lrR" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="P0d-gk-urd"/>
-                <constraint firstItem="Mbq-bp-RoN" firstAttribute="top" secondItem="1" secondAttribute="top" id="U9M-p7-tZu"/>
                 <constraint firstItem="yEA-J2-5KI" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="UTS-MK-4XN"/>
                 <constraint firstAttribute="trailing" secondItem="zG8-p2-yL4" secondAttribute="trailing" constant="10" id="VwV-My-DFI"/>
                 <constraint firstAttribute="trailing" secondItem="dhA-RV-lrR" secondAttribute="trailing" id="Ypr-aS-dvj"/>
-                <constraint firstAttribute="bottom" secondItem="Mbq-bp-RoN" secondAttribute="bottom" id="lSe-zX-iaq"/>
                 <constraint firstAttribute="trailing" secondItem="Wsg-NP-6jI" secondAttribute="trailing" id="lbF-Uk-qf9"/>
                 <constraint firstItem="yEA-J2-5KI" firstAttribute="top" secondItem="1" secondAttribute="top" id="lyr-Di-eWR"/>
                 <constraint firstAttribute="bottom" secondItem="dhA-RV-lrR" secondAttribute="bottom" id="olZ-eh-3Fx"/>
-                <constraint firstItem="Mbq-bp-RoN" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="tDH-cE-CbV"/>
-                <constraint firstAttribute="trailing" secondItem="Mbq-bp-RoN" secondAttribute="trailing" id="vje-C0-00o"/>
                 <constraint firstItem="zG8-p2-yL4" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10" id="xz0-y6-6e7"/>
                 <constraint firstAttribute="bottom" secondItem="yEA-J2-5KI" secondAttribute="bottom" id="ygy-nu-hP3"/>
             </constraints>
@@ -164,7 +157,6 @@
     </objects>
     <resources>
         <image name="btn_lg" width="303" height="44"/>
-        <image name="img_background" width="320" height="568"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

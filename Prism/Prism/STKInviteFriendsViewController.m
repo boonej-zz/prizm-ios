@@ -118,9 +118,11 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    [self.view insertSubview:iv atIndex:0];
     [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
     [[self tableView] setSeparatorColor:STKTextTransparentColor];
     [self addBlurViewWithHeight:64.f];

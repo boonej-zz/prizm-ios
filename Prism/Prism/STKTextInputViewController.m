@@ -32,6 +32,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    [self.view insertSubview:iv atIndex:0];
 }
 
 - (void)save:(id)sender

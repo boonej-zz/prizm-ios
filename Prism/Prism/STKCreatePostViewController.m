@@ -342,7 +342,9 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    [self.view insertSubview:iv atIndex:0];
 //    [[[self imageView] layer] setBorderColor:[[UIColor HATextColor] CGColor]];
 //    [[[self imageView] layer] setBorderWidth:2];
     UIImage *img;

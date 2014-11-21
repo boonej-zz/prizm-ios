@@ -11,5 +11,6 @@
 @interface UIColor (HACore)
 
 + (UIColor *)HATextColor;
++ (UIColor *)HADominantColor;
 
 @end

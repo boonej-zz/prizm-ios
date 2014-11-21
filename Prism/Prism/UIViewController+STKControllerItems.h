@@ -22,5 +22,7 @@
 - (void)menuWillAppear:(BOOL)animated;
 - (void)menuWillDisappear:(BOOL)animated;
 - (void)addBlurViewWithHeight:(double)height;
+- (void)addBackgroundImage;
+- (void)handleUserUpdate;
 
 @end

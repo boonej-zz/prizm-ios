@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -71,12 +71,6 @@
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dln-PT-0fM" userLabel="Comment Container">
                     <rect key="frame" x="0.0" y="532" width="320" height="36"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="RPE-rT-7DA">
-                            <rect key="frame" x="0.0" y="-532" width="320" height="568"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="568" id="GhS-Ml-SeU"/>
-                            </constraints>
-                        </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ac4-pl-Epb">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="36"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -123,16 +117,13 @@
                         <constraint firstItem="Ac4-pl-Epb" firstAttribute="top" secondItem="Dln-PT-0fM" secondAttribute="top" id="9ho-9V-USf"/>
                         <constraint firstAttribute="bottom" secondItem="Ac4-pl-Epb" secondAttribute="bottom" id="Pmg-Wl-JPu"/>
                         <constraint firstItem="dx3-Lf-Ca9" firstAttribute="leading" secondItem="sSO-FA-qQw" secondAttribute="trailing" constant="8" id="QCl-cy-sIv"/>
-                        <constraint firstAttribute="trailing" secondItem="RPE-rT-7DA" secondAttribute="trailing" id="Rzc-Xb-7Zq"/>
                         <constraint firstAttribute="centerY" secondItem="sSO-FA-qQw" secondAttribute="centerY" id="STu-a1-b9e"/>
                         <constraint firstItem="sSO-FA-qQw" firstAttribute="leading" secondItem="Dln-PT-0fM" secondAttribute="leading" constant="14" id="Sld-JS-HDg"/>
                         <constraint firstAttribute="height" constant="36" id="d7s-Gs-nYh"/>
                         <constraint firstAttribute="trailing" secondItem="Ac4-pl-Epb" secondAttribute="trailing" id="h4x-KM-Tgw"/>
                         <constraint firstAttribute="centerY" secondItem="dx3-Lf-Ca9" secondAttribute="centerY" id="iMY-K5-qln"/>
-                        <constraint firstItem="RPE-rT-7DA" firstAttribute="leading" secondItem="Dln-PT-0fM" secondAttribute="leading" id="khD-re-sDM"/>
                         <constraint firstAttribute="centerY" secondItem="3RX-hR-78U" secondAttribute="centerY" id="r0K-U9-pWB"/>
                         <constraint firstAttribute="trailing" secondItem="3RX-hR-78U" secondAttribute="trailing" constant="8" id="yGZ-Qc-EVQ"/>
-                        <constraint firstAttribute="bottom" secondItem="RPE-rT-7DA" secondAttribute="bottom" id="zyh-Kr-ovo"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tVf-Km-kul" userLabel="Overlay View" customClass="UIControl">
@@ -288,7 +279,6 @@
     <resources>
         <image name="btn_edit_post" width="22" height="22"/>
         <image name="btn_write_comment" width="16" height="16"/>
-        <image name="img_background" width="320" height="568"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

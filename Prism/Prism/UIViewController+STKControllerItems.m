@@ -120,6 +120,21 @@
     }];
 }
 
+- (void)addBackgroundImage
+{
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    iv.tag = 8900;
+    [self.view insertSubview:iv atIndex:0];
+}
+
+- (void)handleUserUpdate
+{
+    UIImageView *iv = (UIImageView *)[self.view viewWithTag:8900];
+    if (iv){
+        [iv setImage:[UIImage HABackgroundImage]];
+    }
+}
 
 
 - (void)toggleMenu:(id)sender
@@ -160,7 +175,7 @@
         [[(UIVisualEffectView *)view contentView] addSubview:dv];
     } else {
         view = [[UIImageView alloc] initWithFrame:frame];
-        [(UIImageView *)view setImage:[UIImage imageNamed:@"img_background"]];
+        [(UIImageView *)view setImage:[UIImage HABackgroundImage]];
         [(UIImageView *)view setContentMode:UIViewContentModeTopLeft];
         [view setAlpha:0.95];
         [view setClipsToBounds:YES];

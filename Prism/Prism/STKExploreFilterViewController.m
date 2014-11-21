@@ -114,7 +114,7 @@
                    forCellWithReuseIdentifier:@"STKTextImageCell"];
     [[self councilCollectionView] setBackgroundColor:[UIColor clearColor]];
     [[self councilCollectionView] setScrollEnabled:NO];
-    
+    [[self imageView] setImage:[UIImage HABackgroundImage]];
     [[self imageView] setImage:[self backgroundImage]];
 }
 

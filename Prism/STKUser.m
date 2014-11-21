@@ -49,7 +49,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
-tumblrTokenSecret, tumblrLastMinID, programCode;
+tumblrTokenSecret, tumblrLastMinID, programCode, theme;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype, insightCount;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
@@ -103,6 +103,7 @@ tumblrTokenSecret, tumblrLastMinID, programCode;
              @"twitter_min_id" : @"twitterLastMinID",
              
              @"trusts" : [STKBind bindMapForKey:@"ownedTrusts" matchMap:@{@"uniqueID" : @"_id"}],
+             @"theme"  : [STKBind bindMapForKey:@"theme" matchMap:@{@"uniqueID" : @"_id"}],
 
              @"followers" : [STKBind bindMapForKey:@"followers" matchMap:@{@"uniqueID" : @"_id"}],
              @"following" : [STKBind bindMapForKey:@"following" matchMap:@{@"uniqueID" : @"_id"}],

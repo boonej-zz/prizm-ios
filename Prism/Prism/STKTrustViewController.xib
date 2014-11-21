@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -28,9 +28,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="Mdr-on-fv4">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="alL-qq-7Ni">
                     <rect key="frame" x="0.0" y="64" width="320" height="307"/>
                 </imageView>
@@ -263,7 +260,6 @@
                 <constraint firstAttribute="trailing" secondItem="ION-au-gvc" secondAttribute="trailing" id="2Zd-sy-IFf"/>
                 <constraint firstItem="4L1-nw-zS3" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="4GJ-O4-b6S"/>
                 <constraint firstAttribute="bottom" secondItem="Vzt-QN-V70" secondAttribute="bottom" constant="-101" id="6GV-Bg-mtY"/>
-                <constraint firstItem="Mdr-on-fv4" firstAttribute="top" secondItem="1" secondAttribute="top" id="6ov-H4-7Cj"/>
                 <constraint firstAttribute="trailing" secondItem="RwR-nx-6cr" secondAttribute="trailing" id="93a-qS-tIn"/>
                 <constraint firstItem="4L1-nw-zS3" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Fxi-ie-XKg"/>
                 <constraint firstItem="RwR-nx-6cr" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="GZf-0y-PHO"/>
@@ -273,13 +269,11 @@
                 <constraint firstAttribute="trailing" secondItem="Vzt-QN-V70" secondAttribute="trailing" id="NnA-Mj-4us"/>
                 <constraint firstItem="Vzt-QN-V70" firstAttribute="top" secondItem="4L1-nw-zS3" secondAttribute="bottom" id="Rk6-MA-1TO"/>
                 <constraint firstAttribute="trailing" secondItem="yrH-qv-7qp" secondAttribute="trailing" id="SGt-fu-GHE"/>
-                <constraint firstAttribute="trailing" secondItem="Mdr-on-fv4" secondAttribute="trailing" id="V4V-Te-B9y"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="WHr-oL-3Es"/>
                 <constraint firstItem="Vzt-QN-V70" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bAy-Zx-FEy"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="height" secondItem="alL-qq-7Ni" secondAttribute="height" id="dSZ-np-Xs8"/>
                 <constraint firstItem="ION-au-gvc" firstAttribute="top" secondItem="XNh-yH-M0i" secondAttribute="bottom" id="eHw-Y4-Jhr"/>
                 <constraint firstItem="yrH-qv-7qp" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="j8F-MK-7Wj"/>
-                <constraint firstItem="Vzt-QN-V70" firstAttribute="top" secondItem="Mdr-on-fv4" secondAttribute="bottom" id="m7K-Ux-ubq"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="leading" secondItem="alL-qq-7Ni" secondAttribute="leading" id="m8F-gQ-noN"/>
                 <constraint firstAttribute="trailing" secondItem="XNh-yH-M0i" secondAttribute="trailing" id="oW0-Iw-oiD"/>
                 <constraint firstItem="RwR-nx-6cr" firstAttribute="top" secondItem="ION-au-gvc" secondAttribute="bottom" constant="20" id="r4n-Y0-s36"/>
@@ -287,7 +281,6 @@
                 <constraint firstAttribute="bottom" secondItem="RwR-nx-6cr" secondAttribute="bottom" constant="28" id="uks-4R-6DK"/>
                 <constraint firstItem="ION-au-gvc" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="v4k-Jd-oBr"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="top" secondItem="alL-qq-7Ni" secondAttribute="top" id="vkH-OY-M7Q"/>
-                <constraint firstItem="Mdr-on-fv4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="wjH-ve-IZe"/>
                 <constraint firstItem="XNh-yH-M0i" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="zMh-qt-WxP"/>
                 <constraint firstAttribute="centerX" secondItem="8x9-xm-oZA" secondAttribute="centerX" id="zaG-fg-cKT"/>
             </constraints>
@@ -296,7 +289,6 @@
     </objects>
     <resources>
         <image name="btn_email" width="24" height="17"/>
-        <image name="img_background" width="320" height="568"/>
         <image name="trust_menu" width="18" height="13"/>
         <image name="trust_menu_selected" width="18" height="13"/>
     </resources>

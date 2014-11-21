@@ -76,7 +76,7 @@ typedef enum {
     [super viewDidLoad];
     
     [[self tableView] setRowHeight:106];
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     

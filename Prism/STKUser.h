@@ -14,7 +14,7 @@
 #import <GoogleOpenSource/GoogleOpenSource.h>
 #import <GooglePlus/GooglePlus.h>
 
-@class STKActivityItem, STKPost, STKTrust, STKInterest;
+@class STKActivityItem, STKPost, STKTrust, STKInterest, STKTheme;
 
 extern NSString * const STKUserGenderMale;
 extern NSString * const STKUserGenderFemale;
@@ -109,6 +109,7 @@ extern BOOL const STKUserStatusInActive;
 @property (nonatomic, strong) NSSet *createdActivities;
 @property (nonatomic, strong) NSSet *ownedActivities;
 @property (nonatomic, strong) NSSet *postsTaggedIn;
+@property (nonatomic, strong) STKTheme *theme;
 
 @property (nonatomic, strong) NSString *accountStoreID;
 @property (nonatomic, assign) BOOL active;

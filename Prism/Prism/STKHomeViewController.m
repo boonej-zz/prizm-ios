@@ -108,11 +108,17 @@
     }
 }
 
+- (void)refreshColor
+{
+    [self handleUserUpdate];
+    [self.tableView reloadData];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self addBackgroundImage];
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshColor) name:@"UserDetailsUpdated" object:nil];
     _homeCellNib = [UINib nibWithNibName:@"STKPostCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     CGRect frame = [self.view frame];
@@ -373,7 +379,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+   
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
     [self setDisplayInterests:[[NSUserDefaults standardUserDefaults] boolForKey:@"HADidDisplayInterestPage"]];
@@ -428,6 +434,7 @@
 {
     STKPostCell *c = [STKPostCell cellForTableView:tableView target:[self postController]];
 
+    
     [c populateWithPost:[[[self postController] posts] objectAtIndex:[indexPath row]]];
     
     return c;

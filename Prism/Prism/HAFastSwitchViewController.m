@@ -37,7 +37,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.users = @[];
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     [self loadData];
     self.title = @"Profiles";
     [self layoutViews];

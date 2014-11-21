@@ -364,7 +364,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    [self.view insertSubview:iv atIndex:0];
     _session = [[AVCaptureSession alloc] init];
     [[self session] setSessionPreset:AVCaptureSessionPreset1280x720];
     [[self captureView] setSession:[self session]];

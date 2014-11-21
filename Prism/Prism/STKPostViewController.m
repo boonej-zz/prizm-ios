@@ -272,7 +272,7 @@
     
     [[[self editPostButton] imageView] setContentMode:UIViewContentModeCenter];
     
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
 
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     [[self tableView] setSeparatorColor:[UIColor colorWithWhite:0.5 alpha:0]];
@@ -290,6 +290,9 @@
     
     [[self tableView] setTableFooterView:footerView];
     [self addBlurViewWithHeight:64.f];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.commentFooterView bounds]];
+    [self.commentFooterView insertSubview:iv atIndex:0];
 }
 
 - (void)sourceTapped:(id)sender

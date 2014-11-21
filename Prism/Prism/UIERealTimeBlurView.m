@@ -226,7 +226,7 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.5;
     UIImage *overlay = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    UIImage *bg = [UIImage imageNamed:@"img_background"];
+    UIImage *bg = [UIImage HABackgroundImage];
 
     UIGraphicsBeginImageContext(rect.size);
     

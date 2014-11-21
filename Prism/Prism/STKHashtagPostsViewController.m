@@ -78,7 +78,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    [self.view insertSubview:iv atIndex:0];
     NSString *hashTagTitle = [NSString stringWithFormat:@"#%@", [self hashTag]];
     
     [[self barLabel] setText:[self hashTagCount]];

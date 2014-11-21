@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKCreateProfileViewController">
             <connections>
                 <outlet property="avatarView" destination="cLd-RB-pxL" id="3qk-Sz-waZ"/>
-                <outlet property="backgroundImageView" destination="goM-3J-oOt" id="S3D-Ql-aWz"/>
                 <outlet property="coverOverlayView" destination="lid-zU-hbX" id="hxF-p4-o4n"/>
                 <outlet property="coverPhotoButton" destination="uCp-R9-fYJ" id="Bat-HZ-Vz4"/>
                 <outlet property="coverPhotoImageView" destination="XYa-Fr-Bxy" id="Nkl-0Z-uag"/>
@@ -26,12 +26,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="goM-3J-oOt">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="568" id="yYq-ti-Iun"/>
-                    </constraints>
-                </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SmX-L9-ABj" userLabel="Top Container">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="188"/>
                     <subviews>
@@ -122,14 +116,11 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="7Yn-5Y-IYC" secondAttribute="bottom" id="Cz0-39-lTh"/>
                 <constraint firstAttribute="trailing" secondItem="7Yn-5Y-IYC" secondAttribute="trailing" id="GKX-bc-gnh"/>
-                <constraint firstItem="goM-3J-oOt" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="HWh-Yd-fjs"/>
                 <constraint firstItem="7Yn-5Y-IYC" firstAttribute="top" secondItem="SmX-L9-ABj" secondAttribute="bottom" id="NCD-hO-cdN"/>
                 <constraint firstItem="SmX-L9-ABj" firstAttribute="top" secondItem="1" secondAttribute="top" id="OXZ-QB-nN4"/>
-                <constraint firstAttribute="trailing" secondItem="goM-3J-oOt" secondAttribute="trailing" id="PRy-pq-hh3"/>
                 <constraint firstItem="7Yn-5Y-IYC" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Qrd-eY-Lsn"/>
                 <constraint firstItem="SmX-L9-ABj" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Uya-Rc-cYa"/>
                 <constraint firstAttribute="trailing" secondItem="SmX-L9-ABj" secondAttribute="trailing" id="bjm-ex-YIM"/>
-                <constraint firstItem="goM-3J-oOt" firstAttribute="top" secondItem="1" secondAttribute="top" id="wis-vO-M87"/>
             </constraints>
         </view>
         <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="aE9-wJ-xea">
@@ -228,7 +219,6 @@
     </objects>
     <resources>
         <image name="btn_lg" width="303" height="44"/>
-        <image name="img_background" width="320" height="568"/>
         <image name="upload_camera" width="77" height="77"/>
         <image name="upload_image" width="15" height="15"/>
     </resources>

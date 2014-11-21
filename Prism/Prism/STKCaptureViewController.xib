@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKCaptureViewController">
@@ -28,9 +28,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="fR7-fw-gam">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qRI-nM-84Q" customClass="STKCaptureView">
                     <rect key="frame" x="0.0" y="44" width="320" height="320"/>
                     <color key="backgroundColor" red="1" green="0.90831745332066927" blue="0.98217769578352387" alpha="0.0" colorSpace="calibratedRGB"/>
@@ -196,17 +193,13 @@
                 <constraint firstItem="fc2-Ze-5bK" firstAttribute="top" secondItem="1" secondAttribute="top" id="2vc-0I-TZ7"/>
                 <constraint firstAttribute="bottom" secondItem="ea3-yh-eF2" secondAttribute="bottom" id="3IQ-Ud-NeB"/>
                 <constraint firstItem="9Ju-C0-WAR" firstAttribute="top" secondItem="fc2-Ze-5bK" secondAttribute="bottom" id="7vo-ul-rJ4"/>
-                <constraint firstItem="fR7-fw-gam" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="882-Vj-XrF"/>
                 <constraint firstAttribute="trailing" secondItem="9Ju-C0-WAR" secondAttribute="trailing" id="DKB-4j-0ub"/>
                 <constraint firstItem="Rao-w5-Zyh" firstAttribute="top" secondItem="9Ju-C0-WAR" secondAttribute="bottom" id="DKg-Jj-ai0"/>
                 <constraint firstAttribute="trailing" secondItem="Rao-w5-Zyh" secondAttribute="trailing" id="E61-1T-fQt"/>
                 <constraint firstItem="dBA-ZR-epL" firstAttribute="top" secondItem="fc2-Ze-5bK" secondAttribute="bottom" id="Eif-T5-SFd"/>
                 <constraint firstItem="qRI-nM-84Q" firstAttribute="centerY" secondItem="9Ju-C0-WAR" secondAttribute="centerY" id="JBH-P4-qPi"/>
-                <constraint firstAttribute="trailing" secondItem="fR7-fw-gam" secondAttribute="trailing" id="KxW-Df-5QZ"/>
-                <constraint firstAttribute="bottom" secondItem="fR7-fw-gam" secondAttribute="bottom" id="LGM-dc-Pnz"/>
                 <constraint firstAttribute="trailing" secondItem="fc2-Ze-5bK" secondAttribute="trailing" id="RXe-6V-OsH"/>
                 <constraint firstItem="9Ju-C0-WAR" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="VfD-2h-92i"/>
-                <constraint firstItem="fR7-fw-gam" firstAttribute="top" secondItem="1" secondAttribute="top" id="ZH6-1j-B6J"/>
                 <constraint firstAttribute="trailing" secondItem="ea3-yh-eF2" secondAttribute="trailing" id="c5I-oN-S7D"/>
                 <constraint firstAttribute="centerX" secondItem="qRI-nM-84Q" secondAttribute="centerX" id="cEC-Sl-rBW"/>
                 <constraint firstItem="ea3-yh-eF2" firstAttribute="top" secondItem="fc2-Ze-5bK" secondAttribute="bottom" constant="364" id="drS-FO-ofK"/>
@@ -231,7 +224,6 @@
         <image name="btn_flipcamera" width="24" height="18"/>
         <image name="btn_gallery" width="43" height="44"/>
         <image name="camerbtncta" width="69" height="69"/>
-        <image name="img_background" width="320" height="568"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

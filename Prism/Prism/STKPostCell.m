@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet STKGradientView *hashTagContainer;
 @property (weak, nonatomic) IBOutlet UIView *buttonContainer;
 @property (nonatomic, weak) STKPost *post;
+@property (nonatomic, strong) UIImage *fadeImage;
 @end
 
 @implementation STKPostCell
@@ -37,6 +38,7 @@
 - (void)populateWithPost:(STKPost *)p
 {
     [self setPost:p];
+    
     
     [[self contentImageView] setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2]];
     if([self overrideLoadingImage])
@@ -188,12 +190,22 @@
     ROUTE(sender);
 }
 
-- (void)cellDidLoad
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    
+}
+
+
+
+- (void)awakeFromNib
 {
     static UIImage *fadeImage = nil;
-    if(!fadeImage) {
+    static UIColor *fadeColor = nil;
+    if(!fadeImage || !fadeColor || ![fadeColor isEqual:[UIColor HADominantColor]]) {
+        fadeColor = [UIColor HADominantColor];
         UIGraphicsBeginImageContext(CGSizeMake(2, 2));
-        [[UIColor colorWithRed:11.0 / 255.0 green:53.0 / 255.0 blue:110.0 / 255.0 alpha:0.95] set];
+        [fadeColor set];
         UIRectFill(CGRectMake(0, 0, 2, 2));
         fadeImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
@@ -207,6 +219,25 @@
     
     [[self contentImageView] setPreferredSize:STKImageStoreThumbnailNone];
     [[self contentImageView] setLoadingContentMode:UIViewContentModeCenter];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHeaderView) name:@"UserDetailsUpdated" object:nil];
+}
+
+- (void)refreshHeaderView
+{
+    static UIImage *fadeImage = nil;
+    static UIColor *fadeColor = nil;
+    fadeColor = [UIColor HADominantColor];
+    UIGraphicsBeginImageContext(CGSizeMake(2, 2));
+    [fadeColor set];
+    UIRectFill(CGRectMake(0, 0, 2, 2));
+    fadeImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [[[self headerView] backdropFadeView] setImage:fadeImage];
+}
+
+- (void)cellDidLoad
+{
+    
     
 //    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     //        UIView *bg = [[UIView alloc] initWithCoder:frame];

@@ -669,21 +669,25 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {
             [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
             [q addSubquery:[STKContainQuery containQueryForField:@"following" key:@"_id" value:[[self currentUser] uniqueID]]];
-            [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"interests"]];
+            
             
             //[q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
 //            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" keyValues:@{@"from" : [[self currentUser] uniqueID], @"to" : [[self currentUser] uniqueID]}]];
+        } else {
+            [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"interests"]];
+            [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"theme"]];
         }
         
         [c setQueryObject:q];
         
         [c setModelGraph:@[user]];
-        [c setResolutionMap:@{@"Interest": @"STKInterest"}];
+        [c setResolutionMap:@{@"Interest": @"STKInterest", @"Theme": @"STKTheme"}];
         [c setContext:[self context]];
         [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
             if(!err) {
                 [[self context] save:nil];
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"UserDetailsUpdated" object:nil];
             block(user, err);
         }];
     }];

@@ -285,7 +285,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     [self.view insertSubview:iv atIndex:0];
     
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]];

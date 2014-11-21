@@ -59,7 +59,7 @@ typedef enum {
     [[self view] setBackgroundColor:[STKUnselectedColor colorWithAlphaComponent:1]];
     [[self view] setClipsToBounds:YES];
     
-    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     [[self view] addSubview:iv];
     UIView *overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     [overlay setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.3]];

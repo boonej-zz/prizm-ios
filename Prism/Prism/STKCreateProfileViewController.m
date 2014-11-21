@@ -336,6 +336,8 @@ const long STKCreateProgressGeocoding = 4;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self addBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
     
     if(![self isEditingProfile]) {
         [[Mixpanel sharedInstance] track:@"Entered Profile Creation"];
@@ -609,9 +611,9 @@ const long STKCreateProgressGeocoding = 4;
             [STKProcessingView present];
             NSArray *additionalFields = nil;
             if([[self user] isInstitution]) {
-                additionalFields = @[@"zip_postal", @"date_founded", @"mascot", @"enrollment", @"phone_number", @"interests"];
+                additionalFields = @[@"zip_postal", @"date_founded", @"mascot", @"enrollment", @"phone_number", @"interests", @"theme"];
             } else {
-                additionalFields = @[@"zip_postal", @"birthday", @"gender"];
+                additionalFields = @[@"zip_postal", @"birthday", @"gender", @"theme"];
             }
             [[STKUserStore store] fetchUserDetails:[self user] additionalFields:additionalFields
                                         completion:^(STKUser *u, NSError *err) {

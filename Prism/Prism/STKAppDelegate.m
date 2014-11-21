@@ -82,7 +82,7 @@
         [[UINavigationController alloc] initWithRootViewController:avc],
         [[UINavigationController alloc] initWithRootViewController:gvc]
     ]];
-    [nvc setBackgroundImage:[UIImage imageNamed:@"img_background"]];
+    [nvc setBackgroundImage:[UIImage HABackgroundImage]];
     
     for(UINavigationController *vc in [nvc viewControllers]) {
         [[vc navigationBar] setTranslucent:YES];

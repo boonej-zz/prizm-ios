@@ -96,6 +96,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self addBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
     [self addBlurViewWithHeight:64.f];
     [[self countView] setCircleTitles:@[@"Likes", @"Comments", @"Posts"]];
     [[self countView] setCircleValues:@[@"0", @"0", @"0"]];

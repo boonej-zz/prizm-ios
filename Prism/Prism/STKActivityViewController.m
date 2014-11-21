@@ -81,7 +81,9 @@ typedef enum {
     [self.underlayView setAlpha:0.0];
     [self.view addSubview:self.underlayView];
     [[self tableView] setRowHeight:56];
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [self addBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
+    [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
     [[self tableView] setSeparatorColor:STKTextTransparentColor];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];

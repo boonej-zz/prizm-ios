@@ -40,6 +40,7 @@
 - (IBAction)showLocation:(id)sender;
 - (IBAction)imageTapped:(id)sender;
 
+
 - (void)populateWithPost:(STKPost *)post;
 
 @end

@@ -50,7 +50,7 @@
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 568)];
     
-    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     [iv setAutoresizingMask:UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
     [view addSubview:iv];
     

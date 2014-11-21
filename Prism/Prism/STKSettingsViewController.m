@@ -172,7 +172,7 @@
                 [self connectTwitterAccount:[accounts firstObject]];
             } else {
                 STKAccountChooserViewController *cvc = [[STKAccountChooserViewController alloc] initWithAccounts:accounts];
-                [cvc setBackgroundImage:[UIImage imageNamed:@"img_background"]];
+                [cvc setBackgroundImage:[UIImage HABackgroundImage]];
                 [cvc setDelegate:self];
                 [[self navigationController] pushViewController:cvc animated:YES];
             }
@@ -402,7 +402,7 @@
 {
     [super viewDidLoad];
     
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     [[self tableView] setSeparatorInset:UIEdgeInsetsMake(0, 20, 0, 0)];
     [[self tableView] setSeparatorColor:STKTextTransparentColor];
 

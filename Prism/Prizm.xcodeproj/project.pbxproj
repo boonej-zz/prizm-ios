@@ -17,6 +17,7 @@
 		2C0D735219CB2B7A0078A9B9 /* HAHashTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D735119CB2B7A0078A9B9 /* HAHashTagView.m */; };
 		2C0D735619CB346B0078A9B9 /* HAInterestsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D735419CB346B0078A9B9 /* HAInterestsViewController.m */; };
 		2C0D735719CB346B0078A9B9 /* HAInterestsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */; };
+		2C0FA23E1A1E89C900231D3C /* UIImage+HACore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0FA23D1A1E89C900231D3C /* UIImage+HACore.m */; };
 		2C1D45A819DF7C49008D84C5 /* STKInsightHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45A719DF7C49008D84C5 /* STKInsightHeaderView.m */; };
 		2C1D45AC19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45AA19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m */; };
 		2C1D45AD19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C1D45AB19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib */; };
@@ -327,6 +328,8 @@
 		2C0D735319CB346B0078A9B9 /* HAInterestsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAInterestsViewController.h; sourceTree = "<group>"; };
 		2C0D735419CB346B0078A9B9 /* HAInterestsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAInterestsViewController.m; sourceTree = "<group>"; };
 		2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAInterestsViewController.xib; sourceTree = "<group>"; };
+		2C0FA23C1A1E89C900231D3C /* UIImage+HACore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+HACore.h"; sourceTree = "<group>"; };
+		2C0FA23D1A1E89C900231D3C /* UIImage+HACore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+HACore.m"; sourceTree = "<group>"; };
 		2C109D5C19F06CE300470861 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C109D5D19F06CE300470861 /* ActionRequestHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionRequestHandler.h; sourceTree = "<group>"; };
 		2C109D5E19F06CE300470861 /* ActionRequestHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionRequestHandler.m; sourceTree = "<group>"; };
@@ -2567,7 +2570,6 @@
 				BE47756F186DC64C003672A0 /* Amazon */,
 				883D87B019463E7F00195B11 /* Mixpanel */,
 				BE52B14018E3106400C44F30 /* STK */,
-				BEF96ACF186221340016E737 /* OAuthCore */,
 				BED0B1DA185F61FC00564300 /* Google Plus */,
 				BEF7A0831843ACA500A3AFFB /* Utility */,
 				BE02EAA8182A80A200A5505A /* Prism */,
@@ -2655,6 +2657,7 @@
 		BE02EAD4182A81B000A5505A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				BEF96ACF186221340016E737 /* OAuthCore */,
 				2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */,
 				BE02EAB1182A80A200A5505A /* STKAppDelegate.h */,
 				BE02EAB2182A80A200A5505A /* STKAppDelegate.m */,
@@ -4884,6 +4887,8 @@
 				2C01A3061A09727400D58D9B /* HATableView.m */,
 				2CCA762F1A1BE8CD007580A5 /* UIColor+HACore.h */,
 				2CCA76301A1BE8CD007580A5 /* UIColor+HACore.m */,
+				2C0FA23C1A1E89C900231D3C /* UIImage+HACore.h */,
+				2C0FA23D1A1E89C900231D3C /* UIImage+HACore.m */,
 			);
 			name = Utility;
 			path = Prism;
@@ -5301,6 +5306,7 @@
 				BEFCEE07182C210600648B9F /* STKSecurePassword.m in Sources */,
 				BE95438B1892CD1400DCC3B1 /* STKCommentCell.m in Sources */,
 				BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */,
+				2C0FA23E1A1E89C900231D3C /* UIImage+HACore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

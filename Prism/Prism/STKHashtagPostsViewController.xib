@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKHashtagPostsViewController">
@@ -16,9 +17,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_background" translatesAutoresizingMaskIntoConstraints="NO" id="Eot-zf-Qub">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ehB-fC-XpV">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -70,18 +68,13 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="mc1-oc-wVj" secondAttribute="trailing" id="Bhv-qj-lby"/>
-                <constraint firstItem="Eot-zf-Qub" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="DRd-dd-s1B"/>
-                <constraint firstItem="Eot-zf-Qub" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="DvO-jf-PhJ"/>
-                <constraint firstAttribute="bottom" secondItem="Eot-zf-Qub" secondAttribute="bottom" id="GCl-b3-X7c"/>
                 <constraint firstItem="mc1-oc-wVj" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Nfo-Y9-sPD"/>
-                <constraint firstAttribute="trailing" secondItem="Eot-zf-Qub" secondAttribute="trailing" id="XzV-D6-QPP"/>
                 <constraint firstItem="mc1-oc-wVj" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="65" id="ksF-TK-9uZ"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
         </view>
     </objects>
     <resources>
-        <image name="img_background" width="320" height="568"/>
         <image name="profile_cardview_off" width="15" height="14"/>
         <image name="profile_cardview_on" width="15" height="14"/>
         <image name="profile_gridview_off" width="14" height="14"/>

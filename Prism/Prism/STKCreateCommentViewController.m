@@ -37,6 +37,7 @@
 
 @property (nonatomic, strong) NSMutableArray *comments;
 @property (nonatomic, strong) STKMarkupController *markupController;
+@property (nonatomic, weak) IBOutlet UIImageView *commentImageView;
 
 
 - (IBAction)postComment:(id)sender;
@@ -58,6 +59,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    [self.view insertSubview:iv atIndex:0];
+    [_commentImageView setImage:[UIImage HABackgroundImage]];
     [[self postButton] setBackgroundColor:[[UIColor whiteColor] colorWithAlphaComponent:0.1]];
     [[self postButton] setClipsToBounds:YES];
     [[[self postButton] layer] setCornerRadius:10];

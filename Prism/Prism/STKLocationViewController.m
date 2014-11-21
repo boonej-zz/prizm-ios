@@ -50,7 +50,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    [iv setFrame:[self.view bounds]];
+    [self.view insertSubview:iv atIndex:0];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }

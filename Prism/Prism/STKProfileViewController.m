@@ -151,9 +151,9 @@ typedef enum {
     
     
     if([self profile]) {
-        NSArray *additionalFields = @[@"zip_postal", @"interests"];
+        NSArray *additionalFields = @[@"zip_postal", @"interests", @"theme"];
         if([[self profile] isInstitution]) {
-            additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email", @"zip_postal", @"interests"];
+            additionalFields = @[@"enrollment", @"date_founded", @"mascot", @"email", @"zip_postal", @"interests", @"theme"];
         }
 
         __weak id ws = self;
@@ -277,7 +277,8 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self addBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
     CGRect frame = [self.view frame];
     frame.size.height = 64.f;
     self.underlayView = [[UIView alloc] initWithFrame:frame];
@@ -285,7 +286,7 @@ typedef enum {
     [self.underlayView setAlpha:0.0];
     [self.view addSubview:self.underlayView];
     
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"img_background"]]];
+    [[self tableView] setBackgroundColor:[UIColor clearColor]];
 
     [self setStatsView:[STKInitialProfileStatisticsCell cellForTableView:[self tableView] target:self]];
     [self setProfileView:[STKProfileCell cellForTableView:[self tableView] target:self]];

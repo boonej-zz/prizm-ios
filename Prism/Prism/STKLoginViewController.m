@@ -60,7 +60,7 @@
    
     
     if (!self.presentingViewController) {
-        UIImage *i = [UIImage imageNamed:@"img_background"];
+        UIImage *i = [UIImage HABackgroundImage];
         UIImageView *iv = [[UIImageView alloc] initWithImage:i];
         [self.view insertSubview:iv atIndex:0];
         CGRect frame = [[UIScreen mainScreen] bounds];
