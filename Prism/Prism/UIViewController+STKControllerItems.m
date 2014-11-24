@@ -175,10 +175,13 @@
         [[(UIVisualEffectView *)view contentView] addSubview:dv];
     } else {
         view = [[UIImageView alloc] initWithFrame:frame];
+        [view  setTag:15000];
         [(UIImageView *)view setImage:[UIImage HABackgroundImage]];
         [(UIImageView *)view setContentMode:UIViewContentModeTopLeft];
         [view setAlpha:0.95];
         [view setClipsToBounds:YES];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshBlurView) name:@"UserDetailsUpdated"object:nil];
+        
     }
     
     [self.view addSubview:view];
@@ -190,6 +193,14 @@
     [self.view addConstraints:verticalConstraints];
     NSLog(@"%@", [self class]);
     
+}
+
+- (void)refreshBlurView
+{
+    UIImageView *iv = (UIImageView *)[self.view viewWithTag:15000];
+    if (iv){
+        [iv setImage:[UIImage HABackgroundImage]];
+    }
 }
 
 @end
