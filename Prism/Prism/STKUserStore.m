@@ -2353,7 +2353,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)trackFollow:(STKUser *)user
 {
 
-    [[Mixpanel sharedInstance] track:@"User followed" properties:mixpanelDataForObject(@{@"Target User" : user.email,
+    [[Mixpanel sharedInstance] track:@"User followed" properties:mixpanelDataForObject(@{@"Target User" : user.uniqueID,
                                                                    @"Following Count" : @([user followingCount])})];
 }
 
