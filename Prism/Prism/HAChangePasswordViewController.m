@@ -16,7 +16,8 @@
 @interface HAChangePasswordViewController () <UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet UITextField *emailField;
-@property (nonatomic, weak) IBOutlet UITextField *passwordField;
+@property (nonatomic, weak) IBOutlet UITextField *currentPasswordField;
+@property (nonatomic, weak) IBOutlet UITextField *updatedPasswordField;
 @property (nonatomic, weak) IBOutlet UITextField *confirmField;
 
 @end
@@ -29,12 +30,13 @@
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:backgroundImage]];
     
     [self.emailField setDelegate:self];
-    [self.passwordField setDelegate:self];
+    [self.currentPasswordField setDelegate:self];
+    [self.updatedPasswordField setDelegate:self];
     [self.confirmField setDelegate:self];
     
     [self.emailField setText:self.userEmail];
     [self.emailField setEnabled:NO];
-    [self.passwordField becomeFirstResponder];
+    [self.currentPasswordField becomeFirstResponder];
     
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(changePassword:)];
     [bbi setTitlePositionAdjustment:UIOffsetMake(-3, 0) forBarMetrics:UIBarMetricsDefault];
@@ -48,8 +50,18 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if ([[self passwordField] isFirstResponder]) {
-        if ([[[self passwordField] text] length] > 0) {
+    if ([[self currentPasswordField] isFirstResponder]) {
+        if ([[[self currentPasswordField] text] length] > 0) {
+            [[self updatedPasswordField] becomeFirstResponder];
+            return NO;
+        }
+        else {
+            [self emptyFieldsAlertView];
+        }
+        return NO;
+    }
+    else if ([[self updatedPasswordField] isFirstResponder]) {
+        if ([[[self updatedPasswordField] text] length] > 0) {
             [[self confirmField] becomeFirstResponder];
             return NO;
         }
@@ -59,53 +71,56 @@
         return NO;
     }
     else if ([[self confirmField] isFirstResponder]) {
-        if (![[[self passwordField] text] length] > 0 && [[[self confirmField] text] length] > 0) {
+        if (![[[self updatedPasswordField] text] length] > 0 || [[[self confirmField] text] length] > 0) {
             [self emptyFieldsAlertView];
             return NO;
         }
+        if (![[[self confirmField] text] isEqualToString:[[self updatedPasswordField] text]]) {
+            [self mismatchPasswordsAlertView];
+            return NO;
+        }
     }
-    else if (![[[self confirmField] text] isEqualToString:[[self passwordField] text]]) {
-        [self mismatchPasswordsAlertView];
-        return NO;
-    }
-    [self resetPassword];
+    [self updatePassword];
     return YES;
 }
 
 - (IBAction)changePassword:(id)sender
 {
     if(!([[[self emailField] text] length] > 0
-         && [[[self passwordField] text] length] > 0
+         && [[[self updatedPasswordField] text] length] > 0
          && [[[self confirmField] text] length] > 0)) {
         
         [self emptyFieldsAlertView];
         return;
     }
     
-    if(![[[self confirmField] text] isEqualToString:[[self passwordField] text]]) {
+    if(![[[self confirmField] text] isEqualToString:[[self updatedPasswordField] text]]) {
         [self mismatchPasswordsAlertView];
         return;
     }
-    [self resetPassword];
+    [self updatePassword];
 
 }
 
-- (void)resetPassword
+- (void)updatePassword
 {
     [STKProcessingView present];
     
-    [[STKUserStore store] resetPasswordForEmail:[[self emailField] text]
-                                       password:[[self passwordField] text]
-                                     completion:^(NSError *err) {
-                                         [STKProcessingView dismiss];
-                                         if(err) {
-                                             UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
-                                             [av show];
-                                         } else {
-                                             [self successfulChangeAlertView];
-                                             [[self navigationController] popViewControllerAnimated:YES];
-                                         }
-                                     }];
+    [[STKUserStore store] changePasswordForEmail:[[self emailField] text]
+                                 currentPassword:[[self currentPasswordField] text]
+                                     newPassword:[[self updatedPasswordField] text]
+                                      completion:^(NSError *err) {
+        
+                                          [STKProcessingView dismiss];
+                                          if (err) {
+                                              UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
+                                              [av show];
+                                          }
+                                          else {
+                                              [self successfulChangeAlertView];
+                                              [[self navigationController] popViewControllerAnimated:YES];
+                                          }
+    }];
 }
 
 - (void)emptyFieldsAlertView
@@ -131,7 +146,7 @@
 - (void)successfulChangeAlertView
 {
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Confirm Reset", @"confirm reset login")
-                                                 message:NSLocalizedString(@"An e-mail will be sent to you. Click the link on that e-mail to confirm this change.", @"confirm reset message")
+                                                 message:NSLocalizedString(@"Your password has been successfully changed.", @"change password successful message")
                                                 delegate:nil
                                        cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
                                        otherButtonTitles:nil];

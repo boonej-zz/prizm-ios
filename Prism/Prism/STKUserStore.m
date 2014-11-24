@@ -425,9 +425,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];
-                [self fetchOrganizationByCode:u.programCode completion:^(STKOrganization *organization, NSError *err) {
-                    NSLog(@"Organization Fetched");
-                }];
+//                [self fetchOrganizationByCode:u.programCode completion:^(STKOrganization *organization, NSError *err) {
+//                    NSLog(@"Organization Fetched");
+//                }];
                 [[Mixpanel sharedInstance] identify:[u uniqueID]];
                 [[Mixpanel sharedInstance].people set:[u mixpanelProperties]];
                 
@@ -2045,6 +2045,24 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", email, @"passwordreset"]];
         [c addQueryValue:password forKey:@"password"];
+        
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(err);
+        }];
+    }];
+}
+
+- (void)changePasswordForEmail:(NSString *)email currentPassword:(NSString *)currentPassword newPassword:(NSString *)newPassword completion:(void (^)(NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", email, @"passwordchange"]];
+        [c addQueryValue:newPassword forKey:@"newPassword"];
+        [c addQueryValue:currentPassword forKey:@"currentPassword"];
         
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             block(err);
