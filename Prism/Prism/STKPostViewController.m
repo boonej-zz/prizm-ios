@@ -511,6 +511,7 @@
         [[STKContentStore store] fetchLikersForComment:pc completion:^(NSArray *likers, NSError *err) {
             [vc setUsers:likers];
         }];
+        [vc setTitle:@"Likes"];
         [[self navigationController] pushViewController:vc animated:YES];
     }
 
