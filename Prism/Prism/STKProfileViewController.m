@@ -38,6 +38,7 @@
 #import "STKAccoladeViewController.h"
 #import "STKMarkupUtilities.h"
 #import "NSArray+Reverse.h"
+#import "STKProcessingView.h"
 
 @import MessageUI;
 @import AddressBook;
@@ -255,7 +256,9 @@ typedef enum {
             STKUserListViewController *vc = [[STKUserListViewController alloc] init];
             [vc setTitle:@"Followers"];
             [[self navigationController] pushViewController:vc animated:YES];
+            [STKProcessingView present];
             [[STKUserStore store] fetchFollowersOfUser:[self profile] completion:^(NSArray *followers, NSError *err) {
+                [STKProcessingView dismiss];
                 [vc setUsers:[[followers filteredArrayUsingPredicate:activeUsersOnly] reversedArray]];
             }];
         } break;
@@ -263,8 +266,10 @@ typedef enum {
             STKUserListViewController *vc = [[STKUserListViewController alloc] init];
             [vc setTitle:@"Following"];
             [[self navigationController] pushViewController:vc animated:YES];
+            [STKProcessingView present];
             [[STKUserStore store] fetchUsersFollowingOfUser:[self profile] completion:^(NSArray *followers, NSError *err) {
                 [vc setUsers:[[followers filteredArrayUsingPredicate:activeUsersOnly] reversedArray]];
+                [STKProcessingView dismiss];
             }];
         } break;
         case 2: {
