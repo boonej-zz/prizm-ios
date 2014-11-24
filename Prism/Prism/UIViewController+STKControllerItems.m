@@ -175,7 +175,6 @@
         [[(UIVisualEffectView *)view contentView] addSubview:dv];
     } else {
         view = [[UIImageView alloc] initWithFrame:frame];
-        [view  setTag:15000];
         [(UIImageView *)view setImage:[UIImage HABackgroundImage]];
         [(UIImageView *)view setContentMode:UIViewContentModeTopLeft];
         [view setAlpha:0.95];
@@ -197,7 +196,7 @@
 
 - (void)refreshBlurView
 {
-    UIImageView *iv = (UIImageView *)[self.view viewWithTag:15000];
+    UIImageView *iv = (UIImageView *)[self.view viewWithTag:99999];
     if (iv){
         [iv setImage:[UIImage HABackgroundImage]];
     }
