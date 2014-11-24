@@ -842,7 +842,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setContext:[self context]];
         [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
         STKResolutionQuery *q = [STKResolutionQuery resolutionQueryForField:@"followers"];
-        [q setFormat:STKQueryObjectFormatBasic];
+        [q setFormat:STKQueryObjectFormatShort];
         [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
         [c setQueryObject:q];
 
@@ -2359,7 +2359,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)trackUnfollow:(STKUser *)user
 {
-    [[Mixpanel sharedInstance] track:@"User un-followed" properties:mixpanelDataForObject(@{@"Target User" : user.email,
+    [[Mixpanel sharedInstance] track:@"User un-followed" properties:mixpanelDataForObject(@{@"Target User" : user.uniqueID,
                                                                    @"Following Count" : @([user followingCount])})];
 }
 
