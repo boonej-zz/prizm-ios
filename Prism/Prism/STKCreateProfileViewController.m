@@ -34,6 +34,7 @@
 #import "HANavigationController.h"
 #import "STKOrganization.h"
 #import "HAChangePasswordViewController.h"
+#import "HAItemListViewController.h"
 
 @import AddressBook;
 @import Social;
@@ -76,6 +77,9 @@ const long STKCreateProgressGeocoding = 4;
 @property (weak, nonatomic) IBOutlet UIButton *tosButton;
 @property (nonatomic, strong) NSDictionary *subtypeFormatters;
 
+@property (nonatomic, strong) NSArray *religionValues;
+@property (nonatomic, strong) NSArray *ethnicityValues;
+
 @property (weak, nonatomic) IBOutlet UIView *coverOverlayView;
 @property (nonatomic, getter = isEditingProfile) BOOL editingProfile;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topOffset;
@@ -102,6 +106,8 @@ const long STKCreateProgressGeocoding = 4;
         }
         [self setUser:user];
         [user setType:@"user"];
+        
+        [self sortReligionsAndEthinicitiesIntoSortedArrays];
         
         [self configureItemsForCreation];
         
@@ -175,7 +181,11 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                    @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
-                   @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}}
+                   @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}},
+                   @{@"title" : @"Ethnicity", @"key" : @"ethnicity", @"cellType" : @"ethnicity",
+                     @"values" : [self ethnicityValues]},
+                   @{@"title" : @"Religion", @"key" : @"religion", @"cellType" : @"religion",
+                     @"values" : [self religionValues]}
                    ];
         
         _requiredKeys = @[@"email", @"password", @"firstName", @"lastName", @"gender", @"birthday"];
@@ -199,6 +209,7 @@ const long STKCreateProgressGeocoding = 4;
         [self setEditingProfile:YES];
         [[self navigationItem] setTitle:@"Edit Profile"];
         
+        [self sortReligionsAndEthinicitiesIntoSortedArrays];
         
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(finishProfile:)];
         [bbi setTitlePositionAdjustment:UIOffsetMake(-3, 0) forBarMetrics:UIBarMetricsDefault];
@@ -263,6 +274,10 @@ const long STKCreateProgressGeocoding = 4;
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
                        @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}},
+                       @{@"title" : @"Ethnicity", @"key" : @"ethnicity", @"cellType" : @"ethnicity",
+                         @"values" : [self ethnicityValues]},
+                       @{@"title" : @"Religion", @"key" : @"religion", @"cellType" : @"religion",
+                         @"values" : [self religionValues]},
                        @{@"title" : @"Change Password", @"key" : @"password", @"cellType" : @"password"}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"lastName", @"gender", @"birthday"];
@@ -1039,6 +1054,35 @@ const long STKCreateProgressGeocoding = 4;
             [[self user] setSubtype:[[item objectForKey:@"values"] objectAtIndex:idx]];
             [[self navigationController] popViewControllerAnimated:YES];
         }];
+    } else if ([[item objectForKey:@"cellType"] isEqualToString:@"religion"]) {
+        HAItemListViewController *lvc = [[HAItemListViewController alloc] init];
+        
+        NSMutableArray *orderedTitles = [[NSMutableArray alloc] init];
+        for(NSString *key in [item objectForKey:@"values"]) {
+            [orderedTitles addObject:[[self religions] objectForKey:key]];
+        }
+        [lvc setItems:orderedTitles];
+        [[self navigationController] pushViewController:lvc animated:YES];
+        
+        [lvc setSelectionBlock:^(int idx) {
+            [[self user] setReligion:[[item objectForKey:@"values"] objectAtIndex:idx]];
+            [[self navigationController] popViewControllerAnimated:YES];
+        }];
+        
+    } else if ([[item objectForKey:@"cellType"] isEqualToString:@"ethnicity"]) {
+        HAItemListViewController *lvc = [[HAItemListViewController alloc] init];
+        
+        NSMutableArray *orderedTitles = [[NSMutableArray alloc] init];
+        for(NSString *key in [item objectForKey:@"values"]) {
+            [orderedTitles addObject:[[self ethnicities] objectForKey:key]];
+        }
+        [lvc setItems:orderedTitles];
+        [[self navigationController] pushViewController:lvc animated:YES];
+        
+        [lvc setSelectionBlock:^(int idx) {
+            [[self user] setEthnicity:[[item objectForKey:@"values"] objectAtIndex:idx]];
+            [[self navigationController] popViewControllerAnimated:YES];
+        }];
     } else if ([[item objectForKey:@"cellType"] isEqualToString:@"password"]) {
         HAChangePasswordViewController *pvc = [[HAChangePasswordViewController alloc] init];
         [pvc setUserEmail:[[self user] email]];
@@ -1115,7 +1159,11 @@ const long STKCreateProgressGeocoding = 4;
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
     
-    if([cellType isEqual:@"textView"] || [cellType isEqualToString:@"list"] || [cellType isEqualToString:@"password"]) {
+    if([cellType isEqual:@"textView"] ||
+       [cellType isEqualToString:@"list"] ||
+       [cellType isEqualToString:@"password"] ||
+       [cellType isEqualToString:@"religion"] ||
+       [cellType isEqualToString:@"ethnicity"]) {
         [[c textField] setEnabled:NO];
     } else {
         [[c textField] setEnabled:YES];
@@ -1202,6 +1250,68 @@ const long STKCreateProgressGeocoding = 4;
     }
 }
 
+- (NSDictionary *)religions
+{
+    NSDictionary *religions = @{@"Anglican (Episcopal)" : @"Anglican (Episcopal)",
+                                @"Bahá'í" : @"Bahá'í",
+                                @"Buddhist" : @"Buddhist",
+                                @"Caodalist" : @"Caodalist",
+                                @"Cheondoist" : @"Cheondoist",
+                                @"Christian" : @"Christian",
+                                @"Christian Scientist" : @"Christian Scientist",
+                                @"Church of World Messianity" : @"Church of World Messianity",
+                                @"Congregatonalist (UCC)" : @"Congregatonalist (UCC)",
+                                @"Disciples of Christ" : @"Disciples of Christ",
+                                @"Friend (Quaker)" : @"Friend (Quaker)",
+                                @"Hindu" : @"Hindu",
+                                @"Jain" : @"Jain",
+                                @"Jehovah's Witness" : @"Jehovah's Witness",
+                                @"Jewish" : @"Jewish",
+                                @"Latter-day Saint (Mormon)" : @"Latter-day Saint (Mormon)",
+                                @"Lutheran" : @"Lutheran",
+                                @"Methodist" : @"Methodist",
+                                @"Moravian" : @"Moravian",
+                                @"Muslim" : @"Muslim",
+                                @"None" : @"None",
+                                @"Orthodox" : @"Orthodox",
+                                @"Other - Non-Christian" : @"Other - Non-Christian",
+                                @"Pentacostal" : @"Pentacostal",
+                                @"Presbyterian" : @"Presbyterian",
+                                @"Rastafari" : @"Rastafari",
+                                @"Reformed" : @"Reformed",
+                                @"Roman Chatholic" : @"Roman Chatholic",
+                                @"Seicho-no-le-ist" : @"Seicho-no-le-ist",
+                                @"Seventh Day Adventist" : @"Seventh Day Adventist",
+                                @"Sikh" : @"Sikh",
+                                @"Taoist" : @"Taoist",
+                                @"Unitarian Universalist (UU)" : @"Unitarian Universalist (UU)",
+                                @"Wiccan (Pagan)" : @"Wiccan (Pagan)",
+                                @"Yazidi" : @"Yazidi"
+                                };
+    return religions;
+}
+
+- (NSDictionary *)ethnicities
+{
+    NSDictionary *ethnicities = @{@"African-American or Black" : @"African-American or Black",
+                                  @"American Indian or Alaska Native" : @"American Indian or Alaska Native",
+                                  @"Asian" : @"Asian",
+                                  @"Caucasian or White" : @"Caucasian or White",
+                                  @"Hispanic or Latino" : @"Hispanic or Latino",
+                                  @"Native Hawaiian or Other Pacific Islander" : @"Native Hawaiian or Other Pacific Islander",
+                                  @"Other" : @"Other"
+                                  };
+    return ethnicities;
+}
+
+- (void)sortReligionsAndEthinicitiesIntoSortedArrays
+{
+    NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:nil ascending:YES selector:@selector(localizedStandardCompare:)];
+    
+    _religionValues = [[[self religions] allValues] sortedArrayUsingDescriptors:@[sd]];
+    _ethnicityValues = [[[self ethnicities] allValues] sortedArrayUsingDescriptors:@[sd]];
+}
+
 - (IBAction)nextTapped:(id)sender
 {
     int row = (int)[[self editingIndexPath] row] + 1;
@@ -1233,3 +1343,4 @@ const long STKCreateProgressGeocoding = 4;
 }
 
 @end
+
