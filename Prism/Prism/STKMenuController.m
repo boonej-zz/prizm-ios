@@ -917,7 +917,7 @@ static BOOL HAActivityIsAnimating = NO;
     UIViewController *inVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIViewController *outVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     if ([inVC isKindOfClass:[STKHomeViewController class]]) {
-        STKHomeViewController *hvc = (STKHomeViewController *)inVC;
+//        STKHomeViewController *hvc = (STKHomeViewController *)inVC;
 //        [hvc.blurView setRenderStatic:YES];
         
     }

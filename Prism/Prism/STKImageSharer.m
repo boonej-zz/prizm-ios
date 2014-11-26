@@ -202,7 +202,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 {
     id obj = nil;
     NSString *t = @"";
-    NSString *link = @"http://www.prizmapp.com/download";
+//    NSString *link = @"http://www.prizmapp.com/download";
     if ([self post]) {
         t = [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
         if ([self.post text]){
