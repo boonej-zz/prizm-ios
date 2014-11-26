@@ -85,6 +85,8 @@
 		9CD7D98E1A1BC1FF003E221C /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7D98D1A1BC1FF003E221C /* ShareViewController.m */; };
 		9CD7D9901A1BC1FF003E221C /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CD7D98F1A1BC1FF003E221C /* MainInterface.storyboard */; };
 		9CD7D9931A1BC1FF003E221C /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9CE69BBA1A256D7700718D26 /* HAItemListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE69BB81A256D7700718D26 /* HAItemListViewController.m */; };
+		9CE69BBB1A256D7700718D26 /* HAItemListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CE69BB91A256D7700718D26 /* HAItemListViewController.xib */; };
 		BE02EAA3182A80A200A5505A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA2182A80A200A5505A /* Foundation.framework */; };
 		BE02EAA5182A80A200A5505A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA4182A80A200A5505A /* CoreGraphics.framework */; };
 		BE02EAA7182A80A200A5505A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA6182A80A200A5505A /* UIKit.framework */; };
@@ -463,6 +465,9 @@
 		9CD7D9A31A1BD062003E221C /* PrizmShareExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrizmShareExt.entitlements; sourceTree = "<group>"; };
 		9CD7D9C11A1C1E84003E221C /* HAShareExtensionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAShareExtensionHelper.h; sourceTree = "<group>"; };
 		9CD7D9C21A1C1E84003E221C /* HAShareExtensionHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAShareExtensionHelper.m; sourceTree = "<group>"; };
+		9CE69BB71A256D7700718D26 /* HAItemListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAItemListViewController.h; sourceTree = "<group>"; };
+		9CE69BB81A256D7700718D26 /* HAItemListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAItemListViewController.m; sourceTree = "<group>"; };
+		9CE69BB91A256D7700718D26 /* HAItemListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAItemListViewController.xib; sourceTree = "<group>"; };
 		BE02EA9F182A80A200A5505A /* Prizm β.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prizm β.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE02EAA2182A80A200A5505A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE02EAA4182A80A200A5505A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2843,6 +2848,9 @@
 				9CC22F141A1F0CD1004AFF73 /* HAChangePasswordViewController.h */,
 				9CC22F151A1F0CD1004AFF73 /* HAChangePasswordViewController.m */,
 				9CC22F161A1F0CD1004AFF73 /* HAChangePasswordViewController.xib */,
+				9CE69BB71A256D7700718D26 /* HAItemListViewController.h */,
+				9CE69BB81A256D7700718D26 /* HAItemListViewController.m */,
+				9CE69BB91A256D7700718D26 /* HAItemListViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5182,6 +5190,7 @@
 				2C97973F19DC5946003A6C0A /* HAInsightsViewController.xib in Resources */,
 				BE8150D31982D3860094C7A8 /* Localizable.strings in Resources */,
 				BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */,
+				9CE69BBB1A256D7700718D26 /* HAItemListViewController.xib in Resources */,
 				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
 				2C1D45BF19E45E94008D84C5 /* STKInsightArchiveCell.xib in Resources */,
@@ -5253,6 +5262,7 @@
 				BE7AFA7E18ECA32800DA30A7 /* STKNetworkStore.m in Sources */,
 				BEE84F5D192BFB2200820A19 /* STKLuminatingBar.m in Sources */,
 				BE7D5AE418D37327005D3893 /* STKUserPostListViewController.m in Sources */,
+				9CE69BBA1A256D7700718D26 /* HAItemListViewController.m in Sources */,
 				2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */,
 				BECA9F1E1937CAF600AABA20 /* STKAccoladeUserListViewController.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,

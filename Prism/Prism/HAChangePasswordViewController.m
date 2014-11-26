@@ -51,7 +51,9 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if ([[self currentPasswordField] isFirstResponder]) {
+        
         if ([[[self currentPasswordField] text] length] > 0) {
+            
             [[self updatedPasswordField] becomeFirstResponder];
             return NO;
         }
@@ -61,7 +63,9 @@
         return NO;
     }
     else if ([[self updatedPasswordField] isFirstResponder]) {
+        
         if ([[[self updatedPasswordField] text] length] > 0) {
+            
             [[self confirmField] becomeFirstResponder];
             return NO;
         }
@@ -71,11 +75,23 @@
         return NO;
     }
     else if ([[self confirmField] isFirstResponder]) {
-        if (![[[self updatedPasswordField] text] length] > 0 || [[[self confirmField] text] length] > 0) {
+        
+        if ([[[self confirmField] text] length] > 0 &&
+            [[[self updatedPasswordField] text] length] > 0 &&
+            [[[self currentPasswordField] text] length] > 0) {
+            
+            if (![[[self confirmField] text] isEqualToString:[[self updatedPasswordField] text]]) {
+                
+                [self mismatchPasswordsAlertView];
+                return NO;
+            }
+        }
+        else {
             [self emptyFieldsAlertView];
             return NO;
         }
         if (![[[self confirmField] text] isEqualToString:[[self updatedPasswordField] text]]) {
+            
             [self mismatchPasswordsAlertView];
             return NO;
         }
@@ -95,6 +111,7 @@
     }
     
     if(![[[self confirmField] text] isEqualToString:[[self updatedPasswordField] text]]) {
+        
         [self mismatchPasswordsAlertView];
         return;
     }
