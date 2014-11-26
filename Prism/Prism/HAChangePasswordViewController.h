@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class STKUser;
 @interface HAChangePasswordViewController : UIViewController
 
-@property (nonatomic, strong) NSString *userEmail;
+@property (nonatomic, strong) STKUser *user;
+//@property (nonatomic, strong) NSString *userEmail;
 
 @end

@@ -12,6 +12,8 @@
 #import "STKProcessingView.h"
 #import "STKLoginViewController.h"
 #import "STKErrorStore.h"
+#import "STKUser.h"
+#import "STKUserStore.h"
 
 @interface HAChangePasswordViewController () <UITextFieldDelegate>
 
@@ -19,6 +21,7 @@
 @property (nonatomic, weak) IBOutlet UITextField *currentPasswordField;
 @property (nonatomic, weak) IBOutlet UITextField *updatedPasswordField;
 @property (nonatomic, weak) IBOutlet UITextField *confirmField;
+@property (nonatomic, weak) IBOutlet UIView *instructionsView;
 
 @end
 
@@ -33,8 +36,11 @@
     [self.currentPasswordField setDelegate:self];
     [self.updatedPasswordField setDelegate:self];
     [self.confirmField setDelegate:self];
-    
-    [self.emailField setText:self.userEmail];
+    self.user = [[STKUserStore store] currentUser];
+    if (self.user.externalServiceType){
+        [self.instructionsView setHidden:NO];
+    }
+        [self.emailField setText:self.user.email];
     [self.emailField setEnabled:NO];
     [self.currentPasswordField becomeFirstResponder];
     

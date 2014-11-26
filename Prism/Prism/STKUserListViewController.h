@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "STKLuminatingBar.h"
 typedef enum {
     STKUserListTypeFollow,
     STKUserListTypeTrust

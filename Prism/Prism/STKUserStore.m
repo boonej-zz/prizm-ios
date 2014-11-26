@@ -167,7 +167,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     NSFetchRequest *bReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     [bReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"like"]];
     NSFetchRequest *cReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-    [cReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (comment <> NULL)"]];
+    [cReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (comment <> NULL) AND (action != %@)", @"like"]];
     NSFetchRequest *dReq = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
     [dReq setPredicate:[NSPredicate predicateWithFormat:@"(hasBeenViewed == NO) AND (action == %@)", @"insight"]];
     NSFetchRequest *eReq = [NSFetchRequest fetchRequestWithEntityName:@"STKTrust"];

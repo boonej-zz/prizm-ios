@@ -1085,7 +1085,7 @@ const long STKCreateProgressGeocoding = 4;
         }];
     } else if ([[item objectForKey:@"cellType"] isEqualToString:@"password"]) {
         HAChangePasswordViewController *pvc = [[HAChangePasswordViewController alloc] init];
-        [pvc setUserEmail:[[self user] email]];
+//        [pvc setUserEmail:[[self user] email]];
         [[self navigationController] pushViewController:pvc animated:YES];
     }
     
