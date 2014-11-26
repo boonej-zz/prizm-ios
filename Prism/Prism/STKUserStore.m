@@ -2065,6 +2065,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:currentPassword forKey:@"currentPassword"];
         
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if (!err) {
+                STKSecurityStorePassword(email, newPassword);
+            }
             block(err);
         }];
     }];

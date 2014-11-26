@@ -14,7 +14,7 @@
 #import "STKErrorStore.h"
 #import "STKUser.h"
 #import "STKUserStore.h"
-
+#import "UIViewController+STKControllerItems.h"
 @interface HAChangePasswordViewController () <UITextFieldDelegate>
 
 @property (nonatomic, weak) IBOutlet UITextField *emailField;
@@ -29,8 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIImage *backgroundImage = [UIImage imageNamed:@"img_background"];
-    [self.view setBackgroundColor:[UIColor colorWithPatternImage:backgroundImage]];
+    [self addBackgroundImage];
     
     [self.emailField setDelegate:self];
     [self.currentPasswordField setDelegate:self];
@@ -47,6 +46,7 @@
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(changePassword:)];
     [bbi setTitlePositionAdjustment:UIOffsetMake(-3, 0) forBarMetrics:UIBarMetricsDefault];
     [[self navigationItem] setRightBarButtonItem:bbi];
+    [self addBlurViewWithHeight:64.f];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,6 +56,7 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    // That's an awful lot of code for not much action.
     if ([[self currentPasswordField] isFirstResponder]) {
         
         if ([[[self currentPasswordField] text] length] > 0) {
