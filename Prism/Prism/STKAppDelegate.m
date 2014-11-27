@@ -168,6 +168,13 @@
                             }
                         }
                     }];
+                } else if ([taskArray[0] isEqualToString:@"insight_id"]) {
+                    [[Mixpanel sharedInstance] track:@"Insight Opened from Email"];
+                    HAInsightsViewController *ivc = [[HAInsightsViewController alloc] init];
+                    STKMenuController *rvc = (STKMenuController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+                    if (rvc.selectedViewController && [rvc.selectedViewController isKindOfClass:[UINavigationController class]]){
+                        [(UINavigationController *)rvc.selectedViewController pushViewController:ivc animated:NO];
+                    }
                 }
             }
         }
