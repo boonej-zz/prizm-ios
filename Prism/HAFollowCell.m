@@ -62,7 +62,10 @@
     [self.nameLabel setText:profile.name];
     [self.avatarView setUrlString:[profile profilePhotoPath]];
     [self.luminaryIcon setHidden:![profile isLuminary]];
-    NSString *location = [NSString stringWithFormat:@"%@, %@", profile.city, profile.state];
+    NSString *location = nil;
+    if (profile.city && profile.state) {
+        location = [NSString stringWithFormat:@"%@, %@", profile.city, profile.state];
+    }
     [self.locationLabel setText:location];
     if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
         [[self followButton] setTitle:@"Following" forState:UIControlStateNormal];
