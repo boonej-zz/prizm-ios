@@ -8,7 +8,7 @@
 
 #import "HAItemListViewController.h"
 #import "STKTextFieldCell.h"
-
+#import "UIViewController+STKControllerItems.h"
 @interface HAItemListViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -22,9 +22,18 @@
     [super viewDidLoad];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    UIImage *background = [UIImage imageNamed:@"img_background"];
-    [[self view] setBackgroundColor:[UIColor colorWithPatternImage:background]];
+    [self addBackgroundImage];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                              landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                           target:self action:@selector(back:)];
+    [[self navigationItem] setLeftBarButtonItem:bbi];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
+    [self addBlurViewWithHeight:64.f];
+}
+
+- (void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
