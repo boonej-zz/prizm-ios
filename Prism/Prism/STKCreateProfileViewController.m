@@ -1298,8 +1298,7 @@ const long STKCreateProgressGeocoding = 4;
                                   @"Asian" : @"Asian",
                                   @"Caucasian or White" : @"Caucasian or White",
                                   @"Hispanic or Latino" : @"Hispanic or Latino",
-                                  @"Native Hawaiian or Other Pacific Islander" : @"Native Hawaiian or Other Pacific Islander",
-                                  @"Other" : @"Other"
+                                  @"Native Hawaiian or Other Pacific Islander" : @"Native Hawaiian or Other Pacific Islander"
                                   };
     return ethnicities;
 }
