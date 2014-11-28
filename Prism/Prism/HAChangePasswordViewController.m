@@ -22,6 +22,7 @@
 @property (nonatomic, weak) IBOutlet UITextField *updatedPasswordField;
 @property (nonatomic, weak) IBOutlet UITextField *confirmField;
 @property (nonatomic, weak) IBOutlet UIView *instructionsView;
+@property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 
 @end
 
@@ -42,18 +43,34 @@
         [self.emailField setText:self.user.email];
     [self.emailField setEnabled:NO];
     [self.currentPasswordField becomeFirstResponder];
-    
-    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(changePassword:)];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                              landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                           target:self action:@selector(back:)];
+    [[self navigationItem] setLeftBarButtonItem:bbi];
+    UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleBordered target:self action:@selector(changePassword:)];
     [bbi setTitlePositionAdjustment:UIOffsetMake(-3, 0) forBarMetrics:UIBarMetricsDefault];
-    [[self navigationItem] setRightBarButtonItem:bbi];
+    [[self navigationItem] setRightBarButtonItem:saveItem];
+    [self.scrollView setContentInset:UIEdgeInsetsMake(64.f, 0, 100.f, 0)];
     [self addBlurViewWithHeight:64.f];
     [self setTitle:@"Password"];
+}
+
+
+- (void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+//- (void)textFieldDidBeginEditing:(UITextField *)textField
+//{
+////   scrollView convertRect:textField. fromCoordinateSpace:<#(id<UICoordinateSpace>)#>
+//    [self.scrollView scrollRectToVisible:textField.frame animated:YES];
+//}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
