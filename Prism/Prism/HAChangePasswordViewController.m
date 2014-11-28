@@ -47,6 +47,7 @@
     [bbi setTitlePositionAdjustment:UIOffsetMake(-3, 0) forBarMetrics:UIBarMetricsDefault];
     [[self navigationItem] setRightBarButtonItem:bbi];
     [self addBlurViewWithHeight:64.f];
+    [self setTitle:@"Password"];
 }
 
 - (void)didReceiveMemoryWarning {

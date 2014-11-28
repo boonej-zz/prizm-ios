@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.higheraltitude.prizm.staging</string>
+		<string>group.com.higheraltitude.prism</string>
 	</array>
 </dict>
 </plist>

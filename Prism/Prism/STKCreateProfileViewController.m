@@ -1056,7 +1056,7 @@ const long STKCreateProgressGeocoding = 4;
         }];
     } else if ([[item objectForKey:@"cellType"] isEqualToString:@"religion"]) {
         HAItemListViewController *lvc = [[HAItemListViewController alloc] init];
-        
+        [lvc setTitle:@"Religon"];
         NSMutableArray *orderedTitles = [[NSMutableArray alloc] init];
         for(NSString *key in [item objectForKey:@"values"]) {
             [orderedTitles addObject:[[self religions] objectForKey:key]];
@@ -1071,7 +1071,7 @@ const long STKCreateProgressGeocoding = 4;
         
     } else if ([[item objectForKey:@"cellType"] isEqualToString:@"ethnicity"]) {
         HAItemListViewController *lvc = [[HAItemListViewController alloc] init];
-        
+        [lvc setTitle:@"Ethnicity"];
         NSMutableArray *orderedTitles = [[NSMutableArray alloc] init];
         for(NSString *key in [item objectForKey:@"values"]) {
             [orderedTitles addObject:[[self ethnicities] objectForKey:key]];
