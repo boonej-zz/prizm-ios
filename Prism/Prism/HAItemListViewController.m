@@ -28,6 +28,7 @@
                                                            target:self action:@selector(back:)];
     [[self navigationItem] setLeftBarButtonItem:bbi];
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
+    [[self tableView] setContentInset:UIEdgeInsetsMake(65, 0, 0, 0)];
     [self addBlurViewWithHeight:64.f];
 }
 
@@ -56,6 +57,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
+    [c setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     [[c textField] setEnabled:NO];
     
     [[c label] setFont:STKFont(16)];
