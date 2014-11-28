@@ -384,6 +384,7 @@ const long STKCreateProgressGeocoding = 4;
     
     [[self avatarView] setOutlineWidth:3];
     [[self avatarView] setOutlineColor:[UIColor HATextColor]];
+    [self addBlurViewWithHeight:64.f];
 //    [self addBlurViewWithHeight:64.f];
 }
 
