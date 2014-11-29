@@ -902,7 +902,7 @@ const long STKCreateProgressGeocoding = 4;
 - (IBAction)showTOS:(id)sender
 {
     STKWebViewController *vc = [[STKWebViewController alloc] init];
-    [vc setUrl:[NSURL URLWithString:@"http://prizmapp.com/terms"]];
+    [vc setUrl:[NSURL URLWithString:@"https://prizmapp.com/terms"]];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
 
     [self presentViewController:nvc animated:YES completion:nil];
@@ -1057,7 +1057,7 @@ const long STKCreateProgressGeocoding = 4;
         }];
     } else if ([[item objectForKey:@"cellType"] isEqualToString:@"religion"]) {
         HAItemListViewController *lvc = [[HAItemListViewController alloc] init];
-        [lvc setTitle:@"Religon"];
+        [lvc setTitle:@"Religion"];
         NSMutableArray *orderedTitles = [[NSMutableArray alloc] init];
         for(NSString *key in [item objectForKey:@"values"]) {
             [orderedTitles addObject:[[self religions] objectForKey:key]];

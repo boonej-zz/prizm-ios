@@ -137,7 +137,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (NSDictionary *)dictionaryItem
 {
     NSString *t = @"";
-    NSString *link = @"http://www.prizmapp.com/download";
+    NSString *link = @"https://www.prizmapp.com/download";
     if ([self post]) {
         if ([self.post text]){
             t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
@@ -156,7 +156,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (NSArray *)arrayItem
 {
     NSString *t = @"";
-    NSString *link = @"http://www.prizmapp.com/download";
+    NSString *link = @"https://www.prizmapp.com/download";
     if ([self post]) {
         
         if ([self.post text]){
@@ -179,13 +179,13 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (id)customItem
 {
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
-    NSString *link = @"http://www.prizmapp.com/download";
+    NSString *link = @"https://www.prizmapp.com/download";
     if (self.image){
         [d setObject:self.image forKey:@"image"];
     }
     NSString *t = @"";
     if ([self post]) {
-        t = [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
+        t = [NSString stringWithFormat:@"https://prizmapp.com/posts/%@", self.post.uniqueID];
         if ([self.post text]){
             t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
         }
@@ -202,9 +202,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 {
     id obj = nil;
     NSString *t = @"";
-//    NSString *link = @"http://www.prizmapp.com/download";
+//    NSString *link = @"https://www.prizmapp.com/download";
     if ([self post]) {
-        t = [NSString stringWithFormat:@"http://prizmapp.com/posts/%@", self.post.uniqueID];
+        t = [NSString stringWithFormat:@"https://prizmapp.com/posts/%@", self.post.uniqueID];
         if ([self.post text]){
             t = [NSString stringWithFormat:@"%@ @beprizmatic %@", self.baseText, t];
         }
@@ -220,9 +220,9 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (id)genericItem
 {
     NSString *t = @"";
-    NSString *link = @"http://www.prizmapp.com/download";
+    NSString *link = @"https://www.prizmapp.com/download";
     if ([self post]) {
-        NSString *link = @"http://www.prizmapp.com/download";
+        NSString *link = @"https://www.prizmapp.com/download";
         if ([self.post text]){
             t = [NSString stringWithFormat:@"%@ %@", self.baseText, link];
         }
@@ -242,7 +242,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (id)urlToCopy
 {
     if (self.post) {
-        NSString *url = [NSString stringWithFormat:@"http://www.prizmapp.com/posts/%@", [self.post uniqueID]];
+        NSString *url = [NSString stringWithFormat:@"https://www.prizmapp.com/posts/%@", [self.post uniqueID]];
         return [NSURL URLWithString:url];
     }
     return @"";
@@ -585,7 +585,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 {
     HAItemSource *is = [[HAItemSource alloc] init];
     UIImage *image = [[STKImageStore store] cachedImageForURLString:[post imageURLString]];
-    NSString *text = [NSString stringWithFormat:@"%@ @beprizmatic %@", [post text], @"http://www.prizmapp.com/download"];
+    NSString *text = [NSString stringWithFormat:@"%@ @beprizmatic %@", [post text], @"https://www.prizmapp.com/download"];
     [is setPost:post];
     [is setImage:image];
     [is setText: text];
@@ -636,7 +636,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 {
     HAItemSource *is = [[HAItemSource alloc] init];
     UIImage *image = [[STKImageStore store] cachedImageForURLString:[insight filePath]];
-    NSString *text = [NSString stringWithFormat:@"%@ %@", [insight text], @"http://www.prizmapp.com/download"];
+    NSString *text = [NSString stringWithFormat:@"%@ %@", [insight text], @"https://www.prizmapp.com/download"];
     [is setInsight:insight];
     [is setImage:image];
     [is setText: text];
@@ -675,12 +675,12 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         [a addObject:image];
     }
     if([object isKindOfClass:[STKPost class]]) {
-        NSString *t =[NSString stringWithFormat:@"%@ @beprizmatic %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"];
+        NSString *t =[NSString stringWithFormat:@"%@ @beprizmatic %@", [object valueForKey:@"text"], @"https://www.prizmapp.com/download"];
         [a addObject:t];
         report.currentPost = object;
     }
     else {
-        NSString *t =[NSString stringWithFormat:@"%@ %@", [object valueForKey:@"text"], @"http://www.prizmapp.com/download"];
+        NSString *t =[NSString stringWithFormat:@"%@ %@", [object valueForKey:@"text"], @"https://www.prizmapp.com/download"];
         [a addObject:t];
     }
     
