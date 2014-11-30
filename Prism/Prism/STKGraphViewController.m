@@ -205,7 +205,7 @@
     }
     [view setHighlightedImage:[UIImage imageNamed:@"btn_brain_glow"]];
     [view setOffset:10];
-    [view setBadgeable:YES];
+    [view setBadgeable:NO];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
     return bbi;
 }

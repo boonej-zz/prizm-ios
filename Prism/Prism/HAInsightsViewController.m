@@ -351,7 +351,8 @@
             [[self navigationController] popViewControllerAnimated:YES];
         }
         [self filterArrays];
-        
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Insight Archived" message:@" The insight has been moved to your archive." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [av show];
     }];
 }
 
