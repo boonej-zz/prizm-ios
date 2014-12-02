@@ -285,9 +285,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
-    [self.view insertSubview:iv atIndex:0];
-    
+    [self addBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
     [[self instructionsView] setHidden:![[[STKUserStore store] currentUser] shouldDisplayGraphInstructions]];
     
     
