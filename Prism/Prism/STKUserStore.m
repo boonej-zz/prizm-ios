@@ -676,12 +676,13 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         } else {
             [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"interests"]];
             [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"theme"]];
+            [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"organization"]];
         }
         
         [c setQueryObject:q];
         
         [c setModelGraph:@[user]];
-        [c setResolutionMap:@{@"Interest": @"STKInterest", @"Theme": @"STKTheme"}];
+        [c setResolutionMap:@{@"Interest": @"STKInterest", @"Theme": @"STKTheme", @"Organization": @"STKOrganization"}];
         [c setContext:[self context]];
         [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
             if(!err) {
@@ -1511,20 +1512,22 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             STKQueryObject *q = [[STKQueryObject alloc] init];
         
             
-            STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"theme"];
-            STKResolutionQuery *mq = [STKResolutionQuery resolutionQueryForField:@"members"];
-            [q addSubquery:rq];
-            [q addSubquery:mq];
+//            STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"theme"];
+//            STKResolutionQuery *mq = [STKResolutionQuery resolutionQueryForField:@"members"];
+//            [q addSubquery:rq];
+//            [q addSubquery:mq];
             [c setQueryObject:q];
             [c setModelGraph:@"STKOrganization"];
             [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
             [c setResolutionMap:@{@"Theme": @"STKTheme", @"User": @"STKUser"}];
             [c setContext:[self context]];
+//            [c setShouldReturnArray:YES];
             [c setShouldReturnArray:YES];
             [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
                 if (obj && [obj isKindOfClass:[NSArray class]]) {
                     if ([obj count] > 0) {
                         obj = [obj objectAtIndex:0];
+                        err = nil;
                     } else {
                         obj = nil;
                     }

@@ -14,7 +14,7 @@
 #import "HAInterestCell.h"
 #import "UIViewController+STKControllerItems.h"
 #import "HAFollowViewController.h"
-
+#import "HAWelcomeViewController.h"
 @interface HAInterestsViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, weak) IBOutlet UIView * tagView;
@@ -241,9 +241,17 @@
     [[STKUserStore store] updateInterestsforUser:self.user completion:^(STKUser *u, NSError *err) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HADidDisplayInterestPage"];
         [STKProcessingView dismiss];
-        HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
-        [fvc setStandalone:YES];
-        [self.navigationController pushViewController:fvc animated:YES];
+        if (self.user.organization){
+            HAWelcomeViewController *wvc = [[HAWelcomeViewController alloc] init];
+            [wvc setOrganization:self.user.organization];
+            [wvc setIntroFlow:YES];
+            [self.navigationController pushViewController:wvc animated:YES];
+        } else {
+            HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
+            [fvc setStandalone:YES];
+            [self.navigationController pushViewController:fvc animated:YES];
+        }
+        
     }];
     
 }

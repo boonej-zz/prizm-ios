@@ -19,6 +19,8 @@
 		2C0D735719CB346B0078A9B9 /* HAInterestsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */; };
 		2C0FA2431A1FB7D300231D3C /* UIColor+HACore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0FA2401A1FB7D300231D3C /* UIColor+HACore.m */; };
 		2C0FA2441A1FB7D300231D3C /* UIImage+HACore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0FA2421A1FB7D300231D3C /* UIImage+HACore.m */; };
+		2C189DD11A2F74190028AD1C /* HAWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C189DCF1A2F74190028AD1C /* HAWelcomeViewController.m */; };
+		2C189DD21A2F74190028AD1C /* HAWelcomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C189DD01A2F74190028AD1C /* HAWelcomeViewController.xib */; };
 		2C1D45A819DF7C49008D84C5 /* STKInsightHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45A719DF7C49008D84C5 /* STKInsightHeaderView.m */; };
 		2C1D45AC19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45AA19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m */; };
 		2C1D45AD19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C1D45AB19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.xib */; };
@@ -352,6 +354,9 @@
 		2C109D5D19F06CE300470861 /* ActionRequestHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionRequestHandler.h; sourceTree = "<group>"; };
 		2C109D5E19F06CE300470861 /* ActionRequestHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionRequestHandler.m; sourceTree = "<group>"; };
 		2C109D6019F06CE300470861 /* Action.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Action.js; sourceTree = "<group>"; };
+		2C189DCE1A2F74190028AD1C /* HAWelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAWelcomeViewController.h; sourceTree = "<group>"; };
+		2C189DCF1A2F74190028AD1C /* HAWelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAWelcomeViewController.m; sourceTree = "<group>"; };
+		2C189DD01A2F74190028AD1C /* HAWelcomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAWelcomeViewController.xib; sourceTree = "<group>"; };
 		2C1D45A619DF7C49008D84C5 /* STKInsightHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsightHeaderView.h; sourceTree = "<group>"; };
 		2C1D45A719DF7C49008D84C5 /* STKInsightHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInsightHeaderView.m; sourceTree = "<group>"; };
 		2C1D45A919E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsightTitleCellTableViewCell.h; sourceTree = "<group>"; };
@@ -408,6 +413,7 @@
 		2CCA762A1A1BC151007580A5 /* STKTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTheme.m; sourceTree = "<group>"; };
 		2CCA762C1A1BC152007580A5 /* STKOrganization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKOrganization.h; sourceTree = "<group>"; };
 		2CCA762D1A1BC152007580A5 /* STKOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKOrganization.m; sourceTree = "<group>"; };
+		2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 4.xcdatamodel"; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -2851,6 +2857,9 @@
 				9CE69BB71A256D7700718D26 /* HAItemListViewController.h */,
 				9CE69BB81A256D7700718D26 /* HAItemListViewController.m */,
 				9CE69BB91A256D7700718D26 /* HAItemListViewController.xib */,
+				2C189DCE1A2F74190028AD1C /* HAWelcomeViewController.h */,
+				2C189DCF1A2F74190028AD1C /* HAWelcomeViewController.m */,
+				2C189DD01A2F74190028AD1C /* HAWelcomeViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5190,6 +5199,7 @@
 				2C97973F19DC5946003A6C0A /* HAInsightsViewController.xib in Resources */,
 				BE8150D31982D3860094C7A8 /* Localizable.strings in Resources */,
 				BE654EA7188841C5006DCA5C /* lookup.sqlite in Resources */,
+				2C189DD21A2F74190028AD1C /* HAWelcomeViewController.xib in Resources */,
 				9CE69BBB1A256D7700718D26 /* HAItemListViewController.xib in Resources */,
 				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
@@ -5303,6 +5313,7 @@
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
 				9CC22F171A1F0CD1004AFF73 /* HAChangePasswordViewController.m in Sources */,
 				2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */,
+				2C189DD11A2F74190028AD1C /* HAWelcomeViewController.m in Sources */,
 				2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
 				D0E85B12197D7910001A5333 /* STKMessageBanner.m in Sources */,
@@ -5488,6 +5499,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging.PrizmShareExt;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -5540,6 +5552,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging.PrizmShareExt;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -5591,10 +5604,11 @@
 		9CD7D9961A1BC200003E221C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging.PrizmShareExt;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5606,7 +5620,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4efde7bc-f3e7-4a25-9f28-897dbd2fed2d";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -5614,6 +5628,7 @@
 		9CD7D9971A1BC200003E221C /* App Store */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism.PrizmShareExt;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -5637,6 +5652,7 @@
 		9CD7D9981A1BC200003E221C /* Release (User Testing) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging.PrizmShareExt;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -5660,6 +5676,7 @@
 		9CD7D9991A1BC200003E221C /* Release (Staging) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging.PrizmShareExt;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -5804,7 +5821,7 @@
 				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -5826,7 +5843,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "d2f89612-bd30-47c2-9f61-4a95adc03d77";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -6330,11 +6347,12 @@
 		BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */,
 				2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */,
 				2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */,
 				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
 			);
-			currentVersion = 2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */;
+			currentVersion = 2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */;
 			path = User.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

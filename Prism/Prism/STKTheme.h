@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+@class STKOrganization;
 
 
 @interface STKTheme : NSManagedObject
@@ -18,6 +19,6 @@
 @property (nonatomic, retain) NSString * dominantColor;
 @property (nonatomic, retain) NSDate * createDate;
 @property (nonatomic, retain) NSString * modifyDate;
-@property (nonatomic, retain) NSManagedObject *organization;
+@property (nonatomic, retain) STKOrganization *organization;
 
 @end

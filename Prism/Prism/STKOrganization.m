@@ -22,6 +22,7 @@
 @dynamic welcomeImageURL;
 @dynamic theme;
 @dynamic members;
+@dynamic logoURL;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -35,6 +36,7 @@
     return nil;
 }
 
+
 + (NSDictionary *)remoteToLocalKeyMap
 {
     return @{
@@ -43,11 +45,10 @@
              @"name" : @"name",
              @"welcome_message": @"welcomeMessage",
              @"welcome_image_url": @"welcomeImageURL",
+             @"logo_url":@"logoURL",
              @"theme": [STKBind bindMapForKey:@"theme" matchMap:@{@"uniqueID": @"_id"}],
              @"create_date":[STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
-             @"modify_date":[STKBind bindMapForKey:@"modifyDate" transform:STKBindTransformDateTimestamp],
-             @"members": [STKBind bindMapForKey:@"members" matchMap:@{@"uniqueID": @"_id"}]
-             };
+             @"modify_date":[STKBind bindMapForKey:@"modifyDate" transform:STKBindTransformDateTimestamp]          };
 }
 
 @end

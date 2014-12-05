@@ -23,6 +23,7 @@
 @property (nonatomic, retain) NSString * welcomeImageURL;
 @property (nonatomic, retain) STKTheme *theme;
 @property (nonatomic, retain) NSSet *members;
+@property (nonatomic, retain) NSString *logoURL;
 @end
 
 @interface STKOrganization (CoreDataGeneratedAccessors)

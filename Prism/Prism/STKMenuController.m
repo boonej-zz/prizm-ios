@@ -34,6 +34,9 @@
 #import "HAInsightsViewController.h"
 #import "UIERealTimeBlurView.h"
 #import <CoreGraphics/CoreGraphics.h>
+#import "HAWelcomeViewController.h"
+#import "STKOrganization.h"
+#import "STKUser.h"
 
 @import QuartzCore;
 
@@ -88,9 +91,29 @@ static BOOL HAActivityIsAnimating = NO;
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoggedOut:) name:HANotificationKeyUserLoggedOut object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showActivities:) name:@"ShowActivities" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showWelcome:) name:@"ShowWelcome" object:nil];
     }
     
     return self;
+}
+
+- (void)showWelcome:(NSNotification *)note
+{
+    STKUser *user = [[STKUserStore store] currentUser];
+    [[STKUserStore store] fetchUserDetails:user additionalFields:nil completion:^(STKUser *u, NSError *err) {
+        if (u.organization){
+            HAWelcomeViewController *wvc = [[HAWelcomeViewController alloc] init];
+            [wvc setOrganization:u.organization];
+            [wvc setTitle:@"Welcome to"];
+            [[self navigationController] pushViewController:wvc animated:NO];
+            STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:wvc];
+            [self presentViewController:nvc animated:YES
+                             completion:nil];
+//            [self presentViewController:wvc animated:YES completion:nil];
+        }
+
+    }];
+    
 }
 
 - (void)showActivities:(NSNotification *)note

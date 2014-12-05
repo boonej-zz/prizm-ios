@@ -35,6 +35,9 @@
 #import "STKOrganization.h"
 #import "HAChangePasswordViewController.h"
 #import "HAItemListViewController.h"
+#import "HAWelcomeViewController.h"
+#import "STKTheme.h"
+#import "STKOrganization.h"
 
 @import AddressBook;
 @import Social;
@@ -84,6 +87,7 @@ const long STKCreateProgressGeocoding = 4;
 @property (nonatomic, getter = isEditingProfile) BOOL editingProfile;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topOffset;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
+@property (nonatomic) BOOL orgPresent;
 
 - (IBAction)previousTapped:(id)sender;
 - (IBAction)nextTapped:(id)sender;
@@ -662,6 +666,11 @@ const long STKCreateProgressGeocoding = 4;
         [[self blurView] setHidden:YES];
         [[[self blurView] displayLink] setPaused:YES];
     }
+    if (self.user.organization) {
+        self.orgPresent = YES;
+    } else {
+        self.orgPresent = NO;
+    }
 }
 
 - (void)keyboardWillAppear:(NSNotification *)note
@@ -910,6 +919,8 @@ const long STKCreateProgressGeocoding = 4;
 
 - (IBAction)finishProfile:(id)sender
 {
+    
+    
     [[self view] endEditing:YES];
     if([self verifyFields:YES]) {
         [STKProcessingView present];
@@ -941,6 +952,10 @@ const long STKCreateProgressGeocoding = 4;
                         [[STKErrorStore alertViewForError:err delegate:nil] show];
                     } else {
                         [[self navigationController] popViewControllerAnimated:YES];
+                        if (! self.orgPresent){
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"ShowWelcome" object:nil];
+                        }
+                        
                     }
                 }];
             };
@@ -960,13 +975,17 @@ const long STKCreateProgressGeocoding = 4;
                                                    }
 
                                                    UIViewController *menuController = [self presentingViewController];
-                                                   [self dismissViewControllerAnimated:NO completion:^{
-                                                       HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
-                                                       [ivc setUser:user];
-                                                        HANavigationController *nvc = [[HANavigationController alloc] init];
-                                                       [nvc addChildViewController:ivc];
-                                                       [menuController presentViewController:nvc animated:NO completion:nil];
+                                                   [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {
+                                                       [self dismissViewControllerAnimated:NO completion:^{
+                                                           HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
+                                                           [ivc setUser:u];
+                                                           HANavigationController *nvc = [[HANavigationController alloc] init];
+                                                           [nvc addChildViewController:ivc];
+                                                           [menuController presentViewController:nvc animated:NO completion:nil];
+                                                       }];
+                                                       
                                                    }];
+                                                   
                                                    
                                                   
                                                    

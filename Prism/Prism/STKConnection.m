@@ -74,7 +74,15 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
 
     if([[self internalArguments] count] > 0) {
         if([self method] == STKConnectionMethodPOST || [self method] == STKConnectionMethodPUT || [self method] == STKConnectionMethodDELETE) {
-            [req setHTTPBody:[NSJSONSerialization dataWithJSONObject:[self internalArguments] options:0 error:nil]];
+            NSError *err;
+            if ([NSJSONSerialization isValidJSONObject:[self internalArguments]]) {
+            NSData *body =[ NSJSONSerialization dataWithJSONObject:[self internalArguments] options:0 error:&err];
+            if (!err) {
+                [req setHTTPBody:body];
+            } else {
+                NSLog(@"%@", err.localizedDescription);
+            }
+            }
             [req addValue:@"application/json;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
         } else {
             NSMutableString *queryString = [[NSMutableString alloc] init];

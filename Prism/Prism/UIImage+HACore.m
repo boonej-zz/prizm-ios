@@ -23,9 +23,6 @@
         }
     }
     UIImage *img =  [UIImage imageNamed:imageName];
-    if (!img) {
-        img = [UIImage imageNamed:@"img_background"];
-    }
     return img;
 }
 

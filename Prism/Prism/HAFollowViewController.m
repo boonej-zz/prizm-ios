@@ -75,12 +75,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"Who to Follow";
+    [self.navigationController setNavigationBarHidden:NO];
     [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     UIView *blankView = [[UIView alloc] init];
     [blankView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.tableView setContentInset:UIEdgeInsetsMake(3, 0, 0, 0)];
     [self addBlurViewWithHeight:64.f];
+    
     id sort = ^(STKUser *user1, STKUser *user2){
         NSNumber *count1 = @(user1.matchingInterestsCount);
         NSNumber *count2 = @(user2.matchingInterestsCount);

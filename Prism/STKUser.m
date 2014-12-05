@@ -12,6 +12,7 @@
 #import "STKTrust.h"
 #import "STKUserStore.h"
 #import "STKInterest.h"
+#import "STKOrganization.h"
 
 NSString * const STKUserGenderMale = @"male";
 NSString * const STKUserGenderFemale = @"female";
@@ -45,7 +46,7 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 
 
 @implementation STKUser
-@dynamic uniqueID, birthday, city, interests, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType,
+@dynamic uniqueID, birthday, city, interests, dateCreated, email, firstName, lastName, externalServiceID, externalServiceType, organization,
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
@@ -107,6 +108,7 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
 
              @"followers" : [STKBind bindMapForKey:@"followers" matchMap:@{@"uniqueID" : @"_id"}],
              @"following" : [STKBind bindMapForKey:@"following" matchMap:@{@"uniqueID" : @"_id"}],
+             @"organization" : [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID": @"_id"}],
              @"phone_number" : @"phoneNumber",
              @"mascot" : @"mascotName",
              @"enrollment" : [STKBind bindMapForKey:@"enrollment" transform:^id(id inValue, STKTransformDirection direction) {
