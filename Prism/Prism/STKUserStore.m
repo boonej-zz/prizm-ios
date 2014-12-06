@@ -1867,7 +1867,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 {
     SLRequest *req = [SLRequest requestForServiceType:SLServiceTypeFacebook
                                         requestMethod:SLRequestMethodGET
-                                                  URL:[NSURL URLWithString:@"https://graph.facebook.com/me"]
+                                                  URL:[NSURL URLWithString:@"https://graph.facebook.com/v2.0/me"]
                                            parameters:nil];
     [self executeSocialRequest:req forAccount:acct completion:^(NSData *userData, NSError *userError) {
         if(!userError && userData) {
@@ -1880,7 +1880,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             
             SLRequest *profilePicReq = [SLRequest requestForServiceType:SLServiceTypeFacebook
                                                           requestMethod:SLRequestMethodGET
-                                                                    URL:[NSURL URLWithString:@"https://graph.facebook.com/me/picture"]
+                                                                    URL:[NSURL URLWithString:@"https://graph.facebook.com/v2.0/me/picture"]
                                                              parameters:@{@"width" : @"600", @"height" : @"600", @"access_token" : [[acct credential] oauthToken]}];
             [self executeSocialRequest:profilePicReq forAccount:acct completion:^(NSData *picData, NSError *picError) {
                 if(!picError && picData) {
@@ -1890,7 +1890,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 
                 SLRequest *coverPicReq = [SLRequest requestForServiceType:SLServiceTypeFacebook
                                                             requestMethod:SLRequestMethodGET
-                                                                      URL:[NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/me"]]
+                                                                      URL:[NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/v2.0/me"]]
                                                                parameters:@{@"fields" : @"cover", @"access_token" : [[acct credential] oauthToken]}];
                 [self executeSocialRequest:coverPicReq forAccount:acct completion:^(NSData *coverData, NSError *coverError) {
                     if(!coverError && coverData) {
