@@ -10,15 +10,17 @@
 #import "UIViewController+STKControllerItems.h"
 #import "STKResolvingImageView.h"
 #import "HAFollowViewController.h"
+#import "STKAvatarView.h"
 
 @interface HAWelcomeViewController ()
 
 @property (nonatomic, weak) IBOutlet UILabel *greeting;
-@property (nonatomic, weak) IBOutlet STKResolvingImageView *orgLogo;
+//@property (nonatomic, weak) IBOutlet STKResolvingImageView *orgLogo;
 @property (nonatomic, weak) IBOutlet UILabel *orgText;
 @property (nonatomic, weak) IBOutlet STKResolvingImageView *orgImage;
 @property (nonatomic, weak) IBOutlet UIView *navView;
 @property (nonatomic, weak) IBOutlet UIView *shadedView;
+@property (nonatomic, weak) IBOutlet STKAvatarView *avatarView;
 
 @end
 
@@ -49,16 +51,21 @@
     NSString *text = [NSString stringWithFormat:@"%@ on Prizm", self.organization.name];
     [self.orgText setText:text];
     [self.orgImage setUrlString:self.organization.welcomeImageURL];
-    [self.orgLogo setUrlString:self.organization.logoURL];
+//    [self.orgLogo setUrlString:self.organization.logoURL];
+    [self.avatarView setUrlString:self.organization.logoURL];
 }
 
 
 - (IBAction)doneButtonTapped:(id)sender
 {
     if (self.navigationController) {
-        HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
-        [fvc setStandalone:YES];
-        [self.navigationController pushViewController:fvc animated:YES];
+        if ([self isIntroFlow]){
+            HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
+            [fvc setStandalone:YES];
+            [self.navigationController pushViewController:fvc animated:YES];
+        } else {
+            [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+        }
     } else {
         [self dismissViewControllerAnimated:YES completion:nil];
     }

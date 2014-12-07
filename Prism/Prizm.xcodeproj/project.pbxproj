@@ -86,7 +86,6 @@
 		9CC22F181A1F0CD1004AFF73 /* HAChangePasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CC22F161A1F0CD1004AFF73 /* HAChangePasswordViewController.xib */; };
 		9CD7D98E1A1BC1FF003E221C /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD7D98D1A1BC1FF003E221C /* ShareViewController.m */; };
 		9CD7D9901A1BC1FF003E221C /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CD7D98F1A1BC1FF003E221C /* MainInterface.storyboard */; };
-		9CD7D9931A1BC1FF003E221C /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9CE69BBA1A256D7700718D26 /* HAItemListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE69BB81A256D7700718D26 /* HAItemListViewController.m */; };
 		9CE69BBB1A256D7700718D26 /* HAItemListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CE69BB91A256D7700718D26 /* HAItemListViewController.xib */; };
 		BE02EAA3182A80A200A5505A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE02EAA2182A80A200A5505A /* Foundation.framework */; };
@@ -322,7 +321,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				9CD7D9931A1BC1FF003E221C /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5090,7 +5088,7 @@
 						DevelopmentTeam = MU64MV9X8B;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -5779,7 +5777,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm β";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5819,7 +5816,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5931,7 +5927,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6021,7 +6016,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6118,7 +6112,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6221,7 +6214,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = "Prizm β";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
