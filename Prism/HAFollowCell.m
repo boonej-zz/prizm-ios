@@ -80,6 +80,21 @@
     }
 }
 
+- (void)setFollowed
+{
+    if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
+        [[self followButton] setTitle:@"Following" forState:UIControlStateNormal];
+        [[self followButton] setImage:[UIImage imageNamed:@"following.png"]
+                             forState:UIControlStateNormal];
+        [[self followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 66, 0, 0)];
+    } else {
+        [[self followButton] setTitle:@"Follow" forState:UIControlStateNormal];
+        [[self followButton] setImage:[UIImage imageNamed:@"arrowblue.png"]
+                             forState:UIControlStateNormal];
+        [[self followButton] setImageEdgeInsets:UIEdgeInsetsMake(0, 50, 0, 0)];
+    }
+}
+
 - (void)prepareForReuse
 {
     self.leftImage.image = nil;

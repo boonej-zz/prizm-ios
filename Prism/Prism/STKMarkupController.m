@@ -244,11 +244,20 @@ typedef enum {
                             [self updateView];
                         }];
                     } else {
-                        [[STKUserStore store] searchUserTrustsWithName:textBasis
-                                                            completion:^(NSArray *users, NSError *error) {
-                                                                [self setUserTags:users];
-                                                                [self updateView];
-                                                            }];
+                        [[STKUserStore store] fetchUsersFollowingOfUser:[[STKUserStore store] currentUser] completion:^(NSArray *followers, NSError *err) {
+                            if (!err) {
+                                
+                            
+                                NSPredicate *search = [NSPredicate predicateWithFormat:@"(firstName beginsWith[cd] %@) || (lastName beginsWith[cd] %@)", textBasis, textBasis];
+                                NSArray *users = [followers filteredArrayUsingPredicate:search];
+                                [self setUserTags:users];
+                                [self updateView];
+                            }
+                        }];
+//                        [[STKUserStore store] searchUserTrustsWithName:textBasis
+//                                                            completion:^(NSArray *users, NSError *error) {
+//                                                                
+//                                                            }];
                     }
                     
                 } else {

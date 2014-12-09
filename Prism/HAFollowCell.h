@@ -18,5 +18,5 @@
 @property (nonatomic, weak) IBOutlet STKResolvingImageView *leftImage;
 @property (nonatomic, weak) IBOutlet STKResolvingImageView *centerImage;
 @property (nonatomic, weak) IBOutlet STKResolvingImageView *rightImage;
-
+- (void)setFollowed;
 @end

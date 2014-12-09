@@ -161,7 +161,8 @@
             if (err) {
                 [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
-            [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [selectedCell setFollowed];
+//            [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
         
     } else {
@@ -169,7 +170,8 @@
             if (err) {
                 [[STKErrorStore alertViewForError:err delegate:nil] show];
             }
-            [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [selectedCell setFollowed];
+//            [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
     }
 }
