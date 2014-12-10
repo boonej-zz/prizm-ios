@@ -236,7 +236,8 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
 {
     [self setNavigationBackgroundImage:[[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault]];
     [self setTextFieldTintColor:[[UITextField appearance] tintColor]];
-    
+    [[UITextField appearance] setTintColor:nil];
+    [[UITextView appearance] setTintColor:nil];
     if ([indexPath section] == 1) {
         NSString *serviceType = [self availableServiceTypes][[indexPath row]];
         SLComposeViewController *vc = [SLComposeViewController composeViewControllerForServiceType:serviceType];
@@ -254,7 +255,6 @@ NSString * const STKInviteFriendsEmailSubject = @"Join me on Prizm!";
     if ([indexPath section] == 3) {
 #warning smelly, but no direct manipulations on the nav controller had any effect
 //        [[UINavigationBar appearance] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-        [[UITextField appearance] setTintColor:nil];
         
         MFMessageComposeViewController *vc = [[MFMessageComposeViewController alloc] init];
         
