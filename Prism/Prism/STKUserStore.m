@@ -474,7 +474,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     
     [self.signedInUsers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         STKUser *user = [self userForID:[obj valueForKey:@"id"]];
-        [users addObject:@{@"user": user, @"active": [obj valueForKey:@"active"]}];
+        if (user) {
+            [users addObject:@{@"user": user, @"active": [obj valueForKey:@"active"]}];
+        }
     }];
     return [users copy];
 }
@@ -1333,16 +1335,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     NSArray *cached = nil;
     if(!referenceActivity) {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
-        [req setPredicate:[NSPredicate predicateWithFormat:@"(notifiedUser == %@)", u]];
+        [req setPredicate:[NSPredicate predicateWithFormat:@"(notifiedUser == %@) AND (post != nil || comment != nil || insight != nil)", u]];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
         [req setFetchLimit:fetchLimit];
         cached = [[self context] executeFetchRequest:req error:nil];
     } else {
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
         if (direction == STKQueryObjectPageNewer) {
-            [req setPredicate:[NSPredicate predicateWithFormat:@"(notifiedUser == %@ and dateCreated > %@)", u, [referenceActivity dateCreated]]];
+            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated > %@ and (post != nil || comment != nil || insight != nil)", u, [referenceActivity dateCreated]]];
         } else {
-            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated < %@", u, [referenceActivity dateCreated]]];
+            [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@ and dateCreated < %@ and (post != nil || comment != nil || insight != nil)", u, [referenceActivity dateCreated]]];
         }
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
         [req setFetchLimit:fetchLimit];
