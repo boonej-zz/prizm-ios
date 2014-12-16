@@ -42,6 +42,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *achivementButton;
 @property (weak, nonatomic) IBOutlet UIButton *inspirationButton;
 @property (weak, nonatomic) IBOutlet UIButton *personalButton;
+@property (nonatomic) BOOL fetchLikes;
 
 @end
 
@@ -69,6 +70,21 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
         _postController = [[STKPostController alloc] initWithViewController:self];
         [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
         [self setShowsFilterBar:YES];
+    }
+    return self;
+}
+
+- (id)initWithUser:(STKUser *)user likes:(BOOL)likes
+{
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
+        
+        [self setUser:user];
+        [self setAutomaticallyAdjustsScrollViewInsets:NO];
+        _postController = [[STKPostController alloc] initWithViewController:self];
+        [[self navigationItem] setRightBarButtonItem:[self postBarButtonItem]];
+        [self setShowsFilterBar:YES];
+        [self setFetchLikes:likes];
     }
     return self;
 }
@@ -205,7 +221,11 @@ static const CGFloat STKUserPostListFilterViewHeight = 50.0;
 - (void)configurePostController
 {
     __weak STKUserPostListViewController *ws = self;
-    if([self user]) {
+    if (self.fetchLikes) {
+        [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchLikedPostsForUser:ws.user fetchDescription:fs completion:completion];
+        }];
+    } else if([self user]) {
         [[self postController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchProfilePostsForUser:[ws user] fetchDescription:fs completion:completion];
         }];

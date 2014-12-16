@@ -256,7 +256,7 @@ typedef enum {
                         }];
 //                        [[STKUserStore store] searchUserTrustsWithName:textBasis
 //                                                            completion:^(NSArray *users, NSError *error) {
-//                                                                
+//                                                               
 //                                                            }];
                     }
                     

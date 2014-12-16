@@ -74,4 +74,6 @@ extern NSString * const STKContentStorePostDeletedKey;
 - (void)deleteComment:(STKPostComment *)comment completion:(void (^)(STKPost *p, NSError *err))block;
 - (void)fetchLikersForComment:(STKPostComment *)postComment completion:(void (^)(NSArray *likers, NSError *err))block;
 
+- (void)fetchLikedPostsForUser:(STKUser *)user fetchDescription:(STKFetchDescription *)desc completion:(void (^)(NSArray *posts, NSError *err))block;
+
 @end
