@@ -11,5 +11,9 @@
 @interface STKHashtagPostsViewController : UIViewController
 
 @property (nonatomic, strong) NSString *hashTagCount;
+@property (nonatomic, getter=isLinkedToPost) BOOL linkedToPost;
+
 - (id)initWithHashTag:(NSString *)hashTag;
+
+
 @end

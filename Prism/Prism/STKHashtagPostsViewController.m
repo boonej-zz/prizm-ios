@@ -14,8 +14,9 @@
 #import "STKResolvingImageView.h"
 #import "STKPostCell.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKPostViewController.h"
 
-@interface STKHashtagPostsViewController () <STKPostControllerDelegate>
+@interface STKHashtagPostsViewController () <STKPostControllerDelegate, UITableViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UIERealTimeBlurView *blurView;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
@@ -23,6 +24,7 @@
 @property (nonatomic, strong) NSString *hashTag;
 @property (nonatomic, strong) STKPostController *hashTagPostsController;
 @property (nonatomic) BOOL showPostsInSingleLayout;
+@property (nonatomic, weak) IBOutlet UIControl *toolbarControl;
 
 - (IBAction)gridViewButtonTapped:(id)sender;
 - (IBAction)cardViewButtonTapped:(id)sender;
@@ -48,7 +50,13 @@
 
 - (UIViewController *)viewControllerForPresentingPostInPostController:(STKPostController *)pc
 {
-    return [[self navigationController] parentViewController];
+
+    if ([self isLinkedToPost]) {
+        NSLog(@"Explore? %@", [[self.navigationController.viewControllers objectAtIndex:1] class]);
+        return [self.navigationController.viewControllers objectAtIndex:1];
+    }
+    
+    return self.navigationController.parentViewController;
 }
 
 - (CGRect)postController:(STKPostController *)pc rectForPostAtIndex:(int)idx
@@ -81,15 +89,25 @@
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     [iv setFrame:[self.view bounds]];
     [self.view insertSubview:iv atIndex:0];
-    NSString *hashTagTitle = [NSString stringWithFormat:@"#%@", [self hashTag]];
+    
     
     [[self barLabel] setText:[self hashTagCount]];
-    [[[[self parentViewController] parentViewController] navigationItem] setTitle:hashTagTitle];
+    
     [[self tableView] setBackgroundColor:[UIColor clearColor]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[self tableView] setContentInset:UIEdgeInsetsMake(109, 0, 0, 0)];
     [self addBlurViewWithHeight:109.f];
+    [self.view bringSubviewToFront:self.toolbarControl];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                              landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                           target:self action:@selector(back:)];
+    [self.navigationItem setLeftBarButtonItem:bbi];
     
+}
+
+- (void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)gridViewButtonTapped:(id)sender
@@ -112,8 +130,11 @@
     [[self hashTagPostsController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self tableView] reloadData];
     }];
-    
+    NSString *hashTagTitle = [NSString stringWithFormat:@"#%@", [self hashTag]];
+    [self setTitle:hashTagTitle];
+    [[[[self parentViewController] parentViewController] navigationItem] setTitle:hashTagTitle];
     [[[[self parentViewController] parentViewController] navigationItem] setLeftBarButtonItem:[self backButtonItem]];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -155,6 +176,15 @@
         
         return c;
     }
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    STKPost *post = [[[self hashTagPostsController] posts] objectAtIndex:[indexPath row]];
+    STKPostViewController *pvc = [[STKPostViewController alloc] init];
+    [pvc setPost:post];
+    [self.navigationController pushViewController:pvc animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

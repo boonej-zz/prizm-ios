@@ -327,6 +327,54 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
     }];
 }
 
+- (void)fetchLikedPostsForUser:(STKUser *)user fetchDescription:(STKFetchDescription *)desc completion:(void (^)(NSArray *posts, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [user uniqueID], @"likes"]];
+        [c setShouldReturnArray:YES];
+        STKQueryObject *q = [[STKQueryObject alloc] init];
+        [q setPageDirection:[desc direction]];
+        [q setPageKey:STKPostDateCreatedKey];
+        [q setPageValue:[STKTimestampFormatter stringFromDate:[[desc referenceObject] datePosted]]];
+        
+        [q setFilters:[self serverFilterMapFromLocalFilterMap:[desc filterDictionary]]];
+        
+        STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
+        [q addSubquery:tagQ];
+        
+        STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
+        [q addSubquery:rq];
+        
+        STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
+        [q addSubquery:cq];
+        
+        [c setQueryObject:q];
+        [c setResolutionMap:@{@"User" : @"STKUser"}];
+        [c setModelGraph:@[@"STKPost"]];
+        [c setContext:[[STKUserStore store] context]];
+        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+        [c getWithSession:[self session] completionBlock:^(NSArray *obj, NSError *err) {
+            if(!err) {
+                obj = [obj sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"datePosted"
+                                                                                       ascending:NO]]];
+                for(STKPost *p in obj) {
+                    [p setFInverseProfile:user];
+                }
+                
+                [[[STKUserStore store] context] save:nil];
+                block(obj, nil);
+            } else {
+                block(nil, err);
+            }
+        }];
+        
+    }];
+}
+
 - (NSDictionary *)serverFilterMapFromLocalFilterMap:(NSDictionary *)filterMap
 {
     NSMutableDictionary *filters = [NSMutableDictionary dictionary];

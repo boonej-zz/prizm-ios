@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="barLabel" destination="D4W-fP-zdH" id="Dl7-V2-Y4j"/>
                 <outlet property="tableView" destination="ehB-fC-XpV" id="8Rd-bg-VrE"/>
+                <outlet property="toolbarControl" destination="mc1-oc-wVj" id="2Pm-4Q-Zcf"/>
                 <outlet property="view" destination="iN0-l3-epB" id="ZaN-sc-FVR"/>
             </connections>
         </placeholder>

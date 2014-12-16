@@ -7,10 +7,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HAWelcomeViewController">
             <connections>
+                <outlet property="avatarView" destination="VYr-yE-KIL" id="WMF-wK-gMW"/>
                 <outlet property="greeting" destination="vfz-Zo-ujU" id="rTR-mX-pzM"/>
                 <outlet property="navView" destination="3Wa-wX-X4a" id="koT-0y-hrF"/>
                 <outlet property="orgImage" destination="qbn-LW-WE7" id="bor-gO-gle"/>
-                <outlet property="orgLogo" destination="LJm-7S-0Fv" id="XOj-Nj-dWM"/>
                 <outlet property="orgText" destination="CNc-WO-Vny" id="hyo-xm-qYl"/>
                 <outlet property="shadedView" destination="8wB-4J-ThZ" id="jlW-cI-gFS"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -47,13 +47,6 @@
                         <constraint firstItem="vfz-Zo-ujU" firstAttribute="top" secondItem="3Wa-wX-X4a" secondAttribute="top" constant="30" id="te4-Ld-fEd"/>
                     </constraints>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LJm-7S-0Fv" customClass="STKResolvingImageView">
-                    <rect key="frame" x="120" y="78" width="80" height="80"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="80" id="DgK-f5-Mme"/>
-                        <constraint firstAttribute="width" constant="80" id="pmX-bt-4lc"/>
-                    </constraints>
-                </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CNc-WO-Vny">
                     <rect key="frame" x="32" y="169" width="256" height="55"/>
                     <string key="text">Boys and Girls Club
@@ -91,25 +84,33 @@ of Metro Atlanta on Prizm</string>
                         <action selector="doneButtonTapped:" destination="-1" eventType="touchUpInside" id="6qy-df-0bw"/>
                     </connections>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYr-yE-KIL" customClass="STKAvatarView">
+                    <rect key="frame" x="120" y="78" width="80" height="80"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="80" id="E5C-v7-eJF"/>
+                        <constraint firstAttribute="height" constant="80" id="Itp-mG-vH4"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="3Wa-wX-X4a" secondAttribute="trailing" id="1I6-1v-guN"/>
+                <constraint firstAttribute="centerX" secondItem="VYr-yE-KIL" secondAttribute="centerX" id="4lF-QR-NnW"/>
                 <constraint firstItem="S4P-Mn-Ape" firstAttribute="top" secondItem="qbn-LW-WE7" secondAttribute="bottom" constant="32" id="8Ww-xr-ft3"/>
                 <constraint firstAttribute="trailing" secondItem="8wB-4J-ThZ" secondAttribute="trailing" id="ACQ-Vl-hPE"/>
-                <constraint firstItem="CNc-WO-Vny" firstAttribute="top" secondItem="LJm-7S-0Fv" secondAttribute="bottom" constant="11" id="GuM-LV-sSp"/>
                 <constraint firstAttribute="centerX" secondItem="S4P-Mn-Ape" secondAttribute="centerX" id="HdF-Xl-J6F"/>
                 <constraint firstItem="8wB-4J-ThZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Iex-Ec-cg6"/>
+                <constraint firstItem="CNc-WO-Vny" firstAttribute="top" secondItem="VYr-yE-KIL" secondAttribute="bottom" constant="11" id="JTy-zI-Em9"/>
                 <constraint firstAttribute="trailing" secondItem="qbn-LW-WE7" secondAttribute="trailing" id="OAp-x5-6ZH"/>
                 <constraint firstItem="S4P-Mn-Ape" firstAttribute="top" secondItem="qbn-LW-WE7" secondAttribute="bottom" constant="32" id="Pw7-8c-H6a"/>
                 <constraint firstItem="3Wa-wX-X4a" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="S12-IY-WwG"/>
-                <constraint firstAttribute="centerX" secondItem="LJm-7S-0Fv" secondAttribute="centerX" id="S7O-j0-f6d"/>
                 <constraint firstItem="qbn-LW-WE7" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Uel-SS-Kex"/>
                 <constraint firstAttribute="bottom" secondItem="S4P-Mn-Ape" secondAttribute="bottom" constant="21" id="XIQ-RQ-p0N"/>
                 <constraint firstItem="8wB-4J-ThZ" firstAttribute="top" secondItem="3Wa-wX-X4a" secondAttribute="bottom" constant="1" id="e1w-qm-0RM"/>
-                <constraint firstItem="LJm-7S-0Fv" firstAttribute="top" secondItem="3Wa-wX-X4a" secondAttribute="bottom" constant="14" id="gxH-YD-H8C"/>
                 <constraint firstItem="qbn-LW-WE7" firstAttribute="top" secondItem="CNc-WO-Vny" secondAttribute="bottom" constant="3" id="ib1-09-pYc"/>
                 <constraint firstAttribute="centerX" secondItem="CNc-WO-Vny" secondAttribute="centerX" id="rPq-rQ-khQ"/>
+                <constraint firstItem="VYr-yE-KIL" firstAttribute="top" secondItem="3Wa-wX-X4a" secondAttribute="bottom" constant="14" id="wef-CJ-ENI"/>
                 <constraint firstItem="3Wa-wX-X4a" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="xrM-5w-eZb"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

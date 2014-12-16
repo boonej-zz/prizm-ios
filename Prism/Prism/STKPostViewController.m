@@ -231,6 +231,7 @@
         [self presentViewController:nvc animated:YES completion:nil];
     } else if([[URL scheme] isEqualToString:STKPostHashTagURLScheme]) {
         STKHashtagPostsViewController *pvc = [[STKHashtagPostsViewController alloc] initWithHashTag:[URL host]];
+        [pvc setLinkedToPost:YES];
         [[self navigationController] pushViewController:pvc animated:YES];
     } else if([[URL scheme] isEqualToString:STKPostUserURLScheme]) {
         [self showProfileForUser:[[STKUserStore store] userForID:[URL host]]];

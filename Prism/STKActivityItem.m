@@ -84,7 +84,7 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
     } else if([[self action] isEqualToString:STKActivityItemTypeAccolade]) {
         [str appendString:@"sent you an accolade."];
     } else if([[self action] isEqualToString:@"post"]) {
-        [str appendString:@"Luminary created a new post."];
+        [str appendString:@"created a new post."];
     }
     
     

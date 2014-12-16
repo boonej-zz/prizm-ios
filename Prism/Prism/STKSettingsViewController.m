@@ -23,6 +23,7 @@
 #import "HAFollowViewController.h"
 #import "HAInterestsViewController.h"
 #import "UIViewController+STKControllerItems.h"
+#import "STKUserPostListViewController.h"
 
 //#import "TMAPIClient.h"
 
@@ -64,6 +65,7 @@
                           @{@"title" : @"Who to Follow", @"type" : @"STKLabelCell", @"selectionSelector": @"whoToFollow:"},
                           @{@"title" : @"Friends", @"type" : @"STKLabelCell", @"next" : [self friendsSettings]},
                           @{@"title" : @"Interests", @"type" : @"STKLabelCell", @"selectionSelector" : @"showInterests:"},
+                          @{@"title" : @"Likes", @"type": @"STKLabelCell", @"selectionSelector": @"showLikes:"},
                           
                           @{@"title": @"Sharing", @"type" : @"STKLabelCell", @"next" : [self sharingSettings]},
                           @{@"title" : @"Support", @"type" : @"STKLabelCell", @"next" : [self supportSettings]},
@@ -90,6 +92,14 @@
 {
     HAFollowViewController *fvc = [[HAFollowViewController alloc] init];
     [self.navigationController pushViewController:fvc animated:YES];
+}
+
+- (void)showLikes:(id)sender
+
+{
+    STKUserPostListViewController *plvc = [[STKUserPostListViewController alloc] initWithUser:[[STKUserStore store] currentUser] likes:YES];
+    [plvc setTitle:@"Likes"];
+    [self.navigationController pushViewController:plvc animated:YES];
 }
 
 - (void)showInterests:(id)sender
@@ -571,7 +581,7 @@
         [[cell overlayView] setBackgroundColor:[UIColor clearColor]];
         [[cell label] setText:[self titleForIndexPath:indexPath]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        if ([[cell label].text isEqualToString:@"Who to Follow"] || [[cell label].text isEqualToString:@"Interests"]) {
+        if ([[cell label].text isEqualToString:@"Who to Follow"] || [[cell label].text isEqualToString:@"Interests"] || [cell.label.text isEqualToString:@"Likes"]) {
             UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_right"]];
             [cell setAccessoryView:iv];
         }

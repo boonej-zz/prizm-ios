@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -51,8 +52,8 @@
                             <constraint firstAttribute="height" constant="16" id="gpg-GQ-Pr0"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LrZ-kv-omJ">
-                        <rect key="frame" x="56" y="9" width="161" height="18"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LrZ-kv-omJ">
+                        <rect key="frame" x="61" y="5" width="195" height="18"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                         <color key="textColor" red="0.75294119119644165" green="0.75686275959014893" blue="0.83529412746429443" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -88,6 +89,7 @@
                     <constraint firstItem="pkP-J2-fFc" firstAttribute="top" secondItem="Vpp-Kg-Pxp" secondAttribute="top" id="E60-dp-K8G"/>
                     <constraint firstItem="m2s-jy-YQI" firstAttribute="leading" secondItem="KrN-3j-DXO" secondAttribute="trailing" constant="1" id="Tay-bl-aVC"/>
                     <constraint firstAttribute="centerY" secondItem="gFK-5G-pZ1" secondAttribute="centerY" constant="5" id="WGB-FT-zHd"/>
+                    <constraint firstItem="pkP-J2-fFc" firstAttribute="leading" secondItem="LrZ-kv-omJ" secondAttribute="trailing" constant="8" id="bxB-yz-oax"/>
                     <constraint firstItem="VfA-Yc-Efg" firstAttribute="trailing" secondItem="gFK-5G-pZ1" secondAttribute="trailing" id="cKe-yf-2p0"/>
                     <constraint firstItem="LrZ-kv-omJ" firstAttribute="leading" secondItem="KrW-jy-2R5" secondAttribute="leading" id="dLn-K6-cN7"/>
                     <constraint firstItem="Ozo-8o-OxR" firstAttribute="leading" secondItem="Vpp-Kg-Pxp" secondAttribute="leading" id="ejE-FZ-sI1"/>
@@ -107,6 +109,7 @@
                 <outlet property="recentIndicatorImageView" destination="VfA-Yc-Efg" id="akE-t6-4Y5"/>
                 <outlet property="timeLabel" destination="m2s-jy-YQI" id="enP-Os-h0M"/>
             </connections>
+            <point key="canvasLocation" x="278" y="236"/>
         </tableViewCell>
     </objects>
     <resources>

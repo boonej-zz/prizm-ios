@@ -325,8 +325,10 @@ typedef enum {
     if([self filterByLocation]) {
         [d setObject:STKQueryObjectFilterExists forKey:@"locationName"];
     }
-    if([self filterByUserTags]) {
+    else if([self filterByUserTags]) {
         [d setObject:[[self profile] uniqueID] forKey:@"tags.uniqueID"];
+    } else {
+        [d setObject:[[self profile] uniqueID] forKey:@"creator"];
     }
     
     if(![self isShowingCurrentUserProfile]) {

@@ -283,7 +283,8 @@
 
     
     [[self tableView] setRowHeight:106];
-    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
+    [[self tableView] setBackgroundColor:[UIColor clearColor]];
+//    [[self tableView] setBackgroundView:[[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadPosts) name:HANotificationReportInappropriate object:nil];
     [self addBlurViewWithHeight:114.0];

@@ -16,6 +16,7 @@
 
 - (id)initWithUser:(STKUser *)user;
 - (id)initWithTrust:(STKTrust *)t;
+- (id)initWithUser:(STKUser *)user likes:(BOOL)likes;
 
 @property (nonatomic) STKTrustPostType trustType;
 @property (nonatomic, strong) STKUser *user;
