@@ -306,6 +306,7 @@ typedef enum {
         [[cell nameLabel] setText:[user name]];
         
         [[cell luminaryIcon] setHidden:![user isLuminary]];
+        [[cell ambassadorIcon] setHidden:![user isAmbassador]];
 
 
         return cell;

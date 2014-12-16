@@ -242,6 +242,7 @@
         [[cell cancelTrustButton] setHidden:YES];
         [[cell mailButton] setHidden:YES];
         [[cell luminaryIcon] setHidden:![user isLuminary]];
+        [[cell ambassadorIcon] setHidden:![user isAmbassador]];
 
         if([user isEqual:[[STKUserStore store] currentUser]]) {
             [[cell followButton] setHidden:YES];

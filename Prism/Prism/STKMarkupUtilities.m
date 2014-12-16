@@ -71,6 +71,7 @@
     
     NSString *name = [profile name];
     UIImage *luminaryIcon = [UIImage imageNamed:@"luminary_icon"];
+    UIImage *ambassadorIcon = [UIImage imageNamed:@"luminary_icon"];
     
     int fontSizeToFit = nameTextSize;
     UIFont *f = STKFont(fontSizeToFit);
@@ -99,6 +100,10 @@
     
     if ([profile isLuminary]) {
         [luminaryIcon drawInRect:luminaryRect];
+    }
+    
+    if ([profile isAmbassador]) {
+        [ambassadorIcon drawInRect:luminaryRect];
     }
     
     

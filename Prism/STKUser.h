@@ -129,6 +129,7 @@ extern BOOL const STKUserStatusInActive;
 
 - (BOOL)isInstitution;
 - (BOOL)isLuminary;
+- (BOOL)isAmbassador;
 
 - (BOOL)hasTrusts;
 - (NSArray *)trusts;
