@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -104,6 +104,13 @@
                             <constraint firstAttribute="height" constant="16" id="krO-Re-lS4"/>
                         </constraints>
                     </imageView>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ambassador_icon" translatesAutoresizingMaskIntoConstraints="NO" id="1Lt-w5-xTs">
+                        <rect key="frame" x="179" y="94" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="16" id="95u-Hn-vEf"/>
+                            <constraint firstAttribute="width" constant="16" id="LJY-5W-iYk"/>
+                        </constraints>
+                    </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="location_pin_small" translatesAutoresizingMaskIntoConstraints="NO" id="atC-6E-Xqf">
                         <rect key="frame" x="120" y="114" width="16" height="16"/>
                         <constraints>
@@ -168,25 +175,31 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="EhT-Vy-DOY" firstAttribute="centerY" secondItem="Yln-6W-Ntw" secondAttribute="centerY" id="2Y0-31-Yfq"/>
+                    <constraint firstItem="1Lt-w5-xTs" firstAttribute="centerX" secondItem="0l8-V2-6wC" secondAttribute="centerX" id="3JN-6K-KJx"/>
                     <constraint firstItem="1jP-yh-JM3" firstAttribute="top" secondItem="Ltc-cZ-vpu" secondAttribute="bottom" constant="27" id="4cd-Qx-flb"/>
                     <constraint firstItem="Ltc-cZ-vpu" firstAttribute="top" secondItem="GdA-8k-g7K" secondAttribute="top" constant="-72" id="8NE-lV-1je"/>
                     <constraint firstItem="Ltc-cZ-vpu" firstAttribute="centerX" secondItem="wly-wl-6OH" secondAttribute="centerX" id="AVu-cL-rGR"/>
+                    <constraint firstItem="1Lt-w5-xTs" firstAttribute="top" secondItem="0l8-V2-6wC" secondAttribute="top" id="Bvc-CP-i3H"/>
                     <constraint firstAttribute="bottom" secondItem="aIN-Ga-pkt" secondAttribute="bottom" id="Cu2-6W-aeI"/>
+                    <constraint firstItem="1Lt-w5-xTs" firstAttribute="centerY" secondItem="0l8-V2-6wC" secondAttribute="centerY" id="DAB-gX-mt9"/>
                     <constraint firstItem="aIN-Ga-pkt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="DKx-1O-mMl"/>
                     <constraint firstItem="wly-wl-6OH" firstAttribute="leading" secondItem="EhT-Vy-DOY" secondAttribute="trailing" constant="2" id="Dw5-xl-csf"/>
                     <constraint firstItem="0l8-V2-6wC" firstAttribute="leading" secondItem="GdA-8k-g7K" secondAttribute="trailing" constant="7" id="E0i-Jy-3Fj"/>
                     <constraint firstItem="Ltc-cZ-vpu" firstAttribute="centerX" secondItem="1jP-yh-JM3" secondAttribute="centerX" id="EIi-mv-fo4"/>
                     <constraint firstAttribute="bottom" secondItem="EhT-Vy-DOY" secondAttribute="bottom" constant="11" id="Heh-3d-U4D"/>
                     <constraint firstItem="wly-wl-6OH" firstAttribute="leading" secondItem="EhT-Vy-DOY" secondAttribute="trailing" constant="2" id="Kkj-sn-yGY"/>
+                    <constraint firstItem="1Lt-w5-xTs" firstAttribute="bottom" secondItem="0l8-V2-6wC" secondAttribute="bottom" id="LMQ-dR-R5i"/>
                     <constraint firstItem="EhT-Vy-DOY" firstAttribute="centerX" secondItem="Yln-6W-Ntw" secondAttribute="centerX" id="MZj-VG-Ghm"/>
                     <constraint firstAttribute="bottom" secondItem="KKO-gX-Umv" secondAttribute="bottom" constant="11" id="OMn-Bn-gRg"/>
                     <constraint firstItem="atC-6E-Xqf" firstAttribute="top" secondItem="Ltc-cZ-vpu" secondAttribute="bottom" constant="30" id="RaA-nT-P7z"/>
                     <constraint firstItem="0l8-V2-6wC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="94" id="WMR-gu-q9D"/>
                     <constraint firstItem="1jP-yh-JM3" firstAttribute="leading" secondItem="atC-6E-Xqf" secondAttribute="trailing" constant="1" id="X2C-AR-h7U"/>
                     <constraint firstAttribute="bottom" secondItem="wly-wl-6OH" secondAttribute="bottom" constant="11" id="Xul-bz-5qY"/>
+                    <constraint firstItem="1Lt-w5-xTs" firstAttribute="trailing" secondItem="0l8-V2-6wC" secondAttribute="trailing" id="Zo7-S0-BiI"/>
                     <constraint firstItem="KKO-gX-Umv" firstAttribute="leading" secondItem="wly-wl-6OH" secondAttribute="trailing" constant="2" id="a4g-bc-VNi"/>
                     <constraint firstItem="Ltc-cZ-vpu" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="bWJ-OV-3p8"/>
                     <constraint firstItem="kOS-O4-9pN" firstAttribute="centerX" secondItem="KKO-gX-Umv" secondAttribute="centerX" id="btH-kN-vDj"/>
+                    <constraint firstItem="1Lt-w5-xTs" firstAttribute="leading" secondItem="0l8-V2-6wC" secondAttribute="leading" id="eLJ-ez-9uF"/>
                     <constraint firstItem="kOS-O4-9pN" firstAttribute="centerY" secondItem="KKO-gX-Umv" secondAttribute="centerY" id="fCo-08-ItE"/>
                     <constraint firstAttribute="trailing" secondItem="aIN-Ga-pkt" secondAttribute="trailing" id="fCp-9Y-uCK"/>
                     <constraint firstItem="aIN-Ga-pkt" firstAttribute="centerX" secondItem="Ltc-cZ-vpu" secondAttribute="centerX" id="huJ-wU-9ub"/>
@@ -209,6 +222,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="ambassador_icon" width="16" height="16"/>
         <image name="btn_followarrow" width="24" height="24"/>
         <image name="location_pin_small" width="8" height="10"/>
         <image name="luminary_icon" width="16" height="16"/>

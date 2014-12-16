@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelTrustButton;
 @property (weak, nonatomic) IBOutlet UIButton *mailButton;
 @property (weak, nonatomic) IBOutlet UIImageView *luminaryIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *ambassadorIcon;
 
 - (IBAction)toggleFollow:(id)sender;
 - (IBAction)cancelTrust:(id)sender;

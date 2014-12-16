@@ -220,6 +220,11 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
     return [[self subtype] isEqualToString:STKUserSubTypeLuminary];
 }
 
+- (BOOL)isAmbassador
+{
+    return [[self subtype] isEqualToString:@"ambassador"];
+}
+
 /////
 
 - (void)setValuesFromFacebook:(NSDictionary *)d

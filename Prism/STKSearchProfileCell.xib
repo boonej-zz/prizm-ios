@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -15,7 +16,6 @@
                 <subviews>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DLx-wG-Oym">
                         <rect key="frame" x="54" y="11" width="38" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="7Og-Ws-xdw"/>
                         </constraints>
@@ -25,7 +25,6 @@
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7et-gZ-jKt" customClass="STKAvatarView">
                         <rect key="frame" x="10" y="4" width="35" height="35"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="35" id="fa7-ok-KUk"/>
@@ -34,7 +33,6 @@
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wSu-8r-2na">
                         <rect key="frame" x="270" y="2" width="50" height="40"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="4lw-4A-UYp"/>
                             <constraint firstAttribute="width" constant="50" id="7mD-I3-QyK"/>
@@ -49,7 +47,6 @@
                     </button>
                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3O9-v3-wx7">
                         <rect key="frame" x="270" y="2" width="50" height="40"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="Ywc-GZ-7Rx"/>
                             <constraint firstAttribute="width" constant="50" id="wUq-rD-s1m"/>
@@ -63,7 +60,6 @@
                     </button>
                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p2G-E8-bZk">
                         <rect key="frame" x="236" y="1" width="40" height="42"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="42" id="5FL-QE-wte"/>
                             <constraint firstAttribute="width" constant="40" id="gft-lp-tQg"/>
@@ -77,10 +73,16 @@
                     </button>
                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="luminary_icon" translatesAutoresizingMaskIntoConstraints="NO" id="IZj-1a-VE0">
                         <rect key="frame" x="98" y="14" width="16" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="gNY-xn-FYU"/>
                             <constraint firstAttribute="height" constant="16" id="sNe-v8-30j"/>
+                        </constraints>
+                    </imageView>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ambassador_icon" translatesAutoresizingMaskIntoConstraints="NO" id="6xK-Zg-eto">
+                        <rect key="frame" x="98" y="14" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="16" id="Iad-h4-aFl"/>
+                            <constraint firstAttribute="height" constant="16" id="Jpr-T4-Dte"/>
                         </constraints>
                     </imageView>
                 </subviews>
@@ -88,6 +90,8 @@
                 <constraints>
                     <constraint firstAttribute="centerY" secondItem="IZj-1a-VE0" secondAttribute="centerY" id="5s6-fh-R0D"/>
                     <constraint firstAttribute="centerY" secondItem="3O9-v3-wx7" secondAttribute="centerY" id="AQD-Mm-tWY"/>
+                    <constraint firstItem="6xK-Zg-eto" firstAttribute="leading" secondItem="IZj-1a-VE0" secondAttribute="leading" id="CzL-PB-YAW"/>
+                    <constraint firstItem="6xK-Zg-eto" firstAttribute="bottom" secondItem="IZj-1a-VE0" secondAttribute="bottom" id="HNR-Ro-rkF"/>
                     <constraint firstAttribute="centerY" secondItem="p2G-E8-bZk" secondAttribute="centerY" id="KeQ-iH-kg2"/>
                     <constraint firstAttribute="trailing" secondItem="3O9-v3-wx7" secondAttribute="trailing" id="Qvd-Xm-aQl"/>
                     <constraint firstAttribute="trailing" secondItem="p2G-E8-bZk" secondAttribute="trailing" constant="44" id="TCk-tf-lsu"/>
@@ -95,13 +99,18 @@
                     <constraint firstItem="DLx-wG-Oym" firstAttribute="leading" secondItem="7et-gZ-jKt" secondAttribute="trailing" constant="9" id="aeX-MH-PLR"/>
                     <constraint firstAttribute="centerY" secondItem="wSu-8r-2na" secondAttribute="centerY" id="bqw-b3-BVT"/>
                     <constraint firstItem="7et-gZ-jKt" firstAttribute="top" secondItem="uR9-RN-UhF" secondAttribute="top" constant="4" id="cv8-yQ-1NK"/>
+                    <constraint firstItem="6xK-Zg-eto" firstAttribute="trailing" secondItem="IZj-1a-VE0" secondAttribute="trailing" id="g0H-9R-MBT"/>
                     <constraint firstAttribute="trailing" secondItem="wSu-8r-2na" secondAttribute="trailing" id="j3W-Hp-xov"/>
+                    <constraint firstItem="6xK-Zg-eto" firstAttribute="centerX" secondItem="IZj-1a-VE0" secondAttribute="centerX" id="l0d-T0-hUb"/>
                     <constraint firstItem="7et-gZ-jKt" firstAttribute="leading" secondItem="uR9-RN-UhF" secondAttribute="leading" constant="10" id="lpx-Fv-F64"/>
                     <constraint firstItem="p2G-E8-bZk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DLx-wG-Oym" secondAttribute="trailing" id="reg-IY-BMn"/>
+                    <constraint firstItem="6xK-Zg-eto" firstAttribute="top" secondItem="IZj-1a-VE0" secondAttribute="top" id="rgg-3s-JWI"/>
                     <constraint firstItem="IZj-1a-VE0" firstAttribute="leading" secondItem="DLx-wG-Oym" secondAttribute="trailing" constant="6" id="wdX-3V-ZJs"/>
+                    <constraint firstItem="6xK-Zg-eto" firstAttribute="centerY" secondItem="IZj-1a-VE0" secondAttribute="centerY" id="xlZ-Hw-oiz"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="ambassadorIcon" destination="6xK-Zg-eto" id="nOd-bB-2iS"/>
                 <outlet property="avatarView" destination="7et-gZ-jKt" id="yxQ-5Z-ULP"/>
                 <outlet property="cancelTrustButton" destination="3O9-v3-wx7" id="RqH-Wl-iLm"/>
                 <outlet property="followButton" destination="wSu-8r-2na" id="2BT-5u-M4a"/>
@@ -112,10 +121,16 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="ambassador_icon" width="16" height="16"/>
         <image name="arrowblue" width="24" height="24"/>
         <image name="btn_email" width="24" height="17"/>
         <image name="following" width="24" height="24"/>
         <image name="luminary_icon" width="16" height="16"/>
         <image name="reject" width="24" height="24"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

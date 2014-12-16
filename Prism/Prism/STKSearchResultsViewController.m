@@ -287,6 +287,7 @@ typedef enum {
     [[c avatarView] setUrlString:[u profilePhotoPath]];
 
     [[c luminaryIcon] setHidden:![u isLuminary]];
+    [[c ambassadorIcon] setHidden:![u isAmbassador]];
 
     if([u isEqual:[[STKUserStore store] currentUser]]) {
         [[c followButton] setHidden:YES];

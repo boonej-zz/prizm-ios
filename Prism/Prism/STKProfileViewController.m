@@ -653,6 +653,7 @@ typedef enum {
     
     
     [[[self profileView] luminaryIcon] setHidden:![p isLuminary]];
+    [self.profileView.ambassadorIcon setHidden:![p isAmbassador]];
     
     if ([p website]) {
         NSAttributedString *attributedWebsite = [[NSAttributedString alloc] initWithString:[p website] attributes:@{NSFontAttributeName : STKFont(12), NSForegroundColorAttributeName : [UIColor whiteColor]}];

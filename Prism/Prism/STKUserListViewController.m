@@ -180,6 +180,7 @@
     [[c nameLabel] setText:[u name]];
     [[c avatarView] setUrlString:[u profilePhotoPath]];
     [[c luminaryIcon] setHidden:![u isLuminary]];
+    [[c ambassadorIcon] setHidden:![u isAmbassador]];
 
     if([self type] == STKUserListTypeFollow) {
         if([u isEqual:[[STKUserStore store] currentUser]]) {

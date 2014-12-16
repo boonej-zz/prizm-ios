@@ -21,6 +21,8 @@
 @property (nonatomic, weak) IBOutlet UILabel *locationLabel;
 
 @property (nonatomic, weak) IBOutlet UIImageView *luminaryIcon;
+@property (nonatomic, weak) IBOutlet UIImageView *ambassadorIcon;
+
 @property (nonatomic, weak) IBOutlet UIButton *followButton;
 
 - (IBAction)followTapped:(id)sender;
@@ -62,6 +64,7 @@
     [self.nameLabel setText:profile.name];
     [self.avatarView setUrlString:[profile profilePhotoPath]];
     [self.luminaryIcon setHidden:![profile isLuminary]];
+    [self.ambassadorIcon setHidden:![profile isAmbassador]];
     NSString *location = nil;
     if (profile.city && profile.state) {
         location = [NSString stringWithFormat:@"%@, %@", profile.city, profile.state];

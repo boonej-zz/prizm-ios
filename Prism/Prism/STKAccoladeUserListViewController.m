@@ -98,6 +98,7 @@
     [[c mailButton] setHidden:YES];
     
     [[c luminaryIcon] setHidden:![u isLuminary]];
+    [[c ambassadorIcon] setHidden:![u isAmbassador]];
 
     return c;
 }
