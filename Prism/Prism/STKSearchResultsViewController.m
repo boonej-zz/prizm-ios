@@ -60,9 +60,8 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
-    [iv setFrame:[self.view bounds]];
-    [self.view insertSubview:iv atIndex:0];
+    [self addBackgroundImage];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
     [[self searchResultsTableView] setBackgroundColor:[UIColor clearColor]];
     [[self searchResultsTableView] setSeparatorColor:STKTextTransparentColor];
     [[self searchResultsTableView] setSeparatorInset:UIEdgeInsetsMake(0, 55, 0, 0)];
@@ -83,7 +82,7 @@ typedef enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [self handleUserUpdate];
     [[[self blurView] displayLink] setPaused:NO];
     [self reloadSearchResults];
     if([self searchType] == STKSearchTypeUser)

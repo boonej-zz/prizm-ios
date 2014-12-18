@@ -115,7 +115,14 @@
     [[self councilCollectionView] setBackgroundColor:[UIColor clearColor]];
     [[self councilCollectionView] setScrollEnabled:NO];
     [[self imageView] setImage:[UIImage HABackgroundImage]];
-    [[self imageView] setImage:[self backgroundImage]];
+//    [[self imageView] setImage:[self backgroundImage]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdate) name:@"UserDetailsUpdated" object:nil];
+}
+
+- (void)handleUpdate
+{
+    [[self imageView] setImage:[UIImage HABackgroundImage]];
+//    [[self imageView] setImage:[self backgroundImage]];
 }
 
 - (void)reloadData
