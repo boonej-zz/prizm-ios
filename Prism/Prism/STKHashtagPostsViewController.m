@@ -15,6 +15,8 @@
 #import "STKPostCell.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKPostViewController.h"
+#import "STKUser.h"
+#import "STKUserStore.h"
 
 @interface STKHashtagPostsViewController () <STKPostControllerDelegate, UITableViewDelegate>
 
@@ -22,9 +24,13 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *barLabel;
 @property (nonatomic, strong) NSString *hashTag;
-@property (nonatomic, strong) STKPostController *hashTagPostsController;
+@property (nonatomic, strong) STKPostController *postsController;
+
 @property (nonatomic) BOOL showPostsInSingleLayout;
+@property (nonatomic) BOOL isLikesPage;
+
 @property (nonatomic, weak) IBOutlet UIControl *toolbarControl;
+
 
 - (IBAction)gridViewButtonTapped:(id)sender;
 - (IBAction)cardViewButtonTapped:(id)sender;
@@ -38,11 +44,26 @@
     self = [super initWithNibName:nil bundle:nil];
     if(self) {
         [self setHashTag:hashTag];
-        _hashTagPostsController = [[STKPostController alloc] initWithViewController:self];
+        _postsController = [[STKPostController alloc] initWithViewController:self];
         
-        [[self hashTagPostsController] setFilterMap:@{@"hashTags": hashTag}];
-        [[self hashTagPostsController] setFetchMechanism:^(STKFetchDescription *fd, void (^comp)(NSArray *posts, NSError *err)) {
+        [[self postsController] setFilterMap:@{@"hashTags": hashTag}];
+        [[self postsController] setFetchMechanism:^(STKFetchDescription *fd, void (^comp)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fd completion:comp];
+        }];
+    }
+    return self;
+}
+
+- (id)initForLikes
+{
+    self = [super initWithNibName:nil bundle:nil];
+    if (self){
+        _postsController = [[STKPostController alloc] initWithViewController:self];
+        STKUser *user = [[STKUserStore store] currentUser];
+        _isLikesPage = YES;
+        
+        [[self postsController] setFetchMechanism:^(STKFetchDescription *fd, void (^comp)(NSArray *posts, NSError *err)) {
+            [[STKContentStore store] fetchLikedPostsForUser:user fetchDescription:fd completion:comp];
         }];
     }
     return self;
@@ -51,8 +72,7 @@
 - (UIViewController *)viewControllerForPresentingPostInPostController:(STKPostController *)pc
 {
 
-    if ([self isLinkedToPost]) {
-        NSLog(@"Explore? %@", [[self.navigationController.viewControllers objectAtIndex:1] class]);
+    if ([self isLinkedToPost] || [self isLikesPage]) {
         return [self.navigationController.viewControllers objectAtIndex:1];
     }
     
@@ -127,12 +147,16 @@
     [super viewWillAppear:animated];
     [[[self blurView] displayLink] setPaused:NO];
     
-    [[self hashTagPostsController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+    [[self postsController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
         [[self tableView] reloadData];
     }];
-    NSString *hashTagTitle = [NSString stringWithFormat:@"#%@", [self hashTag]];
-    [self setTitle:hashTagTitle];
-    [[[[self parentViewController] parentViewController] navigationItem] setTitle:hashTagTitle];
+    if (self.isLikesPage) {
+        [self setTitle:@"Likes"];
+    } else {
+        NSString *hashTagTitle = [NSString stringWithFormat:@"#%@", [self hashTag]];
+        [self setTitle:hashTagTitle];
+        [[[[self parentViewController] parentViewController] navigationItem] setTitle:hashTagTitle];
+    }
     [[[[self parentViewController] parentViewController] navigationItem] setLeftBarButtonItem:[self backButtonItem]];
     
 }
@@ -150,7 +174,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    long postCount = [[[self hashTagPostsController] posts] count];
+    long postCount = [[[self postsController] posts] count];
 
     if([self showPostsInSingleLayout]) {
         return postCount;
@@ -165,14 +189,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if([self showPostsInSingleLayout]){
-        STKPostCell *cell = [STKPostCell cellForTableView:tableView target:[self hashTagPostsController]];
-        [cell populateWithPost:[[[self hashTagPostsController] posts] objectAtIndex:[indexPath row]]];
+        STKPostCell *cell = [STKPostCell cellForTableView:tableView target:[self postsController]];
+        [cell populateWithPost:[[[self postsController] posts] objectAtIndex:[indexPath row]]];
         
         return cell;
         
     }else{
-        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self hashTagPostsController]];
-        [c populateWithPosts:[[self hashTagPostsController] posts] indexOffset:([indexPath row]) * 3];
+        STKTriImageCell *c = [STKTriImageCell cellForTableView:tableView target:[self postsController]];
+        [c populateWithPosts:[[self postsController] posts] indexOffset:([indexPath row]) * 3];
         
         return c;
     }
@@ -181,7 +205,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    STKPost *post = [[[self hashTagPostsController] posts] objectAtIndex:[indexPath row]];
+    STKPost *post = [[[self postsController] posts] objectAtIndex:[indexPath row]];
     STKPostViewController *pvc = [[STKPostViewController alloc] init];
     [pvc setPost:post];
     [self.navigationController pushViewController:pvc animated:YES];
@@ -195,5 +219,68 @@
     }
     return 106.0;
 }
+
+- (void)fetchNewPosts
+{
+//    [[self luminatingBar] setLuminating:YES];
+//    [self configurePostController];
+    [[self tableView] reloadData];
+    [[self postsController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+//        [[self luminatingBar] setLuminating:NO];
+        [[self tableView] reloadData];
+    }];
+    
+}
+
+- (void)fetchOlderPosts
+{
+//    [self configurePostController];
+    [[self tableView] reloadData];
+    [[self postsController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
+    
+}
+
+- (void)reloadPosts
+{
+//    [[self luminatingBar] setLuminating:YES];
+//    [self configurePostController];
+    [[self tableView] reloadData];
+    [[self postsController] reloadWithCompletion:^(NSArray *newPosts, NSError *err) {
+//        [[self luminatingBar] setLuminating:NO];
+        [[self tableView] reloadData];
+    }];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < 0) {
+        float t = fabs(offset) / 60.0;
+        if(t > 1)
+            t = 1;
+//        [[self luminatingBar] setProgress:t];
+    } else {
+//        [[self luminatingBar] setProgress:0];
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if(velocity.y > 0 && [scrollView contentSize].height - [scrollView frame].size.height - 20 < targetContentOffset->y) {
+        [self fetchOlderPosts];
+    }
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < -60) {
+        [self fetchNewPosts];
+    }
+}
+
 
 @end

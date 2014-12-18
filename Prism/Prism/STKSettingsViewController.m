@@ -24,6 +24,7 @@
 #import "HAInterestsViewController.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKUserPostListViewController.h"
+#import "STKHashtagPostsViewController.h"
 
 //#import "TMAPIClient.h"
 
@@ -97,7 +98,8 @@
 - (void)showLikes:(id)sender
 
 {
-    STKUserPostListViewController *plvc = [[STKUserPostListViewController alloc] initWithUser:[[STKUserStore store] currentUser] likes:YES];
+//    STKUserPostListViewController *plvc = [[STKUserPostListViewController alloc] initWithUser:[[STKUserStore store] currentUser] likes:YES];
+    STKHashtagPostsViewController *plvc = [[STKHashtagPostsViewController alloc] initForLikes];
     [plvc setTitle:@"Likes"];
     [self.navigationController pushViewController:plvc animated:YES];
 }

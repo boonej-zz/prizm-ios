@@ -14,6 +14,7 @@
 @property (nonatomic, getter=isLinkedToPost) BOOL linkedToPost;
 
 - (id)initWithHashTag:(NSString *)hashTag;
+- (id)initForLikes;
 
 
 @end
