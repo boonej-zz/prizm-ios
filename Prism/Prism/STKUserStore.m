@@ -1417,7 +1417,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         week = 52 + week;
         year --;
     }
-
+    
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -1431,6 +1431,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [obj setFilters:@{@"year" : @(year),
                           @"week" : @(week),
                           @"offset" : @(count)}];
+        NSLog(@"%@", obj);
         [c setQueryObject:obj];        
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
             
