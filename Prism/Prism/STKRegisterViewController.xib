@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKRegisterViewController">
@@ -32,7 +32,7 @@
                     <rect key="frame" x="0.0" y="249" width="320" height="240"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="igK-xV-ixB">
-                            <rect key="frame" x="50" y="50" width="64" height="64"/>
+                            <rect key="frame" x="63" y="50" width="64" height="64"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="64" id="Qhs-o1-Xao"/>
                             </constraints>
@@ -44,7 +44,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AuD-6k-wNl">
-                            <rect key="frame" x="129" y="50" width="64" height="64"/>
+                            <rect key="frame" x="190" y="50" width="64" height="64"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="64" id="a96-yp-rpd"/>
                             </constraints>
@@ -53,18 +53,6 @@
                             </state>
                             <connections>
                                 <action selector="connectWithTwitter:" destination="-1" eventType="touchUpInside" id="Ofb-w3-MVP"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="miH-by-LCp">
-                            <rect key="frame" x="208" y="50" width="64" height="64"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="64" id="0LJ-no-FP6"/>
-                            </constraints>
-                            <state key="normal" image="gplus">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="connectWithGoogle:" destination="-1" eventType="touchUpInside" id="IOe-oK-g3I"/>
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect with" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HRJ-LH-Onv">
@@ -129,18 +117,30 @@
                                 <constraint firstAttribute="height" constant="1" id="nXW-Dl-1OU"/>
                             </constraints>
                         </view>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="miH-by-LCp">
+                            <rect key="frame" x="192" y="50" width="64" height="64"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="64" id="0LJ-no-FP6"/>
+                            </constraints>
+                            <state key="normal" image="gplus">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="connectWithGoogle:" destination="-1" eventType="touchUpInside" id="IOe-oK-g3I"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="centerX" secondItem="MEU-rq-7z5" secondAttribute="centerX" id="16m-ip-m3a"/>
-                        <constraint firstItem="igK-xV-ixB" firstAttribute="leading" secondItem="HV6-tB-Qog" secondAttribute="leading" constant="50" id="2zz-Zs-MJL"/>
+                        <constraint firstItem="igK-xV-ixB" firstAttribute="leading" secondItem="HV6-tB-Qog" secondAttribute="leading" constant="63" id="2zz-Zs-MJL"/>
                         <constraint firstItem="miH-by-LCp" firstAttribute="top" secondItem="AuD-6k-wNl" secondAttribute="top" id="3b1-9G-ZzK"/>
                         <constraint firstItem="AuD-6k-wNl" firstAttribute="top" secondItem="HRJ-LH-Onv" secondAttribute="bottom" constant="29" id="5mL-D4-N8H"/>
                         <constraint firstItem="cTj-NF-h6D" firstAttribute="leading" secondItem="roY-bq-WkQ" secondAttribute="leading" constant="2" id="6zw-3U-eXi"/>
-                        <constraint firstItem="miH-by-LCp" firstAttribute="leading" secondItem="AuD-6k-wNl" secondAttribute="trailing" constant="15" id="9e1-Sb-sQ7"/>
+                        <constraint firstItem="miH-by-LCp" firstAttribute="leading" secondItem="AuD-6k-wNl" secondAttribute="trailing" constant="-62" id="9e1-Sb-sQ7"/>
                         <constraint firstItem="W4Y-VV-MGB" firstAttribute="centerY" secondItem="MEU-rq-7z5" secondAttribute="centerY" constant="2" id="CIY-vF-HiH"/>
                         <constraint firstAttribute="centerX" secondItem="HRJ-LH-Onv" secondAttribute="centerX" id="DEs-za-Yeq"/>
-                        <constraint firstItem="AuD-6k-wNl" firstAttribute="leading" secondItem="igK-xV-ixB" secondAttribute="trailing" constant="15" id="LYX-jp-Ibr"/>
+                        <constraint firstItem="AuD-6k-wNl" firstAttribute="leading" secondItem="igK-xV-ixB" secondAttribute="trailing" constant="63" id="LYX-jp-Ibr"/>
                         <constraint firstItem="roY-bq-WkQ" firstAttribute="centerY" secondItem="MEU-rq-7z5" secondAttribute="centerY" constant="2" id="LZN-ZG-d6O"/>
                         <constraint firstItem="HRJ-LH-Onv" firstAttribute="top" secondItem="HV6-tB-Qog" secondAttribute="top" constant="2" id="MJ9-ae-OJ9"/>
                         <constraint firstItem="J05-LM-NiM" firstAttribute="top" secondItem="MEU-rq-7z5" secondAttribute="bottom" constant="38" id="QhF-zu-ckg"/>
