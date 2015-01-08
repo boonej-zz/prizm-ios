@@ -67,8 +67,15 @@
     _webView = wv;
     [wv setDelegate:self];
     [view addSubview:wv];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStylePlain target:self action:@selector(back:)];
+    [self.navigationItem setLeftBarButtonItem:bbi];
     
     [self setView:view];
+}
+
+- (void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
