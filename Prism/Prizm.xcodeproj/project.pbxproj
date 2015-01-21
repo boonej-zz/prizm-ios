@@ -52,7 +52,6 @@
 		2CB073E019AF96C900F70B7E /* HAFollowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CB073DE19AF96C900F70B7E /* HAFollowViewController.xib */; };
 		2CBA45C819AC275D00A5BCD6 /* HANotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBA45C619AC275D00A5BCD6 /* HANotificationViewController.m */; };
 		2CBA45C919AC275D00A5BCD6 /* HANotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CBA45C719AC275D00A5BCD6 /* HANotificationViewController.xib */; };
-		2CC0EC491A53371700498ECF /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762A1A1BC151007580A5 /* STKTheme.m */; };
 		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
 		8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */; };
@@ -322,7 +321,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				2CC0EC491A53371700498ECF /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5092,7 +5090,7 @@
 						DevelopmentTeam = MU64MV9X8B;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
