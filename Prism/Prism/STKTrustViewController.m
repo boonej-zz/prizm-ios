@@ -87,7 +87,7 @@
 
 - (void)addNewTrust:(id)sender
 {
-    STKSearchUsersViewController *searchController = [[STKSearchUsersViewController alloc] init];
+    STKSearchUsersViewController *searchController = [[STKSearchUsersViewController alloc] initWithSearchType:STKSearchUsersTypeNotInTrust];
     [searchController setTitle:@"Add to Trust"];
     [[self navigationController] pushViewController:searchController animated:YES];
     [[self menuController] setMenuVisible:NO animated:YES];
