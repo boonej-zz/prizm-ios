@@ -706,8 +706,20 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     NSDictionary *visibilityMap = @{@0 : STKPostVisibilityPublic, @1 : STKPostVisibilityTrust, @2: STKPostVisibilityPrivate};
     NSString *visibilityString = [visibilityMap
                                    objectForKey:@([sender selectedSegmentIndex])];
+    
 
     STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
+    if ([[p type] isEqualToString:STKPostTypePersonal] && [sender selectedSegmentIndex] != 2){
+        [sender setSelectedSegmentIndex:2];
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sharing", @"visibility title")
+                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your Trust. Right now this post is marked as \"Personal\" which will only be seen by you. If you want to share this post with others, select a new category and then choose the sharing options.", @"viibility message")
+                                                    delegate:nil
+                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                           otherButtonTitles:nil];
+        
+        [av show];
+        return;
+    }
     NSString *revertVisibility = [p visibility];
     __block long revertIndex = NSNotFound;
     [visibilityMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -721,7 +733,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     };
     
     if([visibilityString isEqualToString:STKPostVisibilityPrivate]) {
-        [p setType:STKPostTypePersonal];
+//        [p setType:STKPostTypePersonal];
         [[self categoryCollectionView] reloadData];
     }
     
