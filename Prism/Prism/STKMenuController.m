@@ -470,7 +470,11 @@ static BOOL HAActivityIsAnimating = NO;
 {
     NSDictionary *userInfo = [note userInfo];
     int count = [[[note userInfo] objectForKey:STKUserStoreActivityUpdateCountKey] intValue];
-    
+    if ([[STKUserStore store] currentUser]) {
+        [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:@[] completion:^(STKUser *u, NSError *err) {
+            NSLog(@"Refreshed user");
+        }];
+    }
     
     [self displayNotificationButtons:userInfo];
 
