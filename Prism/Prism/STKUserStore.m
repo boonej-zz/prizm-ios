@@ -1282,6 +1282,24 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)fetchSuggestionsForUser:(STKUser *)user completion:(void(^)(NSArray *users, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *conn = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", user.uniqueID, @"suggestions"]];
+        [conn setModelGraph:@[@"STKUser"]];
+        [conn setContext:[self context]];
+        [conn setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [conn setShouldReturnArray:YES];
+        [conn getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
 - (void)searchUserTrustsWithName:(NSString *)name completion:(void (^)(id data, NSError *error))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {

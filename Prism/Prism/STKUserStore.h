@@ -113,5 +113,6 @@ typedef enum {
 - (void)fetchOrganizationByCode:(NSString *)code completion:(void (^)(STKOrganization *organization, NSError *err))block;
 - (STKOrganization *)getOrganizationByCode:(NSString *)code;
 - (void)updateInterestsforUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block;
+- (void)fetchSuggestionsForUser:(STKUser *)user completion:(void(^)(NSArray *users, NSError *err))block;
 
 @end
