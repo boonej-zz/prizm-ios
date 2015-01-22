@@ -20,6 +20,7 @@ NSString * const STKActivityItemTypeTrustAccepted = @"trust_accepted";
 NSString * const STKActivityItemTypeRepost = @"repost";
 NSString * const STKActivityItemTypeTag = @"tag";
 NSString * const STKActivityItemTypeAccolade = @"accolade";
+NSString * const STKActivityItemTypeGroupJoined = @"group_joined";
 
 
 @implementation STKActivityItem
@@ -85,6 +86,8 @@ NSString * const STKActivityItemTypeAccolade = @"accolade";
         [str appendString:@"sent you an accolade."];
     } else if([[self action] isEqualToString:@"post"]) {
         [str appendString:@"created a new post."];
+    } else if ([[self action] isEqualToString:STKActivityItemTypeGroupJoined]) {
+        [str appendString:@"is reviewing your membership request."];
     }
     
     
