@@ -88,7 +88,8 @@
         NSNumber *count2 = @(user2.matchingInterestsCount);
         return [count2 compare:count1];
     };
-    [[STKUserStore store] searchUsersWithType:@"luminary" completion:^(NSArray *profiles, NSError *err) {
+    STKUser *currentUser = [[STKUserStore store] currentUser];
+    [[STKUserStore store] fetchSuggestionsForUser:currentUser completion:^(NSArray *profiles, NSError *err) {
         NSPredicate *notFollowing = [NSPredicate predicateWithBlock:^BOOL(STKUser *user, NSDictionary *bindings) {
             return (![user isFollowedByUser:[[STKUserStore store] currentUser]]) && user.postCount > 2;
         }];
