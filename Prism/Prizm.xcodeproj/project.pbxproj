@@ -37,6 +37,7 @@
 		2C7B79FA19ED8E19000EC061 /* STKInterest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B79F919ED8E19000EC061 /* STKInterest.m */; };
 		2C7B79FE19EDA9C6000EC061 /* HAInterestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B79FC19EDA9C6000EC061 /* HAInterestCell.m */; };
 		2C7B79FF19EDA9C6000EC061 /* HAInterestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */; };
+		2C82D9131A730082009E8AAF /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2C97973219D9D9A7003A6C0A /* STKCreatePostViewController in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973119D9D9A7003A6C0A /* STKCreatePostViewController */; };
 		2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C97973419DC5285003A6C0A /* HAInsightCell.m */; };
 		2C97973719DC5285003A6C0A /* HAInsightCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973519DC5285003A6C0A /* HAInsightCell.xib */; };
@@ -321,6 +322,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				2C82D9131A730082009E8AAF /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5090,7 +5092,7 @@
 						DevelopmentTeam = MU64MV9X8B;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
