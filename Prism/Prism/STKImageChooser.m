@@ -45,7 +45,14 @@
     [_captureViewController setType:type];
     [[self sourceViewController] presentViewController:_captureViewController animated:YES completion:^{
         if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            [[self captureViewController] showLibrary:nil];
+            if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]){
+                [[self captureViewController] showLibrary:nil];
+            } else {
+                    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Need Camera Access"
+                                                                 message:@"Hmmm... It looks like we need permission to access your Camera. Go to the \"Settings\" app, scroll to find Prizm in your list of apps, and allow access to Camera and Photos."
+                                                                delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [av show];
+            }
         }
     }];
 }

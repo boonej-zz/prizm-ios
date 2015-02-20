@@ -610,14 +610,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 - (void)changeImage:(id)sender
 {
-    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
-    NSLog(@"%ld : %ld", status, ALAuthorizationStatusAuthorized);
-    if (status != ALAuthorizationStatusAuthorized) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Need Camera Access"
-    message:@"Hmmm... It looks like we need permission to access your Camera. Go to the \"Settings\" app, scroll to find Prizm in your list of apps, and allow access to Camera and Photos."
-                                                    delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [av show];
-    } else {
+   
     [[STKImageChooser sharedImageChooser] initiateImageChooserForViewController:self
                                                                         forType:STKImageChooserTypeImage
                                                                      completion:^(UIImage *img, UIImage *originalImage, NSDictionary *imageInfo) {
@@ -632,7 +625,6 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                                                                          }];
                                                                          
                                                                      }];
-    }
 }
 
 - (IBAction)adjustImage:(id)sender
