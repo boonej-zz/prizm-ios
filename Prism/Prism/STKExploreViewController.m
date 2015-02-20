@@ -79,8 +79,8 @@
         [self setDefaultFeaturedFilter:@{@"key" : @"creatorType", @"filter" : STKUserTypeInstitution}];
         
         _recentPostsController = [[STKPostController alloc] initWithViewController:self];
-//        NSSortDescriptor *recent = [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO];
-        [[self recentPostsController] setSortDescriptors:@[]];
+         NSSortDescriptor *recent = [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO];
+        [[self recentPostsController] setSortDescriptors:@[recent]];
         [[self recentPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
         }];
@@ -88,6 +88,7 @@
         _featuredPostsController = [[STKPostController alloc] initWithViewController:self];
 //        [[self featuredPostsController] setFilterMap:@{@"creatorType" : STKUserTypeInstitution}];
         [[self featuredPostsController] setFilterMap:[self filterMap]];
+        [self.featuredPostsController setSortDescriptors:@[recent]];
         [[self featuredPostsController] setFetchMechanism:^(STKFetchDescription *fs, void (^completion)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fs completion:completion];
         }];
@@ -432,6 +433,7 @@
         [d setObject:STKUserTypeInstitution forKey:@"creatorType"];
     }
     
+    
     [d addEntriesFromDictionary:[self activeFilter]];
     
     return d;
@@ -502,9 +504,38 @@
         float t = fabs(offset) / 60.0;
         if(t > 1)
             t = 1;
-        [[self luminatingBar] setProgress:t];
+        //        [[self luminatingBar] setProgress:t];
     } else {
-        [[self luminatingBar] setProgress:0];
+        //        [[self luminatingBar] setProgress:0];
+    }
+}
+
+- (void)fetchNewPosts
+{
+    //    [[self luminatingBar] setLuminating:YES];
+    //    [self configurePostController];
+    [[self tableView] reloadData];
+    [[self activePostController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        //        [[self luminatingBar] setLuminating:NO];
+        [[self tableView] reloadData];
+    }];
+    
+}
+
+- (void)fetchOlderPosts
+{
+    //    [self configurePostController];
+    [[self tableView] reloadData];
+    [[self activePostController] fetchOlderPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
+        [[self tableView] reloadData];
+    }];
+    
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if(velocity.y > 0 && [scrollView contentSize].height - [scrollView frame].size.height - 20 < targetContentOffset->y) {
+        [self fetchOlderPosts];
     }
 }
 
@@ -512,7 +543,7 @@
 {
     float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
     if(offset < -60) {
-        [self reloadPosts];
+        [self fetchNewPosts];
     }
 }
 

@@ -260,8 +260,10 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             [q setPageKey:STKPostDateCreatedKey];
             [q setPageValue:[STKTimestampFormatter stringFromDate:[(STKPost *)[desc referenceObject] datePosted]]];
         }
-
-        [q setFilters:[self serverFilterMapFromLocalFilterMap:[desc filterDictionary]]];
+        NSMutableDictionary *filters = [NSMutableDictionary dictionary];
+        [filters setObject:@"infinite" forKey:@"feed"];
+        [filters addEntriesFromDictionary:[self serverFilterMapFromLocalFilterMap:[desc filterDictionary]]];
+        [q setFilters:filters];
         
         if([[desc sortDescriptors] count] > 0) {
             NSSortDescriptor *sd = [[desc sortDescriptors] firstObject];
