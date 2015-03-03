@@ -62,7 +62,10 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [[self navigationItem] setLeftBarButtonItem:[self menuBarButtonItem]];
+        UIBarButtonItem *bi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+                                                               target:self action:@selector(back:)];
+        [[self navigationItem] setLeftBarButtonItem:bi];
         [[self navigationItem] setTitle:@"Trust"];
 
         STKNavigationButton *view = [[STKNavigationButton alloc] init];
@@ -83,6 +86,11 @@
                               STKTrustTypeCoach, STKTrustTypeTeacher, STKTrustTypeFamily]];
     }
     return self;
+}
+
+- (void)back:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)addNewTrust:(id)sender

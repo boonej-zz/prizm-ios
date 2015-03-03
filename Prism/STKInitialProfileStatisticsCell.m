@@ -39,6 +39,11 @@
     ROUTE(sender);
 }
 
+- (IBAction)showTrusts:(id)sender
+{
+    ROUTE(sender);
+}
+
 - (IBAction)sendMessage:(id)sender
 {
     ROUTE(sender);

@@ -41,6 +41,16 @@
 
 @implementation HAInsightsViewController
 
+- (id)init {
+    self = [super init];
+    if (self){
+        [self.tabBarItem setTitle:@"Insight"];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"btn_brain"]];
+        [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"btn_brain_glow"]];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -64,6 +74,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:[STKInsightArchiveCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[STKInsightArchiveCell reuseIdentifier]];
     
     if ([self isModal]) {
+//        UIBarButtonItem  *bbi = [self menuBarButtonItem];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_close"] landscapeImagePhone:nil style:UIBarButtonItemStylePlain target:self action:@selector(close:)];
         [self.navigationItem setLeftBarButtonItem:bbi];
         NSMutableDictionary *props = [[[[STKUserStore store] currentUser] mixpanelProperties] mutableCopy];
@@ -81,9 +92,10 @@
 //        [self.navigationItem setTitleView:titleLabel];
 //        [self.navigationController.navigationBar setTintColor:[UIColor HATextColor]];
     } else {
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
-                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
-                                                               target:self action:@selector(back:)];
+//        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
+//                                                  landscapeImagePhone:nil style:UIBarButtonItemStylePlain
+//                                                               target:self action:@selector(back:)];
+        UIBarButtonItem *bbi = [self menuBarButtonItem];
         [[self navigationItem] setLeftBarButtonItem:bbi];
         [self.navigationItem setHidesBackButton:YES];
     }

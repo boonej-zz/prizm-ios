@@ -169,7 +169,7 @@
 
 - (void)menuWillAppear:(BOOL)animated
 {
-    [self.navigationItem setRightBarButtonItem:nil];
+//    [self.navigationItem setRightBarButtonItem:nil];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
             [[self underlayView] setAlpha:0.5];
@@ -182,7 +182,7 @@
 
 - (void)menuWillDisappear:(BOOL)animated
 {
-    [self.navigationItem setRightBarButtonItem:self.insightsButton];
+//    [self.navigationItem setRightBarButtonItem:self.insightsButton];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
             [[self underlayView] setAlpha:0.0];
@@ -213,15 +213,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.insightsButton = [self insightsButtonWithGlow:NO];
-    [self.navigationItem setRightBarButtonItem:self.insightsButton];
+//    self.insightsButton = [self insightsButtonWithGlow:NO];
+//    [self.navigationItem setRightBarButtonItem:self.insightsButton];
     
     [[STKContentStore store] fetchInsightsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *insights, NSError *err) {
         NSArray *unread = [insights filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"liked == NO && disliked == NO"]];
-        BOOL glow = [unread count] > 0;
+//        BOOL glow = [unread count] > 0;
 
-        self.insightsButton = [self insightsButtonWithGlow:glow];
-        [self.navigationItem setRightBarButtonItem:self.insightsButton];
+//        self.insightsButton = [self insightsButtonWithGlow:glow];
+//        [self.navigationItem setRightBarButtonItem:self.insightsButton];
     }];
     
     [[self lifetimeActivityIndicator] startAnimating];

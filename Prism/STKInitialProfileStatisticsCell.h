@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *accoladesButton;
 @property (weak, nonatomic) IBOutlet UIButton *messageButton;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
+@property (weak, nonatomic) IBOutlet UIButton *myTrustsButton;
 
 - (IBAction)editProfile:(id)sender;
 - (IBAction)requestTrust:(id)sender;

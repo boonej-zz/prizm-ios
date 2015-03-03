@@ -39,6 +39,7 @@
 #import "STKMarkupUtilities.h"
 #import "NSArray+Reverse.h"
 #import "STKProcessingView.h"
+#import "STKTrustViewController.h"
 
 @import MessageUI;
 @import AddressBook;
@@ -584,6 +585,12 @@ typedef enum {
     [[self navigationController] pushViewController:avc animated:YES];
 }
 
+- (void)showTrusts:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKTrustViewController *tvc = [[STKTrustViewController alloc] init];
+    [[self navigationController] pushViewController:tvc animated:YES];
+}
+
 - (void)follow:(id)sender atIndexPath:(NSIndexPath *)ip
 {
     if([[self profile] isFollowedByUser:[[STKUserStore store] currentUser]]) {
@@ -684,12 +691,13 @@ typedef enum {
         [[c editButton] setHidden:NO];
         [[c messageButton] setHidden:YES];
         [[c shareButton] setHidden:YES];
+        [[c myTrustsButton] setHidden:NO];
         
         if([[self profile] isInstitution]) {
             [[c accoladesButton] setHidden:YES];
         }
     } else {
-        
+        [[c myTrustsButton] setHidden:YES];
         [[c editButton] setHidden:YES];
         [[c shareButton] setHidden:YES];
         

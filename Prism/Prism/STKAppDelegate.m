@@ -20,6 +20,7 @@
 #import "STKBaseStore.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKPostViewController.h"
+#import "HAInsightsViewController.h"
 #import <MessageUI/MessageUI.h>
 
 #import <GooglePlus/GooglePlus.h>
@@ -64,7 +65,8 @@
     
     UIViewController *hvc = [[STKHomeViewController alloc] init];
     UIViewController *evc = [[STKExploreViewController alloc] init];
-    UIViewController *tvc = [[STKTrustViewController alloc] init];
+//    UIViewController *tvc = [[STKTrustViewController alloc] init];
+    UIViewController *ivc = [[HAInsightsViewController alloc] init];
     UIViewController *pvc = [[STKProfileViewController alloc] init];
     UIViewController *avc = [[STKActivityViewController alloc] init];
     UIViewController *gvc = [[STKGraphViewController alloc] init];
@@ -77,7 +79,8 @@
     [nvc setViewControllers:@[
         [[UINavigationController alloc] initWithRootViewController:hvc],
         [[UINavigationController alloc] initWithRootViewController:evc],
-        [[UINavigationController alloc] initWithRootViewController:tvc],
+//        [[UINavigationController alloc] initWithRootViewController:tvc],
+        [[UINavigationController alloc] initWithRootViewController:ivc],
         [[UINavigationController alloc] initWithRootViewController:pvc],
         [[UINavigationController alloc] initWithRootViewController:avc],
         [[UINavigationController alloc] initWithRootViewController:gvc]
