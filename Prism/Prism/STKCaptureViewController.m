@@ -367,30 +367,43 @@
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     [iv setFrame:[self.view bounds]];
     [self.view insertSubview:iv atIndex:0];
-    _session = [[AVCaptureSession alloc] init];
-    [[self session] setSessionPreset:AVCaptureSessionPreset1280x720];
-    [[self captureView] setSession:[self session]];
     
-
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    AVCaptureDevice *device = [self deviceForPosition:AVCaptureDevicePositionBack];
-    
-    // We looked for a back camera, couldn't find it, defualt to whatever is in there.
-    if(!device)
-        device = [devices lastObject];
-    
-    if(!device) {
-        // We have no devices!
-        return;
+    @try {
+        _session = [[AVCaptureSession alloc] init];
+        [[self session] setSessionPreset:AVCaptureSessionPreset1280x720];
+        [[self captureView] setSession:[self session]];
+        NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+        AVCaptureDevice *device = [self deviceForPosition:AVCaptureDevicePositionBack];
+        
+        // We looked for a back camera, couldn't find it, defualt to whatever is in there.
+        if(!device)
+            device = [devices lastObject];
+        
+        if(!device) {
+            // We have no devices!
+            return;
+        }
+        
+        _deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
+        [[self session] addInput:[self deviceInput]];
+        
+        _imageCaptureOutput = [[AVCaptureStillImageOutput alloc] init];
+        [[self imageCaptureOutput] setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
+        [[[self imageCaptureOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:AVCaptureVideoOrientationPortrait];
+        [[self session] addOutput:[self imageCaptureOutput]];
+    }
+    @catch (NSException *exception) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Need Camera Access" message:@"Hmmm... It looks like we need permission to access your Camera. Go to the \"Settings\" app, scroll to find Prizm in your list of apps, and allow access to Camera and Photos." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
+        
+    }
+    @finally {
+        NSLog(@"Finally");
+        if(![self.session isRunning]) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
     }
     
-    _deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
-    [[self session] addInput:[self deviceInput]];
-    
-    _imageCaptureOutput = [[AVCaptureStillImageOutput alloc] init];
-    [[self imageCaptureOutput] setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
-    [[[self imageCaptureOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:AVCaptureVideoOrientationPortrait];
-    [[self session] addOutput:[self imageCaptureOutput]];
  
     [[self dimensionLabel] setFont:STKFont(11)];
 }
@@ -436,7 +449,9 @@
 {
     [super viewWillDisappear:animated];
      [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [[self session] stopRunning];
+    if ([self.session isRunning]){
+        [[self session] stopRunning];
+    }
 }
 
 

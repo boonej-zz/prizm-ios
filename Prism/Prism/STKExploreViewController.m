@@ -504,19 +504,19 @@
         float t = fabs(offset) / 60.0;
         if(t > 1)
             t = 1;
-        //        [[self luminatingBar] setProgress:t];
+                [[self luminatingBar] setProgress:t];
     } else {
-        //        [[self luminatingBar] setProgress:0];
+                [[self luminatingBar] setProgress:0];
     }
 }
 
 - (void)fetchNewPosts
 {
-    //    [[self luminatingBar] setLuminating:YES];
+    [[self luminatingBar] setLuminating:YES];
     //    [self configurePostController];
     [[self tableView] reloadData];
     [[self activePostController] fetchNewerPostsWithCompletion:^(NSArray *newPosts, NSError *err) {
-        //        [[self luminatingBar] setLuminating:NO];
+                [[self luminatingBar] setLuminating:NO];
         [[self tableView] reloadData];
     }];
     
