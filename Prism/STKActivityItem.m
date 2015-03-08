@@ -87,7 +87,7 @@ NSString * const STKActivityItemTypeGroupJoined = @"group_joined";
     } else if([[self action] isEqualToString:@"post"]) {
         [str appendString:@"created a new post."];
     } else if ([[self action] isEqualToString:STKActivityItemTypeGroupJoined]) {
-        [str appendString:@"is reviewing your membership request."];
+        [str appendString:@"reviewing membership."];
     }
     
     

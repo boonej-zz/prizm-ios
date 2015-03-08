@@ -10,6 +10,8 @@
 		2C01A3071A09727400D58D9B /* HATableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3061A09727400D58D9B /* HATableView.m */; };
 		2C01A30B1A098C7400D58D9B /* STKCommentTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */; };
 		2C01A30C1A098C7400D58D9B /* STKCommentTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */; };
+		2C0BB38A1AA8CC9C0061A76D /* HAMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0BB3881AA8CC9C0061A76D /* HAMessageViewController.m */; };
+		2C0BB38B1AA8CC9C0061A76D /* HAMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0BB3891AA8CC9C0061A76D /* HAMessageViewController.xib */; };
 		2C0D730619C0E4BB0078A9B9 /* HAAccountSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */; };
 		2C0D730719C0E4BB0078A9B9 /* HAAccountSelectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */; };
 		2C0D730B19C392F90078A9B9 /* HAFastSwitchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D730919C392F90078A9B9 /* HAFastSwitchViewController.m */; };
@@ -326,6 +328,9 @@
 		2C01A3081A098C7400D58D9B /* STKCommentTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCommentTitleCell.h; sourceTree = "<group>"; };
 		2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCommentTitleCell.m; sourceTree = "<group>"; };
 		2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCommentTitleCell.xib; sourceTree = "<group>"; };
+		2C0BB3871AA8CC9C0061A76D /* HAMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessageViewController.h; sourceTree = "<group>"; };
+		2C0BB3881AA8CC9C0061A76D /* HAMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessageViewController.m; sourceTree = "<group>"; };
+		2C0BB3891AA8CC9C0061A76D /* HAMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAMessageViewController.xib; sourceTree = "<group>"; };
 		2C0D730319C0E4BB0078A9B9 /* HAAccountSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAAccountSelectionCell.h; sourceTree = "<group>"; };
 		2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAAccountSelectionCell.m; sourceTree = "<group>"; };
 		2C0D730519C0E4BB0078A9B9 /* HAAccountSelectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAAccountSelectionCell.xib; sourceTree = "<group>"; };
@@ -2853,6 +2858,9 @@
 				2C189DCE1A2F74190028AD1C /* HAWelcomeViewController.h */,
 				2C189DCF1A2F74190028AD1C /* HAWelcomeViewController.m */,
 				2C189DD01A2F74190028AD1C /* HAWelcomeViewController.xib */,
+				2C0BB3871AA8CC9C0061A76D /* HAMessageViewController.h */,
+				2C0BB3881AA8CC9C0061A76D /* HAMessageViewController.m */,
+				2C0BB3891AA8CC9C0061A76D /* HAMessageViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5202,6 +5210,7 @@
 				BE13648F18689F39003D9D5C /* STKAccountChooserViewController.xib in Resources */,
 				BEC01A1E182AF44600080601 /* STKGraphViewController.xib in Resources */,
 				883D87CE19463E7F00195B11 /* Media.xcassets in Resources */,
+				2C0BB38B1AA8CC9C0061A76D /* HAMessageViewController.xib in Resources */,
 				BEC01A19182AF43A00080601 /* STKActivityViewController.xib in Resources */,
 				BE8F35E61833D48300C4ED03 /* STKPostCell.xib in Resources */,
 				BE61085F183D159E003A182C /* STKActivityCell.xib in Resources */,
@@ -5275,6 +5284,7 @@
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
 				2C7B79FA19ED8E19000EC061 /* STKInterest.m in Sources */,
 				2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */,
+				2C0BB38A1AA8CC9C0061A76D /* HAMessageViewController.m in Sources */,
 				883D87DB19463E7F00195B11 /* UIColor+MPColor.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,

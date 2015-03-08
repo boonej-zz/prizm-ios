@@ -45,8 +45,8 @@
     self = [super init];
     if (self){
         [self.tabBarItem setTitle:@"Insight"];
-        [self.tabBarItem setImage:[UIImage imageNamed:@"btn_brain"]];
-        [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"btn_brain_glow"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"menu_insight"]];
+        [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"menu_insight_selected"]];
     }
     return self;
 }
