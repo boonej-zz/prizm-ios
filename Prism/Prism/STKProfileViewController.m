@@ -301,6 +301,14 @@ typedef enum {
     [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
     [[[self filterView] gridViewButton] setSelected:YES];
     [self addBlurViewWithHeight:64.f];
+    if ([[[STKUserStore store] currentUser].type isEqualToString:@"institution_verified"]) {
+        [self.statsView.myTrustsButton setTitle:@"Luminary" forState:UIControlStateNormal];
+//        [self.statsView.myTrustsButton sizeToFit];
+        CGRect frame = self.statsView.myTrustsButton.frame;
+        frame.size.width = 102;
+        [self.statsView.myTrustsButton setFrame:frame];
+        [self.statsView.myTrustsButton setImageEdgeInsets:UIEdgeInsetsMake(0, 68, 0, 0)];
+    }
 }
 
 

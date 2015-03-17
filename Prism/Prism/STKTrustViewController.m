@@ -66,7 +66,13 @@
                                                   landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                                target:self action:@selector(back:)];
         [[self navigationItem] setLeftBarButtonItem:bi];
-        [[self navigationItem] setTitle:@"Trust"];
+        if ([[[STKUserStore store] currentUser].type isEqualToString:@"institution_verified"]) {
+            [[self navigationItem] setTitle:@"Luminary"];
+            [[self tabBarItem] setTitle:@"Luminary"];
+        } else {
+            [[self navigationItem] setTitle:@"Trust"];
+            [[self tabBarItem] setTitle:@"Trust"];
+        }
 
         STKNavigationButton *view = [[STKNavigationButton alloc] init];
         [view setImage:[UIImage imageNamed:@"addusertrust"]];
@@ -79,7 +85,7 @@
         
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_trust"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_trust_selected"]];
-        [[self tabBarItem] setTitle:@"Trust"];
+        
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(currentUserChanged:) name:STKUserStoreCurrentUserChangedNotification object:nil];
         [self setTrustTypes:@[STKTrustTypeMentor, STKTrustTypeParent, STKTrustTypeFriend,

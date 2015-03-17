@@ -21,6 +21,7 @@ NSString * const STKActivityItemTypeRepost = @"repost";
 NSString * const STKActivityItemTypeTag = @"tag";
 NSString * const STKActivityItemTypeAccolade = @"accolade";
 NSString * const STKActivityItemTypeGroupJoined = @"group_joined";
+NSString * const STKActivityItemTypeGroupApproved = @"group_approved";
 
 
 @implementation STKActivityItem
@@ -88,6 +89,8 @@ NSString * const STKActivityItemTypeGroupJoined = @"group_joined";
         [str appendString:@"created a new post."];
     } else if ([[self action] isEqualToString:STKActivityItemTypeGroupJoined]) {
         [str appendString:@"reviewing membership."];
+    } else if ([[self action] isEqualToString:STKActivityItemTypeGroupApproved]) {
+        [str appendString:@"approved membership."];
     }
     
     
