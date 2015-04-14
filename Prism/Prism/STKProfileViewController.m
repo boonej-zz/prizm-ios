@@ -747,8 +747,12 @@ typedef enum {
     
         if(!t || [t isCancelled]) {
             if([[[STKUserStore store] currentUser] isInstitution]) {
-                [[c trustButton] setTitle:@"Request Luminary" forState:UIControlStateNormal];
-                [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -90, 0, 0)];
+                if ([self.profile.type isEqualToString:@"user"]){
+                    [[c trustButton] setTitle:@"Request Luminary" forState:UIControlStateNormal];
+                    [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -90, 0, 0)];
+                } else {
+                    [c.trustButton setHidden:YES];
+                }
             } else {
                 [[c trustButton] setTitle:@"Request Trust" forState:UIControlStateNormal];
                 [[c trustButton] setTitleEdgeInsets:UIEdgeInsetsMake(0, -60, 0, 0)];
