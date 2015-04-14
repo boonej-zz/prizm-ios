@@ -51,7 +51,7 @@ state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religi
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
 tumblrTokenSecret, tumblrLastMinID, programCode, theme;
-@dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype, insightCount;
+@dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype, insightCount, organizations;
 @synthesize profilePhoto, coverPhoto, token, secret, password;
 
 
@@ -131,7 +131,8 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
              }],
              @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp],
              @"delete_date" : [STKBind bindMapForKey:@"dateDeleted" transform:STKBindTransformDateTimestamp],
-             @"active" : @"active"
+             @"active" : @"active",
+             @"org_status": [STKBind bindMapForKey:@"organizations" matchMap:@{@"organization": @"organization"}]
     };
 }
 

@@ -110,6 +110,7 @@ extern BOOL const STKUserStatusInActive;
 @property (nonatomic, strong) NSSet *createdActivities;
 @property (nonatomic, strong) NSSet *ownedActivities;
 @property (nonatomic, strong) NSSet *postsTaggedIn;
+@property (nonatomic, retain) NSSet *organizations;
 @property (nonatomic, strong) STKTheme *theme;
 @property (nonatomic, strong) STKOrganization *organization;
 
@@ -144,6 +145,7 @@ extern BOOL const STKUserStatusInActive;
 - (void)setValuesFromFacebook:(NSDictionary *)vals;
 - (void)setValuesFromTwitter:(NSArray *)vals;
 - (void)setValuesFromGooglePlus:(GTLPlusPerson *)vals;
+- (NSDictionary *)mixpanelProperties;
 
 @end
 
@@ -151,11 +153,17 @@ extern BOOL const STKUserStatusInActive;
 
 - (void)addFFeedPostsObject:(STKPost *)object;
 - (void)addFFeedPosts:(NSSet *)objects;
-- (NSDictionary *)mixpanelProperties;
+
 - (void)addInterestsObject:(STKInterest *)value;
 - (void)removeInterestsObject:(STKInterest *)value;
+
 - (void)addInterests:(NSSet *)values;
 - (void)removeInterests:(NSSet *)values;
+
+- (void)addOrganizationsObject:(STKOrganization *)organization;
+- (void)removeOrganizationsObject:(STKOrganization *)organization;
+- (void)addOrganizations:(NSSet *)organizations;
+- (void)removeOrganizations:(NSSet *)organizations;
 - (NSInteger)matchingInterestsCount;
 
 @end

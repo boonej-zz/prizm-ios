@@ -37,6 +37,7 @@
     [self.navView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     [self.shadedView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     [self.navigationController setNavigationBarHidden:YES];
+    [[NSUserDefaults standardUserDefaults] setValue:@YES forKey:@"DidShowWelcomeScreen"];
 }
 
 - (void)didReceiveMemoryWarning {

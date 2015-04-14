@@ -33,7 +33,6 @@
 		2C1D45BF19E45E94008D84C5 /* STKInsightArchiveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */; };
 		2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */; };
 		2C4FD7321A029E98003A4212 /* HANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C4FD7311A029E98003A4212 /* HANavigationController.m */; };
-		2C5614B61AAF69C00090C6CE /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
 		2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */; };
@@ -57,6 +56,8 @@
 		2CBA45C919AC275D00A5BCD6 /* HANotificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CBA45C719AC275D00A5BCD6 /* HANotificationViewController.xib */; };
 		2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762A1A1BC151007580A5 /* STKTheme.m */; };
 		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
+		2CF53D2F1ADD702F0075FA96 /* STKGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D2E1ADD702F0075FA96 /* STKGroup.m */; };
+		2CF53D321ADD70300075FA96 /* STKOrgStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D311ADD70300075FA96 /* STKOrgStatus.m */; };
 		8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */; };
 		8805330E193E5FD900A8E44D /* STKSearchUsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */; };
 		88053311193E6F0000A8E44D /* STKSearchTrustCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 88053310193E6F0000A8E44D /* STKSearchTrustCell.m */; };
@@ -317,7 +318,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				2C5614B61AAF69C00090C6CE /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -413,6 +413,11 @@
 		2CCA762C1A1BC152007580A5 /* STKOrganization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKOrganization.h; sourceTree = "<group>"; };
 		2CCA762D1A1BC152007580A5 /* STKOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKOrganization.m; sourceTree = "<group>"; };
 		2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 4.xcdatamodel"; sourceTree = "<group>"; };
+		2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 5.xcdatamodel"; sourceTree = "<group>"; };
+		2CF53D2D1ADD702F0075FA96 /* STKGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGroup.h; sourceTree = "<group>"; };
+		2CF53D2E1ADD702F0075FA96 /* STKGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGroup.m; sourceTree = "<group>"; };
+		2CF53D301ADD702F0075FA96 /* STKOrgStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKOrgStatus.h; sourceTree = "<group>"; };
+		2CF53D311ADD70300075FA96 /* STKOrgStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKOrgStatus.m; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -4920,6 +4925,10 @@
 				2CCA762D1A1BC152007580A5 /* STKOrganization.m */,
 				2CCA76291A1BC151007580A5 /* STKTheme.h */,
 				2CCA762A1A1BC151007580A5 /* STKTheme.m */,
+				2CF53D301ADD702F0075FA96 /* STKOrgStatus.h */,
+				2CF53D311ADD70300075FA96 /* STKOrgStatus.m */,
+				2CF53D2D1ADD702F0075FA96 /* STKGroup.h */,
+				2CF53D2E1ADD702F0075FA96 /* STKGroup.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -5092,7 +5101,7 @@
 						DevelopmentTeam = MU64MV9X8B;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -5439,12 +5448,14 @@
 				BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */,
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
 				88384077195B3275006750FC /* STKInviteFriendsShareCell.m in Sources */,
+				2CF53D2F1ADD702F0075FA96 /* STKGroup.m in Sources */,
 				2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */,
 				BEE0FA40185B5914009FCA3B /* STKProcessingView.m in Sources */,
 				2C1D45B619E43676008D84C5 /* STKInsightTextCell.m in Sources */,
 				BEFCEE07182C210600648B9F /* STKSecurePassword.m in Sources */,
 				BE95438B1892CD1400DCC3B1 /* STKCommentCell.m in Sources */,
 				BE893601186CD05E00FE8263 /* STKContentStore.m in Sources */,
+				2CF53D321ADD70300075FA96 /* STKOrgStatus.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5778,7 +5789,6 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm β";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5818,9 +5828,8 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -5842,7 +5851,7 @@
 					"-lRuntime",
 				);
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4f72c768-e004-476f-b0e1-024edf4fe8c5";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -5930,7 +5939,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6020,7 +6028,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6117,7 +6124,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6220,7 +6226,6 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = "Prizm β";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm β.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6346,12 +6351,13 @@
 		BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */,
 				2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */,
 				2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */,
 				2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */,
 				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
 			);
-			currentVersion = 2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */;
+			currentVersion = 2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */;
 			path = User.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -673,6 +673,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             [q addSubquery:[STKContainQuery containQueryForField:@"following" key:@"_id" value:[[self currentUser] uniqueID]]];
             
             
+            
             //[q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
 //            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" keyValues:@{@"from" : [[self currentUser] uniqueID], @"to" : [[self currentUser] uniqueID]}]];
         } else {
@@ -1538,7 +1539,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 //            [q addSubquery:rq];
 //            [q addSubquery:mq];
             [c setQueryObject:q];
-            [c setModelGraph:@"STKOrganization"];
+            [c setModelGraph:@[@"STKOrganization"]];
             [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
             [c setResolutionMap:@{@"Theme": @"STKTheme", @"User": @"STKUser"}];
             [c setContext:[self context]];

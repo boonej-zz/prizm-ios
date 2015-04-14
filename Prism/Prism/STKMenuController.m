@@ -37,6 +37,7 @@
 #import "HAWelcomeViewController.h"
 #import "STKOrganization.h"
 #import "STKUser.h"
+#import "STKOrgStatus.h"
 
 @import QuartzCore;
 
@@ -91,29 +92,39 @@ static BOOL HAActivityIsAnimating = NO;
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoggedOut:) name:HANotificationKeyUserLoggedOut object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showActivities:) name:@"ShowActivities" object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showWelcome:) name:@"ShowWelcome" object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showWelcome:) name:@"ShowWelcome" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(profileUpdated:) name:@"UserDetailsUpdated" object:nil];
     }
     
     return self;
 }
 
-- (void)showWelcome:(NSNotification *)note
+- (void)showWelcome:(STKOrgStatus *)status
 {
     STKUser *user = [[STKUserStore store] currentUser];
-    [[STKUserStore store] fetchUserDetails:user additionalFields:nil completion:^(STKUser *u, NSError *err) {
-        if (u.organization){
+    [[STKUserStore store] fetchOrganizationByCode:user.programCode completion:^(STKOrganization *organization, NSError *err) {
+        if (organization){
+            user.organization = organization;
             HAWelcomeViewController *wvc = [[HAWelcomeViewController alloc] init];
-            [wvc setOrganization:u.organization];
+            [wvc setOrganization:user.organization];
             [wvc setTitle:@"Welcome to"];
             [[self navigationController] pushViewController:wvc animated:NO];
             STKVerticalNavigationController *nvc = [[STKVerticalNavigationController alloc] initWithRootViewController:wvc];
             [self presentViewController:nvc animated:YES
                              completion:nil];
-//            [self presentViewController:wvc animated:YES completion:nil];
         }
-
     }];
-    
+}
+
+- (void)profileUpdated:(NSNotification *)note
+{
+    STKUser *cu = [[STKUserStore store] currentUser];
+    NSSet *matched = [cu.organizations filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status = %@", @"active"]];
+    if (matched.count > 0) {
+        if (![[NSUserDefaults standardUserDefaults] valueForKey:@"DidShowWelcomeScreen"]) {
+            [self showWelcome:[matched allObjects][0]];
+        }
+    }
 }
 
 - (void)showActivities:(NSNotification *)note
