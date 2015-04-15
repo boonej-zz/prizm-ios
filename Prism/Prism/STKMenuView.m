@@ -22,10 +22,12 @@
 
 @implementation STKMenuView
 
-- (id)init
+- (id)initWithOptions:(BOOL)options
 {
-    self = [super initWithFrame:CGRectMake(0, 0, 320, 140)];
+    CGRect frame = options?CGRectMake(0, 0, 320, 210):CGRectMake(0, 0, 320, 140);
+    self = [super initWithFrame:frame];
     if (self) {
+        [self setOptionsEnabled:options];
         [self setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
         [self setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self setClipsToBounds:YES];
@@ -37,7 +39,7 @@
         [_backgroundImageView setContentMode:UIViewContentModeScaleAspectFill];
         [_backgroundImageView setClipsToBounds:YES];
         
-        _buttonContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 140)];
+        _buttonContainerView = [[UIView alloc] initWithFrame:frame];
         [_buttonContainerView setClipsToBounds:YES];
         [self addSubview:_buttonContainerView];
         
@@ -86,9 +88,16 @@
         STKMenuButton *b3 = [[STKMenuButton alloc] init];
         STKMenuButton *b4 = [[STKMenuButton alloc] init];
         STKMenuButton *b5 = [[STKMenuButton alloc] init];
+        STKMenuButton *b6 = [[STKMenuButton alloc] init];
+        STKMenuButton *b7 = [[STKMenuButton alloc] init];
+        STKMenuButton *b8 = [[STKMenuButton alloc] init];
         UILongPressGestureRecognizer *lpr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(buttonLongPress:)];
         [b3 addGestureRecognizer:lpr];
-        _buttons = @[b0, b1, b2, b3, b4, b5];
+        if (self.optionsEnabled) {
+            _buttons = @[b0, b1, b2, b3, b4, b5, b6, b7, b8];
+        } else {
+            _buttons = @[b0, b1, b2, b3, b4, b5];
+        }
 
         for(UIControl *ctl in [self buttons]) {
             [ctl addTarget:self
@@ -98,17 +107,37 @@
             [_buttonContainerView addSubview:ctl];
             
         }
-        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
-                                                                     options:0
-                                                                     metrics:nil
-                                                                       views:@{@"v0" : b0, @"v1" : b1, @"v2" : b2}]];
-        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
-                                                                     options:0
-                                                                     metrics:nil
-                                                                       views:@{@"v0" : b3, @"v1" : b4, @"v2" : b5}]];
-        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b0, @"v1" : b3}]];
-        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b1, @"v1" : b4}]];
-        [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b2, @"v1" : b5}]];
+        if (self.optionsEnabled) {
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
+                                                                         options:0
+                                                                         metrics:nil
+                                                                           views:@{@"v0" : b0, @"v1" : b1, @"v2" : b2}]];
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
+                                                                         options:0
+                                                                         metrics:nil
+                                                                           views:@{@"v0" : b3, @"v1" : b4, @"v2" : b5}]];
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
+                                                                                         options:0
+                                                                                         metrics:nil
+                                                                                           views:@{@"v0" : b6, @"v1" : b7, @"v2" : b8}]];
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)][v2(==v1)]|" options:0 metrics:nil views:@{@"v0" : b0, @"v1" : b3, @"v2": b6}]];
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)][v2(==v1)]|" options:0 metrics:nil views:@{@"v0" : b1, @"v1" : b4, @"v2": b7}]];
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)][v2(==v1)]|" options:0 metrics:nil views:@{@"v0" : b2, @"v1" : b5, @"v2": b8}]];
+        } else {
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
+                                                                                         options:0
+                                                                                         metrics:nil
+                                                                                           views:@{@"v0" : b0, @"v1" : b1, @"v2" : b2}]];
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v0(==v1)][v1(==v2)][v2]|"
+                                                                                         options:0
+                                                                                         metrics:nil
+                                                                                           views:@{@"v0" : b3, @"v1" : b4, @"v2" : b5}]];
+           
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b0, @"v1" : b3}]];
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b1, @"v1" : b4}]];
+            [_buttonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[v0(==v1)][v1(==70)]|" options:0 metrics:nil views:@{@"v0" : b2, @"v1" : b5}]];
+            
+        }
 
         
         _badgeView = [[STKNotificationBadge alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
@@ -164,10 +193,10 @@
 
 - (void)setItems:(NSArray *)items
 {
-    if([items count] != [[self buttons] count])
-        @throw [NSException exceptionWithName:@"STKMenuView" reason:@"Mismatch in STKMenu items - requires 6" userInfo:nil];
-    
-    for(int i = 0; i < [items count]; i++) {
+//    if([items count] != [[self buttons] count])
+//        @throw [NSException exceptionWithName:@"STKMenuView" reason:@"Mismatch in STKMenu items - requires 6" userInfo:nil];
+    int count = self.optionsEnabled?9:6;
+    for(int i = 0; i < count; i++) {
         UITabBarItem *item = [items objectAtIndex:i];
         [[[self buttons] objectAtIndex:i] setItem:item];
     }

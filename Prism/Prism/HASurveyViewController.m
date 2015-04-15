@@ -1,37 +1,39 @@
 //
-//  HAMessageViewController.m
+//  HASurveyViewController.m
 //  Prizm
 //
-//  Created by Jonathan Boone on 3/5/15.
+//  Created by Jonathan Boone on 4/15/15.
 //  Copyright (c) 2015 Higher Altitude. All rights reserved.
 //
 
-#import "HAMessageViewController.h"
+#import "HASurveyViewController.h"
 #import "UIViewController+STKControllerItems.h"
 
-@interface HAMessageViewController ()
+@interface HASurveyViewController ()
 
 @end
 
-@implementation HAMessageViewController
+@implementation HASurveyViewController
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        [self.tabBarItem setTitle:@"Message"];
-        [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_message"]];
-        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_message_selected"]];
+        [self.tabBarItem setTitle:@"Survey"];
+        [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_survey"]];
+        [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_survey_selected"]];
     }
     return self;
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     iv.frame = self.view.bounds;
     [self.view insertSubview:iv atIndex:0];
-    self.title = @"Message";
+    self.title = @"Survey";
     UIBarButtonItem *bbi = [self menuBarButtonItem];
     [[self navigationItem] setLeftBarButtonItem:bbi];
     [self.navigationItem setHidesBackButton:YES];

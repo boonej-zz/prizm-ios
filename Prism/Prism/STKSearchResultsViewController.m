@@ -148,7 +148,7 @@ typedef enum {
 
 - (void)performSearch:(NSString *)searchString
 {
-    if([searchString length] < 2) {
+    if([searchString length] < 1) {
         [self reloadSearchResults];
         return;
     }

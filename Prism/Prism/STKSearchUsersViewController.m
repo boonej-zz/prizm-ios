@@ -119,7 +119,7 @@
 - (IBAction)searchFieldDidChange:(UITextField *)sender
 {
     NSString *searchString = [sender text];
-    if([searchString length] < 2) {
+    if([searchString length] < 1) {
         [self reloadSearchResults];
         return;
     }

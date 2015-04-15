@@ -58,6 +58,10 @@
 		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
 		2CF53D2F1ADD702F0075FA96 /* STKGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D2E1ADD702F0075FA96 /* STKGroup.m */; };
 		2CF53D321ADD70300075FA96 /* STKOrgStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D311ADD70300075FA96 /* STKOrgStatus.m */; };
+		2CF53D391ADED0730075FA96 /* HACalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D371ADED0730075FA96 /* HACalendarViewController.m */; };
+		2CF53D3A1ADED0730075FA96 /* HACalendarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CF53D381ADED0730075FA96 /* HACalendarViewController.xib */; };
+		2CF53D3E1ADED08B0075FA96 /* HASurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D3C1ADED08B0075FA96 /* HASurveyViewController.m */; };
+		2CF53D3F1ADED08B0075FA96 /* HASurveyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CF53D3D1ADED08B0075FA96 /* HASurveyViewController.xib */; };
 		8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */; };
 		8805330E193E5FD900A8E44D /* STKSearchUsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */; };
 		88053311193E6F0000A8E44D /* STKSearchTrustCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 88053310193E6F0000A8E44D /* STKSearchTrustCell.m */; };
@@ -418,6 +422,12 @@
 		2CF53D2E1ADD702F0075FA96 /* STKGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGroup.m; sourceTree = "<group>"; };
 		2CF53D301ADD702F0075FA96 /* STKOrgStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKOrgStatus.h; sourceTree = "<group>"; };
 		2CF53D311ADD70300075FA96 /* STKOrgStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKOrgStatus.m; sourceTree = "<group>"; };
+		2CF53D361ADED0730075FA96 /* HACalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HACalendarViewController.h; sourceTree = "<group>"; };
+		2CF53D371ADED0730075FA96 /* HACalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HACalendarViewController.m; sourceTree = "<group>"; };
+		2CF53D381ADED0730075FA96 /* HACalendarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HACalendarViewController.xib; sourceTree = "<group>"; };
+		2CF53D3B1ADED08B0075FA96 /* HASurveyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyViewController.h; sourceTree = "<group>"; };
+		2CF53D3C1ADED08B0075FA96 /* HASurveyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyViewController.m; sourceTree = "<group>"; };
+		2CF53D3D1ADED08B0075FA96 /* HASurveyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HASurveyViewController.xib; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -2868,6 +2878,12 @@
 				2C0BB3871AA8CC9C0061A76D /* HAMessageViewController.h */,
 				2C0BB3881AA8CC9C0061A76D /* HAMessageViewController.m */,
 				2C0BB3891AA8CC9C0061A76D /* HAMessageViewController.xib */,
+				2CF53D361ADED0730075FA96 /* HACalendarViewController.h */,
+				2CF53D371ADED0730075FA96 /* HACalendarViewController.m */,
+				2CF53D381ADED0730075FA96 /* HACalendarViewController.xib */,
+				2CF53D3B1ADED08B0075FA96 /* HASurveyViewController.h */,
+				2CF53D3C1ADED08B0075FA96 /* HASurveyViewController.m */,
+				2CF53D3D1ADED08B0075FA96 /* HASurveyViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5158,6 +5174,7 @@
 				BE1FC3B2186C81A4003464E1 /* STKTextImageCell.xib in Resources */,
 				BEF0548A192D1F2900434AFF /* STKOptionCell.xib in Resources */,
 				BE477C1E186E2ED4003672A0 /* STKProfileCell.xib in Resources */,
+				2CF53D3A1ADED0730075FA96 /* HACalendarViewController.xib in Resources */,
 				BE0EC57718EDE971007102E1 /* STKSettingsShareCell.xib in Resources */,
 				BED773FF1890A5BB008770F0 /* STKCaptureViewController.xib in Resources */,
 				BECA9F1F1937CAF600AABA20 /* STKAccoladeUserListViewController.xib in Resources */,
@@ -5182,6 +5199,7 @@
 				2CBA45C919AC275D00A5BCD6 /* HANotificationViewController.xib in Resources */,
 				BEAC71A41852285700F0B211 /* STKCreateProfileViewController.xib in Resources */,
 				BE7391C4190193AB00AD81AB /* STKSearchResultsViewController.xib in Resources */,
+				2CF53D3F1ADED08B0075FA96 /* HASurveyViewController.xib in Resources */,
 				883D87D119463E7F00195B11 /* MPCloseBtn@2x.png in Resources */,
 				BEE5F03E187DC03300CB5325 /* STKInitialProfileStatisticsCell.xib in Resources */,
 				BEC01A0A182AF41C00080601 /* STKExploreViewController.xib in Resources */,
@@ -5270,6 +5288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CF53D391ADED0730075FA96 /* HACalendarViewController.m in Sources */,
 				BEF361CB18B2C3700085A38B /* STKTriImageCell.m in Sources */,
 				BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */,
 				BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */,
@@ -5366,6 +5385,7 @@
 				BE1FC3B0186C817C003464E1 /* STKTextImageCell.m in Sources */,
 				BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
+				2CF53D3E1ADED08B0075FA96 /* HASurveyViewController.m in Sources */,
 				883D87CF19463E7F00195B11 /* Mixpanel.m in Sources */,
 				BE2B7E8C191AB96700E6F408 /* STKGraphCell.m in Sources */,
 				BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */,

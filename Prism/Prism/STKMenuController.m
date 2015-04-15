@@ -57,6 +57,8 @@ static BOOL HAActivityIsAnimating = NO;
 @property (nonatomic, strong) STKMessageBanner *messageBanner;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSLayoutConstraint *menuTopConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *menuConstraint0;
+@property (nonatomic, strong) NSArray *menuConstraint1;
 @property (nonatomic, strong) NSLayoutConstraint *messageBannerTopConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *messageBannerHeightConstraint;
 @property (nonatomic, strong) NSTimer *messageBannerDuration;
@@ -71,6 +73,7 @@ static BOOL HAActivityIsAnimating = NO;
 
 @property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
+@property (nonatomic) BOOL isGroupMember;
 
 @end
 
@@ -123,6 +126,13 @@ static BOOL HAActivityIsAnimating = NO;
     if (matched.count > 0) {
         if (![[NSUserDefaults standardUserDefaults] valueForKey:@"DidShowWelcomeScreen"]) {
             [self showWelcome:[matched allObjects][0]];
+        }
+        if (!self.isGroupMember) {
+            [self loadMenu];
+        }
+    } else {
+        if (self.isGroupMember) {
+            [self loadMenu];
         }
     }
 }
@@ -386,37 +396,46 @@ static BOOL HAActivityIsAnimating = NO;
     }
 }
 
+- (void)loadMenu {
+    if (_menuView) [_menuView removeFromSuperview];
+    if (_menuTopConstraint) [self.view removeConstraint:_menuTopConstraint];
+    if (_menuConstraint0) [self.view removeConstraint:_menuConstraint0];
+    if (_menuConstraint1) [self.view removeConstraints:_menuConstraint1];
+    STKUser *cu = [[STKUserStore store] currentUser];
+    NSSet *matched = [cu.organizations filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status = %@", @"active"]];
+    self.isGroupMember = matched.count > 0 || [cu.type isEqualToString:@"institution_verified"];
+    
+    _menuView = [[STKMenuView alloc] initWithOptions:self.isGroupMember];
+    [[self menuView] setDelegate:self];
+    [[self menuView] setItems:[[self viewControllers] valueForKey:@"tabBarItem"]];
+    [[self view] addSubview:[self menuView]];
+    _menuTopConstraint = [NSLayoutConstraint constraintWithItem:_menuView
+                                                      attribute:NSLayoutAttributeTop
+                                                      relatedBy:NSLayoutRelationEqual
+                                                         toItem:[self view]
+                                                      attribute:NSLayoutAttributeTop
+                                                     multiplier:1 constant:0];
+    _menuConstraint0 = [NSLayoutConstraint constraintWithItem:[self view]
+                                                    attribute:NSLayoutAttributeBottom
+                                                    relatedBy:NSLayoutRelationEqual
+                                                       toItem:_menuView
+                                                    attribute:NSLayoutAttributeBottom
+                                                   multiplier:1 constant:0];
+    _menuConstraint1 = [NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|"
+                                                               options:0
+                                                               metrics:nil
+                                                                 views:@{@"v" : _menuView}];
+    [self.view addConstraint:_menuTopConstraint];
+    [self.view addConstraint:_menuConstraint0];
+    [self.view addConstraints:_menuConstraint1];
+    [self.menuView setVisible:NO];
+}
+
 - (void)loadMenuIfRequired
 {
     if(_menuView)
         return;
-    
-    _menuView = [[STKMenuView alloc] init];
-    [[self menuView] setDelegate:self];
-    [[self view] addSubview:[self menuView]];
-    
-    [[self menuView] setItems:[[self viewControllers] valueForKey:@"tabBarItem"]];
-    
-    
-    [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[v]|"
-                                                                        options:0
-                                                                        metrics:nil
-                                                                          views:@{@"v" : _menuView}]];
-    NSLayoutConstraint *c = [NSLayoutConstraint constraintWithItem:_menuView
-                                                         attribute:NSLayoutAttributeTop
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:[self view]
-                                                         attribute:NSLayoutAttributeTop
-                                                        multiplier:1 constant:0];
-    [[self view] addConstraint:c];
-    _menuTopConstraint = c;
-    
-    [[self view] addConstraint:[NSLayoutConstraint constraintWithItem:[self view]
-                                                            attribute:NSLayoutAttributeBottom
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:_menuView
-                                                            attribute:NSLayoutAttributeBottom
-                                                           multiplier:1 constant:0]];
+    [self loadMenu];
 }
 
 - (void)loadMessageBannerIfRequired

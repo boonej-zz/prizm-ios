@@ -755,6 +755,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(NSArray *profiles, NSError *err) {
             if(!err) {
+                
                 block(profiles, nil);
             } else {
                 block(nil, err);

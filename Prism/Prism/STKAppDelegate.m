@@ -31,6 +31,9 @@
 #import "STKAuthorizationToken.h"
 #import "STKCreatePostViewController.h"
 #import "HANavigationController.h"
+#import "HAMessageViewController.h"
+#import "HACalendarViewController.h"
+#import "HASurveyViewController.h"
 //#import "TMAPIClient.h"
 
 #ifdef DEBUG 
@@ -70,6 +73,9 @@
     UIViewController *pvc = [[STKProfileViewController alloc] init];
     UIViewController *avc = [[STKActivityViewController alloc] init];
     UIViewController *gvc = [[STKGraphViewController alloc] init];
+    UIViewController *mvc = [[HAMessageViewController alloc] init];
+    UIViewController *cal = [[HACalendarViewController alloc] init];
+    UIViewController *sur = [[HASurveyViewController alloc] init];
 //    UIViewController *ivc = [[HAInsightsViewController alloc] init];
     
 
@@ -83,7 +89,10 @@
         [[UINavigationController alloc] initWithRootViewController:ivc],
         [[UINavigationController alloc] initWithRootViewController:pvc],
         [[UINavigationController alloc] initWithRootViewController:avc],
-        [[UINavigationController alloc] initWithRootViewController:gvc]
+        [[UINavigationController alloc] initWithRootViewController:gvc],
+        [[UINavigationController alloc] initWithRootViewController:mvc],
+        [[UINavigationController alloc] initWithRootViewController:cal],
+        [[UINavigationController alloc] initWithRootViewController:sur]
     ]];
     [nvc setBackgroundImage:[UIImage HABackgroundImage]];
     
