@@ -45,7 +45,8 @@
     if(self) {
         [self setHashTag:hashTag];
         _postsController = [[STKPostController alloc] initWithViewController:self];
-        
+        NSSortDescriptor *recent = [NSSortDescriptor sortDescriptorWithKey:@"datePosted" ascending:NO];
+        [[self postsController] setSortDescriptors:@[recent]];
         [[self postsController] setFilterMap:@{@"hashTags": hashTag}];
         [[self postsController] setFetchMechanism:^(STKFetchDescription *fd, void (^comp)(NSArray *posts, NSError *err)) {
             [[STKContentStore store] fetchExplorePostsWithFetchDescription:fd completion:comp];

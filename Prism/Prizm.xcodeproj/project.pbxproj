@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0FB71436FD4870B3115ADE03 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D09B0F7CFF194B7F03935EF /* libPods.a */; };
 		2C01A3071A09727400D58D9B /* HATableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3061A09727400D58D9B /* HATableView.m */; };
 		2C01A30B1A098C7400D58D9B /* STKCommentTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */; };
 		2C01A30C1A098C7400D58D9B /* STKCommentTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */; };
@@ -329,6 +330,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00918671ACDDC1A8AC8178E9 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		1D09B0F7CFF194B7F03935EF /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FB8266A17F7D2BDB40694A5 /* Pods.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods.app store.xcconfig"; path = "Pods/Target Support Files/Pods/Pods.app store.xcconfig"; sourceTree = "<group>"; };
 		2C01A3051A09727400D58D9B /* HATableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HATableView.h; sourceTree = "<group>"; };
 		2C01A3061A09727400D58D9B /* HATableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HATableView.m; sourceTree = "<group>"; };
 		2C01A3081A098C7400D58D9B /* STKCommentTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCommentTitleCell.h; sourceTree = "<group>"; };
@@ -428,6 +432,7 @@
 		2CF53D3B1ADED08B0075FA96 /* HASurveyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyViewController.h; sourceTree = "<group>"; };
 		2CF53D3C1ADED08B0075FA96 /* HASurveyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyViewController.m; sourceTree = "<group>"; };
 		2CF53D3D1ADED08B0075FA96 /* HASurveyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HASurveyViewController.xib; sourceTree = "<group>"; };
+		5DFEBE5168818D084085EB7C /* Pods.release (staging).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods.release (staging).xcconfig"; path = "Pods/Target Support Files/Pods/Pods.release (staging).xcconfig"; sourceTree = "<group>"; };
 		8805330A193E5FD900A8E44D /* STKSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSearchUsersViewController.h; sourceTree = "<group>"; };
 		8805330B193E5FD900A8E44D /* STKSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSearchUsersViewController.m; sourceTree = "<group>"; };
 		8805330C193E5FD900A8E44D /* STKSearchUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKSearchUsersViewController.xib; sourceTree = "<group>"; };
@@ -473,6 +478,7 @@
 		88A74C7D184714A600DF05AC /* STKHashtagToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKHashtagToolbar.m; sourceTree = "<group>"; };
 		88EE2B0D184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+STKHashtagDetector.h"; sourceTree = "<group>"; };
 		88EE2B0E184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+STKHashtagDetector.m"; sourceTree = "<group>"; };
+		9469E391DBDF891BA4802EE2 /* Pods.debug (dev).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods.debug (dev).xcconfig"; path = "Pods/Target Support Files/Pods/Pods.debug (dev).xcconfig"; sourceTree = "<group>"; };
 		9CC22F141A1F0CD1004AFF73 /* HAChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAChangePasswordViewController.h; sourceTree = "<group>"; };
 		9CC22F151A1F0CD1004AFF73 /* HAChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAChangePasswordViewController.m; sourceTree = "<group>"; };
 		9CC22F161A1F0CD1004AFF73 /* HAChangePasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAChangePasswordViewController.xib; sourceTree = "<group>"; };
@@ -488,6 +494,7 @@
 		9CE69BB71A256D7700718D26 /* HAItemListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAItemListViewController.h; sourceTree = "<group>"; };
 		9CE69BB81A256D7700718D26 /* HAItemListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAItemListViewController.m; sourceTree = "<group>"; };
 		9CE69BB91A256D7700718D26 /* HAItemListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAItemListViewController.xib; sourceTree = "<group>"; };
+		B859B3C6D6F333805FF32668 /* Pods.release (user testing).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods.release (user testing).xcconfig"; path = "Pods/Target Support Files/Pods/Pods.release (user testing).xcconfig"; sourceTree = "<group>"; };
 		BE02EA9F182A80A200A5505A /* Prizm β.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prizm β.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE02EAA2182A80A200A5505A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE02EAA4182A80A200A5505A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2524,6 +2531,7 @@
 		D0E5076B1914251A0011DB63 /* STKLoginResetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKLoginResetViewController.xib; sourceTree = "<group>"; };
 		D0E85B10197D7910001A5333 /* STKMessageBanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMessageBanner.h; sourceTree = "<group>"; };
 		D0E85B11197D7910001A5333 /* STKMessageBanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMessageBanner.m; sourceTree = "<group>"; };
+		D89CB3F798B4AD176568FCF6 /* Pods.debug (staging).xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods.debug (staging).xcconfig"; path = "Pods/Target Support Files/Pods/Pods.debug (staging).xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2551,6 +2559,7 @@
 				BE02EAA7182A80A200A5505A /* UIKit.framework in Frameworks */,
 				BED0B264185F689100564300 /* GoogleOpenSource.framework in Frameworks */,
 				BE02EAA3182A80A200A5505A /* Foundation.framework in Frameworks */,
+				0FB71436FD4870B3115ADE03 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2622,6 +2631,19 @@
 			path = Mixpanel;
 			sourceTree = "<group>";
 		};
+		8B606A22D8006ABCD59D4C91 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D89CB3F798B4AD176568FCF6 /* Pods.debug (staging).xcconfig */,
+				9469E391DBDF891BA4802EE2 /* Pods.debug (dev).xcconfig */,
+				00918671ACDDC1A8AC8178E9 /* Pods.release.xcconfig */,
+				1FB8266A17F7D2BDB40694A5 /* Pods.app store.xcconfig */,
+				B859B3C6D6F333805FF32668 /* Pods.release (user testing).xcconfig */,
+				5DFEBE5168818D084085EB7C /* Pods.release (staging).xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		9CD7D9891A1BC1FF003E221C /* PrizmShareExt */ = {
 			isa = PBXGroup;
 			children = (
@@ -2656,6 +2678,7 @@
 				9CD7D9891A1BC1FF003E221C /* PrizmShareExt */,
 				BE02EAA1182A80A200A5505A /* Frameworks */,
 				BE02EAA0182A80A200A5505A /* Products */,
+				8B606A22D8006ABCD59D4C91 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2685,6 +2708,7 @@
 				BE02EAA4182A80A200A5505A /* CoreGraphics.framework */,
 				BE02EAA6182A80A200A5505A /* UIKit.framework */,
 				BE02EABB182A80A200A5505A /* XCTest.framework */,
+				1D09B0F7CFF194B7F03935EF /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -5061,11 +5085,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BE02EACB182A80A200A5505A /* Build configuration list for PBXNativeTarget "Prism" */;
 			buildPhases = (
+				8B7A2745A0E62DA4FE789A66 /* Check Pods Manifest.lock */,
 				BE02EA9B182A80A200A5505A /* Sources */,
 				BE02EA9C182A80A200A5505A /* Frameworks */,
 				BE02EA9D182A80A200A5505A /* Resources */,
 				BE36BC4518CA147B00694145 /* ShellScript */,
 				2CEC922619E70DA900B13D95 /* Embed App Extensions */,
+				B62562AE7FC82BBDAE2F119D /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -5260,6 +5286,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		8B7A2745A0E62DA4FE789A66 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B62562AE7FC82BBDAE2F119D /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		BE36BC4518CA147B00694145 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -5804,6 +5860,7 @@
 		};
 		BE02EACC182A80A200A5505A /* Debug (Staging) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D89CB3F798B4AD176568FCF6 /* Pods.debug (staging).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
@@ -5819,20 +5876,33 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"HEAP=1",
+				);
 				GCC_VERSION = "";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"\"$(SRCROOT)/Libraries/Debug-iphoneos\"",
+					"$(inherited)",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"",
+					"$(inherited)",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
 					"-lRuntime",
+					"$(inherited)",
 				);
+				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5842,14 +5912,15 @@
 		};
 		BE02EACD182A80A200A5505A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 00918671ACDDC1A8AC8178E9 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -5858,18 +5929,25 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = BASE_URL_PRODUCTION;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					BASE_URL_PRODUCTION,
+					"$(inherited)",
+					"HEAP=1",
+				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
 					"-lRuntime",
+					"$(inherited)",
 				);
+				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
 				PROVISIONING_PROFILE = "4f72c768-e004-476f-b0e1-024edf4fe8c5";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5953,6 +6031,7 @@
 		};
 		BE36BC4918CA65C300694145 /* Release (Staging) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DFEBE5168818D084085EB7C /* Pods.release (staging).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
@@ -5969,20 +6048,28 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"HEAP=1",
+				);
 				GCC_VERSION = "";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
 					"-lRuntime",
+					"$(inherited)",
 				);
+				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4f72c768-e004-476f-b0e1-024edf4fe8c5";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -6042,6 +6129,7 @@
 		};
 		BE4D5C4519409ED7009EE70F /* Release (User Testing) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B859B3C6D6F333805FF32668 /* Pods.release (user testing).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
@@ -6062,6 +6150,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					BASE_URL_USERTESTING,
 					DEBUG,
+					"$(inherited)",
+					"HEAP=1",
 				);
 				GCC_VERSION = "";
 				GENERATE_PROFILING_CODE = YES;
@@ -6069,14 +6159,23 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Release-iphoneos\"";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
+					"$(inherited)",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"",
+					"$(inherited)",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
 					"-lRuntime",
+					"$(inherited)",
 				);
+				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -6138,6 +6237,7 @@
 		};
 		BE9E9FEC197E9E2B000662B4 /* App Store */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1FB8266A17F7D2BDB40694A5 /* Pods.app store.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
@@ -6159,20 +6259,25 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
 					"-lRuntime",
+					"$(inherited)",
 				);
+				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
 				PROVISIONING_PROFILE = "7da70514-b914-4f6e-82e5-bd9a0aec71a3";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -6240,6 +6345,7 @@
 		};
 		BEB8C5E918C62F0800A1A39E /* Debug (Dev) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9469E391DBDF891BA4802EE2 /* Pods.debug (dev).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
@@ -6256,21 +6362,34 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"HEAP=1",
+				);
 				GCC_VERSION = "";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
 				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/Libraries/Debug-iphoneos\"";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"\"$(SRCROOT)/Libraries/Debug-iphoneos\"",
+					"$(inherited)",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"$(SRCROOT)/Libraries/Debug-iphonesimulator\"",
+					"$(inherited)",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lS3",
 					"-lRuntime",
+					"$(inherited)",
 				);
+				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;

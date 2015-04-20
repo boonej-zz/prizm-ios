@@ -34,6 +34,7 @@
 #import "HAMessageViewController.h"
 #import "HACalendarViewController.h"
 #import "HASurveyViewController.h"
+#import "Heap.h"
 //#import "TMAPIClient.h"
 
 #ifdef DEBUG 
@@ -59,6 +60,15 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [Crashlytics startWithAPIKey:@"e70b092ac5acf46c6e8a86bc59e79c34df550f5f"];
+    [Heap setAppId:@"3662545250"];
+
+#ifdef HEAP
+    [Heap enableVisualizer];
+#endif
+
+    
+    /* Other launch code goes here */
+    
     [Mixpanel sharedInstanceWithToken:STKMixpanelKey];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 //    [[STKUserStore store] syncInterests];
