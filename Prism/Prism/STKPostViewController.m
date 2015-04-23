@@ -360,6 +360,10 @@
     } 
 
     [[self editPostButton] setHidden:[self shouldHideEditButton]];
+    if ([[[self post] type] isEqualToString:STKPostTypePersonal]) {
+        [self.visibilityControl setEnabled:NO forSegmentAtIndex:0];
+        [self.visibilityControl setEnabled:NO forSegmentAtIndex:1];
+    }
     
     [[self tableView] reloadData];
 }
@@ -711,13 +715,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     STKPost *p = [[[self post] managedObjectContext] obtainEditableCopy:[self post]];
     if ([[p type] isEqualToString:STKPostTypePersonal] && [sender selectedSegmentIndex] != 2){
         [sender setSelectedSegmentIndex:2];
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sharing", @"visibility title")
-                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your Trust. Right now this post is marked as \"Personal\" which will only be seen by you. If you want to share this post with others, select a new category and then choose the sharing options.", @"viibility message")
-                                                    delegate:nil
-                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
-                                           otherButtonTitles:nil];
+//        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sharing", @"visibility title")
+//                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your Trust. Right now this post is marked as \"Personal\" which will only be seen by you. If you want to share this post with others, select a new category and then choose the sharing options.", @"viibility message")
+//                                                    delegate:nil
+//                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+//                                           otherButtonTitles:nil];
+//        
+//        [av show];
         
-        [av show];
         return;
     }
     NSString *revertVisibility = [p visibility];
@@ -801,6 +806,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     if (![category isEqualToString:STKPostTypePersonal]) {
         [[self visibilityControl] setEnabled:YES forSegmentAtIndex:0];
         [[self visibilityControl] setEnabled:YES forSegmentAtIndex:1];
+    } else {
+        [self.visibilityControl setSelectedSegmentIndex:2];
+        [self.visibilityControl setEnabled:NO forSegmentAtIndex:0];
+        [self.visibilityControl setEnabled:NO forSegmentAtIndex:1];
     }
     
     void (^reversal)(void) = ^{
