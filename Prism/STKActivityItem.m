@@ -22,6 +22,8 @@ NSString * const STKActivityItemTypeTag = @"tag";
 NSString * const STKActivityItemTypeAccolade = @"accolade";
 NSString * const STKActivityItemTypeGroupJoined = @"group_joined";
 NSString * const STKActivityItemTypeGroupApproved = @"group_approved";
+NSString * const STKActivityItemTypeGroupAdded = @"group_added";
+NSString * const STKActivityItemLeader = @"leader";
 
 
 @implementation STKActivityItem
@@ -91,6 +93,10 @@ NSString * const STKActivityItemTypeGroupApproved = @"group_approved";
         [str appendString:@"reviewing membership."];
     } else if ([[self action] isEqualToString:STKActivityItemTypeGroupApproved]) {
         [str appendString:@"approved membership."];
+    } else if ([self.action isEqualToString:STKActivityItemLeader]) {
+        [str appendString:@"made you a leader."];
+    } else if ([self.action isEqualToString:STKActivityItemTypeGroupAdded]) {
+        [str appendString:@"added you to a group."];
     }
     
     

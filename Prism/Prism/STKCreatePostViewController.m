@@ -133,7 +133,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
               @"selectedImage" : [UIImage imageNamed:@"category_achievements_selected"]},
             @{@"title" : @"Inspiration", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
               @"selectedImage" : [UIImage imageNamed:@"category_inspiration_selected"]},
-            @{@"title" : @"Private", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
+            @{@"title" : @"Private", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"lockpassword"],
               @"selectedImage" : [UIImage imageNamed:@"category_personal_selected"]}
         ];
         
