@@ -28,6 +28,7 @@
 #import "STKInsight.h"
 #import "STKInsightTarget.h"
 #import "STKInterest.h"
+#import "Heap.h"
 
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
@@ -262,6 +263,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)authenticateUser:(STKUser *)u
 {
     [self setCurrentUser:u];
+    [Heap identify:@{@"email": u.email, @"gender": u.gender }];
     [[self activityUpdateTimer] invalidate];
     _activityUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(activityUpdateCheck:) userInfo:nil repeats:YES];
     [self activityUpdateCheck:nil];

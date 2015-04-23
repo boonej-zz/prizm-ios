@@ -133,7 +133,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
               @"selectedImage" : [UIImage imageNamed:@"category_achievements_selected"]},
             @{@"title" : @"Inspiration", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
               @"selectedImage" : [UIImage imageNamed:@"category_inspiration_selected"]},
-            @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
+            @{@"title" : @"Private", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
               @"selectedImage" : [UIImage imageNamed:@"category_personal_selected"]}
         ];
         
@@ -317,20 +317,24 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 - (void)toggleTrust:(id)sender
 {
     NSString *postType = [[self postInfo] objectForKey:STKPostTypeKey];
-    if([postType isEqualToString:STKPostTypePersonal]) {
-        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sharing", @"visibility title")
-                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your Trust. Right now this post is marked as \"Personal\" which will only be seen by you. If you want to share this post with others, select a new category and then choose the sharing options.", @"viibility message")
-                                                    delegate:nil
-                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
-                                           otherButtonTitles:nil];
-        [av show];
-        return;
-    }
+    if ([postType isEqualToString:STKPostTypePersonal]) return;
+    
+//    if([postType isEqualToString:STKPostTypePersonal]) {
+//        UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sharing", @"visibility title")
+//                                                     message:NSLocalizedString(@"This button changes whether this post is visible to everyone or just members of your Trust. Right now this post is marked as \"Personal\" which will only be seen by you. If you want to share this post with others, select a new category and then choose the sharing options.", @"viibility message")
+//                                                    delegate:nil
+//                                           cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+//                                           otherButtonTitles:nil];
+//        [av show];
+//        return;
+//    }
     
     NSString *postVisibility = [[self postInfo] objectForKey:STKPostVisibilityKey];
     if(!postVisibility) {
         [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
     } else if([postVisibility isEqualToString:STKPostVisibilityPublic]) {
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Privacy" message:@"This button changes this post from public to trust and will only be visible to you and your trust." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [av show];
         [[self postInfo] setObject:STKPostVisibilityTrust forKey:STKPostVisibilityKey];
     } else {
         [[self postInfo] setObject:STKPostVisibilityPublic forKey:STKPostVisibilityKey];
