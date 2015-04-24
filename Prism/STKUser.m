@@ -13,6 +13,7 @@
 #import "STKUserStore.h"
 #import "STKInterest.h"
 #import "STKOrganization.h"
+#import "STKOrgStatus.h"
 
 NSString * const STKUserGenderMale = @"male";
 NSString * const STKUserGenderFemale = @"female";
@@ -322,6 +323,31 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
     }
     
     return [NSString stringWithFormat:@"%ld", age];
+}
+- (NSDictionary *)heapProperties
+{
+    NSMutableDictionary *props = [NSMutableDictionary dictionary];
+    NSMutableArray *interests = [NSMutableArray arrayWithCapacity:self.interests.count];
+    [self.interests enumerateObjectsUsingBlock:^(STKInterest *interest, BOOL *stop) {
+        [interests addObject:[interest text]];
+    }];
+    NSMutableArray *orgs = [NSMutableArray arrayWithCapacity:self.organizations.count];
+    [self.organizations enumerateObjectsUsingBlock:^(STKOrgStatus  *status, BOOL *stop) {
+        if (status.organization && status.organization.name){
+            [orgs addObject:status.organization.name];
+        }
+    }];
+
+    [props setValue:[interests componentsJoinedByString:@","] forKey:@"interests"];
+    [props setValue:self.name forKey:@"handle"];
+    [props setValue:self.email forKey:@"email"];
+    [props setValue:[self age] forKey:@"age"];
+    [props setValue:self.gender forKey:@"gender"];
+    [props setValue:@"ios app" forKey:@"source"];
+    [props setValue:self.subtype forKey:@"subtype"];
+    [props setValue:self.type forKey:@"type"];
+    [props setValue:[orgs componentsJoinedByString:@","] forKey:@"orgs"];
+    return props;
 }
 
 - (NSDictionary *)mixpanelProperties

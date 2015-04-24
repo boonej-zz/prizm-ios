@@ -108,7 +108,7 @@
                              @"selectedImage" : [UIImage imageNamed:@"category_achievements_selected"]},
                            @{@"title" : @"Inspiration", STKPostTypeKey : STKPostTypeInspiration, @"image" : [UIImage imageNamed:@"category_inspiration_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_inspiration_selected"]},
-                           @{@"title" : @"Personal", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
+                           @{@"title" : @"Private", STKPostTypeKey : STKPostTypePersonal, @"image" : [UIImage imageNamed:@"category_personal_disabled"],
                              @"selectedImage" : [UIImage imageNamed:@"category_personal_selected"]}
                            ];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_cancel"]

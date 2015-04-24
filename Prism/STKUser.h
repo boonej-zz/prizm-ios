@@ -134,6 +134,7 @@ extern BOOL const STKUserStatusInActive;
 
 - (BOOL)hasTrusts;
 - (NSArray *)trusts;
+- (NSDictionary *)heapProperties;
 
 // For auth/creating - not stored, used only for creating a user.
 @property (nonatomic, strong) UIImage *profilePhoto;

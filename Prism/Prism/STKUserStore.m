@@ -263,7 +263,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)authenticateUser:(STKUser *)u
 {
     [self setCurrentUser:u];
-    [Heap identify:@{@"email": u.email, @"gender": u.gender }];
     [[self activityUpdateTimer] invalidate];
     _activityUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(activityUpdateCheck:) userInfo:nil repeats:YES];
     [self activityUpdateCheck:nil];
@@ -692,6 +691,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c getWithSession:[self session] completionBlock:^(STKUser *user, NSError *err) {
             if(!err) {
                 [[self context] save:nil];
+            }
+            if ([user.uniqueID isEqualToString:self.currentUser.uniqueID]) {
+                [Heap identify:[user heapProperties]];
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"UserDetailsUpdated" object:nil];
             block(user, err);
