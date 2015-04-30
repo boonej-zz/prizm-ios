@@ -111,8 +111,11 @@ extern BOOL const STKUserStatusInActive;
 @property (nonatomic, strong) NSSet *ownedActivities;
 @property (nonatomic, strong) NSSet *postsTaggedIn;
 @property (nonatomic, retain) NSSet *organizations;
+@property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, retain) NSSet *likedMessages;
 @property (nonatomic, strong) STKTheme *theme;
 @property (nonatomic, strong) STKOrganization *organization;
+@property (nonatomic, strong) STKOrganization *ownedOrganization;
 
 @property (nonatomic, strong) NSString *accountStoreID;
 @property (nonatomic, assign) BOOL active;

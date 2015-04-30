@@ -17,6 +17,7 @@
 @dynamic groupDescription;
 @dynamic organization;
 @dynamic members;
+@dynamic messages;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {

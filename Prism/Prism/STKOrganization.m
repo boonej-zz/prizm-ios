@@ -23,6 +23,8 @@
 @dynamic theme;
 @dynamic members;
 @dynamic logoURL;
+@dynamic owner;
+@dynamic messages;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -48,7 +50,8 @@
              @"logo_url":@"logoURL",
              @"theme": [STKBind bindMapForKey:@"theme" matchMap:@{@"uniqueID": @"_id"}],
              @"create_date":[STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
-             @"modify_date":[STKBind bindMapForKey:@"modifyDate" transform:STKBindTransformDateTimestamp]          };
+             @"modify_date":[STKBind bindMapForKey:@"modifyDate" transform:STKBindTransformDateTimestamp],
+             @"owner": [STKBind bindMapForKey:@"owner" matchMap:@{@"uniqueID": @"_id"}]};
 }
 
 @end

@@ -19,6 +19,8 @@
 @property (nonatomic, retain) NSString * groupDescription;
 @property (nonatomic, retain) STKOrganization *organization;
 @property (nonatomic, retain) NSSet *members;
+@property (nonatomic, retain) NSSet *messages;
+
 @end
 
 @interface STKGroup (CoreDataGeneratedAccessors)

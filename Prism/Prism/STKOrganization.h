@@ -24,6 +24,8 @@
 @property (nonatomic, retain) STKTheme *theme;
 @property (nonatomic, retain) NSSet *members;
 @property (nonatomic, retain) NSString *logoURL;
+@property (nonatomic, retain) STKUser *owner;
+@property (nonatomic, retain) NSSet *messages;
 @end
 
 @interface STKOrganization (CoreDataGeneratedAccessors)

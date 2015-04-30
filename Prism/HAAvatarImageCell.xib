@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="48" id="KGk-i7-Jjw" customClass="HAAvatarImageCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="47"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XIx-HF-hyg" customClass="STKAvatarView">
+                        <rect key="frame" x="15" y="8" width="30" height="30"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="AU0-le-Ial"/>
+                            <constraint firstAttribute="width" constant="30" id="bnB-oA-DQw"/>
+                        </constraints>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_message" translatesAutoresizingMaskIntoConstraints="NO" id="7Sn-nH-xHp">
+                        <rect key="frame" x="289" y="15" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="16" id="LtK-ls-oF3"/>
+                            <constraint firstAttribute="height" constant="16" id="Wec-16-Xtd"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4sz-4d-EGG">
+                        <rect key="frame" x="53" y="12" width="228" height="22"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="centerY" secondItem="XIx-HF-hyg" secondAttribute="centerY" id="0Bb-QY-l28"/>
+                    <constraint firstAttribute="centerY" secondItem="4sz-4d-EGG" secondAttribute="centerY" id="6Dg-un-JcG"/>
+                    <constraint firstItem="XIx-HF-hyg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="7" id="ADt-GF-Fxv"/>
+                    <constraint firstItem="4sz-4d-EGG" firstAttribute="leading" secondItem="XIx-HF-hyg" secondAttribute="trailing" constant="8" id="ZBg-Bj-eeb"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="7Sn-nH-xHp" secondAttribute="trailing" constant="7" id="Zcy-xX-bjD"/>
+                    <constraint firstAttribute="centerY" secondItem="7Sn-nH-xHp" secondAttribute="centerY" id="lbC-sw-1Vm"/>
+                    <constraint firstItem="7Sn-nH-xHp" firstAttribute="leading" secondItem="4sz-4d-EGG" secondAttribute="trailing" constant="8" id="sBJ-AB-fUl"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="avatarView" destination="XIx-HF-hyg" id="8jB-QZ-Hwx"/>
+                <outlet property="title" destination="4sz-4d-EGG" id="mgk-9I-77X"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icon_message" width="16" height="16"/>
+    </resources>
+</document>

@@ -19,6 +19,7 @@
 @dynamic organization;
 @dynamic groups;
 @dynamic member;
+@dynamic memberID;
 
 
 - (NSError *) readFromJSONObject:(id)jsonObject
@@ -36,9 +37,11 @@
 {
     return @{
              @"create_date": [STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
+             @"date": [STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
              @"organization": [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID": @"_id"}],
              @"groups": [STKBind bindMapForKey:@"groups" matchMap:@{@"uniqueID": @"_id"}],
-             @"status": @"status"
+             @"status": @"status",
+             @"member_id": @"memberID"
              
              };
 }

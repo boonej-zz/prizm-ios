@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@class STKOrganization, STKGroup;
 
 @interface HAMessageViewController : UIViewController
+
+- (id)initWithOrganization:(STKOrganization *)organization;
+- (id)initWithGroup:(STKGroup *)group organization:(STKOrganization *)organization;
 
 @end

@@ -18,6 +18,7 @@
 @property (nonatomic, retain) STKOrganization *organization;
 @property (nonatomic, retain) NSSet *groups;
 @property (nonatomic, retain) STKUser *member;
+@property (nonatomic, retain) NSString *memberID;
 @end
 
 @interface STKOrgStatus (CoreDataGeneratedAccessors)

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "STKTrust.h"
 
-@class STKUser, STKPost, STKActivityItem, STKFetchDescription, STKOrganization;
+@class STKUser, STKPost, STKActivityItem, STKFetchDescription, STKOrganization, STKGroup, STKMessage;
 @class ACAccount, ACAccountStore;
 
 extern NSString * const STKUserStoreActivityUpdateNotification;
@@ -114,5 +114,16 @@ typedef enum {
 - (STKOrganization *)getOrganizationByCode:(NSString *)code;
 - (void)updateInterestsforUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block;
 - (void)fetchSuggestionsForUser:(STKUser *)user completion:(void(^)(NSArray *users, NSError *err))block;
+- (void)fetchUserOrgs:(void (^)(NSArray *organizations, NSError *err))block;
+- (void)fetchGroupsForOrganization:(STKOrganization *)org completion:(void (^)(NSArray *groups, NSError *err))block;
+- (void)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block;
+- (void)fetchLatestMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block;
+- (void)likeMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block;
+- (void)unlikeMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block;
+
+- (void)postMessage:(NSString*)message toGroup:(STKGroup *)group organization:(STKOrganization *)organization completion:(void (^)(STKMessage *message, NSError *err))block;
+- (void)fetchMembersForOrganization:(STKOrganization *)organization completion:(void (^)(NSArray *messages, NSError *err))block;
+- (NSArray *)getMembersForOrganization:(STKOrganization *)organization group:(STKGroup *)group;
+
 
 @end
