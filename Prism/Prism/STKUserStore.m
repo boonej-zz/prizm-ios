@@ -429,13 +429,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             if(u) {
                 [self setContext:ctx];
                 [self setCurrentUser:u];
-//                [self fetchOrganizationByCode:u.programCode completion:^(STKOrganization *organization, NSError *err) {
-//                    NSLog(@"Organization Fetched");
-//                }];
+
                 [[Mixpanel sharedInstance] identify:[u uniqueID]];
                 [[Mixpanel sharedInstance].people set:[u mixpanelProperties]];
-                
-//                MixpanelPeople *people  = [[Mixpanel sharedInstance] people];
 
                 [self attemptTransparentLoginWithUser:u];
                 
@@ -711,9 +707,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 [Heap identify:[user heapProperties]];
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"UserDetailsUpdated" object:nil];
-            [user.organizations enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-                NSLog(@"%@", obj);
-            }];
+            
             block(user, err);
         }];
     }];
@@ -1415,7 +1409,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKQueryObject *q = [[STKQueryObject alloc] init];
         
         if(referenceActivity) {
-            NSLog(@"%@", [referenceActivity dateCreated]);
             [q setPageValue:[STKTimestampFormatter stringFromDate:[referenceActivity dateCreated]]];
         }
         [q setPageDirection:direction];
@@ -1472,7 +1465,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [obj setFilters:@{@"year" : @(year),
                           @"week" : @(week),
                           @"offset" : @(count)}];
-        NSLog(@"%@", obj);
         [c setQueryObject:obj];        
         [c getWithSession:[self session] completionBlock:^(NSDictionary *obj, NSError *err) {
             
@@ -1545,7 +1537,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchUserOrgs:(void (^)(NSArray *organizations, NSError *err))block
 {
-    NSLog(@"Fetching User Orgs");
     STKUser *u = [self currentUser];
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if (err) {
@@ -1561,7 +1552,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            NSLog(@"%@", obj);
             block(obj, err);
         }];
     }];
@@ -1584,7 +1574,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            NSLog(@"%@", obj);
             block(obj, err);
         }];
     }];
@@ -1608,7 +1597,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            NSLog(@"%@", obj);
             block(obj, err);
         }];
     }];
@@ -1673,7 +1661,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            NSLog(@"%@", obj);
             block(obj, err);
         }];
     }];
@@ -1696,7 +1683,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
        
         NSString *localDateString = [dateFormatter stringFromDate:date];
-        NSLog(@"Date: %@", localDateString);
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups", obj, @"messages"]];
         [c addQueryValue:localDateString forKey:@"since"];
         [c setModelGraph:@[@"STKMessage"]];
@@ -1705,7 +1691,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            NSLog(@"%@", obj);
             block(obj, err);
         }];
     }];
@@ -1729,7 +1714,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setContext:[self context]];
         [c setShouldReturnArray:NO];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            NSLog(@"%@", obj);
             block(obj, err);
         }];
     }];
@@ -1753,7 +1737,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:NO];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            NSLog(@"%@", obj);
             block(obj, err);
         }];
     }];
@@ -1781,7 +1764,6 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:NO];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            NSLog(@"%@", obj);
             block(obj, err);
         }];
     }];
@@ -1789,7 +1771,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchOrganizationByCode:(NSString *)code completion:(void (^)(STKOrganization *organization, NSError *err))block
 {
-    if (code) {
+    if (code && code.length > 2) {
         [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
             if (err) {
                 block (nil, err);

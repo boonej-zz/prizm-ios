@@ -105,6 +105,7 @@ static BOOL HAActivityIsAnimating = NO;
 - (void)showWelcome:(STKOrgStatus *)status
 {
     STKUser *user = [[STKUserStore store] currentUser];
+    if (user.programCode){
     [[STKUserStore store] fetchOrganizationByCode:user.programCode completion:^(STKOrganization *organization, NSError *err) {
         if (organization){
             user.organization = organization;
@@ -117,6 +118,7 @@ static BOOL HAActivityIsAnimating = NO;
                              completion:nil];
         }
     }];
+    }
 }
 
 - (void)profileUpdated:(NSNotification *)note

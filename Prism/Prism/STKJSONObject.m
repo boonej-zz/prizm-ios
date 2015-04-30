@@ -186,9 +186,6 @@ NSString * const STKJSONBindTransformKey = @"transform";
 {
     for(NSString *key in keyMap) {
         id value = [keyMap objectForKey:key];
-        if ([key isEqualToString:@"org_status"]) {
-            NSLog(@"YEs");
-        }
         if([value isKindOfClass:[NSString class]]) {
             [self bindFromDictionary:dataDictionary
                            sourceKey:key

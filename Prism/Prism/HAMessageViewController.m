@@ -72,20 +72,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"Message";
     self.viewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     self.postView.delegate = self;
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     iv.frame = self.view.bounds;
     [self.view insertSubview:iv atIndex:0];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
-    if (self.organization) {
-        self.title = self.organization.name;
-        [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *users, NSError *err) {
-            
-        }];
-    } else {
-        self.title = @"Message";
-    }
+    
     UIBarButtonItem *bbi = nil;
     if (self.organization) {
         bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
@@ -97,17 +91,10 @@
     
     [[self navigationItem] setLeftBarButtonItem:bbi];
     [self.navigationItem setHidesBackButton:YES];
-    if (self.organization && self.group) {
-        STKGroup *g = [self.group isKindOfClass:[NSString class]]?nil:self.group;
-        self.members = [[STKUserStore store] getMembersForOrganization:self.organization group:g];
-        UIButton *rbb = [UIButton buttonWithType:UIButtonTypeCustom];
-        [rbb setImage:[UIImage imageNamed:@"group_bar_button"] forState:UIControlStateNormal];
-        [rbb setFrame:CGRectMake(0, 0, 31, 18)];
-        STKNotificationBadge *badge = [[STKNotificationBadge alloc] initWithFrame:CGRectMake(10, -10, 40, 20)];
-        [badge setCount:(int)self.members.count];
-        [rbb addSubview:badge];
-        UIBarButtonItem *bb = [[UIBarButtonItem alloc] initWithCustomView:rbb];
-        [self.navigationItem  setRightBarButtonItem:bb];
+    if (self.organization) {
+        [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *users, NSError *err) {
+            
+        }];
     }
     
     self.user = [[STKUserStore store] currentUser];
@@ -154,19 +141,39 @@
     if (self.organization && self.group) {
         [self.postView setHidden:NO];
         [self fetchNewer];
-
+        STKGroup *g = [self.group isKindOfClass:[NSString class]]?nil:self.group;
+        self.members = [[STKUserStore store] getMembersForOrganization:self.organization group:g];
+        UIButton *rbb = [UIButton buttonWithType:UIButtonTypeCustom];
+        [rbb setImage:[UIImage imageNamed:@"group_bar_button"] forState:UIControlStateNormal];
+        [rbb setFrame:CGRectMake(0, 0, 31, 18)];
+        STKNotificationBadge *badge = [[STKNotificationBadge alloc] initWithFrame:CGRectMake(10, -10, 40, 20)];
+        [badge setCount:(int)self.members.count];
+        [rbb addSubview:badge];
+        UIBarButtonItem *bb = [[UIBarButtonItem alloc] initWithCustomView:rbb];
+        [self.navigationItem  setRightBarButtonItem:bb];
         [self addTitleView];
     } else if (self.organization) {
+       
+            self.title = self.organization.name;
+        
+
+        
+        
         [self.tableViewBottomConstraint setConstant:0];
         [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
             self.groups = groups;
-            [self.tableView reloadData];
+         
+                [self.tableView reloadData];
+   \
         }];
     } else {
         [self.tableViewBottomConstraint setConstant:0];
         [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
             self.orgs = organizations;
-            [self.tableView reloadData];
+          
+                 [self.tableView reloadData];
+        
+           
         }];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -209,13 +216,19 @@
                 [is enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
                     [paths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
                 }];
-                [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+                    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+         
+                
             }
         }];
     } else {
         [[STKUserStore store] fetchMessagesForOrganization:self.organization group:g completion:^(NSArray *messages, NSError *err) {
+     
             self.messages = [messages mutableCopy];
-            [self.tableView reloadData];
+                [self.tableView reloadData];
+      
+            
         }];
     }
 }
