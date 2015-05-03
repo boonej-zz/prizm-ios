@@ -11,5 +11,7 @@
 @interface UITableViewCell (HAExtensions)
 
 + (NSString *)reuseIdentifier;
+- (void)HASetDisclosureIndicator:(CGFloat)opacity;
+- (void)HAAddCellBackground:(CGFloat)opacity;
 
 @end

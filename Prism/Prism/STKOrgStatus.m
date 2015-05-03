@@ -20,6 +20,7 @@
 @dynamic groups;
 @dynamic member;
 @dynamic memberID;
+@dynamic role;
 
 
 - (NSError *) readFromJSONObject:(id)jsonObject
@@ -41,7 +42,8 @@
              @"organization": [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID": @"_id"}],
              @"groups": [STKBind bindMapForKey:@"groups" matchMap:@{@"uniqueID": @"_id"}],
              @"status": @"status",
-             @"member_id": @"memberID"
+             @"member_id": @"memberID",
+             @"role": @"role"
              
              };
 }

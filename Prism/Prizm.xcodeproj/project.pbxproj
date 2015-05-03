@@ -33,6 +33,16 @@
 		2C1D45BE19E45E94008D84C5 /* STKInsightArchiveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45BC19E45E94008D84C5 /* STKInsightArchiveCell.m */; };
 		2C1D45BF19E45E94008D84C5 /* STKInsightArchiveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */; };
 		2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */; };
+		2C2E9C611AF3D83000F0F7A8 /* HACreateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C5F1AF3D83000F0F7A8 /* HACreateGroupViewController.m */; };
+		2C2E9C621AF3D83000F0F7A8 /* HACreateGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E9C601AF3D83000F0F7A8 /* HACreateGroupViewController.xib */; };
+		2C2E9C661AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C641AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.m */; };
+		2C2E9C671AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E9C651AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.xib */; };
+		2C2E9C6A1AF3F7CE00F0F7A8 /* HASearchMembersHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C691AF3F7CE00F0F7A8 /* HASearchMembersHeaderView.m */; };
+		2C2E9C6D1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C6C1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.m */; };
+		2C2E9C701AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C6F1AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.m */; };
+		2C2E9C731AF58DC300F0F7A8 /* HATextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C721AF58DC300F0F7A8 /* HATextFieldCell.m */; };
+		2C2E9C781AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C761AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m */; };
+		2C2E9C791AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E9C771AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib */; };
 		2C4FD7321A029E98003A4212 /* HANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C4FD7311A029E98003A4212 /* HANavigationController.m */; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
@@ -386,6 +396,24 @@
 		2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInsightArchiveCell.xib; sourceTree = "<group>"; };
 		2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+STKLocation.h"; sourceTree = "<group>"; };
 		2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+STKLocation.m"; sourceTree = "<group>"; };
+		2C2E9C5E1AF3D83000F0F7A8 /* HACreateGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HACreateGroupViewController.h; sourceTree = "<group>"; };
+		2C2E9C5F1AF3D83000F0F7A8 /* HACreateGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HACreateGroupViewController.m; sourceTree = "<group>"; };
+		2C2E9C601AF3D83000F0F7A8 /* HACreateGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HACreateGroupViewController.xib; sourceTree = "<group>"; };
+		2C2E9C631AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASearchMembersHeaderCellTableViewCell.h; sourceTree = "<group>"; };
+		2C2E9C641AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASearchMembersHeaderCellTableViewCell.m; sourceTree = "<group>"; };
+		2C2E9C651AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HASearchMembersHeaderCellTableViewCell.xib; sourceTree = "<group>"; };
+		2C2E9C681AF3F7CE00F0F7A8 /* HASearchMembersHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASearchMembersHeaderView.h; sourceTree = "<group>"; };
+		2C2E9C691AF3F7CE00F0F7A8 /* HASearchMembersHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASearchMembersHeaderView.m; sourceTree = "<group>"; };
+		2C2E9C6B1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKUserSelectCellTableViewCell.h; sourceTree = "<group>"; };
+		2C2E9C6C1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUserSelectCellTableViewCell.m; sourceTree = "<group>"; };
+		2C2E9C6E1AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HALabelAccessoryTableViewCell.h; sourceTree = "<group>"; };
+		2C2E9C6F1AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HALabelAccessoryTableViewCell.m; sourceTree = "<group>"; };
+		2C2E9C711AF58DC300F0F7A8 /* HATextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HATextFieldCell.h; sourceTree = "<group>"; };
+		2C2E9C721AF58DC300F0F7A8 /* HATextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HATextFieldCell.m; sourceTree = "<group>"; };
+		2C2E9C741AF5A1FA00F0F7A8 /* HACellProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HACellProtocol.h; sourceTree = "<group>"; };
+		2C2E9C751AF6918700F0F7A8 /* HASelectLeaderControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASelectLeaderControllerViewController.h; sourceTree = "<group>"; };
+		2C2E9C761AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASelectLeaderControllerViewController.m; sourceTree = "<group>"; };
+		2C2E9C771AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HASelectLeaderControllerViewController.xib; sourceTree = "<group>"; };
 		2C4FD7301A029E98003A4212 /* HANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HANavigationController.h; sourceTree = "<group>"; };
 		2C4FD7311A029E98003A4212 /* HANavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HANavigationController.m; sourceTree = "<group>"; };
 		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
@@ -2929,6 +2957,12 @@
 				2CF53D3B1ADED08B0075FA96 /* HASurveyViewController.h */,
 				2CF53D3C1ADED08B0075FA96 /* HASurveyViewController.m */,
 				2CF53D3D1ADED08B0075FA96 /* HASurveyViewController.xib */,
+				2C2E9C5E1AF3D83000F0F7A8 /* HACreateGroupViewController.h */,
+				2C2E9C5F1AF3D83000F0F7A8 /* HACreateGroupViewController.m */,
+				2C2E9C601AF3D83000F0F7A8 /* HACreateGroupViewController.xib */,
+				2C2E9C751AF6918700F0F7A8 /* HASelectLeaderControllerViewController.h */,
+				2C2E9C761AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m */,
+				2C2E9C771AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -2994,6 +3028,8 @@
 				2C1D45A719DF7C49008D84C5 /* STKInsightHeaderView.m */,
 				2CBF30B71AF14E67000F261C /* HAPostMessageView.h */,
 				2CBF30B81AF14E67000F261C /* HAPostMessageView.m */,
+				2C2E9C681AF3F7CE00F0F7A8 /* HASearchMembersHeaderView.h */,
+				2C2E9C691AF3F7CE00F0F7A8 /* HASearchMembersHeaderView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -3112,6 +3148,16 @@
 				2CBF30B21AF017B8000F261C /* HAMessageCell.h */,
 				2CBF30B31AF017B8000F261C /* HAMessageCell.m */,
 				2CBF30B41AF017B8000F261C /* HAMessageCell.xib */,
+				2C2E9C631AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.h */,
+				2C2E9C641AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.m */,
+				2C2E9C651AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.xib */,
+				2C2E9C6B1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.h */,
+				2C2E9C6C1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.m */,
+				2C2E9C6E1AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.h */,
+				2C2E9C6F1AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.m */,
+				2C2E9C711AF58DC300F0F7A8 /* HATextFieldCell.h */,
+				2C2E9C721AF58DC300F0F7A8 /* HATextFieldCell.m */,
+				2C2E9C741AF5A1FA00F0F7A8 /* HACellProtocol.h */,
 			);
 			name = Cells;
 			path = ..;
@@ -5275,9 +5321,11 @@
 				BE7391C91901A58200AD81AB /* STKHashtagPostsViewController.xib in Resources */,
 				D073F6E8195B4A590049E573 /* STKExploreFilterViewController.xib in Resources */,
 				2C97973719DC5285003A6C0A /* HAInsightCell.xib in Resources */,
+				2C2E9C621AF3D83000F0F7A8 /* HACreateGroupViewController.xib in Resources */,
 				88384078195B3275006750FC /* STKInviteFriendsShareCell.xib in Resources */,
 				2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */,
 				2C0D730C19C392F90078A9B9 /* HAFastSwitchViewController.xib in Resources */,
+				2C2E9C671AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.xib in Resources */,
 				BE7D5AE018D36050005D3893 /* STKUserListViewController.xib in Resources */,
 				2CBF30B61AF017B8000F261C /* HAMessageCell.xib in Resources */,
 				D0E5076D1914251A0011DB63 /* STKLoginResetViewController.xib in Resources */,
@@ -5294,6 +5342,7 @@
 				2C189DD21A2F74190028AD1C /* HAWelcomeViewController.xib in Resources */,
 				9CE69BBB1A256D7700718D26 /* HAItemListViewController.xib in Resources */,
 				BE72B74D192FA880002349E3 /* STKCreateAccoladeViewController.xib in Resources */,
+				2C2E9C791AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib in Resources */,
 				BEAC71A918522D6C00F0B211 /* STKTextFieldCell.xib in Resources */,
 				2C1D45BF19E45E94008D84C5 /* STKInsightArchiveCell.xib in Resources */,
 				BEE0FA48185B6722009FCA3B /* STKDateCell.xib in Resources */,
@@ -5400,8 +5449,10 @@
 				2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */,
 				BECA9F1E1937CAF600AABA20 /* STKAccoladeUserListViewController.m in Sources */,
 				BE1FC3BA186C901B003464E1 /* STKImageChooser.m in Sources */,
+				2C2E9C6D1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.m in Sources */,
 				BEFCEE0E182C212800648B9F /* STKImageStore.m in Sources */,
 				BE1A73C518D8BFB8004A3BB3 /* STKLockCell.m in Sources */,
+				2C2E9C6A1AF3F7CE00F0F7A8 /* HASearchMembersHeaderView.m in Sources */,
 				2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */,
 				BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
@@ -5411,6 +5462,7 @@
 				883D87DB19463E7F00195B11 /* UIColor+MPColor.m in Sources */,
 				BE02EAD3182A81AC00A5505A /* STKMenuController.m in Sources */,
 				BEF96AD8186221340016E737 /* NSData+Base64.m in Sources */,
+				2C2E9C701AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.m in Sources */,
 				BECA36B519004F88000A5851 /* STKGradientView.m in Sources */,
 				BEF7A0861843ACB100A3AFFB /* STKRenderServer.m in Sources */,
 				2C1D45AC19E38FC8008D84C5 /* STKInsightTitleCellTableViewCell.m in Sources */,
@@ -5438,6 +5490,7 @@
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
 				9CC22F171A1F0CD1004AFF73 /* HAChangePasswordViewController.m in Sources */,
 				2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */,
+				2C2E9C781AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m in Sources */,
 				2C189DD11A2F74190028AD1C /* HAWelcomeViewController.m in Sources */,
 				2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
@@ -5500,6 +5553,7 @@
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
 				BEF05488192D1F1900434AFF /* STKOptionCell.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
+				2C2E9C611AF3D83000F0F7A8 /* HACreateGroupViewController.m in Sources */,
 				2CBF30A81AEEF338000F261C /* HAAvatarImageCell.m in Sources */,
 				2CBF30B51AF017B8000F261C /* HAMessageCell.m in Sources */,
 				88053311193E6F0000A8E44D /* STKSearchTrustCell.m in Sources */,
@@ -5517,6 +5571,7 @@
 				BED773FD1890A546008770F0 /* STKCaptureView.m in Sources */,
 				9C6AAF891A1C27DC00284A48 /* HAShareExtensionHelper.m in Sources */,
 				2C1D45BE19E45E94008D84C5 /* STKInsightArchiveCell.m in Sources */,
+				2C2E9C731AF58DC300F0F7A8 /* HATextFieldCell.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
 				883D87D819463E7F00195B11 /* MPSurveyQuestion.m in Sources */,
 				2C97974819DDE998003A6C0A /* STKInsight.m in Sources */,
@@ -5528,6 +5583,7 @@
 				BE61085E183D159E003A182C /* STKActivityCell.m in Sources */,
 				883D87D919463E7F00195B11 /* MPSurveyQuestionViewController.m in Sources */,
 				BE02EAB3182A80A200A5505A /* STKAppDelegate.m in Sources */,
+				2C2E9C661AF3E9D100F0F7A8 /* HASearchMembersHeaderCellTableViewCell.m in Sources */,
 				2CBF30AD1AF00728000F261C /* HAGroupCell.m in Sources */,
 				BEF96AD9186221340016E737 /* OAuth+Additions.m in Sources */,
 				BEF96ADA186221340016E737 /* OAuthCore.m in Sources */,

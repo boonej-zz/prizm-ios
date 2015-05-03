@@ -15,6 +15,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dsh-el-DPQ">
+                        <rect key="frame" x="0.0" y="1" width="320" height="42"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGK-FN-OIy">
                         <rect key="frame" x="14" y="11" width="298" height="21"/>
                         <constraints>
@@ -25,11 +29,29 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
+                    <constraint firstItem="dsh-el-DPQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="1" id="B7l-WA-Et1"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="dsh-el-DPQ" secondAttribute="trailing" id="BXb-Fb-Wop"/>
+                    <constraint firstItem="dsh-el-DPQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="Xfo-Wd-mR8"/>
                     <constraint firstItem="zGK-FN-OIy" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="6" id="ZE1-YH-58j"/>
+                    <constraint firstItem="dsh-el-DPQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="aPS-SC-R7y"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="dsh-el-DPQ" secondAttribute="bottom" id="bhT-G4-4Z9"/>
+                    <constraint firstAttribute="bottom" secondItem="dsh-el-DPQ" secondAttribute="bottom" id="e8s-Vr-Jpl"/>
                     <constraint firstAttribute="centerY" secondItem="zGK-FN-OIy" secondAttribute="centerY" id="eGH-sU-s30"/>
+                    <constraint firstItem="dsh-el-DPQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="gfM-ZR-4h7"/>
+                    <constraint firstAttribute="trailing" secondItem="dsh-el-DPQ" secondAttribute="trailing" id="ymr-fm-kq0"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="BXb-Fb-Wop"/>
+                        <exclude reference="Xfo-Wd-mR8"/>
+                        <exclude reference="aPS-SC-R7y"/>
+                        <exclude reference="bhT-G4-4Z9"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="title" destination="zGK-FN-OIy" id="22X-u2-LWm"/>
             </connections>

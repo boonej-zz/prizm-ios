@@ -1602,6 +1602,49 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)editMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block{
+    NSString *obj = @"all";
+    if (message.group) obj = message.group.uniqueID;
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", message.organization.uniqueID, @"groups", obj, @"messages", message.uniqueID]];
+        [c addQueryValue:message.text forKey:@"text"];
+        [c setModelGraph:@[@"STKMessage"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        [c setShouldReturnArray:NO];
+        [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+        
+    }];
+}
+
+- (void)deleteMessage:(STKMessage *)message completion:(void (^)(NSError *err))block
+{
+    NSString *obj = @"all";
+    if (message.group) obj = message.group.uniqueID;
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", message.organization.uniqueID, @"groups", obj, @"messages", message.uniqueID]];
+        [c setContext:[self context]];
+        [c setShouldReturnArray:NO];
+        [c deleteWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            [self.context deleteObject:message];
+            NSError *error;
+            [self.context save:&error];
+            block(err);
+        }];
+        
+    }];
+}
+
 - (NSArray *)getMembersForOrganization:(STKOrganization *)organization group:(STKGroup *)group
 {
     NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKOrgStatus"];
@@ -1625,6 +1668,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return match;
         }]];
     }
+    cached = [cached sortedArrayWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(STKOrgStatus *obj1, STKOrgStatus *obj2) {
+        return [obj1.member.name compare:obj2.member.name];
+    }];
     return cached;
 }
 
@@ -1824,6 +1870,33 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     } else {
         return nil;
     }
+}
+
+- (void)createGroup:(NSString *)name forOrganization:(STKOrganization *)organization withDescription:(NSString *)description leader:(NSString *)leader member:(NSArray *)members completion:(void (^)(id data, NSError *error))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups"]];
+        
+        [c addQueryValue:[self currentUser].uniqueID forKey:@"creator"];
+        [c addQueryValue:organization.uniqueID forKey:@"organization"];
+        [c addQueryValue:name forKey:@"name"];
+        [c addQueryValue:description forKey:@"description"];
+        [c addQueryValue:leader forKey:@"leader"];
+        [c addQueryValue:members forKey:@"members"];
+        
+        [c setModelGraph:@[@"STKGroup"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        //            [c setShouldReturnArray:YES];
+        [c setShouldReturnArray:NO];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
 }
 
 

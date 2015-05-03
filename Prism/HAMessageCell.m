@@ -18,6 +18,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *creator;
 @property (nonatomic, weak) IBOutlet UILabel *dateAgo;
 @property (nonatomic, weak) IBOutlet UITextView *postText;
+@property (nonatomic, weak) IBOutlet UILabel *likesCount;
 
 
 - (IBAction)likeButtonTapped:(id)sender;
@@ -25,6 +26,7 @@
 @end
 
 @implementation HAMessageCell
+
 
 - (void)awakeFromNib {
     // Initialization code
@@ -34,7 +36,7 @@
     [self.creator setTextColor:[UIColor HATextColor]];
     
     [self.dateAgo setTextColor:[UIColor colorWithRed:192.f/255.f green:193.f/255.f blue:213.f/255.f alpha:1]];
-    [self setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
+    [self setBackgroundColor:[UIColor clearColor]];
    
     [self.postText setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
 }
@@ -53,6 +55,11 @@
     [self.creator setText:message.creator.name];
     [self.postText setTextColor:[UIColor HATextColor]];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];
+    if ([message.likesCount integerValue] > 0) {
+        [self.likesCount setText:[NSString stringWithFormat:@"%@", message.likesCount]];
+    } else {
+        [self.likesCount setText:@""];
+    }
 }
 
 - (void)setLiked:(BOOL)liked
@@ -63,19 +70,12 @@
     } else {
         [self.likeButton setImage:[UIImage imageNamed:@"action_heart"] forState:UIControlStateNormal];
     }
-}
-
-- (void)setFrame:(CGRect)frame
-{
-    //    frame.origin.x += 5;
-    //    frame.size.width -= 10;
-    frame.origin.y += 1;
-    frame.size.height -= 2;
-    [super setFrame:frame];
+    [self.likeButton setEnabled:YES];
 }
 
 - (IBAction)likeButtonTapped:(id)sender
 {
+    [self.likeButton setEnabled:NO];
     if (self.delegate) {
         [self.delegate likeButtonTapped:self];
     }

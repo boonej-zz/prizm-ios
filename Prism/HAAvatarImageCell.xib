@@ -15,6 +15,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Bm-EO-g58">
+                        <rect key="frame" x="0.0" y="1" width="320" height="44"/>
+                        <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
+                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XIx-HF-hyg" customClass="STKAvatarView">
                         <rect key="frame" x="15" y="8" width="30" height="30"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -39,13 +43,30 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="centerY" secondItem="XIx-HF-hyg" secondAttribute="centerY" id="0Bb-QY-l28"/>
+                    <constraint firstItem="1Bm-EO-g58" firstAttribute="leading" secondItem="XIx-HF-hyg" secondAttribute="trailing" id="2Do-Lw-Yid"/>
                     <constraint firstAttribute="centerY" secondItem="4sz-4d-EGG" secondAttribute="centerY" id="6Dg-un-JcG"/>
                     <constraint firstItem="XIx-HF-hyg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="7" id="ADt-GF-Fxv"/>
+                    <constraint firstItem="7Sn-nH-xHp" firstAttribute="leading" secondItem="1Bm-EO-g58" secondAttribute="trailing" id="BZ6-BU-19l"/>
+                    <constraint firstAttribute="trailing" secondItem="1Bm-EO-g58" secondAttribute="trailing" id="CD8-Zj-c9d"/>
+                    <constraint firstItem="1Bm-EO-g58" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="1" id="CUk-eD-1pi"/>
+                    <constraint firstItem="1Bm-EO-g58" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="DWi-BJ-WNa"/>
+                    <constraint firstAttribute="bottom" secondItem="1Bm-EO-g58" secondAttribute="bottom" constant="1" id="DgI-9y-qcq"/>
                     <constraint firstItem="4sz-4d-EGG" firstAttribute="leading" secondItem="XIx-HF-hyg" secondAttribute="trailing" constant="8" id="ZBg-Bj-eeb"/>
                     <constraint firstAttribute="trailingMargin" secondItem="7Sn-nH-xHp" secondAttribute="trailing" constant="7" id="Zcy-xX-bjD"/>
+                    <constraint firstItem="7Sn-nH-xHp" firstAttribute="leading" secondItem="4sz-4d-EGG" secondAttribute="trailing" constant="8" id="cFZ-sy-vft"/>
+                    <constraint firstItem="1Bm-EO-g58" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="icT-J8-QQe"/>
                     <constraint firstAttribute="centerY" secondItem="7Sn-nH-xHp" secondAttribute="centerY" id="lbC-sw-1Vm"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="1Bm-EO-g58" secondAttribute="bottom" id="mnq-XN-Rpb"/>
                     <constraint firstItem="7Sn-nH-xHp" firstAttribute="leading" secondItem="4sz-4d-EGG" secondAttribute="trailing" constant="8" id="sBJ-AB-fUl"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="2Do-Lw-Yid"/>
+                        <exclude reference="DWi-BJ-WNa"/>
+                        <exclude reference="mnq-XN-Rpb"/>
+                        <exclude reference="BZ6-BU-19l"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="avatarView" destination="XIx-HF-hyg" id="8jB-QZ-Hwx"/>

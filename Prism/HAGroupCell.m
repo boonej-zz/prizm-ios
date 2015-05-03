@@ -14,7 +14,6 @@
     // Initialization code
     [self.title setFont:STKFont(18.0f)];
     [self.title setTextColor:[UIColor HATextColor]];
-    [self setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 48.0f)];
     [bgView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.4f]];
     [self setSelectedBackgroundView:bgView];
@@ -24,12 +23,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-- (void)setFrame:(CGRect)frame
-{
-    frame.size.height -= 1;
-    [super setFrame:frame];
 }
 
 @end

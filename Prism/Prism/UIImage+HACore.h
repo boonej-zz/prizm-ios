@@ -11,5 +11,6 @@
 @interface UIImage (HACore)
 
 + (UIImage *)HABackgroundImage;
++ (UIImage *)HAPatternImage:(UIImage *)image withHeight:(CGFloat)height andWidth:(CGFloat)width bgColor:(UIColor *)color;
 
 @end

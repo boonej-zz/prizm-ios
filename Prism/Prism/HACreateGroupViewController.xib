@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HACreateGroupViewController">
+            <connections>
+                <outlet property="searchHeader" destination="Zf9-AB-tjC" id="pgK-zA-wou"/>
+                <outlet property="searchTableView" destination="PZN-J3-N9u" id="zob-sV-X6E"/>
+                <outlet property="tableView" destination="lZc-G8-1Oo" id="zVf-3J-ydN"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" tag="1000" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="lZc-G8-1Oo">
+                    <rect key="frame" x="0.0" y="65" width="414" height="141"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="141" id="cXv-mk-nFO"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="g1M-wZ-ovq"/>
+                        <outlet property="delegate" destination="-1" id="jsa-Ts-sat"/>
+                    </connections>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zf9-AB-tjC" customClass="HASearchMembersHeaderView">
+                    <rect key="frame" x="0.0" y="206" width="414" height="47"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="47" id="G3j-wu-1st"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" tag="1001" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PZN-J3-N9u">
+                    <rect key="frame" x="0.0" y="253" width="414" height="483"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="lVG-D5-r9f"/>
+                        <outlet property="delegate" destination="-1" id="dFE-Si-vRv"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="PZN-J3-N9u" secondAttribute="trailing" id="8OQ-Hj-3ur"/>
+                <constraint firstItem="PZN-J3-N9u" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Cml-f8-W7g"/>
+                <constraint firstItem="lZc-G8-1Oo" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Ir7-34-pc0"/>
+                <constraint firstItem="Zf9-AB-tjC" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="KwV-pj-pBW"/>
+                <constraint firstItem="PZN-J3-N9u" firstAttribute="top" secondItem="Zf9-AB-tjC" secondAttribute="bottom" id="QHZ-Hy-uAX"/>
+                <constraint firstItem="lZc-G8-1Oo" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="65" id="QWz-66-8He"/>
+                <constraint firstAttribute="trailing" secondItem="Zf9-AB-tjC" secondAttribute="trailing" id="Qpx-04-CFe"/>
+                <constraint firstAttribute="trailing" secondItem="lZc-G8-1Oo" secondAttribute="trailing" id="Yas-ZF-1nV"/>
+                <constraint firstAttribute="bottom" secondItem="lZc-G8-1Oo" secondAttribute="bottom" id="hDD-Xc-YmQ"/>
+                <constraint firstItem="Zf9-AB-tjC" firstAttribute="top" secondItem="lZc-G8-1Oo" secondAttribute="bottom" id="pYu-ru-FTD"/>
+                <constraint firstAttribute="bottom" secondItem="PZN-J3-N9u" secondAttribute="bottom" id="tKC-dm-0oB"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="hDD-Xc-YmQ"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>
