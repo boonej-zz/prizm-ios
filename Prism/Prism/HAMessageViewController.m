@@ -24,13 +24,14 @@
 #import "UIImage+HACore.h"
 #import "STKNavigationButton.h"
 #import "HACreateGroupViewController.h"
+#import "HAGroupMembersViewController.h"
 
 @interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView * tableView;
 @property (nonatomic, weak) IBOutlet HAPostMessageView *postView;
 @property (nonatomic, strong) NSArray * orgs;
-@property (nonatomic, strong) NSArray * groups;
+@property (nonatomic, strong) NSMutableArray * groups;
 @property (nonatomic, strong) NSMutableArray * messages;
 @property (nonatomic, strong) STKUser * user;
 @property (nonatomic, strong) id group;
@@ -145,7 +146,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:[HAGroupCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAGroupCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[HAMessageCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAMessageCell reuseIdentifier]];
     [self.tableView setContentInset:UIEdgeInsetsMake(65.f, 0, 0, 0)];
-    [self.tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 200)]];
+    [self.tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)]];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self addBlurViewWithHeight:64.f];
 }
@@ -195,6 +196,9 @@
 {
     if (self.organization && self.group) {
         [self.postView setHidden:NO];
+        NSString *name = [self.group isKindOfClass:[STKGroup class]]?[[(STKGroup *)self.group name] lowercaseString ]:@"all";
+        NSString *placeholder = [NSString stringWithFormat:@"Post a message to %@...", name];
+        [self.postView setPlaceHolder:placeholder];
         [self fetchNewer];
         STKGroup *g = [self.group isKindOfClass:[NSString class]]?nil:self.group;
         self.members = [[STKUserStore store] getMembersForOrganization:self.organization group:g];
@@ -204,6 +208,7 @@
         STKNotificationBadge *badge = [[STKNotificationBadge alloc] initWithFrame:CGRectMake(10, -10, 40, 20)];
         [badge setCount:(int)self.members.count];
         [rbb addSubview:badge];
+        [rbb addTarget:self action:@selector(membersButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *bb = [[UIBarButtonItem alloc] initWithCustomView:rbb];
         [self.navigationItem  setRightBarButtonItem:bb];
         if ([self.group isKindOfClass:[STKGroup class]]) {
@@ -221,7 +226,7 @@
         } else {
             self.title = self.organization.name;
         }
-        if ([self isLeader]) {
+        if ([self isLeader] || [self.user.type isEqualToString:@"institution_verified"]) {
             STKNavigationButton *view = [[STKNavigationButton alloc] init];
             [view addTarget:self action:@selector(createNewGroup:) forControlEvents:UIControlEventTouchUpInside];
             [view setOffset:9];
@@ -236,7 +241,7 @@
         
         [self.tableViewBottomConstraint setConstant:0];
         [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
-            self.groups = groups;
+            self.groups = [groups mutableCopy];
          
                 [self.tableView reloadData];
         }];
@@ -277,33 +282,42 @@
 - (void)fetchNewer
 {
     STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
-    STKMessage *m = self.messages.count > 0?[self.messages objectAtIndex:0]:nil;
+    STKMessage *m = self.messages.count > 0?[self.messages lastObject]:nil;
     if (m) {
         [[STKUserStore store] fetchLatestMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
             if (messages) {
-                NSLog(@"%lu messages found.", (long unsigned)messages.count);
-                NSIndexSet *is = [messages indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                    return [obj isKindOfClass:[STKMessage class]];
-                }];
-                [self.messages insertObjects:messages atIndexes:is];
+                [self.messages addObjectsFromArray:messages];
                 NSMutableArray *paths = [NSMutableArray array];
-                [is enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-                    [paths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+                [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
+                    [paths addObject:[NSIndexPath indexPathForRow:[self.messages indexOfObject:message] inSection:0]];
                 }];
-            
+                [UIView animateWithDuration:0.2 animations:^{
                     [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
-         
-                
+                    
+                } completion:^(BOOL finished) {
+                    [self scrollToBottom:YES];
+                }];
             }
         }];
     } else {
         [[STKUserStore store] fetchMessagesForOrganization:self.organization group:g completion:^(NSArray *messages, NSError *err) {
      
             self.messages = [messages mutableCopy];
-                [self.tableView reloadData];
+            [self.tableView reloadData];
+            [self scrollToBottom:NO];
       
             
         }];
+    }
+}
+
+- (void)scrollToBottom:(BOOL)animated
+{
+    CGFloat scrollHeight = self.tableView.contentSize.height;
+    CGFloat viewHeight = self.tableView.frame.size.height;
+    CGFloat yOffset = scrollHeight - viewHeight;
+    if (scrollHeight > viewHeight) {
+        [self.tableView setContentOffset:CGPointMake(0, yOffset) animated:animated];
     }
 }
 
@@ -312,15 +326,22 @@
     STKMessage *message = [self.messages objectAtIndex:ip.row];
     self.editingIndexPath = ip;
     self.editing = YES;
-    [self.postView.textField setText:message.text];
-    [self.postView.textField becomeFirstResponder];
+    [self.postView.textView setText:message.text];
+    [self.postView.textView becomeFirstResponder];
     [self.view addGestureRecognizer:self.viewTap];
+}
+
+- (void)editGroupAtIndexPath:(NSIndexPath *)ip
+{
+    STKGroup *group = [self.groups objectAtIndex:(ip.row - 1)];
+    HACreateGroupViewController *cgvc = [[HACreateGroupViewController alloc] initWithGroup:group];
+    [self.navigationController pushViewController:cgvc animated:YES];
 }
 
 - (void)deleteMessageAtIndexPath:(NSIndexPath *)ip
 {
     STKMessage *message = [self.messages objectAtIndex:ip.row];
-    [STKUserStore.store deleteMessage:message completion:^(NSError *err) {
+    [[STKUserStore store] deleteMessage:message completion:^(NSError *err) {
         [self.messages removeObjectAtIndex:ip.row];
         [self.tableView endEditing:YES];
         [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -328,11 +349,35 @@
     
 }
 
+- (void)deleteGroupAtIndexPath:(NSIndexPath *)ip
+{
+    STKGroup *group = [self.groups objectAtIndex:ip.row - 1];
+    [[STKUserStore store] deleteGroup:group completion:^(id data, NSError *error) {
+        if (error) {
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"This group could not be deleted. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+        } else {
+            [self.groups removeObject:group];
+            [self.tableView endEditing:YES];
+            [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+    }];
+}
+
 - (void)createNewGroup:(id)sender
 {
     HACreateGroupViewController *cgvc = [[HACreateGroupViewController alloc] init];
     [cgvc setOrganization:self.organization];
     [self.navigationController pushViewController:cgvc animated:YES];
+}
+
+- (void)membersButtonTapped:(id)sender
+{
+    STKGroup *group = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
+    HAGroupMembersViewController *gvc = [[HAGroupMembersViewController alloc] init];
+    [gvc setGroup:group];
+    [gvc setOrganization:self.organization];
+    [self.navigationController pushViewController:gvc animated:YES];
 }
 
 #pragma mark Tableview delegate methods.
@@ -363,7 +408,7 @@
         
         STKOrganization *org = [self.orgs objectAtIndex:indexPath.row];
         [c.title setText:org.name];
-        [c.avatarView setUrlString:org.logoURL];
+        [c.avatarView setUrlString:org.owner.profilePhotoPath];
         cell = c;
     } else if (self.groups){
         HAGroupCell *c = [self.tableView dequeueReusableCellWithIdentifier:[HAGroupCell reuseIdentifier]];
@@ -454,6 +499,9 @@
             return YES;
         }
     } else if (self.organization) {
+        if (indexPath.row == 0) {
+            return NO;
+        }
         if ([self.user.type isEqualToString:@"institution_verified"]) {
             return YES;
         } else if ([self.user.type isEqualToString:@"user"]) {
@@ -470,10 +518,9 @@
     return NO;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //remove the deleted object from your data source.
-    }
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
 }
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -481,6 +528,8 @@
     UITableViewRowAction *moreAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"      " handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
         if (self.messages) {
             [self editMessageAtIndexPath:indexPath];
+        } else if (self.groups) {
+            [self editGroupAtIndexPath:indexPath];
         }
     }];
     float width =[moreAction.title sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Helvetica" size:15.0]}].width;
@@ -492,7 +541,11 @@
     
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"      "  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
 //        [self.objects removeObjectAtIndex:indexPath.row];
-        [self deleteMessageAtIndexPath:indexPath];
+        if (self.messages) {
+            [self deleteMessageAtIndexPath:indexPath];
+        } else if (self.groups) {
+            [self deleteGroupAtIndexPath:indexPath];
+        }
     }];
     UIImage *deleteImage = [UIImage HAPatternImage:[UIImage imageNamed:@"edit_delete"] withHeight:height andWidth:width bgColor:[UIColor colorWithRed:221.f/255.f green:75.f/255.f blue:75.f/255.f alpha:1.f]];
     [deleteAction setBackgroundColor:[UIColor colorWithPatternImage:deleteImage]];
@@ -503,7 +556,7 @@
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.editing && self.editingIndexPath) {
-        [self.postView.textField setText:@""];
+        [self.postView.textView setText:@""];
         [self dismissKeyboard:nil];
         [self.tableView reloadRowsAtIndexPaths:@[self.editingIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         self.editing = NO;
@@ -580,15 +633,15 @@
     if ([self isEditing] && [self editingIndexPath]) {
         if (self.messages) {
             STKMessage *message = [self.messages objectAtIndex:self.editingIndexPath.row];
-            message.text = self.postView.textField.text;
+            message.text = self.postView.textView.text;
             [STKUserStore.store editMessage:message completion:^(STKMessage *message, NSError *err) {
                 [self.tableView setEditing:NO];
             }];
         }
     } else {
         STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
-        [[STKUserStore store] postMessage:self.postView.textField.text toGroup:g organization:self.organization completion:^(STKMessage *message, NSError *err) {
-            [self.postView.textField setText:@""];
+        [[STKUserStore store] postMessage:self.postView.textView.text toGroup:g organization:self.organization completion:^(STKMessage *message, NSError *err) {
+            [self.postView.textView setText:@""];
             [self fetchNewer];
         }];
         [self.view layoutIfNeeded];
@@ -606,7 +659,7 @@
 {
     
     [UIView animateWithDuration:0.3 animations:^{
-        [self.postView.textField resignFirstResponder];
+        [self.postView.textView resignFirstResponder];
         [self.postViewBottomConstraint setConstant:0];
         [self.tableViewBottomConstraint setConstant:46];
         [self.view layoutIfNeeded];

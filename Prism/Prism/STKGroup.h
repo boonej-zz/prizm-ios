@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "STKJSONObject.h"
 
-@class NSManagedObject, STKOrganization;
+@class NSManagedObject, STKOrganization, STKUser;
 
 @interface STKGroup : NSManagedObject<STKJSONObject>
 
@@ -20,6 +20,7 @@
 @property (nonatomic, retain) STKOrganization *organization;
 @property (nonatomic, retain) NSSet *members;
 @property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, retain) STKUser *leader;
 
 @end
 

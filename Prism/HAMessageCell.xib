@@ -20,9 +20,9 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="23" translatesAutoresizingMaskIntoConstraints="NO" id="K3g-bq-EzX">
-                        <rect key="frame" x="289" y="11" width="23" height="16"/>
+                        <rect key="frame" x="302" y="11" width="18" height="16"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="23" id="EJm-hv-RsB"/>
+                            <constraint firstAttribute="width" constant="18" id="EJm-hv-RsB"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -38,7 +38,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U4S-Bn-tqX">
-                        <rect key="frame" x="261" y="8" width="27" height="22"/>
+                        <rect key="frame" x="274" y="8" width="27" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="27" id="pt5-zb-1ff"/>
                             <constraint firstAttribute="height" constant="22" id="xYZ-CK-f6Q"/>
@@ -104,12 +104,14 @@
                     <constraint firstItem="0tq-fb-Brx" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="leading" id="lk7-4c-2Ms"/>
                     <constraint firstItem="505-PA-74J" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="trailing" constant="5" id="vjp-fL-tR3"/>
                     <constraint firstItem="ojs-mq-Jlc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="1" id="wz9-Kv-cOk"/>
+                    <constraint firstAttribute="trailing" secondItem="K3g-bq-EzX" secondAttribute="trailing" id="z1z-a7-4Zf"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
                         <exclude reference="FJ8-X1-t1L"/>
                         <exclude reference="K9y-gm-Az4"/>
                         <exclude reference="OPO-ci-tfO"/>
+                        <exclude reference="hGU-ww-ibN"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>

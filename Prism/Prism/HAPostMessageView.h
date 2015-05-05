@@ -18,8 +18,10 @@
 
 @interface HAPostMessageView : UIView
 
-@property (nonatomic, strong) IBOutlet UIImageView *iv;
-@property (nonatomic, strong) IBOutlet UITextField *textField;
+@property (nonatomic, strong) UIImageView *iv;
+@property (nonatomic, strong) UITextView *textView;
 @property (nonatomic, weak) id<HAPostMessageViewDelegate> delegate;
+
+- (void)setPlaceHolder:(NSString *)placeholder;
 
 @end

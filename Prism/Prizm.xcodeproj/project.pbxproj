@@ -41,8 +41,9 @@
 		2C2E9C6D1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C6C1AF53FB500F0F7A8 /* STKUserSelectCellTableViewCell.m */; };
 		2C2E9C701AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C6F1AF54DEB00F0F7A8 /* HALabelAccessoryTableViewCell.m */; };
 		2C2E9C731AF58DC300F0F7A8 /* HATextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C721AF58DC300F0F7A8 /* HATextFieldCell.m */; };
-		2C2E9C781AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C761AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m */; };
+		2C2E9C781AF6918700F0F7A8 /* HASelectMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C761AF6918700F0F7A8 /* HASelectMemberViewController.m */; };
 		2C2E9C791AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E9C771AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib */; };
+		2C2E9C7C1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C7B1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m */; };
 		2C4FD7321A029E98003A4212 /* HANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C4FD7311A029E98003A4212 /* HANavigationController.m */; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
@@ -411,9 +412,11 @@
 		2C2E9C711AF58DC300F0F7A8 /* HATextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HATextFieldCell.h; sourceTree = "<group>"; };
 		2C2E9C721AF58DC300F0F7A8 /* HATextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HATextFieldCell.m; sourceTree = "<group>"; };
 		2C2E9C741AF5A1FA00F0F7A8 /* HACellProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HACellProtocol.h; sourceTree = "<group>"; };
-		2C2E9C751AF6918700F0F7A8 /* HASelectLeaderControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASelectLeaderControllerViewController.h; sourceTree = "<group>"; };
-		2C2E9C761AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASelectLeaderControllerViewController.m; sourceTree = "<group>"; };
+		2C2E9C751AF6918700F0F7A8 /* HASelectMemberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASelectMemberViewController.h; sourceTree = "<group>"; };
+		2C2E9C761AF6918700F0F7A8 /* HASelectMemberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASelectMemberViewController.m; sourceTree = "<group>"; };
 		2C2E9C771AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HASelectLeaderControllerViewController.xib; sourceTree = "<group>"; };
+		2C2E9C7A1AF7B24A00F0F7A8 /* HAGroupMembersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAGroupMembersViewController.h; sourceTree = "<group>"; };
+		2C2E9C7B1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAGroupMembersViewController.m; sourceTree = "<group>"; };
 		2C4FD7301A029E98003A4212 /* HANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HANavigationController.h; sourceTree = "<group>"; };
 		2C4FD7311A029E98003A4212 /* HANavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HANavigationController.m; sourceTree = "<group>"; };
 		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
@@ -2960,9 +2963,11 @@
 				2C2E9C5E1AF3D83000F0F7A8 /* HACreateGroupViewController.h */,
 				2C2E9C5F1AF3D83000F0F7A8 /* HACreateGroupViewController.m */,
 				2C2E9C601AF3D83000F0F7A8 /* HACreateGroupViewController.xib */,
-				2C2E9C751AF6918700F0F7A8 /* HASelectLeaderControllerViewController.h */,
-				2C2E9C761AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m */,
+				2C2E9C751AF6918700F0F7A8 /* HASelectMemberViewController.h */,
+				2C2E9C761AF6918700F0F7A8 /* HASelectMemberViewController.m */,
 				2C2E9C771AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib */,
+				2C2E9C7A1AF7B24A00F0F7A8 /* HAGroupMembersViewController.h */,
+				2C2E9C7B1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5456,6 +5461,7 @@
 				2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */,
 				BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
+				2C2E9C7C1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m in Sources */,
 				2C7B79FA19ED8E19000EC061 /* STKInterest.m in Sources */,
 				2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */,
 				2C0BB38A1AA8CC9C0061A76D /* HAMessageViewController.m in Sources */,
@@ -5490,7 +5496,7 @@
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
 				9CC22F171A1F0CD1004AFF73 /* HAChangePasswordViewController.m in Sources */,
 				2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */,
-				2C2E9C781AF6918700F0F7A8 /* HASelectLeaderControllerViewController.m in Sources */,
+				2C2E9C781AF6918700F0F7A8 /* HASelectMemberViewController.m in Sources */,
 				2C189DD11A2F74190028AD1C /* HAWelcomeViewController.m in Sources */,
 				2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
@@ -6002,7 +6008,7 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "1af99032-7827-448b-929a-d0e94d63de39";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

@@ -1872,6 +1872,31 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }
 }
 
+- (void)editGroup:(STKGroup *)group name:(NSString *)name description:(NSString *)description leader:(NSString *)leader completion:(void (^)(id data, NSError *error))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", group.organization.uniqueID, @"groups", group.uniqueID]];
+        [c addQueryValue:[self currentUser].uniqueID forKey:@"creator"];
+        [c addQueryValue:group.organization.uniqueID forKey:@"organization"];
+        [c addQueryValue:name forKey:@"name"];
+        [c addQueryValue:description forKey:@"description"];
+        [c addQueryValue:leader forKey:@"leader"];
+        
+        [c setModelGraph:@[@"STKGroup"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        //            [c setShouldReturnArray:YES];
+        [c setShouldReturnArray:NO];
+        [c putWithSession:[self session] completionBlock:^(STKGroup *obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
 - (void)createGroup:(NSString *)name forOrganization:(STKOrganization *)organization withDescription:(NSString *)description leader:(NSString *)leader member:(NSArray *)members completion:(void (^)(id data, NSError *error))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
@@ -1894,6 +1919,54 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:NO];
         [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)deleteGroup:(STKGroup *)group completion:(void (^)(id data, NSError *error))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", group.organization.uniqueID, @"groups", group.uniqueID]];
+        
+        [c addQueryValue:[self currentUser].uniqueID forKey:@"requestor"];
+        
+        [c setModelGraph:@[@"STKGroup"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        [c setShouldReturnArray:NO];
+        [c deleteWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if (!err) {
+                [self.context deleteObject:group];
+                NSError *err;
+                [self.context save:&err];
+            }
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)editMembers:(NSArray *)members forGroup:(STKGroup *)group completion:(void (^)(id data, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", group.organization.uniqueID, @"groups", group.uniqueID, @"members"]];
+        [c addQueryValue:[self currentUser].uniqueID forKey:@"requestor"];
+        [c addQueryValue:members forKey:@"members"];
+        
+        [c setModelGraph:@[@"STKUser"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        //            [c setShouldReturnArray:YES];
+        [c setShouldReturnArray:YES];
+        [c putWithSession:[self session] completionBlock:^(STKGroup *obj, NSError *err) {
             block(obj, err);
         }];
     }];

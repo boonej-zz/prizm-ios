@@ -18,6 +18,7 @@
 @dynamic organization;
 @dynamic members;
 @dynamic messages;
+@dynamic leader;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -38,6 +39,7 @@
              @"name": @"name",
              @"description": @"groupDescription",
              @"organization": [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID": @"_id"}],
+             @"leader": [STKBind bindMapForKey:@"leader" matchMap:@{@"uniqueID": @"_id"}]
              };
 }
 

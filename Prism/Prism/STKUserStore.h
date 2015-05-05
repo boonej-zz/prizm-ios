@@ -127,6 +127,8 @@ typedef enum {
 - (void)editMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block;
 - (void)deleteMessage:(STKMessage *)message completion:(void (^)(NSError *err))block;
 - (void)createGroup:(NSString *)name forOrganization:(STKOrganization *)organization withDescription:(NSString *)description leader:(NSString *)leader member:(NSArray *)members completion:(void (^)(id data, NSError *error))block;
-
+- (void)deleteGroup:(STKGroup *)group completion:(void (^)(id data, NSError *error))block;
+- (void)editGroup:(STKGroup *)group name:(NSString *)name description:(NSString *)description leader:(NSString *)leader completion:(void (^)(id data, NSError *error))block;
+- (void)editMembers:(NSArray *)members forGroup:(STKGroup *)group completion:(void (^)(id data, NSError *err))block;
 
 @end

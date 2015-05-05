@@ -15,11 +15,12 @@
 #import "HALabelAccessoryTableViewCell.h"
 #import "STKUserSelectCellTableViewCell.h"
 #import "STKUser.h"
+#import "STKGroup.h"
 #import "STKOrgStatus.h"
 #import "HATextFieldCell.h"
-#import "HASelectLeaderControllerViewController.h"
+#import "HASelectMemberViewController.h"
 
-@interface HACreateGroupViewController ()<UITableViewDataSource, UITableViewDelegate, HACellDelegateProtocol, HASearchMembersDelegate, HASelectLeaderProtocol>
+@interface HACreateGroupViewController ()<UITableViewDataSource, UITableViewDelegate, HACellDelegateProtocol, HASearchMembersDelegate, HASelectMemberProtocol>
 
 @property (nonatomic, weak) IBOutlet UITableView * tableView;
 @property (nonatomic, strong) NSArray * settings;
@@ -33,19 +34,43 @@
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 @property (nonatomic, strong) NSString *groupName;
 @property (nonatomic, strong) NSString *groupDescription;
+@property (nonatomic, strong) STKGroup *group;
 
 @end
 
 @implementation HACreateGroupViewController
 
+- (id)initWithGroup:(STKGroup *)group
+{
+    self = [super init];
+    if (self) {
+        self.group = group;
+        self.settingsVals = [@[group.name, group.leader.uniqueID, group.groupDescription] mutableCopy];
+        self.groupName = group.name;
+        self.groupDescription = group.groupDescription;
+        self.organization = group.organization;
+        self.selectedLeader = group.leader?group.leader.uniqueID:nil;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.selectedMembers = [NSMutableArray array];
+    [self.navigationItem setTitle:@"Create"];
+    if (self.group) {
+        [self.group.members enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+            [self.selectedMembers addObject:obj.member.uniqueID];
+        }];
+        [self.navigationItem setTitle:@"Edit"];
+    }
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     [self.searchTableView registerClass:[STKUserSelectCellTableViewCell class] forCellReuseIdentifier:[STKUserSelectCellTableViewCell reuseIdentifier]];
     [self.tableView registerClass:[HATextFieldCell class] forCellReuseIdentifier:[HATextFieldCell reuseIdentifier]];
     [self.tableView registerClass:[HALabelAccessoryTableViewCell class] forCellReuseIdentifier:[HALabelAccessoryTableViewCell reuseIdentifier]];
-    self.settingsVals = [@[@"", @"", @""] mutableCopy];
+    if (!self.settingsVals) {
+        self.settingsVals = [@[@"", @"", @""] mutableCopy];
+    }
     self.settings = @[
                       @{@"field":@"Group Name",
                         @"cell":@"HATextFieldCell"},
@@ -62,7 +87,6 @@
     self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(done:)];
     [self.navigationItem setRightBarButtonItem:self.doneButton];
     [self.doneButton setEnabled:NO];
-    [self.navigationItem setTitle:@"Create"];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.searchTableView setBackgroundColor:[UIColor clearColor]];
     [self.searchHeader setDelegate:self];
@@ -78,7 +102,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     self.members = [[STKUserStore store] getMembersForOrganization:self.organization group:nil];
-    self.filteredMembers = [[NSArray alloc] initWithArray:self.members copyItems:NO];
+    if (self.group) {
+        [self.searchTableView setHidden:YES];
+        [self.searchHeader setHidden:YES];
+        [self.doneButton setEnabled:YES];
+    } else {
+        self.filteredMembers = [[NSArray alloc] initWithArray:self.members copyItems:NO];
+    }
     [super viewWillAppear:animated];
 }
 
@@ -94,16 +124,29 @@
 
 - (void)done:(id)sender
 {
-    [[STKUserStore store] createGroup:self.groupName forOrganization:self.organization withDescription:self.groupDescription leader:self.selectedLeader member:self.selectedMembers completion:^(id data, NSError *error) {
-        if (error) {
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"There was a problem creating your group. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [av show];
-        } else {
-            [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:nil completion:^(STKUser *u, NSError *err) {
-                [self.navigationController popViewControllerAnimated:YES];
-            }];
-        }
-    }];
+    if (self.group) {
+        [[STKUserStore store] editGroup:self.group name:self.groupName description:self.groupDescription leader:self.selectedLeader completion:^(id data, NSError *error) {
+            if (error) {
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"There was a problem editing your group. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [av show];
+            } else {
+                [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:nil completion:^(STKUser *u, NSError *err) {
+                    [self.navigationController popViewControllerAnimated:YES];
+                }];
+            }
+        }];
+    } else {
+        [[STKUserStore store] createGroup:self.groupName forOrganization:self.organization withDescription:self.groupDescription leader:self.selectedLeader member:self.selectedMembers completion:^(id data, NSError *error) {
+            if (error) {
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"There was a problem creating your group. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [av show];
+            } else {
+                [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:nil completion:^(STKUser *u, NSError *err) {
+                    [self.navigationController popViewControllerAnimated:YES];
+                }];
+            }
+        }];
+    }
 }
 
 #pragma mark Table View Delegate
@@ -129,6 +172,7 @@
             [[(HATextFieldCell *)c textField ]setText:[self.settingsVals objectAtIndex:indexPath.row]];
             [(HATextFieldCell *)c setDelegate:self];
         }
+        
     } else {
         STKOrgStatus *u = [self.filteredMembers objectAtIndex:indexPath.row];
         STKUserSelectCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[STKUserSelectCellTableViewCell reuseIdentifier]];
@@ -179,7 +223,8 @@
         }
 
     } else if (indexPath.row == 1) {
-        HASelectLeaderControllerViewController *svc = [[HASelectLeaderControllerViewController alloc] initWithSelection:self.selectedLeader];
+        HASelectMemberViewController *svc = [[HASelectMemberViewController alloc] initWithSelection:self.selectedLeader predicate:[NSPredicate predicateWithFormat:@"role==%@", @"leader"]];
+        [svc setTitle:@"Leader"];
         [svc setMembers:[self members]];
         [svc setDelegate:self];
         [self.navigationController pushViewController:svc animated:YES];
@@ -199,12 +244,12 @@
     }
 }
 
-- (void)didSelectLeader:(STKOrgStatus *)leader
+- (void)didSelectMember:(STKOrgStatus *)member
 {
-    if (leader) {
-        self.selectedLeader = leader.member.uniqueID;
+    if (member) {
+        self.selectedLeader = member.member.uniqueID;
     } else {
-        leader = nil;
+        self.selectedLeader = nil;
     }
 }
 

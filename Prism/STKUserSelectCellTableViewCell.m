@@ -14,6 +14,7 @@
 @interface STKUserSelectCellTableViewCell()
 
 @property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, getter=shouldOverrideAccessoryView) BOOL overrideAccessoryView;
 
 @end
 
@@ -47,6 +48,13 @@
         [self setupCell];
     }
     return self;
+}
+
+- (void)setAccessoryView:(UIView *)accessoryView
+{
+    [self setOverrideAccessoryView:YES];
+    [_toggle setHidden:YES];
+    [super setAccessoryView:accessoryView];
 }
 
 
@@ -100,6 +108,9 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+    if ([self shouldOverrideAccessoryView]) {
+        return;
+    }
     if (self.selected) {
         [_toggle setBackgroundColor:[UIColor colorWithRed:61.f/255.f green:112.f/255.f blue:177.f/255.f alpha:1.f]];
     } else {

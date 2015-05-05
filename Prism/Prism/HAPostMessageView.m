@@ -7,48 +7,91 @@
 //
 
 #import "HAPostMessageView.h"
-@interface HAPostMessageView()<UITextFieldDelegate>
+@interface HAPostMessageView()<UITextViewDelegate>
 @property (nonatomic) BOOL constraintsAdded;
+@property (nonatomic, strong) UILabel *placeholder;
 @end
 
 @implementation HAPostMessageView
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sendTapped:)];
+        [self addGestureRecognizer:tap];
+        self.textView = [[UITextView alloc] init];
+        [self.textView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        self.iv = [[UIImageView alloc] init];
+        [self.iv setTranslatesAutoresizingMaskIntoConstraints:NO];
+        self.placeholder = [[UILabel alloc] init];
+        [self.placeholder setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.textView addSubview:self.placeholder];
+        [self addSubview:self.textView];
+        [self addSubview:self.iv];
+        [self setupConstraints];
+        
+    }
+    return self;
+}
+
+- (void)setupConstraints
+{
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[tv]-0-[iv]-0-|" options:0 metrics:nil views:@{@"tv": _textView, @"iv": _iv}]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_iv attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    [self.textView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[p]-8-|" options:0 metrics:nil views:@{@"p": _placeholder}]];
+    [self.textView addConstraint:[NSLayoutConstraint constraintWithItem:_placeholder attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    [self.textView addConstraint:[NSLayoutConstraint constraintWithItem:_placeholder attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+}
+
+- (void)sendTapped:(UITapGestureRecognizer *)g
+{
+    if ([self.textView isFirstResponder]) {
+        [self dismissKeyboard:self];
+    }
+}
 
 - (void)layoutSubviews
 {
     [self setBackgroundColor:[UIColor clearColor]];
     [self.iv setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.4f]];
     [self setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2f]];
-    [self.textField setDelegate:self];
-    [self.textField setTextColor:[UIColor HATextColor]];
-    
+    [self.textView setDelegate:self];
+    [self.textView setTextColor:[UIColor HATextColor]];
+    [self.textView setFont:STKFont(15)];
     [self.iv setContentMode:UIViewContentModeCenter];
     [self.iv setImage:[UIImage imageNamed:@"icon_message_small"]];
+    [self.placeholder setTextColor:[UIColor HATextColor]];
+    [self.placeholder setFont:STKFont(15)];
+    [self.textView setBackgroundColor:[UIColor clearColor]];
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+- (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    
+    [self.placeholder setHidden:YES];
     if (self.delegate) {
         [self.delegate beganEditing:self];
     }
-
-}
-
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [self dismissKeyboard:textField];
-    return YES;
 }
 
 - (void)dismissKeyboard:(id)sender
 {
-    [self.textField resignFirstResponder];
+    [self.placeholder setHidden:NO];
+    [self.textView resignFirstResponder];
     if (self.delegate) {
         [self.delegate endEditing:self];
     }
 }
 
+
+- (void)setPlaceHolder:(NSString *)placeholder
+{
+    [self.placeholder setText:placeholder];
+}
 
 
 /*

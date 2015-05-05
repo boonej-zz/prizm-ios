@@ -12,6 +12,7 @@
 
 @property (nonatomic, weak) IBOutlet UITextField *textField;
 
+
 @end
 
 @implementation HASearchMembersHeaderCellTableViewCell
