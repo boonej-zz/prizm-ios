@@ -17,6 +17,7 @@
 #import "STKUser.h"
 #import "STKGroup.h"
 #import "STKOrgStatus.h"
+#import "STKOrganization.h"
 #import "HATextFieldCell.h"
 #import "HASelectMemberViewController.h"
 
@@ -137,16 +138,22 @@
             }
         }];
     } else {
-        [[STKUserStore store] createGroup:self.groupName forOrganization:self.organization withDescription:self.groupDescription leader:self.selectedLeader member:self.selectedMembers completion:^(id data, NSError *error) {
-            if (error) {
-                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"There was a problem creating your group. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [av show];
-            } else {
-                [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:nil completion:^(STKUser *u, NSError *err) {
-                    [self.navigationController popViewControllerAnimated:YES];
-                }];
-            }
-        }];
+        NSSet *matches = [self.organization.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"name LIKE[c] %@ && status == %@", self.groupName, @"active"]];
+        if (matches.count == 0) {
+            [[STKUserStore store] createGroup:self.groupName forOrganization:self.organization withDescription:self.groupDescription leader:self.selectedLeader member:self.selectedMembers completion:^(id data, NSError *error) {
+                if (error) {
+                    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"There was a problem creating your group. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [av show];
+                } else {
+                    [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:nil completion:^(STKUser *u, NSError *err) {
+                        [self.navigationController popViewControllerAnimated:YES];
+                    }];
+                }
+            }];
+        } else {
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"That group name already exists." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [av show];
+        }
     }
 }
 
@@ -254,6 +261,20 @@
     }
 }
 
+- (void)didUpdateCell:(UITableViewCell *)cell withText:(NSString *)text
+{
+    NSIndexPath *ip = [self.tableView indexPathForCell:cell];
+    self.settingsVals[ip.row] = text;
+    if (ip.row == 0) {
+        self.groupName = text;
+    } else if (ip.row == 2) {
+        self.groupDescription = text;
+    }
+    if (self.groupName && self.groupDescription) {
+        [self.doneButton setEnabled:YES];
+    }
+//    [self.searchTableView reloadData];
+}
 
 #pragma mark Search Members Delegate;
 - (void)searchTextChanged:(NSString *)text

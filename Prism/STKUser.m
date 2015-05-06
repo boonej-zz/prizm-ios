@@ -168,7 +168,14 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
 
 - (BOOL)isFollowingUser:(STKUser *)u
 {
-    return [[self following] member:u] != nil;
+    __block BOOL following = NO;
+    [self.following enumerateObjectsUsingBlock:^(STKUser *obj, BOOL *stop) {
+        if ([obj.uniqueID isEqualToString:u.uniqueID]) {
+            following = YES;
+            *stop = YES;
+        }
+    }];
+    return following;
 }
 
 - (BOOL)shouldDisplayGraphInstructions

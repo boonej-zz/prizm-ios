@@ -7,6 +7,7 @@
 //
 
 #import "HAPostMessageView.h"
+
 @interface HAPostMessageView()<UITextViewDelegate>
 @property (nonatomic) BOOL constraintsAdded;
 @property (nonatomic, strong) UILabel *placeholder;
@@ -95,6 +96,10 @@
     [self.textView setFont:STKFont(15)];
     [self.delegate postTextChanged:textView.text];
 }
+
+
+
+
 
 - (void)dismissKeyboard:(id)sender
 {

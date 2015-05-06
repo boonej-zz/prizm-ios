@@ -34,7 +34,7 @@
                             <constraint firstAttribute="width" constant="182" id="Bjo-PG-dIh"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U4S-Bn-tqX">
@@ -62,7 +62,7 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" misplaced="YES" scrollEnabled="NO" editable="NO" text="This is some post text." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0tq-fb-Brx">
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" misplaced="YES" scrollEnabled="NO" editable="NO" text="This is some post text." translatesAutoresizingMaskIntoConstraints="NO" id="0tq-fb-Brx">
                         <rect key="frame" x="53" y="57" width="254" height="29"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -86,7 +86,7 @@
                     <constraint firstItem="syP-1I-nKF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="FJ8-X1-t1L"/>
                     <constraint firstAttribute="bottom" secondItem="ojs-mq-Jlc" secondAttribute="bottom" id="Fk2-SB-cwp"/>
                     <constraint firstAttribute="trailingMargin" secondItem="0tq-fb-Brx" secondAttribute="trailing" constant="5" id="K9y-gm-Az4"/>
-                    <constraint firstAttribute="bottom" secondItem="0tq-fb-Brx" secondAttribute="bottom" constant="18" id="LAy-pb-Se0"/>
+                    <constraint firstAttribute="bottom" secondItem="0tq-fb-Brx" secondAttribute="bottom" constant="8" id="LAy-pb-Se0"/>
                     <constraint firstItem="K3g-bq-EzX" firstAttribute="leading" secondItem="U4S-Bn-tqX" secondAttribute="trailing" constant="1" id="NIX-I6-lZG"/>
                     <constraint firstAttribute="trailing" secondItem="U4S-Bn-tqX" secondAttribute="trailing" constant="13" id="OPO-ci-tfO"/>
                     <constraint firstItem="0tq-fb-Brx" firstAttribute="top" secondItem="505-PA-74J" secondAttribute="bottom" constant="5" id="RtS-0q-X6b"/>

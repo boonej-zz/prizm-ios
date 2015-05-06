@@ -676,6 +676,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID]]];
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
+        
         [q setFields:fields];
         if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {
             [q addSubquery:[STKContainQuery containQueryForField:@"followers" key:@"_id" value:[[self currentUser] uniqueID]]];
@@ -686,6 +687,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             //[q addSubquery:[STKContainQuery containQueryForField:@"trusts" key:@"user_id" value:[[self currentUser] uniqueID]]];
 //            [q addSubquery:[STKContainQuery containQueryForField:@"trusts" keyValues:@{@"from" : [[self currentUser] uniqueID], @"to" : [[self currentUser] uniqueID]}]];
         } else {
+            [q setFormat:@"advanced"];
             [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"interests"]];
             [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"theme"]];
             [q addSubquery:[STKResolutionQuery resolutionQueryForField:@"organization"]];
@@ -1577,10 +1579,10 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 {
     STKUser *user = [self currentUser];
     __block NSArray *cached = [NSArray array];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
     if ([user.type isEqualToString:@"institution_verified"]) {
         NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKGroup"];
         NSPredicate *p = [NSPredicate predicateWithFormat:@"organization.uniqueID == %@ && status != %@", org.uniqueID, @"inactive"];
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
         [fr setPredicate:p];
         [fr setSortDescriptors:@[sort]];
         cached = [[self context] executeFetchRequest:fr error:nil];
@@ -1588,6 +1590,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
             if ([obj.organization.uniqueID isEqualToString:org.uniqueID] && [obj.status isEqualToString:@"active"]) {
                 cached = [[obj.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"name!=nil && status!=%@", @"inactive"]] allObjects];
+                cached = [cached sortedArrayUsingDescriptors:@[sort]];
                 *stop = YES;
             }
         }];

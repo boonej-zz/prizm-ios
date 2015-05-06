@@ -202,7 +202,7 @@
         [[cell followButton] setHidden:YES];
     } else {
         [[cell followButton] setHidden:NO];
-        if([user isFollowedByUser:[[STKUserStore store] currentUser]]) {
+        if([self.user isFollowingUser:user]) {
             [[cell followButton] setSelected:YES];
         } else {
             [[cell followButton] setSelected:NO];
@@ -225,7 +225,7 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.isLeader || [self.user.type isEqualToString:@"institution_verified"]) {
+    if ((self.isLeader || [self.user.type isEqualToString:@"institution_verified"]) && self.group) {
         return YES;
     }
     return NO;
@@ -238,30 +238,17 @@
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewRowAction *mute = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"      " handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
-        STKOrgStatus *os = [self.members objectAtIndex:indexPath.row];
-        
-        
-    }];
-    float width =[mute.title sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Helvetica" size:15.0]}].width;
-    width = width+40;
-    float height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
-    UIImage *muteImage = [UIImage HAPatternImage:[UIImage imageNamed:@"edit_edit"] withHeight:height andWidth:width bgColor:[UIColor colorWithRed:142.f/255.f green:152.f/255.f blue:179.f/255.f alpha:1.f]];
-    [mute setBackgroundColor:[UIColor colorWithPatternImage:muteImage]];
-    
-    
     UITableViewRowAction *delete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"      "  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
         
         [self deleteUser:indexPath];
      
     }];
+    float width =[delete.title sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Helvetica" size:15.0]}].width;
+    width = width+40;
+    float height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
     UIImage *deleteImage = [UIImage HAPatternImage:[UIImage imageNamed:@"edit_delete"] withHeight:height andWidth:width bgColor:[UIColor colorWithRed:221.f/255.f green:75.f/255.f blue:75.f/255.f alpha:1.f]];
     [delete setBackgroundColor:[UIColor colorWithPatternImage:deleteImage]];
-    if (self.group) {
-        return @[delete, mute];
-    } else {
-        return @[mute];
-    }
+    return @[delete];
 }
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath

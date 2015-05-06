@@ -12,14 +12,11 @@
 #import "STKUser.h"
 #import "STKRelativeDateConverter.h"
 #import "STKMarkupUtilities.h"
+#import "UITextView+STKHashtagDetector.h"
 
-@interface HAMessageCell()
+@interface HAMessageCell()<UITextViewDelegate>
 
-@property (nonatomic, weak) IBOutlet STKAvatarView *avatarView;
-@property (nonatomic, weak) IBOutlet UILabel *creator;
-@property (nonatomic, weak) IBOutlet UILabel *dateAgo;
-@property (nonatomic, weak) IBOutlet UITextView *postText;
-@property (nonatomic, weak) IBOutlet UILabel *likesCount;
+
 
 
 - (IBAction)likeButtonTapped:(id)sender;
@@ -82,5 +79,7 @@
         [self.delegate likeButtonTapped:self];
     }
 }
+
+
 
 @end

@@ -386,7 +386,7 @@
 
     if([[STKUserStore store] currentUser]) {
         [self fetchNewPosts];
-        [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:nil completion:^(STKUser *u, NSError *err) {
+        [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:@[@"following"] completion:^(STKUser *u, NSError *err) {
             if (err) {
                 NSLog(@"%@", err.localizedDescription);
             }

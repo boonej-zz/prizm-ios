@@ -29,8 +29,15 @@
 #import "STKMarkupController.h"
 #import "STKMarkupUtilities.h"
 #import "UITextView+STKHashtagDetector.h"
+#import "STKWebViewController.h"
+#import "STKHashtagPostsViewController.h"
+#import "STKProfileViewController.h"
+#import "STKUserListViewController.h"
 
-@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate>
+NSString * const HAMessageHashTagURLScheme = @"hashtag";
+NSString * const HAMessageUserURLScheme = @"user";
+
+@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView * tableView;
 @property (nonatomic, weak) IBOutlet HAPostMessageView *postView;
@@ -118,14 +125,7 @@
     NSSet *statusArray = [self.user.organizations filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
         return [[evaluatedObject status] isEqualToString:@"active"];
     }]];
-    if (self.organization) {
-        NSSet *leaderArray = [self.user.organizations filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-            return [[[evaluatedObject organization] uniqueID] isEqualToString:self.organization.uniqueID] && [[evaluatedObject role] isEqualToString:@"leader"];
-        }]];
-        if (leaderArray.count > 0) {
-            self.leader = YES;
-        }
-    }
+    
     if (statusArray.count == 1) self.leader = YES;
     if (!self.organization) {
         if ([self.user.type isEqualToString:@"institution_verified"]) {
@@ -140,6 +140,12 @@
         }
     }
     if (self.organization) {
+        NSSet *leaderArray = [self.user.organizations filteredSetUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+            return [[[evaluatedObject organization] uniqueID] isEqualToString:self.organization.uniqueID] && [[evaluatedObject role] isEqualToString:@"leader"];
+        }]];
+        if (leaderArray.count > 0) {
+            self.leader = YES;
+        }
         [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *users, NSError *err) {
             
         }];
@@ -500,9 +506,7 @@
         HAMessageCell *c = [tableView dequeueReusableCellWithIdentifier:[HAMessageCell reuseIdentifier]];
         [c setDelegate:self];
         [c setMessage:message];
-        if (message.creator == self.user) {
-            [c.likeButton setEnabled:NO];
-        }
+        [c.postText setDelegate:self];
         __block BOOL liked = NO;
         [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
             if ([obj isKindOfClass:[NSString class]]) {
@@ -527,16 +531,18 @@
     if (self.messages) {
         static UIFont *f = nil;
         if (! f) {
-            f = STKFont(15.f);
+            f = STKFont(14.f);
         }
         if (self.messages.count > 0) {
             STKMessage *m = [self.messages objectAtIndex:indexPath.row];
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
             [style setAlignment:NSTextAlignmentLeft];
-            CGRect r = [m.text boundingRectWithSize:CGSizeMake(254, 10000)
+             NSDictionary *attributes = @{NSFontAttributeName : f};
+            NSAttributedString *text = [STKMarkupUtilities renderedTextForText:m.text attributes:attributes];
+            CGRect r = [text boundingRectWithSize:CGSizeMake(254, 10000)
                                           options:NSStringDrawingUsesLineFragmentOrigin
-                                         attributes:@{NSFontAttributeName : f, NSParagraphStyleAttributeName: style} context:nil];
-            CGFloat height = r.size.height + 90;
+                                          context:nil];
+            CGFloat height = r.size.height + 80;
             return height;
         } else {
             return 48.0f;
@@ -572,7 +578,7 @@
     if (self.messages) {
         if (self.messages.count > 0) {
             STKMessage *m =[self.messages objectAtIndex:indexPath.row];
-            if ([m.creator.uniqueID isEqualToString:self.user.uniqueID]) {
+            if ([m.creator.uniqueID isEqualToString:self.user.uniqueID] || self.isLeader || [self.user.type isEqualToString:@"insititution_verified"]) {
                 return YES;
             }
         }
@@ -627,8 +633,12 @@
     }];
     UIImage *deleteImage = [UIImage HAPatternImage:[UIImage imageNamed:@"edit_delete"] withHeight:height andWidth:width bgColor:[UIColor colorWithRed:221.f/255.f green:75.f/255.f blue:75.f/255.f alpha:1.f]];
     [deleteAction setBackgroundColor:[UIColor colorWithPatternImage:deleteImage]];
-    
-    return @[deleteAction, moreAction];
+    STKMessage *m = [self.messages objectAtIndex:indexPath.row];
+    if ([m.creator.uniqueID isEqualToString:self.user.uniqueID]){
+        return @[deleteAction, moreAction];
+    } else {
+        return @[deleteAction];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
@@ -649,40 +659,73 @@
 #pragma mark Message View Cell Delegate
 - (void)likeButtonTapped:(HAMessageCell *)sender
 {
-    if ([sender isLiked]) {
-        [[STKUserStore store] unlikeMessage:sender.message completion:^(STKMessage *message, NSError *err) {
-            __block BOOL liked = NO;
-            [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-                if ([obj isKindOfClass:[NSString class]]) {
-                    if ([obj isEqualToString:self.user.uniqueID]) {
-                        liked = YES;
-                    }
-                } else if ([obj isKindOfClass:[STKUser class]]) {
-                    if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
-                        liked = YES;
-                    }
-                }
-            }];
-            [sender setLiked:liked];
-        }];
+    if ([sender.message.creator.uniqueID isEqualToString:self.user.uniqueID]) {
+        if (sender.message.likesCount > 0){
+            STKUserListViewController *vc = [[STKUserListViewController alloc] init];
+            [vc setTitle:@"Likes"];
+            [vc setUsers:[sender.message.likes allObjects]];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        [sender setLiked:NO];
     } else {
-        [[STKUserStore store] likeMessage:sender.message completion:^(STKMessage *message, NSError *err) {
-            __block BOOL liked = NO;
-            [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-                if ([obj isKindOfClass:[NSString class]]) {
-                    if ([obj isEqualToString:self.user.uniqueID]) {
-                        liked = YES;
+        if ([sender isLiked]) {
+            [[STKUserStore store] unlikeMessage:sender.message completion:^(STKMessage *message, NSError *err) {
+                __block BOOL liked = NO;
+                [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                    if ([obj isKindOfClass:[NSString class]]) {
+                        if ([obj isEqualToString:self.user.uniqueID]) {
+                            liked = YES;
+                        }
+                    } else if ([obj isKindOfClass:[STKUser class]]) {
+                        if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
+                            liked = YES;
+                        }
                     }
-                } else if ([obj isKindOfClass:[STKUser class]]) {
-                    if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
-                        liked = YES;
-                    }
-                }
+                }];
+                [sender setLiked:liked];
             }];
-            [sender setLiked:liked];
-        }];
+        } else {
+            [[STKUserStore store] likeMessage:sender.message completion:^(STKMessage *message, NSError *err) {
+                __block BOOL liked = NO;
+                [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                    if ([obj isKindOfClass:[NSString class]]) {
+                        if ([obj isEqualToString:self.user.uniqueID]) {
+                            liked = YES;
+                        }
+                    } else if ([obj isKindOfClass:[STKUser class]]) {
+                        if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
+                            liked = YES;
+                        }
+                    }
+                }];
+                [sender setLiked:liked];
+            }];
+        }
     }
 }
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)url inRange:(NSRange)characterRange
+{
+    if([[url scheme] isEqualToString:@"http"] || [[url scheme] isEqualToString:@"https"]) {
+        STKWebViewController *wvc = [[STKWebViewController alloc] init];
+        [wvc setUrl:url];
+        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
+        [self presentViewController:nvc animated:YES completion:nil];
+        return YES;
+    } else if([[url scheme] isEqualToString:HAMessageHashTagURLScheme]) {
+        STKHashtagPostsViewController *pvc = [[STKHashtagPostsViewController alloc] initWithHashTag:[url host]];
+        [pvc setLinkedToPost:YES];
+        [[self navigationController] pushViewController:pvc animated:YES];
+        return YES;
+    } else if([[url scheme] isEqualToString:HAMessageUserURLScheme]) {
+        STKProfileViewController *vc = [[STKProfileViewController alloc] init];
+        [vc setProfile:[[STKUserStore store] userForID:[url host]]];
+        [[self navigationController] pushViewController:vc animated:YES];
+        return YES;
+    }
+    return NO;
+}
+
 
 #pragma mark Post View Delegate
 

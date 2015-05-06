@@ -79,4 +79,15 @@
     [[self delegate] didEndEditingCell:self];
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (self.delegate) {
+        if ([self.delegate respondsToSelector:@selector(didUpdateCell:withText:)]) {
+             NSString *returnString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+            [self.delegate didUpdateCell:self withText:returnString];
+        }
+    }
+    return YES;
+}
+
 @end

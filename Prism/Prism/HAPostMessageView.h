@@ -14,6 +14,7 @@
 - (void)beganEditing:(HAPostMessageView *)sender;
 - (void)endEditing:(HAPostMessageView *)sender;
 - (void)postTextChanged:(NSString *)text;
+- (void)urlTapped:(NSURL *)url;
 
 @end
 

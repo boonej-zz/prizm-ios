@@ -27,6 +27,7 @@
 @property (nonatomic, retain) STKUser *owner;
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) NSSet *mutes;
+@property (nonatomic, retain) NSSet *groups;
 @end
 
 @interface STKOrganization (CoreDataGeneratedAccessors)
