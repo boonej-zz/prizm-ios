@@ -1535,9 +1535,24 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
-- (void)fetchUserOrgs:(void (^)(NSArray *organizations, NSError *err))block
+- (NSArray *)fetchUserOrgs:(void (^)(NSArray *organizations, NSError *err))block
 {
     STKUser *u = [self currentUser];
+    NSMutableArray *cached = [NSMutableArray array];
+    if ([u.type isEqualToString:@"institution_verified"]) {
+        NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKOrganization"];
+        NSPredicate *p = [NSPredicate predicateWithFormat:@"owner.uniqueID == %@", u.uniqueID];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+        [fr setPredicate:p];
+        [fr setSortDescriptors:@[sort]];
+        [cached addObjectsFromArray:[[self context] executeFetchRequest:fr error:nil]];
+    } else {
+        [u.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+            if ([obj.status isEqualToString:@"active"]) {
+                [cached addObject:obj.organization];
+            }
+        }];
+    }
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if (err) {
             block(nil, err);
@@ -1555,17 +1570,34 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(obj, err);
         }];
     }];
+    return cached;
 }
 
-- (void)fetchGroupsForOrganization:(STKOrganization *)org completion:(void (^)(NSArray *groups, NSError *err))block
+- (NSArray *)fetchGroupsForOrganization:(STKOrganization *)org completion:(void (^)(NSArray *groups, NSError *err))block
 {
-    STKUser *u = [self currentUser];
+    STKUser *user = [self currentUser];
+    __block NSArray *cached = [NSArray array];
+    if ([user.type isEqualToString:@"institution_verified"]) {
+        NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKGroup"];
+        NSPredicate *p = [NSPredicate predicateWithFormat:@"organization.uniqueID == %@ && status != %@", org.uniqueID, @"inactive"];
+        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+        [fr setPredicate:p];
+        [fr setSortDescriptors:@[sort]];
+        cached = [[self context] executeFetchRequest:fr error:nil];
+    } else {
+        [user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+            if ([obj.organization.uniqueID isEqualToString:org.uniqueID] && [obj.status isEqualToString:@"active"]) {
+                cached = [[obj.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"name!=nil && status!=%@", @"inactive"]] allObjects];
+                *stop = YES;
+            }
+        }];
+    }
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if (err) {
             block(nil, err);
             return;
         }
-        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", u.uniqueID, @"organizations", org.uniqueID, @"groups"]];
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", user.uniqueID, @"organizations", org.uniqueID, @"groups"]];
         STKQueryObject *q = [[STKQueryObject alloc] init];
         [c setQueryObject:q];
         [c setModelGraph:@[@"STKGroup"]];
@@ -1577,29 +1609,27 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(obj, err);
         }];
     }];
+    return cached;
 }
 
-- (void)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block
+- (NSArray *)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block
 {
-    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
-        if (err) {
-            block(nil, err);
-            return;
-        }
-        NSString *obj = @"all";
-        if (group) obj = group.uniqueID;
-        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups", obj, @"messages"]];
-        STKQueryObject *q = [[STKQueryObject alloc] init];
-        [c setQueryObject:q];
-        [c setModelGraph:@[@"STKMessage"]];
-        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
-        [c setContext:[self context]];
-        //            [c setShouldReturnArray:YES];
-        [c setShouldReturnArray:YES];
-        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            block(obj, err);
-        }];
+    NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKMessage"];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"organization.uniqueID == %@ && group.uniqueID == %@", organization.uniqueID, group.uniqueID];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"createDate" ascending:YES];
+    [fr setPredicate:p];
+    [fr setSortDescriptors:@[sort]];
+    NSArray *cached = nil;
+    cached = [[self context] executeFetchRequest:fr error:nil];
+    NSDate *date = nil;
+    if (cached.count > 0) {
+        STKMessage *lastMessage = [cached lastObject];
+        date = [lastMessage createDate];
+    }
+    [self fetchLatestMessagesForOrganization:organization group:group date:date completion:^(NSArray *messages, NSError *err) {
+        block(messages, err);
     }];
+    return cached;
 }
 
 - (void)editMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block{
@@ -1648,7 +1678,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (NSArray *)getMembersForOrganization:(STKOrganization *)organization group:(STKGroup *)group
 {
     NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKOrgStatus"];
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"organization.uniqueID == %@ && status == %@", organization.uniqueID, @"active"];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"organization.uniqueID == %@ && status == %@ && member.active == YES", organization.uniqueID, @"active"];
     [fr setPredicate:p];
     NSArray *cached = nil;
     cached = [[self context] executeFetchRequest:fr error:nil];
@@ -1723,14 +1753,45 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if (group) obj = group.uniqueID;
         NSTimeZone *timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
         // or specifc Timezone: with name
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups", obj, @"messages"]];
+        if (date) {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setTimeZone:timeZone];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+           
+            NSString *localDateString = [dateFormatter stringFromDate:date];
+            [c addQueryValue:localDateString forKey:@"since"];
+        }
+        [c setModelGraph:@[@"STKMessage"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        //            [c setShouldReturnArray:YES];
+        [c setShouldReturnArray:YES];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)fetchOlderMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        NSString *obj = @"all";
+        if (group) obj = group.uniqueID;
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+        // or specifc Timezone: with name
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:timeZone];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-       
+        
         NSString *localDateString = [dateFormatter stringFromDate:date];
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups", obj, @"messages"]];
-        [c addQueryValue:localDateString forKey:@"since"];
+        [c addQueryValue:localDateString forKey:@"before"];
         [c setModelGraph:@[@"STKMessage"]];
         [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
         [c setContext:[self context]];
@@ -1772,8 +1833,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(nil, err);
             return;
         }
-        
-        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", message.organization.uniqueID, @"groups", message.group.uniqueID, @"messages", message.uniqueID]];
+        NSString *group = message.group?message.group.uniqueID:@"all";
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", message.organization.uniqueID, @"groups", group, @"messages", message.uniqueID]];
         
         [c addQueryValue:[self currentUser].uniqueID forKey:@"user"];
         [c addQueryValue:@"unlike" forKey:@"action"];
@@ -1967,6 +2028,39 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:YES];
         [c putWithSession:[self session] completionBlock:^(STKGroup *obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)removeUser:(STKUser *)user fromGroup:(STKGroup *)group completion:(void (^)(id data, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", group.organization.uniqueID, @"groups", group.uniqueID, @"members", user.uniqueID]];
+        [c addQueryValue:[self currentUser].uniqueID forKey:@"requestor"];
+        
+        
+        [c setModelGraph:@[@"STKUser"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        //            [c setShouldReturnArray:YES];
+        [c setShouldReturnArray:NO];
+        [c deleteWithSession:[self session] completionBlock:^(STKUser *obj, NSError *err) {
+            if (!err) {
+                __block id object;
+                [obj.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+                    object = obj;
+                }];
+                if (object) {
+                    [obj removeOrganizationsObject:object];
+                    NSError *err;
+                    [self.context save:&err];
+                }
+            }
             block(obj, err);
         }];
     }];

@@ -1,26 +1,25 @@
 //
-//  STKGroup.m
+//  STKMute.m
 //  Prizm
 //
-//  Created by Jonathan Boone on 4/14/15.
+//  Created by Jonathan Boone on 5/5/15.
 //  Copyright (c) 2015 Higher Altitude. All rights reserved.
 //
 
+#import "STKMute.h"
 #import "STKGroup.h"
 #import "STKOrganization.h"
+#import "STKUser.h"
 
 
-@implementation STKGroup
+@implementation STKMute
 
 @dynamic uniqueID;
-@dynamic name;
-@dynamic groupDescription;
+@dynamic createDate;
+@dynamic revokeDate;
+@dynamic user;
 @dynamic organization;
-@dynamic members;
-@dynamic messages;
-@dynamic leader;
-@dynamic status;
-@dynamic mutes;
+@dynamic group;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -38,12 +37,11 @@
 {
     return @{
              @"_id": @"uniqueID",
-             @"name": @"name",
-             @"description": @"groupDescription",
+             @"create_date": [STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
+             @"revoke_date": [STKBind bindMapForKey:@"revokeDate" transform:STKBindTransformDateTimestamp],
+             @"user": [STKBind bindMapForKey:@"user" matchMap:@{@"uniqueID": @"_id"}],
              @"organization": [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID": @"_id"}],
-             @"leader": [STKBind bindMapForKey:@"leader" matchMap:@{@"uniqueID": @"_id"}],
-             @"status": @"status",
-             @"mutes": [STKBind bindMapForKey:@"mutes" matchMap:@{@"uniqueID": @"_id"}]
+             @"group": [STKBind bindMapForKey:@"group" matchMap:@{@"uniqueID": @"_id"}]
              };
 }
 

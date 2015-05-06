@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "STKJSONObject.h"
 
-@class STKTheme, STKUser;
+@class STKTheme, STKUser, STKMute;
 
 @interface STKOrganization : NSManagedObject <STKJSONObject>
 
@@ -26,13 +26,20 @@
 @property (nonatomic, retain) NSString *logoURL;
 @property (nonatomic, retain) STKUser *owner;
 @property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, retain) NSSet *mutes;
 @end
 
 @interface STKOrganization (CoreDataGeneratedAccessors)
 
 - (void)addMembersObject:(STKUser *)value;
 - (void)removeMembersObject:(STKUser *)value;
+
 - (void)addMembers:(NSSet *)values;
 - (void)removeMembers:(NSSet *)values;
+
+- (void)addMuteObject:(STKMute *)mute;
+- (void)removeMuteObject:(STKMute *)mute;
+- (void)addMutes:(NSSet *)values;
+- (void)removeMutes:(NSSet *)values;
 
 @end

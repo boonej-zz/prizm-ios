@@ -190,7 +190,6 @@
     view.tag = 99999;
     [self.view addConstraints:horizontalConstatraints];
     [self.view addConstraints:verticalConstraints];
-    NSLog(@"%@", [self class]);
     
 }
 

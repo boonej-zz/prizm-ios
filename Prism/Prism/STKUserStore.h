@@ -114,10 +114,11 @@ typedef enum {
 - (STKOrganization *)getOrganizationByCode:(NSString *)code;
 - (void)updateInterestsforUser:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block;
 - (void)fetchSuggestionsForUser:(STKUser *)user completion:(void(^)(NSArray *users, NSError *err))block;
-- (void)fetchUserOrgs:(void (^)(NSArray *organizations, NSError *err))block;
-- (void)fetchGroupsForOrganization:(STKOrganization *)org completion:(void (^)(NSArray *groups, NSError *err))block;
-- (void)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block;
+- (NSArray *)fetchUserOrgs:(void (^)(NSArray *organizations, NSError *err))block;
+- (NSArray *)fetchGroupsForOrganization:(STKOrganization *)org completion:(void (^)(NSArray *groups, NSError *err))block;
+- (NSArray *)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block;
 - (void)fetchLatestMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block;
+- (void)fetchOlderMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block;
 - (void)likeMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block;
 - (void)unlikeMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block;
 
@@ -130,5 +131,6 @@ typedef enum {
 - (void)deleteGroup:(STKGroup *)group completion:(void (^)(id data, NSError *error))block;
 - (void)editGroup:(STKGroup *)group name:(NSString *)name description:(NSString *)description leader:(NSString *)leader completion:(void (^)(id data, NSError *error))block;
 - (void)editMembers:(NSArray *)members forGroup:(STKGroup *)group completion:(void (^)(id data, NSError *err))block;
+- (void)removeUser:(STKUser *)user fromGroup:(STKGroup *)group completion:(void (^)(id data, NSError *err))block;
 
 @end

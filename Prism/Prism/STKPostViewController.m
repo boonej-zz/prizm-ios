@@ -557,6 +557,31 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     return NO;
 }
 
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewRowAction *delete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"      "  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        STKPostComment *pc = [self commentForIndexPath:indexPath];
+        [[STKContentStore store] deleteComment:pc completion:^(STKPost *p, NSError *err) {
+            if (err) {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            } else {
+                [self extractComments];
+            }
+            [[self tableView] reloadData];
+        }];
+        [self extractComments];
+        [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [[self postCell] populateWithPost:[[[self postController] posts] firstObject]];
+        
+    }];
+    CGFloat height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+    float width =[delete.title sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Helvetica" size:15.0]}].width;
+    width = width+40;
+    UIImage *deleteImage = [UIImage HAPatternImage:[UIImage imageNamed:@"edit_delete"] withHeight:height andWidth:width bgColor:[UIColor colorWithRed:221.f/255.f green:75.f/255.f blue:75.f/255.f alpha:1.f]];
+    [delete setBackgroundColor:[UIColor colorWithPatternImage:deleteImage]];
+    return @[delete];
+}
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [cell setBackgroundColor:[UIColor clearColor]];

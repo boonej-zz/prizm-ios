@@ -10,6 +10,8 @@
 @interface HAPostMessageView()<UITextViewDelegate>
 @property (nonatomic) BOOL constraintsAdded;
 @property (nonatomic, strong) UILabel *placeholder;
+@property (nonatomic, strong) UIVisualEffectView *blurView;
+@property (nonatomic, strong) UIView *tintView;
 @end
 
 @implementation HAPostMessageView
@@ -20,6 +22,13 @@
     if (self) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sendTapped:)];
         [self addGestureRecognizer:tap];
+        UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        self.blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
+        [self.blurView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self addSubview:_blurView];
+        self.tintView = [[UIView alloc] init];
+        [self.tintView setBackgroundColor:[UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.34f]];
+        [[self.blurView contentView] addSubview:self.tintView];
         self.textView = [[UITextView alloc] init];
         [self.textView setTranslatesAutoresizingMaskIntoConstraints:NO];
         self.iv = [[UIImageView alloc] init];
@@ -37,6 +46,8 @@
 
 - (void)setupConstraints
 {
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[bv]-0-|" options:0 metrics:nil views:@{@"bv": _blurView}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[bv]-0-|" options:0 metrics:nil views:@{@"bv": _blurView}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[tv]-0-[iv]-0-|" options:0 metrics:nil views:@{@"tv": _textView, @"iv": _iv}]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
@@ -57,7 +68,7 @@
 
 - (void)layoutSubviews
 {
-    [self setBackgroundColor:[UIColor clearColor]];
+    [self.tintView setFrame:self.bounds];
     [self.iv setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.4f]];
     [self setBackgroundColor:[UIColor colorWithWhite:1 alpha:0.2f]];
     [self.textView setDelegate:self];
@@ -76,6 +87,13 @@
     if (self.delegate) {
         [self.delegate beganEditing:self];
     }
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    [self.textView setTintColor:[UIColor HATextColor]];
+    [self.textView setFont:STKFont(15)];
+    [self.delegate postTextChanged:textView.text];
 }
 
 - (void)dismissKeyboard:(id)sender

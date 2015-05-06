@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "STKJSONObject.h"
 
-@class NSManagedObject, STKOrganization, STKUser;
+@class NSManagedObject, STKOrganization, STKUser, STKMute;
 
 @interface STKGroup : NSManagedObject<STKJSONObject>
 
@@ -21,6 +21,8 @@
 @property (nonatomic, retain) NSSet *members;
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) STKUser *leader;
+@property (nonatomic, retain) NSString *status;
+@property (nonatomic, retain) NSSet *mutes;
 
 @end
 
@@ -30,5 +32,10 @@
 - (void)removeMembersObject:(NSManagedObject *)value;
 - (void)addMembers:(NSSet *)values;
 - (void)removeMembers:(NSSet *)values;
+
+- (void)addMuteObject:(STKMute *)mute;
+- (void)removeMuteObject:(STKMute *)mute;
+- (void)addMutes:(NSSet *)values;
+- (void)removeMutes:(NSSet *)values;
 
 @end

@@ -25,11 +25,16 @@
 #import "STKNavigationButton.h"
 #import "HACreateGroupViewController.h"
 #import "HAGroupMembersViewController.h"
+#import "STKLuminatingBar.h"
+#import "STKMarkupController.h"
+#import "STKMarkupUtilities.h"
+#import "UITextView+STKHashtagDetector.h"
 
-@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate>
+@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView * tableView;
 @property (nonatomic, weak) IBOutlet HAPostMessageView *postView;
+@property (nonatomic, weak) IBOutlet STKLuminatingBar *luminatingBar;
 @property (nonatomic, strong) NSArray * orgs;
 @property (nonatomic, strong) NSMutableArray * groups;
 @property (nonatomic, strong) NSMutableArray * messages;
@@ -38,7 +43,7 @@
 @property (nonatomic, strong) STKOrganization *organization;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *postViewBottomConstraint;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *tableViewBottomConstraint;
-@property (nonatomic, strong) UITapGestureRecognizer *viewTap;
+//@property (nonatomic, strong) UITapGestureRecognizer *viewTap;
 @property (nonatomic, strong) NSArray *members;
 @property (nonatomic, getter=isEditing) BOOL editing;
 @property (nonatomic, strong) NSIndexPath *editingIndexPath;
@@ -48,6 +53,8 @@
 @property (nonatomic, weak) IBOutlet UITextView *overlayText;
 @property (nonatomic, getter=isHome) BOOL home;
 @property (nonatomic, getter=isLeader) BOOL leader;
+@property (nonatomic, strong) STKMarkupController *markupController;
+@property (nonatomic, assign) CGRect originalFrameForMarkupController;
 
 - (IBAction)dismissOverlayView:(id)sender;
 
@@ -87,9 +94,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _markupController = [[STKMarkupController alloc] initWithDelegate:self];
+    [[self view] addSubview:[[self markupController] view]];
+    CGRect frame = _markupController.view.frame;
+    frame.origin.y = self.postView.frame.origin.y;
+    self.originalFrameForMarkupController = frame;
+    _markupController.view.frame = frame;
+    [_markupController.view setHidden:YES];
+    [_markupController setOrganization:self.organization];
+    STKGroup *group = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
+    [_markupController setGroup:group];
     self.home = !self.organization;
     self.title = @"Message";
-    self.viewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+//    self.viewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     self.postView.delegate = self;
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     iv.frame = self.view.bounds;
@@ -145,8 +162,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:[HAAvatarImageCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAAvatarImageCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[HAGroupCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAGroupCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[HAMessageCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAMessageCell reuseIdentifier]];
-    [self.tableView setContentInset:UIEdgeInsetsMake(65.f, 0, 0, 0)];
-    [self.tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)]];
+    [self.tableView setContentInset:UIEdgeInsetsMake(65.f, 0, 88.f, 0)];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self addBlurViewWithHeight:64.f];
 }
@@ -169,7 +185,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 6, 137, 44)];
     UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     [infoButton setTintColor:[UIColor HATextColor]];
-    [infoButton addTarget:self action:@selector(showOverlayView:) forControlEvents:UIControlEventTouchUpInside];
+//    [infoButton addTarget:self action:@selector(showOverlayView:) forControlEvents:UIControlEventTouchUpInside];
     [titleLabel setText:titleString];
     [titleLabel setFont:STKFont(22)];
     [titleLabel setTextColor:[UIColor HATextColor]];
@@ -182,6 +198,8 @@
     [infoButton setFrame:CGRectMake(titleLabel.bounds.size.width + 8, 16, 12, 12)];
     [container addSubview:titleLabel];
     if (showInfo){
+        UIGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOverlayView:)];
+        [container addGestureRecognizer:tapRecognizer];
         [container addSubview:infoButton];
     }
     [self.navigationItem setTitleView:container];
@@ -199,7 +217,7 @@
         NSString *name = [self.group isKindOfClass:[STKGroup class]]?[[(STKGroup *)self.group name] lowercaseString ]:@"all";
         NSString *placeholder = [NSString stringWithFormat:@"Post a message to %@...", name];
         [self.postView setPlaceHolder:placeholder];
-        [self fetchNewer];
+        [self fetchNewer:NO];
         STKGroup *g = [self.group isKindOfClass:[NSString class]]?nil:self.group;
         self.members = [[STKUserStore store] getMembersForOrganization:self.organization group:g];
         UIButton *rbb = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -240,20 +258,28 @@
         
         
         [self.tableViewBottomConstraint setConstant:0];
-        [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
-            self.groups = [groups mutableCopy];
-         
+        self.groups = [[[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
+            if (!err) {
+                self.groups = [groups mutableCopy];
                 [self.tableView reloadData];
-        }];
+            }
+         
+            
+        }] mutableCopy];
+        if (self.groups.count > 0) {
+            [self.tableView reloadData];
+        }
     } else {
         [self.tableViewBottomConstraint setConstant:0];
-        [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
-            self.orgs = organizations;
-          
+        self.orgs = [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
+            if (!err) {
+                self.orgs = organizations;
                  [self.tableView reloadData];
-        
-           
+            }
         }];
+        if (self.orgs.count > 0) {
+            [self.tableView reloadData];
+        }
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
     [super viewWillAppear:animated];
@@ -279,13 +305,37 @@
 }
 */
 
-- (void)fetchNewer
+- (void)fetchOlder
+{
+    STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
+    STKMessage *m = self.messages.count > 0?[self.messages objectAtIndex:0]:nil;
+    if (m) {
+        [[self luminatingBar] setLuminating:YES];
+        [[STKUserStore store] fetchOlderMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
+            if (messages && messages.count > 0) {
+                NSMutableArray *paths = [NSMutableArray array];
+                [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
+                    [paths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+                }];
+                [self.messages insertObjects:messages atIndexes:[messages indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                    return [obj isKindOfClass:[STKMessage class]];
+                }]];
+                [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+                
+            }
+            [[self luminatingBar] setLuminating:NO];
+        }];
+    }
+}
+
+- (void)fetchNewer:(BOOL)scroll
 {
     STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
     STKMessage *m = self.messages.count > 0?[self.messages lastObject]:nil;
+    [[self luminatingBar] setLuminating:YES];
     if (m) {
         [[STKUserStore store] fetchLatestMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
-            if (messages) {
+            if (messages && messages.count > 0) {
                 [self.messages addObjectsFromArray:messages];
                 NSMutableArray *paths = [NSMutableArray array];
                 [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
@@ -295,29 +345,52 @@
                     [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
                     
                 } completion:^(BOOL finished) {
-                    [self scrollToBottom:YES];
+                    
+                    if (scroll) {
+                        [self scrollToBottom:YES];
+                    }
                 }];
             }
+            [[self luminatingBar] setLuminating:NO];
         }];
     } else {
-        [[STKUserStore store] fetchMessagesForOrganization:self.organization group:g completion:^(NSArray *messages, NSError *err) {
-     
-            self.messages = [messages mutableCopy];
-            [self.tableView reloadData];
-            [self scrollToBottom:NO];
-      
-            
-        }];
+        self.messages = [[[STKUserStore store] fetchMessagesForOrganization:self.organization group:g completion:^(NSArray *messages, NSError *err) {
+            BOOL hasMessages = self.messages.count > 0;
+            if (messages.count > 0) {
+            [self.messages addObjectsFromArray:messages];
+                NSMutableArray *paths = [NSMutableArray array];
+                [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
+                    [paths addObject:[NSIndexPath indexPathForRow:[self.messages indexOfObject:message] inSection:0]];
+                }];
+                [UIView animateWithDuration:0.2 animations:^{
+                    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+                    
+                } completion:^(BOOL finished) {
+                    
+                        [self scrollToBottom:hasMessages];
+                    
+                }];
+            }
+            [[self luminatingBar] setLuminating:NO];
+        }] mutableCopy];
+        [self.tableView reloadData];
+        [self scrollToBottom:NO];
     }
 }
 
 - (void)scrollToBottom:(BOOL)animated
 {
-    CGFloat scrollHeight = self.tableView.contentSize.height;
-    CGFloat viewHeight = self.tableView.frame.size.height;
-    CGFloat yOffset = scrollHeight - viewHeight;
-    if (scrollHeight > viewHeight) {
-        [self.tableView setContentOffset:CGPointMake(0, yOffset) animated:animated];
+    if (self.messages.count > 0) {
+        NSIndexPath *ip = [NSIndexPath indexPathForRow:(self.messages.count - 1) inSection:0];
+//    CGFloat scrollHeight = self.tableView.contentSize.height;
+//    CGFloat viewHeight = self.tableView.frame.size.height;
+//    CGFloat yOffset = scrollHeight;
+        [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+//    if (yOffset > 0) {
+////        [self.tableView setContentOffset:CGPointMake(0, yOffset) animated:animated];
+//        
+//        [self.tableView scrollRectToVisible:CGRectMake(0, yOffset, self.tableView.frame.size.width, 100) animated:animated];
+//    }
     }
 }
 
@@ -328,7 +401,7 @@
     self.editing = YES;
     [self.postView.textView setText:message.text];
     [self.postView.textView becomeFirstResponder];
-    [self.view addGestureRecognizer:self.viewTap];
+//    [self.view addGestureRecognizer:self.viewTap];
 }
 
 - (void)editGroupAtIndexPath:(NSIndexPath *)ip
@@ -358,8 +431,8 @@
             [av show];
         } else {
             [self.groups removeObject:group];
-            [self.tableView endEditing:YES];
             [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView endEditing:YES];
         }
     }];
 }
@@ -456,15 +529,18 @@
         if (! f) {
             f = STKFont(15.f);
         }
-        STKMessage *m = [self.messages objectAtIndex:indexPath.row];
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setAlignment:NSTextAlignmentLeft];
-        CGRect r = [m.text boundingRectWithSize:CGSizeMake(254, 10000)
-                                      options:NSStringDrawingUsesLineFragmentOrigin
-                                     attributes:@{NSFontAttributeName : f, NSParagraphStyleAttributeName: style} context:nil];
-        CGFloat height = r.size.height + 90;
-        return height;
-        
+        if (self.messages.count > 0) {
+            STKMessage *m = [self.messages objectAtIndex:indexPath.row];
+            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+            [style setAlignment:NSTextAlignmentLeft];
+            CGRect r = [m.text boundingRectWithSize:CGSizeMake(254, 10000)
+                                          options:NSStringDrawingUsesLineFragmentOrigin
+                                         attributes:@{NSFontAttributeName : f, NSParagraphStyleAttributeName: style} context:nil];
+            CGFloat height = r.size.height + 90;
+            return height;
+        } else {
+            return 48.0f;
+        }
     } else {
         return 48.0f;
     }
@@ -494,9 +570,11 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.messages) {
-        STKMessage *m =[self.messages objectAtIndex:indexPath.row];
-        if ([m.creator.uniqueID isEqualToString:self.user.uniqueID]) {
-            return YES;
+        if (self.messages.count > 0) {
+            STKMessage *m =[self.messages objectAtIndex:indexPath.row];
+            if ([m.creator.uniqueID isEqualToString:self.user.uniqueID]) {
+                return YES;
+            }
         }
     } else if (self.organization) {
         if (indexPath.row == 0) {
@@ -566,6 +644,8 @@
 }
 
 
+
+
 #pragma mark Message View Cell Delegate
 - (void)likeButtonTapped:(HAMessageCell *)sender
 {
@@ -616,55 +696,144 @@
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:0 animations:^{
         [self.postViewBottomConstraint setConstant:keyboardFrame.size.height];
-        [self.tableViewBottomConstraint setConstant:self.tableViewBottomConstraint.constant + keyboardFrame.size.height];
         [self.view layoutIfNeeded];
     }];
-    
+    CGRect r = rawFrame;
+    r.origin.y -= _markupController.view.frame.size.height + self.postView.frame.size.height;
+    r.origin.x = 0;
+    r.size.height = _markupController.view.frame.size.height;
+    r.size.width = _markupController.view.frame.size.width;
+    [_markupController.view setFrame:r];
+    [_markupController.view setHidden:NO];
     
 }
 
 - (void)beganEditing:(HAPostMessageView *)sender
 {
-    [self.view addGestureRecognizer:self.viewTap];
+//    [self.view addGestureRecognizer:self.viewTap];
 }
 
 - (void)endEditing:(HAPostMessageView *)sender
 {
+    NSMutableAttributedString *text = [[self.postView.textView attributedText] mutableCopy];
+    
+    [text enumerateAttributesInRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
+        NSTextAttachment *attachment = [attrs objectForKey:NSAttachmentAttributeName];
+        if(attachment) {
+            NSURL *userURL = [attrs objectForKey:NSLinkAttributeName];
+            if(userURL) {
+                NSString *uniqueID = [userURL host];
+                [text replaceCharactersInRange:range withString:[NSString stringWithFormat:@"@%@", uniqueID]];
+            }
+        }
+    }];
     if ([self isEditing] && [self editingIndexPath]) {
         if (self.messages) {
             STKMessage *message = [self.messages objectAtIndex:self.editingIndexPath.row];
-            message.text = self.postView.textView.text;
+            message.text = [text string];
             [STKUserStore.store editMessage:message completion:^(STKMessage *message, NSError *err) {
                 [self.tableView setEditing:NO];
             }];
         }
     } else {
         STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
-        [[STKUserStore store] postMessage:self.postView.textView.text toGroup:g organization:self.organization completion:^(STKMessage *message, NSError *err) {
+        [[STKUserStore store] postMessage:text.string toGroup:g organization:self.organization completion:^(STKMessage *message, NSError *err) {
             [self.postView.textView setText:@""];
-            [self fetchNewer];
+            [self fetchNewer:YES];
         }];
         [self.view layoutIfNeeded];
-        [self.view removeGestureRecognizer:self.viewTap];
+//        [self.view removeGestureRecognizer:self.viewTap];
         [UIView animateWithDuration:0 animations:^{
+            [self.markupController.view setFrame:self.originalFrameForMarkupController];
             [self.postViewBottomConstraint setConstant:0];
-            [self.tableViewBottomConstraint setConstant:46];
+            [self.markupController.view setHidden:YES];
             [self.view layoutIfNeeded];
         }];
     }
 
 }
 
-- (void)dismissKeyboard:(UIGestureRecognizer *)gr
+- (void)postTextChanged:(NSString *)text
 {
+    [self.markupController textView:self.postView.textView updatedWithText:text];
+}
+
+- (void)dismissKeyboard:(UITapGestureRecognizer *)gr
+{
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.postView.textView resignFirstResponder];
+            [self.postViewBottomConstraint setConstant:0];
+            [self.markupController.view setFrame:self.originalFrameForMarkupController];
+            [self.markupController.view setHidden:YES];
+            [self.view layoutIfNeeded];
+            
+        }];
+}
+
+#pragma mark Infinite Scroll
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float offset = [scrollView contentOffset].y + [scrollView contentInset].top;
+    if(offset < 0) {
+        float t = fabs(offset) / 60.0;
+        if(t > 1)
+            t = 1;
+        [[self luminatingBar] setProgress:t];
+    } else {
+        [[self luminatingBar] setProgress:0];
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if (self.messages) {
+        if(velocity.y > 0 && [scrollView contentSize].height - [scrollView frame].size.height - 20 < targetContentOffset->y) {
+            [self fetchNewer:NO];
+        }
+        if(velocity.y < 0 && targetContentOffset->y < 100) {
+            [self fetchOlder];
+        }
+    }
+}
+
+#pragma mark Markup Controller
+- (void)markupController:(STKMarkupController *)markupController didSelectHashTag:(NSString *)hashTag forMarkerAtRange:(NSRange)range
+{
+    if(range.location == NSNotFound) {
+        range = NSMakeRange(self.postView.textView.textStorage.length, 0);
+    }
     
-    [UIView animateWithDuration:0.3 animations:^{
-        [self.postView.textView resignFirstResponder];
-        [self.postViewBottomConstraint setConstant:0];
-        [self.tableViewBottomConstraint setConstant:46];
-        [self.view layoutIfNeeded];
-        
-    }];
+    [self.postView.textView.textStorage replaceCharactersInRange:range
+                                               withString:[NSString stringWithFormat:@"#%@ ", hashTag]];
+    [self.postView.textView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
+                                                                                               attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}]];
+    
+    NSInteger newIndex = range.location + [hashTag length] + 2;
+    [self.postView.textView setSelectedRange:NSMakeRange(newIndex, 0)];
+}
+
+
+- (void)markupController:(STKMarkupController *)markupController didSelectUser:(STKUser *)user forMarkerAtRange:(NSRange)range
+{
+    NSAttributedString *str = [STKMarkupUtilities userTagForUser:user attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}];
+    
+    if(range.location == NSNotFound) {
+        range = NSMakeRange([self.postView.textView.textStorage length], 0);
+    }
+    
+    [self.postView.textView.textStorage replaceCharactersInRange:range
+                                           withAttributedString:str];
+    [self.postView.textView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:@" "
+                                                                                              attributes:@{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]}]];
+    
+    NSInteger newIndex = range.location + [str length] + 2;
+    [self.postView.textView setSelectedRange:NSMakeRange(newIndex, 0)];
+}
+
+- (void)markupControllerDidFinish:(STKMarkupController *)markupController
+{
+    [self dismissKeyboard:nil];
+    [self.markupController.view setHidden:YES];
 }
 
 @end

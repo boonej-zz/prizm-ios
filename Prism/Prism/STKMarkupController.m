@@ -14,6 +14,7 @@
 #import "STKContentStore.h"
 #import "STKSearchHashTagsCell.h"
 #import "STKFetchDescription.h"
+#import "STKOrgStatus.h"
 
 typedef enum {
     STKMarkupTypeHashtag,
@@ -111,6 +112,12 @@ typedef enum {
     [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|" options:0 metrics:nil views:@{@"v" : iv}]];
     [[self view] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|" options:0 metrics:nil views:@{@"v" : overlay}]];
 
+}
+
+- (void)setOrganization:(STKOrganization *)organization
+{
+    _organization = organization;
+    [self.doneButton setTitle:@"Close" forState:UIControlStateNormal];
 }
 
 - (void)setPreventsUserTagging:(BOOL)preventsUserTagging
@@ -243,7 +250,17 @@ typedef enum {
                             [self setUserTags:users];
                             [self updateView];
                         }];
-                    } else {
+                    } else if (self.organization) {
+                        NSArray *members = [[STKUserStore store] getMembersForOrganization:self.organization group:self.group];
+                        NSPredicate *search = [NSPredicate predicateWithFormat:@"(member.firstName beginsWith[cd]%@) || (member.lastName beginsWith[cd] %@)", textBasis, textBasis];
+                        NSArray *users = [members filteredArrayUsingPredicate:search];
+                        NSMutableArray *returnV = [NSMutableArray array];
+                        [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            [returnV addObject:[obj member]];
+                        }];
+                        [self setUserTags:returnV];
+                        [self updateView];
+                    }  else {
                         [[STKUserStore store] fetchUsersFollowingOfUser:[[STKUserStore store] currentUser] completion:^(NSArray *followers, NSError *err) {
                             if (!err) {
                                 

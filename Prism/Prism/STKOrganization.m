@@ -25,6 +25,7 @@
 @dynamic logoURL;
 @dynamic owner;
 @dynamic messages;
+@dynamic mutes;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -51,7 +52,8 @@
              @"theme": [STKBind bindMapForKey:@"theme" matchMap:@{@"uniqueID": @"_id"}],
              @"create_date":[STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
              @"modify_date":[STKBind bindMapForKey:@"modifyDate" transform:STKBindTransformDateTimestamp],
-             @"owner": [STKBind bindMapForKey:@"owner" matchMap:@{@"uniqueID": @"_id"}]};
+             @"owner": [STKBind bindMapForKey:@"owner" matchMap:@{@"uniqueID": @"_id"}],
+             @"mutes": [STKBind bindMapForKey:@"mutes" matchMap:@{@"uniqueID": @"_id"}]};
 }
 
 @end

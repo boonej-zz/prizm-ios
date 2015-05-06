@@ -11,6 +11,7 @@
 #import "STKMessage.h"
 #import "STKUser.h"
 #import "STKRelativeDateConverter.h"
+#import "STKMarkupUtilities.h"
 
 @interface HAMessageCell()
 
@@ -51,7 +52,8 @@
 {
     _message = message;
     [self.avatarView setUrlString:message.creator.profilePhotoPath];
-    [self.postText setText:message.text];
+     NSDictionary *attributes = @{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
+    [self.postText setAttributedText:[STKMarkupUtilities renderedTextForText:message.text attributes:attributes]];
     [self.creator setText:message.creator.name];
     [self.postText setTextColor:[UIColor HATextColor]];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];

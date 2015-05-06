@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HAMessageViewController">
             <connections>
+                <outlet property="luminatingBar" destination="w1c-pO-Vbc" id="0eR-9o-pfU"/>
                 <outlet property="overlayText" destination="fxp-YK-oq6" id="h4N-sr-xaU"/>
                 <outlet property="overlayTitle" destination="w46-1g-TXt" id="dkr-8U-9Ug"/>
                 <outlet property="overlayView" destination="FIs-16-e09" id="WcS-Tb-Rco"/>
@@ -22,7 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FOi-oq-Oz1">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FOi-oq-Oz1">
                     <rect key="frame" x="0.0" y="46" width="414" height="690"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -30,6 +31,14 @@
                         <outlet property="delegate" destination="-1" id="i7t-pv-ffk"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w1c-pO-Vbc" customClass="STKLuminatingBar">
+                    <rect key="frame" x="0.0" y="64" width="414" height="4"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="4" id="ViG-FW-GIt"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="4" id="mHz-yN-QvP"/>
+                    </constraints>
+                </view>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6k9-du-2dh" customClass="HAPostMessageView">
                     <rect key="frame" x="0.0" y="690" width="414" height="46"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -50,7 +59,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="290" height="37"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                            <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <color key="textColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NsX-C5-NW6">
@@ -136,10 +145,13 @@
                 <constraint firstItem="6k9-du-2dh" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="62a-4y-sOk"/>
                 <constraint firstItem="FIs-16-e09" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="Dex-g2-xsO"/>
                 <constraint firstItem="FOi-oq-Oz1" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="PmZ-4y-nU5"/>
+                <constraint firstItem="w1c-pO-Vbc" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="RHw-rH-I9d"/>
                 <constraint firstAttribute="bottom" secondItem="FIs-16-e09" secondAttribute="bottom" id="U8L-cW-9BE"/>
+                <constraint firstAttribute="trailing" secondItem="w1c-pO-Vbc" secondAttribute="trailing" id="aqU-fZ-dYZ"/>
                 <constraint firstItem="FOi-oq-Oz1" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="geI-rw-9tq"/>
+                <constraint firstItem="w1c-pO-Vbc" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="gkg-CJ-E3g"/>
                 <constraint firstAttribute="bottom" secondItem="6k9-du-2dh" secondAttribute="bottom" id="hOb-Af-mUq"/>
-                <constraint firstAttribute="bottom" secondItem="FOi-oq-Oz1" secondAttribute="bottom" constant="46" id="i9b-AU-nna"/>
+                <constraint firstAttribute="bottom" secondItem="FOi-oq-Oz1" secondAttribute="bottom" id="i9b-AU-nna"/>
                 <constraint firstAttribute="trailing" secondItem="6k9-du-2dh" secondAttribute="trailing" id="nCf-o8-efo"/>
                 <constraint firstAttribute="trailing" secondItem="FIs-16-e09" secondAttribute="trailing" id="qSe-cD-Wr2"/>
                 <constraint firstAttribute="trailing" secondItem="FOi-oq-Oz1" secondAttribute="trailing" id="vmL-kd-9an"/>

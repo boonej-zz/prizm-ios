@@ -17,6 +17,8 @@
 #import "STKNavigationButton.h"
 #import "STKOrganization.h"
 #import "HASelectMemberViewController.h"
+#import "STKSearchProfileCell.h"
+#import "STKProfileViewController.h"
 
 @interface HAGroupMembersViewController ()<UITableViewDataSource, UITableViewDelegate, HASelectMemberProtocol>
 
@@ -75,6 +77,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.tableView registerClass:[STKUserSelectCellTableViewCell class] forCellReuseIdentifier:[STKUserSelectCellTableViewCell reuseIdentifier]];
+    
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"]
                                               landscapeImagePhone:nil style:UIBarButtonItemStylePlain
                                                            target:self action:@selector(back:)];
@@ -125,6 +128,26 @@
 }
 */
 
+- (void)muteUser:(STKOrgStatus *)os
+{
+    
+    
+}
+
+- (void)deleteUser:(NSIndexPath *)ip
+{
+    STKOrgStatus *os = [self.members objectAtIndex:ip.row];
+    [[STKUserStore store] removeUser:os.member fromGroup:self.group completion:^(id data, NSError *err) {
+        if (!err) {
+            [self.members removeObjectAtIndex:ip.row];
+            [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+        } else {
+            UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Uh oh..." message:@"There was a problem processing your request. Please try again later." preferredStyle:UIAlertControllerStyleAlert];
+            [self presentViewController:ac animated:YES completion:nil];
+        }
+    }];
+}
+
 #pragma mark Select Member Protocol
 
 - (void)finishedMakingSelections:(NSArray *)selections
@@ -151,15 +174,40 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static UIImage *yellowWarningImage = nil;
-    if (!yellowWarningImage) {
-        yellowWarningImage = [UIImage imageNamed:@"warning_yellow"];
+//    static UIImage *yellowWarningImage = nil;
+//    if (!yellowWarningImage) {
+//        yellowWarningImage = [UIImage imageNamed:@"warning_yellow"];
+//    }
+//    STKUserSelectCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[STKUserSelectCellTableViewCell reuseIdentifier]];
+    STKUser *user = [(STKOrgStatus *)[self.members objectAtIndex:indexPath.row] member];
+//    [cell.label setText:member.name];
+//    [cell.avatarView setUrlString:member.profilePhotoPath];
+//    [cell setIndexPath:indexPath];
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [button setImage:yellowWarningImage forState:UIControlStateNormal];
+//    [button sizeToFit];
+//    [button addTarget:self action:@selector(accessoryTapped:) forControlEvents:UIControlEventTouchUpInside];
+//    [cell setAccessoryView:button];
+    STKSearchProfileCell *cell = [STKSearchProfileCell cellForTableView:tableView target:self];
+    [[cell nameLabel] setTextColor:[UIColor HATextColor]];
+    [[cell nameLabel] setText:[user name]];
+    [[cell avatarView] setUrlString:[user profilePhotoPath]];
+    [[cell cancelTrustButton] setHidden:YES];
+    [[cell mailButton] setHidden:YES];
+    cell.backgroundColor = [UIColor clearColor];
+    [[cell luminaryIcon] setHidden:![user isLuminary]];
+    [[cell ambassadorIcon] setHidden:![user isAmbassador]];
+    [cell.underlayView setHidden:NO];
+    if([user isEqual:[[STKUserStore store] currentUser]]) {
+        [[cell followButton] setHidden:YES];
+    } else {
+        [[cell followButton] setHidden:NO];
+        if([user isFollowedByUser:[[STKUserStore store] currentUser]]) {
+            [[cell followButton] setSelected:YES];
+        } else {
+            [[cell followButton] setSelected:NO];
+        }
     }
-    STKUserSelectCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[STKUserSelectCellTableViewCell reuseIdentifier]];
-    STKUser *member = [(STKOrgStatus *)[self.members objectAtIndex:indexPath.row] member];
-    [cell.label setText:member.name];
-    [cell.avatarView setUrlString:member.profilePhotoPath];
-    [cell setAccessoryView:[[UIImageView alloc] initWithImage:yellowWarningImage]];
     return cell;
 }
 
@@ -168,4 +216,93 @@
     return 47.f;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    STKUser *user = [[self.members objectAtIndex:indexPath.row] member];
+    STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+    [pvc setProfile:user];
+    [self.navigationController pushViewController:pvc animated:YES];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.isLeader || [self.user.type isEqualToString:@"institution_verified"]) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewRowAction *mute = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"      " handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        STKOrgStatus *os = [self.members objectAtIndex:indexPath.row];
+        
+        
+    }];
+    float width =[mute.title sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"Helvetica" size:15.0]}].width;
+    width = width+40;
+    float height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+    UIImage *muteImage = [UIImage HAPatternImage:[UIImage imageNamed:@"edit_edit"] withHeight:height andWidth:width bgColor:[UIColor colorWithRed:142.f/255.f green:152.f/255.f blue:179.f/255.f alpha:1.f]];
+    [mute setBackgroundColor:[UIColor colorWithPatternImage:muteImage]];
+    
+    
+    UITableViewRowAction *delete = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"      "  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        
+        [self deleteUser:indexPath];
+     
+    }];
+    UIImage *deleteImage = [UIImage HAPatternImage:[UIImage imageNamed:@"edit_delete"] withHeight:height andWidth:width bgColor:[UIColor colorWithRed:221.f/255.f green:75.f/255.f blue:75.f/255.f alpha:1.f]];
+    [delete setBackgroundColor:[UIColor colorWithPatternImage:deleteImage]];
+    if (self.group) {
+        return @[delete, mute];
+    } else {
+        return @[mute];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    [self.tableView reloadRowsAtIndexPaths:@[self.editingIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//    if (self.editing && self.editingIndexPath) {
+//        [self.postView.textView setText:@""];
+//        [self dismissKeyboard:nil];
+//        
+//        self.editing = NO;
+//        self.editingIndexPath = nil;
+//    }
+    
+}
+
+
+- (void)accessoryTapped:(id)sender
+{
+ 
+}
+
+- (void)toggleFollow:(id)sender atIndexPath:(NSIndexPath *)ip
+{
+    STKUser *u = [(STKOrgStatus *)[self.members objectAtIndex:ip.row] member];
+    if([u isFollowedByUser:[[STKUserStore store] currentUser]]) {
+        [[STKUserStore store] unfollowUser:u completion:^(id obj, NSError *err) {
+            if(!err) {
+                [[(STKSearchProfileCell *)[[self tableView] cellForRowAtIndexPath:ip] followButton] setSelected:NO];
+            } else {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }
+        }];
+    } else {
+        [[STKUserStore store] followUser:u completion:^(id obj, NSError *err) {
+            if(!err) {
+                [[(STKSearchProfileCell *)[[self tableView] cellForRowAtIndexPath:ip] followButton] setSelected:YES];
+            } else {
+                [[STKErrorStore alertViewForError:err delegate:nil] show];
+            }
+        }];
+    }
+    
+}
 @end

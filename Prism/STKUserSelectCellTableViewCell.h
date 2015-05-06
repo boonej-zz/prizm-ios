@@ -16,5 +16,6 @@
 @property (nonatomic, strong) STKAvatarView *avatarView;
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, strong) UIView *toggle;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 @end

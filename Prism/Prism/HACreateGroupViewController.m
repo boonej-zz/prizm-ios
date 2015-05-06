@@ -45,7 +45,8 @@
     self = [super init];
     if (self) {
         self.group = group;
-        self.settingsVals = [@[group.name, group.leader.uniqueID, group.groupDescription] mutableCopy];
+        NSString *leader = group.leader?group.leader.uniqueID:@"";
+        self.settingsVals = [@[group.name, leader, group.groupDescription] mutableCopy];
         self.groupName = group.name;
         self.groupDescription = group.groupDescription;
         self.organization = group.organization;
@@ -252,6 +253,7 @@
         self.selectedLeader = nil;
     }
 }
+
 
 #pragma mark Search Members Delegate;
 - (void)searchTextChanged:(NSString *)text

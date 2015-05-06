@@ -57,8 +57,6 @@
     [super setAccessoryView:accessoryView];
 }
 
-
-
 - (void)setupCell
 {
     _containerView = [[UIView alloc] init];

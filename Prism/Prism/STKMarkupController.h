@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class STKMarkupController, STKUser;
+@class STKMarkupController, STKUser, STKGroup, STKOrganization;
 
 @protocol STKMarkupControllerDelegate <NSObject>
 
@@ -33,6 +33,8 @@
 @property (nonatomic) BOOL hidesDoneButton;
 @property (nonatomic) BOOL preventsUserTagging;
 @property (nonatomic) BOOL allowsAllUserTagging;
+@property (nonatomic, strong) STKOrganization *organization;
+@property (nonatomic, strong) STKGroup *group;
 
 - (void)textView:(UITextView *)textView updatedWithText:(NSString *)text;
 

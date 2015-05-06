@@ -76,6 +76,7 @@
 		2CBF30B91AF14E67000F261C /* HAPostMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF30B81AF14E67000F261C /* HAPostMessageView.m */; };
 		2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762A1A1BC151007580A5 /* STKTheme.m */; };
 		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
+		2CE58A691AF9B50700349C57 /* STKMute.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE58A681AF9B50700349C57 /* STKMute.m */; };
 		2CF53D2F1ADD702F0075FA96 /* STKGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D2E1ADD702F0075FA96 /* STKGroup.m */; };
 		2CF53D321ADD70300075FA96 /* STKOrgStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D311ADD70300075FA96 /* STKOrgStatus.m */; };
 		2CF53D391ADED0730075FA96 /* HACalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D371ADED0730075FA96 /* HACalendarViewController.m */; };
@@ -473,6 +474,8 @@
 		2CCA762C1A1BC152007580A5 /* STKOrganization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKOrganization.h; sourceTree = "<group>"; };
 		2CCA762D1A1BC152007580A5 /* STKOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKOrganization.m; sourceTree = "<group>"; };
 		2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 4.xcdatamodel"; sourceTree = "<group>"; };
+		2CE58A671AF9B50700349C57 /* STKMute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMute.h; sourceTree = "<group>"; };
+		2CE58A681AF9B50700349C57 /* STKMute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMute.m; sourceTree = "<group>"; };
 		2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 5.xcdatamodel"; sourceTree = "<group>"; };
 		2CF53D2D1ADD702F0075FA96 /* STKGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGroup.h; sourceTree = "<group>"; };
 		2CF53D2E1ADD702F0075FA96 /* STKGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGroup.m; sourceTree = "<group>"; };
@@ -5054,6 +5057,8 @@
 				2CF53D2E1ADD702F0075FA96 /* STKGroup.m */,
 				2CBF30AF1AF012FA000F261C /* STKMessage.h */,
 				2CBF30B01AF012FA000F261C /* STKMessage.m */,
+				2CE58A671AF9B50700349C57 /* STKMute.h */,
+				2CE58A681AF9B50700349C57 /* STKMute.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -5614,6 +5619,7 @@
 				BE72B74C192FA880002349E3 /* STKCreateAccoladeViewController.m in Sources */,
 				2C0FA2431A1FB7D300231D3C /* UIColor+HACore.m in Sources */,
 				BE1A73C918D8ECBB004A3BB3 /* STKPostController.m in Sources */,
+				2CE58A691AF9B50700349C57 /* STKMute.m in Sources */,
 				BE937C9E191175E000C24A58 /* STKNotifiedBadgeView.m in Sources */,
 				BE1C7082192F8E7400223BDC /* STKAccoladeViewController.m in Sources */,
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
