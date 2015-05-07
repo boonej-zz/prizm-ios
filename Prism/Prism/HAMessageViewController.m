@@ -33,6 +33,7 @@
 #import "STKHashtagPostsViewController.h"
 #import "STKProfileViewController.h"
 #import "STKUserListViewController.h"
+#import "HAGroupInfoViewController.h"
 
 NSString * const HAMessageHashTagURLScheme = @"hashtag";
 NSString * const HAMessageUserURLScheme = @"user";
@@ -145,6 +146,8 @@ NSString * const HAMessageUserURLScheme = @"user";
         }]];
         if (leaderArray.count > 0) {
             self.leader = YES;
+        } else {
+            self.leader = NO;
         }
         [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *users, NSError *err) {
             
@@ -180,7 +183,9 @@ NSString * const HAMessageUserURLScheme = @"user";
 
 - (void)showOverlayView:(id)sender
 {
-    [[self overlayView] setHidden:NO];
+    STKGroup *group = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
+    HAGroupInfoViewController *gic = [[HAGroupInfoViewController alloc] initWithOrganization:self.organization Group:group];
+    [self.navigationController pushViewController:gic animated:YES];
 }
 
 - (void)addTitleView:(BOOL)showInfo
@@ -203,11 +208,11 @@ NSString * const HAMessageUserURLScheme = @"user";
     }
     [infoButton setFrame:CGRectMake(titleLabel.bounds.size.width + 8, 16, 12, 12)];
     [container addSubview:titleLabel];
-    if (showInfo){
-        UIGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOverlayView:)];
-        [container addGestureRecognizer:tapRecognizer];
-        [container addSubview:infoButton];
-    }
+  
+    UIGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOverlayView:)];
+    [container addGestureRecognizer:tapRecognizer];
+    [container addSubview:infoButton];
+
     [self.navigationItem setTitleView:container];
 }
 

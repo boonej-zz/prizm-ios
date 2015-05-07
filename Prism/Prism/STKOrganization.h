@@ -38,8 +38,8 @@
 - (void)addMembers:(NSSet *)values;
 - (void)removeMembers:(NSSet *)values;
 
-- (void)addMuteObject:(STKMute *)mute;
-- (void)removeMuteObject:(STKMute *)mute;
+- (void)addMuteObject:(STKUser *)mute;
+- (void)removeMuteObject:(STKUser *)mute;
 - (void)addMutes:(NSSet *)values;
 - (void)removeMutes:(NSSet *)values;
 

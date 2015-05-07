@@ -132,5 +132,7 @@ typedef enum {
 - (void)editGroup:(STKGroup *)group name:(NSString *)name description:(NSString *)description leader:(NSString *)leader completion:(void (^)(id data, NSError *error))block;
 - (void)editMembers:(NSArray *)members forGroup:(STKGroup *)group completion:(void (^)(id data, NSError *err))block;
 - (void)removeUser:(STKUser *)user fromGroup:(STKGroup *)group completion:(void (^)(id data, NSError *err))block;
-
+- (void)fetchUpdatedMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block;
+- (void)muteGroup:(STKGroup *)group muted:(BOOL)muted  completion:(void (^)(id data, NSError *error))block;
+- (void)muteOrganization:(STKOrganization *)organization muted:(BOOL)muted completion:(void (^)(id, NSError *))block;
 @end
