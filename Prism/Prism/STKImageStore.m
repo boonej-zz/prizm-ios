@@ -122,6 +122,24 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
     return nil;
 }
 
+- (UIImage *)fetchCachedImageOrLoadNew:(NSString *)url
+
+{
+    NSString *cachePath = [self cachePathForURLString:url];
+    UIImage *img = [[self memoryCache] objectForKey:cachePath];
+    if(img) {
+        return img;
+    }
+    NSData *fileData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+    if(fileData) {
+        img = [[UIImage alloc] initWithData:fileData];
+        [[self memoryCache] setObject:img forKey:cachePath];
+        return img;
+    }
+    
+    return nil;
+}
+
 - (NSString *)thumbnailPathForURLString:(NSString *)URLString size:(STKImageStoreThumbnail)size
 {
     NSString *code = @"";

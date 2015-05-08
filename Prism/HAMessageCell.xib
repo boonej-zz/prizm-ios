@@ -8,14 +8,14 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell autoresizesSubviews="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" shouldIndentWhileEditing="NO" rowHeight="103" id="KGk-i7-Jjw" customClass="HAMessageCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="103"/>
+        <tableViewCell autoresizesSubviews="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" shouldIndentWhileEditing="NO" rowHeight="317" id="KGk-i7-Jjw" customClass="HAMessageCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="317"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ojs-mq-Jlc">
+                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ojs-mq-Jlc">
                         <rect key="frame" x="0.0" y="1" width="320" height="101"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                     </view>
@@ -73,6 +73,13 @@
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
                     </textView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="txw-Fn-CBH">
+                        <rect key="frame" x="53" y="114" width="254" height="163"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="190" id="2NJ-pI-zCM"/>
+                        </constraints>
+                    </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CnI-Av-qwV" customClass="STKAvatarView">
                         <rect key="frame" x="15" y="8" width="30" height="30"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -84,6 +91,8 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="CnI-Av-qwV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="0fu-XA-lCa"/>
+                    <constraint firstItem="0tq-fb-Brx" firstAttribute="width" secondItem="txw-Fn-CBH" secondAttribute="width" id="35S-2I-isC"/>
+                    <constraint firstItem="txw-Fn-CBH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="53" id="8yx-n9-KDb"/>
                     <constraint firstItem="syP-1I-nKF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="FJ8-X1-t1L"/>
                     <constraint firstAttribute="bottom" secondItem="ojs-mq-Jlc" secondAttribute="bottom" id="Fk2-SB-cwp"/>
                     <constraint firstAttribute="trailingMargin" secondItem="0tq-fb-Brx" secondAttribute="trailing" constant="5" id="K9y-gm-Az4"/>
@@ -93,24 +102,35 @@
                     <constraint firstItem="0tq-fb-Brx" firstAttribute="top" secondItem="505-PA-74J" secondAttribute="bottom" constant="5" id="RtS-0q-X6b"/>
                     <constraint firstItem="QZb-lD-64O" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="leading" id="SBZ-Zg-sbr"/>
                     <constraint firstItem="syP-1I-nKF" firstAttribute="top" secondItem="QZb-lD-64O" secondAttribute="bottom" constant="5" id="TSC-dH-c93"/>
+                    <constraint firstItem="txw-Fn-CBH" firstAttribute="top" secondItem="0tq-fb-Brx" secondAttribute="bottom" id="WXX-nS-fsp"/>
                     <constraint firstItem="QZb-lD-64O" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="XUV-03-dse"/>
                     <constraint firstItem="QZb-lD-64O" firstAttribute="leading" secondItem="CnI-Av-qwV" secondAttribute="trailing" constant="8" id="ZUN-a1-WsA"/>
+                    <constraint firstAttribute="bottom" secondItem="txw-Fn-CBH" secondAttribute="bottom" constant="8" id="aAb-tR-21V"/>
                     <constraint firstAttribute="trailing" secondItem="ojs-mq-Jlc" secondAttribute="trailing" id="bb0-3m-fRK"/>
                     <constraint firstItem="CnI-Av-qwV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="cLQ-H2-ru7"/>
+                    <constraint firstItem="txw-Fn-CBH" firstAttribute="top" secondItem="ojs-mq-Jlc" secondAttribute="bottom" id="cXR-w3-zTt"/>
                     <constraint firstItem="K3g-bq-EzX" firstAttribute="centerY" secondItem="U4S-Bn-tqX" secondAttribute="centerY" id="dpX-NI-1OZ"/>
+                    <constraint firstItem="txw-Fn-CBH" firstAttribute="top" secondItem="0tq-fb-Brx" secondAttribute="bottom" constant="28" id="eh0-5l-JMm"/>
                     <constraint firstItem="505-PA-74J" firstAttribute="centerY" secondItem="syP-1I-nKF" secondAttribute="centerY" id="h8w-YJ-O9A"/>
                     <constraint firstItem="U4S-Bn-tqX" firstAttribute="leading" secondItem="QZb-lD-64O" secondAttribute="trailing" constant="26" id="hGU-ww-ibN"/>
                     <constraint firstItem="ojs-mq-Jlc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="kB4-F7-prg"/>
                     <constraint firstItem="U4S-Bn-tqX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="kH1-hE-44g"/>
                     <constraint firstItem="0tq-fb-Brx" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="leading" id="lk7-4c-2Ms"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="0tq-fb-Brx" secondAttribute="bottom" constant="156" id="oE9-gG-zWw"/>
                     <constraint firstItem="505-PA-74J" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="trailing" constant="5" id="vjp-fL-tR3"/>
                     <constraint firstItem="ojs-mq-Jlc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="1" id="wz9-Kv-cOk"/>
+                    <constraint firstAttribute="bottom" secondItem="txw-Fn-CBH" secondAttribute="bottom" constant="8" id="xIW-6D-cXC"/>
                     <constraint firstAttribute="trailing" secondItem="K3g-bq-EzX" secondAttribute="trailing" id="z1z-a7-4Zf"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
                         <exclude reference="FJ8-X1-t1L"/>
                         <exclude reference="K9y-gm-Az4"/>
+                        <exclude reference="LAy-pb-Se0"/>
+                        <exclude reference="oE9-gG-zWw"/>
+                        <exclude reference="aAb-tR-21V"/>
+                        <exclude reference="cXR-w3-zTt"/>
+                        <exclude reference="eh0-5l-JMm"/>
                         <exclude reference="OPO-ci-tfO"/>
                         <exclude reference="hGU-ww-ibN"/>
                     </mask>
@@ -120,11 +140,13 @@
                 <outlet property="avatarView" destination="CnI-Av-qwV" id="Ayr-c8-2UH"/>
                 <outlet property="creator" destination="QZb-lD-64O" id="ms6-j4-ZeM"/>
                 <outlet property="dateAgo" destination="505-PA-74J" id="35w-kw-Wqn"/>
+                <outlet property="imageViewHeight" destination="2NJ-pI-zCM" id="zhf-Wq-iuy"/>
+                <outlet property="iv" destination="txw-Fn-CBH" id="b5x-oJ-gbr"/>
                 <outlet property="likeButton" destination="U4S-Bn-tqX" id="8Rz-yg-Oci"/>
                 <outlet property="likesCount" destination="K3g-bq-EzX" id="sEc-Xh-tR7"/>
                 <outlet property="postText" destination="0tq-fb-Brx" id="dYf-QZ-IGM"/>
             </connections>
-            <point key="canvasLocation" x="340" y="240.5"/>
+            <point key="canvasLocation" x="340" y="347.5"/>
         </tableViewCell>
     </objects>
     <resources>

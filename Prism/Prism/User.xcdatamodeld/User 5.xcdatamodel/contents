@@ -77,7 +77,22 @@
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="messages" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="group" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="messages" inverseEntity="STKGroup" syncable="YES"/>
         <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedMessages" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="metaData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessageMetaData" inverseName="message" inverseEntity="STKMessageMetaData" syncable="YES"/>
         <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="messages" inverseEntity="STKOrganization" syncable="YES"/>
+    </entity>
+    <entity name="STKMessageMetaData" representedClassName="STKMessageMetaData" syncable="YES">
+        <attribute name="linkDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessageMetaDataImage" inverseName="metaData" inverseEntity="STKMessageMetaDataImage" syncable="YES"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="metaData" inverseEntity="STKMessage" syncable="YES"/>
+    </entity>
+    <entity name="STKMessageMetaDataImage" representedClassName="STKMessageMetaDataImage" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="messageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="urlString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="width" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="metaData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessageMetaData" inverseName="image" inverseEntity="STKMessageMetaData" syncable="YES"/>
     </entity>
     <entity name="STKOrganization" representedClassName="STKOrganization" syncable="YES">
         <attribute name="code" optional="YES" attributeType="String" syncable="YES"/>
@@ -259,7 +274,7 @@
         <element name="STKInsight" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="165"/>
         <element name="STKInterest" positionX="18" positionY="153" width="128" height="165"/>
-        <element name="STKMessage" positionX="27" positionY="153" width="128" height="165"/>
+        <element name="STKMessage" positionX="27" positionY="153" width="128" height="180"/>
         <element name="STKOrganization" positionX="36" positionY="171" width="128" height="285"/>
         <element name="STKOrgStatus" positionX="27" positionY="153" width="128" height="150"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
@@ -267,5 +282,7 @@
         <element name="STKTheme" positionX="45" positionY="180" width="128" height="165"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKUser" positionX="0" positionY="0" width="128" height="1080"/>
+        <element name="STKMessageMetaData" positionX="27" positionY="153" width="128" height="120"/>
+        <element name="STKMessageMetaDataImage" positionX="36" positionY="162" width="128" height="120"/>
     </elements>
 </model>

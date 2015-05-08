@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class STKGroup, STKOrganization, STKUser;
+@class STKGroup, STKOrganization, STKUser, STKMessageMetaData;
 
 @interface STKMessage : NSManagedObject<STKJSONObject>
 
@@ -19,6 +19,7 @@
 @property (nonatomic, retain) STKUser *creator;
 @property (nonatomic, retain) STKGroup *group;
 @property (nonatomic, retain) STKOrganization *organization;
+@property (nonatomic, retain) STKMessageMetaData *metaData;
 @property (nonatomic, retain) NSSet *likes;
 @property (nonatomic, retain) NSString * uniqueID;
 @end

@@ -22,6 +22,7 @@
 @dynamic organization;
 @dynamic likes;
 @dynamic uniqueID;
+@dynamic metaData;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -45,7 +46,8 @@
              @"creator": [STKBind bindMapForKey:@"creator" matchMap:@{@"uniqueID": @"_id"}],
              @"group": [STKBind bindMapForKey:@"group" matchMap:@{@"uniqueID": @"_id"}],
              @"likes": [STKBind bindMapForKey:@"likes" matchMap:@{@"uniqueID": @"_id"}],
-             @"create_date": [STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp]
+             @"create_date": [STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
+             @"meta": [STKBind bindMapForKey:@"metaData" matchMap:@{@"messageID": @"message_id"}]
              };
 }
 

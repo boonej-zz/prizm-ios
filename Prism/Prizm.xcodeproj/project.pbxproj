@@ -11,6 +11,8 @@
 		2C01A3071A09727400D58D9B /* HATableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3061A09727400D58D9B /* HATableView.m */; };
 		2C01A30B1A098C7400D58D9B /* STKCommentTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */; };
 		2C01A30C1A098C7400D58D9B /* STKCommentTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */; };
+		2C0512731AFD10BD009B6C21 /* STKMessageMetaDataImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0512721AFD10BD009B6C21 /* STKMessageMetaDataImage.m */; };
+		2C0512761AFD10BE009B6C21 /* STKMessageMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0512751AFD10BE009B6C21 /* STKMessageMetaData.m */; };
 		2C0BB38A1AA8CC9C0061A76D /* HAMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0BB3881AA8CC9C0061A76D /* HAMessageViewController.m */; };
 		2C0BB38B1AA8CC9C0061A76D /* HAMessageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0BB3891AA8CC9C0061A76D /* HAMessageViewController.xib */; };
 		2C0D730619C0E4BB0078A9B9 /* HAAccountSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0D730419C0E4BB0078A9B9 /* HAAccountSelectionCell.m */; };
@@ -359,6 +361,10 @@
 		2C01A3081A098C7400D58D9B /* STKCommentTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCommentTitleCell.h; sourceTree = "<group>"; };
 		2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCommentTitleCell.m; sourceTree = "<group>"; };
 		2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCommentTitleCell.xib; sourceTree = "<group>"; };
+		2C0512711AFD10BD009B6C21 /* STKMessageMetaDataImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMessageMetaDataImage.h; sourceTree = "<group>"; };
+		2C0512721AFD10BD009B6C21 /* STKMessageMetaDataImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMessageMetaDataImage.m; sourceTree = "<group>"; };
+		2C0512741AFD10BE009B6C21 /* STKMessageMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMessageMetaData.h; sourceTree = "<group>"; };
+		2C0512751AFD10BE009B6C21 /* STKMessageMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMessageMetaData.m; sourceTree = "<group>"; };
 		2C0BB3871AA8CC9C0061A76D /* HAMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessageViewController.h; sourceTree = "<group>"; };
 		2C0BB3881AA8CC9C0061A76D /* HAMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessageViewController.m; sourceTree = "<group>"; };
 		2C0BB3891AA8CC9C0061A76D /* HAMessageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAMessageViewController.xib; sourceTree = "<group>"; };
@@ -5064,6 +5070,10 @@
 				2CBF30B01AF012FA000F261C /* STKMessage.m */,
 				2CE58A671AF9B50700349C57 /* STKMute.h */,
 				2CE58A681AF9B50700349C57 /* STKMute.m */,
+				2C0512741AFD10BE009B6C21 /* STKMessageMetaData.h */,
+				2C0512751AFD10BE009B6C21 /* STKMessageMetaData.m */,
+				2C0512711AFD10BD009B6C21 /* STKMessageMetaDataImage.h */,
+				2C0512721AFD10BD009B6C21 /* STKMessageMetaDataImage.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -5448,6 +5458,7 @@
 				2CF53D391ADED0730075FA96 /* HACalendarViewController.m in Sources */,
 				BEF361CB18B2C3700085A38B /* STKTriImageCell.m in Sources */,
 				BE61085A183D1588003A182C /* STKTableViewCell.m in Sources */,
+				2C0512731AFD10BD009B6C21 /* STKMessageMetaDataImage.m in Sources */,
 				BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */,
 				BE8F35E91833D48D00C4ED03 /* STKPostCell.m in Sources */,
 				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
@@ -5471,6 +5482,7 @@
 				2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */,
 				BE4C7360190AAA1F003A4109 /* STKNotificationBadge.m in Sources */,
 				BE9543901892FE5C00DCC3B1 /* STKSearchProfileCell.m in Sources */,
+				2C0512761AFD10BE009B6C21 /* STKMessageMetaData.m in Sources */,
 				2C2E9C7C1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m in Sources */,
 				2C7B79FA19ED8E19000EC061 /* STKInterest.m in Sources */,
 				2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */,

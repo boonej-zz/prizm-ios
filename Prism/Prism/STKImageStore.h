@@ -35,7 +35,7 @@ typedef enum {
       intoDirectory:(NSString *)directory
          completion:(void (^)(NSString *URLString, NSError *err))block;
 
-
+- (UIImage *)fetchCachedImageOrLoadNew:(NSString *)url;
 - (UIImage *)cachedImageForURLString:(NSString *)url;
 - (UIImage *)bestCachedImageForURLString:(NSString *)url;
 - (void)deleteCachedImagesForURLString:(NSString *)url;

@@ -34,6 +34,8 @@
 #import "STKProfileViewController.h"
 #import "STKUserListViewController.h"
 #import "HAGroupInfoViewController.h"
+#import "STKMessageMetaData.h"
+#import "STKMessageMetaDataImage.h"
 
 NSString * const HAMessageHashTagURLScheme = @"hashtag";
 NSString * const HAMessageUserURLScheme = @"user";
@@ -77,6 +79,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         [self.tabBarItem setTitle:@"Message"];
         [[self tabBarItem] setImage:[UIImage imageNamed:@"menu_message"]];
         [[self tabBarItem] setSelectedImage:[UIImage imageNamed:@"menu_message_selected"]];
+        
     }
     return self;
 }
@@ -120,6 +123,8 @@ NSString * const HAMessageUserURLScheme = @"user";
     iv.frame = self.view.bounds;
     [self.view insertSubview:iv atIndex:0];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
+    [self.tableView setScrollsToTop:YES];
+    [self.postView.textView setScrollsToTop:NO];
     
     
     self.user = [[STKUserStore store] currentUser];
@@ -195,8 +200,9 @@ NSString * const HAMessageUserURLScheme = @"user";
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 157, 44)];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 6, 137, 44)];
     UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    
     [infoButton setTintColor:[UIColor HATextColor]];
-//    [infoButton addTarget:self action:@selector(showOverlayView:) forControlEvents:UIControlEventTouchUpInside];
+    [infoButton addTarget:self action:@selector(showOverlayView:) forControlEvents:UIControlEventTouchUpInside];
     [titleLabel setText:titleString];
     [titleLabel setFont:STKFont(22)];
     [titleLabel setTextColor:[UIColor HATextColor]];
@@ -469,6 +475,37 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.navigationController pushViewController:gvc animated:YES];
 }
 
+- (NSAttributedString *)renderedTextForMessage:(STKMessage *)message
+{
+    NSMutableAttributedString *s = [[NSMutableAttributedString alloc] init];
+    NSDictionary *baseAttributes = @{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
+    
+    NSAttributedString *mainMessage = [STKMarkupUtilities renderedTextForText:message.text attributes:baseAttributes];
+    [s appendAttributedString:mainMessage];
+    if (message.metaData) {
+        STKMessageMetaData *meta = message.metaData;
+        NSDictionary *titleAttributes = @{NSFontAttributeName : STKBoldFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
+        
+        NSDictionary *descAttributes = @{NSFontAttributeName : STKFont(13), NSForegroundColorAttributeName : [UIColor HATextColor]};
+        NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"" attributes:titleAttributes];
+        NSAttributedString *description = [[NSAttributedString alloc] initWithString:@"" attributes:descAttributes];
+        if (meta.title) {
+            NSString *titleBreak = [NSString stringWithFormat:@"\n\n%@\n", meta.title];
+            title = [[NSAttributedString alloc] initWithString:titleBreak attributes:titleAttributes];
+            [s appendAttributedString:title];
+        } if (meta.linkDescription) {
+            NSString *descriptionBreak = [NSString stringWithFormat:@"\n%@", meta.linkDescription];
+            description = [[NSAttributedString alloc] initWithString:descriptionBreak attributes:descAttributes];
+            [s appendAttributedString:description];
+        }
+    }
+    
+    
+    
+    
+    return s;
+}
+
 #pragma mark Tableview delegate methods.
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -554,16 +591,19 @@ NSString * const HAMessageUserURLScheme = @"user";
             f = STKFont(14.f);
         }
         if (self.messages.count > 0) {
-            STKMessage *m = [self.messages objectAtIndex:indexPath.row];
+            STKMessage *m  = [self.messages objectAtIndex:indexPath.row];
+            NSAttributedString *t = [self renderedTextForMessage:m];
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
             [style setAlignment:NSTextAlignmentLeft];
-             NSDictionary *attributes = @{NSFontAttributeName : f};
-            NSAttributedString *text = [STKMarkupUtilities renderedTextForText:m.text attributes:attributes];
-            CGRect r = [text boundingRectWithSize:CGSizeMake(254, 10000)
-                                          options:NSStringDrawingUsesLineFragmentOrigin
-                                          context:nil];
-            CGFloat height = r.size.height + 80;
-            return height;
+            
+            CGRect r = [t boundingRectWithSize:CGSizeMake(254, 10000)
+                                                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                                                  context:nil];
+            if (m.metaData.image.urlString) {
+                return r.size.height + 80 + 163;
+            } else {
+                return r.size.height + 80;
+            }
         } else {
             return 48.0f;
         }
@@ -598,7 +638,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     if (self.messages) {
         if (self.messages.count > 0) {
             STKMessage *m =[self.messages objectAtIndex:indexPath.row];
-            if ([m.creator.uniqueID isEqualToString:self.user.uniqueID] || self.isLeader || [self.user.type isEqualToString:@"insititution_verified"]) {
+            if ([m.creator.uniqueID isEqualToString:self.user.uniqueID] || self.isLeader || [self.user.type isEqualToString:@"institution_verified"]) {
                 return YES;
             }
         }
@@ -679,8 +719,9 @@ NSString * const HAMessageUserURLScheme = @"user";
 #pragma mark Message View Cell Delegate
 - (void)likeButtonTapped:(HAMessageCell *)sender
 {
+    NSIndexPath *ip = [self.tableView indexPathForCell:sender];
     if ([sender.message.creator.uniqueID isEqualToString:self.user.uniqueID]) {
-        if (sender.message.likesCount > 0){
+        if (sender.message.likes.count > 0){
             STKUserListViewController *vc = [[STKUserListViewController alloc] init];
             [vc setTitle:@"Likes"];
             [vc setUsers:[sender.message.likes allObjects]];
@@ -690,35 +731,13 @@ NSString * const HAMessageUserURLScheme = @"user";
     } else {
         if ([sender isLiked]) {
             [[STKUserStore store] unlikeMessage:sender.message completion:^(STKMessage *message, NSError *err) {
-                __block BOOL liked = NO;
-                [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-                    if ([obj isKindOfClass:[NSString class]]) {
-                        if ([obj isEqualToString:self.user.uniqueID]) {
-                            liked = YES;
-                        }
-                    } else if ([obj isKindOfClass:[STKUser class]]) {
-                        if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
-                            liked = YES;
-                        }
-                    }
-                }];
-                [sender setLiked:liked];
+                [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationNone];
             }];
         } else {
             [[STKUserStore store] likeMessage:sender.message completion:^(STKMessage *message, NSError *err) {
-                __block BOOL liked = NO;
-                [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-                    if ([obj isKindOfClass:[NSString class]]) {
-                        if ([obj isEqualToString:self.user.uniqueID]) {
-                            liked = YES;
-                        }
-                    } else if ([obj isKindOfClass:[STKUser class]]) {
-                        if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
-                            liked = YES;
-                        }
-                    }
-                }];
-                [sender setLiked:liked];
+
+                [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationNone];
+
             }];
         }
     }
@@ -801,6 +820,11 @@ NSString * const HAMessageUserURLScheme = @"user";
     } else {
         STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
         [[STKUserStore store] postMessage:text.string toGroup:g organization:self.organization completion:^(STKMessage *message, NSError *err) {
+            if (err) {
+                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Oops..." message:@"Your message could not be posted. Please try again later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [av show];
+                
+            }
             [self.postView.textView setText:@""];
             [self fetchNewer:YES];
         }];

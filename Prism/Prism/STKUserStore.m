@@ -175,6 +175,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     __block double groupCount = 0;
     if (u.organizations.count > 0) {
         [u.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *org, BOOL *stop) {
+            if ([org.status isEqualToString:@"active"]){
             [self fetchUnreadCountForOrganization:org.organization group:nil completion:^(id obj, NSError *err) {
                 if (obj) {
                     STKOrganization *organization = nil;
@@ -210,6 +211,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                     }
                 }];
             }
+            }
         }];
     } else if ([u.type isEqualToString:@"institution_verified"]) {
         [self fetchUserOrgs:^(NSArray *organizations, NSError *err) {
@@ -226,32 +228,36 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                             orgCount += organization.unreadCount.doubleValue;
                             [[NSUserDefaults standardUserDefaults] setDouble:orgCount forKey:HAUnreadMessagesForOrgKey];
                             [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
-
+                            NSLog(@"Message Count: %f", orgCount + groupCount);
                             [self.context save:nil];
                         }
                     }];
                     if (org.groups.count > 0) {
                         [org.groups enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-                            [self fetchUnreadCountForOrganization:org group:obj completion:^(id obj, NSError *err) {
-                                    if (obj) {
-                                        STKGroup *group = nil;
-                                        if ([obj isKindOfClass:[NSArray class]]) {
-                                            group = [obj objectAtIndex:0];
-                                        } else {
-                                            group = obj;
+                            if ([[obj status]isEqualToString:@"active"]) {
+                                [self fetchUnreadCountForOrganization:org group:obj completion:^(id obj, NSError *err) {
+                                        if (obj) {
+                                            STKGroup *group = nil;
+                                            if ([obj isKindOfClass:[NSArray class]]) {
+                                                group = [obj objectAtIndex:0];
+                                            } else {
+                                                group = obj;
+                                            }
+                                            groupCount += group.unreadCount.doubleValue;
+                                            NSLog(@"Message Count: %f", orgCount + groupCount);
+                                            [[NSUserDefaults standardUserDefaults] setDouble:groupCount forKey:HAUnreadMessagesForGroupsKey];
+                                            [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
+                                            [self.context save:nil];
                                         }
-                                        groupCount += group.unreadCount.doubleValue;
-                                        [[NSUserDefaults standardUserDefaults] setDouble:groupCount forKey:HAUnreadMessagesForGroupsKey];
-                                        [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
-                                        [self.context save:nil];
-                                    }
-                            }];
+                                }];
+                            }
                         }];
                     }
                 }];
             }
         }];
     }
+         
 }
 
 - (void)notifyNotificationCount
