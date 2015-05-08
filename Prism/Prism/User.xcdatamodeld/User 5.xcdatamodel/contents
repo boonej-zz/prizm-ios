@@ -17,6 +17,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="leader" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ledGroups" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKOrgStatus" inverseName="groups" inverseEntity="STKOrgStatus" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="group" inverseEntity="STKMessage" syncable="YES"/>
@@ -85,6 +86,7 @@
         <attribute name="modifyDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="welcomeImageURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="welcomeMessage" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="groups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="organization" inverseEntity="STKGroup" syncable="YES"/>
@@ -252,13 +254,13 @@
     </entity>
     <elements>
         <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="195"/>
-        <element name="STKGroup" positionX="36" positionY="162" width="128" height="180"/>
+        <element name="STKGroup" positionX="36" positionY="162" width="128" height="195"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="120"/>
         <element name="STKInsight" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="165"/>
         <element name="STKInterest" positionX="18" positionY="153" width="128" height="165"/>
         <element name="STKMessage" positionX="27" positionY="153" width="128" height="165"/>
-        <element name="STKOrganization" positionX="36" positionY="171" width="128" height="270"/>
+        <element name="STKOrganization" positionX="36" positionY="171" width="128" height="285"/>
         <element name="STKOrgStatus" positionX="27" positionY="153" width="128" height="150"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>

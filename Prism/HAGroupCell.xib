@@ -19,18 +19,44 @@
                         <rect key="frame" x="0.0" y="1" width="320" height="42"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                     </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GjW-Aw-s5F">
+                        <rect key="frame" x="290" y="11" width="22" height="22"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yix-nT-ofm">
+                                <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="E7j-Lk-JvM"/>
+                            <constraint firstItem="Yix-nT-ofm" firstAttribute="top" secondItem="GjW-Aw-s5F" secondAttribute="top" id="IvG-yA-i7F"/>
+                            <constraint firstAttribute="bottom" secondItem="Yix-nT-ofm" secondAttribute="bottom" id="Orc-UX-uyu"/>
+                            <constraint firstAttribute="width" constant="22" id="RFE-GV-Eyd"/>
+                            <constraint firstItem="Yix-nT-ofm" firstAttribute="leading" secondItem="GjW-Aw-s5F" secondAttribute="leading" id="gAa-U0-aYH"/>
+                            <constraint firstAttribute="trailing" secondItem="Yix-nT-ofm" secondAttribute="trailing" id="pnU-lk-XIQ"/>
+                        </constraints>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zGK-FN-OIy">
-                        <rect key="frame" x="14" y="11" width="298" height="21"/>
+                        <rect key="frame" x="14" y="11" width="271" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="298" id="a67-QX-OtP"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="a67-QX-OtP"/>
+                            </mask>
+                        </variation>
                     </label>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
+                    <constraint firstItem="GjW-Aw-s5F" firstAttribute="leading" secondItem="zGK-FN-OIy" secondAttribute="trailing" constant="5" id="AME-7i-AfP"/>
                     <constraint firstItem="dsh-el-DPQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="1" id="B7l-WA-Et1"/>
                     <constraint firstAttribute="trailingMargin" secondItem="dsh-el-DPQ" secondAttribute="trailing" id="BXb-Fb-Wop"/>
                     <constraint firstItem="dsh-el-DPQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="Xfo-Wd-mR8"/>
@@ -39,7 +65,9 @@
                     <constraint firstAttribute="bottomMargin" secondItem="dsh-el-DPQ" secondAttribute="bottom" id="bhT-G4-4Z9"/>
                     <constraint firstAttribute="bottom" secondItem="dsh-el-DPQ" secondAttribute="bottom" id="e8s-Vr-Jpl"/>
                     <constraint firstAttribute="centerY" secondItem="zGK-FN-OIy" secondAttribute="centerY" id="eGH-sU-s30"/>
+                    <constraint firstAttribute="centerY" secondItem="GjW-Aw-s5F" secondAttribute="centerY" id="eJW-zR-Hs1"/>
                     <constraint firstItem="dsh-el-DPQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="gfM-ZR-4h7"/>
+                    <constraint firstAttribute="trailing" secondItem="GjW-Aw-s5F" secondAttribute="trailing" constant="8" id="vPu-J8-Jxc"/>
                     <constraint firstAttribute="trailing" secondItem="dsh-el-DPQ" secondAttribute="trailing" id="ymr-fm-kq0"/>
                 </constraints>
                 <variation key="default">
@@ -53,6 +81,8 @@
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
+                <outlet property="countLabel" destination="Yix-nT-ofm" id="wb2-he-PcJ"/>
+                <outlet property="countView" destination="GjW-Aw-s5F" id="tdi-x3-v86"/>
                 <outlet property="title" destination="zGK-FN-OIy" id="22X-u2-LWm"/>
             </connections>
         </tableViewCell>

@@ -224,6 +224,11 @@ NSString * const HAMessageUserURLScheme = @"user";
 - (void)viewWillAppear:(BOOL)animated
 {
     if (self.organization && self.group) {
+        if ([self.group isKindOfClass:[STKGroup class]]) {
+            [self.group setUnreadCount:[NSNumber numberWithInt:0]];
+        } else {
+            [self.organization setUnreadCount:[NSNumber numberWithInt:0]];
+        }
         [self.postView setHidden:NO];
         NSString *name = [self.group isKindOfClass:[STKGroup class]]?[[(STKGroup *)self.group name] lowercaseString ]:@"all";
         NSString *placeholder = [NSString stringWithFormat:@"Post a message to %@...", name];
@@ -495,13 +500,23 @@ NSString * const HAMessageUserURLScheme = @"user";
         [c.avatarView setUrlString:org.owner.profilePhotoPath];
         cell = c;
     } else if (self.groups){
-        HAGroupCell *c = [self.tableView dequeueReusableCellWithIdentifier:[HAGroupCell reuseIdentifier]];
         NSString *text = nil;
+        HAGroupCell *c = [self.tableView dequeueReusableCellWithIdentifier:[HAGroupCell reuseIdentifier]];
+        [c.countView setHidden:YES];
         if (indexPath.row > 0) {
             STKGroup *group = [self.groups objectAtIndex:indexPath.row - 1];
             text = [NSString stringWithFormat:@"#%@", [group.name lowercaseString]];
+            
+            if (group.unreadCount.integerValue > 0 ){
+                [c setMessageCount:group.unreadCount];
+                [c.countView setHidden:NO];
+            }
         } else {
             text = @"#all";
+            if (self.organization.unreadCount.integerValue > 0) {
+                [c setMessageCount:self.organization.unreadCount];
+                [c.countView setHidden:NO];
+            }
         }
         [[c title] setText:text];
         cell = c;
@@ -716,17 +731,17 @@ NSString * const HAMessageUserURLScheme = @"user";
         [wvc setUrl:url];
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
         [self presentViewController:nvc animated:YES completion:nil];
-        return YES;
+//        return YES;
     } else if([[url scheme] isEqualToString:HAMessageHashTagURLScheme]) {
         STKHashtagPostsViewController *pvc = [[STKHashtagPostsViewController alloc] initWithHashTag:[url host]];
         [pvc setLinkedToPost:YES];
         [[self navigationController] pushViewController:pvc animated:YES];
-        return YES;
+//        return YES;
     } else if([[url scheme] isEqualToString:HAMessageUserURLScheme]) {
         STKProfileViewController *vc = [[STKProfileViewController alloc] init];
         [vc setProfile:[[STKUserStore store] userForID:[url host]]];
         [[self navigationController] pushViewController:vc animated:YES];
-        return YES;
+//        return YES;
     }
     return NO;
 }

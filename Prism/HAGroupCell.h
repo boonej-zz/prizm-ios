@@ -11,5 +11,9 @@
 @interface HAGroupCell : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel * title;
+@property (nonatomic, weak) IBOutlet UIView *countView;
+
+- (void)setMessageCount:(NSNumber *)count;
+
 
 @end

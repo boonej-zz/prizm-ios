@@ -16,18 +16,18 @@
 + (UIImage *)HABackgroundImage
 {
     NSString *imageName = @"img_background";
-    static NSString * HABackgroundThemeURL = nil;
-    if (! HABackgroundThemeURL) {
-    
-        STKUser *user = [[STKUserStore store] currentUser];
-        if ([user theme]) {
-            if ([user theme].backgroundURL) {
-               imageName = [imageName stringByAppendingString:[NSString stringWithFormat:@"_%@", [user theme].backgroundURL]];
-            }
+//    static NSString * HABackgroundThemeURL = nil;
+    STKUser *user = [[STKUserStore store] currentUser];
+    if ([user theme]) {
+        if ([user theme].backgroundURL) {
+            imageName = [imageName stringByAppendingString:[NSString stringWithFormat:@"_%@", [user theme].backgroundURL]];
         }
-        HABackgroundThemeURL = imageName;
+//        if (! HABackgroundThemeURL) {
+//            HABackgroundThemeURL = imageName;
+//        }
     }
-    UIImage *img =  [UIImage imageNamed:HABackgroundThemeURL];
+    
+    UIImage *img =  [UIImage imageNamed:imageName];
     return img;
 }
 

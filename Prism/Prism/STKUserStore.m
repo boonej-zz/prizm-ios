@@ -49,6 +49,9 @@ NSString * const STKUserStoreCurrentUserKey = @"com.higheraltitude.prism.current
 NSString * const HAUserStoreLoggedInUsersKey = @"com.higheraltitude.prism.loggedInUsers";
 NSString * const HANotificationKeyUserLoggedOut = @"HANotificationKeyUserLoggedOut";
 NSString * const HAUserStoreInterestsKey = @"HAUserStoreInterestsKey";
+NSString * const HAUnreadMessagesUpdated = @"HAUnreadMessagesUpdated";
+NSString * const HAUnreadMessagesForGroupsKey = @"HAUnreadMessagesForGroupsKey";
+NSString * const HAUnreadMessagesForOrgKey = @"HAUnreadMessagesForOrgKey";
 
 NSString * const STKUserStoreCurrentUserChangedNotification = @"STKUserStoreCurrentUserChangedNotification";
 
@@ -136,6 +139,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)activityUpdateCheck:(NSTimer *)timer
 {
     if([self currentUser]) {
+        [self getUpdateCounts];
         NSFetchRequest *req = [NSFetchRequest fetchRequestWithEntityName:@"STKActivityItem"];
         [req setPredicate:[NSPredicate predicateWithFormat:@"notifiedUser == %@", [self currentUser]]];
         [req setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO]]];
@@ -160,6 +164,92 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             [self fetchRequestsForCurrentUserWithFetchDescription:requestFd completion:^(NSArray *requests, NSError *err) {
                 [self notifyNotificationCount];
             }];
+        }];
+    }
+}
+
+- (void)getUpdateCounts
+{
+    STKUser *u = [self currentUser];
+    __block double orgCount = 0;
+    __block double groupCount = 0;
+    if (u.organizations.count > 0) {
+        [u.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *org, BOOL *stop) {
+            [self fetchUnreadCountForOrganization:org.organization group:nil completion:^(id obj, NSError *err) {
+                if (obj) {
+                    STKOrganization *organization = nil;
+                    if ([obj isKindOfClass:[NSArray class]]) {
+                        organization = [obj objectAtIndex:0];
+                    } else {
+                        organization = obj;
+                    }
+                    orgCount += organization.unreadCount.doubleValue;
+                    [[NSUserDefaults standardUserDefaults] setDouble:orgCount forKey:HAUnreadMessagesForOrgKey];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
+                    [self.context save:nil];
+                    
+                }
+            }];
+            if (org.groups.count > 0) {
+                [org.groups enumerateObjectsUsingBlock:^(STKGroup *obj, BOOL *stop) {
+                    if ([obj.status isEqualToString:@"active"]) {
+                        [self fetchUnreadCountForOrganization:org.organization group:obj completion:^(id obj, NSError *err) {
+                            if (obj) {
+                                STKGroup *group = nil;
+                                if ([obj isKindOfClass:[NSArray class]]) {
+                                    group = [obj objectAtIndex:0];
+                                } else {
+                                    group = obj;
+                                }
+                                groupCount += group.unreadCount.doubleValue;
+                                [[NSUserDefaults standardUserDefaults] setDouble:groupCount forKey:HAUnreadMessagesForGroupsKey];
+                                [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
+                                [self.context save:nil];
+                            }
+                        }];
+                    }
+                }];
+            }
+        }];
+    } else if ([u.type isEqualToString:@"institution_verified"]) {
+        [self fetchUserOrgs:^(NSArray *organizations, NSError *err) {
+            if (organizations && organizations.count > 0) {
+                [organizations enumerateObjectsUsingBlock:^(STKOrganization *org, NSUInteger idx, BOOL *stop) {
+                    [self fetchUnreadCountForOrganization:org group:nil completion:^(id obj, NSError *err) {
+                        if (obj) {
+                            STKOrganization *organization = nil;
+                            if ([obj isKindOfClass:[NSArray class]]) {
+                                organization = [obj objectAtIndex:0];
+                            } else {
+                                organization = obj;
+                            }
+                            orgCount += organization.unreadCount.doubleValue;
+                            [[NSUserDefaults standardUserDefaults] setDouble:orgCount forKey:HAUnreadMessagesForOrgKey];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
+
+                            [self.context save:nil];
+                        }
+                    }];
+                    if (org.groups.count > 0) {
+                        [org.groups enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                            [self fetchUnreadCountForOrganization:org group:obj completion:^(id obj, NSError *err) {
+                                    if (obj) {
+                                        STKGroup *group = nil;
+                                        if ([obj isKindOfClass:[NSArray class]]) {
+                                            group = [obj objectAtIndex:0];
+                                        } else {
+                                            group = obj;
+                                        }
+                                        groupCount += group.unreadCount.doubleValue;
+                                        [[NSUserDefaults standardUserDefaults] setDouble:groupCount forKey:HAUnreadMessagesForGroupsKey];
+                                        [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
+                                        [self.context save:nil];
+                                    }
+                            }];
+                        }];
+                    }
+                }];
+            }
         }];
     }
 }
@@ -1537,6 +1627,41 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)fetchUnreadCountForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(id obj, NSError *err))block
+
+{
+    __block STKUser *u = [[STKUserStore store] currentUser];
+    if (organization) {
+        [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+            if (err) {
+                block(nil, err);
+                return;
+            }
+            NSString *obj = @"all";
+            
+            if (group) obj = group.uniqueID;
+            STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups", obj, @"messages"]];
+            [c addQueryValue:u.uniqueID forKey:@"requestor"];
+            [c addQueryValue:@"unread" forKey:@"action"];
+            if (group) {
+                [c setModelGraph:@[@"STKGroup"]];
+            } else {
+                [c setModelGraph:@[@"STKOrganization"]];
+            }
+            [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+            [c setContext:[self context]];
+            //            [c setShouldReturnArray:YES];
+            [c setShouldReturnArray:YES];
+            [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+                block(obj, err);
+            }];
+        }];
+    } else {
+        block(nil, nil);
+    }
+}
+
+
 - (NSArray *)fetchUserOrgs:(void (^)(NSArray *organizations, NSError *err))block
 {
     STKUser *u = [self currentUser];
@@ -1644,6 +1769,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         //            [c setShouldReturnArray:YES];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastMessageUpdate"];
             block(obj, err);
         }];
     }];

@@ -24,6 +24,7 @@
 @property (nonatomic) int selectedIndex;
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic) int notificationCount;
+@property (nonatomic) double messageCount;
 @property (nonatomic) BOOL optionsEnabled;
 
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated;

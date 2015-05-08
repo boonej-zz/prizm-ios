@@ -19,6 +19,10 @@
                                                  selector:@selector(notificationsUpdated:)
                                                      name:STKUserStoreActivityUpdateNotification
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(notificationsUpdated:)
+                                                     name:HAUnreadMessagesUpdated
+                                                   object:nil];
     }
     return self;
 }
@@ -26,8 +30,11 @@
 - (void)notificationsUpdated:(NSNotification *)note
 {
     NSNumber *n = [[note userInfo] objectForKey:STKUserStoreActivityUpdateCountKey];
+    double orgCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForOrgKey];
+    double groupCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForGroupsKey];
+    double total = orgCount + groupCount + n.doubleValue;
     
-    if([n intValue] > 0) {
+    if(total > 0) {
         [self setHidden:NO];
     } else {
         [self setHidden:YES];

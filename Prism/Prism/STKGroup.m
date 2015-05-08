@@ -21,6 +21,7 @@
 @dynamic leader;
 @dynamic status;
 @dynamic mutes;
+@dynamic unreadCount;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -43,7 +44,8 @@
              @"organization": [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID": @"_id"}],
              @"leader": [STKBind bindMapForKey:@"leader" matchMap:@{@"uniqueID": @"_id"}],
              @"status": @"status",
-             @"mutes": [STKBind bindMapForKey:@"mutes" matchMap:@{@"uniqueID": @"_id"}]
+             @"mutes": [STKBind bindMapForKey:@"mutes" matchMap:@{@"uniqueID": @"_id"}],
+             @"unread_count": @"unreadCount"
              };
 }
 

@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSLayoutConstraint *blurHeightConstraint;
 @property (nonatomic, strong) STKNotificationBadge *badgeView;
+@property (nonatomic, strong) STKNotificationBadge *messageBadgeView;
 @property (nonatomic, strong) CALayer *underlayLayer;
 @end
 
@@ -150,6 +151,18 @@
                                                                             toItem:b4 attribute:NSLayoutAttributeCenterX multiplier:1 constant:15]];
         [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_badgeView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual
                                                                             toItem:b4 attribute:NSLayoutAttributeCenterY multiplier:1 constant:-15]];
+        if (self.optionsEnabled) {
+            _messageBadgeView = [[STKNotificationBadge alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
+            [_messageBadgeView setTranslatesAutoresizingMaskIntoConstraints:NO];
+            [_buttonContainerView addSubview:_messageBadgeView];
+            
+            [_messageBadgeView addConstraint:[NSLayoutConstraint constraintWithItem:_messageBadgeView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:20]];
+            [_messageBadgeView addConstraint:[NSLayoutConstraint constraintWithItem:_messageBadgeView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:40]];
+            [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_messageBadgeView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual
+                                                                                toItem:b6 attribute:NSLayoutAttributeCenterX multiplier:1 constant:15]];
+            [_buttonContainerView addConstraint:[NSLayoutConstraint constraintWithItem:_messageBadgeView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual
+                                                                                toItem:b6 attribute:NSLayoutAttributeCenterY multiplier:1 constant:-15]];
+        }
         
     }
     return self;
@@ -189,6 +202,13 @@
 - (void)setNotificationCount:(int)notificationCount
 {
     [[self badgeView] setCount:notificationCount];
+}
+
+- (void)setMessageCount:(double)messageCount
+{
+    if (self.messageBadgeView) {
+        [[self messageBadgeView] setCount:messageCount];
+    }
 }
 
 - (void)setItems:(NSArray *)items

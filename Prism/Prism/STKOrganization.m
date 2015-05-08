@@ -27,6 +27,7 @@
 @dynamic messages;
 @dynamic mutes;
 @dynamic groups;
+@dynamic unreadCount;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -55,7 +56,8 @@
              @"modify_date":[STKBind bindMapForKey:@"modifyDate" transform:STKBindTransformDateTimestamp],
              @"owner": [STKBind bindMapForKey:@"owner" matchMap:@{@"uniqueID": @"_id"}],
              @"mutes": [STKBind bindMapForKey:@"mutes" matchMap:@{@"uniqueID": @"_id"}],
-             @"groups": [STKBind bindMapForKey:@"groups" matchMap:@{@"uniqueID": @"_id"}]};
+             @"groups": [STKBind bindMapForKey:@"groups" matchMap:@{@"uniqueID": @"_id"}],
+             @"unread_count": @"unreadCount"};
 }
 
 @end

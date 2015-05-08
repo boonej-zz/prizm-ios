@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HACalendarViewController">
@@ -11,9 +12,112 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="VpV-74-PqP">
+                    <rect key="frame" x="0.0" y="65" width="414" height="532"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lB9-zH-fhq">
+                    <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                    <subviews>
+                        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mgR-HH-c5x" userLabel="header">
+                            <rect key="frame" x="63" y="15" width="290" height="197"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FUP-ix-H3Q" userLabel="header title">
+                                    <rect key="frame" x="0.0" y="0.0" width="290" height="37"/>
+                                    <subviews>
+                                        <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming Soon" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="sRZ-a7-UVc">
+                                            <rect key="frame" x="0.0" y="0.0" width="290" height="37"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                            <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="sRZ-a7-UVc" firstAttribute="top" secondItem="FUP-ix-H3Q" secondAttribute="top" id="Q0Y-kv-iiq"/>
+                                        <constraint firstAttribute="height" constant="37" id="b9g-GG-m2k"/>
+                                        <constraint firstAttribute="width" constant="290" id="dHd-jZ-wDu"/>
+                                        <constraint firstAttribute="trailing" secondItem="sRZ-a7-UVc" secondAttribute="trailing" id="hZs-CF-fz0"/>
+                                        <constraint firstAttribute="bottom" secondItem="sRZ-a7-UVc" secondAttribute="bottom" id="lR3-2m-AKK"/>
+                                        <constraint firstItem="sRZ-a7-UVc" firstAttribute="leading" secondItem="FUP-ix-H3Q" secondAttribute="leading" id="xfy-Bi-erb"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m5B-sH-3oA" userLabel="description">
+                                    <rect key="frame" x="0.0" y="37" width="290" height="144"/>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.25" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="290" id="iDN-Q3-UhQ"/>
+                                    </constraints>
+                                </view>
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="You'll find your organization's upcoming events listed here." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DuH-jl-xSH">
+                                    <rect key="frame" x="41" y="37" width="209" height="144"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="209" id="X5N-hH-kGr"/>
+                                    </constraints>
+                                    <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="centerX" secondItem="DuH-jl-xSH" secondAttribute="centerX" id="3g5-4Q-3lV"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="leading" secondItem="mgR-HH-c5x" secondAttribute="leading" id="7zw-BW-Rg6"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="leading" secondItem="m5B-sH-3oA" secondAttribute="leading" id="Go7-KP-six"/>
+                                <constraint firstAttribute="trailing" secondItem="FUP-ix-H3Q" secondAttribute="trailing" id="HxH-YQ-aDd"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="leading" secondItem="mgR-HH-c5x" secondAttribute="leading" id="KQ5-UW-0kF"/>
+                                <constraint firstItem="m5B-sH-3oA" firstAttribute="top" secondItem="FUP-ix-H3Q" secondAttribute="bottom" id="QIP-yS-j5K"/>
+                                <constraint firstAttribute="bottom" secondItem="m5B-sH-3oA" secondAttribute="bottom" constant="16" id="VGX-tX-TQB"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="top" secondItem="mgR-HH-c5x" secondAttribute="top" id="VXJ-y8-iNA"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="top" secondItem="mgR-HH-c5x" secondAttribute="top" id="bMW-x7-Luq"/>
+                                <constraint firstItem="m5B-sH-3oA" firstAttribute="top" secondItem="FUP-ix-H3Q" secondAttribute="bottom" id="c4b-I1-o4P"/>
+                                <constraint firstAttribute="bottom" secondItem="FUP-ix-H3Q" secondAttribute="bottom" constant="160" id="ceL-Jb-Lkx"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="leading" secondItem="mgR-HH-c5x" secondAttribute="leading" id="dji-U2-ho9"/>
+                                <constraint firstItem="DuH-jl-xSH" firstAttribute="top" secondItem="FUP-ix-H3Q" secondAttribute="bottom" id="eGU-Pw-Jke"/>
+                                <constraint firstAttribute="bottom" secondItem="DuH-jl-xSH" secondAttribute="bottom" constant="16" id="ekY-9p-yTY"/>
+                                <constraint firstAttribute="trailing" secondItem="FUP-ix-H3Q" secondAttribute="trailing" id="jGh-dc-fjO"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="bottom" secondItem="m5B-sH-3oA" secondAttribute="bottom" constant="-144" id="jUR-sP-fOb"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="top" secondItem="mgR-HH-c5x" secondAttribute="top" id="l02-UV-Qg9"/>
+                                <constraint firstAttribute="height" constant="197" id="rZs-ZZ-lWd"/>
+                                <constraint firstItem="FUP-ix-H3Q" firstAttribute="trailing" secondItem="m5B-sH-3oA" secondAttribute="trailing" id="xNK-bQ-nrq"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="mgR-HH-c5x" secondAttribute="centerX" id="C5L-KL-0w1"/>
+                        <constraint firstItem="mgR-HH-c5x" firstAttribute="leading" secondItem="lB9-zH-fhq" secondAttribute="leading" constant="15" id="PPV-XO-f81"/>
+                        <constraint firstAttribute="centerY" secondItem="mgR-HH-c5x" secondAttribute="centerY" id="cvO-M3-jgQ"/>
+                        <constraint firstItem="mgR-HH-c5x" firstAttribute="top" secondItem="lB9-zH-fhq" secondAttribute="top" constant="15" id="vEK-lH-lTG"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="PPV-XO-f81"/>
+                            <exclude reference="cvO-M3-jgQ"/>
+                        </mask>
+                    </variation>
+                </view>
+            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="lB9-zH-fhq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="1G2-8f-Zn0"/>
+                <constraint firstAttribute="bottom" secondItem="VpV-74-PqP" secondAttribute="bottom" constant="139" id="O3e-gK-vIP"/>
+                <constraint firstAttribute="trailing" secondItem="lB9-zH-fhq" secondAttribute="trailing" id="WAG-At-XdP"/>
+                <constraint firstAttribute="trailing" secondItem="VpV-74-PqP" secondAttribute="trailing" id="cIV-BW-cwf"/>
+                <constraint firstAttribute="bottom" secondItem="lB9-zH-fhq" secondAttribute="bottom" id="fqj-C7-ML3"/>
+                <constraint firstItem="lB9-zH-fhq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="mEj-e8-c9s"/>
+                <constraint firstItem="VpV-74-PqP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="65" id="rDD-ts-vUe"/>
+                <constraint firstItem="VpV-74-PqP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="wnF-GG-hxE"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
         </view>
     </objects>
+    <resources>
+        <image name="calendar_placeholder" width="320" height="363"/>
+    </resources>
 </document>

@@ -23,6 +23,7 @@
 @property (nonatomic, retain) STKUser *leader;
 @property (nonatomic, retain) NSString *status;
 @property (nonatomic, retain) NSSet *mutes;
+@property (nonatomic, retain) NSNumber *unreadCount;
 
 @end
 

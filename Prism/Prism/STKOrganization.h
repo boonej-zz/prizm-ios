@@ -28,6 +28,7 @@
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) NSSet *mutes;
 @property (nonatomic, retain) NSSet *groups;
+@property (nonatomic, retain) NSNumber *unreadCount;
 @end
 
 @interface STKOrganization (CoreDataGeneratedAccessors)

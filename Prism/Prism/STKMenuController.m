@@ -94,12 +94,23 @@ static BOOL HAActivityIsAnimating = NO;
                                                      name:@"STKConnectionNetworkError"
                                                    object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLoggedOut:) name:HANotificationKeyUserLoggedOut object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messagesUpdated:) name:HAUnreadMessagesUpdated object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showActivities:) name:@"ShowActivities" object:nil];
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showWelcome:) name:@"ShowWelcome" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(profileUpdated:) name:@"UserDetailsUpdated" object:nil];
     }
     
     return self;
+}
+
+- (void)messagesUpdated:(NSNotification *)note
+{
+    double orgCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForOrgKey];
+    double groupCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForGroupsKey];
+    double total = orgCount + groupCount;
+ 
+    
+    [[self menuView] setMessageCount:total];
 }
 
 - (void)showWelcome:(STKOrgStatus *)status

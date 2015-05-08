@@ -15,6 +15,7 @@
 extern NSString * const STKUserStoreActivityUpdateNotification;
 extern NSString * const STKUserStoreActivityUpdateCountKey;
 
+
 extern NSString * const STKUserStoreCurrentUserChangedNotification;
 extern NSString * const STKUserStoreErrorDomain;
 extern NSString * const HAUserStoreActivityUserKey;
@@ -25,6 +26,9 @@ extern NSString * const HANotificationKeyUserLoggedOut;
 extern NSString * const HAUserStoreInterestsKey;
 extern NSString * const HAUserStoreActivityInsightKey;
 extern NSString * const HAUserStoreActivityLuminaryPostKey ;
+extern NSString * const HAUnreadMessagesUpdated;
+extern NSString * const HAUnreadMessagesForGroupsKey;
+extern NSString * const HAUnreadMessagesForOrgKey;
 
 typedef enum {
     STKUserStoreErrorCodeMissingArguments, // @[arg0, ...]
@@ -135,4 +139,5 @@ typedef enum {
 - (void)fetchUpdatedMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block;
 - (void)muteGroup:(STKGroup *)group muted:(BOOL)muted  completion:(void (^)(id data, NSError *error))block;
 - (void)muteOrganization:(STKOrganization *)organization muted:(BOOL)muted completion:(void (^)(id, NSError *))block;
+- (void)fetchUnreadCountForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(id obj, NSError *err))block;
 @end
