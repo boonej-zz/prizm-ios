@@ -77,10 +77,10 @@
     [self.textView setTextColor:[UIColor HATextColor]];
     [self.textView setEditable:NO];
     if (self.group) {
-        self.title = self.group.name;
+        self.title = [NSString stringWithFormat:@"#%@", [self.group.name lowercaseString]];
         [self.textView setText:self.group.groupDescription];
     } else {
-        self.title = @"All";
+        self.title = @"#all";
         NSString *text = [NSString stringWithFormat:@"This group contains all members of %@.", self.organization.name];
         [self.textView setText:text];
         

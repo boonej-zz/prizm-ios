@@ -10,9 +10,11 @@
 
 @interface HAPostMessageView()<UITextViewDelegate>
 @property (nonatomic) BOOL constraintsAdded;
-@property (nonatomic, strong) UILabel *placeholder;
+
 @property (nonatomic, strong) UIVisualEffectView *blurView;
 @property (nonatomic, strong) UIView *tintView;
+@property (nonatomic) BOOL textViewHasText;
+
 @end
 
 @implementation HAPostMessageView
@@ -21,8 +23,6 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sendTapped:)];
-        [self addGestureRecognizer:tap];
         UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
         self.blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
         [self.blurView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -34,13 +34,18 @@
         [self.textView setTranslatesAutoresizingMaskIntoConstraints:NO];
         self.iv = [[UIImageView alloc] init];
         [self.iv setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        self.actionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.actionButton = [[UIButton alloc] init];
+        [self.actionButton setTranslatesAutoresizingMaskIntoConstraints:NO];
         self.placeholder = [[UILabel alloc] init];
         [self.placeholder setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.textView addSubview:self.placeholder];
+        [self.textView setClipsToBounds:NO];
         [self addSubview:self.textView];
         [self addSubview:self.iv];
+        [self addSubview:self.actionButton];
+        self.textViewHasText = NO;
         [self setupConstraints];
-        
     }
     return self;
 }
@@ -49,22 +54,27 @@
 {
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[bv]-0-|" options:0 metrics:nil views:@{@"bv": _blurView}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[bv]-0-|" options:0 metrics:nil views:@{@"bv": _blurView}]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[tv]-0-[iv]-0-|" options:0 metrics:nil views:@{@"tv": _textView, @"iv": _iv}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[ab]-0-|" options:0 metrics:nil views:@{@"ab": _actionButton}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-4-[tv]-0-|" options:0 metrics:nil views:@{@"tv": _textView}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[iv]-15-[tv]-8-[ab]-0-|" options:0 metrics:nil views:@{@"tv": _textView, @"iv": _iv, @"ab": _actionButton}]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_iv attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     [self.textView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[p]-8-|" options:0 metrics:nil views:@{@"p": _placeholder}]];
     [self.textView addConstraint:[NSLayoutConstraint constraintWithItem:_placeholder attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
-    [self.textView addConstraint:[NSLayoutConstraint constraintWithItem:_placeholder attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self.textView addConstraint:[NSLayoutConstraint constraintWithItem:_placeholder attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeCenterY multiplier:1 constant:-4.f]];
+    [self.actionButton addConstraint:[NSLayoutConstraint constraintWithItem:_actionButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:46.f]];
+    [self.actionButton addConstraint:[NSLayoutConstraint constraintWithItem:_actionButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:46.f]];
 }
 
-- (void)sendTapped:(UITapGestureRecognizer *)g
+- (void)sendTapped:(id)sender
 {
+    [self showActionButton:NO];
     if ([self.textView isFirstResponder]) {
         [self dismissKeyboard:self];
     }
+    
 }
 
 - (void)layoutSubviews
@@ -94,22 +104,41 @@
 {
     [self.textView setTintColor:[UIColor HATextColor]];
     [self.textView setFont:STKFont(15)];
+    if (textView.text.length > 0) {
+        if (!self.textViewHasText) {
+            self.textViewHasText = YES;
+            [self showActionButton:YES];
+        }
+    } else {
+        self.textViewHasText = NO;
+        [self showActionButton:NO];
+    }
+    
     [self.delegate postTextChanged:textView.text];
+    
 }
 
-
-
-
+- (void)showActionButton:(BOOL)textEntry
+{
+    if (textEntry) {
+        [self.actionButton addTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
+        UIImage *img = [UIImage imageNamed:@"btn_create_message"];
+        [self.actionButton setImage:img forState:UIControlStateNormal];
+    } else {
+        [self.actionButton removeTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionButton setImage:nil forState:UIControlStateNormal];
+        self.textViewHasText = NO;
+    }
+}
 
 - (void)dismissKeyboard:(id)sender
 {
-    [self.placeholder setHidden:NO];
+    [self showActionButton:NO];
     [self.textView resignFirstResponder];
     if (self.delegate) {
         [self.delegate endEditing:self];
     }
 }
-
 
 - (void)setPlaceHolder:(NSString *)placeholder
 {

@@ -105,12 +105,12 @@ static BOOL HAActivityIsAnimating = NO;
 
 - (void)messagesUpdated:(NSNotification *)note
 {
-    double orgCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForOrgKey];
-    double groupCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForGroupsKey];
-    double total = orgCount + groupCount;
- 
-    
-    [[self menuView] setMessageCount:total];
+//    double orgCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForOrgKey];
+//    double groupCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForGroupsKey];
+//    double total = orgCount + groupCount;
+// 
+//    
+//    [[self menuView] setMessageCount:total];
 }
 
 - (void)showWelcome:(STKOrgStatus *)status

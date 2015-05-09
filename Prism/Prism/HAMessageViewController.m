@@ -167,12 +167,8 @@ NSString * const HAMessageUserURLScheme = @"user";
     } else {
         bbi = [self menuBarButtonItem];
     }
-    
     [[self navigationItem] setLeftBarButtonItem:bbi];
     [self.navigationItem setHidesBackButton:YES];
-    
-    
-    
     [self.tableView registerNib:[UINib nibWithNibName:[HAAvatarImageCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAAvatarImageCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[HAGroupCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAGroupCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[HAMessageCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAMessageCell reuseIdentifier]];
@@ -241,6 +237,16 @@ NSString * const HAMessageUserURLScheme = @"user";
         [self.postView setPlaceHolder:placeholder];
         [self fetchNewer:NO];
         STKGroup *g = [self.group isKindOfClass:[NSString class]]?nil:self.group;
+        if (g) {
+            double unreadCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForGroupsKey];
+            unreadCount -= [g.unreadCount doubleValue];
+            g.unreadCount = @2;
+            [[NSUserDefaults standardUserDefaults] setDouble:unreadCount forKey:HAUnreadMessagesForGroupsKey];
+            
+        } else {
+            [self.organization setUnreadCount:@0];
+            [[NSUserDefaults standardUserDefaults] setDouble:0 forKey:HAUnreadMessagesForOrgKey];
+        }
         self.members = [[STKUserStore store] getMembersForOrganization:self.organization group:g];
         UIButton *rbb = [UIButton buttonWithType:UIButtonTypeCustom];
         [rbb setImage:[UIImage imageNamed:@"group_bar_button"] forState:UIControlStateNormal];
@@ -276,8 +282,6 @@ NSString * const HAMessageUserURLScheme = @"user";
             UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:view];
             [self.navigationItem setRightBarButtonItem:bbi];
         }
-
-        
         
         [self.tableViewBottomConstraint setConstant:0];
         self.groups = [[[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
@@ -316,16 +320,6 @@ NSString * const HAMessageUserURLScheme = @"user";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)fetchOlder
 {
@@ -404,15 +398,7 @@ NSString * const HAMessageUserURLScheme = @"user";
 {
     if (self.messages.count > 0) {
         NSIndexPath *ip = [NSIndexPath indexPathForRow:(self.messages.count - 1) inSection:0];
-//    CGFloat scrollHeight = self.tableView.contentSize.height;
-//    CGFloat viewHeight = self.tableView.frame.size.height;
-//    CGFloat yOffset = scrollHeight;
         [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:animated];
-//    if (yOffset > 0) {
-////        [self.tableView setContentOffset:CGPointMake(0, yOffset) animated:animated];
-//        
-//        [self.tableView scrollRectToVisible:CGRectMake(0, yOffset, self.tableView.frame.size.width, 100) animated:animated];
-//    }
     }
 }
 
@@ -798,6 +784,8 @@ NSString * const HAMessageUserURLScheme = @"user";
 - (void)endEditing:(HAPostMessageView *)sender
 {
     NSMutableAttributedString *text = [[self.postView.textView attributedText] mutableCopy];
+    self.postView.textView.text = @"";
+    [self.postView.placeholder setHidden:NO];
     
     [text enumerateAttributesInRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
         NSTextAttachment *attachment = [attrs objectForKey:NSAttachmentAttributeName];
@@ -920,6 +908,9 @@ NSString * const HAMessageUserURLScheme = @"user";
 - (void)markupControllerDidFinish:(STKMarkupController *)markupController
 {
     [self dismissKeyboard:nil];
+     [self.postView.textView setText:@""];
+    [self.postView.placeholder setHidden:NO];
+    [self.postView showActionButton:NO];
     [self.markupController.view setHidden:YES];
 }
 

@@ -86,9 +86,16 @@
     [s appendAttributedString:mainMessage];
     if (self.message.metaData) {
         STKMessageMetaData *meta = self.message.metaData;
-        NSDictionary *titleAttributes = @{NSFontAttributeName : STKBoldFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
-    
-        NSDictionary *descAttributes = @{NSFontAttributeName : STKFont(13), NSForegroundColorAttributeName : [UIColor HATextColor]};
+        NSDictionary *titleAttributes = nil;
+        NSDictionary *descAttributes = nil;
+        NSLog(@"%@", meta);
+        if (meta.urlString) {
+            titleAttributes = @{NSFontAttributeName : STKBoldFont(14), NSForegroundColorAttributeName : [UIColor HATextColor], NSLinkAttributeName: [NSURL URLWithString:meta.urlString]};
+            descAttributes = @{NSFontAttributeName : STKFont(13), NSForegroundColorAttributeName : [UIColor HATextColor], NSLinkAttributeName: [NSURL URLWithString:meta.urlString]};
+        } else {
+            titleAttributes = @{NSFontAttributeName : STKBoldFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
+            descAttributes = @{NSFontAttributeName : STKFont(13), NSForegroundColorAttributeName : [UIColor HATextColor]};
+        }
         NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"" attributes:titleAttributes];
         NSAttributedString *description = [[NSAttributedString alloc] initWithString:@"" attributes:descAttributes];
         if (meta.title) {

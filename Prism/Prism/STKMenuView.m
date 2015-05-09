@@ -9,6 +9,7 @@
 #import "STKMenuView.h"
 #import "STKMenuButton.h"
 #import "STKNotificationBadge.h"
+#import "STKUserStore.h"
 
 @interface STKMenuView () <UIDynamicAnimatorDelegate>
 @property (nonatomic, strong) UIView *buttonContainerView;
@@ -172,6 +173,7 @@
 {
     [super layoutSubviews];
     [[self underlayLayer] setFrame:[[self buttonContainerView] bounds]];
+    
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
@@ -230,7 +232,10 @@
 - (void)setVisible:(BOOL)visible animated:(BOOL)animated
 {
     [self setHidden:!visible];
-    
+    double orgCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForOrgKey];
+    double groupCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForGroupsKey];
+    double total = orgCount + groupCount;
+    [self setMessageCount:total];
     if(!visible) {
         [self setBackgroundImage:nil];
         [[self underlayLayer] setOpacity:0.0];

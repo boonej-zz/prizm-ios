@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSString * messageID;
 @property (nonatomic, retain) NSString * linkDescription;
 @property (nonatomic, retain) NSString * title;
+@property (nonatomic, retain) NSString * urlString;
 @property (nonatomic, retain) STKMessage *message;
 @property (nonatomic, retain) STKMessageMetaDataImage *image;
 

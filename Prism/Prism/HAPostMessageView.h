@@ -19,10 +19,13 @@
 
 @interface HAPostMessageView : UIView
 
+@property (nonatomic, strong) UILabel *placeholder;
+@property (nonatomic, strong) UIButton *actionButton;
 @property (nonatomic, strong) UIImageView *iv;
 @property (nonatomic, strong) UITextView *textView;
 @property (nonatomic, weak) id<HAPostMessageViewDelegate> delegate;
 
 - (void)setPlaceHolder:(NSString *)placeholder;
+- (void)showActionButton:(BOOL)textEntry;
 
 @end
