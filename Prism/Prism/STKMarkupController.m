@@ -244,7 +244,7 @@ typedef enum {
                 NSMutableArray *tags = [NSMutableArray array];
                 [tags addObject:@"all"];
                 [self.organization.groups enumerateObjectsUsingBlock:^(STKGroup *obj, BOOL *stop) {
-                    if (![obj.status isEqualToString:@"inactive"]) {
+                    if (obj.name && ![obj.status isEqualToString:@"inactive"]) {
                         [tags addObject:obj.name.lowercaseString];
                     }
                 }];

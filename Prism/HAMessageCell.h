@@ -15,6 +15,7 @@
 
 - (void)likeButtonTapped:(HAMessageCell *)sender;
 - (void)previewImageTapped:(NSURL *)url;
+- (void)videoImageTapped:(NSURL *)url;
 
 @end
 

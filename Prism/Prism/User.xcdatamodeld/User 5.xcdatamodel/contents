@@ -85,6 +85,7 @@
         <attribute name="messageID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="urlString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="videoString" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessageMetaDataImage" inverseName="metaData" inverseEntity="STKMessageMetaDataImage" syncable="YES"/>
         <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="metaData" inverseEntity="STKMessage" syncable="YES"/>
     </entity>
@@ -276,7 +277,7 @@
         <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="165"/>
         <element name="STKInterest" positionX="18" positionY="153" width="128" height="165"/>
         <element name="STKMessage" positionX="27" positionY="153" width="128" height="180"/>
-        <element name="STKMessageMetaData" positionX="27" positionY="153" width="128" height="135"/>
+        <element name="STKMessageMetaData" positionX="27" positionY="153" width="128" height="150"/>
         <element name="STKMessageMetaDataImage" positionX="36" positionY="162" width="128" height="120"/>
         <element name="STKOrganization" positionX="36" positionY="171" width="128" height="285"/>
         <element name="STKOrgStatus" positionX="27" positionY="153" width="128" height="150"/>

@@ -91,8 +91,11 @@
 - (void)previewImageViewTapped:(id)sender
 {
     if (self.delegate) {
-        NSURL *url = [NSURL URLWithString:self.message.metaData.urlString];
-        [self.delegate previewImageTapped:url];
+        NSURL *url = nil;
+        if (self.message.metaData.urlString) {
+            url = [NSURL URLWithString:self.message.metaData.urlString];
+            [self.delegate previewImageTapped:url];
+        }
     }
 }
 

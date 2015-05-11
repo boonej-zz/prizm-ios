@@ -19,6 +19,7 @@
 @dynamic message;
 @dynamic image;
 @dynamic urlString;
+@dynamic videoString;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -34,7 +35,8 @@
              @"description": @"linkDescription",
              @"title": @"title",
              @"image": [STKBind bindMapForKey:@"image" matchMap:@{@"messageID": @"message_id"}],
-             @"url" : @"urlString"
+             @"url" : @"urlString",
+             @"video_url": @"videoString"
              };
 }
 

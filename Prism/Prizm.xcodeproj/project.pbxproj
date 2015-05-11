@@ -429,6 +429,7 @@
 		2C2E9C7B1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAGroupMembersViewController.m; sourceTree = "<group>"; };
 		2C4FD7301A029E98003A4212 /* HANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HANavigationController.h; sourceTree = "<group>"; };
 		2C4FD7311A029E98003A4212 /* HANavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HANavigationController.m; sourceTree = "<group>"; };
+		2C690A3A1B0158F7006ECF4D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
 		2C6969271982A71900E4B9FD /* STKIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKIntroViewController.m; sourceTree = "<group>"; };
 		2C6969281982A71900E4B9FD /* STKIntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKIntroViewController.xib; sourceTree = "<group>"; };
@@ -2763,6 +2764,7 @@
 		BE02EAA1182A80A200A5505A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2C690A3A1B0158F7006ECF4D /* CoreVideo.framework */,
 				2CBFA2281AFEF66500C6577C /* libPods-Heap.a */,
 				D097F29318D3533E0053F479 /* Crashlytics.framework */,
 				BE36BC4618CA14B200694145 /* Crashlytics.framework */,

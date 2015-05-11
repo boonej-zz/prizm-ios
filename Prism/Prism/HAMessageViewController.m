@@ -37,8 +37,10 @@
 #import "STKMessageMetaData.h"
 #import "STKMessageMetaDataImage.h"
 
+
 NSString * const HAMessageHashTagURLScheme = @"hashtag";
 NSString * const HAMessageUserURLScheme = @"user";
+
 
 @interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate>
 
@@ -716,6 +718,13 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self presentViewController:nvc animated:YES completion:nil];
 }
 
+- (void)videoImageTapped:(NSURL *)url
+{
+    STKWebViewController *wc = [[STKWebViewController alloc] init];
+    [wc setUrl:url];
+    [self.navigationController presentViewController:wc animated:YES completion:nil];
+}
+
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)url inRange:(NSRange)characterRange
 {
     if([[url scheme] isEqualToString:@"http"] || [[url scheme] isEqualToString:@"https"]) {
@@ -724,15 +733,30 @@ NSString * const HAMessageUserURLScheme = @"user";
     } else if([[url scheme] isEqualToString:HAMessageHashTagURLScheme]) {
         NSString *groupName = url.host;
         NSSet *matches = [self.organization.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", groupName]];
+        __block BOOL resetAll = NO;
+        STKGroup *g = nil;
         if ((matches && matches.count > 0 )|| [groupName containsString:@"all"]) {
             if (matches.count > 0) {
-                self.group = [[matches allObjects] objectAtIndex:0];
+                g = [[matches allObjects] objectAtIndex:0];
+                [g.members enumerateObjectsUsingBlock:^(STKOrgStatus *u, BOOL *stop) {
+                    if ([u.member.uniqueID isEqualToString:self.user.uniqueID]) {
+                        resetAll = YES;
+                        *stop = YES;
+                    }
+                }];
+                if (resetAll){
+                    self.group = g;
+                }
             } else {
+                resetAll = YES;
                 self.group = @"all";
             }
-            self.messages = nil;
-            [self configureViews];
-            [self finalizeViewConfiguration];
+            if (resetAll) {
+                self.messages = nil;
+                self.members = nil;
+                [self configureViews];
+                [self finalizeViewConfiguration];
+            }
         }
 //        [[self navigationController] pushViewController:pvc animated:YES];
 //        return YES;

@@ -107,9 +107,9 @@
 - (void)setUrl:(NSURL *)url
 {
     _url = url;
-    if([self isViewLoaded] && _url) {
-        [[self webView] loadRequest:[NSURLRequest requestWithURL:[self url]]];
-    }
+//    if([self isViewLoaded] && _url) {
+//        [[self webView] loadRequest:[NSURLRequest requestWithURL:[self url]]];
+//    }
     
     [[self navigationItem] setTitle:[url host]];
 }
@@ -119,6 +119,8 @@
 {
     [super viewDidLoad];
     [[self blurView] setOverlayOpacity:0.5];
+    [self.webView setAllowsInlineMediaPlayback:YES];
+
     if([self url])
         [[self webView] loadRequest:[NSURLRequest requestWithURL:[self url]]];
 }
