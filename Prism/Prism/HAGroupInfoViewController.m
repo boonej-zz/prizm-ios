@@ -81,7 +81,7 @@
         [self.textView setText:self.group.groupDescription];
     } else {
         self.title = @"#all";
-        NSString *text = [NSString stringWithFormat:@"This group contains all members of %@.", self.organization.name];
+        NSString *text = [NSString stringWithFormat:@"This group contains all members of %@.", self.organization.owner.name];
         [self.textView setText:text];
         
     }
