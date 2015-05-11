@@ -90,6 +90,7 @@
     [self.placeholder setTextColor:[UIColor HATextColor]];
     [self.placeholder setFont:STKFont(15)];
     [self.textView setBackgroundColor:[UIColor clearColor]];
+    [self.textView setKeyboardType:UIKeyboardTypeTwitter];
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView

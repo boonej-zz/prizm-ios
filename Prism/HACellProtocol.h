@@ -14,9 +14,11 @@
 
 @protocol HACellDelegateProtocol<NSObject>
 
-- (void)didEndEditingCell:(UITableViewCell<HACellProtocol> *)cell;
+
 
 @optional
+- (void)didEndEditingCell:(UITableViewCell<HACellProtocol> *)cell;
 - (void)didUpdateCell:(UITableViewCell *)cell withText:(NSString *)text;
+- (BOOL)shouldUpdateCell:(UITableViewCell *)cell withText:(NSString *)text;
 
 @end

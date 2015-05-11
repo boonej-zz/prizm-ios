@@ -14,6 +14,7 @@
 @protocol HAMessageCellDelegate
 
 - (void)likeButtonTapped:(HAMessageCell *)sender;
+- (void)previewImageTapped:(NSURL *)url;
 
 @end
 

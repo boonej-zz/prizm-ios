@@ -15,5 +15,7 @@
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, weak) id<HACellDelegateProtocol> delegate;
+@property (nonatomic) BOOL forceLowercase;
+@property (nonatomic) UIKeyboardType keyboardType;
 
 @end

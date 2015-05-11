@@ -23,6 +23,8 @@
 
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *imageViewHeight;
 @property (nonatomic, weak) IBOutlet UIImageView *iv;
+@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
+
 - (IBAction)likeButtonTapped:(id)sender;
 
 @end
@@ -49,13 +51,18 @@
     // Configure the view for the selected state
 }
 
+- (void)prepareForReuse
+{
+    [self.iv removeGestureRecognizer:self.tapRecognizer];
+}
+
 - (void)setMessage:(STKMessage *)message
 {
     _message = message;
     self.imageViewHeight.constant = 0;
     [self layoutIfNeeded];
     [self.avatarView setUrlString:message.creator.profilePhotoPath];
-    [self.postText setAttributedText:[self renderedText]];
+    [self.postText setAttributedText:[self.message attributedMessageText]];
     [self.creator setText:message.creator.name];
     [self.postText setTextColor:[UIColor HATextColor]];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];
@@ -73,46 +80,20 @@
                 [self.iv setImage:img];
             }];
         }
+        if (!self.tapRecognizer) {
+            self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(previewImageViewTapped:)];
+        }
+        [self.iv addGestureRecognizer:self.tapRecognizer];
     }
+
 }
 
-
-- (NSAttributedString *)renderedText
+- (void)previewImageViewTapped:(id)sender
 {
-    NSMutableAttributedString *s = [[NSMutableAttributedString alloc] init];
-    NSDictionary *baseAttributes = @{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
-    
-    NSAttributedString *mainMessage = [STKMarkupUtilities renderedTextForText:self.message.text attributes:baseAttributes];
-    [s appendAttributedString:mainMessage];
-    if (self.message.metaData) {
-        STKMessageMetaData *meta = self.message.metaData;
-        NSDictionary *titleAttributes = nil;
-        NSDictionary *descAttributes = nil;
-        NSLog(@"%@", meta);
-        if (meta.urlString) {
-            titleAttributes = @{NSFontAttributeName : STKBoldFont(14), NSForegroundColorAttributeName : [UIColor HATextColor], NSLinkAttributeName: [NSURL URLWithString:meta.urlString]};
-            descAttributes = @{NSFontAttributeName : STKFont(13), NSForegroundColorAttributeName : [UIColor HATextColor], NSLinkAttributeName: [NSURL URLWithString:meta.urlString]};
-        } else {
-            titleAttributes = @{NSFontAttributeName : STKBoldFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
-            descAttributes = @{NSFontAttributeName : STKFont(13), NSForegroundColorAttributeName : [UIColor HATextColor]};
-        }
-        NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"" attributes:titleAttributes];
-        NSAttributedString *description = [[NSAttributedString alloc] initWithString:@"" attributes:descAttributes];
-        if (meta.title) {
-            NSString *titleBreak = [NSString stringWithFormat:@"\n\n%@", meta.title];
-            title = [[NSAttributedString alloc] initWithString:titleBreak attributes:titleAttributes];
-            [s appendAttributedString:title];
-        } if (meta.linkDescription) {
-            NSString *descriptionBreak = [[NSString stringWithFormat:@"\n%@", meta.linkDescription] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]];
-            description = [[NSAttributedString alloc] initWithString:descriptionBreak attributes:descAttributes];
-            [s appendAttributedString:description];
-        }
+    if (self.delegate) {
+        NSURL *url = [NSURL URLWithString:self.message.metaData.urlString];
+        [self.delegate previewImageTapped:url];
     }
-    
-    
-    
-    
-    return s;
 }
 
 - (void)setLiked:(BOOL)liked

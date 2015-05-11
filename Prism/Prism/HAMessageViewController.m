@@ -105,6 +105,11 @@ NSString * const HAMessageUserURLScheme = @"user";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self configureViews];
+}
+
+-  (void)configureViews
+{
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
     [[self view] addSubview:[[self markupController] view]];
     CGRect frame = _markupController.view.frame;
@@ -117,7 +122,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     [_markupController setGroup:group];
     self.home = !self.organization;
     self.title = @"Message";
-//    self.viewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+    //    self.viewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     self.postView.delegate = self;
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
     iv.frame = self.view.bounds;
@@ -210,6 +215,9 @@ NSString * const HAMessageUserURLScheme = @"user";
     }
     [infoButton setFrame:CGRectMake(titleLabel.bounds.size.width + 8, 16, 12, 12)];
     [container addSubview:titleLabel];
+    CGFloat width = titleLabel.frame.size.width + infoButton.frame.size.width;
+    CGRect frame = CGRectMake(0, 0, width, 44);
+    [container setFrame:frame];
   
     UIGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showOverlayView:)];
     [container addGestureRecognizer:tapRecognizer];
@@ -224,6 +232,12 @@ NSString * const HAMessageUserURLScheme = @"user";
 }
 
 - (void)viewWillAppear:(BOOL)animated
+{
+    [self finalizeViewConfiguration];
+    [super viewWillAppear:animated];
+}
+
+- (void)finalizeViewConfiguration
 {
     if (self.organization && self.group) {
         if ([self.group isKindOfClass:[STKGroup class]]) {
@@ -240,7 +254,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         if (g) {
             double unreadCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForGroupsKey];
             unreadCount -= [g.unreadCount doubleValue];
-            g.unreadCount = @2;
+            g.unreadCount = @0;
             [[NSUserDefaults standardUserDefaults] setDouble:unreadCount forKey:HAUnreadMessagesForGroupsKey];
             
         } else {
@@ -289,7 +303,7 @@ NSString * const HAMessageUserURLScheme = @"user";
                 self.groups = [groups mutableCopy];
                 [self.tableView reloadData];
             }
-         
+            
             
         }] mutableCopy];
         if (self.groups.count > 0) {
@@ -300,15 +314,15 @@ NSString * const HAMessageUserURLScheme = @"user";
         self.orgs = [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
             if (!err) {
                 self.orgs = organizations;
-                 [self.tableView reloadData];
+                [self.tableView reloadData];
             }
         }];
         if (self.orgs.count > 0) {
             [self.tableView reloadData];
         }
     }
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
-    [super viewWillAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -407,7 +421,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     STKMessage *message = [self.messages objectAtIndex:ip.row];
     self.editingIndexPath = ip;
     self.editing = YES;
-    [self.postView.textView setText:message.text];
+    [self.postView.textView setAttributedText:[message attributedMessageText]];
     [self.postView.textView becomeFirstResponder];
 //    [self.view addGestureRecognizer:self.viewTap];
 }
@@ -459,37 +473,6 @@ NSString * const HAMessageUserURLScheme = @"user";
     [gvc setGroup:group];
     [gvc setOrganization:self.organization];
     [self.navigationController pushViewController:gvc animated:YES];
-}
-
-- (NSAttributedString *)renderedTextForMessage:(STKMessage *)message
-{
-    NSMutableAttributedString *s = [[NSMutableAttributedString alloc] init];
-    NSDictionary *baseAttributes = @{NSFontAttributeName : STKFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
-    
-    NSAttributedString *mainMessage = [STKMarkupUtilities renderedTextForText:message.text attributes:baseAttributes];
-    [s appendAttributedString:mainMessage];
-    if (message.metaData) {
-        STKMessageMetaData *meta = message.metaData;
-        NSDictionary *titleAttributes = @{NSFontAttributeName : STKBoldFont(14), NSForegroundColorAttributeName : [UIColor HATextColor]};
-        
-        NSDictionary *descAttributes = @{NSFontAttributeName : STKFont(13), NSForegroundColorAttributeName : [UIColor HATextColor]};
-        NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"" attributes:titleAttributes];
-        NSAttributedString *description = [[NSAttributedString alloc] initWithString:@"" attributes:descAttributes];
-        if (meta.title) {
-            NSString *titleBreak = [NSString stringWithFormat:@"\n\n%@\n", meta.title];
-            title = [[NSAttributedString alloc] initWithString:titleBreak attributes:titleAttributes];
-            [s appendAttributedString:title];
-        } if (meta.linkDescription) {
-            NSString *descriptionBreak = [NSString stringWithFormat:@"\n%@", meta.linkDescription];
-            description = [[NSAttributedString alloc] initWithString:descriptionBreak attributes:descAttributes];
-            [s appendAttributedString:description];
-        }
-    }
-    
-    
-    
-    
-    return s;
 }
 
 #pragma mark Tableview delegate methods.
@@ -578,13 +561,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         }
         if (self.messages.count > 0) {
             STKMessage *m  = [self.messages objectAtIndex:indexPath.row];
-            NSAttributedString *t = [self renderedTextForMessage:m];
-            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-            [style setAlignment:NSTextAlignmentLeft];
-            
-            CGRect r = [t boundingRectWithSize:CGSizeMake(254, 10000)
-                                                                  options:NSStringDrawingUsesLineFragmentOrigin
-                                                                  context:nil];
+            CGRect r = [m boundingBoxForMessageWithWidth:254.f];
             if (m.metaData.image.urlString) {
                 return r.size.height + 80 + 163;
             } else {
@@ -682,7 +659,9 @@ NSString * const HAMessageUserURLScheme = @"user";
     STKMessage *m = [self.messages objectAtIndex:indexPath.row];
     if ([m.creator.uniqueID isEqualToString:self.user.uniqueID]){
         return @[deleteAction, moreAction];
-    } else {
+    } else if (!self.messages) {
+        return @[deleteAction, moreAction];
+    }else {
         return @[deleteAction];
     }
 }
@@ -694,7 +673,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         [self dismissKeyboard:nil];
         [self.tableView reloadRowsAtIndexPaths:@[self.editingIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         self.editing = NO;
-        self.editingIndexPath = nil;
+//        self.editingIndexPath = nil;
     }
     
 }
@@ -729,18 +708,33 @@ NSString * const HAMessageUserURLScheme = @"user";
     }
 }
 
+- (void)previewImageTapped:(NSURL *)url
+{
+    STKWebViewController *wvc = [[STKWebViewController alloc] init];
+    [wvc setUrl:url];
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
+    [self presentViewController:nvc animated:YES completion:nil];
+}
+
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)url inRange:(NSRange)characterRange
 {
     if([[url scheme] isEqualToString:@"http"] || [[url scheme] isEqualToString:@"https"]) {
-        STKWebViewController *wvc = [[STKWebViewController alloc] init];
-        [wvc setUrl:url];
-        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
-        [self presentViewController:nvc animated:YES completion:nil];
+        [self previewImageTapped:url];
 //        return YES;
     } else if([[url scheme] isEqualToString:HAMessageHashTagURLScheme]) {
-        STKHashtagPostsViewController *pvc = [[STKHashtagPostsViewController alloc] initWithHashTag:[url host]];
-        [pvc setLinkedToPost:YES];
-        [[self navigationController] pushViewController:pvc animated:YES];
+        NSString *groupName = url.host;
+        NSSet *matches = [self.organization.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", groupName]];
+        if ((matches && matches.count > 0 )|| [groupName containsString:@"all"]) {
+            if (matches.count > 0) {
+                self.group = [[matches allObjects] objectAtIndex:0];
+            } else {
+                self.group = @"all";
+            }
+            self.messages = nil;
+            [self configureViews];
+            [self finalizeViewConfiguration];
+        }
+//        [[self navigationController] pushViewController:pvc animated:YES];
 //        return YES;
     } else if([[url scheme] isEqualToString:HAMessageUserURLScheme]) {
         STKProfileViewController *vc = [[STKProfileViewController alloc] init];
@@ -801,8 +795,10 @@ NSString * const HAMessageUserURLScheme = @"user";
         if (self.messages) {
             STKMessage *message = [self.messages objectAtIndex:self.editingIndexPath.row];
             message.text = [text string];
+//            [self.tableView reloadRowsAtIndexPaths:@[self.editingIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             [STKUserStore.store editMessage:message completion:^(STKMessage *message, NSError *err) {
                 [self.tableView setEditing:NO];
+                
             }];
         }
     } else {

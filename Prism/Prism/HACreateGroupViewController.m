@@ -126,9 +126,11 @@
 
 - (void)done:(id)sender
 {
+    [self.navigationItem.rightBarButtonItem setEnabled:NO];
     if (self.group) {
         [[STKUserStore store] editGroup:self.group name:self.groupName description:self.groupDescription leader:self.selectedLeader completion:^(id data, NSError *error) {
             if (error) {
+                [self.navigationItem.rightBarButtonItem setEnabled:YES];
                 UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"There was a problem editing your group. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [av show];
             } else {
@@ -138,22 +140,22 @@
             }
         }];
     } else {
-        NSSet *matches = [self.organization.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"name LIKE[c] %@ && status == %@", self.groupName, @"active"]];
-        if (matches.count == 0) {
             [[STKUserStore store] createGroup:self.groupName forOrganization:self.organization withDescription:self.groupDescription leader:self.selectedLeader member:self.selectedMembers completion:^(id data, NSError *error) {
                 if (error) {
-                    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"There was a problem creating your group. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [av show];
+                    [self.navigationItem.rightBarButtonItem setEnabled:YES];
+                    if (error.code == 2) {
+                        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"That group name already exists." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [av show];
+                    }else {
+                        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"There was a problem creating your group. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [av show];
+                    }
                 } else {
                     [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:nil completion:^(STKUser *u, NSError *err) {
                         [self.navigationController popViewControllerAnimated:YES];
                     }];
                 }
             }];
-        } else {
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"That group name already exists." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [av show];
-        }
     }
 }
 
@@ -179,6 +181,13 @@
         if ([c isKindOfClass:[HATextFieldCell class]]){
             [[(HATextFieldCell *)c textField ]setText:[self.settingsVals objectAtIndex:indexPath.row]];
             [(HATextFieldCell *)c setDelegate:self];
+            if (indexPath.row == 0) {
+                [(HATextFieldCell *)c setKeyboardType:UIKeyboardTypeAlphabet];
+                [(HATextFieldCell *)c setForceLowercase:YES];
+            } else {
+                [(HATextFieldCell *)c setKeyboardType:UIKeyboardTypeAlphabet];
+                [(HATextFieldCell *)c setForceLowercase:NO];
+            }
         }
         
     } else {
@@ -256,6 +265,19 @@
 {
     if (member) {
         self.selectedLeader = member.member.uniqueID;
+        
+        NSInteger index = [self.members indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            return [[[obj member]uniqueID] isEqualToString:member.member.uniqueID];
+        }];
+        STKOrgStatus *o = [self.members objectAtIndex:index];
+        NSString *uniqueID = o.member.uniqueID;
+        if ([self.selectedMembers indexOfObjectPassingTest:^BOOL(NSString* obj, NSUInteger idx, BOOL *stop) {
+            return [obj isEqualToString:uniqueID];
+        }] == NSNotFound){
+            [self.selectedMembers addObject:uniqueID];
+        }
+        [self.searchTableView reloadData];
+        
     } else {
         self.selectedLeader = nil;
     }
@@ -274,6 +296,17 @@
         [self.doneButton setEnabled:YES];
     }
 //    [self.searchTableView reloadData];
+}
+
+- (BOOL)shouldUpdateCell:(UITableViewCell *)cell withText:(NSString *)text
+{
+    NSIndexPath *ip = [self.tableView indexPathForCell:cell];
+    if (ip.row == 0) {
+        if ([text isEqualToString:@" "]) {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 #pragma mark Search Members Delegate;

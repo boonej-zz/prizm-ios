@@ -415,6 +415,7 @@ static BOOL HAActivityIsAnimating = NO;
     if (_menuConstraint0) [self.view removeConstraint:_menuConstraint0];
     if (_menuConstraint1) [self.view removeConstraints:_menuConstraint1];
     STKUser *cu = [[STKUserStore store] currentUser];
+    
     NSSet *matched = [cu.organizations filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status = %@", @"active"]];
     self.isGroupMember = matched.count > 0 || [cu.type isEqualToString:@"institution_verified"];
     

@@ -52,6 +52,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
+    NSLog(@"%@", deviceToken);
     [[STKUserStore store] updateDeviceTokenForCurrentUser:deviceToken];
 }
 

@@ -1818,6 +1818,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setContext:[self context]];
         [c setShouldReturnArray:NO];
         [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            if (obj) {
+                [self.context save:nil];
+            }
             block(obj, err);
         }];
         

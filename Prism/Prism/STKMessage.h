@@ -22,6 +22,8 @@
 @property (nonatomic, retain) STKMessageMetaData *metaData;
 @property (nonatomic, retain) NSSet *likes;
 @property (nonatomic, retain) NSString * uniqueID;
+
+
 @end
 
 @interface STKMessage (CoreDataGeneratedAccessors)
@@ -30,5 +32,7 @@
 - (void)removeLikesObject:(STKUser *)value;
 - (void)addLikes:(NSSet *)values;
 - (void)removeLikes:(NSSet *)values;
+- (NSAttributedString *)attributedMessageText;
+- (CGRect)boundingBoxForMessageWithWidth:(CGFloat)width;
 
 @end

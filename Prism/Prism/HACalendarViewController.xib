@@ -52,7 +52,7 @@
                                         <constraint firstAttribute="width" constant="290" id="iDN-Q3-UhQ"/>
                                     </constraints>
                                 </view>
-                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="You'll find your organization's upcoming events listed here." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DuH-jl-xSH">
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="You'll find your organization's upcoming events listed here." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DuH-jl-xSH">
                                     <rect key="frame" x="8" y="37" width="274" height="144"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>

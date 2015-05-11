@@ -15,6 +15,8 @@
 #import "STKSearchHashTagsCell.h"
 #import "STKFetchDescription.h"
 #import "STKOrgStatus.h"
+#import "STKOrganization.h"
+#import "STKGroup.h"
 
 typedef enum {
     STKMarkupTypeHashtag,
@@ -238,10 +240,24 @@ typedef enum {
     if ([self markupRange].location != NSNotFound) {
         NSString *textBasis = [[textView text] substringWithRange:[self markupRange]];
         if([self markupType] == STKMarkupTypeHashtag) {
-            [[STKContentStore store] fetchRecommendedHashtags:textBasis completion:^(NSArray *hashtags) {
-                [self setHashTags:hashtags];
+            if (self.organization) {
+                NSMutableArray *tags = [NSMutableArray array];
+                [tags addObject:@"all"];
+                [self.organization.groups enumerateObjectsUsingBlock:^(STKGroup *obj, BOOL *stop) {
+                    if (![obj.status isEqualToString:@"inactive"]) {
+                        [tags addObject:obj.name.lowercaseString];
+                    }
+                }];
+                NSArray *matches = [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] %@", textBasis]];
+                [self setHashTags:matches];
                 [self updateView];
-            }];
+                
+            } else {
+                [[STKContentStore store] fetchRecommendedHashtags:textBasis completion:^(NSArray *hashtags) {
+                    [self setHashTags:hashtags];
+                    [self updateView];
+                }];
+            }
         } else {
             if(![self preventsUserTagging]) {
                 if([textBasis length] > 1 ){

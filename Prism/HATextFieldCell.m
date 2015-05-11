@@ -61,6 +61,9 @@
     [self.textField setReturnKeyType:UIReturnKeyDone];
     [self setBackgroundColor:[UIColor clearColor]];
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    if (self.keyboardType) {
+        [self.textField setKeyboardType:self.keyboardType];
+    }
     [super layoutSubviews];
 }
 
@@ -81,13 +84,24 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    BOOL shouldUpdate = YES;
     if (self.delegate) {
-        if ([self.delegate respondsToSelector:@selector(didUpdateCell:withText:)]) {
-             NSString *returnString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-            [self.delegate didUpdateCell:self withText:returnString];
+        if ([self.delegate respondsToSelector:@selector(shouldUpdateCell:withText:)]) {
+            shouldUpdate = [self.delegate shouldUpdateCell:self withText:string];
+        }
+        if (shouldUpdate) {
+            if (self.forceLowercase) {
+                string = [string lowercaseString];
+            }
+            if ([self.delegate respondsToSelector:@selector(didUpdateCell:withText:)]) {
+                 NSString *returnString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+                [self.textField setText:returnString];
+                [self.delegate didUpdateCell:self withText:returnString];
+                return NO;
+            }
         }
     }
-    return YES;
+    return shouldUpdate;
 }
 
 @end

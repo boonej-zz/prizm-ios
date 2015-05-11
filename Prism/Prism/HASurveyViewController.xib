@@ -48,7 +48,7 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xoU-h7-1Cg" userLabel="description">
                                     <rect key="frame" x="0.0" y="37" width="290" height="144"/>
                                     <subviews>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="You'll be able to give feedback to your group leaders here." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="agA-Wl-uZf">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="You'll be able to give feedback to your organization's leaders here." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="agA-Wl-uZf">
                                             <rect key="frame" x="26" y="0.0" width="239" height="144"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="textColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
