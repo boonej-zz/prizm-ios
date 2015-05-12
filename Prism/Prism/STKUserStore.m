@@ -805,7 +805,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                 [Heap identify:[user heapProperties]];
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"UserDetailsUpdated" object:nil];
-            
+            if ([user.uniqueID isEqualToString:[self.currentUser uniqueID]]) {
+                [user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+                    if (obj.organization) {
+                        [self fetchUserOrgs:^(NSArray *organizations, NSError *err) {
+                            
+                        }];
+                    }
+                }];
+            }
             block(user, err);
         }];
     }];
