@@ -739,7 +739,7 @@ NSString * const HAMessageUserURLScheme = @"user";
             if (matches.count > 0) {
                 g = [[matches allObjects] objectAtIndex:0];
                 [g.members enumerateObjectsUsingBlock:^(STKOrgStatus *u, BOOL *stop) {
-                    if ([u.member.uniqueID isEqualToString:self.user.uniqueID]) {
+                    if ([u.member.uniqueID isEqualToString:self.user.uniqueID] || [self.user.subtype isEqualToString:@"institution_verified"]) {
                         resetAll = YES;
                         *stop = YES;
                     }
