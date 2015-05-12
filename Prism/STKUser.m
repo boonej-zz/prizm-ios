@@ -53,13 +53,7 @@ followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdP
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
 tumblrTokenSecret, tumblrLastMinID, programCode, theme;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype, insightCount, organizations, ownedOrganization, messages, likedMessages;
-@synthesize profilePhoto, coverPhoto, token, secret, password;
-
-
-- (NSString *)name
-{
-    return [NSString stringWithFormat:@"%@ %@", [self firstName], [self lastName]];
-}
+@synthesize profilePhoto, coverPhoto, token, secret, password, name;
 
 + (NSDictionary *)remoteToLocalKeyMap
 {
@@ -94,6 +88,7 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
              @"following_count" : @"followingCount",
              @"posts_count" : @"postCount",
              @"trust_count" : @"trustCount",
+             @"name": @"name",
              
              
              @"tumblr_token_secret" : @"tumblrTokenSecret",

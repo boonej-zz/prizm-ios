@@ -119,8 +119,8 @@ extern BOOL const STKUserStatusInActive;
 
 @property (nonatomic, strong) NSString *accountStoreID;
 @property (nonatomic, assign) BOOL active;
+@property (nonatomic, retain) NSString *name;
 
-- (NSString *)name;
 - (STKTrust *)trustForUser:(STKUser *)u;
 - (BOOL)isFollowedByUser:(STKUser *)u;
 - (BOOL)isFollowingUser:(STKUser *)u;

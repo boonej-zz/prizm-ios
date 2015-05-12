@@ -34,6 +34,7 @@ NSString * const STKActivityItemLeader = @"leader";
 @dynamic hasBeenViewed;
 @dynamic post, comment;
 @dynamic creator, notifiedUser, insightTarget, insight;
+@dynamic message;
 
 + (NSDictionary*)remoteToLocalKeyMap
 {
@@ -47,7 +48,8 @@ NSString * const STKActivityItemLeader = @"leader";
         @"has_been_viewed" : @"hasBeenViewed",
         @"insight_target_id" : [STKBind bindMapForKey:@"insightTarget" matchMap:@{@"uniqueID": @"_id"}],
         @"insight_id" : [STKBind bindMapForKey:@"insight" matchMap:@{@"uniqueID":@"_id"}],
-        @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp]
+        @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp],
+        @"message_id" : [STKBind bindMapForKey:@"message" matchMap:@{@"uniqueID":@"_id"}]
         };
 }
 
@@ -73,6 +75,8 @@ NSString * const STKActivityItemLeader = @"leader";
             [str appendString:@"comment."];
         } else if([self post]) {
             [str appendString:@"post."];
+        } else if([self message]) {
+            [str appendString:@"message."];
         }
     } else if([[self action] isEqualToString:STKActivityItemTypeComment]) {
         [str appendString:@"commented on your post."];

@@ -216,13 +216,13 @@
 //    self.insightsButton = [self insightsButtonWithGlow:NO];
 //    [self.navigationItem setRightBarButtonItem:self.insightsButton];
     
-    [[STKContentStore store] fetchInsightsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *insights, NSError *err) {
-        NSArray *unread = [insights filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"liked == NO && disliked == NO"]];
+//    [[STKContentStore store] fetchInsightsForUser:[[STKUserStore store] currentUser] fetchDescription:nil completion:^(NSArray *insights, NSError *err) {
+//        NSArray *unread = [insights filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"liked == NO && disliked == NO"]];
 //        BOOL glow = [unread count] > 0;
 
 //        self.insightsButton = [self insightsButtonWithGlow:glow];
 //        [self.navigationItem setRightBarButtonItem:self.insightsButton];
-    }];
+//    }];
     
     [[self lifetimeActivityIndicator] startAnimating];
     [[STKUserStore store] fetchLifetimeGraphDataWithCompletion:^(NSDictionary *vals, NSError *err) {

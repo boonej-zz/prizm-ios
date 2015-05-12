@@ -93,6 +93,8 @@
     }
 }
 
+
+
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -127,7 +129,9 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
-    [[STKErrorStore alertViewForError:error delegate:nil] show];
+    if (error.code != -999) {
+        [[STKErrorStore alertViewForError:error delegate:nil] show];
+    }
 }
 
 @end

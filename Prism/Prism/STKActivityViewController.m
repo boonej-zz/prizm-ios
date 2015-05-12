@@ -305,6 +305,10 @@ typedef enum {
             return;
         }
         
+        if([i message]) {
+            UIViewController *vc = [[self.menuController viewControllers] objectAtIndex:6];
+            [self.menuController setSelectedViewController:vc];
+        }
         
     }
     
