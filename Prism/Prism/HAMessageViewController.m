@@ -738,12 +738,16 @@ NSString * const HAMessageUserURLScheme = @"user";
         if ((matches && matches.count > 0 )|| [groupName containsString:@"all"]) {
             if (matches.count > 0) {
                 g = [[matches allObjects] objectAtIndex:0];
-                [g.members enumerateObjectsUsingBlock:^(STKOrgStatus *u, BOOL *stop) {
-                    if ([u.member.uniqueID isEqualToString:self.user.uniqueID] || [self.user.subtype isEqualToString:@"institution_verified"]) {
-                        resetAll = YES;
-                        *stop = YES;
-                    }
-                }];
+                if ([self.user.type isEqualToString:@"institution_verified"]) {
+                    resetAll = YES;
+                } else {
+                    [g.members enumerateObjectsUsingBlock:^(STKOrgStatus *u, BOOL *stop) {
+                        if ([u.member.uniqueID isEqualToString:self.user.uniqueID]) {
+                            resetAll = YES;
+                            *stop = YES;
+                        }
+                    }];
+                }
                 if (resetAll){
                     self.group = g;
                 }
