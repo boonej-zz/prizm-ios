@@ -2060,6 +2060,33 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)postMessageImage:(NSString*)imageURL toGroup:(STKGroup *)group organization:(STKOrganization *)organization completion:(void (^)(STKMessage *message, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        NSString *groupName = group?group.uniqueID:@"all";
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups", groupName, @"messages"]];
+        
+        [c addQueryValue:[self currentUser].uniqueID forKey:@"creator"];
+        [c addQueryValue:organization.uniqueID forKey:@"organization"];
+        
+        [c addQueryValue:groupName forKey:@"group"];
+        
+        [c addQueryValue:imageURL forKey:@"image_url"];
+        [c setModelGraph:@[@"STKMessage"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        //            [c setShouldReturnArray:YES];
+        [c setShouldReturnArray:NO];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
 - (void)fetchOrganizationByCode:(NSString *)code completion:(void (^)(STKOrganization *organization, NSError *err))block
 {
     if (code && code.length > 2) {

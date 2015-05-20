@@ -22,6 +22,7 @@
 @property (nonatomic, retain) STKMessageMetaData *metaData;
 @property (nonatomic, retain) NSSet *likes;
 @property (nonatomic, retain) NSString * uniqueID;
+@property (nonatomic, retain) NSString * imageURL;
 
 
 @end

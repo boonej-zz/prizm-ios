@@ -377,7 +377,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
             S3PutObjectResponse *response = [[self amazonClient] putObject:req];
             if(![response error] && ![response exception]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSString *fullPath = [[STKImageStoreBucketHostURLString stringByAppendingPathComponent:STKImageStoreBucketName] stringByAppendingPathComponent:fileName];
+                    NSString *fullPath = [NSString stringWithFormat:@"%@/%@/%@", STKImageStoreBucketHostURLString,STKImageStoreBucketName, fileName];
                     NSString *cachePath = [self cachePathForURLString:fullPath];
                     [imageData writeToFile:cachePath atomically:YES];
                     

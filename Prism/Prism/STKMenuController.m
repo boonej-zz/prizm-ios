@@ -38,6 +38,7 @@
 #import "STKOrganization.h"
 #import "STKUser.h"
 #import "STKOrgStatus.h"
+#import "STKWebViewController.h"
 
 @import QuartzCore;
 
@@ -1033,6 +1034,29 @@ static BOOL HAActivityIsAnimating = NO;
 - (void)animationEnded:(BOOL) transitionCompleted
 {
     
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    if ([self.navigationController.visibleViewController isKindOfClass:[STKWebViewController class]]) {
+        return UIInterfaceOrientationMaskPortrait|UIInterfaceOrientationMaskLandscapeRight|UIInterfaceOrientationMaskLandscapeLeft;
+    }
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+
+- (BOOL)shouldAutorotate
+{
+    if ([self.navigationController.visibleViewController isKindOfClass:[STKWebViewController class]]) {
+        return YES;
+    }
+    return NO;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+
+        return UIInterfaceOrientationPortrait;
 }
 
 @end

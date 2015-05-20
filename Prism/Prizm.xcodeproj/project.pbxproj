@@ -11,6 +11,8 @@
 		2C01A3071A09727400D58D9B /* HATableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3061A09727400D58D9B /* HATableView.m */; };
 		2C01A30B1A098C7400D58D9B /* STKCommentTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */; };
 		2C01A30C1A098C7400D58D9B /* STKCommentTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */; };
+		2C02B7D81B0BB83300E5E82D /* HAMessageImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02B7D71B0BB83300E5E82D /* HAMessageImageCell.m */; };
+		2C02B7DC1B0BDF3500E5E82D /* UIImagePickerController+HAMods.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02B7DB1B0BDF3500E5E82D /* UIImagePickerController+HAMods.m */; };
 		2C0512731AFD10BD009B6C21 /* STKMessageMetaDataImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0512721AFD10BD009B6C21 /* STKMessageMetaDataImage.m */; };
 		2C0512761AFD10BE009B6C21 /* STKMessageMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0512751AFD10BE009B6C21 /* STKMessageMetaData.m */; };
 		2C0BB38A1AA8CC9C0061A76D /* HAMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0BB3881AA8CC9C0061A76D /* HAMessageViewController.m */; };
@@ -24,7 +26,6 @@
 		2C0D735719CB346B0078A9B9 /* HAInterestsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C0D735519CB346B0078A9B9 /* HAInterestsViewController.xib */; };
 		2C0FA2431A1FB7D300231D3C /* UIColor+HACore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0FA2401A1FB7D300231D3C /* UIColor+HACore.m */; };
 		2C0FA2441A1FB7D300231D3C /* UIImage+HACore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0FA2421A1FB7D300231D3C /* UIImage+HACore.m */; };
-		2C123B851AFF003000303243 /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2C189DD11A2F74190028AD1C /* HAWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C189DCF1A2F74190028AD1C /* HAWelcomeViewController.m */; };
 		2C189DD21A2F74190028AD1C /* HAWelcomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C189DD01A2F74190028AD1C /* HAWelcomeViewController.xib */; };
 		2C1D45A819DF7C49008D84C5 /* STKInsightHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45A719DF7C49008D84C5 /* STKInsightHeaderView.m */; };
@@ -347,7 +348,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				2C123B851AFF003000303243 /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -363,6 +363,11 @@
 		2C01A3081A098C7400D58D9B /* STKCommentTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKCommentTitleCell.h; sourceTree = "<group>"; };
 		2C01A3091A098C7400D58D9B /* STKCommentTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKCommentTitleCell.m; sourceTree = "<group>"; };
 		2C01A30A1A098C7400D58D9B /* STKCommentTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKCommentTitleCell.xib; sourceTree = "<group>"; };
+		2C02B7D61B0BB83300E5E82D /* HAMessageImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessageImageCell.h; sourceTree = "<group>"; };
+		2C02B7D71B0BB83300E5E82D /* HAMessageImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessageImageCell.m; sourceTree = "<group>"; };
+		2C02B7D91B0BB95000E5E82D /* User 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 6.xcdatamodel"; sourceTree = "<group>"; };
+		2C02B7DA1B0BDF3500E5E82D /* UIImagePickerController+HAMods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImagePickerController+HAMods.h"; sourceTree = "<group>"; };
+		2C02B7DB1B0BDF3500E5E82D /* UIImagePickerController+HAMods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImagePickerController+HAMods.m"; sourceTree = "<group>"; };
 		2C0512711AFD10BD009B6C21 /* STKMessageMetaDataImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMessageMetaDataImage.h; sourceTree = "<group>"; };
 		2C0512721AFD10BD009B6C21 /* STKMessageMetaDataImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMessageMetaDataImage.m; sourceTree = "<group>"; };
 		2C0512741AFD10BE009B6C21 /* STKMessageMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMessageMetaData.h; sourceTree = "<group>"; };
@@ -2810,6 +2815,8 @@
 				BE02EAAB182A80A200A5505A /* InfoPlist.strings */,
 				BE02EAAE182A80A200A5505A /* main.m */,
 				BE02EAB0182A80A200A5505A /* Prism-Prefix.pch */,
+				2C02B7DA1B0BDF3500E5E82D /* UIImagePickerController+HAMods.h */,
+				2C02B7DB1B0BDF3500E5E82D /* UIImagePickerController+HAMods.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -3185,6 +3192,8 @@
 				2C2E9C711AF58DC300F0F7A8 /* HATextFieldCell.h */,
 				2C2E9C721AF58DC300F0F7A8 /* HATextFieldCell.m */,
 				2C2E9C741AF5A1FA00F0F7A8 /* HACellProtocol.h */,
+				2C02B7D61B0BB83300E5E82D /* HAMessageImageCell.h */,
+				2C02B7D71B0BB83300E5E82D /* HAMessageImageCell.m */,
 			);
 			name = Cells;
 			path = ..;
@@ -5256,7 +5265,7 @@
 						DevelopmentTeam = MU64MV9X8B;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -5469,6 +5478,7 @@
 				2C0512731AFD10BD009B6C21 /* STKMessageMetaDataImage.m in Sources */,
 				BEE8F04618C0F5E6001A28CD /* STKPostComment.m in Sources */,
 				BE8F35E91833D48D00C4ED03 /* STKPostCell.m in Sources */,
+				2C02B7DC1B0BDF3500E5E82D /* UIImagePickerController+HAMods.m in Sources */,
 				BE24B51D183A90C8009BC02A /* STKTrustView.m in Sources */,
 				BE4C64231896F65D00467E2D /* STKFoursquareConnection.m in Sources */,
 				BEC726ED18AC111D009350E8 /* STKLabelCell.m in Sources */,
@@ -5519,6 +5529,7 @@
 				BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */,
 				BE5F68FA18F0A522006D2CD1 /* STKResolutionQuery.m in Sources */,
 				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
+				2C02B7D81B0BB83300E5E82D /* HAMessageImageCell.m in Sources */,
 				BE63C53918FD89890087585E /* STKActivityIndicatorView.m in Sources */,
 				2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
@@ -6772,13 +6783,14 @@
 		BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C02B7D91B0BB95000E5E82D /* User 6.xcdatamodel */,
 				2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */,
 				2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */,
 				2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */,
 				2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */,
 				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
 			);
-			currentVersion = 2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */;
+			currentVersion = 2C02B7D91B0BB95000E5E82D /* User 6.xcdatamodel */;
 			path = User.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

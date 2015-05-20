@@ -88,7 +88,7 @@
                               STKPostTypeExperience : @"Experience",
                               STKPostTypeAchievement : @"Achievement",
                               STKPostTypeInspiration : @"Inspiration",
-                              STKPostTypePersonal : @"Personal"}];
+                              STKPostTypePersonal : @"Private"}];
         
     }
     return self;

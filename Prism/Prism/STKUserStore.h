@@ -140,4 +140,5 @@ typedef enum {
 - (void)muteGroup:(STKGroup *)group muted:(BOOL)muted  completion:(void (^)(id data, NSError *error))block;
 - (void)muteOrganization:(STKOrganization *)organization muted:(BOOL)muted completion:(void (^)(id, NSError *))block;
 - (void)fetchUnreadCountForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(id obj, NSError *err))block;
+- (void)postMessageImage:(NSString*)imageURL toGroup:(STKGroup *)group organization:(STKOrganization *)organization completion:(void (^)(STKMessage *message, NSError *err))block;
 @end

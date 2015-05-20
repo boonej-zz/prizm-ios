@@ -77,6 +77,15 @@
     
 }
 
+- (void)addTapped:(id)sender
+{
+    [self showActionButton:NO];
+    if (self.delegate) {
+        [self.delegate addButtonTapped:self];
+    }
+    
+}
+
 - (void)layoutSubviews
 {
     [self.tintView setFrame:self.bounds];
@@ -91,6 +100,10 @@
     [self.placeholder setFont:STKFont(15)];
     [self.textView setBackgroundColor:[UIColor clearColor]];
     [self.textView setKeyboardType:UIKeyboardTypeTwitter];
+    [self.actionButton removeTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.actionButton addTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.actionButton setImage:[UIImage imageNamed:@"btn_addcontent"] forState:UIControlStateNormal];
+    [self.actionButton setImage:[UIImage imageNamed:@"btn_addcontent_active"] forState:UIControlStateSelected];
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
@@ -122,12 +135,16 @@
 - (void)showActionButton:(BOOL)textEntry
 {
     if (textEntry) {
+        [self.actionButton removeTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self.actionButton addTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
         UIImage *img = [UIImage imageNamed:@"btn_create_message"];
         [self.actionButton setImage:img forState:UIControlStateNormal];
+        [self.actionButton setImage:nil forState:UIControlStateSelected];
     } else {
         [self.actionButton removeTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [self.actionButton setImage:nil forState:UIControlStateNormal];
+        [self.actionButton addTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionButton setImage:[UIImage imageNamed:@"btn_addcontent"] forState:UIControlStateNormal];
+        [self.actionButton setImage:[UIImage imageNamed:@"btn_addcontent_active"] forState:UIControlStateSelected];
         self.textViewHasText = NO;
     }
 }

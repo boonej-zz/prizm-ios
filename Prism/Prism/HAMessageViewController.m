@@ -36,13 +36,14 @@
 #import "HAGroupInfoViewController.h"
 #import "STKMessageMetaData.h"
 #import "STKMessageMetaDataImage.h"
-
+#import "STKProcessingView.h"
+#import "HAMessageImageCell.h"
 
 NSString * const HAMessageHashTagURLScheme = @"hashtag";
 NSString * const HAMessageUserURLScheme = @"user";
 
 
-@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate>
+@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView * tableView;
 @property (nonatomic, weak) IBOutlet HAPostMessageView *postView;
@@ -67,6 +68,7 @@ NSString * const HAMessageUserURLScheme = @"user";
 @property (nonatomic, getter=isLeader) BOOL leader;
 @property (nonatomic, strong) STKMarkupController *markupController;
 @property (nonatomic, assign) CGRect originalFrameForMarkupController;
+@property (nonatomic, strong) UIImage *capturedImage;
 
 - (IBAction)dismissOverlayView:(id)sender;
 
@@ -179,6 +181,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.tableView registerNib:[UINib nibWithNibName:[HAAvatarImageCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAAvatarImageCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[HAGroupCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAGroupCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[HAMessageCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAMessageCell reuseIdentifier]];
+    [self.tableView registerClass:[HAMessageImageCell class] forCellReuseIdentifier:[HAMessageImageCell reuseIdentifier]];
     [self.tableView setContentInset:UIEdgeInsetsMake(65.f, 0, 88.f, 0)];
     [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self addBlurViewWithHeight:64.f];
@@ -530,25 +533,44 @@ NSString * const HAMessageUserURLScheme = @"user";
         cell = c;
     } else if (self.messages){
         STKMessage *message = [self.messages objectAtIndex:indexPath.row];
-        
-        HAMessageCell *c = [tableView dequeueReusableCellWithIdentifier:[HAMessageCell reuseIdentifier]];
-        [c setDelegate:self];
-        [c setMessage:message];
-        [c.postText setDelegate:self];
-        __block BOOL liked = NO;
-        [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
-            if ([obj isKindOfClass:[NSString class]]) {
-                if ([obj isEqualToString:self.user.uniqueID]) {
-                    liked = YES;
+        if (message.imageURL){
+            HAMessageImageCell *c = [tableView dequeueReusableCellWithIdentifier:[HAMessageImageCell reuseIdentifier]];
+            [c setDelegate:self];
+            [c setMessage:message];
+            __block BOOL liked = NO;
+            [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                if ([obj isKindOfClass:[NSString class]]) {
+                    if ([obj isEqualToString:self.user.uniqueID]) {
+                        liked = YES;
+                    }
+                } else if ([obj isKindOfClass:[STKUser class]]) {
+                    if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
+                        liked = YES;
+                    }
                 }
-            } else if ([obj isKindOfClass:[STKUser class]]) {
-                if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
-                    liked = YES;
+            }];
+            [c setLiked:liked];
+            cell = c;
+        } else {
+            HAMessageCell *c = [tableView dequeueReusableCellWithIdentifier:[HAMessageCell reuseIdentifier]];
+            [c setDelegate:self];
+            [c setMessage:message];
+            [c.postText setDelegate:self];
+            __block BOOL liked = NO;
+            [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                if ([obj isKindOfClass:[NSString class]]) {
+                    if ([obj isEqualToString:self.user.uniqueID]) {
+                        liked = YES;
+                    }
+                } else if ([obj isKindOfClass:[STKUser class]]) {
+                    if ([[obj uniqueID] isEqualToString:self.user.uniqueID]) {
+                        liked = YES;
+                    }
                 }
-            }
-        }];
-        [c setLiked:liked];
-        cell = c;
+            }];
+            [c setLiked:liked];
+            cell = c;
+        }
     }
     
     return cell;
@@ -563,11 +585,15 @@ NSString * const HAMessageUserURLScheme = @"user";
         }
         if (self.messages.count > 0) {
             STKMessage *m  = [self.messages objectAtIndex:indexPath.row];
-            CGRect r = [m boundingBoxForMessageWithWidth:254.f];
-            if (m.metaData.image.urlString) {
-                return r.size.height + 80 + 163;
-            } else {
-                return r.size.height + 80;
+            if (m.imageURL) {
+                return 80 + self.view.frame.size.width - 16;
+            } else  {
+                CGRect r = [m boundingBoxForMessageWithWidth:254.f];
+                if (m.metaData.image.urlString) {
+                    return r.size.height + 80 + 163;
+                } else {
+                    return r.size.height + 80;
+                }
             }
         } else {
             return 48.0f;
@@ -855,6 +881,50 @@ NSString * const HAMessageUserURLScheme = @"user";
 - (void)postTextChanged:(NSString *)text
 {
     [self.markupController textView:self.postView.textView updatedWithText:text];
+}
+
+- (void)addButtonTapped:(HAPostMessageView *)sender
+{
+    UIImagePickerController *ipc = [[UIImagePickerController alloc] init];
+    [ipc setDelegate:self];
+    [ipc setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    [[ipc navigationBar] setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    [[ipc navigationBar] setTranslucent:YES];
+    [self.navigationController presentViewController:ipc animated:YES completion:nil];
+    
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self setCapturedImage:img];
+    [STKProcessingView present];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"prefs:root=LOCATION_SERVICES"]];
+
+    [[STKImageStore store] uploadImage:self.capturedImage thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
+         if(err) {
+             [STKProcessingView dismiss];
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Uploading Image", @"image upload error title")
+                                                         message:NSLocalizedString(@"Oops! The image you selected failed to upload. Make sure you have an internet connection and try again.", @"image upload error message")
+                                                        delegate:self
+                                               cancelButtonTitle:NSLocalizedString(@"Never mind", @"cancel button title")
+                                               otherButtonTitles:NSLocalizedString(@"Try Again", @"try again button title"), nil];
+            [av show];
+         } else {
+             STKGroup *group = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
+             [[STKUserStore store] postMessageImage:URLString toGroup:group organization:self.organization completion:^(STKMessage *message, NSError *err) {
+                 [STKProcessingView dismiss];
+                 [self fetchNewer:YES];
+                 
+             }];
+         }
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)gr

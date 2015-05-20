@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14C1510" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="STKActivityItem" representedClassName="STKActivityItem" syncable="YES">
+        <attribute name="action" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="hasBeenViewed" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="comment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="activities" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="createdActivities" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="insight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="activities" inverseEntity="STKInsight" syncable="YES"/>
+        <relationship name="insightTarget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKInsightTarget" inverseName="activity" inverseEntity="STKInsightTarget" syncable="YES"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="activities" inverseEntity="STKMessage" syncable="YES"/>
+        <relationship name="notifiedUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedActivities" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="activities" inverseEntity="STKPost" syncable="YES"/>
+    </entity>
+    <entity name="STKGroup" representedClassName="STKGroup" syncable="YES">
+        <attribute name="groupDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="leader" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ledGroups" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKOrgStatus" inverseName="groups" inverseEntity="STKOrgStatus" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="group" inverseEntity="STKMessage" syncable="YES"/>
+        <relationship name="mutes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="mutedGroups" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="groups" inverseEntity="STKOrganization" syncable="YES"/>
+    </entity>
+    <entity name="STKHashTag" representedClassName="STKHashTag" syncable="YES">
+        <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="hashTags" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="insights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="hashTags" inverseEntity="STKInsight" syncable="YES"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="hashTags" inverseEntity="STKPost" syncable="YES"/>
+    </entity>
+    <entity name="STKInsight" representedClassName="STKInsight" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dislikesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="filePath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hashTagsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="likesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="linkTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tagsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="insight" inverseEntity="STKActivityItem" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="createdInsights" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="hashTags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKHashTag" inverseName="insights" inverseEntity="STKHashTag" syncable="YES"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="insightsTaggedIn" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="targets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsightTarget" inverseName="insight" inverseEntity="STKInsightTarget" syncable="YES"/>
+    </entity>
+    <entity name="STKInsightTarget" representedClassName="STKInsightTarget" syncable="YES">
+        <attribute name="disliked" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="filePath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="sentDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="insightTarget" inverseEntity="STKActivityItem" syncable="YES"/>
+        <relationship name="insight" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="targets" inverseEntity="STKInsight" syncable="YES"/>
+        <relationship name="target" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="targetedInsights" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKInterest" representedClassName="STKInterest" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="isSubinterest" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="topLevel" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="subinterests" inverseEntity="STKInterest" syncable="YES"/>
+        <relationship name="subinterests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="parent" inverseEntity="STKInterest" syncable="YES"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="interests" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKMessage" representedClassName="STKMessage" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="likesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="message" inverseEntity="STKActivityItem" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="messages" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="group" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="messages" inverseEntity="STKGroup" syncable="YES"/>
+        <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedMessages" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="metaData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessageMetaData" inverseName="message" inverseEntity="STKMessageMetaData" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="messages" inverseEntity="STKOrganization" syncable="YES"/>
+    </entity>
+    <entity name="STKMessageMetaData" representedClassName="STKMessageMetaData" syncable="YES">
+        <attribute name="linkDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="urlString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="videoString" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="image" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessageMetaDataImage" inverseName="metaData" inverseEntity="STKMessageMetaDataImage" syncable="YES"/>
+        <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="metaData" inverseEntity="STKMessage" syncable="YES"/>
+    </entity>
+    <entity name="STKMessageMetaDataImage" representedClassName="STKMessageMetaDataImage" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="messageID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="urlString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="width" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="metaData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKMessageMetaData" inverseName="image" inverseEntity="STKMessageMetaData" syncable="YES"/>
+    </entity>
+    <entity name="STKOrganization" representedClassName="STKOrganization" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="logoURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modifyDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="welcomeImageURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="welcomeMessage" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="groups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="organization" inverseEntity="STKGroup" syncable="YES"/>
+        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="organization" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="organization" inverseEntity="STKMessage" syncable="YES"/>
+        <relationship name="mutes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="mutedOrganizations" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="orgStatuses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKOrgStatus" inverseName="organization" inverseEntity="STKOrgStatus" syncable="YES"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedOrganization" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="theme" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKTheme" inverseName="organization" inverseEntity="STKTheme" syncable="YES"/>
+    </entity>
+    <entity name="STKOrgStatus" representedClassName="STKOrgStatus" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="memberID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="role" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="groups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="members" inverseEntity="STKGroup" syncable="YES"/>
+        <relationship name="member" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="organizations" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="orgStatuses" inverseEntity="STKOrganization" syncable="YES"/>
+    </entity>
+    <entity name="STKPost" representedClassName="STKPost" syncable="YES">
+        <attribute name="commentCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="coordinateLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="coordinateLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="creatorType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="datePosted" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="externalProvider" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageURLString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="likeCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="locationLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="locationLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="repost" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subtype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="visibility" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="accoladeReceiver" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="accoladesReceived" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="post" inverseEntity="STKActivityItem" syncable="YES"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="STKPostComment" inverseName="post" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="createdPosts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="derivativePosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="originalPost" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="fInverseFeed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="fFeedPosts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="fInverseProfile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="fProfilePosts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="hashTags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKHashTag" inverseName="posts" inverseEntity="STKHashTag" syncable="YES"/>
+        <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedPosts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="originalPost" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="derivativePosts" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="postsTaggedIn" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKPostComment" representedClassName="STKPostComment" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="hashTagsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="likeCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="tagsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="comment" inverseEntity="STKActivityItem" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="comments" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="hashTags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKHashTag" inverseName="comments" inverseEntity="STKHashTag" syncable="YES"/>
+        <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedComments" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="comments" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="commentsTaggedIn" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKTheme" representedClassName="STKTheme" syncable="YES">
+        <attribute name="backgroundURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dominantColor" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="modifyDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="textColor" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="theme" inverseEntity="STKOrganization" syncable="YES"/>
+        <relationship name="users" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="theme" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKTrust" representedClassName="STKTrust" syncable="YES">
+        <attribute name="creatorCommentsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorLikesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorPostsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="creatorScore" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="recepientCommentsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="recepientLikesCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="recepientPostsCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="recepientScore" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedTrusts" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="recepient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="receivedTrusts" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKUser" representedClassName="STKUser" syncable="YES">
+        <attribute name="accountStoreID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="active" optional="YES" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
+        <attribute name="birthday" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="blurb" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coverPhotoPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateDeleted" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateFounded" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="enrollment" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ethnicity" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalServiceID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalServiceType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="followerCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="followingCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="insightCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="instagramLastMinID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="instagramToken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mascotName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="profilePhotoPath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="programCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="religion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subtype" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="trustCount" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="tumblrLastMinID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tumblrToken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tumblrTokenSecret" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitterID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitterLastMinID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="zipCode" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="accoladesReceived" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="accoladeReceiver" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="creator" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="commentsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="tags" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="createdActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="creator" inverseEntity="STKActivityItem" syncable="YES"/>
+        <relationship name="createdInsights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="creator" inverseEntity="STKInsight" syncable="YES"/>
+        <relationship name="createdPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="creator" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="fFeedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="fInverseFeed" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="followers" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="following" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="following" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="followers" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="fProfilePosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="fInverseProfile" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="insightsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="tags" inverseEntity="STKInsight" syncable="YES"/>
+        <relationship name="interests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="users" inverseEntity="STKInterest" syncable="YES"/>
+        <relationship name="ledGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="leader" inverseEntity="STKGroup" syncable="YES"/>
+        <relationship name="likedComments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="likes" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="likedMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="likes" inverseEntity="STKMessage" syncable="YES"/>
+        <relationship name="likedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="likes" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="creator" inverseEntity="STKMessage" syncable="YES"/>
+        <relationship name="mutedGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="mutes" inverseEntity="STKGroup" syncable="YES"/>
+        <relationship name="mutedOrganizations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="mutes" inverseEntity="STKOrganization" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="members" inverseEntity="STKOrganization" syncable="YES"/>
+        <relationship name="organizations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKOrgStatus" inverseName="member" inverseEntity="STKOrgStatus" syncable="YES"/>
+        <relationship name="ownedActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="notifiedUser" inverseEntity="STKActivityItem" syncable="YES"/>
+        <relationship name="ownedOrganization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="owner" inverseEntity="STKOrganization" syncable="YES"/>
+        <relationship name="ownedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="creator" inverseEntity="STKTrust" syncable="YES"/>
+        <relationship name="postsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="tags" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="receivedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="recepient" inverseEntity="STKTrust" syncable="YES"/>
+        <relationship name="targetedInsights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsightTarget" inverseName="target" inverseEntity="STKInsightTarget" syncable="YES"/>
+        <relationship name="theme" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKTheme" inverseName="users" inverseEntity="STKTheme" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="210"/>
+        <element name="STKGroup" positionX="36" positionY="162" width="128" height="195"/>
+        <element name="STKHashTag" positionX="36" positionY="180" width="128" height="120"/>
+        <element name="STKInsight" positionX="18" positionY="153" width="128" height="285"/>
+        <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="165"/>
+        <element name="STKInterest" positionX="18" positionY="153" width="128" height="165"/>
+        <element name="STKMessage" positionX="27" positionY="153" width="128" height="210"/>
+        <element name="STKMessageMetaData" positionX="27" positionY="153" width="128" height="150"/>
+        <element name="STKMessageMetaDataImage" positionX="36" positionY="162" width="128" height="120"/>
+        <element name="STKOrganization" positionX="36" positionY="171" width="128" height="285"/>
+        <element name="STKOrgStatus" positionX="27" positionY="153" width="128" height="150"/>
+        <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
+        <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
+        <element name="STKTheme" positionX="45" positionY="180" width="128" height="165"/>
+        <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="1095"/>
+    </elements>
+</model>
