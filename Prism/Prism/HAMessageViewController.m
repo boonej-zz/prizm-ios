@@ -909,6 +909,7 @@ NSString * const HAMessageUserURLScheme = @"user";
 
 - (void)addButtonTapped:(HAPostMessageView *)sender
 {
+    [self dismissKeyboard:nil];
     UIImagePickerController *ipc = [[UIImagePickerController alloc] init];
     [ipc setDelegate:self];
     [ipc setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
@@ -938,7 +939,6 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self setCapturedImage:resized];
     [STKProcessingView present];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"prefs:root=LOCATION_SERVICES"]];
-
     [[STKImageStore store] uploadImage:self.capturedImage thumbnailCount:thumbCount intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
         [picker dismissViewControllerAnimated:YES completion:nil];
          if(err) {
