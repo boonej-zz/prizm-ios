@@ -48,6 +48,7 @@
     self.postImage = [[STKResolvingImageView alloc] init];
     [self.postImage setContentMode:UIViewContentModeCenter];
     [self.postImage setUserInteractionEnabled:YES];
+    [self.postImage setClipsToBounds:YES];
     self.likeButton = [[UIButton alloc] init];
     [self.likeButton addTarget:self action:@selector(likeButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     self.clockImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_clock"]];
