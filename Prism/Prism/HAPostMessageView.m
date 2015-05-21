@@ -100,14 +100,17 @@
     [self.placeholder setFont:STKFont(15)];
     [self.textView setBackgroundColor:[UIColor clearColor]];
     [self.textView setKeyboardType:UIKeyboardTypeTwitter];
-    [self.actionButton removeTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.actionButton addTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.actionButton setImage:[UIImage imageNamed:@"btn_addcontent"] forState:UIControlStateNormal];
-    [self.actionButton setImage:[UIImage imageNamed:@"btn_addcontent_active"] forState:UIControlStateSelected];
+    if (!self.textView.text.length > 0) {
+        [self.actionButton removeTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionButton addTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionButton setImage:[UIImage imageNamed:@"message_plus"] forState:UIControlStateNormal];
+    }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
+    [self.actionButton setImage:nil forState:UIControlStateNormal];
+    [self.actionButton removeTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.placeholder setHidden:YES];
     if (self.delegate) {
         [self.delegate beganEditing:self];
@@ -125,7 +128,8 @@
         }
     } else {
         self.textViewHasText = NO;
-        [self showActionButton:NO];
+        [self.actionButton setImage:nil forState:UIControlStateNormal];
+        [self.actionButton removeTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     [self.delegate postTextChanged:textView.text];
@@ -143,8 +147,7 @@
     } else {
         [self.actionButton removeTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self.actionButton addTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [self.actionButton setImage:[UIImage imageNamed:@"btn_addcontent"] forState:UIControlStateNormal];
-        [self.actionButton setImage:[UIImage imageNamed:@"btn_addcontent_active"] forState:UIControlStateSelected];
+        [self.actionButton setImage:[UIImage imageNamed:@"message_plus"] forState:UIControlStateNormal];
         self.textViewHasText = NO;
     }
 }

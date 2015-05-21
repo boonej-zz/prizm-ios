@@ -81,7 +81,7 @@
 
 - (NSUserDefaults *)savePostToUserDefaults:(NSString *)postText withImage:(UIImage *)postImage
 {
-    NSUserDefaults *sharedPost = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.higheraltitude.prizm.staging"];
+    NSUserDefaults *sharedPost = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.higheraltitude.prism"];
 
     [sharedPost setObject:postText forKey:@"postText"];
     [sharedPost setObject:UIImageJPEGRepresentation(postImage, 1.0) forKey:@"postImage"];

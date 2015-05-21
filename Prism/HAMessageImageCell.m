@@ -11,6 +11,12 @@
 #import "STKUser.h"
 #import "STKRelativeDateConverter.h"
 
+@interface HAMessageImageCell()
+
+@property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
+
+@end
+
 @implementation HAMessageImageCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -20,6 +26,13 @@
         [self setup];
     }
     return self;
+}
+
+- (void)prepareForReuse
+{
+    [self.postImage setImage:nil];
+    [self.postImage setContentMode:UIViewContentModeCenter];
+    [super prepareForReuse];
 }
 
 - (void)setup
@@ -33,7 +46,8 @@
     self.dateAgo = [[UILabel alloc] init];
     self.likesCount = [[UILabel alloc] init];
     self.postImage = [[STKResolvingImageView alloc] init];
-    [self.postImage setContentMode:UIViewContentModeScaleAspectFit];
+    [self.postImage setContentMode:UIViewContentModeCenter];
+    [self.postImage setUserInteractionEnabled:YES];
     self.likeButton = [[UIButton alloc] init];
     [self.likeButton addTarget:self action:@selector(likeButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     self.clockImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_clock"]];
@@ -42,6 +56,7 @@
         [view setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.containerView addSubview:view];
     }];
+    
     [self setConstraints];
 }
 
@@ -68,6 +83,13 @@
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.postImage attribute:NSLayoutAttributeCenterX            relatedBy:NSLayoutRelationEqual toItem:_containerView attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0]];
 }
 
+- (void)imageTapped:(id)sender
+{
+    if (self.delegate) {
+        [self.delegate messageImageTapped:self.message];
+    }
+}
+
 - (void)setMessage:(STKMessage *)message
 {
     _message = message;
@@ -81,6 +103,9 @@
         [self.likesCount setText:@""];
     }
     [[STKImageStore store] fetchImageForURLString:message.imageURL preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
+        if (img.size.width > 300 || img.size.height > 3000) {
+            [self.postImage setContentMode:UIViewContentModeScaleAspectFit];
+        }
         [self.postImage setImage:img];
     }];
 }
@@ -96,6 +121,10 @@
     [self.likesCount setFont:[UIFont systemFontOfSize:13.f]];
     [self.dateAgo setTextColor:[UIColor colorWithRed:192.f/255.f green:193.f/255.f blue:213.f/255.f alpha:1]];
     [self.postImage setBackgroundColor:[UIColor colorWithWhite:0.f alpha:0.2f]];
+    if (!self.tapRecognizer) {
+        self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTapped:)];
+        [self.postImage addGestureRecognizer:self.tapRecognizer];
+    }
 }
 
 - (void)setLiked:(BOOL)liked

@@ -263,6 +263,7 @@
     [super viewDidLoad];
     [self addBackgroundImage];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchNewPosts) name:@"refreshViews" object:nil];
     CGRect frame = [self.view frame];
     frame.size.height = 64.f;
     self.underlayView = [[UIView alloc] initWithFrame:frame];

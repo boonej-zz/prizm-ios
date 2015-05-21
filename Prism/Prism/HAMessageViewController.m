@@ -38,12 +38,13 @@
 #import "STKMessageMetaDataImage.h"
 #import "STKProcessingView.h"
 #import "HAMessageImageCell.h"
+#import "HASingleMessageImageController.h"
 
 NSString * const HAMessageHashTagURLScheme = @"hashtag";
 NSString * const HAMessageUserURLScheme = @"user";
 
 
-@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView * tableView;
 @property (nonatomic, weak) IBOutlet HAPostMessageView *postView;
@@ -69,6 +70,7 @@ NSString * const HAMessageUserURLScheme = @"user";
 @property (nonatomic, strong) STKMarkupController *markupController;
 @property (nonatomic, assign) CGRect originalFrameForMarkupController;
 @property (nonatomic, strong) UIImage *capturedImage;
+@property (nonatomic, getter=isUpdatingMessages) BOOL updatingMessages;
 
 - (IBAction)dismissOverlayView:(id)sender;
 
@@ -103,6 +105,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     if (self) {
         self.group = group;
         self.organization = organization;
+        self.updatingMessages = NO;
     }
     return self;
 }
@@ -342,74 +345,83 @@ NSString * const HAMessageUserURLScheme = @"user";
 
 - (void)fetchOlder
 {
-    STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
-    STKMessage *m = self.messages.count > 0?[self.messages objectAtIndex:0]:nil;
-    if (m) {
-        [[self luminatingBar] setLuminating:YES];
-        [[STKUserStore store] fetchOlderMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
-            if (messages && messages.count > 0) {
-                NSMutableArray *paths = [NSMutableArray array];
-                [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
-                    [paths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
-                }];
-                [self.messages insertObjects:messages atIndexes:[messages indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                    return [obj isKindOfClass:[STKMessage class]];
-                }]];
-                [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
-                
-            }
-            [[self luminatingBar] setLuminating:NO];
-        }];
+    if (![self isUpdatingMessages]){
+        self.updatingMessages = YES;
+        STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
+        STKMessage *m = self.messages.count > 0?[self.messages objectAtIndex:0]:nil;
+        if (m) {
+            [[self luminatingBar] setLuminating:YES];
+            [[STKUserStore store] fetchOlderMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
+                if (messages && messages.count > 0) {
+                    NSMutableArray *paths = [NSMutableArray array];
+                    [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
+                        [paths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+                    }];
+                    [self.messages insertObjects:messages atIndexes:[messages indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                        return [obj isKindOfClass:[STKMessage class]];
+                    }]];
+                    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+                    
+                }
+                self.updatingMessages = NO;
+                [[self luminatingBar] setLuminating:NO];
+            }];
+        }
     }
 }
 
 - (void)fetchNewer:(BOOL)scroll
 {
-    STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
-    STKMessage *m = self.messages.count > 0?[self.messages lastObject]:nil;
-    [[self luminatingBar] setLuminating:YES];
-    if (m) {
-        [[STKUserStore store] fetchLatestMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
-            if (messages && messages.count > 0) {
+    if (![self isUpdatingMessages]) {
+        self.updatingMessages = YES;
+        STKGroup *g = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
+        STKMessage *m = self.messages.count > 0?[self.messages lastObject]:nil;
+        [[self luminatingBar] setLuminating:YES];
+        if (m) {
+            [[STKUserStore store] fetchLatestMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
+                if (messages && messages.count > 0) {
+                    [self.messages addObjectsFromArray:messages];
+                    NSMutableArray *paths = [NSMutableArray array];
+                    [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
+                        [paths addObject:[NSIndexPath indexPathForRow:[self.messages indexOfObject:message] inSection:0]];
+                    }];
+                    [UIView animateWithDuration:0.2 animations:^{
+                        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+                        
+                    } completion:^(BOOL finished) {
+                        
+                        if (scroll) {
+                            [self scrollToBottom:YES];
+                        }
+                    }];
+                }
+                [[self luminatingBar] setLuminating:NO];
+                self.updatingMessages = NO;
+            }];
+        } else {
+            self.messages = [[[STKUserStore store] fetchMessagesForOrganization:self.organization group:g completion:^(NSArray *messages, NSError *err) {
+                BOOL hasMessages = self.messages.count > 0;
+                if (messages.count > 0) {
                 [self.messages addObjectsFromArray:messages];
-                NSMutableArray *paths = [NSMutableArray array];
-                [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
-                    [paths addObject:[NSIndexPath indexPathForRow:[self.messages indexOfObject:message] inSection:0]];
-                }];
-                [UIView animateWithDuration:0.2 animations:^{
-                    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
-                    
-                } completion:^(BOOL finished) {
-                    
-                    if (scroll) {
-                        [self scrollToBottom:YES];
-                    }
-                }];
-            }
-            [[self luminatingBar] setLuminating:NO];
-        }];
-    } else {
-        self.messages = [[[STKUserStore store] fetchMessagesForOrganization:self.organization group:g completion:^(NSArray *messages, NSError *err) {
-            BOOL hasMessages = self.messages.count > 0;
-            if (messages.count > 0) {
-            [self.messages addObjectsFromArray:messages];
-                NSMutableArray *paths = [NSMutableArray array];
-                [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
-                    [paths addObject:[NSIndexPath indexPathForRow:[self.messages indexOfObject:message] inSection:0]];
-                }];
-                [UIView animateWithDuration:0.2 animations:^{
-                    [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
-                    
-                } completion:^(BOOL finished) {
-                    
-                        [self scrollToBottom:hasMessages];
-                    
-                }];
-            }
-            [[self luminatingBar] setLuminating:NO];
-        }] mutableCopy];
-        [self.tableView reloadData];
-        [self scrollToBottom:NO];
+                    NSMutableArray *paths = [NSMutableArray array];
+                    [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
+                        [paths addObject:[NSIndexPath indexPathForRow:[self.messages indexOfObject:message] inSection:0]];
+                    }];
+                    [UIView animateWithDuration:0.2 animations:^{
+                        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+                        
+                    } completion:^(BOOL finished) {
+                        
+                            [self scrollToBottom:hasMessages];
+                        
+                    }];
+                }
+                self.updatingMessages = NO;
+                [[self luminatingBar] setLuminating:NO];
+            }] mutableCopy];
+            [self.tableView reloadData];
+            [self scrollToBottom:NO];
+        }
     }
 }
 
@@ -684,13 +696,19 @@ NSString * const HAMessageUserURLScheme = @"user";
     }];
     UIImage *deleteImage = [UIImage HAPatternImage:[UIImage imageNamed:@"edit_delete"] withHeight:height andWidth:width bgColor:[UIColor colorWithRed:221.f/255.f green:75.f/255.f blue:75.f/255.f alpha:1.f]];
     [deleteAction setBackgroundColor:[UIColor colorWithPatternImage:deleteImage]];
-    STKMessage *m = [self.messages objectAtIndex:indexPath.row];
-    if ([m.creator.uniqueID isEqualToString:self.user.uniqueID]){
+    if (!self.messages) {
         return @[deleteAction, moreAction];
-    } else if (!self.messages) {
-        return @[deleteAction, moreAction];
-    }else {
-        return @[deleteAction];
+    } else {
+        STKMessage *m = [self.messages objectAtIndex:indexPath.row];
+        if ([m.creator.uniqueID isEqualToString:self.user.uniqueID]){
+            if (m.text) {
+                return @[deleteAction, moreAction];
+            } else {
+                return @[deleteAction];
+            }
+        } else {
+            return @[deleteAction];
+        }
     }
 }
 
@@ -741,7 +759,13 @@ NSString * const HAMessageUserURLScheme = @"user";
     STKWebViewController *wvc = [[STKWebViewController alloc] init];
     [wvc setUrl:url];
     UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:wvc];
-    [self presentViewController:nvc animated:YES completion:nil];
+    [self.navigationController presentViewController:nvc animated:YES completion:nil];
+}
+
+- (void)messageImageTapped:(STKMessage *)message
+{
+    HASingleMessageImageController *smc = [[HASingleMessageImageController alloc] initWithMessage:message];
+    [self.navigationController pushViewController:smc animated:YES];
 }
 
 - (void)videoImageTapped:(NSURL *)url
@@ -896,14 +920,29 @@ NSString * const HAMessageUserURLScheme = @"user";
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    double max = 1200;
     UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
-    [self setCapturedImage:img];
+    if (img.size.width < max && img.size.height < max){
+        max = img.size.width > img.size.height?img.size.width:img.size.height;
+    }
+    int thumbCount = max < 1200?0:2;
+    double ratio = img.size.width > img.size.height?img.size.width/img.size.height:img.size.height/img.size.width;
+    double width = img.size.width > img.size.height?max:max/ratio;
+    double height = img.size.width> img.size.height?max/ratio:max;
+    CGSize size = CGSizeMake(width, height);
+    UIGraphicsBeginImageContext(size);
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    [img drawInRect:rect];
+    UIImage *resized = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self setCapturedImage:resized];
     [STKProcessingView present];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"prefs:root=LOCATION_SERVICES"]];
 
-    [[STKImageStore store] uploadImage:self.capturedImage thumbnailCount:2 intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
+    [[STKImageStore store] uploadImage:self.capturedImage thumbnailCount:thumbCount intoDirectory:[[[STKUserStore store] currentUser] uniqueID] completion:^(NSString *URLString, NSError *err) {
+        [picker dismissViewControllerAnimated:YES completion:nil];
          if(err) {
+             
              [STKProcessingView dismiss];
             UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Uploading Image", @"image upload error title")
                                                          message:NSLocalizedString(@"Oops! The image you selected failed to upload. Make sure you have an internet connection and try again.", @"image upload error message")
@@ -1007,5 +1046,6 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.postView showActionButton:NO];
     [self.markupController.view setHidden:YES];
 }
+
 
 @end

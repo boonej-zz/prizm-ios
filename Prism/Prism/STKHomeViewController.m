@@ -119,6 +119,7 @@
     [super viewDidLoad];
     [self addBackgroundImage];
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshColor) name:@"UserDetailsUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchNewPosts) name:@"refreshViews" object:nil];
     _homeCellNib = [UINib nibWithNibName:@"STKPostCell" bundle:nil];
     _initialCardViewOffset = [[self cardViewTopOffset] constant];
     CGRect frame = [self.view frame];

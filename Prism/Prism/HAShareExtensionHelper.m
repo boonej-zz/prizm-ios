@@ -12,10 +12,12 @@
 #import "STKMarkupUtilities.h"
 #import "STKUserStore.h"
 #import "STKContentStore.h"
+#import "STKImageSharer.h"
+
 
 NSString * const HATEXTKEY = @"postText";
 NSString * const HAIMAGEKEY = @"postImage";
-NSString * const HAAPPGROUP = @"group.com.higheraltitude.prizm.staging";
+NSString * const HAAPPGROUP = @"group.com.higheraltitude.prism";
 
 
 @interface HAShareExtensionHelper ()
@@ -89,7 +91,7 @@ NSString * const HAAPPGROUP = @"group.com.higheraltitude.prizm.staging";
 //    NSString *tweetID = [post objectForKey:@"id"];
 //    NSString *link = [NSString stringWithFormat:@"http://twitter.com/%@/status/%@", userID, tweetID];
     
-    NSString *postType = STKPostTypeExperience;
+    NSString *postType = STKPostTypePersonal;
     NSString *lowercaseSearchString = [text lowercaseString];
     if([lowercaseSearchString rangeOfString:@"#aspiration"].location != NSNotFound) {
         postType = STKPostTypeAspiration;
@@ -127,6 +129,7 @@ NSString * const HAAPPGROUP = @"group.com.higheraltitude.prizm.staging";
             [[STKContentStore store] addPostWithInfo:postInfo completion:^(STKPost *p, NSError *err) {
                 if(!err) {
                     [self clearPostInfoFromDefaults];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshViews" object:nil];
                 }
             }];
         }

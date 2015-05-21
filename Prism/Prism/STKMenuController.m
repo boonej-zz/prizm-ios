@@ -39,6 +39,8 @@
 #import "STKUser.h"
 #import "STKOrgStatus.h"
 #import "STKWebViewController.h"
+#import "HASingleMessageImageController.h"
+#import "HAMessageViewController.h"
 
 @import QuartzCore;
 
@@ -938,7 +940,10 @@ static BOOL HAActivityIsAnimating = NO;
                                                  toViewController:(UIViewController *)toVC
 {
     self.operation = operation;
-    if (([fromVC class] == [HAInsightsViewController class] || [fromVC class] == [STKActivityViewController class])&& ([toVC class] == [HAInsightsViewController class] || [toVC isKindOfClass:[STKActivityViewController class]])) {
+    if ([toVC isKindOfClass:[HASingleMessageImageController class]] || [fromVC isKindOfClass:[HASingleMessageImageController class]]){
+        return self;
+    }
+    if (([fromVC class] == [HAInsightsViewController class] || [fromVC class] == [STKActivityViewController class])&& ([toVC class] == [HAInsightsViewController class] || [toVC isKindOfClass:[STKActivityViewController class]] || [toVC isKindOfClass:[HASingleMessageImageController class]] || [fromVC isKindOfClass:[HASingleMessageImageController class]])) {
         if ([fromVC isKindOfClass:[HAInsightsViewController class]]) {
             HAInsightsViewController *hvc = (HAInsightsViewController *)fromVC;
             if ([hvc.segmentedControl selectedSegmentIndex] == 0 && ! [hvc isArchived] && [toVC class] != [STKProfileViewController class]) {
@@ -993,6 +998,26 @@ static BOOL HAActivityIsAnimating = NO;
 //        [hvc.blurView setRenderStatic:YES];
         
     }
+    
+    if ([outVC isKindOfClass:[HASingleMessageImageController class]] || [inVC isKindOfClass:[HASingleMessageImageController class]]) {
+        UIView *containerView = [transitionContext containerView];
+        
+        inVC.view.alpha = 0.f;
+        if ([inVC isKindOfClass:[HASingleMessageImageController class]]) {
+            [inVC.navigationController setNavigationBarHidden:YES];
+        } else {
+            [inVC.navigationController setNavigationBarHidden:NO];
+        }
+        [containerView insertSubview:inVC.view aboveSubview:outVC.view];
+        [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
+            outVC.view.alpha = 0.f;
+            inVC.view.alpha = 1.f;
+        } completion:^(BOOL finished) {
+            [transitionContext completeTransition:YES];
+        }];
+    } else {
+    
+
     CGRect transitionFrame;
     if ([inVC class] == [HAInsightsViewController class]) {
         transitionFrame = CGRectMake(0, 116, 320, 300);
@@ -1026,6 +1051,7 @@ static BOOL HAActivityIsAnimating = NO;
              [[self transitionImageView] setHidden:YES];
          }
      }];
+    }
 }
 
 

@@ -56,6 +56,8 @@
 		2C7B79FE19EDA9C6000EC061 /* HAInterestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B79FC19EDA9C6000EC061 /* HAInterestCell.m */; };
 		2C7B79FF19EDA9C6000EC061 /* HAInterestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */; };
 		2C854A421AFB08140097B9D1 /* HAGroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C854A411AFB08140097B9D1 /* HAGroupInfoViewController.m */; };
+		2C8DE51C1B0CF2660054FB60 /* HASingleMessageImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DE51B1B0CF2660054FB60 /* HASingleMessageImageController.m */; };
+		2C8DE51D1B0D573A0054FB60 /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2C97973219D9D9A7003A6C0A /* STKCreatePostViewController in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973119D9D9A7003A6C0A /* STKCreatePostViewController */; };
 		2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C97973419DC5285003A6C0A /* HAInsightCell.m */; };
 		2C97973719DC5285003A6C0A /* HAInsightCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973519DC5285003A6C0A /* HAInsightCell.xib */; };
@@ -332,6 +334,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2C8DE51E1B0D581D0054FB60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BE02EA97182A80A200A5505A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9CD7D9871A1BC1FF003E221C;
+			remoteInfo = PrizmShareExt;
+		};
 		BE02EABF182A80A200A5505A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BE02EA97182A80A200A5505A /* Project object */;
@@ -348,6 +357,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				2C8DE51D1B0D573A0054FB60 /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,6 +457,8 @@
 		2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAInterestCell.xib; sourceTree = "<group>"; };
 		2C854A401AFB08140097B9D1 /* HAGroupInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAGroupInfoViewController.h; sourceTree = "<group>"; };
 		2C854A411AFB08140097B9D1 /* HAGroupInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAGroupInfoViewController.m; sourceTree = "<group>"; };
+		2C8DE51A1B0CF2660054FB60 /* HASingleMessageImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASingleMessageImageController.h; sourceTree = "<group>"; };
+		2C8DE51B1B0CF2660054FB60 /* HASingleMessageImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASingleMessageImageController.m; sourceTree = "<group>"; };
 		2C97973119D9D9A7003A6C0A /* STKCreatePostViewController */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = STKCreatePostViewController; sourceTree = "<group>"; };
 		2C97973319DC5285003A6C0A /* HAInsightCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HAInsightCell.h; path = Prism/HAInsightCell.h; sourceTree = "<group>"; };
 		2C97973419DC5285003A6C0A /* HAInsightCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HAInsightCell.m; path = Prism/HAInsightCell.m; sourceTree = "<group>"; };
@@ -2997,6 +3009,8 @@
 				2C2E9C7B1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m */,
 				2C854A401AFB08140097B9D1 /* HAGroupInfoViewController.h */,
 				2C854A411AFB08140097B9D1 /* HAGroupInfoViewController.m */,
+				2C8DE51A1B0CF2660054FB60 /* HASingleMessageImageController.h */,
+				2C8DE51B1B0CF2660054FB60 /* HASingleMessageImageController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5218,6 +5232,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2C8DE51F1B0D581D0054FB60 /* PBXTargetDependency */,
 			);
 			name = Prism;
 			productName = Prism;
@@ -5249,7 +5264,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = STK;
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Higher Altitude";
 				TargetAttributes = {
 					9CD7D9871A1BC1FF003E221C = {
@@ -5265,7 +5280,7 @@
 						DevelopmentTeam = MU64MV9X8B;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -5540,6 +5555,7 @@
 				2C2E9C781AF6918700F0F7A8 /* HASelectMemberViewController.m in Sources */,
 				2C189DD11A2F74190028AD1C /* HAWelcomeViewController.m in Sources */,
 				2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */,
+				2C8DE51C1B0CF2660054FB60 /* HASingleMessageImageController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
 				D0E85B12197D7910001A5333 /* STKMessageBanner.m in Sources */,
 				883D87D519463E7F00195B11 /* MPSurvey.m in Sources */,
@@ -5693,6 +5709,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2C8DE51F1B0D581D0054FB60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9CD7D9871A1BC1FF003E221C /* PrizmShareExt */;
+			targetProxy = 2C8DE51E1B0D581D0054FB60 /* PBXContainerItemProxy */;
+		};
 		BE02EAC0182A80A200A5505A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BE02EA9E182A80A200A5505A /* Prism */;
@@ -5772,8 +5793,8 @@
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
 				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/App Store-iphoneos";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5809,7 +5830,7 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "eb3150d6-855b-4a2c-afc8-f3ad6a158cad";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -5839,8 +5860,8 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism.PrizmShareExt;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5969,32 +5990,8 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging.PrizmShareExt;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = PrizmShareExt/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4efde7bc-f3e7-4a25-9f28-897dbd2fed2d";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		9CD7D9971A1BC200003E221C /* App Store */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism.PrizmShareExt;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6007,6 +6004,30 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		9CD7D9971A1BC200003E221C /* App Store */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism.PrizmShareExt;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = PrizmShareExt/PrizmShareExt.entitlements;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = PrizmShareExt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6d1261c0-2f0f-467f-a885-0b8076fabf9a";
 				SKIP_INSTALL = YES;
 			};
 			name = "App Store";
@@ -6182,7 +6203,7 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "1af99032-7827-448b-929a-d0e94d63de39";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -6198,8 +6219,8 @@
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
 				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6229,7 +6250,7 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "24b469aa-d7ae-488e-845d-ca5614e9d923";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -6351,7 +6372,7 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "4f72c768-e004-476f-b0e1-024edf4fe8c5";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "4f72c768-e004-476f-b0e1-024edf4fe8c5";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -6502,8 +6523,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -6515,6 +6536,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE = "7da70514-b914-4f6e-82e5-bd9a0aec71a3";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -6530,8 +6552,8 @@
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
 				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6566,7 +6588,7 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "7da70514-b914-4f6e-82e5-bd9a0aec71a3";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
