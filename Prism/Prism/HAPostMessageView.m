@@ -100,17 +100,15 @@
     [self.placeholder setFont:STKFont(15)];
     [self.textView setBackgroundColor:[UIColor clearColor]];
     [self.textView setKeyboardType:UIKeyboardTypeTwitter];
-    if (!self.textView.text.length > 0) {
-        [self.actionButton removeTarget:self action:@selector(sendTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [self.actionButton addTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [self.actionButton setImage:[UIImage imageNamed:@"message_plus"] forState:UIControlStateNormal];
+    if (self.textView.text.length > 0) {
+        [self showActionButton:YES];
+    } else {
+        [self showActionButton:NO];
     }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    [self.actionButton setImage:nil forState:UIControlStateNormal];
-    [self.actionButton removeTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.placeholder setHidden:YES];
     if (self.delegate) {
         [self.delegate beganEditing:self];
@@ -128,8 +126,7 @@
         }
     } else {
         self.textViewHasText = NO;
-        [self.actionButton setImage:nil forState:UIControlStateNormal];
-        [self.actionButton removeTarget:self action:@selector(addTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self showActionButton:NO];
     }
     
     [self.delegate postTextChanged:textView.text];
