@@ -121,4 +121,22 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    
+    return UIInterfaceOrientationPortrait;
+}
+
+
 @end

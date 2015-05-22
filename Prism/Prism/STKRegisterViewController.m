@@ -181,7 +181,7 @@
     BOOL introComplete = [[NSUserDefaults standardUserDefaults] boolForKey:STKIntroCompletedKey];
     if (!introComplete) {
         STKIntroViewController *ivc = [[STKIntroViewController alloc] initWithNibName:@"STKIntroViewController" bundle:nil];
-        [self presentViewController:ivc animated:NO completion:nil];
+        [self.navigationController presentViewController:ivc animated:NO completion:nil];
     }
 }
 
