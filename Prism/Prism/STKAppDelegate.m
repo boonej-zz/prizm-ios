@@ -24,6 +24,7 @@
 #import <MessageUI/MessageUI.h>
 
 #import <GooglePlus/GooglePlus.h>
+#import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import "Mixpanel.h"
 #import "STKContentStore.h"
@@ -60,7 +61,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [Crashlytics startWithAPIKey:@"e70b092ac5acf46c6e8a86bc59e79c34df550f5f"];
+    [Fabric with:@[CrashlyticsKit]];
 #ifdef DEBUG
     [Heap setAppId:@"3468470936"];
 #else
