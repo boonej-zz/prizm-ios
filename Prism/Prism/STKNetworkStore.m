@@ -160,14 +160,14 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     NSMutableDictionary *stats = [[NSMutableDictionary alloc] init];
     [[STKUserStore store] fetchUserDetails:u additionalFields:@[@"instagram_token", @"instagram_min_id", @"twitter_min_id", @"twitter_token", @"tumblr_token", @"tumblr_min_id"] completion:^(STKUser *user, NSError *err) {
         if(!err) {
-            NSLog(@"Will check Instagram %@", [user instagramToken]);
+//            NSLog(@"Will check Instagram %@", [user instagramToken]);
             [self transferPostsFromInstagramWithToken:[user instagramToken] lastMinimumID:[u instagramLastMinID] completion:^(NSString *instagramLastID, NSError *err) {
                 if(!err && instagramLastID)
                     [stats setObject:instagramLastID forKey:@"instagramLastMinID"];
                 
                 [[STKUserStore store] fetchAvailableTwitterAccounts:^(NSArray *accounts, NSError *err) {
                     ACAccount *account = [self matchingAccountForUser:u inAccounts:accounts];
-                    NSLog(@"Will check Twitter %@", [account username]);
+//                    NSLog(@"Will check Twitter %@", [account username]);
                     [self transferPostsFromTwitterAccount:account lastMinimumID:[u twitterLastMinID] completion:^(NSString *twitterLastID, NSError *twitterError) {
 
                         if(!err && twitterLastID)
@@ -191,7 +191,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
             }];
         } else {
             block(nil, err);
-            NSLog(@"Failed to get instagram/twitter/tumblr details");
+//            NSLog(@"Failed to get instagram/twitter/tumblr details");
         }
     }];
 }
@@ -222,7 +222,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                                                                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                                                                              NSMutableArray *postsToSend = [NSMutableArray array];
                                                                              NSArray *posts = [val objectForKey:@"data"];
-                                                                             NSLog(@"Instagram yielded %d total posts", (int)[posts count]);
+//                                                                             NSLog(@"Instagram yielded %d total posts", (int)[posts count]);
                                                                              for(NSDictionary *post in posts) {
                                                                                  
                                                                                  if([[post objectForKey:@"type"] isEqualToString:@"image"]) {
@@ -372,7 +372,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                     block(nil, connectionError);
                 } else {
                     NSArray *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-                    NSLog(@"Twitter got %d total posts", (int)[json count]);
+//                    NSLog(@"Twitter got %d total posts", (int)[json count]);
                     
                     NSMutableArray *postsToSend = [NSMutableArray array];
                     for(NSDictionary *d in json) {

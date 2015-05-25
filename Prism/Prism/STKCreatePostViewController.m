@@ -444,7 +444,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
                 [[cell imageView] setImage:[item objectForKey:@"selectedImage"]];
             }
         }
-        NSLog(@"%f", self.optionCollectionView.frame.size.height);
+//        NSLog(@"%f", self.optionCollectionView.frame.size.height);
         return cell;
     }
 

@@ -65,7 +65,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
         [a setValue:self.image forKey:@"image"];
     }
     else if ([self text]) {
-        NSLog(@"Text is present in placeholder");
+//        NSLog(@"Text is present in placeholder");
         [a setValue:self.text forKey:@"text"];
     } else return @"";
     
@@ -74,7 +74,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType
 {
-    NSLog(@"In the activity item");
+//    NSLog(@"In the activity item");
     self.baseText = @"";
     if ([self post]) {
         NSMutableArray *textArr = [[self.post.text componentsSeparatedByString:@" "] mutableCopy];
@@ -296,7 +296,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
-        NSLog(@"Object: %@", [obj class]);
+//        NSLog(@"Object: %@", [obj class]);
         if([obj isKindOfClass:[UIImage class]]) {
             [self setImage:obj];
         }
@@ -314,7 +314,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (void)prepareWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
-        NSLog(@"Object: %@", [obj class]);
+//        NSLog(@"Object: %@", [obj class]);
         if([obj isKindOfClass:[UIImage class]]) {
             [self setImage:obj];
         }
@@ -362,7 +362,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
-        NSLog(@"Object: %@", [obj class]);
+//        NSLog(@"Object: %@", [obj class]);
         if([obj isKindOfClass:[UIImage class]]) {
             [self setImage:obj];
         }
@@ -380,7 +380,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (void)prepareWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
-        NSLog(@"Object: %@", [obj class]);
+//        NSLog(@"Object: %@", [obj class]);
         if([obj isKindOfClass:[UIImage class]]) {
             [self setImage:obj];
         }
@@ -430,7 +430,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
-        NSLog(@"Object: %@", [obj class]);
+//        NSLog(@"Object: %@", [obj class]);
         if([obj isKindOfClass:[UIImage class]]) {
             [self setImage:obj];
         }
@@ -449,7 +449,7 @@ wantsToPresentDocumentController:(UIDocumentInteractionController *)doc;
 - (void)prepareWithActivityItems:(NSArray *)activityItems
 {
     for(id obj in activityItems) {
-        NSLog(@"Object: %@", [obj class]);
+//        NSLog(@"Object: %@", [obj class]);
         if([obj isKindOfClass:[UIImage class]]) {
             [self setImage:obj];
         }

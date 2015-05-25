@@ -83,7 +83,7 @@
 {
     NSString *string = [[request URL] absoluteString];
 
-    NSLog(@"request %@", string);
+//    NSLog(@"request %@", string);
     NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"access_token=([^&]*)" options:0 error:nil];
     NSTextCheckingResult *result = [exp firstMatchInString:string options:0 range:NSMakeRange(0, [string length])];
     

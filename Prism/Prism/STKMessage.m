@@ -76,7 +76,7 @@
         STKMessageMetaData *meta = self.metaData;
         NSDictionary *titleAttributes = nil;
         NSDictionary *descAttributes = nil;
-        NSLog(@"%@", meta);
+//        NSLog(@"%@", meta);
         if (meta.urlString) {
             titleAttributes = @{NSFontAttributeName : STKBoldFont(14), NSForegroundColorAttributeName : [UIColor HATextColor], NSLinkAttributeName: [NSURL URLWithString:meta.urlString]};
             descAttributes = @{NSFontAttributeName : STKFont(13), NSForegroundColorAttributeName : [UIColor HATextColor], NSLinkAttributeName: [NSURL URLWithString:meta.urlString]};

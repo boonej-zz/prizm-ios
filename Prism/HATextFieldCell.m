@@ -44,6 +44,8 @@
 {
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-1-[cv]-0-|" options:0 metrics:nil views:@{@"cv": _containerView}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[cv]-0-|" options:0 metrics:nil views:@{@"cv": _containerView}]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_containerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1.f constant:-1.f]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_containerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.f constant:-1.f]];
     [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-13-[tl(==120)]-4-[tf]-|" options:0 metrics:nil views:@{@"tl": self.label, @"tf": self.textField}]];
 //    [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tl][tf]-0-|" options:0 metrics:nil views:@{@"tl": self.label, @"tf": self.textField}]];
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:_label attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_containerView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];

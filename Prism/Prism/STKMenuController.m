@@ -78,6 +78,7 @@ static BOOL HAActivityIsAnimating = NO;
 @property (nonatomic, strong, readonly) UIImageView *transitionImageView;
 @property (nonatomic) CGRect imageTransitionRect;
 @property (nonatomic) BOOL isGroupMember;
+@property (nonatomic) BOOL hideStatusBar;
 
 @end
 
@@ -520,7 +521,7 @@ static BOOL HAActivityIsAnimating = NO;
     int count = [[[note userInfo] objectForKey:STKUserStoreActivityUpdateCountKey] intValue];
     if ([[STKUserStore store] currentUser]) {
         [[STKUserStore store] fetchUserDetails:[[STKUserStore store] currentUser] additionalFields:@[] completion:^(STKUser *u, NSError *err) {
-            NSLog(@"Refreshed user");
+//            NSLog(@"Refreshed user");
         }];
     }
     
@@ -837,9 +838,9 @@ static BOOL HAActivityIsAnimating = NO;
 
 - (UIViewController *)childViewControllerForType:(Class)cls
 {
-    NSLog(@"%@", cls);
+//    NSLog(@"%@", cls);
     for(UINavigationController *vc in [self viewControllers]) {
-        NSLog(@"%@ == %@", [vc class], cls);
+//        NSLog(@"%@ == %@", [vc class], cls);
         if([[[vc viewControllers] firstObject] isKindOfClass:cls]) {
             return vc;
         }
@@ -880,7 +881,7 @@ static BOOL HAActivityIsAnimating = NO;
         newImage = image;
     }
     self.originalImage = image;
-    NSLog(@"%f", image.size.width);
+//    NSLog(@"%f", image.size.width);
     if (image == nil) {
         image = [p largeTypeImage];
         
@@ -991,7 +992,7 @@ static BOOL HAActivityIsAnimating = NO;
 
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext
 {
-    
+    self.hideStatusBar = NO;
     UIViewController *inVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     UIViewController *outVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     if ([inVC isKindOfClass:[STKHomeViewController class]]) {
@@ -1001,6 +1002,11 @@ static BOOL HAActivityIsAnimating = NO;
     }
     
     if ([outVC isKindOfClass:[HASingleMessageImageController class]] || [inVC isKindOfClass:[HASingleMessageImageController class]]) {
+        if ([inVC isKindOfClass:[HASingleMessageImageController class]]) {
+            self.hideStatusBar = YES;
+        } else {
+            self.hideStatusBar = NO;
+        }
         UIView *containerView = [transitionContext containerView];
         
         inVC.view.alpha = 0.f;
@@ -1084,6 +1090,11 @@ static BOOL HAActivityIsAnimating = NO;
 {
 
         return UIInterfaceOrientationPortrait;
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return self.hideStatusBar;
 }
 
 @end

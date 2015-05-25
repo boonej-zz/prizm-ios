@@ -167,7 +167,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
         if(img) {
             block(img);
         } else {
-            NSLog(@"Failed to get %d at %@", size, url);
+//            NSLog(@"Failed to get %d at %@", size, url);
             if(size != STKImageStoreThumbnailNone) {
                 [self fetchImageForURLString:url completion:block];
             }
@@ -365,7 +365,7 @@ NSString * const STKImageStoreBucketHostURLString = @"https://s3.amazonaws.com";
 
 - (void)uploadImage:(UIImage *)img toPath:(NSString *)fileName completion:(void (^)(NSString *URLString, NSError *err))block
 {
-    NSLog(@"Uploading image of size %@ to path %@", NSStringFromCGSize([img size]), fileName);
+//    NSLog(@"Uploading image of size %@ to path %@", NSStringFromCGSize([img size]), fileName);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         S3PutObjectRequest *req = [[S3PutObjectRequest alloc] initWithKey:fileName inBucket:STKImageStoreBucketName];
         NSData *imageData = UIImageJPEGRepresentation(img, 1.0);

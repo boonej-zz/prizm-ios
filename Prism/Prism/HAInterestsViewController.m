@@ -189,7 +189,7 @@
         [self.selectedInterests addObjectsFromArray:[u.interests allObjects]];
         [self.tagObjects addObjectsFromArray:self.selectedInterests];
         [[STKUserStore store] fetchInterests:^(NSArray *interests, NSError *err) {
-            NSLog(@"%@", interests);
+//            NSLog(@"%@", interests);
             self.interests = [interests filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(STKInterest *interest, NSDictionary *bindings) {
                 return ![interest isSubinterest];
             }]];

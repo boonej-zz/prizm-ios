@@ -53,7 +53,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSLog(@"%@", deviceToken);
+//    NSLog(@"%@", deviceToken);
     [[STKUserStore store] updateDeviceTokenForCurrentUser:deviceToken];
 }
 
@@ -139,7 +139,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"%@", userInfo);
+//    NSLog(@"%@", userInfo);
     NSString *alertValue = [[userInfo valueForKeyPath:@"aps"] valueForKey:@"badge"];
     int badgeValue= [alertValue intValue];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeValue];

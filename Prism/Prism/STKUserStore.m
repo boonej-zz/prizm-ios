@@ -228,7 +228,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                             orgCount += organization.unreadCount.doubleValue;
                             [[NSUserDefaults standardUserDefaults] setDouble:orgCount forKey:HAUnreadMessagesForOrgKey];
                             [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
-                            NSLog(@"Message Count: %f", orgCount + groupCount);
+//                            NSLog(@"Message Count: %f", orgCount + groupCount);
                             [self.context save:nil];
                         }
                     }];
@@ -244,7 +244,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
                                                 group = obj;
                                             }
                                             groupCount += group.unreadCount.doubleValue;
-                                            NSLog(@"Message Count: %f", orgCount + groupCount);
+//                                            NSLog(@"Message Count: %f", orgCount + groupCount);
                                             [[NSUserDefaults standardUserDefaults] setDouble:groupCount forKey:HAUnreadMessagesForGroupsKey];
                                             [[NSNotificationCenter defaultCenter] postNotificationName:HAUnreadMessagesUpdated object:nil];
                                             [self.context save:nil];
@@ -759,7 +759,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)fetchUserDetails:(STKUser *)user additionalFields:(NSArray *)fields completion:(void (^)(STKUser *u, NSError *err))block
 {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasPurged"]) {
-        NSLog(@"Purging old org status");
+//        NSLog(@"Purging old org status");
         [self purgeOrgStatus];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasPurged"];
     }

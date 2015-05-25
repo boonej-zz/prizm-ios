@@ -66,7 +66,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
                                                resolvingAgainstBaseURL:NO];
     if([self identifiers]) {
         NSString *pathIdentifier = [[self identifiers] componentsJoinedByString:@"/"];
-        NSLog(@"Path: %@", pathIdentifier);
+//        NSLog(@"Path: %@", pathIdentifier);
         [components setPath:pathIdentifier];
     }
     
@@ -80,7 +80,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
             if (!err) {
                 [req setHTTPBody:body];
             } else {
-                NSLog(@"%@", err.localizedDescription);
+//                NSLog(@"%@", err.localizedDescription);
             }
             }
             [req addValue:@"application/json;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
@@ -126,7 +126,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     _request = [req copy];
 
     if(![[self request] URL]) {
-        NSLog(@"OK");
+//        NSLog(@"OK");
     }
     
     NSURLSessionDataTask *dt = [session dataTaskWithRequest:[self request]
@@ -235,7 +235,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
         argHeaders = [[[self queryObject] dictionaryRepresentation] description];
     }
     
-    NSLog(@"%@", [self curlRequest]);
+//    NSLog(@"%@", [self curlRequest]);
 
     
     NSLog(@"Request Failed (%.3fs) -> \n%@ %@\n %@ \n %@\nResponse: %d\n%@",

@@ -18,7 +18,7 @@
 {
     UIColor *c = [UIColor colorWithRed:192.0/255.0 green:193.0/255.0 blue:213.0/255.0 alpha:1];
     STKTheme *theme = [[STKUserStore store] currentUser].theme;
-    NSLog(@"%@", theme);
+//    NSLog(@"%@", theme);
     if (theme && theme.textColor) {
         NSArray *color = [theme.textColor componentsSeparatedByString:@","];
         if ([color count] == 4) {
@@ -36,7 +36,7 @@
 {
     UIColor *c = [UIColor colorWithRed:11.0/255.0 green:53.0/255.0 blue:110.0/255.0 alpha:0.95];
     STKTheme *theme = [[STKUserStore store] currentUser].theme;
-    NSLog(@"%@", theme);
+//    NSLog(@"%@", theme);
     if (theme && theme.dominantColor) {
         NSArray *color = [theme.dominantColor componentsSeparatedByString:@","];
         if ([color count] == 4) {

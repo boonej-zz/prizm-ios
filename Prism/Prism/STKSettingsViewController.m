@@ -324,7 +324,7 @@
                     UIAlertView *av = [STKErrorStore alertViewForError:err delegate:nil];
                     [av show];
                 } else {
-                    NSLog(@"Twitter: %@ %@", [acct username], minID);
+//                    NSLog(@"Twitter: %@ %@", [acct username], minID);
                 }
             }];
         }

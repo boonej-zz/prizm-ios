@@ -82,7 +82,7 @@
     
     NSMutableArray *hashtagRanges = [NSMutableArray array];
     NSArray *hashtags = [self hashtags];
-    NSLog(@"hashtags %@", hashtags);
+//    NSLog(@"hashtags %@", hashtags);
     NSRange lastHashtagRange = NSMakeRange(0,0);
     for (NSString *hashtag in hashtags) {
         NSUInteger searchLocation = lastHashtagRange.length+lastHashtagRange.location;

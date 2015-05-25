@@ -54,8 +54,8 @@ NSString * const HAAPPGROUP = @"group.com.higheraltitude.prism";
     [self setHasPost:[self hasPostFromExtension]];
     NSData *imageData = [self.postDefaults objectForKey:HAIMAGEKEY];
     UIImage* image = [UIImage imageWithData:imageData];
-    NSLog(@"postText: %@", [self.postDefaults objectForKey:HATEXTKEY]);
-    NSLog(@"postImage: %@", image);
+//    NSLog(@"postText: %@", [self.postDefaults objectForKey:HATEXTKEY]);
+//    NSLog(@"postImage: %@", image);
 }
 
 - (BOOL)hasPostFromExtension
@@ -63,11 +63,11 @@ NSString * const HAAPPGROUP = @"group.com.higheraltitude.prism";
     BOOL hasPost = NO;
     if (([self.postDefaults objectForKey:HAIMAGEKEY] == nil) && ([self.postDefaults objectForKey:HATEXTKEY] == nil)) {
         hasPost = NO;
-        NSLog(@"Empty Post");
+//        NSLog(@"Empty Post");
     }
     else {
         hasPost = YES;
-        NSLog(@"Post has image or text");
+//        NSLog(@"Post has image or text");
     }
     return hasPost;
 }
@@ -76,8 +76,8 @@ NSString * const HAAPPGROUP = @"group.com.higheraltitude.prism";
 {
     [self.postDefaults setObject:nil forKey:HATEXTKEY];
     [self.postDefaults setObject:nil forKey:HAIMAGEKEY];
-    NSLog(@"Post text should be nil: %@", [self.postDefaults objectForKey:HATEXTKEY]);
-    NSLog(@"Post image should be nil: %@", [self.postDefaults objectForKey:HAIMAGEKEY]);
+//    NSLog(@"Post text should be nil: %@", [self.postDefaults objectForKey:HATEXTKEY]);
+//    NSLog(@"Post image should be nil: %@", [self.postDefaults objectForKey:HAIMAGEKEY]);
 }
 
 - (void)createPostsFromDefaults

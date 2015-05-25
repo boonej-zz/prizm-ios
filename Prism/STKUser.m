@@ -152,7 +152,7 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
                        self, u, u, self]];
     
     NSArray *results = [[self managedObjectContext] executeFetchRequest:req error:nil];
-    NSLog(@"%@", [results valueForKey:@"uniqueID"]);
+//    NSLog(@"%@", [results valueForKey:@"uniqueID"]);
     return [results firstObject];
 }
 
@@ -356,7 +356,7 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
 {
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"YYYY-MM-dd"];
-    NSLog(@"%@", [self age]);
+//    NSLog(@"%@", [self age]);
     NSMutableArray *interests = [NSMutableArray arrayWithCapacity:self.interests.count];
     [self.interests enumerateObjectsUsingBlock:^(STKInterest *interest, BOOL *stop) {
         [interests addObject:[interest text]];

@@ -54,6 +54,18 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [super viewDidDisappear:animated];
+}
+
 - (void)configureViews
 {
     self.imageView = [[UIImageView alloc] init];
@@ -68,8 +80,7 @@
     [self.closeButton addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
     self.longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(imageLongPress:)];
     self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(close:)];
-    [self.imageView addGestureRecognizer:self.longPressGesture];
-    [self.imageView addGestureRecognizer:self.tapRecognizer];
+    [self.view addGestureRecognizer:self.tapRecognizer];
     [self.view addSubview:self.closeButton];
     [self.view bringSubviewToFront:self.closeButton];
 }
@@ -80,10 +91,8 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[iv]-0-|" options:0 metrics:nil views:@{@"iv": self.imageView}]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.closeButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:24.f]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.closeButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:24.f]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.closeButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.f constant:31.f]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.closeButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.f constant:-12.f]];
-
-                                                                                                                        
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.closeButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.f constant:18.f]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.closeButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.f constant:-16.f]];
 }
 
 - (void)loadContent
@@ -92,7 +101,7 @@
     [self.imageView setBackgroundColor:[UIColor blackColor]];
     
     [self.navigationController setNavigationBarHidden:YES];
-    NSLog(@"%@", self.message.imageURL);
+//    NSLog(@"%@", self.message.imageURL);
     if (self.message) {
         [[STKImageStore store] fetchImageForURLString:self.message.imageURL preferredSize:STKImageStoreThumbnailLarge completion:^(UIImage *img) {
             if (img.size.width < self.imageView.bounds.size.width && img.size.height < self.imageView.bounds.size.height){

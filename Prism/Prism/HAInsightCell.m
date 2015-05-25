@@ -61,7 +61,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    NSLog(@"Woke up");
+//    NSLog(@"Woke up");
 //    [self setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.contentView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     
@@ -106,7 +106,7 @@
 {
     _insightTarget = insightTarget;
     [self.postImageView setUrlString:insightTarget.insight.filePath];
-    NSLog(@"%@", insightTarget.insight);
+//    NSLog(@"%@", insightTarget.insight);
     [self.headerView.avatarView setUrlString:self.insightTarget.insight.creator.profilePhotoPath];
     [self.headerView.posterLabel setText:self.insightTarget.insight.creator.name];
     CGRect frame = [self convertRect:self.headerView.avatarView.frame fromView:self.headerView];

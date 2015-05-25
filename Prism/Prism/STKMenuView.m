@@ -313,7 +313,7 @@
 
 - (void)dynamicAnimatorDidPause:(UIDynamicAnimator *)animator
 {
-    NSLog(@"Pause");
+//    NSLog(@"Pause");
     [[self animator] removeAllBehaviors];
     [self setNeedsLayout];
 }

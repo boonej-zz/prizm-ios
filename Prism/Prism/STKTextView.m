@@ -21,19 +21,19 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"TB %@", touches);
+//    NSLog(@"TB %@", touches);
     [super touchesBegan:touches withEvent:event];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"TM %@", touches);
+//    NSLog(@"TM %@", touches);
     [super touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"TE %@", touches);
+//    NSLog(@"TE %@", touches);
     [super touchesEnded:touches withEvent:event];
     
 }

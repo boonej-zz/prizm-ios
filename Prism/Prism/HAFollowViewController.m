@@ -101,7 +101,7 @@
         self.posts = [NSMutableArray arrayWithArray:self.users];
         [self.tableView reloadData];
         [self.users enumerateObjectsUsingBlock:^(STKUser *obj, NSUInteger idx, BOOL *stop) {
-            NSLog(@"%@: %ld", [obj name], (long)[obj matchingInterestsCount]);
+//            NSLog(@"%@: %ld", [obj name], (long)[obj matchingInterestsCount]);
         }];
         [self.users enumerateObjectsUsingBlock:^(STKUser *obj, NSUInteger idx, BOOL *stop) {
            [[STKContentStore store] fetchProfilePostsForUser:obj fetchDescription:desc completion:^(NSArray *posts, NSError *err) {

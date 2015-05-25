@@ -398,7 +398,7 @@
         
     }
     @finally {
-        NSLog(@"Finally");
+//        NSLog(@"Finally");
         if(![self.session isRunning]) {
             [self dismissViewControllerAnimated:YES completion:nil];
         }

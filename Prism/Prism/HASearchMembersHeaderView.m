@@ -101,7 +101,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     NSString *value = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    NSLog(@"%@", value);
+//    NSLog(@"%@", value);
     if ([self delegate]) {
         [[self delegate] searchTextChanged:value];
     }
