@@ -24,12 +24,14 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        self.blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
-        [self.blurView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [self addSubview:_blurView];
-        self.tintView = [[UIView alloc] init];
-        [self.tintView setBackgroundColor:[UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.34f]];
-        [[self.blurView contentView] addSubview:self.tintView];
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+            self.blurView = [[UIVisualEffectView alloc] initWithEffect:blur];
+            [self.blurView setTranslatesAutoresizingMaskIntoConstraints:NO];
+            [self addSubview:_blurView];
+            self.tintView = [[UIView alloc] init];
+            [self.tintView setBackgroundColor:[UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.34f]];
+            [[self.blurView contentView] addSubview:self.tintView];
+        }
         self.textView = [[UITextView alloc] init];
         [self.textView setTranslatesAutoresizingMaskIntoConstraints:NO];
         self.iv = [[UIImageView alloc] init];
@@ -52,17 +54,20 @@
 
 - (void)setupConstraints
 {
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[bv]-0-|" options:0 metrics:nil views:@{@"bv": _blurView}]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[bv]-0-|" options:0 metrics:nil views:@{@"bv": _blurView}]];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[bv]-0-|" options:0 metrics:nil views:@{@"bv": _blurView}]];
+        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[bv]-0-|" options:0 metrics:nil views:@{@"bv": _blurView}]];
+    }
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[ab]-0-|" options:0 metrics:nil views:@{@"ab": _actionButton}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-4-[tv]-0-|" options:0 metrics:nil views:@{@"tv": _textView}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[iv]-0-|" options:0 metrics:nil views:@{@"iv": self.iv}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[iv]-15-[tv]-8-[ab]-0-|" options:0 metrics:nil views:@{@"tv": _textView, @"iv": _iv, @"ab": _actionButton}]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+//    [self addConstraint:[NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+//    [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_iv attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_iv attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     [self.textView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[p]-8-|" options:0 metrics:nil views:@{@"p": _placeholder}]];
-    [self.textView addConstraint:[NSLayoutConstraint constraintWithItem:_placeholder attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    [self.textView addConstraint:[NSLayoutConstraint constraintWithItem:_placeholder attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeHeight multiplier:1 constant:4]];
     [self.textView addConstraint:[NSLayoutConstraint constraintWithItem:_placeholder attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_textView attribute:NSLayoutAttributeCenterY multiplier:1 constant:-4.f]];
     [self.actionButton addConstraint:[NSLayoutConstraint constraintWithItem:_actionButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:46.f]];
     [self.actionButton addConstraint:[NSLayoutConstraint constraintWithItem:_actionButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:46.f]];
@@ -105,6 +110,7 @@
     } else {
         [self showActionButton:NO];
     }
+    [super layoutSubviews];
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView

@@ -41,6 +41,7 @@
 #import "STKWebViewController.h"
 #import "HASingleMessageImageController.h"
 #import "HAMessageViewController.h"
+#import "HANavigationController.h"
 
 @import QuartzCore;
 
@@ -913,7 +914,7 @@ static BOOL HAActivityIsAnimating = NO;
     void (^createPost)(void) = ^{
         STKCreatePostViewController *cpvc = [[STKCreatePostViewController alloc] init];
         [cpvc setPostImage:image];
-        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:cpvc];
+        HANavigationController *nvc = [[HANavigationController alloc] initWithRootViewController:cpvc];
         [[self selectedViewController] presentViewController:nvc animated:YES completion:nil];
     };
     

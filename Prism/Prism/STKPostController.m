@@ -21,6 +21,7 @@
 #import "STKPostViewController.h"
 #import "STKFetchDescription.h"
 #import "STKPostCell.h"
+#import "HANavigationController.h"
 
 @interface STKPostController ()
 
@@ -262,8 +263,7 @@
     STKCreatePostViewController *pvc = [[STKCreatePostViewController alloc] init];
     [pvc setOriginalPost:[[self posts] objectAtIndex:[ip row]]];
     
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:pvc];
-    
+    HANavigationController *nvc = [[HANavigationController alloc] initWithRootViewController:pvc];
     [[self viewController] presentViewController:nvc animated:YES completion:nil];
 }
 

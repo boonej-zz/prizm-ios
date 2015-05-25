@@ -32,8 +32,6 @@
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, weak) IBOutlet UIButton *likeButton;
 
-- (CGFloat)heightForCell;
-
 @end
 
 

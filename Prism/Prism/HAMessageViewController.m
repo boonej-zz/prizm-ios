@@ -44,7 +44,7 @@ NSString * const HAMessageHashTagURLScheme = @"hashtag";
 NSString * const HAMessageUserURLScheme = @"user";
 
 
-@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate>
+@interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate >
 
 @property (nonatomic, weak) IBOutlet UITableView * tableView;
 @property (nonatomic, weak) IBOutlet HAPostMessageView *postView;
@@ -117,6 +117,9 @@ NSString * const HAMessageUserURLScheme = @"user";
 
 -  (void)configureViews
 {
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        [self.tableViewBottomConstraint setConstant:self.postView.frame.size.height];
+    }
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
     [[self view] addSubview:[[self markupController] view]];
     CGRect frame = _markupController.view.frame;
@@ -598,7 +601,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         if (self.messages.count > 0) {
             STKMessage *m  = [self.messages objectAtIndex:indexPath.row];
             if (m.imageURL) {
-                return 80 + self.view.frame.size.width - 16;
+                return 60 + self.view.frame.size.width - 16;
             } else  {
                 CGRect r = [m boundingBoxForMessageWithWidth:254.f];
                 if (m.metaData.image.urlString) {
@@ -836,6 +839,9 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:0 animations:^{
         [self.postViewBottomConstraint setConstant:keyboardFrame.size.height];
+        if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+            [self.tableViewBottomConstraint setConstant:(keyboardFrame.size.height + self.postView.frame.size.height)];
+        }
         [self.view layoutIfNeeded];
     }];
     CGRect r = rawFrame;
@@ -969,6 +975,9 @@ NSString * const HAMessageUserURLScheme = @"user";
 - (void)dismissKeyboard:(UITapGestureRecognizer *)gr
 {
         [UIView animateWithDuration:0.3 animations:^{
+            if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+                [self.tableViewBottomConstraint setConstant:self.postView.frame.size.height];
+            }
             [self.postView.textView resignFirstResponder];
             [self.postViewBottomConstraint setConstant:0];
             [self.markupController.view setFrame:self.originalFrameForMarkupController];

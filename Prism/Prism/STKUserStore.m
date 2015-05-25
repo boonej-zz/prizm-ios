@@ -469,7 +469,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [[NSUserDefaults standardUserDefaults] setObject:[currentUser uniqueID]
                                                   forKey:STKUserStoreCurrentUserKey];
         
-        [Crashlytics setUserIdentifier:[NSString stringWithFormat:@"%@ %@ %@", [currentUser name], [currentUser uniqueID], [[UIDevice currentDevice] name]]];
+        [[Crashlytics sharedInstance] setUserIdentifier:[NSString stringWithFormat:@"%@ %@ %@", [currentUser name], [currentUser uniqueID], [[UIDevice currentDevice] name]]];
 
         NSString *analyticsIdentifier = [NSString stringWithFormat:@"%@ %@", [currentUser name], [currentUser uniqueID]];
 //        [[Mixpanel sharedInstance] identify:analyticsIdentifier];

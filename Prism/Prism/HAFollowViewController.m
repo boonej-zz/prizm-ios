@@ -96,6 +96,7 @@
         NSArray *filtered = [profiles filteredArrayUsingPredicate:notFollowing];
         self.users = [filtered sortedArrayUsingComparator:sort];
         STKFetchDescription *desc = [[STKFetchDescription alloc] init];
+        [desc setFilterDictionary:@{@"visibility": @"public"}];
         desc.limit = 3;
         self.posts = [NSMutableArray arrayWithArray:self.users];
         [self.tableView reloadData];

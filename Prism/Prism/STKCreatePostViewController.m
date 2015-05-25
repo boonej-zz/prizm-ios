@@ -34,7 +34,7 @@
 NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
 
 @interface STKCreatePostViewController ()
-    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKMarkupControllerDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate, UICollectionViewDelegateFlowLayout>
+    <STKHashtagToolbarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UITextViewDelegate, STKMarkupControllerDelegate, UIAlertViewDelegate, STKLocationListViewControllerDelegate, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *locationIndicator;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *optionHeightConstraint;
@@ -655,6 +655,7 @@ NSString * const STKCreatePostPlaceholderText = @"Caption your post...";
     [self.postTextView setHidden:NO];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:STKPrivacyInstructionsDismissedKey];
 }
+
 
 
 

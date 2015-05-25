@@ -19,9 +19,6 @@
 
 @interface HAMessageCell()<UITextViewDelegate>
 
-
-
-@property (nonatomic, weak) IBOutlet NSLayoutConstraint *imageViewHeight;
 @property (nonatomic, weak) IBOutlet UIImageView *iv;
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
@@ -43,6 +40,7 @@
     [self setBackgroundColor:[UIColor clearColor]];
    
     [self.postText setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+    [super awakeFromNib];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -54,13 +52,17 @@
 - (void)prepareForReuse
 {
     [self.iv removeGestureRecognizer:self.tapRecognizer];
+    [self.iv setImage:nil];
+    [super prepareForReuse];
 }
 
 - (void)setMessage:(STKMessage *)message
 {
     _message = message;
-    self.imageViewHeight.constant = 0;
-    [self layoutIfNeeded];
+    if (!self.tapRecognizer) {
+        self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(previewImageViewTapped:)];
+    }
+//    [self layoutIfNeeded];
     [self.avatarView setUrlString:message.creator.profilePhotoPath];
     [self.postText setAttributedText:[self.message attributedMessageText]];
     [self.creator setText:message.creator.name];
@@ -72,20 +74,25 @@
         [self.likesCount setText:@""];
     }
     if (message.metaData){
+        [self setNeedsUpdateConstraints];
         STKMessageMetaData *meta = message.metaData;
         if (meta.image && meta.image.urlString) {
-            self.imageViewHeight.constant = 163;
-            [self layoutIfNeeded];
+//            [self.iv setHidden:NO];
+//            [self layoutIfNeeded];
             [[STKImageStore store] fetchImageForURLString:meta.image.urlString completion:^(UIImage *img) {
                 [self.iv setImage:img];
             }];
+            
+            [self.iv addGestureRecognizer:self.tapRecognizer];
+        } else {
+//            [self.iv setHidden:YES];
         }
-        if (!self.tapRecognizer) {
-            self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(previewImageViewTapped:)];
-        }
-        [self.iv addGestureRecognizer:self.tapRecognizer];
+        
+    } else {
+//        [self.iv setHidden:YES];
+//        [self layoutIfNeeded];
     }
-
+    [self layoutIfNeeded];
 }
 
 - (void)previewImageViewTapped:(id)sender
@@ -116,17 +123,6 @@
     if (self.delegate) {
         [self.delegate likeButtonTapped:self];
     }
-}
-
-- (CGFloat)heightForCell
-{
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setAlignment:NSTextAlignmentLeft];
-
-    CGRect r = [self.postText.attributedText boundingRectWithSize:CGSizeMake(254, 10000)
-                                  options:NSStringDrawingUsesLineFragmentOrigin
-                                  context:nil];
-    return r.size.height + 80;
 }
 
 

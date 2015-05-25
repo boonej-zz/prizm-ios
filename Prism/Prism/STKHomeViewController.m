@@ -380,15 +380,17 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]){
-        UIUserNotificationType types = UIUserNotificationTypeBadge |
-        UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-        
-        UIUserNotificationSettings *mySettings =
-        [UIUserNotificationSettings settingsForTypes:types categories:nil];
-        
-        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-        //        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound)];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+        if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]){
+            UIUserNotificationType types = UIUserNotificationTypeBadge |
+            UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+            
+            UIUserNotificationSettings *mySettings =
+            [UIUserNotificationSettings settingsForTypes:types categories:nil];
+            
+            [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+            //        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound)];
+        }
     }
     
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];

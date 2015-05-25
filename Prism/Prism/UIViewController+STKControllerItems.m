@@ -13,6 +13,7 @@
 #import "STKUserStore.h"
 #import "HAFastSwitchViewController.h"
 #import "UIERealTimeBlurView.h"
+#import "HANavigationController.h"
 
 #define IS_HEIGHT_GTE_568 [[UIScreen mainScreen ] bounds].size.height >= 568.0f
 
@@ -114,7 +115,7 @@
 - (void)createNewPost:(id)sender
 {
     STKCreatePostViewController *cpc = [[STKCreatePostViewController alloc] init];
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:cpc];
+    HANavigationController *nvc = [[HANavigationController alloc] initWithRootViewController:cpc];
     [self presentViewController:nvc animated:YES completion:^{
         [[self menuController] setMenuVisible:NO];
     }];

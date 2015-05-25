@@ -40,6 +40,7 @@
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     self.containerView = [[UIView alloc] init];
     [self.containerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     [self addSubview:self.containerView];
     self.avatarView = [[STKAvatarView alloc] init];
     self.creator = [[UILabel alloc] init];
@@ -63,8 +64,10 @@
 
 - (void)setConstraints
 {
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[cv]-0-|" options:0 metrics:nil views:@{@"cv": self.containerView}]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-1-[cv]-0-|" options:0 metrics:nil views:@{@"cv": self.containerView}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[cv]-0-|" options:0 metrics:nil views:@{@"cv": _containerView}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-1-[cv]-0-|" options:0 metrics:nil views:@{@"cv": _containerView}]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_containerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.f constant:0.f]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_containerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1.f constant:-1.f]];
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.clockImage attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.creator attribute:NSLayoutAttributeBottom multiplier:1.f constant:5.f]];
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.postImage attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.clockImage attribute:NSLayoutAttributeBottom multiplier:1.f constant:8.f]];
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeWidth multiplier:1.f constant:0.f]];
@@ -79,9 +82,9 @@
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.dateAgo attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:42.f]];
     [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[ci(==11)]-5-[da]" options:0 metrics:nil views:@{@"ci": self.clockImage, @"da": self.dateAgo}]];
 //    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.postImage attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:300]];
-    [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[pi]-15-|" options:0 metrics:nil views:@{@"ci": self.clockImage, @"pi": self.postImage}]];
+    [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[pi]-15-|" options:0 metrics:nil views:@{@"pi": self.postImage}]];
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.postImage attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.postImage attribute:NSLayoutAttributeWidth multiplier:1.f constant:0]];
-    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.postImage attribute:NSLayoutAttributeCenterX            relatedBy:NSLayoutRelationEqual toItem:_containerView attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0]];
+//    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.postImage attribute:NSLayoutAttributeCenterX            relatedBy:NSLayoutRelationEqual toItem:_containerView attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0]];
 }
 
 - (void)imageTapped:(id)sender
@@ -94,7 +97,8 @@
 - (void)setMessage:(STKMessage *)message
 {
     _message = message;
-    [self layoutIfNeeded];
+    [self setBackgroundColor:[UIColor clearColor]];
+    [self.containerView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     [self.avatarView setUrlString:message.creator.profilePhotoPath];
     [self.creator setText:message.creator.name];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];
@@ -104,7 +108,7 @@
         [self.likesCount setText:@""];
     }
     [[STKImageStore store] fetchImageForURLString:message.imageURL preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
-        if (img.size.width > 300 || img.size.height > 3000) {
+        if (img.size.width > 300 || img.size.height > 300) {
             [self.postImage setContentMode:UIViewContentModeScaleAspectFit];
         }
         [self.postImage setImage:img];
@@ -113,8 +117,7 @@
 
 - (void)layoutSubviews
 {
-    [self setBackgroundColor:[UIColor clearColor]];
-    [self.containerView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
+    [super layoutSubviews];
     [self.creator setFont:STKFont(18.f)];
     [self.dateAgo setFont:STKFont(9.0f)];
     [self.creator setTextColor:[UIColor HATextColor]];
