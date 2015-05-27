@@ -28,6 +28,8 @@
 {
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[uv]-0-|" options:0 metrics:nil views:@{@"uv": _underlayView}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-1-[uv]-0-|" options:0 metrics:nil views:@{@"uv": _underlayView}]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_underlayView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.f constant:0.f]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:_underlayView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1.f constant:-1.f]];
 }
 
 - (void)layoutSubviews

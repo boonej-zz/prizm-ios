@@ -46,16 +46,18 @@
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.view addSubview:self.tableView];
-    [self.tableView setContentInset:UIEdgeInsetsMake(65.f, 0, 0, 0)];
+    [self setAutomaticallyAdjustsScrollViewInsets:NO];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self addBackgroundImage];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tv]-0-|" options:0 metrics:nil views:@{@"tv": _tableView}]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tv]-0-|" options:0 metrics:nil views:@{@"tv": self.tableView}]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_tableView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1.0f constant:0.f]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:_tableView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.f]];
     [self addBlurViewWithHeight:64.f];
     self.user = [[STKUserStore store] currentUser];
-
+    
     
 }
 
@@ -84,6 +86,7 @@
     [self.navigationItem setHidesBackButton:YES];
     [self.navigationItem setLeftBarButtonItem:bbi];
     self.title = @"Members";
+    [self.tableView setContentInset:UIEdgeInsetsMake(65.f, 0, 0, 0)];
 }
 
 - (void)back:(id)sender

@@ -84,7 +84,7 @@
 		2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762A1A1BC151007580A5 /* STKTheme.m */; };
 		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
 		2CE58A691AF9B50700349C57 /* STKMute.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE58A681AF9B50700349C57 /* STKMute.m */; };
-		2CF1A6101B14B75F00676C10 /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2CF1A6161B15443700676C10 /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2CF53D2F1ADD702F0075FA96 /* STKGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D2E1ADD702F0075FA96 /* STKGroup.m */; };
 		2CF53D321ADD70300075FA96 /* STKOrgStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D311ADD70300075FA96 /* STKOrgStatus.m */; };
 		2CF53D391ADED0730075FA96 /* HACalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D371ADED0730075FA96 /* HACalendarViewController.m */; };
@@ -335,7 +335,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2CF1A60E1B14B75200676C10 /* PBXContainerItemProxy */ = {
+		2CF1A6141B15442800676C10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BE02EA97182A80A200A5505A /* Project object */;
 			proxyType = 1;
@@ -358,7 +358,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				2CF1A6101B14B75F00676C10 /* PrizmShareExt.appex in Embed App Extensions */,
+				2CF1A6161B15443700676C10 /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5236,7 +5236,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				2CF1A60F1B14B75200676C10 /* PBXTargetDependency */,
+				2CF1A6151B15442800676C10 /* PBXTargetDependency */,
 			);
 			name = Prism;
 			productName = Prism;
@@ -5713,10 +5713,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2CF1A60F1B14B75200676C10 /* PBXTargetDependency */ = {
+		2CF1A6151B15442800676C10 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9CD7D9871A1BC1FF003E221C /* PrizmShareExt */;
-			targetProxy = 2CF1A60E1B14B75200676C10 /* PBXContainerItemProxy */;
+			targetProxy = 2CF1A6141B15442800676C10 /* PBXContainerItemProxy */;
 		};
 		BE02EAC0182A80A200A5505A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

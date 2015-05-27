@@ -245,6 +245,7 @@ NSString * const HAMessageUserURLScheme = @"user";
 - (void)viewWillAppear:(BOOL)animated
 {
     [self finalizeViewConfiguration];
+    [self dismissKeyboard:nil];
     [super viewWillAppear:animated];
 }
 
@@ -338,7 +339,9 @@ NSString * const HAMessageUserURLScheme = @"user";
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [self dismissKeyboard:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
