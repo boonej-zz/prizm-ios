@@ -21,7 +21,7 @@
 @property (nonatomic, strong) id selected;
 @property (nonatomic, getter=hasEdits) BOOL edits;
 @property (nonatomic, strong) NSPredicate *predicate;
-@property (nonatomic, strong) NSMutableArray *selections;
+
 @property (nonatomic, strong) HASearchMembersHeaderView *searchBar;
 
 
@@ -34,6 +34,12 @@
     self = [super init];
     if (self) {
         self.selected = selection;
+        self.selections = [NSMutableArray array];
+        if ([self.selected isKindOfClass:[NSArray class]]) {
+            [self.selected enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [self.selections addObject:obj];
+            }];
+        }
         self.predicate = predicate;
         self.tableView = [[UITableView alloc] init];
         [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -57,7 +63,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.selections = [NSMutableArray array];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
@@ -148,7 +153,6 @@
                 return NO;
             }] != NSNotFound) {
                 [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-                [self.selections addObject:o];
             }
         }
     }
@@ -160,7 +164,7 @@
     self.edits = YES;
     STKOrgStatus *status = [self.filteredMembers objectAtIndex:indexPath.row];
     self.selected = status.member.uniqueID;
-    [self.selections addObject:status];
+    [self.selections addObject:status.member.uniqueID];
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(didSelectMember:)]) {
             [self.delegate didSelectMember:status];
@@ -173,7 +177,7 @@
     self.edits = YES;
     STKOrgStatus *status = [self.filteredMembers objectAtIndex:indexPath.row];
     self.selected = nil;
-    [self.selections removeObject:status];
+    [self.selections removeObject:status.member.uniqueID];
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(didSelectMember:)]) {
             [self.delegate didSelectMember:nil];

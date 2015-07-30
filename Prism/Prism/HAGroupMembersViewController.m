@@ -157,7 +157,7 @@
 {
     NSMutableArray *members = [NSMutableArray array];
     [selections enumerateObjectsUsingBlock:^(STKOrgStatus *obj, NSUInteger idx, BOOL *stop) {
-        [members addObject:obj.member.uniqueID];
+        [members addObject:obj];
     }];
     [[STKUserStore store] editMembers:members forGroup:self.group completion:^(id data, NSError *err) {
         [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {

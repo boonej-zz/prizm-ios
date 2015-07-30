@@ -21,6 +21,7 @@
 
 @property (nonatomic, strong) NSArray *members;
 @property (nonatomic, weak) id<HASelectMemberProtocol> delegate;
+@property (nonatomic, strong) NSMutableArray *selections;
 
 - (id)initWithSelection:(id)selection predicate:(NSPredicate *)predicate;
 
