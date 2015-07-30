@@ -67,6 +67,7 @@
 		2C97974B19DDEB8E003A6C0A /* STKInsightTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C97974A19DDEB8E003A6C0A /* STKInsightTarget.m */; };
 		2CA39E7D19D0A8CE001F9F0C /* STKHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */; };
 		2CB0126119A693D800B07C96 /* HAUtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */; };
+		2CB028DD1B6A7C2800034A01 /* HAMessageViewedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB028DC1B6A7C2800034A01 /* HAMessageViewedController.m */; };
 		2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB073D819AE634A00F70B7E /* HAFollowCell.m */; };
 		2CB073DB19AE634A00F70B7E /* HAFollowCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CB073D919AE634A00F70B7E /* HAFollowCell.xib */; };
 		2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB073DD19AF96C900F70B7E /* HAFollowViewController.m */; };
@@ -475,6 +476,9 @@
 		2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKHomeViewController.xib; sourceTree = "<group>"; };
 		2CB0125F19A693D800B07C96 /* HAUtilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAUtilityFunctions.h; sourceTree = "<group>"; };
 		2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAUtilityFunctions.m; sourceTree = "<group>"; };
+		2CB028DA1B6A790B00034A01 /* User 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 7.xcdatamodel"; sourceTree = "<group>"; };
+		2CB028DB1B6A7C2800034A01 /* HAMessageViewedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessageViewedController.h; sourceTree = "<group>"; };
+		2CB028DC1B6A7C2800034A01 /* HAMessageViewedController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessageViewedController.m; sourceTree = "<group>"; };
 		2CB073D719AE634A00F70B7E /* HAFollowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAFollowCell.h; sourceTree = "<group>"; };
 		2CB073D819AE634A00F70B7E /* HAFollowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAFollowCell.m; sourceTree = "<group>"; };
 		2CB073D919AE634A00F70B7E /* HAFollowCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAFollowCell.xib; sourceTree = "<group>"; };
@@ -2717,7 +2721,8 @@
 				883D87CC19463E7F00195B11 /* UIView+MPSnapshotImage.h */,
 				883D87CD19463E7F00195B11 /* UIView+MPSnapshotImage.m */,
 			);
-			path = Mixpanel;
+			name = Mixpanel;
+			path = MixPanel;
 			sourceTree = "<group>";
 		};
 		8B606A22D8006ABCD59D4C91 /* Pods */ = {
@@ -3015,6 +3020,8 @@
 				2C854A411AFB08140097B9D1 /* HAGroupInfoViewController.m */,
 				2C8DE51A1B0CF2660054FB60 /* HASingleMessageImageController.h */,
 				2C8DE51B1B0CF2660054FB60 /* HASingleMessageImageController.m */,
+				2CB028DB1B6A7C2800034A01 /* HAMessageViewedController.h */,
+				2CB028DC1B6A7C2800034A01 /* HAMessageViewedController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5568,6 +5575,7 @@
 				BE5767F5187B4DFF004AEE1F /* STKPostViewController.m in Sources */,
 				2C854A421AFB08140097B9D1 /* HAGroupInfoViewController.m in Sources */,
 				2C97973E19DC5946003A6C0A /* HAInsightsViewController.m in Sources */,
+				2CB028DD1B6A7C2800034A01 /* HAMessageViewedController.m in Sources */,
 				BE7391C3190193AB00AD81AB /* STKSearchResultsViewController.m in Sources */,
 				883D87DD19463E7F00195B11 /* UIImage+MPImageEffects.m in Sources */,
 				BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */,
@@ -6809,6 +6817,7 @@
 		BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2CB028DA1B6A790B00034A01 /* User 7.xcdatamodel */,
 				2C02B7D91B0BB95000E5E82D /* User 6.xcdatamodel */,
 				2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */,
 				2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */,
@@ -6816,7 +6825,7 @@
 				2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */,
 				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
 			);
-			currentVersion = 2C02B7D91B0BB95000E5E82D /* User 6.xcdatamodel */;
+			currentVersion = 2CB028DA1B6A790B00034A01 /* User 7.xcdatamodel */;
 			path = User.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

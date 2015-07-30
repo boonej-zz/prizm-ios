@@ -52,6 +52,16 @@
     [self.postImage setClipsToBounds:YES];
     self.likeButton = [[UIButton alloc] init];
     [self.likeButton addTarget:self action:@selector(likeButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    self.viewedButton = [[UIButton alloc] init];
+    [self.viewedButton setTitle:@"" forState:UIControlStateNormal];
+    [self.viewedButton setImage:[UIImage imageNamed:@"view_icon"] forState:UIControlStateNormal];
+    [self.viewedButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.viewedButton addTarget:self action:@selector(viewedButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.containerView addSubview:self.viewedButton];
+    self.viewedLabel = [[UILabel alloc] init];
+    [self.viewedLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.viewedLabel setHidden:YES];
+    [self.containerView addSubview:self.viewedLabel];
     self.clockImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_clock"]];
     NSArray *views = @[self.avatarView, self.creator, self.dateAgo, self.likesCount, self.postImage, self.likeButton, self.clockImage];
     [views enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
@@ -80,7 +90,13 @@
    
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.dateAgo attribute:NSLayoutAttributeCenterY      relatedBy:NSLayoutRelationEqual toItem:self.clockImage attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.dateAgo attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:42.f]];
+    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.viewedButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.clockImage attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
+    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.viewedLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.clockImage attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
+    
     [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[ci(==11)]-5-[da]" options:0 metrics:nil views:@{@"ci": self.clockImage, @"da": self.dateAgo}]];
+    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.viewedButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.clockImage attribute:NSLayoutAttributeTrailing multiplier:1.f constant:55]];
+    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.viewedLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.viewedButton attribute:NSLayoutAttributeTrailing multiplier:1.f constant:5]];
+    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.viewedButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute  multiplier:1.f constant:11.f]];
 //    [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.postImage attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:300]];
     [_containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[pi]-15-|" options:0 metrics:nil views:@{@"pi": self.postImage}]];
     [_containerView addConstraint:[NSLayoutConstraint constraintWithItem:self.postImage attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.postImage attribute:NSLayoutAttributeWidth multiplier:1.f constant:0]];
@@ -102,11 +118,16 @@
     [self.avatarView setUrlString:message.creator.profilePhotoPath];
     [self.creator setText:message.creator.name];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];
+    [self.dateAgo sizeToFit];
     if ([message.likesCount integerValue] > 0) {
         [self.likesCount setText:[NSString stringWithFormat:@"%@", message.likesCount]];
     } else {
         [self.likesCount setText:@""];
     }
+    [self.viewedLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)message.read.count]];
+    [self.viewedLabel setFont:STKFont(9)];
+    [self.viewedLabel setTextColor:[UIColor HATextColor]];
+    [self.viewedLabel sizeToFit];
     [[STKImageStore store] fetchImageForURLString:message.imageURL preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
         if (img.size.width > 300 || img.size.height > 300) {
             [self.postImage setContentMode:UIViewContentModeScaleAspectFit];
@@ -155,5 +176,13 @@
 
     // Configure the view for the selected state
 }
+
+- (void)viewedButtonTapped:(id)sender
+{
+    if (self.delegate) {
+        [self.delegate viewedButtonTapped:self];
+    }
+}
+
 
 @end

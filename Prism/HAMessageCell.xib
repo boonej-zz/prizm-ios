@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -62,6 +62,15 @@
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wPm-r4-3wg">
+                        <rect key="frame" x="140" y="34" width="42" height="11"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="42" id="J4o-D3-w6Z"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="9"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" editable="NO" text="This is some post text." translatesAutoresizingMaskIntoConstraints="NO" id="0tq-fb-Brx">
                         <rect key="frame" x="53" y="50" width="254" height="95"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -88,6 +97,15 @@
                             <constraint firstAttribute="width" constant="30" id="eqI-LY-vZ4"/>
                         </constraints>
                     </view>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I2p-Qj-hoG">
+                        <rect key="frame" x="119" y="29" width="16" height="22"/>
+                        <state key="normal" image="view_icon">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="viewedButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="w9w-Fu-sgX"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="CnI-Av-qwV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="0fu-XA-lCa"/>
@@ -103,8 +121,11 @@
                     <constraint firstItem="0tq-fb-Brx" firstAttribute="top" secondItem="505-PA-74J" secondAttribute="bottom" constant="5" id="RtS-0q-X6b"/>
                     <constraint firstItem="QZb-lD-64O" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="leading" id="SBZ-Zg-sbr"/>
                     <constraint firstItem="syP-1I-nKF" firstAttribute="top" secondItem="QZb-lD-64O" secondAttribute="bottom" constant="5" id="TSC-dH-c93"/>
+                    <constraint firstItem="syP-1I-nKF" firstAttribute="centerY" secondItem="I2p-Qj-hoG" secondAttribute="centerY" id="VNZ-7r-PWk"/>
+                    <constraint firstItem="I2p-Qj-hoG" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="trailing" constant="55" id="Vrb-7t-K3H"/>
                     <constraint firstItem="txw-Fn-CBH" firstAttribute="top" secondItem="0tq-fb-Brx" secondAttribute="bottom" id="WXX-nS-fsp"/>
                     <constraint firstItem="QZb-lD-64O" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="XUV-03-dse"/>
+                    <constraint firstItem="syP-1I-nKF" firstAttribute="centerY" secondItem="wPm-r4-3wg" secondAttribute="centerY" id="YaJ-TE-JO7"/>
                     <constraint firstItem="QZb-lD-64O" firstAttribute="leading" secondItem="CnI-Av-qwV" secondAttribute="trailing" constant="8" id="ZUN-a1-WsA"/>
                     <constraint firstAttribute="bottom" secondItem="txw-Fn-CBH" secondAttribute="bottom" constant="8" id="aAb-tR-21V"/>
                     <constraint firstAttribute="trailing" secondItem="ojs-mq-Jlc" secondAttribute="trailing" id="bb0-3m-fRK"/>
@@ -117,6 +138,7 @@
                     <constraint firstItem="ojs-mq-Jlc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="kB4-F7-prg"/>
                     <constraint firstItem="U4S-Bn-tqX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="kH1-hE-44g"/>
                     <constraint firstItem="0tq-fb-Brx" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="leading" id="lk7-4c-2Ms"/>
+                    <constraint firstItem="wPm-r4-3wg" firstAttribute="leading" secondItem="I2p-Qj-hoG" secondAttribute="trailing" constant="5" id="n6Y-MK-4fB"/>
                     <constraint firstAttribute="bottomMargin" secondItem="0tq-fb-Brx" secondAttribute="bottom" constant="156" id="oE9-gG-zWw"/>
                     <constraint firstItem="505-PA-74J" firstAttribute="leading" secondItem="syP-1I-nKF" secondAttribute="trailing" constant="5" id="vjp-fL-tR3"/>
                     <constraint firstItem="ojs-mq-Jlc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="1" id="wz9-Kv-cOk"/>
@@ -146,6 +168,8 @@
                 <outlet property="likeButton" destination="U4S-Bn-tqX" id="8Rz-yg-Oci"/>
                 <outlet property="likesCount" destination="K3g-bq-EzX" id="sEc-Xh-tR7"/>
                 <outlet property="postText" destination="0tq-fb-Brx" id="dYf-QZ-IGM"/>
+                <outlet property="viewedButton" destination="I2p-Qj-hoG" id="gTu-8T-s8t"/>
+                <outlet property="viewedLabel" destination="wPm-r4-3wg" id="bsX-GZ-mx9"/>
             </connections>
             <point key="canvasLocation" x="340" y="347.5"/>
         </tableViewCell>
@@ -153,5 +177,6 @@
     <resources>
         <image name="action_heart" width="23" height="20"/>
         <image name="btn_clock" width="11" height="11"/>
+        <image name="view_icon" width="16" height="11"/>
     </resources>
 </document>

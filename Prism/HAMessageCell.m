@@ -23,6 +23,7 @@
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
 - (IBAction)likeButtonTapped:(id)sender;
+- (IBAction)viewedButtonTapped:(id)sender;
 
 @end
 
@@ -53,6 +54,8 @@
 {
     [self.iv removeGestureRecognizer:self.tapRecognizer];
     [self.iv setImage:nil];
+    [self.viewedLabel setHidden:YES];
+    [self.viewedButton setHidden:YES];
     [super prepareForReuse];
 }
 
@@ -67,6 +70,7 @@
     [self.postText setAttributedText:[self.message attributedMessageText]];
     [self.creator setText:message.creator.name];
     [self.postText setTextColor:[UIColor HATextColor]];
+    [self.viewedLabel setText:[NSString stringWithFormat:@"%lu", message.read.count]];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];
     if ([message.likesCount integerValue] > 0) {
         [self.likesCount setText:[NSString stringWithFormat:@"%@", message.likesCount]];
@@ -122,6 +126,13 @@
     [self.likeButton setEnabled:NO];
     if (self.delegate) {
         [self.delegate likeButtonTapped:self];
+    }
+}
+
+- (IBAction)viewedButtonTapped:(id)sender
+{
+    if (self.delegate) {
+        [self.delegate viewedButtonTapped:self];
     }
 }
 

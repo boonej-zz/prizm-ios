@@ -25,5 +25,7 @@
 @property (nonatomic, weak) id<HAMessageCellDelegate> delegate;
 @property (nonatomic, strong) UIButton *likeButton;
 @property (nonatomic, strong) UIImageView *clockImage;
+@property (nonatomic, strong) IBOutlet UIButton *viewedButton;
+@property (nonatomic, strong) IBOutlet UILabel *viewedLabel;
 
 @end

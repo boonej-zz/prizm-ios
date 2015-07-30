@@ -17,6 +17,7 @@
 - (void)previewImageTapped:(NSURL *)url;
 - (void)videoImageTapped:(NSURL *)url;
 - (void)messageImageTapped:(STKMessage *)message;
+- (void)viewedButtonTapped:(HAMessageCell *)sender;
 
 @end
 
@@ -31,6 +32,8 @@
 @property (nonatomic, getter=isLiked) BOOL liked;
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, weak) IBOutlet UIButton *likeButton;
+@property (nonatomic, weak) IBOutlet UIButton *viewedButton;
+@property (nonatomic, weak) IBOutlet UILabel *viewedLabel;
 
 @end
 

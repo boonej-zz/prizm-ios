@@ -58,7 +58,8 @@
              @"likes": [STKBind bindMapForKey:@"likes" matchMap:@{@"uniqueID": @"_id"}],
              @"create_date": [STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
              @"meta": [STKBind bindMapForKey:@"metaData" matchMap:@{@"messageID": @"message_id"}],
-             @"image_url": @"imageURL"
+             @"image_url": @"imageURL",
+             @"read": [STKBind bindMapForKey:@"read" matchMap:@{@"uniqueID": @"_id"}]
              };
 }
 

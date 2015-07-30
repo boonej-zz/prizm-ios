@@ -23,6 +23,7 @@
 @property (nonatomic, retain) NSSet *likes;
 @property (nonatomic, retain) NSString * uniqueID;
 @property (nonatomic, retain) NSString * imageURL;
+@property (nonatomic, retain) NSSet *read;
 
 
 @end

@@ -39,6 +39,7 @@
 #import "STKProcessingView.h"
 #import "HAMessageImageCell.h"
 #import "HASingleMessageImageController.h"
+#import "HAMessageViewedController.h"
 
 NSString * const HAMessageHashTagURLScheme = @"hashtag";
 NSString * const HAMessageUserURLScheme = @"user";
@@ -556,6 +557,9 @@ NSString * const HAMessageUserURLScheme = @"user";
             [c setDelegate:self];
             [c setMessage:message];
             __block BOOL liked = NO;
+            if (message.read.count > 0) {
+                [c.viewedLabel setHidden:NO];
+            }
             [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
                 if ([obj isKindOfClass:[NSString class]]) {
                     if ([obj isEqualToString:self.user.uniqueID]) {
@@ -586,6 +590,14 @@ NSString * const HAMessageUserURLScheme = @"user";
                     }
                 }
             }];
+            if ([self isLeader] || [self.user.type isEqualToString:@"institution_verified"]) {
+                if ([message.creator.uniqueID isEqualToString:self.user.uniqueID]) {
+                    [c.viewedButton setHidden:NO];
+                    if (message.read.count > 0) {
+                        [c.viewedLabel setHidden:NO];
+                    }
+                }
+            }
             [c setLiked:liked];
             cell = c;
         }
@@ -758,6 +770,16 @@ NSString * const HAMessageUserURLScheme = @"user";
             }];
         }
     }
+}
+
+- (void)viewedButtonTapped:(HAMessageCell *)sender
+{
+    NSLog(@"Message viewed tapped");
+
+    HAMessageViewedController *mvc = [[HAMessageViewedController alloc] init];
+    [mvc setMessage:sender.message];
+    [mvc setMembers:self.members];
+    [self.navigationController pushViewController:mvc animated:YES];
 }
 
 - (void)previewImageTapped:(NSURL *)url
