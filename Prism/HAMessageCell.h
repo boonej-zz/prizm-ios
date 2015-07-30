@@ -10,6 +10,7 @@
 @class STKMessage;
 @class HAMessageCell;
 @class STKAvatarView;
+@class STKUser;
 
 @protocol HAMessageCellDelegate
 
@@ -18,6 +19,7 @@
 - (void)videoImageTapped:(NSURL *)url;
 - (void)messageImageTapped:(STKMessage *)message;
 - (void)viewedButtonTapped:(HAMessageCell *)sender;
+- (void)avatarTapped:(STKUser *)user;
 
 @end
 

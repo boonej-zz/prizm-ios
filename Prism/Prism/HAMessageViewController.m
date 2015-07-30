@@ -803,6 +803,13 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.navigationController presentViewController:wc animated:YES completion:nil];
 }
 
+- (void)avatarTapped:(STKUser *)user
+{
+    STKProfileViewController *pvc = [[STKProfileViewController alloc] init];
+    [pvc setProfile:user];
+    [self.navigationController pushViewController:pvc animated:YES];
+}
+
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)url inRange:(NSRange)characterRange
 {
     if([[url scheme] isEqualToString:@"http"] || [[url scheme] isEqualToString:@"https"]) {

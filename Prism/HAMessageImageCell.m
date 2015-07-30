@@ -14,6 +14,8 @@
 @interface HAMessageImageCell()
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *avatarTap;
+@property (nonatomic, strong) UITapGestureRecognizer *creatorTap;
 
 @end
 
@@ -116,6 +118,19 @@
     [self setBackgroundColor:[UIColor clearColor]];
     [self.containerView setBackgroundColor:[UIColor colorWithWhite:1.f alpha:0.2f]];
     [self.avatarView setUrlString:message.creator.profilePhotoPath];
+    if (!self.avatarTap) {
+        self.avatarTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageTapped:)];
+    }
+    
+    if (!self.creatorTap) {
+        self.creatorTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageTapped:)];
+    }
+    [self.avatarView setUserInteractionEnabled:YES];
+    [self.creator setUserInteractionEnabled:YES];
+    [self.avatarView removeGestureRecognizer:self.avatarTap];
+    [self.avatarView addGestureRecognizer:self.avatarTap];
+    [self.creator removeGestureRecognizer:self.creatorTap];
+    [self.creator addGestureRecognizer:self.creatorTap];
     [self.creator setText:message.creator.name];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];
     [self.dateAgo sizeToFit];
@@ -181,6 +196,12 @@
 {
     if (self.delegate) {
         [self.delegate viewedButtonTapped:self];
+    }
+}
+
+- (void)avatarImageTapped:(id)sender {
+    if (self.delegate) {
+        [self.delegate avatarTapped:self.message.creator];
     }
 }
 

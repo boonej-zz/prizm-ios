@@ -21,6 +21,8 @@
 
 @property (nonatomic, weak) IBOutlet UIImageView *iv;
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
+@property (nonatomic, strong) UIGestureRecognizer *avatarTap;
+@property (nonatomic, strong) UIGestureRecognizer *creatorTap;
 
 - (IBAction)likeButtonTapped:(id)sender;
 - (IBAction)viewedButtonTapped:(id)sender;
@@ -65,12 +67,25 @@
     if (!self.tapRecognizer) {
         self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(previewImageViewTapped:)];
     }
+    if (!self.avatarTap) {
+        self.avatarTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageTapped:)];
+    }
+    
+    if (!self.creatorTap) {
+        self.creatorTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarImageTapped:)];
+    }
+    [self.avatarView setUserInteractionEnabled:YES];
+    [self.creator setUserInteractionEnabled:YES];
+    [self.avatarView removeGestureRecognizer:self.avatarTap];
+    [self.avatarView addGestureRecognizer:self.avatarTap];
+    [self.creator removeGestureRecognizer:self.creatorTap];
+    [self.creator addGestureRecognizer:self.creatorTap];
 //    [self layoutIfNeeded];
     [self.avatarView setUrlString:message.creator.profilePhotoPath];
     [self.postText setAttributedText:[self.message attributedMessageText]];
     [self.creator setText:message.creator.name];
     [self.postText setTextColor:[UIColor HATextColor]];
-    [self.viewedLabel setText:[NSString stringWithFormat:@"%lu", message.read.count]];
+    [self.viewedLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)message.read.count]];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];
     if ([message.likesCount integerValue] > 0) {
         [self.likesCount setText:[NSString stringWithFormat:@"%@", message.likesCount]];
@@ -107,6 +122,12 @@
             url = [NSURL URLWithString:self.message.metaData.urlString];
             [self.delegate previewImageTapped:url];
         }
+    }
+}
+
+- (void)avatarImageTapped:(id)sender {
+    if (self.delegate) {
+        [self.delegate avatarTapped:self.message.creator];
     }
 }
 
