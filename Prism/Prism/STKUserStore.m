@@ -1800,14 +1800,15 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     cached = [[self context] executeFetchRequest:fr error:nil];
     NSDate *date = nil;
     if (cached.count > 0) {
-        STKMessage *lastMessage = [cached lastObject];
-        date = [lastMessage createDate];
+//        STKMessage *lastMessage = [cached lastObject];
+//        date = [lastMessage createDate];
     }
     [self fetchUpdatedMessagesForOrganization:organization group:group completion:^(NSArray *messages, NSError *err) {
         [self fetchLatestMessagesForOrganization:organization group:group date:date completion:^(NSArray *messages, NSError *err) {
             block(messages, err);
         }];
     }];
+//    return @[];
     return cached;
 }
 
@@ -1948,7 +1949,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c setModelGraph:@[@"STKMessage"]];
         [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
         [c setContext:[self context]];
-        //            [c setShouldReturnArray:YES];
+                    [c setShouldReturnArray:YES];
         [c setShouldReturnArray:YES];
         [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
             block(obj, err);

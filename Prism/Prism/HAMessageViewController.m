@@ -387,20 +387,24 @@ NSString * const HAMessageUserURLScheme = @"user";
         if (m) {
             [[STKUserStore store] fetchLatestMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
                 if (messages && messages.count > 0) {
-                    [self.messages addObjectsFromArray:messages];
-                    NSMutableArray *paths = [NSMutableArray array];
-                    [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
-                        [paths addObject:[NSIndexPath indexPathForRow:[self.messages indexOfObject:message] inSection:0]];
-                    }];
-                    [UIView animateWithDuration:0.2 animations:^{
-                        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
-                        
-                    } completion:^(BOOL finished) {
-                        
-                        if (scroll) {
-                            [self scrollToBottom:YES];
+                    [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSArray *test = [self.messages filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(STKMessage *evaluatedObject, NSDictionary *bindings) {
+                            return [evaluatedObject.uniqueID isEqualToString:[obj uniqueID]];
+                        }]];
+                        if (test.count > 0) {
+                            NSInteger idx = [self.messages indexOfObject:[test
+                                                                           objectAtIndex:0]];
+                            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                        } else {
+                            [self.messages addObject:obj];
+                            NSInteger idx = [self.messages indexOfObject:obj];
+                            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                            
                         }
                     }];
+                    if (scroll) {
+                        [self scrollToBottom:YES];
+                    }
                 }
                 [[self luminatingBar] setLuminating:NO];
                 self.updatingMessages = NO;
@@ -409,19 +413,24 @@ NSString * const HAMessageUserURLScheme = @"user";
             self.messages = [[[STKUserStore store] fetchMessagesForOrganization:self.organization group:g completion:^(NSArray *messages, NSError *err) {
                 BOOL hasMessages = self.messages.count > 0;
                 if (messages.count > 0) {
-                [self.messages addObjectsFromArray:messages];
-                    NSMutableArray *paths = [NSMutableArray array];
-                    [messages enumerateObjectsUsingBlock:^(STKMessage *message, NSUInteger idx, BOOL *stop) {
-                        [paths addObject:[NSIndexPath indexPathForRow:[self.messages indexOfObject:message] inSection:0]];
+                    [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSArray *test = [self.messages filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(STKMessage *evaluatedObject, NSDictionary *bindings) {
+                            return [evaluatedObject.uniqueID isEqualToString:[obj uniqueID]];
+                        }]];
+                        if (test.count > 0) {
+                            NSInteger idx = [self.messages indexOfObject:[test
+                                                                          objectAtIndex:0]];
+                            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                        } else {
+                            [self.messages addObject:obj];
+                            NSInteger idx = [self.messages indexOfObject:obj];
+                            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                            
+                        }
                     }];
-                    [UIView animateWithDuration:0.2 animations:^{
-                        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
-                        
-                    } completion:^(BOOL finished) {
-                        
-                            [self scrollToBottom:hasMessages];
-                        
-                    }];
+                    if (scroll) {
+                        [self scrollToBottom:hasMessages];
+                    }
                 }
                 self.updatingMessages = NO;
                 [[self luminatingBar] setLuminating:NO];
