@@ -1757,7 +1757,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 - (void)fetchUpdatedMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block
 {
     NSDate *date = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastMessageUpdate"];
-    if (!date) date = [NSDate date];
+    if (!date) date = [NSDate dateWithTimeIntervalSince1970:0];
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if (err) {
             block(nil, err);

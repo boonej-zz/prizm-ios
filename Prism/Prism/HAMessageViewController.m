@@ -557,8 +557,12 @@ NSString * const HAMessageUserURLScheme = @"user";
             [c setDelegate:self];
             [c setMessage:message];
             __block BOOL liked = NO;
-            if (message.read.count > 0) {
-                [c.viewedLabel setHidden:NO];
+            if ([message.creator.uniqueID isEqualToString:self.user.uniqueID] &&
+                ([self isLeader] || [self.user.type isEqualToString:@"institution_verified"])) {
+                [c.viewedButton setHidden:NO];
+                if (message.read.count > 1) {
+                    [c.viewedLabel setHidden:NO];
+                }
             }
             [message.likes enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
                 if ([obj isKindOfClass:[NSString class]]) {
@@ -593,7 +597,7 @@ NSString * const HAMessageUserURLScheme = @"user";
             if ([self isLeader] || [self.user.type isEqualToString:@"institution_verified"]) {
                 if ([message.creator.uniqueID isEqualToString:self.user.uniqueID]) {
                     [c.viewedButton setHidden:NO];
-                    if (message.read.count > 0) {
+                    if (message.read.count > 1) {
                         [c.viewedLabel setHidden:NO];
                     }
                 }

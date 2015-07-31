@@ -50,6 +50,7 @@
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
 }
 
@@ -74,6 +75,9 @@
     [self.tableView registerNib:[UINib nibWithNibName:[STKSearchProfileCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[STKSearchProfileCell reuseIdentifier]];
     [self addBlurViewWithHeight:110.f];
     self.title = @"Viewers";
+    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
+    iv.frame = self.view.bounds;
+    [self.view insertSubview:iv atIndex:0];
 
     
 }

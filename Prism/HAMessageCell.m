@@ -85,7 +85,7 @@
     [self.postText setAttributedText:[self.message attributedMessageText]];
     [self.creator setText:message.creator.name];
     [self.postText setTextColor:[UIColor HATextColor]];
-    [self.viewedLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)message.read.count]];
+    [self.viewedLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)(message.read.count - 1)]];
     [self.dateAgo setText:[NSString stringWithFormat:@"%@", [STKRelativeDateConverter relativeDateStringFromDate:message.createDate]]];
     if ([message.likesCount integerValue] > 0) {
         [self.likesCount setText:[NSString stringWithFormat:@"%@", message.likesCount]];

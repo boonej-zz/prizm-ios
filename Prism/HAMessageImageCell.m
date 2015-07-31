@@ -34,6 +34,8 @@
 {
     [self.postImage setImage:nil];
     [self.postImage setContentMode:UIViewContentModeCenter];
+    [self.viewedLabel setHidden:YES];
+    [self.viewedButton setHidden:YES];
     [super prepareForReuse];
 }
 
@@ -62,7 +64,7 @@
     [self.containerView addSubview:self.viewedButton];
     self.viewedLabel = [[UILabel alloc] init];
     [self.viewedLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.viewedLabel setHidden:YES];
+    
     [self.containerView addSubview:self.viewedLabel];
     self.clockImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_clock"]];
     NSArray *views = @[self.avatarView, self.creator, self.dateAgo, self.likesCount, self.postImage, self.likeButton, self.clockImage];
@@ -139,10 +141,12 @@
     } else {
         [self.likesCount setText:@""];
     }
-    [self.viewedLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)message.read.count]];
+    [self.viewedLabel setText:[NSString stringWithFormat:@"%lu", (unsigned long)(message.read.count - 1)]];
     [self.viewedLabel setFont:STKFont(9)];
     [self.viewedLabel setTextColor:[UIColor HATextColor]];
     [self.viewedLabel sizeToFit];
+    [self.viewedLabel setHidden:YES];
+    [self.viewedButton setHidden:YES];
     [[STKImageStore store] fetchImageForURLString:message.imageURL preferredSize:STKImageStoreThumbnailMedium completion:^(UIImage *img) {
         if (img.size.width > 300 || img.size.height > 300) {
             [self.postImage setContentMode:UIViewContentModeScaleAspectFit];

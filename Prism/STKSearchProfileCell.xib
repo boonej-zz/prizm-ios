@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -94,11 +94,11 @@
                     <constraint firstItem="6xK-Zg-eto" firstAttribute="bottom" secondItem="IZj-1a-VE0" secondAttribute="bottom" id="HNR-Ro-rkF"/>
                     <constraint firstAttribute="centerY" secondItem="p2G-E8-bZk" secondAttribute="centerY" id="KeQ-iH-kg2"/>
                     <constraint firstAttribute="trailing" secondItem="3O9-v3-wx7" secondAttribute="trailing" id="Qvd-Xm-aQl"/>
+                    <constraint firstAttribute="centerY" secondItem="7et-gZ-jKt" secondAttribute="centerY" id="S7d-2Y-frL"/>
                     <constraint firstAttribute="trailing" secondItem="p2G-E8-bZk" secondAttribute="trailing" constant="44" id="TCk-tf-lsu"/>
                     <constraint firstAttribute="centerY" secondItem="DLx-wG-Oym" secondAttribute="centerY" id="Zez-Mz-amn"/>
                     <constraint firstItem="DLx-wG-Oym" firstAttribute="leading" secondItem="7et-gZ-jKt" secondAttribute="trailing" constant="9" id="aeX-MH-PLR"/>
                     <constraint firstAttribute="centerY" secondItem="wSu-8r-2na" secondAttribute="centerY" id="bqw-b3-BVT"/>
-                    <constraint firstItem="7et-gZ-jKt" firstAttribute="top" secondItem="uR9-RN-UhF" secondAttribute="top" constant="4" id="cv8-yQ-1NK"/>
                     <constraint firstItem="6xK-Zg-eto" firstAttribute="trailing" secondItem="IZj-1a-VE0" secondAttribute="trailing" id="g0H-9R-MBT"/>
                     <constraint firstAttribute="trailing" secondItem="wSu-8r-2na" secondAttribute="trailing" id="j3W-Hp-xov"/>
                     <constraint firstItem="6xK-Zg-eto" firstAttribute="centerX" secondItem="IZj-1a-VE0" secondAttribute="centerX" id="l0d-T0-hUb"/>

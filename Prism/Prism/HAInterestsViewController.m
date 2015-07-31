@@ -343,7 +343,7 @@
     [self.user removeInterestsObject:cell.interest];
     [cell setSelected:NO];
     [cell setStored:NO];
-    if (self.selectedInterests.count < 3) {
+    if (self.user.interests.count < 3) {
         [self.doneButton setEnabled:NO];
     }
 }
