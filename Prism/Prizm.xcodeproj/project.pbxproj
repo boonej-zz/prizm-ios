@@ -68,6 +68,7 @@
 		2CA39E7D19D0A8CE001F9F0C /* STKHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CA39E7C19D0A8CE001F9F0C /* STKHomeViewController.xib */; };
 		2CB0126119A693D800B07C96 /* HAUtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB0126019A693D800B07C96 /* HAUtilityFunctions.m */; };
 		2CB028DD1B6A7C2800034A01 /* HAMessageViewedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB028DC1B6A7C2800034A01 /* HAMessageViewedController.m */; };
+		2CB028E21B6C1BC800034A01 /* HAConsentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */; };
 		2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB073D819AE634A00F70B7E /* HAFollowCell.m */; };
 		2CB073DB19AE634A00F70B7E /* HAFollowCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CB073D919AE634A00F70B7E /* HAFollowCell.xib */; };
 		2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB073DD19AF96C900F70B7E /* HAFollowViewController.m */; };
@@ -469,6 +470,8 @@
 		2CB028DA1B6A790B00034A01 /* User 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 7.xcdatamodel"; sourceTree = "<group>"; };
 		2CB028DB1B6A7C2800034A01 /* HAMessageViewedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessageViewedController.h; sourceTree = "<group>"; };
 		2CB028DC1B6A7C2800034A01 /* HAMessageViewedController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessageViewedController.m; sourceTree = "<group>"; };
+		2CB028E01B6C1BC800034A01 /* HAConsentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAConsentViewController.h; sourceTree = "<group>"; };
+		2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAConsentViewController.m; sourceTree = "<group>"; };
 		2CB073D719AE634A00F70B7E /* HAFollowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAFollowCell.h; sourceTree = "<group>"; };
 		2CB073D819AE634A00F70B7E /* HAFollowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAFollowCell.m; sourceTree = "<group>"; };
 		2CB073D919AE634A00F70B7E /* HAFollowCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAFollowCell.xib; sourceTree = "<group>"; };
@@ -3012,6 +3015,8 @@
 				2C8DE51B1B0CF2660054FB60 /* HASingleMessageImageController.m */,
 				2CB028DB1B6A7C2800034A01 /* HAMessageViewedController.h */,
 				2CB028DC1B6A7C2800034A01 /* HAMessageViewedController.m */,
+				2CB028E01B6C1BC800034A01 /* HAConsentViewController.h */,
+				2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5616,6 +5621,7 @@
 				BE4C64291896FA3800467E2D /* STKLocationListViewController.m in Sources */,
 				BEFCEDFA182C1EE100648B9F /* STKCreatePostViewController.m in Sources */,
 				BEF05488192D1F1900434AFF /* STKOptionCell.m in Sources */,
+				2CB028E21B6C1BC800034A01 /* HAConsentViewController.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
 				2C2E9C611AF3D83000F0F7A8 /* HACreateGroupViewController.m in Sources */,
 				2CBF30A81AEEF338000F261C /* HAAvatarImageCell.m in Sources */,

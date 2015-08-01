@@ -295,7 +295,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         }
     } else if (self.organization) {
         if (self.isHome) {
-            self.title = @"Messages";
+            self.title = @"Message";
         } else {
             self.title = self.organization.name;
         }

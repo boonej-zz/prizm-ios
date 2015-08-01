@@ -1263,6 +1263,24 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 }
 
+- (void)submitParentConsent:(NSDictionary *)parent forUser:(STKUser *)user completion:(void(^)(STKUser *user, NSError *err))block {
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+        if(err) {
+            block(nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [user uniqueID], @"consent"]];
+        [c addQueryValues:parent];
+        [c setModelGraph:@[user]];
+        [c setContext:[self context]];
+        [c putWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+        
+    }];
+}
+
 - (void)updateTrust:(STKTrust *)t toType:(NSString *)type completion:(void (^)(STKTrust *requestItem, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){

@@ -38,6 +38,7 @@
 #import "HAWelcomeViewController.h"
 #import "STKTheme.h"
 #import "STKOrganization.h"
+#import "HAConsentViewController.h"
 
 @import AddressBook;
 @import Social;
@@ -88,6 +89,7 @@ const long STKCreateProgressGeocoding = 4;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topOffset;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (nonatomic) BOOL orgPresent;
+@property (nonatomic) BOOL underThirteen;
 
 - (IBAction)previousTapped:(id)sender;
 - (IBAction)nextTapped:(id)sender;
@@ -475,7 +477,11 @@ const long STKCreateProgressGeocoding = 4;
         NSDate *ageMin = [NSDate dateWithTimeIntervalSinceNow:-60 * 60 * 24 * 365.25 * 13];
         if([val timeIntervalSinceDate:ageMin] > 0) {
             *msg = @"You must be 13 years of age to create an account.";
-            return NO;
+//            UIAlertView *av = [UIAlertView alloc] initWith
+//            return YES;
+            self.underThirteen = YES;
+        } else {
+            self.underThirteen = NO;
         }
     }
     
@@ -978,13 +984,24 @@ const long STKCreateProgressGeocoding = 4;
 
                                                    UIViewController *menuController = [self presentingViewController];
                                                    [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {
-                                                       [self dismissViewControllerAnimated:NO completion:^{
-                                                           HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
-                                                           [ivc setUser:u];
-                                                           HANavigationController *nvc = [[HANavigationController alloc] init];
-                                                           [nvc addChildViewController:ivc];
-                                                           [menuController presentViewController:nvc animated:NO completion:nil];
-                                                       }];
+                                                       if ([self underThirteen]) {
+                                                           [self dismissViewControllerAnimated:NO completion:^{
+                                                               HAConsentViewController *hvc = [[HAConsentViewController alloc] init];
+                                                               [hvc setUser:u];
+                                                               HANavigationController *nvc = [[HANavigationController alloc] init];
+                                                               [nvc addChildViewController:hvc];
+                                                               [menuController presentViewController:nvc animated:NO completion:nil];
+                                                           }];
+                                                       } else {
+                                                           [self dismissViewControllerAnimated:NO completion:^{
+                                                               HAInterestsViewController *ivc = [[HAInterestsViewController alloc] init];
+                                                               [ivc setUser:u];
+                                                               HANavigationController *nvc = [[HANavigationController alloc] init];
+                                                               [nvc addChildViewController:ivc];
+                                                               [menuController presentViewController:nvc animated:NO completion:nil];
+                                                           }];
+                                                       }
+                                                       
                                                        
                                                    }];
                                                    

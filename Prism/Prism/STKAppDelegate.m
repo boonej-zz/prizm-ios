@@ -36,6 +36,7 @@
 #import "HACalendarViewController.h"
 #import "HASurveyViewController.h"
 #import "Heap.h"
+#import "HAConsentViewController.h"
 //#import "TMAPIClient.h"
 
 #ifdef DEBUG 
@@ -124,8 +125,11 @@
     if(!u) {
         STKRegisterViewController *rvc = [[STKRegisterViewController alloc] init];
         STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
-        
+//        HAConsentViewController *cvc = [[HAConsentViewController alloc] init];
+//        STKVerticalNavigationController *rnvc = [[STKVerticalNavigationController alloc] initWithRootViewController:cvc];
         [nvc presentViewController:registerNVC animated:NO completion:nil];
+        
+//        [nvc presentViewController:registerNVC animated:NO completion:nil];
     }
     
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
