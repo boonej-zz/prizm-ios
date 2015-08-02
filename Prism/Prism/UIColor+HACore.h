@@ -12,5 +12,6 @@
 
 + (UIColor *)HATextColor;
 + (UIColor *)HADominantColor;
++ (UIColor *)HALightTextColor;
 
 @end

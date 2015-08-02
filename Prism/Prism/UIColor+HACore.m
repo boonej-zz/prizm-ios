@@ -32,6 +32,12 @@
     return c;
 }
 
++ (UIColor *)HALightTextColor
+{
+    UIColor *c = [UIColor colorWithRed:199.f/255.f green:208.f/255.f blue:209.f/255.f alpha:1.f];
+    return c;
+}
+
 + (UIColor *)HADominantColor
 {
     UIColor *c = [UIColor colorWithRed:11.0/255.0 green:53.0/255.0 blue:110.0/255.0 alpha:0.95];

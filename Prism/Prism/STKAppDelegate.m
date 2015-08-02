@@ -127,9 +127,9 @@
         STKVerticalNavigationController *registerNVC = [[STKVerticalNavigationController alloc] initWithRootViewController:rvc];
 //        HAConsentViewController *cvc = [[HAConsentViewController alloc] init];
 //        STKVerticalNavigationController *rnvc = [[STKVerticalNavigationController alloc] initWithRootViewController:cvc];
-        [nvc presentViewController:registerNVC animated:NO completion:nil];
+//        [nvc presentViewController:rnvc animated:NO completion:nil];
         
-//        [nvc presentViewController:registerNVC animated:NO completion:nil];
+        [nvc presentViewController:registerNVC animated:NO completion:nil];
     }
     
     UILocalNotification *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];

@@ -49,6 +49,7 @@
 		2C2E9C791AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E9C771AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib */; };
 		2C2E9C7C1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C7B1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m */; };
 		2C4FD7321A029E98003A4212 /* HANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C4FD7311A029E98003A4212 /* HANavigationController.m */; };
+		2C5CDFDE1B6DE7C700422886 /* HAConsentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
 		2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */; };
@@ -5708,6 +5709,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C5CDFDE1B6DE7C700422886 /* HAConsentViewController.m in Sources */,
 				BE02EAC8182A80A200A5505A /* PrismTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
