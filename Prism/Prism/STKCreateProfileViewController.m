@@ -539,6 +539,18 @@ const long STKCreateProgressGeocoding = 4;
         }
     }
     
+    if ([self.user valueForKey:@"programCode"]) {
+        if (![self.user valueForKey:@"phoneNumber"]) {
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Enter Phone Number", @"phone number title - create profile")
+                                                         message:NSLocalizedString(@"Oops. You must provide your phone number if a program code is entered.", @"phone number message - create profile")
+                                                        delegate:nil
+                                               cancelButtonTitle:NSLocalizedString(@"OK", @"standard dismiss button title")
+                                               otherButtonTitles:nil];
+            [av show];
+            return NO;
+        }
+    }
+    
     return YES;
 }
 - (void)back:(id)sender
