@@ -208,6 +208,9 @@
         <attribute name="birthday" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="blurb" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contactEmail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contactFirstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="contactLastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coverPhotoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="dateDeleted" optional="YES" attributeType="Date" syncable="YES"/>
@@ -291,6 +294,6 @@
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
         <element name="STKTheme" positionX="45" positionY="180" width="128" height="165"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="1110"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="1155"/>
     </elements>
 </model>

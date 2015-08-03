@@ -128,7 +128,10 @@ tumblrTokenSecret, tumblrLastMinID, programCode, theme;
              @"create_date" : [STKBind bindMapForKey:@"dateCreated" transform:STKBindTransformDateTimestamp],
              @"delete_date" : [STKBind bindMapForKey:@"dateDeleted" transform:STKBindTransformDateTimestamp],
              @"active" : @"active",
-             @"org_status": [STKBind bindMapForKey:@"organizations" matchMap:@{@"memberID":@"member_id", @"organization.uniqueID":@"organization"}]
+             @"org_status": [STKBind bindMapForKey:@"organizations" matchMap:@{@"memberID":@"member_id", @"organization.uniqueID":@"organization"}],
+             @"contact_first": @"contactFirstName",
+             @"contact_last":  @"contactLastName",
+             @"contact_email": @"contactEmail"
     };
 }
 

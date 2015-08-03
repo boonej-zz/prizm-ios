@@ -160,6 +160,10 @@ const long STKCreateProgressGeocoding = 4;
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                    @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
                    @{@"title" : @"Website", @"key" : @"website", @"options" : @{@"keyboardType" : @(UIKeyboardTypeURL)}},
+                   @{@"title" : @"Contact First Name", @"key": @"contactFirstName", @"options": @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                   @{@"title" : @"Contact Last Name", @"key": @"contactLastName", @"options": @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                   @{@"title" : @"Contact Email", @"key" : @"contactEmail",
+                     @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                    ];
         
         _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"website", @"subtype", @"phoneNumber"];
@@ -245,6 +249,10 @@ const long STKCreateProgressGeocoding = 4;
                        
                        @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                        @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
+                       @{@"title" : @"Contact First Name", @"key": @"contactFirstName", @"options": @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                       @{@"title" : @"Contact Last Name", @"key": @"contactLastName", @"options": @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                       @{@"title" : @"Contact Email", @"key" : @"contactEmail",
+                         @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                        @{@"title" : @"Change Password", @"key" : @"password", @"cellType" : @"password"}
                        ];
             _requiredKeys = @[@"email", @"firstName", @"zipCode", @"subtype", @"phoneNumber", @"zipCode"];
