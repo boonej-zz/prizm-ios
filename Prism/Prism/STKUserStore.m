@@ -33,6 +33,9 @@
 #import "STKGroup.h"
 #import "STKMessage.h"
 #import "STKOrgStatus.h"
+#import "STKQuestion.h"
+#import "STKSurvey.h"
+#import "STKQuestionOption.h"
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-186-28-238.us-west-2.compute.amazonaws.com
 //ssh -i ~/.ssh/PrismAPIDev.pem ec2-user@ec2-54-200-41-62.us-west-2.compute.amazonaws.com
 
@@ -1629,6 +1632,69 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         }];
     }];
 
+}
+
+- (void)fetchPendingSurveysForUser:(STKUser *) user completion:(void (^)(NSArray * surveys, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", user.uniqueID, @"surveys"]];
+        [c setModelGraph:@[@"STKSurvey"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setShouldReturnArray:YES];
+        [c setContext:[self context]];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            NSLog(@"%@", obj);
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)submitSurveyAnswerForUser:(STKUser *)user question:(STKQuestion *)q value:(NSInteger)v completion:(void (^)(STKQuestion * question, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/surveys", q.survey.uniqueID, @"questions", q.uniqueID]];
+        NSLog(@"%ld", (long)v);
+        [c addQueryValues:@{@"answer_value": [NSNumber numberWithInteger:v], @"uid": user.uniqueID}];
+   
+        [c setModelGraph:@[@"STKQuestion"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setShouldReturnArray:YES];
+        [c setContext:[self context]];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            NSLog(@"%@", obj);
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)finalizeSurveyForUser:(STKUser *)user survey:(STKSurvey *)s completion:(void (^)(STKSurvey * survey, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/surveys", s.uniqueID, @"finalize"]];
+        [c addQueryValue:user.uniqueID forKey:@"uid"];
+        [c setModelGraph:@[@"STKSurvey"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setShouldReturnArray:YES];
+        [c setContext:[self context]];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            NSLog(@"%@", obj);
+            block(obj, err);
+        }];
+    }];
 }
 
 - (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block

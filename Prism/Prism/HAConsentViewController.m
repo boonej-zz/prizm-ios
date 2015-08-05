@@ -262,7 +262,7 @@
     [label setText:@"We need your parent's information!"];
     [label setTranslatesAutoresizingMaskIntoConstraints:NO];
     [label setFont:STKBoldFont(18)];
-    [label setTextColor:[UIColor HALightTextColor]];
+    [label setTextColor:[UIColor HATextColor]];
     [label setTextAlignment:NSTextAlignmentCenter];
     [header addSubview:label];
     [header addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[hl]-0-|" options:0 metrics:nil views:@{@"hl": label}]];
@@ -280,7 +280,7 @@
     [label setTranslatesAutoresizingMaskIntoConstraints:NO];
     [label setFont:STKFont(14)];
     [label setScrollEnabled:NO];
-    [label setTextColor:[UIColor HALightTextColor]];
+    [label setTextColor:[UIColor HATextColor]];
     [label setTextAlignment:NSTextAlignmentCenter];
     [message addSubview:label];
     [message addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[hl]-0-|" options:0 metrics:nil views:@{@"hl": label}]];

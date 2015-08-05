@@ -13,6 +13,13 @@
         <relationship name="notifiedUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedActivities" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="activities" inverseEntity="STKPost" syncable="YES"/>
     </entity>
+    <entity name="STKAnswer" representedClassName="STKAnswer" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="question" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKQuestion" inverseName="answers" inverseEntity="STKQuestion" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="surveyAnswers" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
     <entity name="STKGroup" representedClassName="STKGroup" syncable="YES">
         <attribute name="groupDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -24,6 +31,7 @@
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="group" inverseEntity="STKMessage" syncable="YES"/>
         <relationship name="mutes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="mutedGroups" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="groups" inverseEntity="STKOrganization" syncable="YES"/>
+        <relationship name="surveys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKSurvey" inverseName="groups" inverseEntity="STKSurvey" syncable="YES"/>
     </entity>
     <entity name="STKHashTag" representedClassName="STKHashTag" syncable="YES">
         <attribute name="internalLastModified" optional="YES" attributeType="Date" syncable="YES"/>
@@ -116,6 +124,7 @@
         <relationship name="mutes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="mutedOrganizations" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="orgStatuses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKOrgStatus" inverseName="organization" inverseEntity="STKOrgStatus" syncable="YES"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="ownedOrganization" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="surveys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKSurvey" inverseName="organization" inverseEntity="STKSurvey" syncable="YES"/>
         <relationship name="theme" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKTheme" inverseName="organization" inverseEntity="STKTheme" syncable="YES"/>
     </entity>
     <entity name="STKOrgStatus" representedClassName="STKOrgStatus" syncable="YES">
@@ -173,6 +182,38 @@
         <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="likedComments" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKPost" inverseName="comments" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="commentsTaggedIn" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
+    <entity name="STKQuestion" representedClassName="STKQuestion" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="modifyDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="scale" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="answers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKAnswer" inverseName="question" inverseEntity="STKAnswer" syncable="YES"/>
+        <relationship name="options" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="STKQuestionOption" inverseName="question" inverseEntity="STKQuestionOption" syncable="YES"/>
+        <relationship name="survey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKSurvey" inverseName="questions" inverseEntity="STKSurvey" syncable="YES"/>
+    </entity>
+    <entity name="STKQuestionOption" representedClassName="STKQuestionOption" syncable="YES">
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="question" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKQuestion" inverseName="options" inverseEntity="STKQuestion" syncable="YES"/>
+    </entity>
+    <entity name="STKSurvey" representedClassName="STKSurvey" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="modifyDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="numberOfQuestions" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetAll" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="completed" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="completedSurveys" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="createdSurveys" inverseEntity="STKUser" syncable="YES"/>
+        <relationship name="groups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="surveys" inverseEntity="STKGroup" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="surveys" inverseEntity="STKOrganization" syncable="YES"/>
+        <relationship name="questions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="STKQuestion" inverseName="survey" inverseEntity="STKQuestion" syncable="YES"/>
     </entity>
     <entity name="STKTheme" representedClassName="STKTheme" syncable="YES">
         <attribute name="backgroundURL" optional="YES" attributeType="String" syncable="YES"/>
@@ -251,9 +292,11 @@
         <relationship name="accoladesReceived" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="accoladeReceiver" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="creator" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="commentsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="tags" inverseEntity="STKPostComment" syncable="YES"/>
+        <relationship name="completedSurveys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKSurvey" inverseName="completed" inverseEntity="STKSurvey" syncable="YES"/>
         <relationship name="createdActivities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKActivityItem" inverseName="creator" inverseEntity="STKActivityItem" syncable="YES"/>
         <relationship name="createdInsights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="creator" inverseEntity="STKInsight" syncable="YES"/>
         <relationship name="createdPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="creator" inverseEntity="STKPost" syncable="YES"/>
+        <relationship name="createdSurveys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKSurvey" inverseName="creator" inverseEntity="STKSurvey" syncable="YES"/>
         <relationship name="fFeedPosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="fInverseFeed" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="followers" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="following" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="following" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="followers" inverseEntity="STKUser" syncable="YES"/>
@@ -275,12 +318,14 @@
         <relationship name="postsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="tags" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="readMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="read" inverseEntity="STKMessage" syncable="YES"/>
         <relationship name="receivedTrusts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKTrust" inverseName="recepient" inverseEntity="STKTrust" syncable="YES"/>
+        <relationship name="surveyAnswers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKAnswer" inverseName="user" inverseEntity="STKAnswer" syncable="YES"/>
         <relationship name="targetedInsights" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsightTarget" inverseName="target" inverseEntity="STKInsightTarget" syncable="YES"/>
         <relationship name="theme" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKTheme" inverseName="users" inverseEntity="STKTheme" syncable="YES"/>
     </entity>
     <elements>
         <element name="STKActivityItem" positionX="18" positionY="153" width="128" height="210"/>
-        <element name="STKGroup" positionX="36" positionY="162" width="128" height="195"/>
+        <element name="STKAnswer" positionX="36" positionY="162" width="128" height="120"/>
+        <element name="STKGroup" positionX="36" positionY="162" width="128" height="210"/>
         <element name="STKHashTag" positionX="36" positionY="180" width="128" height="120"/>
         <element name="STKInsight" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="165"/>
@@ -288,12 +333,15 @@
         <element name="STKMessage" positionX="27" positionY="153" width="128" height="225"/>
         <element name="STKMessageMetaData" positionX="27" positionY="153" width="128" height="150"/>
         <element name="STKMessageMetaDataImage" positionX="36" positionY="162" width="128" height="120"/>
-        <element name="STKOrganization" positionX="36" positionY="171" width="128" height="285"/>
+        <element name="STKOrganization" positionX="36" positionY="171" width="128" height="300"/>
         <element name="STKOrgStatus" positionX="27" positionY="153" width="128" height="150"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
+        <element name="STKQuestion" positionX="45" positionY="171" width="128" height="195"/>
+        <element name="STKQuestionOption" positionX="54" positionY="180" width="128" height="105"/>
+        <element name="STKSurvey" positionX="27" positionY="153" width="128" height="225"/>
         <element name="STKTheme" positionX="45" positionY="180" width="128" height="165"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="1155"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="1200"/>
     </elements>
 </model>

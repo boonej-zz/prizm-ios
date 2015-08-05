@@ -57,6 +57,11 @@
 		2C7B79FE19EDA9C6000EC061 /* HAInterestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C7B79FC19EDA9C6000EC061 /* HAInterestCell.m */; };
 		2C7B79FF19EDA9C6000EC061 /* HAInterestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */; };
 		2C854A421AFB08140097B9D1 /* HAGroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C854A411AFB08140097B9D1 /* HAGroupInfoViewController.m */; };
+		2C8DE1F41B71B40300B53343 /* HATakeSurveyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DE1F31B71B40300B53343 /* HATakeSurveyViewController.m */; };
+		2C8DE1F71B71B89100B53343 /* STKQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DE1F61B71B89100B53343 /* STKQuestion.m */; };
+		2C8DE1FA1B71B89200B53343 /* STKAnswer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DE1F91B71B89200B53343 /* STKAnswer.m */; };
+		2C8DE1FD1B71B89200B53343 /* STKSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DE1FC1B71B89200B53343 /* STKSurvey.m */; };
+		2C8DE2001B71B89200B53343 /* STKQuestionOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DE1FF1B71B89200B53343 /* STKQuestionOption.m */; };
 		2C8DE51C1B0CF2660054FB60 /* HASingleMessageImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8DE51B1B0CF2660054FB60 /* HASingleMessageImageController.m */; };
 		2C96672B1B1267FF0050DA74 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C96672A1B1267FF0050DA74 /* Fabric.framework */; };
 		2C97973219D9D9A7003A6C0A /* STKCreatePostViewController in Resources */ = {isa = PBXBuildFile; fileRef = 2C97973119D9D9A7003A6C0A /* STKCreatePostViewController */; };
@@ -451,6 +456,16 @@
 		2C7B79FD19EDA9C6000EC061 /* HAInterestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAInterestCell.xib; sourceTree = "<group>"; };
 		2C854A401AFB08140097B9D1 /* HAGroupInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAGroupInfoViewController.h; sourceTree = "<group>"; };
 		2C854A411AFB08140097B9D1 /* HAGroupInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAGroupInfoViewController.m; sourceTree = "<group>"; };
+		2C8DE1F21B71B40300B53343 /* HATakeSurveyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HATakeSurveyViewController.h; sourceTree = "<group>"; };
+		2C8DE1F31B71B40300B53343 /* HATakeSurveyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HATakeSurveyViewController.m; sourceTree = "<group>"; };
+		2C8DE1F51B71B89100B53343 /* STKQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKQuestion.h; sourceTree = "<group>"; };
+		2C8DE1F61B71B89100B53343 /* STKQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKQuestion.m; sourceTree = "<group>"; };
+		2C8DE1F81B71B89200B53343 /* STKAnswer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKAnswer.h; sourceTree = "<group>"; };
+		2C8DE1F91B71B89200B53343 /* STKAnswer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKAnswer.m; sourceTree = "<group>"; };
+		2C8DE1FB1B71B89200B53343 /* STKSurvey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKSurvey.h; sourceTree = "<group>"; };
+		2C8DE1FC1B71B89200B53343 /* STKSurvey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKSurvey.m; sourceTree = "<group>"; };
+		2C8DE1FE1B71B89200B53343 /* STKQuestionOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKQuestionOption.h; sourceTree = "<group>"; };
+		2C8DE1FF1B71B89200B53343 /* STKQuestionOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKQuestionOption.m; sourceTree = "<group>"; };
 		2C8DE51A1B0CF2660054FB60 /* HASingleMessageImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASingleMessageImageController.h; sourceTree = "<group>"; };
 		2C8DE51B1B0CF2660054FB60 /* HASingleMessageImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASingleMessageImageController.m; sourceTree = "<group>"; };
 		2C96672A1B1267FF0050DA74 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -3018,6 +3033,8 @@
 				2CB028DC1B6A7C2800034A01 /* HAMessageViewedController.m */,
 				2CB028E01B6C1BC800034A01 /* HAConsentViewController.h */,
 				2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */,
+				2C8DE1F21B71B40300B53343 /* HATakeSurveyViewController.h */,
+				2C8DE1F31B71B40300B53343 /* HATakeSurveyViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5112,6 +5129,14 @@
 				2C0512751AFD10BE009B6C21 /* STKMessageMetaData.m */,
 				2C0512711AFD10BD009B6C21 /* STKMessageMetaDataImage.h */,
 				2C0512721AFD10BD009B6C21 /* STKMessageMetaDataImage.m */,
+				2C8DE1FE1B71B89200B53343 /* STKQuestionOption.h */,
+				2C8DE1FF1B71B89200B53343 /* STKQuestionOption.m */,
+				2C8DE1FB1B71B89200B53343 /* STKSurvey.h */,
+				2C8DE1FC1B71B89200B53343 /* STKSurvey.m */,
+				2C8DE1F81B71B89200B53343 /* STKAnswer.h */,
+				2C8DE1F91B71B89200B53343 /* STKAnswer.m */,
+				2C8DE1F51B71B89100B53343 /* STKQuestion.h */,
+				2C8DE1F61B71B89100B53343 /* STKQuestion.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -5572,6 +5597,7 @@
 				2CB028DD1B6A7C2800034A01 /* HAMessageViewedController.m in Sources */,
 				BE7391C3190193AB00AD81AB /* STKSearchResultsViewController.m in Sources */,
 				883D87DD19463E7F00195B11 /* UIImage+MPImageEffects.m in Sources */,
+				2C8DE1FD1B71B89200B53343 /* STKSurvey.m in Sources */,
 				BE96C61C185A0D0C005D44BC /* STKWebViewController.m in Sources */,
 				BE5767F9187B4E98004AEE1F /* STKPostHeaderView.m in Sources */,
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
@@ -5582,6 +5608,7 @@
 				BE7B4858192B99AD00BDCE15 /* STKItemListViewController.m in Sources */,
 				886FBD21195A035F0007188B /* STKInviteFriendsViewController.m in Sources */,
 				BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */,
+				2C8DE1F71B71B89100B53343 /* STKQuestion.m in Sources */,
 				BE05502018A404E600F6B534 /* UIERealTimeBlurView.m in Sources */,
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
@@ -5610,6 +5637,7 @@
 				BECA6B4A197588670026FEEC /* STKCreateCommentViewController.m in Sources */,
 				BEB1687C190700F900CED5F7 /* STKSegmentedControlCell.m in Sources */,
 				BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */,
+				2C8DE2001B71B89200B53343 /* STKQuestionOption.m in Sources */,
 				BE7391C719019AB600AD81AB /* STKHashtagPostsViewController.m in Sources */,
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				D073F6E7195B4A590049E573 /* STKExploreFilterViewController.m in Sources */,
@@ -5668,6 +5696,7 @@
 				BE5324CB189075F4004AAC5C /* STKRelativeDateConverter.m in Sources */,
 				BEFCEE0B182C211A00648B9F /* STKUserStore.m in Sources */,
 				BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */,
+				2C8DE1FA1B71B89200B53343 /* STKAnswer.m in Sources */,
 				BEF7A08D1843AEAB00A3AFFB /* STKPanelViewController.m in Sources */,
 				BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */,
 				BEF6E201190EC21300D60BE0 /* STKButtonRow.m in Sources */,
@@ -5693,6 +5722,7 @@
 				BE8368FB18DA186300526637 /* STKTrust.m in Sources */,
 				BE4C64261896F83A00467E2D /* STKFoursquareLocation.m in Sources */,
 				BEFCEE06182C210600648B9F /* STKJSONObject.m in Sources */,
+				2C8DE1F41B71B40300B53343 /* HATakeSurveyViewController.m in Sources */,
 				88384077195B3275006750FC /* STKInviteFriendsShareCell.m in Sources */,
 				2CF53D2F1ADD702F0075FA96 /* STKGroup.m in Sources */,
 				2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */,

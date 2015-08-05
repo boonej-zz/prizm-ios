@@ -29,6 +29,7 @@
 #import "UIERealTimeBlurView.h"
 #import "HAFollowViewController.h"
 #import "HAInterestsViewController.h"
+#import "HATakeSurveyViewController.h"
 
 @interface STKHomeViewController () <UITableViewDataSource, UITableViewDelegate, STKPostControllerDelegate>
 
@@ -438,8 +439,16 @@
             [ivc setStandalone:YES];
             [ivc setUser:user];
             [self.navigationController pushViewController:ivc animated:YES];
+        } else {
+        [[STKUserStore store] fetchPendingSurveysForUser:user completion:^(NSArray *surveys, NSError *err) {
+            if (surveys && surveys.count > 0) {
+                HATakeSurveyViewController *tsc = [[HATakeSurveyViewController alloc] initWithSurvey:[surveys objectAtIndex:0]];
+                [self.navigationController pushViewController:tsc animated:NO];
+            }
+        }];
         }
     }
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

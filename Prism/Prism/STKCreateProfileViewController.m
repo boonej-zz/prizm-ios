@@ -139,7 +139,7 @@ const long STKCreateProgressGeocoding = 4;
         _items = @[
                    @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Partner", @"Individual"]},
 
-                   @{@"title" : @"Name", @"key" : @"firstName",
+                   @{@"title" : @"Organization", @"key" : @"firstName",
                      @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
                    @{@"title" : @"Type", @"key" : @"subtype", @"cellType" : @"list",
                      @"values" :
@@ -228,7 +228,7 @@ const long STKCreateProgressGeocoding = 4;
         if([u isInstitution]) {
             _items = @[
                        // Public
-                       @{@"title" : @"Name", @"key" : @"firstName",
+                       @{@"title" : @"Organization", @"key" : @"firstName",
                          @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
                        
                        @{@"title" : @"Info", @"key" : @"blurb", @"cellType" : @"textView"},

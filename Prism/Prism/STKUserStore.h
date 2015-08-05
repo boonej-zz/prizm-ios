@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "STKTrust.h"
 
-@class STKUser, STKPost, STKActivityItem, STKFetchDescription, STKOrganization, STKGroup, STKMessage;
+@class STKUser, STKPost, STKActivityItem, STKFetchDescription, STKOrganization, STKGroup, STKMessage, STKSurvey, STKQuestion;
 @class ACAccount, ACAccountStore;
 
 extern NSString * const STKUserStoreActivityUpdateNotification;
@@ -142,4 +142,7 @@ typedef enum {
 - (void)fetchUnreadCountForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(id obj, NSError *err))block;
 - (void)postMessageImage:(NSString*)imageURL toGroup:(STKGroup *)group organization:(STKOrganization *)organization completion:(void (^)(STKMessage *message, NSError *err))block;
 - (void)submitParentConsent:(NSDictionary *)parent forUser:(STKUser *)user completion:(void(^)(STKUser *user, NSError *err))block;
+- (void)fetchPendingSurveysForUser:(STKUser *) user completion:(void (^)(NSArray * surveys, NSError *err))block;
+- (void)submitSurveyAnswerForUser:(STKUser *)user question:(STKQuestion *)q value:(NSInteger)v completion:(void (^)(STKQuestion * question, NSError *err))block;
+- (void)finalizeSurveyForUser:(STKUser *)user survey:(STKSurvey *)s completion:(void (^)(STKSurvey * survey, NSError *err))block;
 @end
