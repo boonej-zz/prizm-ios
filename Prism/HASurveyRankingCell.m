@@ -81,17 +81,26 @@
     [self.surveysTitle setText:@"Surveys"];
     [self.surveysTitle setFont:STKFont(15)];
     [self.surveysTitle setTextColor:[UIColor HATextColor]];
+    [self.surveysTitle setUserInteractionEnabled:YES];
     [self addSubview:self.surveysTitle];
+    UITapGestureRecognizer *tr0 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(surveysTapped:)];
+    [self.surveysTitle addGestureRecognizer:tr0];
     
     self.surveysIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_survey_sm"]];
     [self.surveysIcon setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.surveysIcon setUserInteractionEnabled:YES];
     [self addSubview:self.surveysIcon];
+    UITapGestureRecognizer *tr1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(surveysTapped:)];
+    [self.surveysIcon addGestureRecognizer:tr1];
     
     self.surveysLabel = [[UILabel alloc] init];
     [self.surveysLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.surveysLabel setFont:STKFont(23)];
     [self.surveysLabel setTextColor:[UIColor whiteColor]];
+    [self.surveysLabel setUserInteractionEnabled:YES];
     [self addSubview:self.surveysLabel];
+    UITapGestureRecognizer *tr2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(surveysTapped:)];
+    [self.surveysLabel addGestureRecognizer:tr2];
     
     [self.rankTitle setTextAlignment:NSTextAlignmentCenter];
     [self.pointsTitle setTextAlignment:NSTextAlignmentCenter];
@@ -142,6 +151,13 @@
     CGContextStrokePath(c);
     
     [super drawRect:rect];
+}
+
+- (void)surveysTapped:(id)gesture
+{
+    if (self.delegate) {
+        [self.delegate surveyCountTapped:self];
+    }
 }
 
 @end

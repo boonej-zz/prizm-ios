@@ -36,6 +36,7 @@ _Pragma("clang diagnostic pop") \
 
 #define STKFont(x) [UIFont fontWithName:@"HelveticaNeue-Light" size:x]
 #define STKBoldFont(x) [UIFont fontWithName:@"HelveticaNeue-Bold" size:x]
+#define IS_HEIGHT_GTE_568 [[UIScreen mainScreen ] bounds].size.height >= 568.0f
 
 #define STRINGIFY(x) #x
     #define STRINGIFY_TOKEN(x) @STRINGIFY(x)

@@ -26,6 +26,9 @@
 @dynamic questions;
 @dynamic completed;
 @dynamic organization;
+@dynamic points;
+@dynamic rank;
+@dynamic duration;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -52,7 +55,10 @@
              @"groups": [STKBind bindMapForKey:@"groups" matchMap:@{@"uniqueID" : @"_id"}],
              @"questions": [STKBind bindMapForKey:@"questions" matchMap:@{@"uniqueID" : @"_id"}],
              @"completed": [STKBind bindMapForKey:@"completed" matchMap:@{@"uniqueID" : @"_id"}],
-             @"organization": [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID" : @"_id"}]
+             @"organization": [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID" : @"_id"}],
+             @"points": @"points",
+             @"rank": @"rank",
+             @"duration": @"duration"
     };
 }
 

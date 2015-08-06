@@ -97,6 +97,9 @@
 		2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762A1A1BC151007580A5 /* STKTheme.m */; };
 		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
 		2CE58A691AF9B50700349C57 /* STKMute.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE58A681AF9B50700349C57 /* STKMute.m */; };
+		2CF324D21B73C963000B41D0 /* HACompletedSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF324D11B73C963000B41D0 /* HACompletedSurveysViewController.m */; };
+		2CF324D51B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF324D41B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m */; };
+		2CF324D81B73D51A000B41D0 /* HAUserSurveyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF324D71B73D51A000B41D0 /* HAUserSurveyCell.m */; };
 		2CF53D2F1ADD702F0075FA96 /* STKGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D2E1ADD702F0075FA96 /* STKGroup.m */; };
 		2CF53D321ADD70300075FA96 /* STKOrgStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D311ADD70300075FA96 /* STKOrgStatus.m */; };
 		2CF53D391ADED0730075FA96 /* HACalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D371ADED0730075FA96 /* HACalendarViewController.m */; };
@@ -537,6 +540,12 @@
 		2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 4.xcdatamodel"; sourceTree = "<group>"; };
 		2CE58A671AF9B50700349C57 /* STKMute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMute.h; sourceTree = "<group>"; };
 		2CE58A681AF9B50700349C57 /* STKMute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMute.m; sourceTree = "<group>"; };
+		2CF324D01B73C963000B41D0 /* HACompletedSurveysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HACompletedSurveysViewController.h; sourceTree = "<group>"; };
+		2CF324D11B73C963000B41D0 /* HACompletedSurveysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HACompletedSurveysViewController.m; sourceTree = "<group>"; };
+		2CF324D31B73D1FE000B41D0 /* HAUserSurveyHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAUserSurveyHeaderCell.h; sourceTree = "<group>"; };
+		2CF324D41B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAUserSurveyHeaderCell.m; sourceTree = "<group>"; };
+		2CF324D61B73D51A000B41D0 /* HAUserSurveyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAUserSurveyCell.h; sourceTree = "<group>"; };
+		2CF324D71B73D51A000B41D0 /* HAUserSurveyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAUserSurveyCell.m; sourceTree = "<group>"; };
 		2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 5.xcdatamodel"; sourceTree = "<group>"; };
 		2CF53D2D1ADD702F0075FA96 /* STKGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKGroup.h; sourceTree = "<group>"; };
 		2CF53D2E1ADD702F0075FA96 /* STKGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKGroup.m; sourceTree = "<group>"; };
@@ -3052,6 +3061,8 @@
 				2C8DE1F31B71B40300B53343 /* HATakeSurveyViewController.m */,
 				2C2329491B72AA0700C94AC4 /* HASurveyDashboardViewController.h */,
 				2C23294A1B72AA0700C94AC4 /* HASurveyDashboardViewController.m */,
+				2CF324D01B73C963000B41D0 /* HACompletedSurveysViewController.h */,
+				2CF324D11B73C963000B41D0 /* HACompletedSurveysViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -3255,6 +3266,10 @@
 				2C2329501B72BDED00C94AC4 /* HASurveyRankingCell.m */,
 				2C2329551B732F9C00C94AC4 /* STKLeaderBoardCell.h */,
 				2C2329561B732F9C00C94AC4 /* STKLeaderBoardCell.m */,
+				2CF324D31B73D1FE000B41D0 /* HAUserSurveyHeaderCell.h */,
+				2CF324D41B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m */,
+				2CF324D71B73D51A000B41D0 /* HAUserSurveyCell.m */,
+				2CF324D61B73D51A000B41D0 /* HAUserSurveyCell.h */,
 			);
 			name = Cells;
 			path = ..;
@@ -5610,6 +5625,7 @@
 				9CC22F171A1F0CD1004AFF73 /* HAChangePasswordViewController.m in Sources */,
 				2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */,
 				2C2E9C781AF6918700F0F7A8 /* HASelectMemberViewController.m in Sources */,
+				2CF324D51B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m in Sources */,
 				2C189DD11A2F74190028AD1C /* HAWelcomeViewController.m in Sources */,
 				2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */,
 				2C8DE51C1B0CF2660054FB60 /* HASingleMessageImageController.m in Sources */,
@@ -5640,6 +5656,7 @@
 				2C2329541B7325FE00C94AC4 /* STKLeaderboardItem.m in Sources */,
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
+				2CF324D21B73C963000B41D0 /* HACompletedSurveysViewController.m in Sources */,
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
 				2C7B79FE19EDA9C6000EC061 /* HAInterestCell.m in Sources */,
 				BE300BF6182AB16100CA3FC7 /* STKMenuButton.m in Sources */,
@@ -5667,6 +5684,7 @@
 				BE7D5ADF18D36050005D3893 /* STKUserListViewController.m in Sources */,
 				2C8DE2001B71B89200B53343 /* STKQuestionOption.m in Sources */,
 				BE7391C719019AB600AD81AB /* STKHashtagPostsViewController.m in Sources */,
+				2CF324D81B73D51A000B41D0 /* HAUserSurveyCell.m in Sources */,
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				D073F6E7195B4A590049E573 /* STKExploreFilterViewController.m in Sources */,
 				BEC0676818E46B1F00B5C5E6 /* STKHashTag.m in Sources */,

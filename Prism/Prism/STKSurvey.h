@@ -25,6 +25,9 @@
 @property (nonatomic, retain) NSSet *questions;
 @property (nonatomic, retain) NSSet *completed;
 @property (nonatomic, retain) STKOrganization *organization;
+@property (nonatomic, retain) NSNumber *points;
+@property (nonatomic, retain) NSNumber *rank;
+@property (nonatomic, retain) NSString *duration;
 
 @end
 

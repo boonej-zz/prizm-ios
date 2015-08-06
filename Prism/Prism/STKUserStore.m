@@ -1724,6 +1724,25 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     return cached;
 }
 
+- (void)fetchCompletedSurveysForUser:(STKUser *)user completion:(void(^)(NSArray * surveys, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", user.uniqueID, @"surveys", @"completed"]];
+        [c setModelGraph:@[@"STKSurvey"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setShouldReturnArray:YES];
+        [c setContext:[self context]];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+        
+    }];
+}
+
 - (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {

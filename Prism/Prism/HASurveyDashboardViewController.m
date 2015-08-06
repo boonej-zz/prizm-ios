@@ -18,8 +18,9 @@
 #import "STKLeaderboardItem.h"
 #import "STKLeaderBoardCell.h"
 #import "STKProfileViewController.h"
+#import "HACompletedSurveysViewController.h"
 
-@interface HASurveyDashboardViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface HASurveyDashboardViewController ()<UITableViewDataSource, UITableViewDelegate, HASurveyRankingCellProtocol>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -112,6 +113,12 @@
 */
 
 #pragma mark Actors
+
+- (void)surveyCountTapped:(id)sender
+{
+    HACompletedSurveysViewController *hvc = [[HACompletedSurveysViewController alloc] init];
+    [self.navigationController pushViewController:hvc animated:YES];
+}
 
 #pragma mark Workers
 - (void)fetchLeaders
@@ -238,6 +245,7 @@
     [cell.pointsLabel setText:[NSString stringWithFormat:@"%ld", self.userPoints]];
     [cell.surveysLabel setText:[NSString stringWithFormat:@"%ld", self.surveyCount]];
     [cell setSelectedBackgroundView:[[UIView alloc] init]];
+    [cell setDelegate:self];
     return cell;
 }
 

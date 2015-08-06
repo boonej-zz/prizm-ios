@@ -211,9 +211,12 @@
     </entity>
     <entity name="STKSurvey" representedClassName="STKSurvey" syncable="YES">
         <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="duration" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="modifyDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="numberOfQuestions" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="points" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="rank" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="targetAll" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
@@ -339,6 +342,7 @@
         <element name="STKInsight" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKInsightTarget" positionX="27" positionY="162" width="128" height="165"/>
         <element name="STKInterest" positionX="18" positionY="153" width="128" height="165"/>
+        <element name="STKLeaderboardItem" positionX="36" positionY="153" width="128" height="120"/>
         <element name="STKMessage" positionX="27" positionY="153" width="128" height="225"/>
         <element name="STKMessageMetaData" positionX="27" positionY="153" width="128" height="150"/>
         <element name="STKMessageMetaDataImage" positionX="36" positionY="162" width="128" height="120"/>
@@ -348,10 +352,9 @@
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
         <element name="STKQuestion" positionX="45" positionY="171" width="128" height="195"/>
         <element name="STKQuestionOption" positionX="54" positionY="180" width="128" height="105"/>
-        <element name="STKSurvey" positionX="27" positionY="153" width="128" height="225"/>
+        <element name="STKSurvey" positionX="27" positionY="153" width="128" height="270"/>
         <element name="STKTheme" positionX="45" positionY="180" width="128" height="165"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
         <element name="STKUser" positionX="0" positionY="0" width="128" height="1215"/>
-        <element name="STKLeaderboardItem" positionX="36" positionY="153" width="128" height="120"/>
     </elements>
 </model>
