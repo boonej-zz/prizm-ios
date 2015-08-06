@@ -36,6 +36,11 @@
 		2C1D45BA19E43A3B008D84C5 /* UITableViewCell+HAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45B919E43A3B008D84C5 /* UITableViewCell+HAExtensions.m */; };
 		2C1D45BE19E45E94008D84C5 /* STKInsightArchiveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D45BC19E45E94008D84C5 /* STKInsightArchiveCell.m */; };
 		2C1D45BF19E45E94008D84C5 /* STKInsightArchiveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */; };
+		2C23294B1B72AA0700C94AC4 /* HASurveyDashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C23294A1B72AA0700C94AC4 /* HASurveyDashboardViewController.m */; };
+		2C23294E1B72B2FF00C94AC4 /* HASurveyAvatarHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C23294D1B72B2FF00C94AC4 /* HASurveyAvatarHeaderCell.m */; };
+		2C2329511B72BDED00C94AC4 /* HASurveyRankingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2329501B72BDED00C94AC4 /* HASurveyRankingCell.m */; };
+		2C2329541B7325FE00C94AC4 /* STKLeaderboardItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2329531B7325FE00C94AC4 /* STKLeaderboardItem.m */; };
+		2C2329571B732F9C00C94AC4 /* STKLeaderBoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2329561B732F9C00C94AC4 /* STKLeaderBoardCell.m */; };
 		2C235E67196356BC00D20E09 /* UIImage+STKLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */; };
 		2C2E9C611AF3D83000F0F7A8 /* HACreateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C5F1AF3D83000F0F7A8 /* HACreateGroupViewController.m */; };
 		2C2E9C621AF3D83000F0F7A8 /* HACreateGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E9C601AF3D83000F0F7A8 /* HACreateGroupViewController.xib */; };
@@ -419,6 +424,16 @@
 		2C1D45BB19E45E94008D84C5 /* STKInsightArchiveCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKInsightArchiveCell.h; sourceTree = "<group>"; };
 		2C1D45BC19E45E94008D84C5 /* STKInsightArchiveCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKInsightArchiveCell.m; sourceTree = "<group>"; };
 		2C1D45BD19E45E94008D84C5 /* STKInsightArchiveCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STKInsightArchiveCell.xib; sourceTree = "<group>"; };
+		2C2329491B72AA0700C94AC4 /* HASurveyDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyDashboardViewController.h; sourceTree = "<group>"; };
+		2C23294A1B72AA0700C94AC4 /* HASurveyDashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyDashboardViewController.m; sourceTree = "<group>"; };
+		2C23294C1B72B2FF00C94AC4 /* HASurveyAvatarHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyAvatarHeaderCell.h; sourceTree = "<group>"; };
+		2C23294D1B72B2FF00C94AC4 /* HASurveyAvatarHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyAvatarHeaderCell.m; sourceTree = "<group>"; };
+		2C23294F1B72BDED00C94AC4 /* HASurveyRankingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyRankingCell.h; sourceTree = "<group>"; };
+		2C2329501B72BDED00C94AC4 /* HASurveyRankingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyRankingCell.m; sourceTree = "<group>"; };
+		2C2329521B7325FE00C94AC4 /* STKLeaderboardItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLeaderboardItem.h; sourceTree = "<group>"; };
+		2C2329531B7325FE00C94AC4 /* STKLeaderboardItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLeaderboardItem.m; sourceTree = "<group>"; };
+		2C2329551B732F9C00C94AC4 /* STKLeaderBoardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKLeaderBoardCell.h; sourceTree = "<group>"; };
+		2C2329561B732F9C00C94AC4 /* STKLeaderBoardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKLeaderBoardCell.m; sourceTree = "<group>"; };
 		2C235E65196356BC00D20E09 /* UIImage+STKLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+STKLocation.h"; sourceTree = "<group>"; };
 		2C235E66196356BC00D20E09 /* UIImage+STKLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+STKLocation.m"; sourceTree = "<group>"; };
 		2C2E9C5E1AF3D83000F0F7A8 /* HACreateGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HACreateGroupViewController.h; sourceTree = "<group>"; };
@@ -3035,6 +3050,8 @@
 				2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */,
 				2C8DE1F21B71B40300B53343 /* HATakeSurveyViewController.h */,
 				2C8DE1F31B71B40300B53343 /* HATakeSurveyViewController.m */,
+				2C2329491B72AA0700C94AC4 /* HASurveyDashboardViewController.h */,
+				2C23294A1B72AA0700C94AC4 /* HASurveyDashboardViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -3232,6 +3249,12 @@
 				2C2E9C741AF5A1FA00F0F7A8 /* HACellProtocol.h */,
 				2C02B7D61B0BB83300E5E82D /* HAMessageImageCell.h */,
 				2C02B7D71B0BB83300E5E82D /* HAMessageImageCell.m */,
+				2C23294C1B72B2FF00C94AC4 /* HASurveyAvatarHeaderCell.h */,
+				2C23294D1B72B2FF00C94AC4 /* HASurveyAvatarHeaderCell.m */,
+				2C23294F1B72BDED00C94AC4 /* HASurveyRankingCell.h */,
+				2C2329501B72BDED00C94AC4 /* HASurveyRankingCell.m */,
+				2C2329551B732F9C00C94AC4 /* STKLeaderBoardCell.h */,
+				2C2329561B732F9C00C94AC4 /* STKLeaderBoardCell.m */,
 			);
 			name = Cells;
 			path = ..;
@@ -5137,6 +5160,8 @@
 				2C8DE1F91B71B89200B53343 /* STKAnswer.m */,
 				2C8DE1F51B71B89100B53343 /* STKQuestion.h */,
 				2C8DE1F61B71B89100B53343 /* STKQuestion.m */,
+				2C2329521B7325FE00C94AC4 /* STKLeaderboardItem.h */,
+				2C2329531B7325FE00C94AC4 /* STKLeaderboardItem.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -5572,6 +5597,7 @@
 				BEC01A09182AF41C00080601 /* STKExploreViewController.m in Sources */,
 				2CB0126119A693D800B07C96 /* HAUtilityFunctions.m in Sources */,
 				BE6EB881186395F300E8009D /* STKErrorStore.m in Sources */,
+				2C2329511B72BDED00C94AC4 /* HASurveyRankingCell.m in Sources */,
 				BE5F68FA18F0A522006D2CD1 /* STKResolutionQuery.m in Sources */,
 				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
 				2C02B7D81B0BB83300E5E82D /* HAMessageImageCell.m in Sources */,
@@ -5580,6 +5606,7 @@
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
+				2C23294E1B72B2FF00C94AC4 /* HASurveyAvatarHeaderCell.m in Sources */,
 				9CC22F171A1F0CD1004AFF73 /* HAChangePasswordViewController.m in Sources */,
 				2CB073DA19AE634A00F70B7E /* HAFollowCell.m in Sources */,
 				2C2E9C781AF6918700F0F7A8 /* HASelectMemberViewController.m in Sources */,
@@ -5610,6 +5637,7 @@
 				BE5F690018F21146006D2CD1 /* STKSearchQuery.m in Sources */,
 				2C8DE1F71B71B89100B53343 /* STKQuestion.m in Sources */,
 				BE05502018A404E600F6B534 /* UIERealTimeBlurView.m in Sources */,
+				2C2329541B7325FE00C94AC4 /* STKLeaderboardItem.m in Sources */,
 				BE1E09CF1850DF0A00975652 /* STKLoginViewController.m in Sources */,
 				BEFAC1A2183D512F005E8933 /* STKUser.m in Sources */,
 				BEFAC1A8183D512F005E8933 /* STKPost.m in Sources */,
@@ -5643,6 +5671,7 @@
 				D073F6E7195B4A590049E573 /* STKExploreFilterViewController.m in Sources */,
 				BEC0676818E46B1F00B5C5E6 /* STKHashTag.m in Sources */,
 				BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */,
+				2C23294B1B72AA0700C94AC4 /* HASurveyDashboardViewController.m in Sources */,
 				2CBA45C819AC275D00A5BCD6 /* HANotificationViewController.m in Sources */,
 				2C1D45A819DF7C49008D84C5 /* STKInsightHeaderView.m in Sources */,
 				BE02EAD8182A8A5F00A5505A /* STKMenuView.m in Sources */,
@@ -5711,6 +5740,7 @@
 				2CE58A691AF9B50700349C57 /* STKMute.m in Sources */,
 				BE937C9E191175E000C24A58 /* STKNotifiedBadgeView.m in Sources */,
 				BE1C7082192F8E7400223BDC /* STKAccoladeViewController.m in Sources */,
+				2C2329571B732F9C00C94AC4 /* STKLeaderBoardCell.m in Sources */,
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
 				883D87DC19463E7F00195B11 /* UIImage+MPAverageColor.m in Sources */,
 				2C0D730619C0E4BB0078A9B9 /* HAAccountSelectionCell.m in Sources */,

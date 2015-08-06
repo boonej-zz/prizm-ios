@@ -78,6 +78,13 @@
         <relationship name="subinterests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="parent" inverseEntity="STKInterest" syncable="YES"/>
         <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="interests" inverseEntity="STKUser" syncable="YES"/>
     </entity>
+    <entity name="STKLeaderboardItem" representedClassName="STKLeaderboardItem" syncable="YES">
+        <attribute name="points" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="surveys" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKOrganization" inverseName="leaderboardItems" inverseEntity="STKOrganization" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STKUser" inverseName="leaderBoardItems" inverseEntity="STKUser" syncable="YES"/>
+    </entity>
     <entity name="STKMessage" representedClassName="STKMessage" syncable="YES">
         <attribute name="createDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="imageURL" optional="YES" attributeType="String" syncable="YES"/>
@@ -119,6 +126,7 @@
         <attribute name="welcomeImageURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="welcomeMessage" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="groups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="organization" inverseEntity="STKGroup" syncable="YES"/>
+        <relationship name="leaderboardItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKLeaderboardItem" inverseName="organization" inverseEntity="STKLeaderboardItem" syncable="YES"/>
         <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="organization" inverseEntity="STKUser" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="organization" inverseEntity="STKMessage" syncable="YES"/>
         <relationship name="mutes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKUser" inverseName="mutedOrganizations" inverseEntity="STKUser" syncable="YES"/>
@@ -303,6 +311,7 @@
         <relationship name="fProfilePosts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPost" inverseName="fInverseProfile" inverseEntity="STKPost" syncable="YES"/>
         <relationship name="insightsTaggedIn" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInsight" inverseName="tags" inverseEntity="STKInsight" syncable="YES"/>
         <relationship name="interests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKInterest" inverseName="users" inverseEntity="STKInterest" syncable="YES"/>
+        <relationship name="leaderBoardItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKLeaderboardItem" inverseName="user" inverseEntity="STKLeaderboardItem" syncable="YES"/>
         <relationship name="ledGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKGroup" inverseName="leader" inverseEntity="STKGroup" syncable="YES"/>
         <relationship name="likedComments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKPostComment" inverseName="likes" inverseEntity="STKPostComment" syncable="YES"/>
         <relationship name="likedMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="STKMessage" inverseName="likes" inverseEntity="STKMessage" syncable="YES"/>
@@ -333,7 +342,7 @@
         <element name="STKMessage" positionX="27" positionY="153" width="128" height="225"/>
         <element name="STKMessageMetaData" positionX="27" positionY="153" width="128" height="150"/>
         <element name="STKMessageMetaDataImage" positionX="36" positionY="162" width="128" height="120"/>
-        <element name="STKOrganization" positionX="36" positionY="171" width="128" height="300"/>
+        <element name="STKOrganization" positionX="36" positionY="171" width="128" height="315"/>
         <element name="STKOrgStatus" positionX="27" positionY="153" width="128" height="150"/>
         <element name="STKPost" positionX="0" positionY="144" width="128" height="495"/>
         <element name="STKPostComment" positionX="18" positionY="162" width="128" height="238"/>
@@ -342,6 +351,7 @@
         <element name="STKSurvey" positionX="27" positionY="153" width="128" height="225"/>
         <element name="STKTheme" positionX="45" positionY="180" width="128" height="165"/>
         <element name="STKTrust" positionX="18" positionY="153" width="128" height="285"/>
-        <element name="STKUser" positionX="0" positionY="0" width="128" height="1200"/>
+        <element name="STKUser" positionX="0" positionY="0" width="128" height="1215"/>
+        <element name="STKLeaderboardItem" positionX="36" positionY="153" width="128" height="120"/>
     </elements>
 </model>

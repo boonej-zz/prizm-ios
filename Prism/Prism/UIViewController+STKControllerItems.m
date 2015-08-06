@@ -186,7 +186,7 @@
     
     [self.view addSubview:view];
     NSArray *horizontalConstatraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[v(>=300)]-0-|" options:0 metrics:nil views:@{@"v": view}];
-    NSString *verticalString = [NSString stringWithFormat:@"V:[v(%f)]", height];
+    NSString *verticalString = [NSString stringWithFormat:@"V:|-0-[v(%f)]", height];
     NSArray *verticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:verticalString options:0 metrics:nil views:@{@"v": view}];
     view.tag = 99999;
     [self.view addConstraints:horizontalConstatraints];

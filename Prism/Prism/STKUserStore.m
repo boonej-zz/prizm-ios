@@ -1697,6 +1697,33 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (NSArray *)fetchLeaderboardForOrganization:(STKOrganization *)organization completion:(void(^)(NSArray * leaders, NSError *err))block
+{
+    NSMutableArray *cached = [NSMutableArray array];
+    NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKLeaderboardItem"];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"organization.uniqueID == %@", organization.uniqueID];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"points" ascending:NO];
+    [fr setPredicate:p];
+    [fr setSortDescriptors:@[sort]];
+    [cached addObjectsFromArray:[[self context] executeFetchRequest:fr error:nil]];
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"surveys", @"leaderboard"]];
+        [c setModelGraph:@[@"STKLeaderboardItem"]];
+        [c setExistingMatchMap:@{@"userID": @"_id"}];
+        [c setShouldReturnArray:YES];
+        [c setContext:[self context]];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+        
+    }];
+    return cached;
+}
+
 - (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {

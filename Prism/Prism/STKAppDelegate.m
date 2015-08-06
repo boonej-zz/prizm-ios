@@ -37,6 +37,7 @@
 #import "HASurveyViewController.h"
 #import "Heap.h"
 #import "HAConsentViewController.h"
+#import "HASurveyDashboardViewController.h"
 //#import "TMAPIClient.h"
 
 #ifdef DEBUG 
@@ -92,7 +93,7 @@
     UIViewController *gvc = [[STKGraphViewController alloc] init];
     UIViewController *mvc = [[HAMessageViewController alloc] init];
     UIViewController *cal = [[HACalendarViewController alloc] init];
-    UIViewController *sur = [[HASurveyViewController alloc] init];
+    UIViewController *sur = [[HASurveyDashboardViewController alloc] init];
 //    UIViewController *ivc = [[HAInsightsViewController alloc] init];
     
 
