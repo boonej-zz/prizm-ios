@@ -87,8 +87,11 @@
 - (void)fetchCompletedSurveys
 {
     [[STKUserStore store] fetchCompletedSurveysForUser:self.user completion:^(NSArray *surveys, NSError *err) {
-        self.surveys = surveys;
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.surveys = surveys;
+            [self.tableView reloadData];
+        });
+        
     }];
 }
 

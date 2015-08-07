@@ -1,0 +1,167 @@
+
+
+Fri Aug  7 01:31:39 2015
+Command line: TestDisk
+
+TestDisk 7.0, Data Recovery Utility, April 2015
+Christophe GRENIER <grenier@cgsecurity.org>
+http://www.cgsecurity.org
+OS: Darwin, kernel 14.4.0 (Darwin Kernel Version 14.4.0: Thu May 28 11:35:04 PDT 2015; root:xnu-2782.3
+Compiler: GCC 4.2
+Compilation date: 2015-04-20T09:39:14
+ext2fs lib: none, ntfs lib: none, reiserfs lib: none, ewf lib: none, curses lib: ncurses 5.7
+User is not root!
+Hard disk list
+Disk /dev/disk3 - 536 MB / 512 MiB - 1048650 sectors (RO), sector size=512
+Disk /dev/rdisk3 - 536 MB / 512 MiB - 1048650 sectors (RO), sector size=512
+
+
+TestDisk exited normally.
+
+
+Fri Aug  7 01:32:27 2015
+Command line: TestDisk
+
+TestDisk 7.0, Data Recovery Utility, April 2015
+Christophe GRENIER <grenier@cgsecurity.org>
+http://www.cgsecurity.org
+OS: Darwin, kernel 14.4.0 (Darwin Kernel Version 14.4.0: Thu May 28 11:35:04 PDT 2015; root:xnu-2782.3
+Compiler: GCC 4.2
+Compilation date: 2015-04-20T09:39:14
+ext2fs lib: none, ntfs lib: none, reiserfs lib: none, ewf lib: none, curses lib: ncurses 5.7
+User is not root!
+Hard disk list
+Disk /dev/disk3 - 536 MB / 512 MiB - 1048650 sectors (RO), sector size=512
+Disk /dev/rdisk3 - 536 MB / 512 MiB - 1048650 sectors (RO), sector size=512
+
+Partition table type (auto): Mac
+Media is opened in read-only.
+
+TestDisk exited normally.
+
+
+Fri Aug  7 01:32:49 2015
+Command line: TestDisk
+
+TestDisk 7.0, Data Recovery Utility, April 2015
+Christophe GRENIER <grenier@cgsecurity.org>
+http://www.cgsecurity.org
+OS: Darwin, kernel 14.4.0 (Darwin Kernel Version 14.4.0: Thu May 28 11:35:04 PDT 2015; root:xnu-2782.3
+Compiler: GCC 4.2
+Compilation date: 2015-04-20T09:39:14
+ext2fs lib: none, ntfs lib: none, reiserfs lib: none, ewf lib: none, curses lib: ncurses 5.7
+Hard disk list
+Disk /dev/disk0 - 240 GB / 223 GiB - 468862128 sectors (RO), sector size=512
+Disk /dev/disk2 - 1000 GB / 931 GiB - 1953525168 sectors, sector size=512
+Disk /dev/disk3 - 536 MB / 512 MiB - 1048650 sectors (RO), sector size=512
+Disk /dev/rdisk0 - 240 GB / 223 GiB - 468862128 sectors (RO), sector size=512
+Disk /dev/rdisk1 - 238 GB / 222 GiB - 466457856 sectors, sector size=512
+Disk /dev/rdisk2 - 1000 GB / 931 GiB - 1953525168 sectors, sector size=512
+Disk /dev/rdisk3 - 536 MB / 512 MiB - 1048650 sectors (RO), sector size=512
+
+Partition table type (auto): Mac
+Disk /dev/disk2 - 1000 GB / 931 GiB
+Partition table type: Mac
+
+Analyse Disk /dev/disk2 - 1000 GB / 931 GiB - 1953525168 sectors
+
+HFS+ magic value at 59656/0/1
+Current partition structure:
+ 1 P partition_map                  1         63         63
+ 2 P Free                          64      59655      59592
+ 3 P HFS                        59656 1952151207 1952091552
+ 4 P Free                  1952151208 1953525167    1373960
+
+search_part()
+Disk /dev/disk2 - 1000 GB / 931 GiB - 1953525168 sectors
+
+HFS+ magic value at 59656/0/1
+part_size 1952091552
+     HFS                        59656 1952151207 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+Results
+   P HFS                        59656 1952151207 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+interface_write()
+   P HFS                        59656 1952151207 1952091552
+
+search_part()
+Disk /dev/disk2 - 1000 GB / 931 GiB - 1953525168 sectors
+
+HFS+ magic value at 59656/0/1
+part_size 1952091552
+     HFS                        59656 1952151207 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 59728/0/1
+part_size 1952091552
+     HFS                        59728 1952151279 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 59880/0/1
+part_size 1952091552
+     HFS                        59880 1952151431 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 59928/0/1
+part_size 1952091552
+     HFS                        59928 1952151479 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60080/0/1
+part_size 1952091552
+     HFS                        60080 1952151631 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60192/0/1
+part_size 1952091552
+     HFS                        60192 1952151743 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60280/0/1
+part_size 1952091552
+     HFS                        60280 1952151831 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60320/0/1
+part_size 1952091552
+     HFS                        60320 1952151871 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60376/0/1
+part_size 1952091552
+     HFS                        60376 1952151927 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60520/0/1
+part_size 1952091552
+     HFS                        60520 1952152071 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60616/0/1
+part_size 1952091552
+     HFS                        60616 1952152167 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60736/0/1
+part_size 1952091552
+     HFS                        60736 1952152287 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 60840/0/1
+part_size 1952091552
+     HFS                        60840 1952152391 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 61024/0/1
+part_size 1952091552
+     HFS                        61024 1952152575 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+
+HFS+ magic value at 61064/0/1
+part_size 1952091552
+     HFS                        61064 1952152615 1952091552
+     HFS+ blocksize=4096, 999 GB / 930 GiB
+SIGINT detected! TestDisk has been killed.

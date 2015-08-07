@@ -133,16 +133,22 @@
 
 - (void)processLeaderboard:(NSArray *)leaders
 {
-    self.leaders = [leaders sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"points" ascending:false]]];
-    NSUInteger idx = [self.leaders indexOfObjectPassingTest:^BOOL(STKLeaderboardItem *obj, NSUInteger idx, BOOL *stop) {
-        return [obj.userID isEqualToString:self.user.uniqueID];
-    }];
-    if (idx != NSNotFound) {
-        self.userPosition = idx + 1;
-        self.userPoints = [[[self.leaders objectAtIndex:idx] points] longValue];
-        self.surveyCount = [[[self.leaders objectAtIndex:idx] surveys] longValue];
-    }
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        self.leaders = [leaders sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"points" ascending:false]]];
+        NSUInteger idx = [self.leaders indexOfObjectPassingTest:^BOOL(STKLeaderboardItem *obj, NSUInteger idx, BOOL *stop) {
+            return [obj.userID isEqualToString:self.user.uniqueID];
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (idx != NSNotFound) {
+                self.userPosition = idx + 1;
+                self.userPoints = [[[self.leaders objectAtIndex:idx] points] longValue];
+                self.surveyCount = [[[self.leaders objectAtIndex:idx] surveys] longValue];
+            }
+            [self.tableView reloadData];
+        });
+        
+    });
+    
 }
 
 #pragma mark Table View Data Source

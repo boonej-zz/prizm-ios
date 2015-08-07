@@ -51,8 +51,8 @@
     [self.rankLabel setTextAlignment:NSTextAlignmentCenter];
     UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"circle"]];
     [self.rankLabel addSubview:iv];
-    [self.rankLabel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[iv]-0-|" options:0 metrics:nil views:@{@"iv": iv}]];
-    [self.rankLabel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[iv]-0-|" options:0 metrics:nil views:@{@"iv": iv}]];
+//    [self.rankLabel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[iv]-0-|" options:0 metrics:nil views:@{@"iv": iv}]];
+//    [self.rankLabel addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[iv]-0-|" options:0 metrics:nil views:@{@"iv": iv}]];
     [self.rankWrapper addSubview:self.rankLabel];
     [self.rankWrapper addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[rl(==24)]" options:0 metrics:nil views:@{@"rl": self.rankLabel}]];
     [self.rankWrapper addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[rl(==24)]|" options:0 metrics:nil views:@{@"rl": self.rankLabel}]];

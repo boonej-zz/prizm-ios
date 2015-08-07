@@ -14,6 +14,7 @@
 #import "STKUser.h"
 #import "UIViewController+STKControllerItems.h"
 #import "STKUserStore.h"
+#import "UISurveyDoneViewController.h"
 
 @interface HATakeSurveyViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -128,7 +129,12 @@
                 [self.navigationController pushViewController:tsc animated:YES];
             } else {
                 [[STKUserStore store] finalizeSurveyForUser:[[STKUserStore store] currentUser] survey:self.survey completion:^(STKSurvey *survey, NSError *err) {
-                    [self.navigationController popToRootViewControllerAnimated:NO];
+                    UISurveyDoneViewController *sdc = [[UISurveyDoneViewController alloc] init];
+                    if ([survey isKindOfClass:[NSArray class]]) {
+                        survey  = [(NSArray *)survey objectAtIndex:0];
+                    }
+                    [sdc setSurvey:survey];
+                    [self.navigationController pushViewController:sdc animated:YES];
                 }];
             }
         }];
@@ -210,7 +216,7 @@
     [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[ht]-0-|" options:0 metrics:nil views:@{@"ht": headerText}]];
     [cell addConstraint:[NSLayoutConstraint constraintWithItem:iv attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:iv attribute:NSLayoutAttributeWidth multiplier:1.f constant:0.f]];
     [cell addConstraint:[NSLayoutConstraint constraintWithItem:iv attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:headerText attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
-    [headerText setText:[NSString stringWithFormat:@"%@ would like for you to answer a few questions", self.survey.organization.name]];
+    [headerText setText:[NSString stringWithFormat:@"Please take this short survey from %@", self.survey.organization.name]];
     
     return cell;
 }
@@ -280,7 +286,7 @@
     [cell addSubview:questionView];
     
     /** CONSTRAINTS **/
-    [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-21-[w(==21)]-27-[cn]-14-[qv(>=35)]-21-|" options:0 metrics:nil views:@{@"w": wrapper, @"cn": currentNumber, @"qv": questionView}]];
+    [cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=8)-[w(==21)]-(<=27)-[cn]-(<=14)-[qv(>=35)]-(>=0)-|" options:0 metrics:nil views:@{@"w": wrapper, @"cn": currentNumber, @"qv": questionView}]];
     [cell addConstraint:[NSLayoutConstraint constraintWithItem:currentNumber attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:wrapper attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
 
     [cell addConstraint:[NSLayoutConstraint constraintWithItem:wrapper attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];

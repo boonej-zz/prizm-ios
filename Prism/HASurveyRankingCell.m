@@ -14,6 +14,8 @@
 @property (nonatomic, strong) UILabel *pointsTitle;
 @property (nonatomic, strong) UILabel *surveysTitle;
 @property (nonatomic, strong) UIImageView *surveysIcon;
+@property (nonatomic, strong) UIView *tapMaskView;
+@property (nonatomic) BOOL isWaiting;
 
 @end
 
@@ -37,6 +39,12 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.isWaiting = NO;
 }
 
 #pragma mark Configuration
@@ -83,15 +91,12 @@
     [self.surveysTitle setTextColor:[UIColor HATextColor]];
     [self.surveysTitle setUserInteractionEnabled:YES];
     [self addSubview:self.surveysTitle];
-    UITapGestureRecognizer *tr0 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(surveysTapped:)];
-    [self.surveysTitle addGestureRecognizer:tr0];
+    
     
     self.surveysIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_survey_sm"]];
     [self.surveysIcon setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.surveysIcon setUserInteractionEnabled:YES];
     [self addSubview:self.surveysIcon];
-    UITapGestureRecognizer *tr1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(surveysTapped:)];
-    [self.surveysIcon addGestureRecognizer:tr1];
     
     self.surveysLabel = [[UILabel alloc] init];
     [self.surveysLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -99,8 +104,13 @@
     [self.surveysLabel setTextColor:[UIColor whiteColor]];
     [self.surveysLabel setUserInteractionEnabled:YES];
     [self addSubview:self.surveysLabel];
-    UITapGestureRecognizer *tr2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(surveysTapped:)];
-    [self.surveysLabel addGestureRecognizer:tr2];
+
+    
+    self.tapMaskView = [[UIView alloc] init];
+    [self.tapMaskView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    UITapGestureRecognizer *tr0 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(surveysTapped:)];
+    [self.tapMaskView addGestureRecognizer:tr0];
+    [self addSubview:self.tapMaskView];
     
     [self.rankTitle setTextAlignment:NSTextAlignmentCenter];
     [self.pointsTitle setTextAlignment:NSTextAlignmentCenter];
@@ -125,6 +135,10 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.surveysIcon attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.surveysLabel attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.surveysLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.f constant:11]];
     
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tapMaskView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.f constant:0.f]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tapMaskView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.f constant:0.f]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tapMaskView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.surveysTitle attribute:NSLayoutAttributeTop multiplier:1.f constant:0.f]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tapMaskView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.f constant:0.f]];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -155,8 +169,11 @@
 
 - (void)surveysTapped:(id)gesture
 {
-    if (self.delegate) {
-        [self.delegate surveyCountTapped:self];
+    if (!self.isWaiting) {
+        self.isWaiting = YES;
+        if (self.delegate) {
+            [self.delegate surveyCountTapped:self];
+        }
     }
 }
 
