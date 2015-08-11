@@ -770,16 +770,16 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         UIUserNotificationSettings *settings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         UIUserNotificationType types = settings.types;
         if (types & UIUserNotificationTypeAlert) {
-            [c addQueryValue:@YES forKey:@"push_enabled"];
+            [c addQueryValue:@"true" forKey:@"push_enabled"];
         } else {
-            [c addQueryValue:@NO forKey:@"push_enabled"];
+            [c addQueryValue:@"false" forKey:@"push_enabled"];
         }
     } else {
         UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
         if ((types & UIRemoteNotificationTypeAlert)) {
-            [c addQueryValue:@YES forKey:@"push_enabled"];
+            [c addQueryValue:@"true" forKey:@"push_enabled"];
         } else {
-            [c addQueryValue:@NO forKey:@"push_enabled"];
+            [c addQueryValue:@"false" forKey:@"push_enabled"];
         }
     }
     [c setModelGraph:@[user]];
