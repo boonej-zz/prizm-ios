@@ -42,7 +42,7 @@
     self.surveys = @[];
     self.title = @"Surveys";
     self.user = [[STKUserStore store] currentUser];
-    [self addBackgroundImage];
+    
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
@@ -67,6 +67,7 @@
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:self.tableView];
+    [self addBackgroundImage];
     [self addBlurViewWithHeight:64.f];
 }
 

@@ -759,6 +759,38 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)setPushEnabled:(STKUser *)user completion:(void(^)(STKUser *u, NSError *err))block
+{
+    NSArray *identifiers = nil;
+    identifiers = @[STKUserEndpointUser,[user uniqueID], @"push_enabled"];
+    
+    
+    STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:identifiers];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+        UIUserNotificationSettings *settings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        UIUserNotificationType types = settings.types;
+        if (types & UIUserNotificationTypeAlert) {
+            [c addQueryValue:@YES forKey:@"push_enabled"];
+        } else {
+            [c addQueryValue:@NO forKey:@"push_enabled"];
+        }
+    } else {
+        UIRemoteNotificationType types = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        if ((types & UIRemoteNotificationTypeAlert)) {
+            [c addQueryValue:@YES forKey:@"push_enabled"];
+        } else {
+            [c addQueryValue:@NO forKey:@"push_enabled"];
+        }
+    }
+    [c setModelGraph:@[user]];
+    [c
+     postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+         block(obj, err);
+    }];
+
+}
+
+
 - (void)fetchUserDetails:(STKUser *)user additionalFields:(NSArray *)fields completion:(void (^)(STKUser *u, NSError *err))block
 {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasPurged"]) {
@@ -772,9 +804,19 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         
-        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[STKUserEndpointUser, [user uniqueID]]];
+        NSArray *identifiers = nil;
+         identifiers = @[STKUserEndpointUser,[user uniqueID]];
+        
+        
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:identifiers];
+        if ([user.uniqueID isEqualToString:[self currentUser].uniqueID]) {
+            [self setPushEnabled:user completion:^(STKUser *u, NSError *err) {
+                if (err) NSLog(@"%@", err.localizedDescription);
+            }];
+                    }
         
         STKQueryObject *q = [[STKQueryObject alloc] init];
+        
         
         [q setFields:fields];
         if(![[user uniqueID] isEqual:[[self currentUser] uniqueID]]) {

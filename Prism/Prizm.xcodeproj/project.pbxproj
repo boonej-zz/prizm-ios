@@ -54,6 +54,10 @@
 		2C2E9C791AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C2E9C771AF6918700F0F7A8 /* HASelectLeaderControllerViewController.xib */; };
 		2C2E9C7C1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2E9C7B1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m */; };
 		2C4FD7321A029E98003A4212 /* HANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C4FD7311A029E98003A4212 /* HANavigationController.m */; };
+		2C5BAD8C1B76AD940060F7D8 /* HASurveyHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BAD8B1B76AD940060F7D8 /* HASurveyHeaderCell.m */; };
+		2C5BAD8F1B76AF860060F7D8 /* HASurveyBreadcrumbCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BAD8E1B76AF860060F7D8 /* HASurveyBreadcrumbCell.m */; };
+		2C5BAD921B76B3D20060F7D8 /* HASurveyScaleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BAD911B76B3D20060F7D8 /* HASurveyScaleCell.m */; };
+		2C5BAD951B76B3E40060F7D8 /* HASurveyMultipleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BAD941B76B3E40060F7D8 /* HASurveyMultipleCell.m */; };
 		2C5CDFDE1B6DE7C700422886 /* HAConsentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
@@ -101,6 +105,7 @@
 		2CF324D51B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF324D41B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m */; };
 		2CF324D81B73D51A000B41D0 /* HAUserSurveyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF324D71B73D51A000B41D0 /* HAUserSurveyCell.m */; };
 		2CF324DB1B7526B2000B41D0 /* UISurveyDoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF324DA1B7526B2000B41D0 /* UISurveyDoneViewController.m */; };
+		2CF324E01B75CC6B000B41D0 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CD7D98F1A1BC1FF003E221C /* MainInterface.storyboard */; };
 		2CF53D2F1ADD702F0075FA96 /* STKGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D2E1ADD702F0075FA96 /* STKGroup.m */; };
 		2CF53D321ADD70300075FA96 /* STKOrgStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D311ADD70300075FA96 /* STKOrgStatus.m */; };
 		2CF53D391ADED0730075FA96 /* HACalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF53D371ADED0730075FA96 /* HACalendarViewController.m */; };
@@ -462,6 +467,14 @@
 		2C2E9C7B1AF7B24A00F0F7A8 /* HAGroupMembersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAGroupMembersViewController.m; sourceTree = "<group>"; };
 		2C4FD7301A029E98003A4212 /* HANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HANavigationController.h; sourceTree = "<group>"; };
 		2C4FD7311A029E98003A4212 /* HANavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HANavigationController.m; sourceTree = "<group>"; };
+		2C5BAD8A1B76AD940060F7D8 /* HASurveyHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyHeaderCell.h; sourceTree = "<group>"; };
+		2C5BAD8B1B76AD940060F7D8 /* HASurveyHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyHeaderCell.m; sourceTree = "<group>"; };
+		2C5BAD8D1B76AF860060F7D8 /* HASurveyBreadcrumbCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyBreadcrumbCell.h; sourceTree = "<group>"; };
+		2C5BAD8E1B76AF860060F7D8 /* HASurveyBreadcrumbCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyBreadcrumbCell.m; sourceTree = "<group>"; };
+		2C5BAD901B76B3D20060F7D8 /* HASurveyScaleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyScaleCell.h; sourceTree = "<group>"; };
+		2C5BAD911B76B3D20060F7D8 /* HASurveyScaleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyScaleCell.m; sourceTree = "<group>"; };
+		2C5BAD931B76B3E40060F7D8 /* HASurveyMultipleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyMultipleCell.h; sourceTree = "<group>"; };
+		2C5BAD941B76B3E40060F7D8 /* HASurveyMultipleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyMultipleCell.m; sourceTree = "<group>"; };
 		2C690A3A1B0158F7006ECF4D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
 		2C6969271982A71900E4B9FD /* STKIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKIntroViewController.m; sourceTree = "<group>"; };
@@ -3275,6 +3288,14 @@
 				2CF324D41B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m */,
 				2CF324D71B73D51A000B41D0 /* HAUserSurveyCell.m */,
 				2CF324D61B73D51A000B41D0 /* HAUserSurveyCell.h */,
+				2C5BAD8A1B76AD940060F7D8 /* HASurveyHeaderCell.h */,
+				2C5BAD8B1B76AD940060F7D8 /* HASurveyHeaderCell.m */,
+				2C5BAD8D1B76AF860060F7D8 /* HASurveyBreadcrumbCell.h */,
+				2C5BAD8E1B76AF860060F7D8 /* HASurveyBreadcrumbCell.m */,
+				2C5BAD901B76B3D20060F7D8 /* HASurveyScaleCell.h */,
+				2C5BAD911B76B3D20060F7D8 /* HASurveyScaleCell.m */,
+				2C5BAD931B76B3E40060F7D8 /* HASurveyMultipleCell.h */,
+				2C5BAD941B76B3E40060F7D8 /* HASurveyMultipleCell.m */,
 			);
 			name = Cells;
 			path = ..;
@@ -5389,6 +5410,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CF324E01B75CC6B000B41D0 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5632,6 +5654,7 @@
 				2C2E9C781AF6918700F0F7A8 /* HASelectMemberViewController.m in Sources */,
 				2CF324D51B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m in Sources */,
 				2C189DD11A2F74190028AD1C /* HAWelcomeViewController.m in Sources */,
+				2C5BAD921B76B3D20060F7D8 /* HASurveyScaleCell.m in Sources */,
 				2CB073DF19AF96C900F70B7E /* HAFollowViewController.m in Sources */,
 				2C8DE51C1B0CF2660054FB60 /* HASingleMessageImageController.m in Sources */,
 				BE78BC2718F486E600CD50E9 /* STKActivityItem.m in Sources */,
@@ -5651,6 +5674,7 @@
 				BEC01A18182AF43A00080601 /* STKActivityViewController.m in Sources */,
 				BE0EC57618EDE971007102E1 /* STKSettingsShareCell.m in Sources */,
 				BE9CC7A618FDFF480097D308 /* STKLuminariesCell.m in Sources */,
+				2C5BAD8F1B76AF860060F7D8 /* HASurveyBreadcrumbCell.m in Sources */,
 				BE2B7E85191AB3EC00E6F408 /* STKDateBar.m in Sources */,
 				BE52B13C18E30EF100C44F30 /* NSManagedObject+STKAdditions.m in Sources */,
 				BE7B4858192B99AD00BDCE15 /* STKItemListViewController.m in Sources */,
@@ -5692,6 +5716,7 @@
 				2CF324D81B73D51A000B41D0 /* HAUserSurveyCell.m in Sources */,
 				88EE2B0F184C1BDC00B9AFA8 /* UITextView+STKHashtagDetector.m in Sources */,
 				D073F6E7195B4A590049E573 /* STKExploreFilterViewController.m in Sources */,
+				2C5BAD951B76B3E40060F7D8 /* HASurveyMultipleCell.m in Sources */,
 				BEC0676818E46B1F00B5C5E6 /* STKHashTag.m in Sources */,
 				BE6AEF841857681E00F92DF4 /* STKGenderCell.m in Sources */,
 				2C23294B1B72AA0700C94AC4 /* HASurveyDashboardViewController.m in Sources */,
@@ -5765,6 +5790,7 @@
 				2CF324DB1B7526B2000B41D0 /* UISurveyDoneViewController.m in Sources */,
 				BE1C7082192F8E7400223BDC /* STKAccoladeViewController.m in Sources */,
 				2C2329571B732F9C00C94AC4 /* STKLeaderBoardCell.m in Sources */,
+				2C5BAD8C1B76AD940060F7D8 /* HASurveyHeaderCell.m in Sources */,
 				BED773FA1890A53C008770F0 /* STKCaptureViewController.m in Sources */,
 				883D87DC19463E7F00195B11 /* UIImage+MPAverageColor.m in Sources */,
 				2C0D730619C0E4BB0078A9B9 /* HAAccountSelectionCell.m in Sources */,
@@ -6113,7 +6139,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6d1261c0-2f0f-467f-a885-0b8076fabf9a";
+				PROVISIONING_PROFILE = "6b0fea6f-3e0b-4d44-981a-dba14389e788";
 				SKIP_INSTALL = YES;
 			};
 			name = "App Store";
@@ -6303,8 +6329,8 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6334,7 +6360,8 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "3e1df2f2-a42e-49bb-9c8b-53dfa6f22969";
+				PROVISIONING_PROFILE = "b39eef8c-3ef6-4d84-9e2e-78e9b20fe74f";
+				"PROVISIONING_PROFILE[sdk=*]" = "b39eef8c-3ef6-4d84-9e2e-78e9b20fe74f";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -6633,8 +6660,8 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6669,7 +6696,8 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "deb836bf-fe6b-40c3-96f5-a54a591edb3d";
+				"PROVISIONING_PROFILE[sdk=*]" = "deb836bf-fe6b-40c3-96f5-a54a591edb3d";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

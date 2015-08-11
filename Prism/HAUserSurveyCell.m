@@ -32,6 +32,7 @@
 {
     [self setBackgroundColor:[UIColor clearColor]];
     [self setSelectedBackgroundView:[[UIView alloc] init]];
+    [self setAutoresizesSubviews:YES];
     
     self.titleLabel = [[UILabel alloc] init];
     [self.titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -74,11 +75,13 @@
 
 - (void)setupConstraints
 {
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[tl]-2-[rl(==35)]-16-[dl(==56)]-13-[pt(==42)]-15-|" options:0 metrics:nil views:@{@"tl": self.titleLabel, @"rl": self.rankWrapper, @"dl": self.durationLabel, @"pt": self.pointsLabel}]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[tl(>=126)]-2-[rl(==35)]-16-[dl(==56)]-13-[pt(==42)]-15-|" options:0 metrics:nil views:@{@"tl": self.titleLabel, @"rl": self.rankWrapper, @"dl": self.durationLabel, @"pt": self.pointsLabel}]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.rankLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.durationLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.pointsLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];
+    [self updateConstraintsIfNeeded];
+    [self layoutIfNeeded];
 }
 
 @end

@@ -53,7 +53,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"Survey";
-    [self addBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshColor) name:@"UserDetailsUpdated" object:nil];
     
     [self.tableView registerClass:[HASurveyAvatarHeaderCell class] forCellReuseIdentifier:[HASurveyAvatarHeaderCell reuseIdentifier]];
     [self.tableView registerClass:[HASurveyRankingCell class] forCellReuseIdentifier:[HASurveyRankingCell reuseIdentifier]];
@@ -93,6 +93,7 @@
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     [self.tableView setContentInset:UIEdgeInsetsMake(65.f, 0.f, 0.f, 0.f)];
     [self.view addSubview:self.tableView];
+    [self addBackgroundImage];
     [self addBlurViewWithHeight:64.f];
 }
 
@@ -121,6 +122,13 @@
 }
 
 #pragma mark Workers
+
+- (void)refreshColor
+{
+    [self handleUserUpdate];
+    [self.tableView reloadData];
+}
+
 - (void)fetchLeaders
 {
     if (self.organization) {
@@ -156,9 +164,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 2) {
-        if (self.leaders.count > 4) {
-            return 5;
-        }
         return self.leaders.count + 1;
     }
     return 1;
@@ -266,6 +271,7 @@
         [textLabel setText:@"Leaderboard"];
         [textLabel setFont:STKFont(18)];
         [textLabel setTextColor:[UIColor HATextColor]];
+        [textLabel setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:textLabel];
         [cell addConstraint:[NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
         [cell addConstraint:[NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:cell attribute:NSLayoutAttributeCenterY multiplier:1.f constant:0.f]];

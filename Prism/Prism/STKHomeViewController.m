@@ -381,19 +381,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
-        if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]){
-            UIUserNotificationType types = UIUserNotificationTypeBadge |
-            UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-            
-            UIUserNotificationSettings *mySettings =
-            [UIUserNotificationSettings settingsForTypes:types categories:nil];
-            
-            [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-            //        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound)];
+    UIApplication *application = [UIApplication sharedApplication];
+    if ([[STKUserStore store] currentUser]) {
+        if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
+                                                                                                 |UIRemoteNotificationTypeSound
+                                                                                                 |UIRemoteNotificationTypeAlert) categories:nil];
+            [application registerUserNotificationSettings:settings];
+        } else {
+            UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+            [application registerForRemoteNotificationTypes:myTypes];
         }
     }
-    
     [[self cardViewTopOffset] setConstant:[self initialCardViewOffset]];
     [self setDisplayInterests:[[NSUserDefaults standardUserDefaults] boolForKey:@"HADidDisplayInterestPage"]];
 

@@ -81,10 +81,11 @@
 
 - (NSArray *)supportSettings
 {
+    NSString *version = [NSString stringWithFormat:@"%@ (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
     return @[@{@"title" : @"Terms of Use", @"type" : @"STKLabelCell", @"url" : @"https://prizmapp.com/terms"},
              @{@"title" : @"Privacy Policy", @"type" : @"STKLabelCell", @"url" : @"https://prizmapp.com/privacy"},
              @{@"title" : @"Support Questions", @"type" : @"STKLabelCell", @"url" : @"https://prizmapp.desk.com/"},
-             @{@"title" : @"Version", @"type" : @"STKDetailCell", @"value" : [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge id)kCFBundleVersionKey]},
+             @{@"title" : @"Version", @"type" : @"STKDetailCell", @"value" : version},
              @{@"title" : @"Disable Account", @"type" : @"STKLabelCell", @"selectionSelector" : @"disableAccount:"}
              ];
 }

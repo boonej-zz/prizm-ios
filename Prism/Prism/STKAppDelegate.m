@@ -51,12 +51,26 @@
 
 @end
 
-@implementation STKAppDelegate 
+@implementation STKAppDelegate
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    //register to receive notifications
+    [application registerForRemoteNotifications];
+}
+
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-//    NSLog(@"%@", deviceToken);
+    NSLog(@"%@", deviceToken);
+    [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:@"HADeviceToken"];
     [[STKUserStore store] updateDeviceTokenForCurrentUser:deviceToken];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    [[STKUserStore store] updateDeviceTokenForCurrentUser:[[NSData alloc] initWithData:[@"" dataUsingEncoding:NSUTF8StringEncoding]]];
+    CLSLog(@"%@", error.localizedDescription);
 }
 
 
