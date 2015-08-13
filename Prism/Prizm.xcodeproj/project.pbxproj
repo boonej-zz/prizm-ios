@@ -60,6 +60,10 @@
 		2C5BAD921B76B3D20060F7D8 /* HASurveyScaleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BAD911B76B3D20060F7D8 /* HASurveyScaleCell.m */; };
 		2C5BAD951B76B3E40060F7D8 /* HASurveyMultipleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BAD941B76B3E40060F7D8 /* HASurveyMultipleCell.m */; };
 		2C5CDFDE1B6DE7C700422886 /* HAConsentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */; };
+		2C619D121B7BD7E900E44E23 /* HABarChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C619D111B7BD7E900E44E23 /* HABarChartCell.m */; };
+		2C619F3B1B7D13D600E44E23 /* HARespondentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C619F3A1B7D13D600E44E23 /* HARespondentCell.m */; };
+		2C619F3E1B7D1E1000E44E23 /* STKUserTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C619F3D1B7D1E1000E44E23 /* STKUserTarget.m */; };
+		2C619F411B7D287500E44E23 /* HASegmentedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C619F401B7D287500E44E23 /* HASegmentedCell.m */; };
 		2C6969291982A71900E4B9FD /* STKIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6969271982A71900E4B9FD /* STKIntroViewController.m */; };
 		2C69692A1982A71900E4B9FD /* STKIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6969281982A71900E4B9FD /* STKIntroViewController.xib */; };
 		2C6B2640199AA7E900A14BD8 /* NSArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6B263F199AA7E900A14BD8 /* NSArray+Reverse.m */; };
@@ -484,6 +488,17 @@
 		2C5BAD911B76B3D20060F7D8 /* HASurveyScaleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyScaleCell.m; sourceTree = "<group>"; };
 		2C5BAD931B76B3E40060F7D8 /* HASurveyMultipleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASurveyMultipleCell.h; sourceTree = "<group>"; };
 		2C5BAD941B76B3E40060F7D8 /* HASurveyMultipleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASurveyMultipleCell.m; sourceTree = "<group>"; };
+		2C619CFE1B7BBAD000E44E23 /* User 8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 8.xcdatamodel"; sourceTree = "<group>"; };
+		2C619D101B7BD7E900E44E23 /* HABarChartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HABarChartCell.h; sourceTree = "<group>"; };
+		2C619D111B7BD7E900E44E23 /* HABarChartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HABarChartCell.m; sourceTree = "<group>"; };
+		2C619D1E1B7BDB2000E44E23 /* libCorePlot-CocoaTouch.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCorePlot-CocoaTouch.a"; sourceTree = "<group>"; };
+		2C619D6A1B7C277B00E44E23 /* libCorePlot-CocoaTouch.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libCorePlot-CocoaTouch.a"; path = "../libCorePlot-CocoaTouch.a"; sourceTree = "<group>"; };
+		2C619F391B7D13D600E44E23 /* HARespondentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HARespondentCell.h; sourceTree = "<group>"; };
+		2C619F3A1B7D13D600E44E23 /* HARespondentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HARespondentCell.m; sourceTree = "<group>"; };
+		2C619F3C1B7D1E1000E44E23 /* STKUserTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKUserTarget.h; sourceTree = "<group>"; };
+		2C619F3D1B7D1E1000E44E23 /* STKUserTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKUserTarget.m; sourceTree = "<group>"; };
+		2C619F3F1B7D287500E44E23 /* HASegmentedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASegmentedCell.h; sourceTree = "<group>"; };
+		2C619F401B7D287500E44E23 /* HASegmentedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASegmentedCell.m; sourceTree = "<group>"; };
 		2C690A3A1B0158F7006ECF4D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		2C6969261982A71900E4B9FD /* STKIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKIntroViewController.h; sourceTree = "<group>"; };
 		2C6969271982A71900E4B9FD /* STKIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKIntroViewController.m; sourceTree = "<group>"; };
@@ -2746,6 +2761,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		2C619D151B7BD96400E44E23 /* CorePlot */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = CorePlot;
+			sourceTree = "<group>";
+		};
 		883D87B019463E7F00195B11 /* Mixpanel */ = {
 			isa = PBXGroup;
 			children = (
@@ -2819,6 +2841,7 @@
 		BE02EA96182A80A200A5505A = {
 			isa = PBXGroup;
 			children = (
+				2C619D151B7BD96400E44E23 /* CorePlot */,
 				BE47756F186DC64C003672A0 /* Amazon */,
 				883D87B019463E7F00195B11 /* Mixpanel */,
 				BE52B14018E3106400C44F30 /* STK */,
@@ -2847,6 +2870,8 @@
 		BE02EAA1182A80A200A5505A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2C619D6A1B7C277B00E44E23 /* libCorePlot-CocoaTouch.a */,
+				2C619D1E1B7BDB2000E44E23 /* libCorePlot-CocoaTouch.a */,
 				2C690A3A1B0158F7006ECF4D /* CoreVideo.framework */,
 				2CBFA2281AFEF66500C6577C /* libPods-Heap.a */,
 				D097F29318D3533E0053F479 /* Crashlytics.framework */,
@@ -3305,6 +3330,12 @@
 				2C5BAD911B76B3D20060F7D8 /* HASurveyScaleCell.m */,
 				2C5BAD931B76B3E40060F7D8 /* HASurveyMultipleCell.h */,
 				2C5BAD941B76B3E40060F7D8 /* HASurveyMultipleCell.m */,
+				2C619D101B7BD7E900E44E23 /* HABarChartCell.h */,
+				2C619D111B7BD7E900E44E23 /* HABarChartCell.m */,
+				2C619F391B7D13D600E44E23 /* HARespondentCell.h */,
+				2C619F3A1B7D13D600E44E23 /* HARespondentCell.m */,
+				2C619F3F1B7D287500E44E23 /* HASegmentedCell.h */,
+				2C619F401B7D287500E44E23 /* HASegmentedCell.m */,
 			);
 			name = Cells;
 			path = ..;
@@ -5212,6 +5243,8 @@
 				2C8DE1F61B71B89100B53343 /* STKQuestion.m */,
 				2C2329521B7325FE00C94AC4 /* STKLeaderboardItem.h */,
 				2C2329531B7325FE00C94AC4 /* STKLeaderboardItem.m */,
+				2C619F3C1B7D1E1000E44E23 /* STKUserTarget.h */,
+				2C619F3D1B7D1E1000E44E23 /* STKUserTarget.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -5402,6 +5435,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				English,
 			);
 			mainGroup = BE02EA96182A80A200A5505A;
 			productRefGroup = BE02EAA0182A80A200A5505A /* Products */;
@@ -5656,6 +5690,7 @@
 				BE63C53918FD89890087585E /* STKActivityIndicatorView.m in Sources */,
 				2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
+				2C619F3E1B7D1E1000E44E23 /* STKUserTarget.m in Sources */,
 				BEAC71A818522D6C00F0B211 /* STKTextFieldCell.m in Sources */,
 				D0E5076C1914251A0011DB63 /* STKLoginResetViewController.m in Sources */,
 				2C23294E1B72B2FF00C94AC4 /* HASurveyAvatarHeaderCell.m in Sources */,
@@ -5740,6 +5775,7 @@
 				2CB028E21B6C1BC800034A01 /* HAConsentViewController.m in Sources */,
 				BEC01A04182AF40800080601 /* STKHomeViewController.m in Sources */,
 				2C2E9C611AF3D83000F0F7A8 /* HACreateGroupViewController.m in Sources */,
+				2C619D121B7BD7E900E44E23 /* HABarChartCell.m in Sources */,
 				2CBF30A81AEEF338000F261C /* HAAvatarImageCell.m in Sources */,
 				2CBF30B51AF017B8000F261C /* HAMessageCell.m in Sources */,
 				88053311193E6F0000A8E44D /* STKSearchTrustCell.m in Sources */,
@@ -5761,6 +5797,7 @@
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
 				883D87D819463E7F00195B11 /* MPSurveyQuestion.m in Sources */,
 				2C97974819DDE998003A6C0A /* STKInsight.m in Sources */,
+				2C619F411B7D287500E44E23 /* HASegmentedCell.m in Sources */,
 				D0E3508318FF30A40006B992 /* STKSearchHashTagsCell.m in Sources */,
 				883D87DA19463E7F00195B11 /* NSData+MPBase64.m in Sources */,
 				BEFCEE08182C210600648B9F /* NSError+STKConnection.m in Sources */,
@@ -5785,6 +5822,7 @@
 				BEAC71A31852285700F0B211 /* STKCreateProfileViewController.m in Sources */,
 				2C8DE1FA1B71B89200B53343 /* STKAnswer.m in Sources */,
 				BEF7A08D1843AEAB00A3AFFB /* STKPanelViewController.m in Sources */,
+				2C619F3B1B7D13D600E44E23 /* HARespondentCell.m in Sources */,
 				BE7A2DFB1831877F00CC6EED /* UIViewController+STKControllerItems.m in Sources */,
 				BEF6E201190EC21300D60BE0 /* STKButtonRow.m in Sources */,
 				BEF7A08118439E0800A3AFFB /* STKRegisterViewController.m in Sources */,
@@ -5939,6 +5977,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
 					"$(inherited)",
+					/Users/boonej/work/prizm,
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
@@ -6314,6 +6353,7 @@
 					"$(PROJECT_DIR)",
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					/Users/boonej/work/prizm,
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"\"$(SRCROOT)/Libraries/Debug-iphoneos\"",
@@ -6369,6 +6409,7 @@
 					"$(PROJECT_DIR)",
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					/Users/boonej/work/prizm,
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -6492,6 +6533,7 @@
 					"$(PROJECT_DIR)",
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					/Users/boonej/work/prizm,
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -6595,6 +6637,7 @@
 					"$(PROJECT_DIR)",
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					/Users/boonej/work/prizm,
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
@@ -6698,6 +6741,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
 					"$(inherited)",
+					/Users/boonej/work/prizm,
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
@@ -6814,6 +6858,7 @@
 					"$(PROJECT_DIR)",
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
+					/Users/boonej/work/prizm,
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"\"$(SRCROOT)/Libraries/Debug-iphoneos\"",
@@ -6935,6 +6980,7 @@
 		BEFAC197183D4DCF005E8933 /* User.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C619CFE1B7BBAD000E44E23 /* User 8.xcdatamodel */,
 				2CB028DA1B6A790B00034A01 /* User 7.xcdatamodel */,
 				2C02B7D91B0BB95000E5E82D /* User 6.xcdatamodel */,
 				2CF53D2C1ADD6DA80075FA96 /* User 5.xcdatamodel */,
@@ -6943,7 +6989,7 @@
 				2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */,
 				BEFAC198183D4DCF005E8933 /* User.xcdatamodel */,
 			);
-			currentVersion = 2CB028DA1B6A790B00034A01 /* User 7.xcdatamodel */;
+			currentVersion = 2C619CFE1B7BBAD000E44E23 /* User 8.xcdatamodel */;
 			path = User.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

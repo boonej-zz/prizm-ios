@@ -123,6 +123,7 @@ extern BOOL const STKUserStatusInActive;
 @property (nonatomic, retain) NSString *contactFirstName;
 @property (nonatomic, retain) NSString *contactLastName;
 @property (nonatomic, retain) NSString *contactEmail;
+@property (nonatomic, strong) NSString *completeDate;
 
 - (STKTrust *)trustForUser:(STKUser *)u;
 - (BOOL)isFollowedByUser:(STKUser *)u;

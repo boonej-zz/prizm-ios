@@ -53,7 +53,8 @@ followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdP
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
 tumblrTokenSecret, tumblrLastMinID, programCode, theme;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype, insightCount, organizations, ownedOrganization, messages, likedMessages;
-@synthesize profilePhoto, coverPhoto, token, secret, password, name;
+@synthesize profilePhoto, coverPhoto, token, secret, password, name, completeDate;
+@dynamic contactEmail, contactFirstName, contactLastName;
 
 + (NSDictionary *)remoteToLocalKeyMap
 {

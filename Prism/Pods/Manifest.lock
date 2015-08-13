@@ -1,10 +1,13 @@
 PODS:
+  - CorePlot (1.6)
   - Heap (2.1.3)
 
 DEPENDENCIES:
+  - CorePlot
   - Heap
 
 SPEC CHECKSUMS:
+  CorePlot: 820901f6c147f2d84549ffa1f0902869f980d74d
   Heap: f3b32fcad4c4cb60558f21c596b01679960235d6
 
-COCOAPODS: 0.36.4
+COCOAPODS: 0.38.2

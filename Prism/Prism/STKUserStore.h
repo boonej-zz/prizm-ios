@@ -147,4 +147,5 @@ typedef enum {
 - (void)finalizeSurveyForUser:(STKUser *)user survey:(STKSurvey *)s completion:(void (^)(STKSurvey * survey, NSError *err))block;
 - (NSArray *)fetchLeaderboardForOrganization:(STKOrganization *)organization completion:(void(^)(NSArray * leaders, NSError *err))block;
 - (void)fetchCompletedSurveysForUser:(STKUser *)user completion:(void(^)(NSArray * surveys, NSError *err))block;
+- (void)fetchLatestSurveyForOrganization:(STKOrganization *)org completion:(void(^)(STKSurvey *survey, NSError *err))block;
 @end

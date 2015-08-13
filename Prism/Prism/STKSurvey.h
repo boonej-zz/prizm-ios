@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSSet *groups;
 @property (nonatomic, retain) NSSet *questions;
 @property (nonatomic, retain) NSSet *completed;
+@property (nonatomic, retain) NSSet *targeted;
 @property (nonatomic, retain) STKOrganization *organization;
 @property (nonatomic, retain) NSNumber *points;
 @property (nonatomic, retain) NSNumber *rank;
@@ -47,5 +48,10 @@
 - (void)removeCompletedObject:(STKUser *)value;
 - (void)addCompleted:(NSSet *)values;
 - (void)removeCompleted:(NSSet *)values;
+
+- (void)addTargetedObject:(STKUser *)value;
+- (void)removeTargetedObject:(STKUser *)value;
+- (void)addTargeted:(NSSet *)values;
+- (void)removeTargeted:(NSSet *)values;
 
 @end

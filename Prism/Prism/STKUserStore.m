@@ -1785,6 +1785,25 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
 }
 
+- (void)fetchLatestSurveyForOrganization:(STKOrganization *)org completion:(void(^)(STKSurvey *survey, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block (nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", org.uniqueID, @"surveys", @"latest"]];
+        [c setModelGraph:@[@"STKSurvey"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setShouldReturnArray:NO];
+        [c setContext:[self context]];
+        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+        
+    }];
+}
+
 - (void)fetchInterests:(void (^)(NSArray * interests, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {

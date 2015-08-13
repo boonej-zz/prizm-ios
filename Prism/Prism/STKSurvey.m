@@ -29,6 +29,7 @@
 @dynamic points;
 @dynamic rank;
 @dynamic duration;
+@dynamic targeted;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -56,6 +57,7 @@
              @"questions": [STKBind bindMapForKey:@"questions" matchMap:@{@"uniqueID" : @"_id"}],
              @"completed": [STKBind bindMapForKey:@"completed" matchMap:@{@"uniqueID" : @"_id"}],
              @"organization": [STKBind bindMapForKey:@"organization" matchMap:@{@"uniqueID" : @"_id"}],
+             @"targeted_users": [STKBind bindMapForKey:@"targeted" matchMap:@{@"uniqueID": @"_id"}],
              @"points": @"points",
              @"rank": @"rank",
              @"duration": @"duration"
