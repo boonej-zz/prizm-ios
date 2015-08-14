@@ -17,7 +17,6 @@
 @property (nonatomic, strong) UILabel *dateLabel;
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UILabel *durationLabel;
-@property (nonatomic) BOOL stroked;
 
 @end
 
@@ -118,20 +117,17 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    if (!self.stroked) {
-        CGFloat startX = 17;
-        CGFloat endX = rect.size.width;
-        CGFloat y = rect.size.height - 1;
-        CGContextRef c = UIGraphicsGetCurrentContext();
-        CGContextSetLineWidth(c, 1.0);
-        CGFloat red[4]={168.f/255.f, 171.f/255.f, 176.f/255.f, 0.5f};
-        CGContextSetStrokeColor(c, red);
-        CGContextBeginPath(c);
-        CGContextMoveToPoint(c, startX, y);
-        CGContextAddLineToPoint(c, endX, y);
-        CGContextStrokePath(c);
-        self.stroked = YES;
-    }
+    CGFloat startX = 17;
+    CGFloat endX = rect.size.width;
+    CGFloat y = rect.size.height - 1;
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(c, 1.0);
+    CGFloat red[4]={168.f/255.f, 171.f/255.f, 176.f/255.f, 0.5f};
+    CGContextSetStrokeColor(c, red);
+    CGContextBeginPath(c);
+    CGContextMoveToPoint(c, startX, y);
+    CGContextAddLineToPoint(c, endX, y);
+    CGContextStrokePath(c);
     [super drawRect:rect];
 }
 

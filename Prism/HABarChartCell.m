@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) CPTGraphHostingView *graphView;
 @property (nonatomic, strong) CPTBarPlot *plot;
+@property (nonatomic, strong) NSArray *keys;
 
 @end
 
@@ -65,6 +66,11 @@
 - (void)setPlotData:(NSDictionary *)plotData
 {
     _plotData = plotData;
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"M/d"];
+    self.keys = [[plotData allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [[df dateFromString:obj1] compare:[df dateFromString:obj2]];
+    }];
     CPTTheme *theme = [CPTTheme themeNamed:kCPTPlainWhiteTheme];
    
     CPTGraph *graph =  (CPTGraph *)[theme newGraph];
@@ -121,7 +127,7 @@
     [xAxis setMajorTickLineStyle:nil];
     
     NSArray *customTickLocations = [NSArray arrayWithObjects:[NSDecimalNumber numberWithInt:1], [NSDecimalNumber numberWithInt:2], [NSDecimalNumber numberWithInt:3],  nil];
-    NSArray *xAxisLabels = [plotData allKeys];
+    NSArray *xAxisLabels = self.keys;
     NSUInteger labelLocation = 0;
     NSMutableArray *customLabels = [NSMutableArray arrayWithCapacity:[xAxisLabels count]];
     xAxis.labelOffset = -3;
@@ -205,7 +211,7 @@
         inc = 50;
     }
     NSMutableArray *customLabels = [NSMutableArray array];
-    for (long i = 1; i < max; ++i) {
+    for (long i = 0; i < (max + inc); i += inc) {
         CPTAxisLabel *newLabel = [[CPTAxisLabel alloc] initWithText: [NSString stringWithFormat:@"%lu", i]  textStyle:y.labelTextStyle];
         newLabel.tickLocation = CPTDecimalFromLong((int32_t)i);
         newLabel.offset = y.labelOffset + y.majorTickLength;
@@ -230,7 +236,7 @@
 - (id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)idx
 {
     long x = idx + 1;
-    long y = [[[self.plotData allValues] objectAtIndex:idx] longValue];
+    long y = [[self.plotData valueForKey:[self.keys objectAtIndex:idx]] longValue];
     long value;
     switch (fieldEnum) {
         case CPTScatterPlotFieldX:

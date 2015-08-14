@@ -149,9 +149,7 @@ static BOOL HAActivityIsAnimating = NO;
             [self loadMenu];
         }
     } else {
-        if (self.isGroupMember) {
-            [self loadMenu];
-        }
+        [self loadMenu];
     }
 }
 
