@@ -15,6 +15,8 @@
 @property (nonatomic, strong) CPTGraphHostingView *graphView;
 @property (nonatomic, strong) CPTBarPlot *plot;
 @property (nonatomic, strong) NSArray *keys;
+@property (nonatomic, strong) CPTAnnotation *annotation;
+
 
 @end
 
@@ -255,6 +257,51 @@
 {
     CPTColor *color = [CPTColor colorWithComponentRed:5.f/255.f green:194.f/255.f blue:240.f/255.f alpha:1.f];
     return [CPTFill fillWithColor:color];
+}
+
+# pragma mark Bar Plot Delegate
+
+
+
+- (void)barPlot:(CPTBarPlot *)plot barTouchUpAtRecordIndex:(NSUInteger)idx
+{
+    CPTGraph *graph = self.graphView.hostedGraph;
+    if (_annotation) {
+        [graph.plotAreaFrame.plotArea removeAnnotation:_annotation];
+        _annotation = nil;
+    } else {
+        CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+        textStyle.color = [CPTColor colorWithCGColor:[UIColor HATextColor].CGColor];
+        textStyle.fontName = @"HelveticaNeue-Bold";
+        textStyle.fontSize = 8;
+        textStyle.textAlignment = CPTTextAlignmentCenter;
+        long value = [[self.plotData valueForKey:[self.keys objectAtIndex:idx]] longValue];
+        CGPoint point = CGPointMake(idx + 1, value);
+        NSNumber *x = [NSNumber numberWithFloat:point.x];
+        NSNumber *y = [NSNumber numberWithFloat:point.y];
+        NSArray *anchorPoint = @[x, y];
+        NSString *text = [NSString stringWithFormat:@"%ld Responses Received", value];
+        CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:text style:textStyle];
+        UIImage *backImg = [UIImage imageNamed:@"tooltip_bg"];
+        CPTBorderedLayer *layer = [[CPTBorderedLayer alloc] initWithFrame:CGRectMake(0, 0, 123, 34)];
+        CPTImage *img = [[CPTImage alloc] initWithCGImage:backImg.CGImage];
+        [img setScale:2];
+        CPTFill *fill = [CPTFill fillWithImage:img];
+        layer.fill = fill;
+        [layer addSublayer:textLayer];
+        textLayer.frame = layer.bounds;
+        textLayer.paddingTop = 6;
+        
+    
+        
+        
+        _annotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:graph.defaultPlotSpace anchorPlotPoint:anchorPoint];
+        _annotation.contentLayer = layer;
+        _annotation.displacement = CGPointMake(0.0f, 20.0f);
+        [graph.plotAreaFrame.plotArea addAnnotation:_annotation];
+
+    }
+    
 }
 
 

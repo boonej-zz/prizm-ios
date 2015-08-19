@@ -499,6 +499,7 @@
         [titleLabel setTextColor:[UIColor colorWithRed:254.f/255.f green:254.f/255.f blue:254.f/255.f alpha:1.f]];
         [titleLabel sizeToFit];
         [cell addSubview:titleLabel];
+        [cell setSelectedBackgroundView:[[UIView alloc] init]];
         
         UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_summary"]];
         [image setTranslatesAutoresizingMaskIntoConstraints:NO];

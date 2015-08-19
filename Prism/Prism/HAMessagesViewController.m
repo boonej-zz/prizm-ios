@@ -178,6 +178,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.postView setDelegate:self];
     [self.view addSubview:self.postView];
     self.tableViewBottomConstraint = [NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.f constant:0.f];
+
     self.postViewBottomConstraint = [NSLayoutConstraint constraintWithItem:self.postView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.f constant:0.f];
     
     _markupController = [[STKMarkupController alloc] initWithDelegate:self];
@@ -196,8 +197,13 @@ NSString * const HAMessageUserURLScheme = @"user";
 
 - (void)layoutConstraints
 {
+    double constant = 0;
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+        constant = 46.f;
+        [self.tableViewBottomConstraint setConstant:-constant];
+    }
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1.f constant:0.f]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1.f constant:-constant]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.f constant:0.f]];
     [self.view addConstraint:self.tableViewBottomConstraint];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.f constant:0.f]];
@@ -395,7 +401,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:0.3 animations:^{
         if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
-//            [self.tableViewBottomConstraint setConstant:self.postView.frame.size.height];
+            [self.tableViewBottomConstraint setConstant:-self.postView.frame.size.height];
         }
         [self.postView.textView resignFirstResponder];
         [self.postViewBottomConstraint setConstant:0];
