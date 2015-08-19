@@ -893,6 +893,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             }
             
             if ([user.uniqueID isEqualToString:[self.currentUser uniqueID]]) {
+                if ([user.type isEqualToString:STKUserTypeInstitution]) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserDetailsUpdated" object:nil];
+                }
                 [user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
                     if (obj.organization) {
                         [self fetchUserOrgs:^(NSArray *organizations, NSError *err) {
@@ -2461,6 +2464,32 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         [c addQueryValue:organization.uniqueID forKey:@"organization"];
         
         [c addQueryValue:groupName forKey:@"group"];
+        
+        [c addQueryValue:imageURL forKey:@"image_url"];
+        [c setModelGraph:@[@"STKMessage"]];
+        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+        [c setContext:[self context]];
+        //            [c setShouldReturnArray:YES];
+        [c setShouldReturnArray:NO];
+        [c postWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+            block(obj, err);
+        }];
+    }];
+}
+
+- (void)postMessageImage:(NSString*)imageURL toUser:(STKUser *) user organization:(STKOrganization *)organization completion:(void (^)(STKMessage *message, NSError *err))block
+{
+    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+        if (err) {
+            block(nil, err);
+            return;
+        }
+        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"users", user.uniqueID, @"messages"]];
+        
+        [c addQueryValue:[self currentUser].uniqueID forKey:@"creator"];
+        [c addQueryValue:organization.uniqueID forKey:@"organization"];
+        
+        
         
         [c addQueryValue:imageURL forKey:@"image_url"];
         [c setModelGraph:@[@"STKMessage"]];

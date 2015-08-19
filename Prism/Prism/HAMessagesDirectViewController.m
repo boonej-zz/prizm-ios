@@ -64,8 +64,9 @@
 
 - (void)configureConstraints
 {
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tv]-0-|" options:0 metrics:nil views:@{@"tv": self.tableView}]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tv]-0-|" options:0 metrics:nil views:@{@"tv": self.tableView}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[tv(==v)]-0-|" options:0 metrics:nil views:@{@"tv": self.tableView, @"v": self.view}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[tv(==v)]-0-|" options:0 metrics:nil views:@{@"tv": self.tableView, @"v": self.view}]];
+    
 }
 
 #pragma mark View Lifecycle
@@ -104,7 +105,9 @@
     }
     [super viewWillAppear:animated];
     [self.tableView reloadData];
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    if (self.members && self.members.count > 0) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
 }
 
 

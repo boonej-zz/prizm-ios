@@ -201,7 +201,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.f constant:0.f]];
     [self.view addConstraint:self.tableViewBottomConstraint];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.f constant:0.f]];
-    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-64-[lb(==4)]" options:0 metrics:nil views:@{@"lb": self.luminatingBar}]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.luminatingBar attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.f constant:0.f]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.luminatingBar attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.f constant:0.f]];
@@ -395,7 +395,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     [self.view layoutIfNeeded];
     [UIView animateWithDuration:0.3 animations:^{
         if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
-            [self.tableViewBottomConstraint setConstant:self.postView.frame.size.height];
+//            [self.tableViewBottomConstraint setConstant:self.postView.frame.size.height];
         }
         [self.postView.textView resignFirstResponder];
         [self.postViewBottomConstraint setConstant:0];
@@ -558,7 +558,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     if (self.editing && self.editingIndexPath) {
         [self.postView.textView setText:@""];
         [self dismissKeyboard:nil];
-        [self.tableView reloadRowsAtIndexPaths:@[self.editingIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//        [self.tableView reloadRowsAtIndexPaths:@[self.editingIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         self.editing = NO;
         //        self.editingIndexPath = nil;
     }
@@ -863,12 +863,18 @@ NSString * const HAMessageUserURLScheme = @"user";
                                                otherButtonTitles:NSLocalizedString(@"Try Again", @"try again button title"), nil];
             [av show];
         } else {
-            STKGroup *group = [self.group isKindOfClass:[STKGroup class]]?self.group:nil;
-            [[STKUserStore store] postMessageImage:URLString toGroup:group organization:self.organization completion:^(STKMessage *message, NSError *err) {
-                [STKProcessingView dismiss];
-                [self fetchNewer:YES];
-                
-            }];
+            if ([self isDirectController]) {
+                [[STKUserStore store] postMessageImage:URLString toUser:self.sender organization:self.organization completion:^(STKMessage *message, NSError *err) {
+                    [STKProcessingView dismiss];
+                    [self fetchNewer:YES];
+                }];
+            } else {
+                [[STKUserStore store] postMessageImage:URLString toGroup:self.group organization:self.organization completion:^(STKMessage *message, NSError *err) {
+                    [STKProcessingView dismiss];
+                    [self fetchNewer:YES];
+                    
+                }];
+            }
         }
     }];
 }
@@ -933,11 +939,11 @@ NSString * const HAMessageUserURLScheme = @"user";
 {
     switch(type) {
         case NSFetchedResultsChangeInsert:
-            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSFetchedResultsChangeDelete:
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSFetchedResultsChangeUpdate:
@@ -945,8 +951,8 @@ NSString * const HAMessageUserURLScheme = @"user";
             break;
             
         case NSFetchedResultsChangeMove:
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
     }
 }

@@ -67,6 +67,7 @@
     [self setTitle:@"Messages"];
     [self.navigationItem setLeftBarButtonItem:[self menuBarButtonItem]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshColor) name:@"UserDetailsUpdated" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -173,6 +174,11 @@
     }];
 }
 
+- (void)refreshColor
+{
+    [self handleUserUpdate];
+    [self.tableView reloadData];
+}
 
 #pragma mark Cell Generation
 - (UITableViewCell *)directMessageCell

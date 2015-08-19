@@ -155,5 +155,6 @@ typedef enum {
 - (void)fetchOlderMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group user:(STKUser *) user date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block;
 - (void)fetchUnreadMessageDigestForUser:(STKUser *)user completion:(void (^)(NSArray *messages, NSError *err))block;
 - (NSArray *)fetchMessagedUsers;
+- (void)postMessageImage:(NSString*)imageURL toUser:(STKUser *) user organization:(STKOrganization *)organization completion:(void (^)(STKMessage *message, NSError *err))block;
 
 @end
