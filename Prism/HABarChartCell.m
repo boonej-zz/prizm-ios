@@ -267,7 +267,7 @@
 {
     CPTGraph *graph = self.graphView.hostedGraph;
     if (_annotation) {
-        [graph.plotAreaFrame.plotArea removeAnnotation:_annotation];
+        [graph.plotAreaFrame.plotArea removeAllAnnotations];
         _annotation = nil;
     } else {
         CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
@@ -280,7 +280,8 @@
         NSNumber *x = [NSNumber numberWithFloat:point.x];
         NSNumber *y = [NSNumber numberWithFloat:point.y];
         NSArray *anchorPoint = @[x, y];
-        NSString *text = [NSString stringWithFormat:@"%ld Responses Received", value];
+        NSString *end = value == 1?@"":@"s";
+        NSString *text = [NSString stringWithFormat:@"%ld Response%@ Received", value, end];
         CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:text style:textStyle];
         UIImage *backImg = [UIImage imageNamed:@"tooltip_bg"];
         CPTBorderedLayer *layer = [[CPTBorderedLayer alloc] initWithFrame:CGRectMake(0, 0, 123, 34)];

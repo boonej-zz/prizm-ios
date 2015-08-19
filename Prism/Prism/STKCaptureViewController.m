@@ -567,15 +567,16 @@
 
 - (UIImage *)updateImageToCurrentOrientation:(UIImage *)image
 {
-    if ([self deviceOrientation] == UIDeviceOrientationPortrait) {
-        return image;
-    }
-    
-    NSDictionary *map = @{@(UIDeviceOrientationLandscapeLeft) : @(UIImageOrientationLeft),
-                          @(UIDeviceOrientationLandscapeRight) : @(UIImageOrientationRight),
-                          @(UIDeviceOrientationPortraitUpsideDown) : @(UIImageOrientationDown)};
-    
-    return [UIImage imageWithCGImage:[image CGImage] scale:1.0 orientation:[map[@([self deviceOrientation])] intValue]];
+    return image;
+//    if ([self deviceOrientation] == UIDeviceOrientationPortrait) {
+//        return image;
+//    }
+//    
+//    NSDictionary *map = @{@(UIDeviceOrientationLandscapeLeft) : @(UIImageOrientationLeft),
+//                          @(UIDeviceOrientationLandscapeRight) : @(UIImageOrientationRight),
+//                          @(UIDeviceOrientationPortraitUpsideDown) : @(UIImageOrientationDown)};
+//    
+//    return [UIImage imageWithCGImage:[image CGImage] scale:1.0 orientation:[map[@([self deviceOrientation])] intValue]];
 }
 
 - (void)configureOverlayView
