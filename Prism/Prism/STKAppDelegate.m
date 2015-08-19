@@ -33,6 +33,7 @@
 #import "STKCreatePostViewController.h"
 #import "HANavigationController.h"
 #import "HAMessageViewController.h"
+#import "HAMessagesGroupViewController.h"
 #import "HACalendarViewController.h"
 #import "HASurveyViewController.h"
 #import "Heap.h"
@@ -69,7 +70,6 @@
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    [[STKUserStore store] updateDeviceTokenForCurrentUser:[[NSData alloc] initWithData:[@"" dataUsingEncoding:NSUTF8StringEncoding]]];
     CLSLog(@"%@", error.localizedDescription);
 }
 
@@ -105,7 +105,7 @@
     UIViewController *pvc = [[STKProfileViewController alloc] init];
     UIViewController *avc = [[STKActivityViewController alloc] init];
     UIViewController *gvc = [[STKGraphViewController alloc] init];
-    UIViewController *mvc = [[HAMessageViewController alloc] init];
+    UIViewController *mvc = [[HAMessagesGroupViewController alloc] init];
     UIViewController *cal = [[HACalendarViewController alloc] init];
     UIViewController *sur = [[HASurveyDashboardViewController alloc] init];
 //    UIViewController *ivc = [[HAInsightsViewController alloc] init];

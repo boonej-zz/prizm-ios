@@ -19,9 +19,9 @@
 
 @implementation HAPostMessageView
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id)init
 {
-    self = [super initWithCoder:aDecoder];
+    self = [super init];
     if (self) {
         UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
         if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {

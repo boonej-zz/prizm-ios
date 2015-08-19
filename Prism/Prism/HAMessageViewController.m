@@ -40,9 +40,9 @@
 #import "HAMessageImageCell.h"
 #import "HASingleMessageImageController.h"
 #import "HAMessageViewedController.h"
-
-NSString * const HAMessageHashTagURLScheme = @"hashtag";
-NSString * const HAMessageUserURLScheme = @"user";
+//
+//NSString * const HAMessageHashTagURLScheme = @"hashtag";
+//NSString * const HAMessageUserURLScheme = @"user";
 
 
 @interface HAMessageViewController ()<UITableViewDataSource, UITableViewDelegate, HAMessageCellDelegate, HAPostMessageViewDelegate, UIScrollViewDelegate, STKMarkupControllerDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate >
@@ -385,7 +385,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         STKMessage *m = self.messages.count > 0?[self.messages lastObject]:nil;
         [[self luminatingBar] setLuminating:YES];
         if (m) {
-            [[STKUserStore store] fetchLatestMessagesForOrganization:self.organization group:g date:m.createDate completion:^(NSArray *messages, NSError *err) {
+            [[STKUserStore store] fetchLatestMessagesForOrganization:self.organization group:g user:nil date:m.createDate completion:^(NSArray *messages, NSError *err) {
                 if (messages && messages.count > 0) {
                     [messages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                         NSArray *test = [self.messages filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(STKMessage *evaluatedObject, NSDictionary *bindings) {
@@ -828,7 +828,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     if([[url scheme] isEqualToString:@"http"] || [[url scheme] isEqualToString:@"https"]) {
         [self previewImageTapped:url];
 //        return YES;
-    } else if([[url scheme] isEqualToString:HAMessageHashTagURLScheme]) {
+    } else if([[url scheme] isEqualToString:@""]) {
         NSString *groupName = url.host;
         NSSet *matches = [self.organization.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", groupName]];
         __block BOOL resetAll = NO;
@@ -862,7 +862,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         }
 //        [[self navigationController] pushViewController:pvc animated:YES];
 //        return YES;
-    } else if([[url scheme] isEqualToString:HAMessageUserURLScheme]) {
+    } else if([[url scheme] isEqualToString:@""]) {
         STKProfileViewController *vc = [[STKProfileViewController alloc] init];
         [vc setProfile:[[STKUserStore store] userForID:[url host]]];
         [[self navigationController] pushViewController:vc animated:YES];

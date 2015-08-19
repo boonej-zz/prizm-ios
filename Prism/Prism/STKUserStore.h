@@ -28,6 +28,7 @@ extern NSString * const HAUserStoreActivityInsightKey;
 extern NSString * const HAUserStoreActivityLuminaryPostKey ;
 extern NSString * const HAUnreadMessagesUpdated;
 extern NSString * const HAUnreadMessagesForGroupsKey;
+extern NSString * const HAUnreadMessagesForUserKey;
 extern NSString * const HAUnreadMessagesForOrgKey;
 
 typedef enum {
@@ -121,12 +122,13 @@ typedef enum {
 - (NSArray *)fetchUserOrgs:(void (^)(NSArray *organizations, NSError *err))block;
 - (NSArray *)fetchGroupsForOrganization:(STKOrganization *)org completion:(void (^)(NSArray *groups, NSError *err))block;
 - (NSArray *)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block;
-- (void)fetchLatestMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block;
+- (void)fetchLatestMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group user:(STKUser *)user date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block;
 - (void)fetchOlderMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block;
 - (void)likeMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block;
 - (void)unlikeMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block;
 
 - (void)postMessage:(NSString*)message toGroup:(STKGroup *)group organization:(STKOrganization *)organization completion:(void (^)(STKMessage *message, NSError *err))block;
+- (void)postMessage:(NSString *)message toUser:(STKUser *)user organization:(STKOrganization *)organization completion:(void (^)(STKMessage *, NSError *))block;
 - (void)fetchMembersForOrganization:(STKOrganization *)organization completion:(void (^)(NSArray *messages, NSError *err))block;
 - (NSArray *)getMembersForOrganization:(STKOrganization *)organization group:(STKGroup *)group;
 - (void)editMessage:(STKMessage *)message completion:(void (^)(STKMessage *message, NSError *err))block;
@@ -148,4 +150,10 @@ typedef enum {
 - (NSArray *)fetchLeaderboardForOrganization:(STKOrganization *)organization completion:(void(^)(NSArray * leaders, NSError *err))block;
 - (void)fetchCompletedSurveysForUser:(STKUser *)user completion:(void(^)(NSArray * surveys, NSError *err))block;
 - (void)fetchLatestSurveyForOrganization:(STKOrganization *)org completion:(void(^)(STKSurvey *survey, NSError *err))block;
+
+- (NSFetchedResultsController *)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group user:(STKUser *)user completion:(void (^)(NSArray *messages, NSError *err))block;
+- (void)fetchOlderMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group user:(STKUser *) user date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block;
+- (void)fetchUnreadMessageDigestForUser:(STKUser *)user completion:(void (^)(NSArray *messages, NSError *err))block;
+- (NSArray *)fetchMessagedUsers;
+
 @end

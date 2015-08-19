@@ -234,7 +234,8 @@
     [self setHidden:!visible];
     double orgCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForOrgKey];
     double groupCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForGroupsKey];
-    double total = orgCount + groupCount;
+    double directCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForUserKey];
+    double total = orgCount + groupCount + directCount;
     [self setMessageCount:total];
     if(!visible) {
         [self setBackgroundImage:nil];

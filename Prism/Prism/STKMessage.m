@@ -33,6 +33,7 @@
 @dynamic metaData;
 @dynamic imageURL;
 @synthesize storedAttributedText;
+@dynamic target;
 
 - (NSError *)readFromJSONObject:(id)jsonObject
 {
@@ -56,6 +57,7 @@
              @"creator": [STKBind bindMapForKey:@"creator" matchMap:@{@"uniqueID": @"_id"}],
              @"group": [STKBind bindMapForKey:@"group" matchMap:@{@"uniqueID": @"_id"}],
              @"likes": [STKBind bindMapForKey:@"likes" matchMap:@{@"uniqueID": @"_id"}],
+             @"target": [STKBind bindMapForKey:@"target" matchMap:@{@"uniqueID": @"_id"}],
              @"create_date": [STKBind bindMapForKey:@"createDate" transform:STKBindTransformDateTimestamp],
              @"meta": [STKBind bindMapForKey:@"metaData" matchMap:@{@"messageID": @"message_id"}],
              @"image_url": @"imageURL",

@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSString * uniqueID;
 @property (nonatomic, retain) NSString * imageURL;
 @property (nonatomic, retain) NSSet *read;
+@property (nonatomic, retain) STKUser *target;
 
 
 @end

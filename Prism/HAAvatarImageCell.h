@@ -13,5 +13,6 @@
 
 @property (weak, nonatomic) IBOutlet STKAvatarView *avatarView;
 @property (weak, nonatomic) IBOutlet UILabel *title;
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
 
 @end

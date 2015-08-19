@@ -102,8 +102,13 @@
 		2CBF30B51AF017B8000F261C /* HAMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF30B31AF017B8000F261C /* HAMessageCell.m */; };
 		2CBF30B61AF017B8000F261C /* HAMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CBF30B41AF017B8000F261C /* HAMessageCell.xib */; };
 		2CBF30B91AF14E67000F261C /* HAPostMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF30B81AF14E67000F261C /* HAPostMessageView.m */; };
+		2CC207C31B7E5F0D0019A8AC /* HAMessagesGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CC207C21B7E5F0D0019A8AC /* HAMessagesGroupViewController.m */; };
+		2CC207C61B7E74300019A8AC /* HAMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CC207C51B7E74300019A8AC /* HAMessagesViewController.m */; };
 		2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762A1A1BC151007580A5 /* STKTheme.m */; };
 		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
+		2CE2FB311B7EB12300F286AF /* HAMessagesDirectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE2FB301B7EB12300F286AF /* HAMessagesDirectViewController.m */; };
+		2CE2FB341B80F64F00F286AF /* HAPlainAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE2FB331B80F64F00F286AF /* HAPlainAvatarCell.m */; };
+		2CE2FB371B83C85100F286AF /* HAMessagesUserChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE2FB361B83C85100F286AF /* HAMessagesUserChooserViewController.m */; };
 		2CE58A691AF9B50700349C57 /* STKMute.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE58A681AF9B50700349C57 /* STKMute.m */; };
 		2CF324D21B73C963000B41D0 /* HACompletedSurveysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF324D11B73C963000B41D0 /* HACompletedSurveysViewController.m */; };
 		2CF324D51B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF324D41B73D1FE000B41D0 /* HAUserSurveyHeaderCell.m */; };
@@ -560,12 +565,22 @@
 		2CBF30B81AF14E67000F261C /* HAPostMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAPostMessageView.m; sourceTree = "<group>"; };
 		2CBFA2201AFDBA4300C6577C /* Prizm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Prizm.entitlements; sourceTree = "<group>"; };
 		2CBFA2281AFEF66500C6577C /* libPods-Heap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Heap.a"; path = "Pods/../build/Debug-iphoneos/libPods-Heap.a"; sourceTree = "<group>"; };
+		2CC207C11B7E5F0D0019A8AC /* HAMessagesGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessagesGroupViewController.h; sourceTree = "<group>"; };
+		2CC207C21B7E5F0D0019A8AC /* HAMessagesGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessagesGroupViewController.m; sourceTree = "<group>"; };
+		2CC207C41B7E74300019A8AC /* HAMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessagesViewController.h; sourceTree = "<group>"; };
+		2CC207C51B7E74300019A8AC /* HAMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessagesViewController.m; sourceTree = "<group>"; };
 		2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 2.xcdatamodel"; sourceTree = "<group>"; };
 		2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 3.xcdatamodel"; sourceTree = "<group>"; };
 		2CCA76291A1BC151007580A5 /* STKTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTheme.h; sourceTree = "<group>"; };
 		2CCA762A1A1BC151007580A5 /* STKTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKTheme.m; sourceTree = "<group>"; };
 		2CCA762C1A1BC152007580A5 /* STKOrganization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKOrganization.h; sourceTree = "<group>"; };
 		2CCA762D1A1BC152007580A5 /* STKOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKOrganization.m; sourceTree = "<group>"; };
+		2CE2FB2F1B7EB12300F286AF /* HAMessagesDirectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessagesDirectViewController.h; sourceTree = "<group>"; };
+		2CE2FB301B7EB12300F286AF /* HAMessagesDirectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessagesDirectViewController.m; sourceTree = "<group>"; };
+		2CE2FB321B80F64F00F286AF /* HAPlainAvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAPlainAvatarCell.h; sourceTree = "<group>"; };
+		2CE2FB331B80F64F00F286AF /* HAPlainAvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAPlainAvatarCell.m; sourceTree = "<group>"; };
+		2CE2FB351B83C85100F286AF /* HAMessagesUserChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessagesUserChooserViewController.h; sourceTree = "<group>"; };
+		2CE2FB361B83C85100F286AF /* HAMessagesUserChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessagesUserChooserViewController.m; sourceTree = "<group>"; };
 		2CE4CD8C1A30D84A0091F864 /* User 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 4.xcdatamodel"; sourceTree = "<group>"; };
 		2CE58A671AF9B50700349C57 /* STKMute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKMute.h; sourceTree = "<group>"; };
 		2CE58A681AF9B50700349C57 /* STKMute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKMute.m; sourceTree = "<group>"; };
@@ -3106,6 +3121,14 @@
 				2CF324D11B73C963000B41D0 /* HACompletedSurveysViewController.m */,
 				2CF324D91B7526B2000B41D0 /* UISurveyDoneViewController.h */,
 				2CF324DA1B7526B2000B41D0 /* UISurveyDoneViewController.m */,
+				2CC207C11B7E5F0D0019A8AC /* HAMessagesGroupViewController.h */,
+				2CC207C21B7E5F0D0019A8AC /* HAMessagesGroupViewController.m */,
+				2CC207C41B7E74300019A8AC /* HAMessagesViewController.h */,
+				2CC207C51B7E74300019A8AC /* HAMessagesViewController.m */,
+				2CE2FB2F1B7EB12300F286AF /* HAMessagesDirectViewController.h */,
+				2CE2FB301B7EB12300F286AF /* HAMessagesDirectViewController.m */,
+				2CE2FB351B83C85100F286AF /* HAMessagesUserChooserViewController.h */,
+				2CE2FB361B83C85100F286AF /* HAMessagesUserChooserViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -3327,6 +3350,8 @@
 				2C619F3A1B7D13D600E44E23 /* HARespondentCell.m */,
 				2C619F3F1B7D287500E44E23 /* HASegmentedCell.h */,
 				2C619F401B7D287500E44E23 /* HASegmentedCell.m */,
+				2CE2FB321B80F64F00F286AF /* HAPlainAvatarCell.h */,
+				2CE2FB331B80F64F00F286AF /* HAPlainAvatarCell.m */,
 			);
 			name = Cells;
 			path = ..;
@@ -5733,12 +5758,14 @@
 				2C97974B19DDEB8E003A6C0A /* STKInsightTarget.m in Sources */,
 				8805330D193E5FD900A8E44D /* STKSearchUsersViewController.m in Sources */,
 				BE24B523183AA653009BC02A /* STKCircleView.m in Sources */,
+				2CE2FB311B7EB12300F286AF /* HAMessagesDirectViewController.m in Sources */,
 				BE05502118A404E600F6B534 /* UIImage+BoxBlur.m in Sources */,
 				BE1FC3B0186C817C003464E1 /* STKTextImageCell.m in Sources */,
 				BE8BBF0318C7B1F500D53BF5 /* STKImageSharer.m in Sources */,
 				BEE6CBBE1832DCB500BC72F4 /* STKExploreCell.m in Sources */,
 				2CF53D3E1ADED08B0075FA96 /* HASurveyViewController.m in Sources */,
 				883D87CF19463E7F00195B11 /* Mixpanel.m in Sources */,
+				2CE2FB341B80F64F00F286AF /* HAPlainAvatarCell.m in Sources */,
 				BE2B7E8C191AB96700E6F408 /* STKGraphCell.m in Sources */,
 				BE3D2FDF18C9626500E9F58C /* STKAvatarView.m in Sources */,
 				BE7D396B19141B32003B333F /* STKMarkupController.m in Sources */,
@@ -5785,6 +5812,7 @@
 				2C1D45BE19E45E94008D84C5 /* STKInsightArchiveCell.m in Sources */,
 				2C2E9C731AF58DC300F0F7A8 /* HATextFieldCell.m in Sources */,
 				BE24B520183A90D1009BC02A /* STKCountView.m in Sources */,
+				2CC207C31B7E5F0D0019A8AC /* HAMessagesGroupViewController.m in Sources */,
 				883D87D819463E7F00195B11 /* MPSurveyQuestion.m in Sources */,
 				2C97974819DDE998003A6C0A /* STKInsight.m in Sources */,
 				2C619F411B7D287500E44E23 /* HASegmentedCell.m in Sources */,
@@ -5804,6 +5832,7 @@
 				BE52B13F18E30F7F00C44F30 /* NSManagedObjectContext+STKAdditions.m in Sources */,
 				2C0D730B19C392F90078A9B9 /* HAFastSwitchViewController.m in Sources */,
 				2CBF30B11AF012FA000F261C /* STKMessage.m in Sources */,
+				2CC207C61B7E74300019A8AC /* HAMessagesViewController.m in Sources */,
 				2CBF30B91AF14E67000F261C /* HAPostMessageView.m in Sources */,
 				BE13648E18689F39003D9D5C /* STKAccountChooserViewController.m in Sources */,
 				BE4C48001917E4A40091F40B /* STKFetchDescription.m in Sources */,
@@ -5818,6 +5847,7 @@
 				BEF7A08118439E0800A3AFFB /* STKRegisterViewController.m in Sources */,
 				BE7C4801183EBBAC00C30995 /* STKResolvingImageView.m in Sources */,
 				BE1E09D51850E58900975652 /* STKVerticalNavigationController.m in Sources */,
+				2CE2FB371B83C85100F286AF /* HAMessagesUserChooserViewController.m in Sources */,
 				BE2B7E88191AB40600E6F408 /* STKPieChartView.m in Sources */,
 				BE5F68F718F0A4FC006D2CD1 /* STKQueryObject.m in Sources */,
 				BE72B74C192FA880002349E3 /* STKCreateAccoladeViewController.m in Sources */,

@@ -16,10 +16,22 @@
 
 @implementation HAGroupCell
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self setBackgroundColor:[UIColor clearColor]];
+    }
+    return self;
+}
+
 - (void)prepareForReuse
 {
-//    [self.countView setHidden:YES];
     [super prepareForReuse];
+    [self.countView setHidden:YES];
+    [self setMessageCount:@0];
+    [self.title setText:@""];
+    
 }
 
 - (void)awakeFromNib {
@@ -44,7 +56,7 @@
 - (void)setMessageCount:(NSNumber *)count
 {
     [self.countLabel setText:[count stringValue]];
-//    [self.countView setHidden:NO];
+    [self.countView setHidden:(count.intValue <= 0)];
 }
 
 @end

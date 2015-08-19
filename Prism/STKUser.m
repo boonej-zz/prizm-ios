@@ -51,10 +51,10 @@ CGSize STKUserProfilePhotoSize = {.width = 128, .height = 128};
 state, zipCode, gender, blurb, website, coverPhotoPath, profilePhotoPath, religion, ethnicity, followerCount, followingCount,
 followers, following, postCount, ownedTrusts, receivedTrusts, comments, createdPosts, likedComments, likedPosts, fFeedPosts,
 accountStoreID, instagramLastMinID, instagramToken, phoneNumber, trustCount, active, dateDeleted, tumblrToken,
-tumblrTokenSecret, tumblrLastMinID, programCode, theme;
+tumblrTokenSecret, tumblrLastMinID, programCode, theme, unreadCount;
 @dynamic fProfilePosts, createdActivities, ownedActivities, postsTaggedIn, twitterID, twitterLastMinID, type, dateFounded, enrollment, mascotName, subtype, insightCount, organizations, ownedOrganization, messages, likedMessages;
-@synthesize profilePhoto, coverPhoto, token, secret, password, name, completeDate;
-@dynamic contactEmail, contactFirstName, contactLastName;
+@synthesize profilePhoto, coverPhoto, token, secret, password, completeDate;
+@dynamic contactEmail, contactFirstName, contactLastName, name;
 
 + (NSDictionary *)remoteToLocalKeyMap
 {

@@ -149,6 +149,7 @@ extern BOOL const STKUserStatusInActive;
 @property (nonatomic, strong) NSString *token;
 @property (nonatomic, strong) NSString *secret;
 @property (nonatomic, strong) NSString *password;
+@property (nonatomic, strong) NSNumber *unreadCount;
 
 - (void)setValuesFromFacebook:(NSDictionary *)vals;
 - (void)setValuesFromTwitter:(NSArray *)vals;
