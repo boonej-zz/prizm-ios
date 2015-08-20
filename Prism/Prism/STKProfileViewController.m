@@ -449,7 +449,7 @@ typedef enum {
 - (void)menuWillAppear:(BOOL)animated
 {
     [[self underlayView] setAlpha:0.5f];
-    [[self navigationItem] setRightBarButtonItem:nil];
+    [[self navigationItem] setRightBarButtonItem:[self switchGroupItem]];
 }
 
 - (void)menuWillDisappear:(BOOL)animated

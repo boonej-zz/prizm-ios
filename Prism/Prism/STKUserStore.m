@@ -2161,7 +2161,8 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     NSFetchRequest *fr = [[NSFetchRequest alloc] init];
     [fr setEntity:[NSEntityDescription entityForName:@"STKMessage" inManagedObjectContext:self.context]];
     [fr setIncludesPropertyValues:YES];
-    NSPredicate *sp = [NSPredicate predicateWithFormat:@"(creator.uniqueID == %@ || target.uniqueID == %@) && target != nil", self.currentUser.uniqueID, self.currentUser.uniqueID];
+    STKOrganization *org = [self activeOrgForUser];
+    NSPredicate *sp = [NSPredicate predicateWithFormat:@"(creator.uniqueID == %@ || target.uniqueID == %@) && target != nil && organization.uniqueID == %@", self.currentUser.uniqueID, self.currentUser.uniqueID, org.uniqueID];
     [fr setPredicate:sp];
     NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:@"createDate" ascending:NO];
     [fr setSortDescriptors:@[sd]];
@@ -3587,6 +3588,95 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     }];
     
     return;
+}
+
+- (STKOrganization *)activeOrgForUser
+{
+    NSString *orgID = [[NSUserDefaults standardUserDefaults] stringForKey:@"HAGroupContextString"];
+    __block STKOrganization *org = nil;
+    if (orgID) {
+        NSFetchRequest *fr = [NSFetchRequest fetchRequestWithEntityName:@"STKOrganization"];
+        NSPredicate *sp = [NSPredicate predicateWithFormat:@"uniqueID == %@", orgID];
+        [fr setPredicate:sp];
+        NSError *err = nil;
+        id fetch = [self.context executeFetchRequest:fr error:&err];
+        if (err) {
+            NSLog(@"%@", err.localizedDescription);
+        }
+        if ([fetch isKindOfClass:[NSArray class]]) {
+            if ([fetch count] > 0){
+                org = [fetch objectAtIndex:0];
+            }
+        } else if ([fetch isKindOfClass:[STKOrganization class]]) {
+            org = fetch;
+        }
+    } else {
+        STKUser *u = self.currentUser;
+        if (u.organizations.count > 0) {
+            [u.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+                if ([obj.status isEqualToString:@"active"]) {
+                    org = obj.organization;
+                    [[NSUserDefaults standardUserDefaults] setObject:org.uniqueID forKey:@"HAGroupContextString"];
+                    *stop = YES;
+                }
+            }];
+        }
+    }
+    return org;
+}
+
+- (void)changeOrgForUser:(STKOrganization *)org
+{
+    [[NSUserDefaults standardUserDefaults] setObject:org.uniqueID forKey:@"HAGroupContextString"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserDetailsUpdated" object:nil];
+}
+
+- (BOOL)currentUserIsOrgLeader
+{
+    __block BOOL isLeader = YES;
+    STKOrganization *activeOrg = [self activeOrgForUser];
+    [self.currentUser.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+        if ([obj.organization.uniqueID isEqualToString:activeOrg.uniqueID]) {
+            if ([obj.role isEqualToString:@"leader"]) {
+                isLeader = YES;
+            }
+            *stop = YES;
+        }
+    }];
+    return isLeader;
+}
+
+- (BOOL)currentUserIsLeaderOfGroup:(STKGroup *)group
+{
+    __block BOOL isLeader = YES;
+    STKOrganization *activeOrg = [self activeOrgForUser];
+    [self.currentUser.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+        if ([obj.organization.uniqueID isEqualToString:activeOrg.uniqueID]) {
+            [obj.groups enumerateObjectsUsingBlock:^(STKGroup *g, BOOL *stopB) {
+                if ([group.uniqueID isEqualToString:g.uniqueID]) {
+                    if ([group.leader.uniqueID isEqualToString:self.currentUser.uniqueID]) {
+                        isLeader = YES;
+                    }
+                    *stopB = YES;
+                }
+            }];
+            *stop = YES;
+        }
+    }];
+    return isLeader;
+}
+
+- (NSMutableArray *)groupsForCurrentUser
+{
+    STKOrganization *activeOrg = [self activeOrgForUser];
+    NSMutableArray *arr = [NSMutableArray array];
+    [self.currentUser.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+        if ([obj.organization.uniqueID isEqualToString:activeOrg.uniqueID]) {
+            NSArray *array = [[obj.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] allObjects];
+            [arr addObjectsFromArray:array];
+        }
+    }];
+    return arr;
 }
 
 @end

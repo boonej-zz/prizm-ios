@@ -169,6 +169,7 @@
 
 - (void)menuWillAppear:(BOOL)animated
 {
+    [self.navigationItem setRightBarButtonItem:[self switchGroupItem]];
 //    [self.navigationItem setRightBarButtonItem:nil];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
@@ -182,7 +183,7 @@
 
 - (void)menuWillDisappear:(BOOL)animated
 {
-//    [self.navigationItem setRightBarButtonItem:self.insightsButton];
+    [self.navigationItem setRightBarButtonItem:nil];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
             [[self underlayView] setAlpha:0.0];

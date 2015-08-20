@@ -88,12 +88,15 @@
     self.user = [[STKUserStore store] currentUser];
     self.isInstitution = [self.user.type isEqualToString:@"institution_verified"];
     if (![self.user.type isEqualToString:@"institution_verified"]) {
-        [self.user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
-            if ([obj.status isEqualToString:@"active"]) {
-                self.organization = obj.organization;
-            }
-        }];
+        self.organization = [[STKUserStore store] activeOrgForUser];
+//        [self.user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+//            if ([obj.status isEqualToString:@"active"]) {
+//                self.organization = obj.organization;
+//            }
+//        }];
+        self.leaders = @[];
         [self fetchLeaders];
+        [self.tableView reloadData];
     } else {
         [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
             if (organizations.count > 0) {
@@ -110,6 +113,16 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)menuWillAppear:(BOOL)animated
+{
+    [[self navigationItem] setRightBarButtonItem:[self switchGroupItem]];
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [[self navigationItem] setRightBarButtonItem:nil];
 }
 
 #pragma mark Configuration
@@ -199,6 +212,9 @@
                 self.userPosition = idx + 1;
                 self.userPoints = [[[self.leaders objectAtIndex:idx] points] longValue];
                 self.surveyCount = [[[self.leaders objectAtIndex:idx] surveys] longValue];
+            } else {
+                self.userPoints = 0;
+                self.surveyCount = 0;
             }
             [self.tableView reloadData];
         });
@@ -290,6 +306,7 @@
         }
     } else {
         if (section == 2) {
+//            NSLog(@"Returning %lu rows for section 2.", self.leaders.count + 1);
             return self.leaders.count + 1;
         }
     }

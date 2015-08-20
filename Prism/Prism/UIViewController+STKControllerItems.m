@@ -14,6 +14,10 @@
 #import "HAFastSwitchViewController.h"
 #import "UIERealTimeBlurView.h"
 #import "HANavigationController.h"
+#import "STKUser.h"
+#import "STKOrganization.h"
+#import "STKOrgStatus.h"
+#import "HASwitchOrganizationsViewController.h"
 
 
 
@@ -200,6 +204,25 @@
     if (iv){
         [iv setImage:[UIImage HABackgroundImage]];
     }
+}
+
+- (UIBarButtonItem *)switchGroupItem
+{
+    STKUser *user = [[STKUserStore store] currentUser];
+    NSArray *activeOrgs = [[user.organizations filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] allObjects];
+    if ([activeOrgs count] > 0) {
+        UIBarButtonItem *sgb = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_switch_group"] style:UIBarButtonItemStyleBordered target:self action:@selector(switchGroup:)];
+        return sgb;
+    }
+    return nil;
+}
+
+- (void)switchGroup:(id)sender
+{
+    
+    HASwitchOrganizationsViewController *svc = [[HASwitchOrganizationsViewController alloc] init];
+    [self.menuController toggleMenu:self];
+    [self.navigationController pushViewController:svc animated:YES];
 }
 
 @end

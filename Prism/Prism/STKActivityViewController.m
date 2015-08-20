@@ -354,11 +354,15 @@ typedef enum {
 - (void)menuWillAppear:(BOOL)animated
 {
     [[self underlayView] setAlpha:0.5];
+    [self.navigationItem setRightBarButtonItem:[self switchGroupItem]];
+    
 }
 
 - (void)menuWillDisappear:(BOOL)animated
 {
     [[self underlayView] setAlpha:0.0];
+    [self.navigationItem setRightBarButtonItem:nil];
+    
 }
 
 - (IBAction)typeChanged:(id)sender

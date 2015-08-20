@@ -30,9 +30,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
-    iv.frame = self.view.bounds;
-    [self.view insertSubview:iv atIndex:0];
+    [self addBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
     self.title = @"Calendar";
     UIBarButtonItem *bbi = [self menuBarButtonItem];
     [[self navigationItem] setLeftBarButtonItem:bbi];
@@ -42,6 +41,16 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)menuWillAppear:(BOOL)animated
+{
+    [self.navigationItem setRightBarButtonItem:[self switchGroupItem]];
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [self.navigationItem setRightBarButtonItem:nil];
 }
 
 /*

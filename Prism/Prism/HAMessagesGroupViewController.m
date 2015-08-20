@@ -79,6 +79,7 @@
 {
     [super viewWillAppear:animated];
     self.user = [[STKUserStore store] currentUser];
+    self.groups = [@[] mutableCopy];
     if (self.user) {
         if ([self.user.type isEqualToString:@"institution_verified"]) {
             [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
@@ -92,23 +93,23 @@
                 }
             }];
         } else if (self.user.organizations.count > 0) {
-            __block STKOrgStatus *status = nil;
-            [self.user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
-                if ([obj.status isEqualToString:@"active"]) {
-                    self.organization = obj.organization;
-                    if ([obj.role isEqualToString:@"leader"]) {
-                        self.userIsLeader = YES;
-                        [self.navigationItem setRightBarButtonItem:self.plusButton];
-                    }
-                    status = obj;
-                    *stop = YES;
-                }
-            }];
-            [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
-                self.groups = [[[status groups] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] mutableCopy];
-                self.groups = [[self.groups filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] mutableCopy];
+//            __block STKOrgStatus *status = nil;
+            self.organization = [[STKUserStore store] activeOrgForUser];
+            self.userIsLeader = [[STKUserStore store] currentUserIsOrgLeader];
+            if (self.userIsLeader) {
+                [self.navigationItem setRightBarButtonItem:self.plusButton];
+            }
+            
+            [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {
+                self.groups = [[STKUserStore store] groupsForCurrentUser];
                 [self.tableView reloadData];
             }];
+    
+//            [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
+//                self.groups = [[[status groups] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] mutableCopy];
+//                self.groups = [[self.groups filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] mutableCopy];
+//                [self.tableView reloadData];
+//            }];
             [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
                 NSLog(@"Fetched users for future use");
             }];
@@ -117,6 +118,21 @@
         }
         
     }
+}
+
+- (void)menuWillAppear:(BOOL)animated
+{
+    [[self navigationItem] setRightBarButtonItem:[self switchGroupItem]];
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    if ([self userIsLeader] || [self userIsOwner]) {
+        [[self navigationItem] setRightBarButtonItem:[self plusButton]];
+    } else {
+        [[self navigationItem] setRightBarButtonItem:nil];
+    }
+    self.groups = [NSMutableArray array];
 }
 
 
@@ -295,6 +311,7 @@
     if (section == 0) {
         return 1;
     }
+    NSLog(@"Returning %u count for section 1", self.groups.count + 1);
     return self.groups.count + 1;
 }
 

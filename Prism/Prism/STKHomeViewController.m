@@ -87,7 +87,7 @@
 
 - (void)menuWillAppear:(BOOL)animated
 {
-    [[self navigationItem] setRightBarButtonItem:nil];
+    [[self navigationItem] setRightBarButtonItem:[self switchGroupItem]];
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
             [[self underlayView] setAlpha:0.5];

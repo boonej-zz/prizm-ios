@@ -54,9 +54,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage HABackgroundImage]];
-    iv.frame = self.view.bounds;
-    [self.view insertSubview:iv atIndex:0];
+    [self addBackgroundImage];
     [self.tableView setBackgroundColor:[UIColor clearColor]];
     self.title = @"Insight";
     [self.noInsightsLabel setTextColor:[UIColor HATextColor]];
@@ -111,7 +109,18 @@
     }
     
 //    [self.tableView set]
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
     
+}
+
+- (void)menuWillAppear:(BOOL)animated
+{
+    [self.navigationItem setRightBarButtonItem:[self switchGroupItem]];
+}
+
+- (void)menuWillDisappear:(BOOL)animated
+{
+    [self.navigationItem setRightBarButtonItem:nil];
 }
 
 - (void)close:(id)sender

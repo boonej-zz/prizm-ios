@@ -10,6 +10,7 @@
 #import "STKTheme.h"
 #import "STKUser.h"
 #import "STKUserStore.h"
+#import "STKOrganization.h"
 
 @implementation UIImage (HACore)
 
@@ -17,10 +18,19 @@
 {
     NSString *imageName = @"img_background";
 //    static NSString * HABackgroundThemeURL = nil;
+    STKTheme *theme = nil;
     STKUser *user = [[STKUserStore store] currentUser];
-    if ([user theme]) {
-        if ([user theme].backgroundURL) {
-            imageName = [imageName stringByAppendingString:[NSString stringWithFormat:@"_%@", [user theme].backgroundURL]];
+    if ([user.type isEqualToString:STKUserTypeInstitution]) {
+        theme = user.theme;
+    } else {
+        STKOrganization *org = [[STKUserStore store] activeOrgForUser];
+        if (org) {
+            theme = org.theme;
+        }
+    }
+    if (theme) {
+        if (theme.backgroundURL) {
+            imageName = [imageName stringByAppendingString:[NSString stringWithFormat:@"_%@", theme.backgroundURL]];
         }
 //        if (! HABackgroundThemeURL) {
 //            HABackgroundThemeURL = imageName;

@@ -187,6 +187,7 @@
 {
     [[self underlayView] setAlpha:0.5f];
     [[self navigationItem] setRightBarButtonItems:nil];
+    [self.navigationItem setRightBarButtonItem:[self switchGroupItem]];
 }
 
 - (void)menuWillDisappear:(BOOL)animated
@@ -262,7 +263,7 @@
 {
     [super viewDidLoad];
     [self addBackgroundImage];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchNewPosts) name:@"refreshViews" object:nil];
     CGRect frame = [self.view frame];
     frame.size.height = 64.f;
@@ -291,6 +292,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadPosts) name:HANotificationReportInappropriate object:nil];
     [self addBlurViewWithHeight:114.0];
     [self.view bringSubviewToFront:self.exploreTypeControl];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUserUpdate) name:@"UserDetailsUpdated" object:nil];
 
 }
 

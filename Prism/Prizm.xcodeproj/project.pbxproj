@@ -104,6 +104,7 @@
 		2CBF30B91AF14E67000F261C /* HAPostMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF30B81AF14E67000F261C /* HAPostMessageView.m */; };
 		2CC207C31B7E5F0D0019A8AC /* HAMessagesGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CC207C21B7E5F0D0019A8AC /* HAMessagesGroupViewController.m */; };
 		2CC207C61B7E74300019A8AC /* HAMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CC207C51B7E74300019A8AC /* HAMessagesViewController.m */; };
+		2CC3F84E1B864B4B003A49B9 /* HASwitchOrganizationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CC3F84D1B864B4B003A49B9 /* HASwitchOrganizationsViewController.m */; };
 		2CCA762B1A1BC151007580A5 /* STKTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762A1A1BC151007580A5 /* STKTheme.m */; };
 		2CCA762E1A1BC152007580A5 /* STKOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA762D1A1BC152007580A5 /* STKOrganization.m */; };
 		2CE2FB311B7EB12300F286AF /* HAMessagesDirectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE2FB301B7EB12300F286AF /* HAMessagesDirectViewController.m */; };
@@ -569,6 +570,8 @@
 		2CC207C21B7E5F0D0019A8AC /* HAMessagesGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessagesGroupViewController.m; sourceTree = "<group>"; };
 		2CC207C41B7E74300019A8AC /* HAMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAMessagesViewController.h; sourceTree = "<group>"; };
 		2CC207C51B7E74300019A8AC /* HAMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAMessagesViewController.m; sourceTree = "<group>"; };
+		2CC3F84C1B864B4B003A49B9 /* HASwitchOrganizationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HASwitchOrganizationsViewController.h; sourceTree = "<group>"; };
+		2CC3F84D1B864B4B003A49B9 /* HASwitchOrganizationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HASwitchOrganizationsViewController.m; sourceTree = "<group>"; };
 		2CC897A819A57C7F00E74B27 /* User 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 2.xcdatamodel"; sourceTree = "<group>"; };
 		2CCA76281A1BBE95007580A5 /* User 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "User 3.xcdatamodel"; sourceTree = "<group>"; };
 		2CCA76291A1BC151007580A5 /* STKTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKTheme.h; sourceTree = "<group>"; };
@@ -3129,6 +3132,8 @@
 				2CE2FB301B7EB12300F286AF /* HAMessagesDirectViewController.m */,
 				2CE2FB351B83C85100F286AF /* HAMessagesUserChooserViewController.h */,
 				2CE2FB361B83C85100F286AF /* HAMessagesUserChooserViewController.m */,
+				2CC3F84C1B864B4B003A49B9 /* HASwitchOrganizationsViewController.h */,
+				2CC3F84D1B864B4B003A49B9 /* HASwitchOrganizationsViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -5703,6 +5708,7 @@
 				BE778C4118BBE16300DA5EDD /* STKNavigationButton.m in Sources */,
 				2C02B7D81B0BB83300E5E82D /* HAMessageImageCell.m in Sources */,
 				BE63C53918FD89890087585E /* STKActivityIndicatorView.m in Sources */,
+				2CC3F84E1B864B4B003A49B9 /* HASwitchOrganizationsViewController.m in Sources */,
 				2C97973619DC5285003A6C0A /* HAInsightCell.m in Sources */,
 				BE4C642D18970BE500467E2D /* STKLocationViewController.m in Sources */,
 				2C619F3E1B7D1E1000E44E23 /* STKUserTarget.m in Sources */,
@@ -5973,6 +5979,7 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
+				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/App Store-iphoneos";
@@ -6344,6 +6351,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm β";
+				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6399,8 +6407,9 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6431,7 +6440,7 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "b39eef8c-3ef6-4d84-9e2e-78e9b20fe74f";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "b39eef8c-3ef6-4d84-9e2e-78e9b20fe74f";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -6521,6 +6530,7 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
+				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6622,6 +6632,7 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
+				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6733,8 +6744,9 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Higher Altitude Inc. (MU64MV9X8B)";
+				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6770,7 +6782,7 @@
 				);
 				OTHER_LIBTOOLFLAGS = "$(OTHER_LDFLAGS) $(inherited)";
 				PRODUCT_NAME = "${BUNDLE_NAME}";
-				PROVISIONING_PROFILE = "deb836bf-fe6b-40c3-96f5-a54a591edb3d";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=*]" = "deb836bf-fe6b-40c3-96f5-a54a591edb3d";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -6844,6 +6856,7 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = "Prizm β";
+				CODE_SIGN_ENTITLEMENTS = Prism/Prizm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (

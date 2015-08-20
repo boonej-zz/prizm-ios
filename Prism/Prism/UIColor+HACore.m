@@ -41,7 +41,18 @@
 + (UIColor *)HADominantColor
 {
     UIColor *c = [UIColor colorWithRed:11.0/255.0 green:53.0/255.0 blue:110.0/255.0 alpha:0.95];
-    STKTheme *theme = [[STKUserStore store] currentUser].theme;
+    STKUser *user = [[STKUserStore store] currentUser];
+    STKTheme *theme = nil;
+    if ([user.type isEqualToString:@"institution_verified"]) {
+        theme = user.theme;
+    } else {
+        STKOrganization *org = [[STKUserStore store] activeOrgForUser];
+        
+        if (org && org.theme) {
+            theme = org.theme;
+        }
+    }
+    
 //    NSLog(@"%@", theme);
     if (theme && theme.dominantColor) {
         NSArray *color = [theme.dominantColor componentsSeparatedByString:@","];
