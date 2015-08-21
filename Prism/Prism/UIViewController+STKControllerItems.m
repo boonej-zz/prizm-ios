@@ -210,7 +210,7 @@
 {
     STKUser *user = [[STKUserStore store] currentUser];
     NSArray *activeOrgs = [[user.organizations filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] allObjects];
-    if ([activeOrgs count] > 0) {
+    if ([activeOrgs count] > 1) {
         UIBarButtonItem *sgb = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_switch_group"] style:UIBarButtonItemStyleBordered target:self action:@selector(switchGroup:)];
         return sgb;
     }

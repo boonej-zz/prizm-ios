@@ -2787,9 +2787,11 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
         if(!tokenError) {
             [self validateWithTwitterToken:token secret:secret completion:^(STKUser *user, NSError *valErr) {
                 if(!valErr) {
-                    [user setExternalServiceType:STKUserExternalSystemTwitter];
-                    [user setAccountStoreID:[acct identifier]];
-                    [self authenticateUser:user];
+                    if (user) {
+                        [user setExternalServiceType:STKUserExternalSystemTwitter];
+                        [user setAccountStoreID:[acct identifier]];
+                        [self authenticateUser:user];
+                    }
                     
                     block(user, nil, nil);
                 } else {

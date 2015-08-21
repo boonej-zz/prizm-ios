@@ -190,7 +190,7 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             block(cached, nil);
         }];
     }
-
+    if (u) {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
         if(err) {
             block(nil, err);
@@ -242,6 +242,9 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
             }
         }];
     }];
+    } else {
+        block(nil, nil);
+    }
 }
 
 - (void)fetchExplorePostsWithFetchDescription:(STKFetchDescription *)desc
