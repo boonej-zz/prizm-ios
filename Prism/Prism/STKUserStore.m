@@ -2163,7 +2163,12 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [fr setEntity:[NSEntityDescription entityForName:@"STKMessage" inManagedObjectContext:self.context]];
     [fr setIncludesPropertyValues:YES];
     STKOrganization *org = [self activeOrgForUser];
-    NSPredicate *sp = [NSPredicate predicateWithFormat:@"(creator.uniqueID == %@ || target.uniqueID == %@) && target != nil && organization.uniqueID == %@", self.currentUser.uniqueID, self.currentUser.uniqueID, org.uniqueID];
+    NSPredicate *sp = nil;
+    if ([self.currentUser.type isEqualToString:STKUserTypeInstitution]) {
+        sp = [NSPredicate predicateWithFormat:@"(creator.uniqueID == %@ || target.uniqueID == %@) && target != nil", self.currentUser.uniqueID, self.currentUser.uniqueID, org.uniqueID];
+    } else {
+       sp = [NSPredicate predicateWithFormat:@"(creator.uniqueID == %@ || target.uniqueID == %@) && target != nil && organization.uniqueID == %@", self.currentUser.uniqueID, self.currentUser.uniqueID, org.uniqueID];
+    }
     [fr setPredicate:sp];
     NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:@"createDate" ascending:NO];
     [fr setSortDescriptors:@[sd]];
@@ -2223,6 +2228,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchMembersForOrganization:(STKOrganization *)organization completion:(void (^)(NSArray *messages, NSError *err))block
 {
+    if (organization) {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if (err) {
             block(nil, err);
@@ -2241,6 +2247,9 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             block(obj, err);
         }];
     }];
+    } else {
+        block(nil, nil);
+    }
 }
 
 - (void)fetchLatestMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group user:(STKUser *)user date:(NSDate *)date completion:(void (^)(NSArray *messages, NSError *err))block
