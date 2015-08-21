@@ -207,6 +207,11 @@
     [self.navigationController pushViewController:mvc animated:YES];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 48;
+}
+
 #pragma mark Table View Data Source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

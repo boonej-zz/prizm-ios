@@ -439,6 +439,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     HAMessageCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[HAMessageCell reuseIdentifier]];
     [cell setMessage:message];
     [cell setDelegate:self];
+    [cell.postText setDelegate:self];
     __block BOOL liked = NO;
     if ([message.creator.uniqueID isEqualToString:self.user.uniqueID] &&
         ([self userIsLeader] || [self.user.type isEqualToString:@"institution_verified"])) {
@@ -687,14 +688,26 @@ NSString * const HAMessageUserURLScheme = @"user";
                 }
                 if (resetAll){
                     self.group = g;
+                    self.sender = nil;
                 }
             } else {
                 resetAll = YES;
                 self.group = nil;
+                self.sender = nil;
             }
             if (resetAll) {
                 self.members = nil;
+                self.sender = nil;
             }
+            self.frc = [[STKUserStore store] fetchMessagesForOrganization:self.organization group:self.group user:self.sender completion:^(NSArray *messages, NSError *err) {
+                
+            }];
+            [self.frc setDelegate:self];
+//            self.user = [[STKUserStore store] currentUser];
+            [self setDirectController:NO];
+            self.title = [NSString stringWithFormat:@"#%@", groupName];
+            [self.frc performFetch:nil];
+            [self.tableView reloadData];
         }
     } else if([[url scheme] isEqualToString:HAMessageUserURLScheme]) {
         STKProfileViewController *vc = [[STKProfileViewController alloc] init];

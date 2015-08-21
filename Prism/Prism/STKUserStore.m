@@ -373,6 +373,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     [users removeObjectAtIndex:index];
     self.signedInUsers = users;
     [[NSUserDefaults standardUserDefaults] setObject:self.signedInUsers forKey:HAUserStoreLoggedInUsersKey];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HAGroupContextString"];
     if (self.signedInUsers.count > 0) {
         NSMutableDictionary *mobj = [[self.signedInUsers objectAtIndex:0] mutableCopy];
         NSString *uid =[mobj valueForKey:@"id"];
