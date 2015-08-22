@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class STKOrganization;
 @interface HACompletedSurveysViewController : UIViewController
+
+@property (nonatomic, strong) STKOrganization *organization;
 
 @end

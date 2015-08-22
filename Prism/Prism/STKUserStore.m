@@ -1814,7 +1814,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     return cached;
 }
 
-- (void)fetchCompletedSurveysForUser:(STKUser *)user completion:(void(^)(NSArray * surveys, NSError *err))block
+- (void)fetchCompletedSurveysForUser:(STKUser *)user organization:(STKOrganization *)org completion:(void(^)(NSArray * surveys, NSError *err))block
 {
     [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
         if (err) {
@@ -1822,6 +1822,7 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
             return;
         }
         STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", user.uniqueID, @"surveys", @"completed"]];
+        [c addQueryValue:org.uniqueID forKey:@"organization"];
         [c setModelGraph:@[@"STKSurvey"]];
         [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
         [c setShouldReturnArray:YES];
@@ -1995,37 +1996,41 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
 
 - (void)fetchUpdatedMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block
 {
-    NSDate *date = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastMessageUpdate"];
-    if (!date) date = [NSDate dateWithTimeIntervalSince1970:0];
-    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
-        if (err) {
-            block(nil, err);
-            return;
-        }
-        NSString *obj = @"all";
-        if (group) obj = group.uniqueID;
-        NSTimeZone *timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-        // or specifc Timezone: with name
-        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups", obj, @"messages"]];
-        if (date) {
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setTimeZone:timeZone];
-            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
-            
-            NSString *localDateString = [dateFormatter stringFromDate:date];
-            [c addQueryValue:localDateString forKey:@"updated"];
-        }
-        [c addQueryValue:self.currentUser.uniqueID forKey:@"requestor"];
-        [c setModelGraph:@[@"STKMessage"]];
-        [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
-        [c setContext:[self context]];
-        //            [c setShouldReturnArray:YES];
-        [c setShouldReturnArray:YES];
-        [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
-            [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastMessageUpdate"];
-            block(obj, err);
+    if (organization) {
+        NSDate *date = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastMessageUpdate"];
+        if (!date) date = [NSDate dateWithTimeIntervalSince1970:0];
+        [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err) {
+            if (err) {
+                block(nil, err);
+                return;
+            }
+            NSString *obj = @"all";
+            if (group) obj = group.uniqueID;
+            NSTimeZone *timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+            // or specifc Timezone: with name
+            STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/organizations", organization.uniqueID, @"groups", obj, @"messages"]];
+            if (date) {
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setTimeZone:timeZone];
+                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+                
+                NSString *localDateString = [dateFormatter stringFromDate:date];
+                [c addQueryValue:localDateString forKey:@"updated"];
+            }
+            [c addQueryValue:self.currentUser.uniqueID forKey:@"requestor"];
+            [c setModelGraph:@[@"STKMessage"]];
+            [c setExistingMatchMap:@{@"uniqueID": @"_id"}];
+            [c setContext:[self context]];
+            //            [c setShouldReturnArray:YES];
+            [c setShouldReturnArray:YES];
+            [c getWithSession:[self session] completionBlock:^(id obj, NSError *err) {
+                [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"lastMessageUpdate"];
+                block(obj, err);
+            }];
         }];
-    }];
+    } else {
+        block(nil, nil);
+    }
 }
 
 - (NSArray *)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group completion:(void (^)(NSArray *messages, NSError *err))block

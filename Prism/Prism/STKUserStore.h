@@ -148,7 +148,7 @@ typedef enum {
 - (void)submitSurveyAnswerForUser:(STKUser *)user question:(STKQuestion *)q value:(NSInteger)v completion:(void (^)(STKQuestion * question, NSError *err))block;
 - (void)finalizeSurveyForUser:(STKUser *)user survey:(STKSurvey *)s completion:(void (^)(STKSurvey * survey, NSError *err))block;
 - (NSArray *)fetchLeaderboardForOrganization:(STKOrganization *)organization completion:(void(^)(NSArray * leaders, NSError *err))block;
-- (void)fetchCompletedSurveysForUser:(STKUser *)user completion:(void(^)(NSArray * surveys, NSError *err))block;
+- (void)fetchCompletedSurveysForUser:(STKUser *)user organization:(STKOrganization *)org completion:(void(^)(NSArray * surveys, NSError *err))block;
 - (void)fetchLatestSurveyForOrganization:(STKOrganization *)org completion:(void(^)(STKSurvey *survey, NSError *err))block;
 
 - (NSFetchedResultsController *)fetchMessagesForOrganization:(STKOrganization *)organization group:(STKGroup *)group user:(STKUser *)user completion:(void (^)(NSArray *messages, NSError *err))block;

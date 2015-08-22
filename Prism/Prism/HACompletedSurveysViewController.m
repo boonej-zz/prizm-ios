@@ -52,7 +52,13 @@
     [self.navigationItem setHidesBackButton:YES];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_back"] style:UIBarButtonItemStyleBordered target:self action:@selector(back:)];
     [self.navigationItem setLeftBarButtonItem:bbi];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
     [self fetchCompletedSurveys];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -87,7 +93,7 @@
 #pragma mark - Workers
 - (void)fetchCompletedSurveys
 {
-    [[STKUserStore store] fetchCompletedSurveysForUser:self.user completion:^(NSArray *surveys, NSError *err) {
+    [[STKUserStore store] fetchCompletedSurveysForUser:self.user organization:self.organization completion:^(NSArray *surveys, NSError *err) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.surveys = surveys;
             [self.tableView reloadData];

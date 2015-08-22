@@ -195,6 +195,9 @@
                     [self.tableView reloadData];
                 }
             }
+            [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
+                NSLog(@"Fetched users for future use");
+            }];
         }];
     } else if (self.user.organizations.count > 0) {
         self.organization = [[STKUserStore store] activeOrgForUser];
@@ -228,7 +231,9 @@
         [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
             NSLog(@"Fetched users for future use");
         }];
+        
     }
+    
 }
 
 #pragma mark Cell Generation

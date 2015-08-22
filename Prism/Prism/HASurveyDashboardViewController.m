@@ -160,6 +160,7 @@
 - (void)surveyCountTapped:(id)sender
 {
     HACompletedSurveysViewController *hvc = [[HACompletedSurveysViewController alloc] init];
+    [hvc setOrganization:self.organization];
     [self.navigationController pushViewController:hvc animated:YES];
 }
 
