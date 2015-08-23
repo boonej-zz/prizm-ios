@@ -159,6 +159,6 @@ typedef enum {
 - (STKOrganization *)activeOrgForUser;
 - (void)changeOrgForUser:(STKOrganization *)org;
 - (BOOL)currentUserIsOrgLeader;
-- (NSMutableArray *)groupsForCurrentUser;
+- (NSFetchedResultsController *)groupsForCurrentUserInOrganization:(STKOrganization *)org;
 
 @end

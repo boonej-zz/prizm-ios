@@ -3683,17 +3683,26 @@ NSString * const STKUserEndpointLogin = @"/oauth2/login";
     return isLeader;
 }
 
-- (NSMutableArray *)groupsForCurrentUser
+- (NSFetchedResultsController *)groupsForCurrentUserInOrganization:(STKOrganization *)org
 {
-    STKOrganization *activeOrg = [self activeOrgForUser];
-    NSMutableArray *arr = [NSMutableArray array];
-    [self.currentUser.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
-        if ([obj.organization.uniqueID isEqualToString:activeOrg.uniqueID]) {
-            NSArray *array = [[obj.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] allObjects];
-            [arr addObjectsFromArray:array];
-        }
+    [NSFetchedResultsController deleteCacheWithName:@"MessageGroups"];
+    NSPredicate *predicate = nil;
+    NSFetchRequest *fr = [[NSFetchRequest alloc] initWithEntityName:@"STKGroup"];
+    if ([self.currentUser.type isEqualToString:STKUserTypeInstitution]) {
+        predicate = [NSPredicate predicateWithFormat:@"organization.uniqueID == %@ && status == %@", org.uniqueID, @"active"];
+    } else {
+        predicate = [NSPredicate predicateWithFormat:@"organization.uniqueID == %@ && status == %@ && (SUBQUERY(members, $item, $item.member.uniqueID == %@).@count <> 0)", org.uniqueID, @"active", self.currentUser.uniqueID];
+    }
+
+    [fr setPredicate:predicate];
+    NSSortDescriptor *desc = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    [fr setSortDescriptors:@[desc]];
+    
+    NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest:fr managedObjectContext:self.context sectionNameKeyPath:nil cacheName:@"MessageGroups"];
+    [self fetchGroupsForOrganization:org completion:^(NSArray *groups, NSError *err) {
+        [self.context save:nil];
     }];
-    return arr;
+    return frc;
 }
 
 @end

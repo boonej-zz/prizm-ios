@@ -111,6 +111,7 @@
 {
     STKOrganization *org = [self.statuses objectAtIndex:indexPath.row];
     [[STKUserStore store] changeOrgForUser:org];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DidSwitchGroups" object:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

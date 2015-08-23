@@ -113,6 +113,23 @@ NSString * const HAMessageUserURLScheme = @"user";
     return self;
 }
 
+- (void)updateGroupCount {
+    UIButton *rbb = [UIButton buttonWithType:UIButtonTypeCustom];
+    [rbb setImage:[UIImage imageNamed:@"group_bar_button"] forState:UIControlStateNormal];
+    [rbb setFrame:CGRectMake(0, 0, 31, 18)];
+    
+    self.members = [[STKUserStore store] getMembersForOrganization:self.organization group:self.group];
+    STKNotificationBadge *badge = [[STKNotificationBadge alloc] initWithFrame:CGRectMake(10, -10, 40, 20)];
+    [badge setCount:(int)self.members.count];
+    [rbb addSubview:badge];
+    [rbb addTarget:self action:@selector(membersButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    self.membersButton = [[UIBarButtonItem alloc] initWithCustomView:rbb];
+    if ([self isDirectController]) {
+        [self.navigationItem setRightBarButtonItem:nil];
+    } else {
+        [self.navigationItem setRightBarButtonItem:self.membersButton];
+    }
+}
 
 #pragma mark View Lifecycle
 
@@ -142,12 +159,14 @@ NSString * const HAMessageUserURLScheme = @"user";
     UIButton *rbb = [UIButton buttonWithType:UIButtonTypeCustom];
     [rbb setImage:[UIImage imageNamed:@"group_bar_button"] forState:UIControlStateNormal];
     [rbb setFrame:CGRectMake(0, 0, 31, 18)];
+    
     self.members = [[STKUserStore store] getMembersForOrganization:self.organization group:self.group];
     STKNotificationBadge *badge = [[STKNotificationBadge alloc] initWithFrame:CGRectMake(10, -10, 40, 20)];
     [badge setCount:(int)self.members.count];
     [rbb addSubview:badge];
     [rbb addTarget:self action:@selector(membersButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     self.membersButton = [[UIBarButtonItem alloc] initWithCustomView:rbb];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGroupCount) name:@"DidUpdateMembers" object:nil];
     if ([self isDirectController]) {
         [self.navigationItem setRightBarButtonItem:nil];
     } else {

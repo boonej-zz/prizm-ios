@@ -81,6 +81,7 @@
     self.longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(imageLongPress:)];
     self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(close:)];
     [self.view addGestureRecognizer:self.tapRecognizer];
+    [self.view addGestureRecognizer:self.longPressGesture];
     [self.view addSubview:self.closeButton];
     [self.view bringSubviewToFront:self.closeButton];
 }

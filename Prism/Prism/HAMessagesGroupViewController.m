@@ -20,7 +20,7 @@
 #import "HAMessagesViewController.h"
 #import "HAMessagesDirectViewController.h"
 
-@interface HAMessagesGroupViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface HAMessagesGroupViewController ()<UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) STKUser *user;
@@ -29,6 +29,9 @@
 @property (nonatomic) BOOL userIsLeader;
 @property (nonatomic) BOOL userIsOwner;
 @property (nonatomic, strong) UIBarButtonItem *plusButton;
+
+@property (nonatomic, strong) NSFetchedResultsController *frc;
+@property (nonatomic, strong) NSIndexPath *selectedIndex;
 
 @end
 
@@ -68,7 +71,8 @@
     [self.navigationItem setLeftBarButtonItem:[self menuBarButtonItem]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshColor) name:@"UserDetailsUpdated" object:nil];
-    self.groups = [NSMutableArray array];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTable) name:@"DidSwitchGroups" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -80,7 +84,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (self.selectedIndex) {
+        [self.tableView deselectRowAtIndexPath:self.selectedIndex animated:NO];
+        self.selectedIndex = nil;
+    }
     self.user = [[STKUserStore store] currentUser];
+
 
     if (self.user) {
         [self syncGroups];
@@ -100,7 +109,7 @@
     } else {
         [[self navigationItem] setRightBarButtonItem:nil];
     }
-    [self.tableView reloadData];
+//    [self.tableView reloadData];
 
 }
 
@@ -139,21 +148,23 @@
 
 - (void)editGroupAtIndexPath:(NSIndexPath *)ip
 {
-    STKGroup *group = [self.groups objectAtIndex:(ip.row - 1)];
+    NSIndexPath *ipx = [NSIndexPath indexPathForRow:ip.row - 1 inSection:ip.section - 1];
+    STKGroup *group = [self.frc objectAtIndexPath:ipx];
     HACreateGroupViewController *cgvc = [[HACreateGroupViewController alloc] initWithGroup:group];
     [self.navigationController pushViewController:cgvc animated:YES];
 }
 
 - (void)deleteGroupAtIndexPath:(NSIndexPath *)ip
 {
-    STKGroup *group = [self.groups objectAtIndex:ip.row - 1];
+    NSIndexPath *ipx = [NSIndexPath indexPathForRow:ip.row - 1 inSection:ip.section - 1];
+    STKGroup *group = [self.frc objectAtIndexPath:ipx];
     [[STKUserStore store] deleteGroup:group completion:^(id data, NSError *error) {
         if (error) {
             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"This group could not be deleted. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [av show];
         } else {
             [self.groups removeObject:group];
-            [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
+//            [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
             [self.tableView endEditing:YES];
         }
     }];
@@ -162,77 +173,122 @@
 - (void)refreshColor
 {
     [self handleUserUpdate];
+//    [self.tableView reloadData];
+}
+
+- (void)reloadTable
+{
+    self.organization = [[STKUserStore store] activeOrgForUser];
+    NSError *err = nil;
+    self.frc = [[STKUserStore store] groupsForCurrentUserInOrganization:self.organization];
+    [self.frc setDelegate:self];
+    [self.frc performFetch:&err];
     [self.tableView reloadData];
 }
 
 - (void)syncGroups
 {
-    NSArray *gp = [[STKUserStore store] groupsForCurrentUser];
-    [gp enumerateObjectsUsingBlock:^(STKGroup *obj, NSUInteger idx, BOOL *stop) {
-        if ([obj name] && ![obj.name isEqualToString:@""]){
-            if (![self.groups containsObject:obj]) {
-                [self.groups addObject:obj];
-            }
-        }
-    }];
-    if ([self.user.type isEqualToString:@"institution_verified"]) {
-        [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
-            if (organizations) {
-                self.organization = [organizations objectAtIndex:0];
-                self.userIsOwner = YES;
-                NSArray *groups = [[self.organization.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] allObjects];
-                groups = [[groups sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] mutableCopy];
-                __block BOOL changed = NO;
-                [groups enumerateObjectsUsingBlock:^(STKGroup *obj, NSUInteger idx, BOOL *stop) {
-                    if (![self.groups containsObject:obj]) {
-                        [self.groups addObject:obj];
-                        changed = YES;
-                    }
-                }];
-                [self.navigationItem setRightBarButtonItem:self.plusButton];
-                if (changed) {
-                    [self.groups sortUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]];
+    if (! self.frc) {
+        if ([self.user.type isEqualToString:STKUserTypeInstitution]) {
+            self.frc = [[NSFetchedResultsController alloc] init];
+            [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
+                if (organizations) {
+                    self.organization = [organizations objectAtIndex:0];
+                    self.frc = [[STKUserStore store] groupsForCurrentUserInOrganization:self.organization];
+                    [self.frc setDelegate:self];
+                    NSError *err = nil;
+                    [self.frc performFetch:&err];
                     [self.tableView reloadData];
+                    [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUpdateMembers" object:nil];
+                    }];
                 }
-            }
-            [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
-                NSLog(@"Fetched users for future use");
             }];
-        }];
-    } else if (self.user.organizations.count > 0) {
-        self.organization = [[STKUserStore store] activeOrgForUser];
-        self.userIsLeader = [[STKUserStore store] currentUserIsOrgLeader];
-        if (self.userIsLeader) {
-            [self.navigationItem setRightBarButtonItem:self.plusButton];
         } else {
-            [self.navigationItem setRightBarButtonItem:nil];
-        }
-        
-        [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {
-            NSArray *groups = [[STKUserStore store] groupsForCurrentUser];
-            __block BOOL changed = NO;
-            [groups enumerateObjectsUsingBlock:^(STKGroup *obj, NSUInteger idx, BOOL *stop) {
-                if (![self.groups containsObject:obj]) {
-                    [self.groups addObject:obj];
-                    changed = YES;
-                }
+            self.organization = [[STKUserStore store] activeOrgForUser];
+            self.frc = [[STKUserStore store] groupsForCurrentUserInOrganization:self.organization];
+            [self.frc setDelegate:self];
+            NSError *err = nil;
+            [self.frc performFetch:&err];
+            [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUpdateMembers" object:nil];
             }];
-            if (changed) {
-                [self.groups sortUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]];
-                [self.tableView reloadData];
-            }
+        }
+    } else {
+        [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
+            
         }];
-        
-        //            [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
-        //                self.groups = [[[status groups] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] mutableCopy];
-        //                self.groups = [[self.groups filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] mutableCopy];
-        //                [self.tableView reloadData];
-        //            }];
         [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
-            NSLog(@"Fetched users for future use");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUpdateMembers" object:nil];
         }];
-        
     }
+    
+    
+//    [gp enumerateObjectsUsingBlock:^(STKGroup *obj, NSUInteger idx, BOOL *stop) {
+//        if ([obj name] && ![obj.name isEqualToString:@""]){
+//            if (![self.groups containsObject:obj]) {
+//                [self.groups addObject:obj];
+//            }
+//        }
+//    }];
+//    if ([self.user.type isEqualToString:@"institution_verified"]) {
+//        [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
+//            if (organizations) {
+//                self.organization = [organizations objectAtIndex:0];
+//                self.userIsOwner = YES;
+//                NSArray *groups = [[self.organization.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] allObjects];
+//                groups = [[groups sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] mutableCopy];
+//                __block BOOL changed = NO;
+//                [groups enumerateObjectsUsingBlock:^(STKGroup *obj, NSUInteger idx, BOOL *stop) {
+//                    if (![self.groups containsObject:obj]) {
+//                        [self.groups addObject:obj];
+//                        changed = YES;
+//                    }
+//                }];
+//                [self.navigationItem setRightBarButtonItem:self.plusButton];
+//                if (changed) {
+//                    [self.groups sortUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]];
+//                    [self.tableView reloadData];
+//                }
+//            }
+//            [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
+//                NSLog(@"Fetched users for future use");
+//            }];
+//        }];
+//    } else if (self.user.organizations.count > 0) {
+//        self.organization = [[STKUserStore store] activeOrgForUser];
+//        self.userIsLeader = [[STKUserStore store] currentUserIsOrgLeader];
+//        if (self.userIsLeader) {
+//            [self.navigationItem setRightBarButtonItem:self.plusButton];
+//        } else {
+//            [self.navigationItem setRightBarButtonItem:nil];
+//        }
+//        
+//        [[STKUserStore store] fetchUserDetails:self.user additionalFields:nil completion:^(STKUser *u, NSError *err) {
+//            NSArray *groups = [[STKUserStore store] groupsForCurrentUser];
+//            __block BOOL changed = NO;
+//            [groups enumerateObjectsUsingBlock:^(STKGroup *obj, NSUInteger idx, BOOL *stop) {
+//                if (![self.groups containsObject:obj]) {
+//                    [self.groups addObject:obj];
+//                    changed = YES;
+//                }
+//            }];
+//            if (changed) {
+//                [self.groups sortUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]];
+//                [self.tableView reloadData];
+//            }
+//        }];
+//        
+//        //            [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
+//        //                self.groups = [[[status groups] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] mutableCopy];
+//        //                self.groups = [[self.groups filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"status == %@", @"active"]] mutableCopy];
+//        //                [self.tableView reloadData];
+//        //            }];
+//        [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
+//            NSLog(@"Fetched users for future use");
+//        }];
+//        
+//    }
     
 }
 
@@ -253,7 +309,8 @@
         [cell.title setText:@"#all"];
         [cell setMessageCount:self.organization.unreadCount];
     } else {
-        STKGroup *group = [self.groups objectAtIndex:(ip.row - 1)];
+        NSIndexPath *idx = [NSIndexPath indexPathForRow:(ip.row - 1) inSection:(ip.section - 1)];
+        STKGroup *group = [self.frc objectAtIndexPath:idx];
         NSString *groupName = [group.name lowercaseString];
         [cell.title setText:[NSString stringWithFormat:@"#%@", groupName]];
         [cell setMessageCount:group.unreadCount];
@@ -272,9 +329,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     STKGroup *group = nil;
+    self.selectedIndex = indexPath;
     if (indexPath.section == 1) {
         if (indexPath.row > 0) {
-            group = [self.groups objectAtIndex:(indexPath.row - 1)];
+            NSIndexPath *idx = [NSIndexPath indexPathForRow:(indexPath.row - 1) inSection:(indexPath.section - 1)];
+            group = [self.frc objectAtIndexPath:idx];
         }
         HAMessagesViewController *mvc = [[HAMessagesViewController alloc] initWithOrganization:self.organization group:group];
         [self.navigationController pushViewController:mvc animated:YES];
@@ -352,7 +411,9 @@
         return 1;
     }
 //    NSLog(@"Returning %u count for section 1", self.groups.count + 1);
-    return self.groups.count + 1;
+    id sectionInfo = [self.frc.sections objectAtIndex:(section - 1)];
+    NSUInteger count = [sectionInfo numberOfObjects];
+    return count + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -362,6 +423,54 @@
     } else {
         return [self groupCellAtIndex:indexPath];
     }
+}
+
+#pragma mark Fetched Results Controller Delegate
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    // The fetch controller is about to start sending change notifications, so prepare the table view for updates.
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
+{
+    NSIndexPath *ip = [NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:(indexPath.section + 1)];
+    NSIndexPath *newIp = nil;
+    if (newIndexPath) {
+       newIp = [NSIndexPath indexPathForRow:(newIndexPath.row + 1) inSection:(newIndexPath.section + 1)];
+    }
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertRowsAtIndexPaths:@[newIp] withRowAnimation:UITableViewRowAnimationTop];
+            break;
+            
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationBottom];
+            break;
+            
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationNone];
+            break;
+            
+        case NSFetchedResultsChangeMove:
+            [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView insertRowsAtIndexPaths:@[newIp] withRowAnimation:UITableViewRowAnimationNone];
+            break;
+    }
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
+//    if (!self.initialLoadComplete) {
+//        self.initialLoadComplete = YES;
+//        [self scrollToBottom:NO];
+//    }
+//    if ([self pendingIndex]) {
+//        [self.tableView reloadData];
+//        [self.tableView scrollToRowAtIndexPath:self.pendingIndex atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//        self.pendingIndex = nil;
+//    }
 }
 
 @end
