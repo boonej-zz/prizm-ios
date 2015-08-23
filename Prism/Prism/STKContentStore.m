@@ -166,84 +166,86 @@ NSString * const STKContentStorePostDeletedKey = @"STKContentStorePostDeletedKey
         fetchDescription:(STKFetchDescription *)desc
               completion:(void (^)(NSArray *posts, NSError *err))block
 {
-    int fetchLimit = [desc limit];
-    STKPost *referencePost = [desc referenceObject];
-    STKQueryObjectPage direction = [desc direction];
+    if (u && [[STKUserStore store] currentUser]) {
+        int fetchLimit = [desc limit];
+        STKPost *referencePost = [desc referenceObject];
+        STKQueryObjectPage direction = [desc direction];
 
-    if (fetchLimit == 0) {
-        fetchLimit = 30;
-        [desc setLimit:30];
-    }
-
-    
-    NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
-                                   fetchDescription:desc];
-
-    if([cached count] > 0) {
-        if(direction == STKQueryObjectPageNewer) {
-            referencePost = [cached firstObject];
-        } else if (direction == STKQueryObjectPageOlder) {
-            referencePost = [cached lastObject];
+        if (fetchLimit == 0) {
+            fetchLimit = 30;
+            [desc setLimit:30];
         }
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            block(cached, nil);
-        }];
-    }
-    if (u) {
-    [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
-        if(err) {
-            block(nil, err);
-            return;
-        }
-        
 
-        STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [u uniqueID], @"feed"]];
         
-        STKQueryObject *q = [[STKQueryObject alloc] init];
-        [q setLimit:fetchLimit];
-        [q setPageDirection:direction];
-        [q setPageKey:STKPostDateCreatedKey];
-        [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
-        
-        STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
-        [q addSubquery:rq];
-        
-        STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
-        [q addSubquery:tagQ];
-        
-        STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
-        [q addSubquery:cq];
-        
-        STKResolutionQuery *originPost = [STKResolutionQuery resolutionQueryForField:@"origin_post_id"];
-        
-        STKResolutionQuery *originPostCreator = [STKResolutionQuery resolutionQueryForField:@"creator"];
-        [originPost addSubquery:originPostCreator];
-        [q addSubquery:originPost];
-        
-        [c setQueryObject:q];
-        
-        [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost"}];
-        [c setModelGraph:@[@"STKPost"]];
-        [c setContext:[[STKUserStore store] context]];
-        [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
-        [c setShouldReturnArray:YES];
-        [c getWithSession:[self session] completionBlock:^(NSArray *posts, NSError *err) {
-            if(!err) {
-//                [[[[STKUserStore store] currentUser] mutableSetValueForKeyPath:@"fFeedPosts"] addObjectsFromArray:posts];
-//                [[[STKUserStore store] currentUser] addFFeedPosts:[NSSet setWithArray:posts]];
-                for(STKPost *p in posts) {
-                    [p setFInverseFeed:[[STKUserStore store] currentUser]];
-                }
-                [[[STKUserStore store] context] save:nil];
-                block(posts, nil);
-            } else {
-                block(nil, err);
+        NSArray *cached = [self cachedPostsForPredicate:[NSPredicate predicateWithFormat:@"fInverseFeed == %@", [[STKUserStore store] currentUser]]
+                                       fetchDescription:desc];
+
+        if([cached count] > 0) {
+            if(direction == STKQueryObjectPageNewer) {
+                referencePost = [cached firstObject];
+            } else if (direction == STKQueryObjectPageOlder) {
+                referencePost = [cached lastObject];
             }
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                block(cached, nil);
+            }];
+        }
+        if (u) {
+        [[STKBaseStore store] executeAuthorizedRequest:^(NSError *err){
+            if(err) {
+                block(nil, err);
+                return;
+            }
+            
+
+            STKConnection *c = [[STKBaseStore store] newConnectionForIdentifiers:@[@"/users", [u uniqueID], @"feed"]];
+            
+            STKQueryObject *q = [[STKQueryObject alloc] init];
+            [q setLimit:fetchLimit];
+            [q setPageDirection:direction];
+            [q setPageKey:STKPostDateCreatedKey];
+            [q setPageValue:[STKTimestampFormatter stringFromDate:[referencePost datePosted]]];
+            
+            STKResolutionQuery *rq = [STKResolutionQuery resolutionQueryForField:@"creator"];
+            [q addSubquery:rq];
+            
+            STKResolutionQuery *tagQ = [STKResolutionQuery resolutionQueryForField:@"tags"];
+            [q addSubquery:tagQ];
+            
+            STKContainQuery *cq = [STKContainQuery containQueryForField:@"likes" key:@"_id" value:[[[STKUserStore store] currentUser] uniqueID]];
+            [q addSubquery:cq];
+            
+            STKResolutionQuery *originPost = [STKResolutionQuery resolutionQueryForField:@"origin_post_id"];
+            
+            STKResolutionQuery *originPostCreator = [STKResolutionQuery resolutionQueryForField:@"creator"];
+            [originPost addSubquery:originPostCreator];
+            [q addSubquery:originPost];
+            
+            [c setQueryObject:q];
+            
+            [c setResolutionMap:@{@"User" : @"STKUser", @"Post" : @"STKPost"}];
+            [c setModelGraph:@[@"STKPost"]];
+            [c setContext:[[STKUserStore store] context]];
+            [c setExistingMatchMap:@{@"uniqueID" : @"_id"}];
+            [c setShouldReturnArray:YES];
+            [c getWithSession:[self session] completionBlock:^(NSArray *posts, NSError *err) {
+                if(!err) {
+    //                [[[[STKUserStore store] currentUser] mutableSetValueForKeyPath:@"fFeedPosts"] addObjectsFromArray:posts];
+    //                [[[STKUserStore store] currentUser] addFFeedPosts:[NSSet setWithArray:posts]];
+                    for(STKPost *p in posts) {
+                        [p setFInverseFeed:[[STKUserStore store] currentUser]];
+                    }
+                    [[[STKUserStore store] context] save:nil];
+                    block(posts, nil);
+                } else {
+                    block(nil, err);
+                }
+            }];
         }];
-    }];
-    } else {
-        block(nil, nil);
+        } else {
+            block(nil, nil);
+        }
     }
 }
 

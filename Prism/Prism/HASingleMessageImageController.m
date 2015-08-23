@@ -122,8 +122,10 @@
 
 - (void)imageLongPress:(id)sender
 {
-    UIActivityViewController *av = [[UIActivityViewController alloc] initWithActivityItems:@[self.imageView.image] applicationActivities:nil];
-    [self presentViewController:av animated:YES completion:nil];
+    if (self.imageView.image) {
+        UIActivityViewController *av = [[UIActivityViewController alloc] initWithActivityItems:@[self.imageView.image] applicationActivities:nil];
+        [self presentViewController:av animated:YES completion:nil];
+    }
 }
 
 /*
