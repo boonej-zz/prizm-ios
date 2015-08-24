@@ -75,6 +75,21 @@ NSString * const HAMessageUserURLScheme = @"user";
         _group = group;
         NSString *groupString = group?[group.name lowercaseString]:@"all";
         self.title = [NSString stringWithFormat:@"#%@", groupString];
+        double unreadCount = 0;
+        if (group) {
+            unreadCount = [group.unreadCount doubleValue];
+            group.unreadCount = @0;
+        } else {
+            unreadCount = [organization.unreadCount doubleValue];
+            organization.unreadCount = @0;
+        }
+        double messageCount = [[NSUserDefaults standardUserDefaults] doubleForKey:HAUnreadMessagesForUserKey];
+        messageCount -= unreadCount;
+        if (messageCount < 0) {
+            messageCount = 0;
+        }
+        [[NSUserDefaults standardUserDefaults] setDouble:messageCount forKey:HAUnreadMessagesForUserKey];
+        
         [self layoutViews];
         [self layoutConstraints];
 //        self.frc = [[NSFetchedResultsController alloc] init];
@@ -102,6 +117,7 @@ NSString * const HAMessageUserURLScheme = @"user";
         }
         [[NSUserDefaults standardUserDefaults] setDouble:messageCount forKey:HAUnreadMessagesForUserKey];
         user.unreadCount = @0;
+        
         
         [[[STKUserStore store] context] save:nil];
         _directController = YES;
@@ -176,6 +192,13 @@ NSString * const HAMessageUserURLScheme = @"user";
         [self addTitleView:YES];
     }
     self.user = [[STKUserStore store] currentUser];
+    [self.user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+        if ([obj.organization.uniqueID isEqualToString:self.organization.uniqueID]) {
+            if ([obj.role isEqualToString:@"leader"]) {
+                _userIsLeader = YES;
+            }
+        }
+    }];
 }
 
 #pragma mark Configuration

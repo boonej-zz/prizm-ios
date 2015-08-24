@@ -190,6 +190,7 @@
 {
     if (! self.frc) {
         if ([self.user.type isEqualToString:STKUserTypeInstitution]) {
+            self.userIsOwner = YES;
             self.frc = [[NSFetchedResultsController alloc] init];
             [[STKUserStore store] fetchUserOrgs:^(NSArray *organizations, NSError *err) {
                 if (organizations) {
@@ -206,6 +207,13 @@
             }];
         } else {
             self.organization = [[STKUserStore store] activeOrgForUser];
+            [self.user.organizations enumerateObjectsUsingBlock:^(STKOrgStatus *obj, BOOL *stop) {
+                if ([obj.organization.uniqueID isEqualToString:self.organization.uniqueID]) {
+                    if ([obj.role isEqualToString:@"leader"]) {
+                        self.userIsLeader = YES;
+                    }
+                }
+            }];
             self.frc = [[STKUserStore store] groupsForCurrentUserInOrganization:self.organization];
             [self.frc setDelegate:self];
             NSError *err = nil;
