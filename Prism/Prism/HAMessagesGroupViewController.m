@@ -67,7 +67,7 @@
     
     [self.tableView registerNib:[UINib nibWithNibName:[HAGroupCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[HAGroupCell reuseIdentifier]];
     [self.tableView setContentInset:UIEdgeInsetsMake(64.f, 0, 80.f, 0)];
-    [self setTitle:@"Messages"];
+    [self setTitle:@"Message"];
     [self.navigationItem setLeftBarButtonItem:[self menuBarButtonItem]];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshColor) name:@"UserDetailsUpdated" object:nil];

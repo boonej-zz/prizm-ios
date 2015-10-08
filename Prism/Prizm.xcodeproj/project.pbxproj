@@ -59,7 +59,6 @@
 		2C5BAD921B76B3D20060F7D8 /* HASurveyScaleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BAD911B76B3D20060F7D8 /* HASurveyScaleCell.m */; };
 		2C5BAD951B76B3E40060F7D8 /* HASurveyMultipleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5BAD941B76B3E40060F7D8 /* HASurveyMultipleCell.m */; };
 		2C5CDFDE1B6DE7C700422886 /* HAConsentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB028E11B6C1BC800034A01 /* HAConsentViewController.m */; };
-		2C5DF0A01B8C18D8007F24CF /* PrizmShareExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9CD7D9881A1BC1FF003E221C /* PrizmShareExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2C619D121B7BD7E900E44E23 /* HABarChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C619D111B7BD7E900E44E23 /* HABarChartCell.m */; };
 		2C619F3B1B7D13D600E44E23 /* HARespondentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C619F3A1B7D13D600E44E23 /* HARespondentCell.m */; };
 		2C619F3E1B7D1E1000E44E23 /* STKUserTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C619F3D1B7D1E1000E44E23 /* STKUserTarget.m */; };
@@ -366,13 +365,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2C5DF09E1B8C18CE007F24CF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BE02EA97182A80A200A5505A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9CD7D9871A1BC1FF003E221C;
-			remoteInfo = PrizmShareExt;
-		};
 		BE02EABF182A80A200A5505A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BE02EA97182A80A200A5505A /* Project object */;
@@ -389,7 +381,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				2C5DF0A01B8C18D8007F24CF /* PrizmShareExt.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5402,7 +5393,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2C5DF09F1B8C18CE007F24CF /* PBXTargetDependency */,
 			);
 			name = Prism;
 			productName = Prism;
@@ -5450,7 +5440,7 @@
 						DevelopmentTeam = MU64MV9X8B;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -5911,11 +5901,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2C5DF09F1B8C18CE007F24CF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9CD7D9871A1BC1FF003E221C /* PrizmShareExt */;
-			targetProxy = 2C5DF09E1B8C18CE007F24CF /* PBXContainerItemProxy */;
-		};
 		BE02EAC0182A80A200A5505A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BE02EA9E182A80A200A5505A /* Prism */;
@@ -5994,10 +5979,10 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm θ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/App Store-iphoneos";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6008,6 +5993,7 @@
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
@@ -6344,7 +6330,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = BASE_URL_DEV;
+				GCC_PREPROCESSOR_DEFINITIONS = BASE_URL_PRODUCTION;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -6366,9 +6352,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm β";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm θ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6385,6 +6371,7 @@
 				GCC_VERSION = "";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)",
 					"$(inherited)",
@@ -6422,9 +6409,9 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prizm.staging;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm θ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6434,17 +6421,17 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					BASE_URL_PRODUCTION,
 					"$(inherited)",
+					"BASE_URL_PRODUCTION=1",
 					"HEAP=1",
 				);
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
 					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
 					/Users/boonej/work/prizm,
 				);
 				OTHER_LDFLAGS = (
@@ -6545,9 +6532,9 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm θ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6564,11 +6551,11 @@
 				GCC_VERSION = "";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
 					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
 					/Users/boonej/work/prizm,
 				);
 				OTHER_LDFLAGS = (
@@ -6647,9 +6634,9 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prizm.staging;
 				BUNDLE_NAME = "Prizm θ";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm θ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6668,6 +6655,7 @@
 				GCC_VERSION = "";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
@@ -6759,9 +6747,9 @@
 				BUNDLE_IDENTIFIER_SUFFIX = com.higheraltitude.prism;
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = Prizm;
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm θ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6772,6 +6760,7 @@
 				GCC_PREFIX_HEADER = "Prism/Prism-Prefix.pch";
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Libraries/Release-iphoneos\"",
 					"$(PROJECT_DIR)",
@@ -6871,9 +6860,9 @@
 				BUNDLE_IDENTIFIER_SUFFIX = "";
 				"BUNDLE_IDENTIFIER_SUFFIX[arch=*]" = com.higheraltitude.prism;
 				BUNDLE_NAME = "Prizm β";
-				CODE_SIGN_ENTITLEMENTS = "Prism/Prizm θ.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Prism",
@@ -6890,6 +6879,7 @@
 				GCC_VERSION = "";
 				GENERATE_PROFILING_CODE = YES;
 				INFOPLIST_FILE = "Prism/Prism-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)",
 					"$(inherited)",

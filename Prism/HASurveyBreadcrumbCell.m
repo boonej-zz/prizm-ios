@@ -98,6 +98,9 @@
         [bcs setObject:v forKey:[NSString stringWithFormat:@"v%u", i]];
     }
     NSArray *keys = [bcs allKeys];
+    keys = [keys sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+       return [obj1 compare:obj2 options:NSNumericSearch];
+    }];
     NSMutableString *formatString = [@"H:|-0-" mutableCopy];
     NSEnumerator *e = [keys reverseObjectEnumerator];
     for (NSString *obj in e) {

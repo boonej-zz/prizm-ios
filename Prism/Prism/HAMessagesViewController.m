@@ -182,6 +182,14 @@ NSString * const HAMessageUserURLScheme = @"user";
     [rbb addSubview:badge];
     [rbb addTarget:self action:@selector(membersButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     self.membersButton = [[UIBarButtonItem alloc] initWithCustomView:rbb];
+//    NSString *name = @"all";
+//    if (self.group) {
+//        name = [self.group.name lowercaseString];
+//    } else if (self.sender) {
+//        name = [NSString stringWithFormat:@"@%@", self.sender.name];
+//    }
+    NSString *placeholder = [NSString stringWithFormat:@"Post a message..."];
+    [self.postView.placeholder setText:placeholder];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGroupCount) name:@"DidUpdateMembers" object:nil];
     if ([self isDirectController]) {
         [self.navigationItem setRightBarButtonItem:nil];
@@ -274,6 +282,7 @@ NSString * const HAMessageUserURLScheme = @"user";
     HAGroupMembersViewController *gvc = [[HAGroupMembersViewController alloc] init];
     [gvc setGroup:group];
     [gvc setOrganization:self.organization];
+    [self dismissKeyboard:nil];
     [self.navigationController pushViewController:gvc animated:YES];
 }
 

@@ -13,24 +13,24 @@
 @import Security;
 
 #ifdef BASE_URL_DEV
-NSString * const STKUserBaseURLString = @"https://prizm-fe-prd-1163268161.us-west-2.elb.amazonaws.com";
+NSString * const STKUserBaseURLString = @"https://api.prizmapp.com";
 //NSString * const STKPrismRedirectURI = @"https://ec2-54-186-28-238.us-west-2.compute.amazonaws.com/callback";
-NSString * const STKPrismRedirectURI = @"https://prizm-fe-prd-1163268161.us-west-2.elb.amazonaws.com/callback";
+NSString * const STKPrismRedirectURI = @"https://api.prizmaapp.com/callback";
 #elif BASE_URL_STAGING
-NSString * const STKUserBaseURLString = @"https://prizm-fe-prd-1163268161.us-west-2.elb.amazonaws.com";
-NSString * const STKPrismRedirectURI = @"https://prizm-fe-prd-1163268161.us-west-2.elb.amazonaws.com/callback";
+NSString * const STKUserBaseURLString = @"https://api.prizmapp.com";
+NSString * const STKPrismRedirectURI = @"https://api.prizmapp.com/callback";
 #elif BASE_URL_USERTESTING
 //NSString * const STKUserBaseURLString = @"https://sleepy-eyrie-3962.herokuapp.com";
 //NSString * const STKPrismRedirectURI = @"https://sleepy-eyrie-3962.herokuapp.com/callback";
 NSString * const STKUserBaseURLString = @"https://localhost:3000";
 NSString * const STKPrismRedirectURI = @"https://localhost:3000/callback";
 #elif BASE_URL_PRODUCTION
-NSString * const STKUserBaseURLString = @"https://prizm-fe-prd-1163268161.us-west-2.elb.amazonaws.com";
-NSString * const STKPrismRedirectURI = @"https://prizm-fe-prd-1163268161.us-west-2.elb.amazonaws.com/callback";
+NSString * const STKUserBaseURLString = @"https://api.prizmapp.com";
+NSString * const STKPrismRedirectURI = @"https://api.prizmapp.com/callback";
 #endif
 
-NSString * const STKPrismClientSecret = @"f27198fb-689d-4965-acb0-0e9c5f61ddec";
-NSString * const STKPrismClientID = @"67e1fe4f-db1b-4d5c-bdc7-56270b0822e2";
+NSString * const STKPrismClientSecret = @"b87d564c-9ff0-4c51-96af-cf71d52967c2";
+NSString * const STKPrismClientID = @"2ee2daa3-abeb-41c4-b73c-906ab7ce3145";
 
 NSString * const STKBaseStoreEndpointAuthorization = @"/oauth2/authorize";
 NSString * const STKBaseStoreEndpointToken = @"/oauth2/token";
@@ -213,6 +213,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     
     return c;
 }
+
+
 
 
 

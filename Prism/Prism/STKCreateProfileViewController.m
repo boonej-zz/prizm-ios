@@ -1338,7 +1338,7 @@ const long STKCreateProgressGeocoding = 4;
                                 @"Presbyterian" : @"Presbyterian",
                                 @"Rastafari" : @"Rastafari",
                                 @"Reformed" : @"Reformed",
-                                @"Roman Chatholic" : @"Roman Chatholic",
+                                @"Roman Catholic" : @"Roman Catholic",
                                 @"Seicho-no-le-ist" : @"Seicho-no-le-ist",
                                 @"Seventh Day Adventist" : @"Seventh Day Adventist",
                                 @"Sikh" : @"Sikh",

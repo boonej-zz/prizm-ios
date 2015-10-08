@@ -145,7 +145,8 @@
                                                                              barMetrics:UIBarMetricsDefault];
     [[self cardView] setUserInteractionEnabled:NO];
     [[self cardView] setClipsToBounds:NO];
-    
+    [[self cardView] setOpaque:NO];
+    [self.cardView setBackgroundColor:[UIColor colorWithWhite:0.f alpha:0.f]];
     
     [[self tableView] setContentInset:UIEdgeInsetsMake(64, 0, 0, 0)];
     [self addBlurViewWithHeight:64.f];
@@ -171,6 +172,8 @@
             [[c layer] setShadowOffset:CGSizeMake(0, 0)];
             [[c layer] setShadowOpacity:.4];
         }
+        [c setOpaque:NO];
+        [c setBackgroundColor:[UIColor clearColor]];
         
         [[[c headerView] backdropFadeView] setAlpha:1];
         

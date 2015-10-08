@@ -72,6 +72,7 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
     
     NSMutableURLRequest *req = [[NSMutableURLRequest alloc] init];
 
+
     if([[self internalArguments] count] > 0) {
         if([self method] == STKConnectionMethodPOST || [self method] == STKConnectionMethodPUT || [self method] == STKConnectionMethodDELETE) {
             NSError *err;
@@ -323,13 +324,15 @@ NSString * const STKConnectionErrorDomain = @"STKConnectionErrorDomain";
                                                                        options:0
                                                                          error:nil];
             NSDictionary *errObj = [jsonObject objectForKey:@"error"];
-            if([errObj objectForKey:@"error"]) {
+            if(![errObj isKindOfClass:[NSString class]]){
+                if([errObj objectForKey:@"error"]) {
                 [errDict setObject:[errObj objectForKey:@"error"]
                             forKey:@"error"];
-            }
-            if([errObj objectForKey:@"error_description"]) {
-                [errDict setObject:[errObj objectForKey:@"error_description"]
+                }
+                if([errObj objectForKey:@"error_description"]) {
+                    [errDict setObject:[errObj objectForKey:@"error_description"]
                             forKey:@"error_description"];
+                }
             }
         }
         
