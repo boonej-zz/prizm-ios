@@ -48,11 +48,14 @@ static STKProcessingView *STKProcessingViewCurrentView = nil;
 }
 
 
-- (id)initWithFrame:(CGRect)frame
+- (id)init
 {
-    self = [super initWithFrame:[[UIScreen mainScreen] bounds]];
+    self = [super init];
+    
     if (self) {
-        [self setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.7]];
+        self.frame = [[UIScreen mainScreen] bounds];
+        [self setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
+        [self setOpaque:NO];
         [self setWindowLevel:UIWindowLevelStatusBar + 1];
         
         UIActivityIndicatorView *iv = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
