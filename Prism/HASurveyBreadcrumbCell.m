@@ -102,10 +102,10 @@
        return [obj1 compare:obj2 options:NSNumericSearch];
     }];
     NSMutableString *formatString = [@"H:|-0-" mutableCopy];
-    NSEnumerator *e = [keys reverseObjectEnumerator];
+    NSEnumerator *e = [keys objectEnumerator];
     for (NSString *obj in e) {
         [formatString appendFormat:@"[%@(==21)]", obj];
-        if (obj != [keys objectAtIndex:0]) {
+        if (obj != [keys lastObject]) {
             [formatString appendString:@"-4-"];
         } else {
             [formatString appendString:@"-0-|"];
