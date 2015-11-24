@@ -11,6 +11,7 @@
 
 @interface STKTextFieldCell ()
 @property (weak, nonatomic) IBOutlet UIView *backdropView;
+@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
 @end
 
@@ -34,6 +35,12 @@
 {
     ROUTE(textField);
 }
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:NO];
+}
+
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
@@ -80,10 +87,11 @@
 
 - (void)cellDidLoad
 {
-    UIGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-    [tap setCancelsTouchesInView:NO];
-    [[self contentView] addGestureRecognizer:tap];
-    
+    if (!self.tapRecognizer) {
+        self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        [[self contentView] addGestureRecognizer:self.tapRecognizer];
+        [self.tapRecognizer setCancelsTouchesInView:NO];
+    }
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 }
 

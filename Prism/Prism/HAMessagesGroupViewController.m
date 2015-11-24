@@ -219,16 +219,20 @@
             NSError *err = nil;
             [self.frc performFetch:&err];
             [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
+                 NSLog(@"Executed 1 time");
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUpdateMembers" object:nil];
             }];
         }
     } else {
         [[STKUserStore store] fetchGroupsForOrganization:self.organization completion:^(NSArray *groups, NSError *err) {
+            NSLog(@"Executed 1 time");
+            [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
+                NSLog(@"Executed 1 time");
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUpdateMembers" object:nil];
+            }];
             
         }];
-        [[STKUserStore store] fetchMembersForOrganization:self.organization completion:^(NSArray *messages, NSError *err) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"DidUpdateMembers" object:nil];
-        }];
+        
     }
     
     

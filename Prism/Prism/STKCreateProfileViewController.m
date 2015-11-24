@@ -710,14 +710,14 @@ const long STKCreateProgressGeocoding = 4;
     
     [[self topOffset] setConstant:-[[self topContainer] bounds].size.height + 64];
 
-    [UIView animateWithDuration:[[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue]
-                          delay:0
-                        options:[[[note userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]
-                     animations:^{
-                         [[self view] layoutIfNeeded];
-                     } completion:^(BOOL finished) {
-                         
-                     }];
+//    [UIView animateWithDuration:[[[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue]
+//                          delay:0
+//                        options:[[[note userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue]
+//                     animations:^{
+//                         [[self view] layoutIfNeeded];
+//                     } completion:^(BOOL finished) {
+//                         
+//                     }];
 }
 
 - (void)keyboardWillDisappear:(NSNotification *)note
@@ -1217,6 +1217,7 @@ const long STKCreateProgressGeocoding = 4;
     }
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
+    [c setFocusStyle:nil];
     
     if([cellType isEqual:@"textView"] ||
        [cellType isEqualToString:@"list"] ||
@@ -1284,6 +1285,7 @@ const long STKCreateProgressGeocoding = 4;
     [[c textField] setInputAccessoryView:[self toolbar]];
 
     [[c textField] setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [[c textField] setClearsContextBeforeDrawing:NO];
     
     return c;
 }

@@ -90,8 +90,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIImage *bgImage = [UIImage HABackgroundImage];
+    CGRect rect = CGRectMake(0, 0, bgImage.size.width, bgImage.size.height);
+    rect.size.height = 64.f;
+    CGImageRef imageRef = CGImageCreateWithImageInRect([[UIImage HABackgroundImage] CGImage], rect);
+    // or use the UIImage wherever you like
+    [[[self navigationController] navigationBar] setBackgroundImage:[UIImage imageWithCGImage:imageRef] forBarMetrics:UIBarMetricsDefault];
+
+    CGImageRelease(imageRef);
     
-    [[[self navigationController] navigationBar] setBackgroundImage:[UIImage imageNamed:@"nav_bar"] forBarMetrics:UIBarMetricsDefault];
+
     [[[self navigationController] navigationBar] setTranslucent:YES];
     [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
     [[[self navigationController] navigationBar] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor HATextColor],
@@ -107,6 +115,7 @@
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
     [imageView setFrame:CGRectMake(0, 0, 320, 100)];
     [[self tableView] setTableFooterView:imageView];
+    [self addBackgroundImage];
 //    [self addBlurViewWithHeight:64.f];
 }
 

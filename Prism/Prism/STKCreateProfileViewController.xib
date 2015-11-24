@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STKCreateProfileViewController">
@@ -31,14 +31,17 @@
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XYa-Fr-Bxy" customClass="STKResolvingImageView">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="188"/>
+                            <animations/>
                             <color key="backgroundColor" red="0.98198792879453212" green="0.96728371077188058" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lid-zU-hbX">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="188"/>
+                            <animations/>
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
                         </view>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JIC-o4-eZ5" customClass="UIControl">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="188"/>
+                            <animations/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="changeCoverPhoto:" destination="-1" eventType="touchUpInside" id="jPt-Nv-wx4"/>
@@ -46,10 +49,12 @@
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cLd-RB-pxL" customClass="STKAvatarView">
                             <rect key="frame" x="121" y="72" width="77" height="77"/>
+                            <animations/>
                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCp-R9-fYJ">
                             <rect key="frame" x="21" y="161" width="83" height="19"/>
+                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="83" id="1Nf-t1-0Uz"/>
                                 <constraint firstAttribute="height" constant="19" id="eNO-Ny-MHb"/>
@@ -66,6 +71,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bmB-56-liW">
                             <rect key="frame" x="121" y="72" width="77" height="77"/>
+                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="77" id="BUq-nu-aNB"/>
                                 <constraint firstAttribute="height" constant="77" id="KPt-JQ-3rm"/>
@@ -82,6 +88,7 @@
                             </connections>
                         </button>
                     </subviews>
+                    <animations/>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="uCp-R9-fYJ" secondAttribute="bottom" constant="8" id="4X4-Ga-CSX"/>
@@ -103,8 +110,9 @@
                         <constraint firstAttribute="centerY" secondItem="bmB-56-liW" secondAttribute="centerY" constant="-16" id="ywu-lP-Fox"/>
                     </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7Yn-5Y-IYC">
+                <tableView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7Yn-5Y-IYC">
                     <rect key="frame" x="0.0" y="188" width="320" height="380"/>
+                    <animations/>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="GSv-mY-5iA"/>
@@ -112,6 +120,7 @@
                     </connections>
                 </tableView>
             </subviews>
+            <animations/>
             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="7Yn-5Y-IYC" secondAttribute="bottom" id="Cz0-39-lTh"/>
@@ -126,6 +135,7 @@
         <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="aE9-wJ-xea">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+            <animations/>
             <items>
                 <barButtonItem title="Done" id="ESp-YE-dXy">
                     <connections>
@@ -151,6 +161,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DMn-BH-2Xh">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+                    <animations/>
                     <color key="backgroundColor" white="1" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="600" id="WPD-bH-HiO"/>
@@ -158,6 +169,7 @@
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BPe-LZ-5Me">
                     <rect key="frame" x="10" y="198" width="300" height="51"/>
+                    <animations/>
                     <color key="backgroundColor" red="0.46701013749414405" green="0.62567713678999992" blue="0.935546875" alpha="0.0" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <state key="normal" title="Done" backgroundImage="btn_lg">
@@ -170,6 +182,7 @@
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By tapping Done, you are indicating that you have read and agree to the" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="260" translatesAutoresizingMaskIntoConstraints="NO" id="Omw-2u-fTv">
                     <rect key="frame" x="30" y="37" width="260" height="35"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="height" constant="35" id="u2I-Sb-Wg6"/>
                     </constraints>
@@ -179,6 +192,7 @@
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I4v-xD-8nb">
                     <rect key="frame" x="78" y="64" width="165" height="30"/>
+                    <animations/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="TsR-z5-gYD"/>
                     </constraints>
@@ -197,6 +211,7 @@
                     </connections>
                 </button>
             </subviews>
+            <animations/>
             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="DMn-BH-2Xh" firstAttribute="leading" secondItem="ZG1-O3-gkY" secondAttribute="leading" id="6c6-bg-tAk"/>
@@ -222,9 +237,4 @@
         <image name="upload_camera" width="77" height="77"/>
         <image name="upload_image" width="15" height="15"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>
