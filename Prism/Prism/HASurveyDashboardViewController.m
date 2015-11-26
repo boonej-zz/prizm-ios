@@ -543,7 +543,9 @@
 {
     HABarChartCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[HABarChartCell reuseIdentifier]];
 //    [cell setBackgroundColor:[UIColor clearColor]];
-    [cell setPlotData:self.responsesByDate];
+    if (self.responsesByDate.count > 0) {
+        [cell setPlotData:self.responsesByDate];
+    }
     return cell;
 }
 

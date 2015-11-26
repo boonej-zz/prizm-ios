@@ -22,8 +22,8 @@ NSString * const STKPrismRedirectURI = @"https://api.prizmapp.com/callback";
 #elif BASE_URL_USERTESTING
 //NSString * const STKUserBaseURLString = @"https://sleepy-eyrie-3962.herokuapp.com";
 //NSString * const STKPrismRedirectURI = @"https://sleepy-eyrie-3962.herokuapp.com/callback";
-NSString * const STKUserBaseURLString = @"https://localhost:3000";
-NSString * const STKPrismRedirectURI = @"https://localhost:3000/callback";
+NSString * const STKUserBaseURLString = @"https://api-test.prizmapp.com:3000";
+NSString * const STKPrismRedirectURI = @"https://api-test.prizmapp.com:3000/callback";
 #elif BASE_URL_PRODUCTION
 NSString * const STKUserBaseURLString = @"https://api.prizmapp.com";
 NSString * const STKPrismRedirectURI = @"https://api.prizmapp.com/callback";
