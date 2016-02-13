@@ -1217,7 +1217,7 @@ const long STKCreateProgressGeocoding = 4;
     }
     
     STKTextFieldCell *c = [STKTextFieldCell cellForTableView:tableView target:self];
-    [c setFocusStyle:nil];
+
     
     if([cellType isEqual:@"textView"] ||
        [cellType isEqualToString:@"list"] ||

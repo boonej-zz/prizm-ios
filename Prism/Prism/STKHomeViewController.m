@@ -422,6 +422,7 @@
     
     [[self tableView] reloadData];
     [self layoutCards];
+
 }
 
 

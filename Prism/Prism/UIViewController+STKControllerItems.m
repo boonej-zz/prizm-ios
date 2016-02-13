@@ -193,8 +193,11 @@
     NSString *verticalString = [NSString stringWithFormat:@"V:|-0-[v(%f)]", height];
     NSArray *verticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:verticalString options:0 metrics:nil views:@{@"v": view}];
     view.tag = 99999;
-    [self.view addConstraints:horizontalConstatraints];
-    [self.view addConstraints:verticalConstraints];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.view addConstraints:horizontalConstatraints];
+        [self.view addConstraints:verticalConstraints];
+    });
+    
     
 }
 

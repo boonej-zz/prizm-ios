@@ -303,7 +303,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     if(!link)
         link = @"";
 
-    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#prizm(?:[@#\\s]|$)" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#(prizm|prizmapp)(?:[@#\\s]|$)" options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray *matches = [exp matchesInString:text options:kNilOptions range:NSMakeRange(0, [text length])];
     // modify the string backwards
     int lastIndex = (int)[matches count] - 1;
@@ -379,7 +379,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
                         NSDictionary *entities = [d objectForKey:@"entities"];
                         NSArray *hashTags = [entities objectForKey:@"hashtags"];
                         for(NSDictionary *hashTag in hashTags) {
-                            if([[[hashTag objectForKey:@"text"] lowercaseString] isEqualToString:@"prizm"]) {
+                            if([[[hashTag objectForKey:@"text"] lowercaseString] isEqualToString:@"prizm"] || [[[hashTag objectForKey:@"text"] lowercaseString] isEqualToString:@"prizmapp"]) {
                                 [postsToSend addObject:d];
                             }
                         }
@@ -437,7 +437,7 @@ const int STKNetworkStoreErrorTwitterAccountNoLongerExists = -25;
     }
 
     // don't include #prizm in the post (it will make #prizm trend through the roof)
-    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#prizm(?:[@#\\s]|$)" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSRegularExpression *exp = [[NSRegularExpression alloc] initWithPattern:@"#(prizm|prizmapp)(?:[@#\\s]|$)" options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray *matches = [exp matchesInString:text options:kNilOptions range:NSMakeRange(0, [text length])];
     // modify the string backwards
     int lastIndex = (int)[matches count] - 1;

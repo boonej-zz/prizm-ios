@@ -695,24 +695,27 @@ static BOOL HAActivityIsAnimating = NO;
 
 - (void)setViewControllers:(NSArray *)viewControllers
 {
-    for(UIViewController *vc in [self viewControllers]) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for(UIViewController *vc in [self viewControllers]) {
+            
+            [vc willMoveToParentViewController:nil];
+            if(vc == [self selectedViewController])
+                [[vc view] removeFromSuperview];
+            [vc removeFromParentViewController];
+        }
         
-        [vc willMoveToParentViewController:nil];
-        if(vc == [self selectedViewController])
-            [[vc view] removeFromSuperview];
-        [vc removeFromParentViewController];
-    }
+        _viewControllers = [viewControllers copy];
+        [self refreshNavBars];
+        for(UIViewController *vc in viewControllers) {
+            
+            
+            [self addChildViewController:vc];
+            [vc didMoveToParentViewController:self];
+            
+        }
+        [self setSelectedViewController:[viewControllers objectAtIndex:0]];
+    });
     
-    _viewControllers = [viewControllers copy];
-    [self refreshNavBars];
-    for(UIViewController *vc in viewControllers) {
-        
-        
-        [self addChildViewController:vc];
-        [vc didMoveToParentViewController:self];
-        
-    }
-    [self setSelectedViewController:[viewControllers objectAtIndex:0]];
 }
 
 - (void)refreshNavBars
