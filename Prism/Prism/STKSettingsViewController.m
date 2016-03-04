@@ -258,7 +258,7 @@
 
 - (void)followUsOnTwitter:(id)sender
 {
-    NSURL *url = [NSURL URLWithString:@"https://www.twitter.com/beprizmatic"];
+    NSURL *url = [NSURL URLWithString:@"https://www.twitter.com/PrizmHQ"];
     [self openWebViewWithURL:url];
 }
 

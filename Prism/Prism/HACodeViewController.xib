@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HACodeViewController">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is Your Program Code?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Srz-Iu-kW6">
+                    <rect key="frame" x="8" y="109" width="359" height="26"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="26" id="OOF-HO-el9"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="22.5"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QWz-wK-x30">
+                    <rect key="frame" x="57" y="188" width="261" height="44"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="HmL-Ky-LXO"/>
+                    </constraints>
+                    <color key="textColor" red="0.75294117650000003" green="0.75686274509999996" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                    <textInputTraits key="textInputTraits" returnKeyType="go"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="wof-0R-nDf"/>
+                    </connections>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LSF-RF-lch">
+                    <rect key="frame" x="112" y="344" width="150" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="Pno-XF-HKW"/>
+                        <constraint firstAttribute="width" constant="150" id="bDw-7H-a9e"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" title="Next" backgroundImage="btn_lg">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="nextButtonTapped:" destination="-1" eventType="touchUpInside" id="m7d-34-lyu"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Ww-0t-tkm">
+                    <rect key="frame" x="8" y="418" width="359" height="27"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
+                    <state key="normal" title="I don't have a program code">
+                        <color key="titleColor" red="0.29411764705882354" green="0.4392156862745098" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="noCodeTapped:" destination="-1" eventType="touchUpInside" id="OXL-fu-hS3"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Srz-Iu-kW6" secondAttribute="trailing" constant="8" id="0Ss-56-mnW"/>
+                <constraint firstItem="LSF-RF-lch" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="2sq-Ur-LQ6"/>
+                <constraint firstItem="6Ww-0t-tkm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="3GM-4R-HBS"/>
+                <constraint firstItem="LSF-RF-lch" firstAttribute="top" secondItem="QWz-wK-x30" secondAttribute="bottom" constant="112" id="3d7-gp-qm4"/>
+                <constraint firstItem="QWz-wK-x30" firstAttribute="top" secondItem="Srz-Iu-kW6" secondAttribute="bottom" constant="53" id="3kG-zC-Hg5"/>
+                <constraint firstItem="Srz-Iu-kW6" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="109" id="CGW-03-Fki"/>
+                <constraint firstItem="QWz-wK-x30" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="57" id="Fo7-Os-xST"/>
+                <constraint firstItem="Srz-Iu-kW6" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="HPF-dA-qjl"/>
+                <constraint firstItem="6Ww-0t-tkm" firstAttribute="top" secondItem="LSF-RF-lch" secondAttribute="bottom" constant="30" id="MPB-dz-5ve"/>
+                <constraint firstItem="Srz-Iu-kW6" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="TtN-sI-S7D"/>
+                <constraint firstAttribute="trailing" secondItem="6Ww-0t-tkm" secondAttribute="trailing" constant="8" id="ZCp-bh-Fim"/>
+                <constraint firstAttribute="trailing" secondItem="QWz-wK-x30" secondAttribute="trailing" constant="57" id="aHN-gy-d72"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="btn_lg" width="303" height="44"/>
+    </resources>
+</document>

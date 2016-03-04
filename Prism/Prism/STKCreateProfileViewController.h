@@ -11,10 +11,17 @@
 @import Accounts;
 @class STKUser;
 
+typedef enum {
+    AccountTypeIndividual,
+    AccountTypeOrganization
+} AccountType;
+
+
 @interface STKCreateProfileViewController : UIViewController
 
 - (id)initWithProfileForEditing:(STKUser *)user;
 - (id)initWithProfileForCreating:(STKUser *)user;
+- (id)initWithAccountType:(AccountType)type;
 
 
 @end

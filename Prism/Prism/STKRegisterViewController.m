@@ -15,6 +15,7 @@
 #import "STKAccountChooserViewController.h"
 #import "STKIntroViewController.h"
 #import "Mixpanel.h"
+#import "HAWhoViewController.h"
 
 @import Accounts;
 @import Social;
@@ -101,8 +102,10 @@
                     [STKProcessingView dismiss];
                     if(!err) {
                         if(registrationData) {
-                            STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:registrationData];
-                            [[self navigationController] pushViewController:pvc animated:YES];
+                            HAWhoViewController *hvc = [[HAWhoViewController alloc] initWithProfile:registrationData];
+                            //                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:facebookData];
+                            [[self navigationController] pushViewController:hvc animated:YES];
+        
                         } else if(existingUser) {
                             [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
                         }
@@ -154,8 +157,9 @@
             if(u) {
                 [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
             } else {
-                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:facebookData];
-                [[self navigationController] pushViewController:pvc animated:YES];
+                HAWhoViewController *hvc = [[HAWhoViewController alloc] initWithProfile:facebookData];
+//                STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:facebookData];
+                [[self navigationController] pushViewController:hvc animated:YES];
             }
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -166,14 +170,17 @@
 }
 - (IBAction)loginAccount:(id)sender
 {
+
     STKLoginViewController *lvc = [[STKLoginViewController alloc] init];
     [[self navigationController] pushViewController:lvc animated:YES];
 }
 - (IBAction)registerAccount:(id)sender
 {
     [self.mixpanel track:@"Standard Registration"];
-    STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:nil];
-    [[self navigationController] pushViewController:pvc animated:YES];
+    HAWhoViewController *wvc = [[HAWhoViewController alloc] init];
+    [[self navigationController] pushViewController:wvc animated:YES];
+//    STKCreateProfileViewController *pvc = [[STKCreateProfileViewController alloc] initWithProfileForCreating:nil];
+//    [[self navigationController] pushViewController:pvc animated:YES];
 }
 
 - (void)presentIntroIfNeccessary

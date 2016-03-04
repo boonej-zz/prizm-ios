@@ -90,6 +90,7 @@ const long STKCreateProgressGeocoding = 4;
 @property (weak, nonatomic) IBOutlet UIERealTimeBlurView *blurView;
 @property (nonatomic) BOOL orgPresent;
 @property (nonatomic) BOOL underThirteen;
+@property (nonatomic) AccountType accountType;
 
 - (IBAction)previousTapped:(id)sender;
 - (IBAction)nextTapped:(id)sender;
@@ -111,7 +112,7 @@ const long STKCreateProgressGeocoding = 4;
             user = [NSEntityDescription insertNewObjectForEntityForName:@"STKUser" inManagedObjectContext:[[STKUserStore store] context]];
         }
         [self setUser:user];
-        [user setType:@"user"];
+    
         
         [self sortReligionsAndEthinicitiesIntoSortedArrays];
         
@@ -133,11 +134,18 @@ const long STKCreateProgressGeocoding = 4;
     return self;
 }
 
+- (id)initWithAccountType:(AccountType)type {
+    self = [self initWithProfileForCreating:nil];
+    if (self) {
+        self.accountType = type;
+    }
+    return self;
+}
+
 - (void)configureItemsForCreation
 {
     if([[self user] isInstitution]) {
         _items = @[
-                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Partner", @"Individual"]},
 
                    @{@"title" : @"Organization", @"key" : @"firstName",
                      @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
@@ -169,7 +177,11 @@ const long STKCreateProgressGeocoding = 4;
         _requiredKeys = @[@"email", @"password", @"firstName", @"zipCode", @"website", @"subtype", @"phoneNumber"];
     } else {
         _items = @[
-                   @{@"key" : @"type", @"cellType" : @"segmented", @"values" : @[@"Partner", @"Individual"]},
+                   @{@"title" : @"First Name", @"key" : @"firstName",
+                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
+                   
+                   @{@"title" : @"Last Name", @"key" : @"lastName",
+                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
                    @{@"title" : @"Email", @"key" : @"email",
                      @"options" : @{@"keyboardType" : @(UIKeyboardTypeEmailAddress)}},
                    
@@ -178,20 +190,11 @@ const long STKCreateProgressGeocoding = 4;
                    
                    @{@"title" : @"Confirm Password", @"key" : @"confirmPassword",
                      @"options" : @{@"secureTextEntry" : @(YES)}},
-                   
-                   @{@"title" : @"First Name", @"key" : @"firstName",
-                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
-                   
-                   @{@"title" : @"Last Name", @"key" : @"lastName",
-                     @"options" : @{@"autocapitalizationType" : @(UITextAutocapitalizationTypeWords)}},
-                   
-                   
-                   
+               
                    @{@"title" : @"Date of Birth", @"key" : @"birthday", @"cellType" : @"date"},
                    @{@"title" : @"Gender", @"key" : @"gender", @"cellType" : @"gender"},
                    @{@"title" : @"Zip Code", @"key" : @"zipCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad)}},
                    @{@"title" : @"Phone Number", @"key" : @"phoneNumber", @"options" : @{@"keyboardType" : @(UIKeyboardTypeNumberPad), @"formatter" : @"phoneNumber"}},
-                   @{@"title" : @"Program Code", @"key" : @"programCode", @"options" : @{@"keyboardType" : @(UIKeyboardTypeAlphabet)}},
                    @{@"title" : @"Ethnicity", @"key" : @"ethnicity", @"cellType" : @"ethnicity",
                      @"values" : [self ethnicityValues]},
                    @{@"title" : @"Religion", @"key" : @"religion", @"cellType" : @"religion",
